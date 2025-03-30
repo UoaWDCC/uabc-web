@@ -6,34 +6,86 @@ export const GameSession: CollectionConfig = {
   fields: [
     {
       name: 'bookingOpen',
-      type: 'text',
+      type: 'date',
       required: true,
       admin: {
+        date: {
+          pickerAppearance: 'timeOnly',
+        },
         description: 'The time when booking opens for this game session',
+      },
+      hooks: {
+        beforeChange: [
+          (args) => {
+            const date = new Date(args.value)
+            const totalMiliseconds =
+              date.getHours() * 60 * 60 * 1000 + date.getMinutes() * 60 * 1000
+            return totalMiliseconds
+          },
+        ],
       },
     },
     {
       name: 'bookingClose',
-      type: 'text',
+      type: 'date',
       required: true,
       admin: {
+        date: {
+          pickerAppearance: 'timeOnly',
+        },
         description: 'The time when booking closes for this game session',
+      },
+      hooks: {
+        beforeChange: [
+          (args) => {
+            const date = new Date(args.value)
+            const totalMiliseconds =
+              date.getHours() * 60 * 60 * 1000 + date.getMinutes() * 60 * 1000
+            return totalMiliseconds
+          },
+        ],
       },
     },
     {
       name: 'startTime',
-      type: 'text',
+      type: 'date',
       required: true,
       admin: {
+        date: {
+          pickerAppearance: 'timeOnly',
+        },
         description: 'The start time of the game session',
+      },
+      hooks: {
+        beforeChange: [
+          (args) => {
+            const date = new Date(args.value)
+            const totalMiliseconds =
+              date.getHours() * 60 * 60 * 1000 + date.getMinutes() * 60 * 1000
+            return totalMiliseconds
+          },
+        ],
       },
     },
     {
       name: 'endTime',
-      type: 'text',
+      type: 'date',
       required: true,
       admin: {
+        date: {
+          pickerAppearance: 'timeOnly',
+        },
         description: 'The end time of the game session',
+      },
+      hooks: {
+        beforeChange: [
+          (args) => {
+            const date = new Date(args.value)
+            const totalMiliseconds =
+              date.getHours() * 60 * 60 * 1000 + date.getMinutes() * 60 * 1000
+            return totalMiliseconds
+          },
+        ],
       },
     },
     {

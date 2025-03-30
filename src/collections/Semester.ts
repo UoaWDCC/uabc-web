@@ -63,13 +63,25 @@ export const Semester: CollectionConfig = {
         description: 'The day when booking opens for this semester',
       },
     },
-    // Tech debt: This should be a time field
     {
       name: 'bookingOpenTime',
-      type: 'text',
+      type: 'date',
       required: true,
       admin: {
+        date: {
+          pickerAppearance: 'timeOnly',
+        },
         description: 'The time when booking opens for this semester',
+      },
+      hooks: {
+        beforeChange: [
+          (args) => {
+            const date = new Date(args.value)
+            const totalMiliseconds =
+              date.getHours() * 60 * 60 * 1000 + date.getMinutes() * 60 * 1000
+            return totalMiliseconds
+          },
+        ],
       },
     },
   ],
