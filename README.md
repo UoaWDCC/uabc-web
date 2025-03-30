@@ -114,9 +114,9 @@ pnpm test
 To run a single test you can use the following command
 
 ```bash
-# src/app/example-double-user-count/route.ts can be any file path that points to a test.
+# src/app/example-double-admin-count/route.ts can be any file path that points to a test.
 # Or you can replace the file path with a pattern (like a file name)
-pnpm test src/app/example-double-user-count/route.test.ts
+pnpm test src/app/example-double-admin-count/route.test.ts
 ```
 
 ## Tech Stack
