@@ -1,14 +1,6 @@
 # UOA Badminton Club Website
 Project initiated by WDCC in 2023.
 
-## 2025 Team Leadership
-- Eddie Wang (Project Manager)
-- Jeffery Ji (Tech Lead)
-
-## 2025 Team Members
-
-- TBD
-
 ## About
 
 **2025:** We are focused on creating a functional website for the University of Auckland Badminton Club. The functional website will comprise a membership process (sign-up, sign-in, sign-out), membership management system, court booking process and more. The website will be built to be user-friendly, aesthetic alongside having an effective and efficient back-end to satisfy the clients.
@@ -89,6 +81,23 @@ developers more easily understand the function of code, as names can be misleadi
 export const add = (a: number, b: number) => a + b
 ```
 
+### Environment Variables
+
+Environment variables are used to store sensitive information that should not be stored in the codebase. These are stored in a `.env` file in the root of the project.
+
+```
+DATABASE_URI=mongodb://127.0.0.1/your-database-name
+PAYLOAD_SECRET=YOUR_SECRET_HERE
+```
+
+### Type Generation
+
+We use payload's built in code generation to generate types for our project. To do this you can run the following command:
+
+```bash
+pnpm generate:types
+```
+
 ### Automated Testing
 
 Automated testing is an important part of writing code that can be maintained and understood long after the developers
@@ -136,5 +145,12 @@ smaller dependencies
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to make changes to this project.
 
 ## Acknowledgements
+
+### 2025 Team Leadership
+- Eddie Wang (Project Manager)
+- Jeffery Ji (Tech Lead)
+
+### 2025 Team Members
+- TBD
 
 Shoutout to the team responsible for the prior iteration, at [UABC Portal](https://github.com/UoaWDCC/uabc-portal).
