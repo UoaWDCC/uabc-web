@@ -7,7 +7,7 @@ import configPromise from '@payload-config'
  *
  * @example
  * import { testPayloadObject } from './utils'
- * payload.create({
+ * testPayloadObject.create({
  *   collection: 'posts',
  *   data: {
  *     title: 'Hello, world!',
