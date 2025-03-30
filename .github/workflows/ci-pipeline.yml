@@ -123,7 +123,7 @@ jobs:
           key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Build
-        run: pnpm build
+        run: pnpm tsc --noEmit && pnpm build
 
   test:
     needs: setup

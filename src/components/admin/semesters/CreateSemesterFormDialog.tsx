@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { DialogButtonsFooter } from "@/components/ui/utils/DialogUtils";
-import { weekdayEnum } from "@/lib/db/schema";
 import { QUERY_KEY } from "@/lib/utils/queryKeys";
 import { compareDate, formatDateInISO, validateDate } from "./utils";
 
@@ -39,11 +38,8 @@ const formSchema = z
       .refine(validateDate, "Invalid date"),
     bookingOpenDay: z
       .string()
-      .min(1, "Field is required")
-      .refine(
-        (value) => z.enum(weekdayEnum.enumValues).safeParse(value).success,
-        { message: "Invalid day of week" }
-      ),
+      // TODO: add weekday enum
+      .min(1, "Field is required"),
     bookingOpenTime: z.string().min(1, "Field is required"),
   })
   .refine((data) => compareDate(data.startDate, data.breakStart) < 0, {

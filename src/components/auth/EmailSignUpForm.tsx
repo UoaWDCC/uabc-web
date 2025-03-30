@@ -1,32 +1,31 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import React, { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { useValidateEmailMutation } from "@/hooks/mutations/registration";
-import { TextInput } from "../TextInput";
-import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
-import { emailSchema, passwordSchema } from "./formSchema";
-import { OTPFormAlertDialog } from "./OTPFormAlertDialog";
+import { useValidateEmailMutation } from '@/hooks/mutations/registration'
+import { TextInput } from '../TextInput'
+import { Button } from '../ui/button'
+import { useToast } from '../ui/use-toast'
+import { emailSchema, passwordSchema } from './formSchema'
+import { OTPFormAlertDialog } from './OTPFormAlertDialog'
 
 const formSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
-});
+})
 
 export const EmailSignUpForm = () => {
-  const { toast } = useToast();
+  const { toast } = useToast()
 
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   const [formData, setFormData] = useState<z.infer<typeof formSchema>>({
-    email: "",
-    password: "",
-  });
+    email: '',
+    password: '',
+  })
 
   const {
     register,
@@ -35,41 +34,36 @@ export const EmailSignUpForm = () => {
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-  });
+  })
 
-  const { mutate, isPending } = useValidateEmailMutation();
+  const { mutate, isPending } = useValidateEmailMutation()
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     mutate(data.email, {
       onSuccess: () => {
-        setDialogOpen(true);
-        setFormData(data);
+        setDialogOpen(true)
+        setFormData(data)
       },
       onError: (e) => {
-        if (e.message === "400") {
-          setError("email", {
-            type: "manual",
-            message: "Email already in use",
-          });
+        if (e.message === '400') {
+          setError('email', {
+            type: 'manual',
+            message: 'Email already in use',
+          })
         } else {
           toast({
-            title: "Uh oh! Something went wrong",
-            description:
-              "An error occurred while creating your account. Please try again.",
-            variant: "destructive",
-          });
+            title: 'Uh oh! Something went wrong',
+            description: 'An error occurred while creating your account. Please try again.',
+            variant: 'destructive',
+          })
         }
       },
-    });
-  };
+    })
+  }
 
   const handleSuccessfulSignUp = async () => {
-    await signIn("credentials", {
-      email: formData.email,
-      password: formData.password,
-      callbackUrl: "/onboarding/name",
-    });
-  };
+    throw new Error('Sign up not implemented')
+  }
 
   return (
     <>
@@ -82,14 +76,14 @@ export const EmailSignUpForm = () => {
             type="email"
             isError={!!errors.email}
             errorMessage={errors.email?.message}
-            {...register("email")}
+            {...register('email')}
           />
           <TextInput
             label="Password"
             type="password"
             isError={!!errors.password}
             errorMessage={errors.password?.message}
-            {...register("password")}
+            {...register('password')}
           />
           <Button large type="submit" disabled={isPending}>
             Sign Up with Email
@@ -104,5 +98,5 @@ export const EmailSignUpForm = () => {
         password={formData.password}
       />
     </>
-  );
-};
+  )
+}

@@ -8,7 +8,9 @@ export const stubUser = (id: string) => {
     lastName: 'Implemented',
     member: true,
     prepaidSessions: 69,
-  }
+    email: 'not@implemented.com',
+    playLevel: 'beginner',
+  } as const
 }
 
 export type User = ReturnType<typeof stubUser>
