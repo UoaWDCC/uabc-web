@@ -20,10 +20,7 @@ Fixes # (issue)
 ## Checklist before requesting a review
 
 - [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] I've requested a review from another
-- [ ] If it is a core feature, I have added thorough tests.
+- [ ] I have added thorough tests that prove my fix is effective and that my feature works
+- [ ] I've requested a review from another user
