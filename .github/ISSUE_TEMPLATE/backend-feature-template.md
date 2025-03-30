@@ -22,7 +22,7 @@ Add any other context or screenshots about the feature request here.
 **BEFORE MERGING**
 - [ ] Integration test written for services
 - [ ] [Schemas annotated](https://link.com) if adding new models
-- [ ] Code generation run (*hint*: ``)
+- [ ] Code generation run (*hint*: `pnpm generate:types`)
 - [ ] Appropriate mocks created where possible
 - [ ] PR Reviewed (For non-trivial changes)
 - [ ] Changes tested after rebasing on master or merging in master (*hint*: `git fetch origin master:master`, then `git rebase master` or `git merge master`)
