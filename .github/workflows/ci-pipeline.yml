@@ -37,7 +37,7 @@ jobs:
 
   style:
     needs: setup
-    name: Format Check
+    name: Prettier
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -127,7 +127,7 @@ jobs:
 
   test:
     needs: setup
-    name: test
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
