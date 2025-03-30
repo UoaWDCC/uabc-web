@@ -189,13 +189,13 @@ jobs:
       - name: Write git diff
         run: |
           if git diff --quiet; then
-            echo "SKILL_DIFF=0" >> $GITHUB_ENV
+            echo "TYPE_GEN_DIFF=0" >> $GITHUB_ENV
           else
-            echo "SKILL_DIFF=1" >> $GITHUB_ENV
+            echo "TYPE_GEN_DIFF=1" >> $GITHUB_ENV
           fi
 
       - name: Check for differences in typing
-        if: ${{ env.SKILL_DIFF != '0'}}
+        if: ${{ env.TYPE_GEN_DIFF != '0'}}
         uses: actions/github-script@v3
         with:
           script: |
