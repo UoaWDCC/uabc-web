@@ -1,40 +1,35 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { useForm, type SubmitHandler } from 'react-hook-form'
+import { z } from 'zod'
 
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  useDialogContext,
-} from "@/components/ui/dialog";
-import { DialogButtonsFooter } from "@/components/ui/utils/DialogUtils";
-import { useEditScheduleMutation } from "@/hooks/mutations/schedules";
-import { QUERY_KEY } from "@/lib/utils/queryKeys";
-import { TextInput } from "../../TextInput";
-import { useToast } from "@/components/ui/use-toast";
-import { useScheduleContext } from "./SchedulesContext";
+import { DialogContent, DialogHeader, DialogTitle, useDialogContext } from '@/components/ui/dialog'
+import { DialogButtonsFooter } from '@/components/ui/utils/DialogUtils'
+import { useEditScheduleMutation } from '@/hooks/mutations/schedules'
+import { QUERY_KEY } from '@/lib/utils/queryKeys'
+import { TextInput } from '../../TextInput'
+import { useToast } from '@/components/ui/use-toast'
+import { useScheduleContext } from './SchedulesContext'
 
 const formSchema = z
   .object({
-    startTime: z.string().min(1, "Field is required"),
-    endTime: z.string().min(1, "Field is required"),
-    locationName: z.string().min(1, "Field is required"),
-    locationAddress: z.string().min(1, "Field is required"),
+    startTime: z.string().min(1, 'Field is required'),
+    endTime: z.string().min(1, 'Field is required'),
+    locationName: z.string().min(1, 'Field is required'),
+    locationAddress: z.string().min(1, 'Field is required'),
     memberCapacity: z.coerce
-      .number({ message: "Capacity must be a number" })
-      .nonnegative("Capacity must be positive"),
+      .number({ message: 'Capacity must be a number' })
+      .nonnegative('Capacity must be positive'),
     casualCapacity: z.coerce
-      .number({ message: "Capacity must be a number" })
-      .nonnegative("Capacity must be positive"),
+      .number({ message: 'Capacity must be a number' })
+      .nonnegative('Capacity must be positive'),
   })
   .refine(
     (data) => {
-      return !data.endTime || data.startTime < data.endTime;
+      return !data.endTime || data.startTime < data.endTime
     },
-    { message: "Start time must be before end time", path: ["startTime"] }
-  );
+    { message: 'Start time must be before end time', path: ['startTime'] },
+  )
 
 export const EditScheduleFormDialog = () => {
   const {
@@ -47,8 +42,8 @@ export const EditScheduleFormDialog = () => {
     locationAddress,
     memberCapacity,
     casualCapacity,
-  } = useScheduleContext();
-  const { handleClose: closeDialog } = useDialogContext();
+  } = useScheduleContext()
+  const { handleClose: closeDialog } = useDialogContext()
 
   const {
     register,
@@ -65,12 +60,12 @@ export const EditScheduleFormDialog = () => {
       memberCapacity,
       casualCapacity,
     },
-  });
+  })
 
-  const { toast } = useToast();
+  const { toast } = useToast()
 
-  const queryClient = useQueryClient();
-  const { mutate, isPending } = useEditScheduleMutation();
+  const queryClient = useQueryClient()
+  const { mutate, isPending } = useEditScheduleMutation()
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
     const body = JSON.stringify({
@@ -82,27 +77,26 @@ export const EditScheduleFormDialog = () => {
       locationAddress: data.locationAddress,
       memberCapacity: data.memberCapacity,
       casualCapacity: data.casualCapacity,
-    });
+    })
 
     mutate(
       { id, body },
       {
         onError: () => {
           toast({
-            title: "Uh oh! Something went wrong",
-            description:
-              "An error occurred while updating the schedule. Please try again.",
-            variant: "destructive",
-          });
+            title: 'Uh oh! Something went wrong',
+            description: 'An error occurred while updating the schedule. Please try again.',
+            variant: 'destructive',
+          })
         },
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: [QUERY_KEY.SCHEDULES, semesterId],
-          });
+          })
           toast({
-            title: "Success!",
-            description: "Schedule details successfully updated",
-          });
+            title: 'Success!',
+            description: 'Schedule details successfully updated',
+          })
           reset({
             startTime: data.startTime,
             endTime: data.endTime,
@@ -110,12 +104,12 @@ export const EditScheduleFormDialog = () => {
             locationAddress: data.locationAddress,
             memberCapacity: data.memberCapacity,
             casualCapacity: data.casualCapacity,
-          });
-          closeDialog();
+          })
+          closeDialog()
         },
-      }
-    );
-  };
+      },
+    )
+  }
 
   return (
     <DialogContent onCloseAutoFocus={() => reset()}>
@@ -127,7 +121,7 @@ export const EditScheduleFormDialog = () => {
           <TextInput
             label="Start Time"
             type="time"
-            {...register("startTime")}
+            {...register('startTime')}
             isError={!!errors.startTime?.message}
             errorMessage={errors.startTime?.message}
             autoComplete="off"
@@ -135,7 +129,7 @@ export const EditScheduleFormDialog = () => {
           <TextInput
             label="End Time"
             type="time"
-            {...register("endTime")}
+            {...register('endTime')}
             isError={!!errors.endTime?.message}
             errorMessage={errors.endTime?.message}
             autoComplete="off"
@@ -145,7 +139,7 @@ export const EditScheduleFormDialog = () => {
           <TextInput
             label="Venue Name"
             type="text"
-            {...register("locationName")}
+            {...register('locationName')}
             isError={!!errors.locationName?.message}
             errorMessage={errors.locationName?.message}
             autoComplete="off"
@@ -155,7 +149,7 @@ export const EditScheduleFormDialog = () => {
           <TextInput
             label="Address"
             type="text"
-            {...register("locationAddress")}
+            {...register('locationAddress')}
             isError={!!errors.locationAddress?.message}
             errorMessage={errors.locationAddress?.message}
             autoComplete="off"
@@ -165,7 +159,7 @@ export const EditScheduleFormDialog = () => {
           <TextInput
             label="Capacity"
             type="number"
-            {...register("memberCapacity")}
+            {...register('memberCapacity')}
             isError={!!errors.memberCapacity?.message}
             errorMessage={errors.memberCapacity?.message}
             autoComplete="off"
@@ -173,18 +167,14 @@ export const EditScheduleFormDialog = () => {
           <TextInput
             label="Casual Capacity"
             type="number"
-            {...register("casualCapacity")}
+            {...register('casualCapacity')}
             isError={!!errors.casualCapacity?.message}
             errorMessage={errors.casualCapacity?.message}
             autoComplete="off"
           />
         </div>
-        <DialogButtonsFooter
-          type="submit"
-          primaryText="Update"
-          disabled={isPending}
-        />
+        <DialogButtonsFooter type="submit" primaryText="Update" disabled={isPending} />
       </form>
     </DialogContent>
-  );
-};
+  )
+}

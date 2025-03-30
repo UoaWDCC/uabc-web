@@ -1,9 +1,9 @@
-import { MemberApprovalTable } from "@/components/admin/members/MemberApprovalTable/MemberApprovalTable";
-import { BackNavigationBar } from "@/components/BackNavigationBar";
+import { MemberApprovalTable } from '@/components/admin/members/MemberApprovalTable/MemberApprovalTable'
+import { BackNavigationBar } from '@/components/BackNavigationBar'
 
 export const metadata = {
-  title: "Member Approval - UABC Booking Portal",
-};
+  title: 'Member Approval - UABC Booking Portal',
+}
 
 export default function AdminMemberApprovalPage() {
   return (
@@ -19,5 +19,5 @@ export default function AdminMemberApprovalPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

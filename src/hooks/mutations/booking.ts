@@ -1,32 +1,32 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query'
 
-import type { PlayLevel } from "@/types/types";
+import type { PlayLevel } from '@/types/types'
 
 type Booking = {
-  gameSessionId: number;
-  playLevel: PlayLevel;
-};
+  gameSessionId: number
+  playLevel: PlayLevel
+}
 
 export const useBookingMutation = () => {
   const mutation = useMutation({
     mutationFn: async (payload: Booking[]) => {
-      const res = await fetch("/api/bookings", {
-        method: "POST",
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
-      });
+      })
 
       if (!res.ok) {
-        const { code } = await res.json();
-        throw new Error(code);
+        const { code } = await res.json()
+        throw new Error(code)
       }
 
-      const { id } = await res.json();
+      const { id } = await res.json()
 
-      return id;
+      return id
     },
-  });
-  return mutation;
-};
+  })
+  return mutation
+}

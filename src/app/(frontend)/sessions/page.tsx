@@ -1,21 +1,21 @@
-import React from "react";
-import Image from "next/image";
-import { LogOut } from "lucide-react";
+import React from 'react'
+import Image from 'next/image'
+import { LogOut } from 'lucide-react'
 
-import { PrepaidSessionsCounter } from "@/components/booking/sessions/PrepaidSessionsCounter";
-import { Heading } from "@/components/Heading";
-import { LogOutButton } from "@/components/LogOutButton";
-import type { CurrentUserProps } from "@/lib/hoc/withCurrentUser";
-import withCurrentUser from "@/lib/hoc/withCurrentUser";
-import { getUserFromId } from "@/services/user";
-import ClientSessionPage from "./client-page";
+import { PrepaidSessionsCounter } from '@/components/booking/sessions/PrepaidSessionsCounter'
+import { Heading } from '@/components/Heading'
+import { LogOutButton } from '@/components/LogOutButton'
+import type { CurrentUserProps } from '@/lib/hoc/withCurrentUser'
+import withCurrentUser from '@/lib/hoc/withCurrentUser'
+import { getUserFromId } from '@/services/user'
+import ClientSessionPage from './client-page'
 
 export const metadata = {
-  title: "Session Booking - UABC Booking Portal",
-};
+  title: 'Session Booking - UABC Booking Portal',
+}
 
 async function SelectSessionPage({ currentUser }: CurrentUserProps) {
-  const user = (await getUserFromId(currentUser.id))!;
+  const user = (await getUserFromId(currentUser.id))!
 
   return (
     <div className="flex h-dvh flex-col">
@@ -36,16 +36,11 @@ async function SelectSessionPage({ currentUser }: CurrentUserProps) {
             height={20}
           />
         </div>
-        {user?.member && (
-          <PrepaidSessionsCounter prepaidSessions={user.prepaidSessions} />
-        )}
+        {user?.member && <PrepaidSessionsCounter prepaidSessions={user.prepaidSessions} />}
       </div>
-      <ClientSessionPage
-        isMember={user.member!}
-        prepaidSessions={user.prepaidSessions}
-      />
+      <ClientSessionPage isMember={user.member!} prepaidSessions={user.prepaidSessions} />
     </div>
-  );
+  )
 }
 
-export default withCurrentUser(SelectSessionPage);
+export default withCurrentUser(SelectSessionPage)

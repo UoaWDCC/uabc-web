@@ -1,1 +1,1 @@
-export * from "./MemberApprovalTable";
+export * from './MemberApprovalTable'

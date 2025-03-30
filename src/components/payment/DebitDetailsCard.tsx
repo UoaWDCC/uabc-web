@@ -2,15 +2,15 @@
  * @author David Zhu <dzhu292@aucklanduni.ac.nz>
  */
 
-import { MdContentCopy } from "react-icons/md";
+import { MdContentCopy } from 'react-icons/md'
 
-import { Card } from "../Card";
+import { Card } from '../Card'
 
 interface DebitDetailsCardProps {
-  title: string;
-  subtitle: string;
-  sessionId?: string;
-  copyText?: string;
+  title: string
+  subtitle: string
+  sessionId?: string
+  copyText?: string
 }
 
 export const DebitDetailsCard = ({
@@ -31,13 +31,11 @@ export const DebitDetailsCard = ({
       )}
       {/* Clipboard button is positioned absolute relative to the parent card container */}
       <button
-        onPointerDown={() =>
-          copyText && navigator.clipboard.writeText(copyText)
-        }
+        onPointerDown={() => copyText && navigator.clipboard.writeText(copyText)}
         className="absolute right-4 top-1/2 translate-y-1/2 rounded-lg p-2"
       >
         <MdContentCopy className="text-3xl" />
       </button>
     </Card>
-  );
-};
+  )
+}

@@ -1,15 +1,12 @@
-import React from "react";
-import { BsCheckCircle, BsClock } from "react-icons/bs";
+import React from 'react'
+import { BsCheckCircle, BsClock } from 'react-icons/bs'
 
 interface ConfirmationMessageProps {
-  member: boolean;
-  email: string;
+  member: boolean
+  email: string
 }
 
-export default function ConfirmationMessage({
-  member,
-  email,
-}: ConfirmationMessageProps) {
+export default function ConfirmationMessage({ member, email }: ConfirmationMessageProps) {
   return (
     <div className="w-full max-w-96 text-pretty">
       {member ? (
@@ -18,13 +15,11 @@ export default function ConfirmationMessage({
         <BsClock size={120} className="mx-auto text-yellow-500" />
       )}
       <div className="mt-4 space-y-2 text-center">
-        <p className="text-lg font-medium">
-          {member ? "Confirmed" : "Awaiting Payment"}
-        </p>
+        <p className="text-lg font-medium">{member ? 'Confirmed' : 'Awaiting Payment'}</p>
         <p className="text-sm font-medium text-tertiary">
           {member ? (
             <>
-              Booking successful! A confirmation email has been sent to{" "}
+              Booking successful! A confirmation email has been sent to{' '}
               <strong>
                 <u>{email}</u>
               </strong>
@@ -32,8 +27,7 @@ export default function ConfirmationMessage({
             </>
           ) : (
             <>
-              Your booking is pending payment. Payment instructions have been
-              sent to{" "}
+              Your booking is pending payment. Payment instructions have been sent to{' '}
               <strong>
                 <u>{email}</u>
               </strong>
@@ -43,5 +37,5 @@ export default function ConfirmationMessage({
         </p>
       </div>
     </div>
-  );
+  )
 }

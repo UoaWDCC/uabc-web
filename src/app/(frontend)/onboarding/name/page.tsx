@@ -1,27 +1,23 @@
-"use client";
+'use client'
 
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation'
 
-import { TextInput } from "@/components/TextInput";
-import { UabcHeaderText } from "@/components/UabcHeaderText";
-import { Button } from "@/components/ui/button";
-import { useOnboardingDetailsStore } from "@/stores/useOnboardingDetailsStore";
+import { TextInput } from '@/components/TextInput'
+import { UabcHeaderText } from '@/components/UabcHeaderText'
+import { Button } from '@/components/ui/button'
+import { useOnboardingDetailsStore } from '@/stores/useOnboardingDetailsStore'
 
 export default function NamePage() {
-  const router = useRouter();
-  const firstName = useOnboardingDetailsStore((state) => state.firstName);
-  const lastName = useOnboardingDetailsStore((state) => state.lastName);
+  const router = useRouter()
+  const firstName = useOnboardingDetailsStore((state) => state.firstName)
+  const lastName = useOnboardingDetailsStore((state) => state.lastName)
 
-  const updateFirstName = useOnboardingDetailsStore(
-    (state) => state.setFirstName
-  );
-  const updateLastName = useOnboardingDetailsStore(
-    (state) => state.setLastName
-  );
+  const updateFirstName = useOnboardingDetailsStore((state) => state.setFirstName)
+  const updateLastName = useOnboardingDetailsStore((state) => state.setLastName)
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    router.push("/onboarding/member");
-  };
+    e.preventDefault()
+    router.push('/onboarding/member')
+  }
 
   return (
     <div className="h-dvh w-dvw">
@@ -47,17 +43,12 @@ export default function NamePage() {
             onChange={(e) => updateLastName(e.target.value)}
           />
           <div className="pb-10">
-            <Button
-              large
-              className="w-full"
-              type="submit"
-              disabled={!firstName || !lastName}
-            >
+            <Button large className="w-full" type="submit" disabled={!firstName || !lastName}>
               Continue
             </Button>
           </div>
         </form>
       </div>
     </div>
-  );
+  )
 }

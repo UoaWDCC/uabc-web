@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
-import React from "react";
-import { Plus } from "lucide-react";
+import React from 'react'
+import { Plus } from 'lucide-react'
 
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { CreateSemesterFormDialog } from "./CreateSemesterFormDialog";
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { CreateSemesterFormDialog } from './CreateSemesterFormDialog'
 
 const SemesterCreateButton = () => {
   return (
@@ -17,7 +17,7 @@ const SemesterCreateButton = () => {
       </DialogTrigger>
       <CreateSemesterFormDialog />
     </Dialog>
-  );
-};
+  )
+}
 
-export default SemesterCreateButton;
+export default SemesterCreateButton

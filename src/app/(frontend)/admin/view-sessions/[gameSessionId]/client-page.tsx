@@ -1,49 +1,45 @@
-"use client";
+'use client'
 
-import React from "react";
-import { Download } from "lucide-react";
+import React from 'react'
+import { Download } from 'lucide-react'
 
-import { AttendeesTable } from "@/components/admin/view-sessions/gameSessionId/AttendeesList";
-import { BackNavigationBar } from "@/components/BackNavigationBar";
-import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
-import { useGameSessionId } from "@/hooks/query/game-sessions";
-import { formatFullDate } from "@/lib/utils/dates";
+import { AttendeesTable } from '@/components/admin/view-sessions/gameSessionId/AttendeesList'
+import { BackNavigationBar } from '@/components/BackNavigationBar'
+import { Button } from '@/components/ui/button'
+import { toast } from '@/components/ui/use-toast'
+import { useGameSessionId } from '@/hooks/query/game-sessions'
+import { formatFullDate } from '@/lib/utils/dates'
 
-export default function ClientViewSessionsPageWithId({
-  gameSessionId,
-}: {
-  gameSessionId: number;
-}) {
-  const { data, isLoading } = useGameSessionId(gameSessionId);
-  const date = data?.date;
+export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSessionId: number }) {
+  const { data, isLoading } = useGameSessionId(gameSessionId)
+  const date = data?.date
 
   async function downloadAttendeesList() {
-    const res = await fetch(`/api/game-sessions/${gameSessionId}/download`);
+    const res = await fetch(`/api/game-sessions/${gameSessionId}/download`)
     if (!res.ok) {
-      throw new Error("Failed to download attendees list");
+      throw new Error('Failed to download attendees list')
     }
-    const fileContents = await res.blob();
-    const a = document.createElement("a");
-    const url = URL.createObjectURL(fileContents);
-    a.href = url;
-    a.download = `${formatFullDate(date!)} attendees list.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const fileContents = await res.blob()
+    const a = document.createElement('a')
+    const url = URL.createObjectURL(fileContents)
+    a.href = url
+    a.download = `${formatFullDate(date!)} attendees list.csv`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   async function handleDownloadcsv() {
     try {
-      await downloadAttendeesList();
+      await downloadAttendeesList()
     } catch {
-      toast({ variant: "destructive", title: "Uh oh! Something went wrong." });
+      toast({ variant: 'destructive', title: 'Uh oh! Something went wrong.' })
     }
   }
 
   return (
     <>
       <BackNavigationBar
-        title={isLoading ? "Loading..." : formatFullDate(date!)}
+        title={isLoading ? 'Loading...' : formatFullDate(date!)}
         pathName="/admin/view-sessions"
       />
       <div className="flex grow flex-col items-center">
@@ -60,12 +56,12 @@ export default function ClientViewSessionsPageWithId({
             </Button>
           </h1>
           <p className="text-muted-foreground">
-            Here&apos;s the attendee list for the session on{" "}
-            <strong>{isLoading ? "Loading..." : formatFullDate(date!)}</strong>
+            Here&apos;s the attendee list for the session on{' '}
+            <strong>{isLoading ? 'Loading...' : formatFullDate(date!)}</strong>
           </p>
           <AttendeesTable gameSessionId={gameSessionId} />
         </div>
       </div>
     </>
-  );
+  )
 }

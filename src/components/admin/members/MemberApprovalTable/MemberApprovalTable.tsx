@@ -1,11 +1,7 @@
-"use client";
+'use client'
 
-import { useMemo, useState } from "react";
-import {
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { useMemo, useState } from 'react'
+import { getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
 
 import {
   Table,
@@ -14,20 +10,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { usePendingMembers } from "@/hooks/query/usePendingMembers";
-import { columns } from "./columns";
-import { MemberApprovalTablePagination } from "./MemberApprovalTablePagination";
-import { MemberApprovalTableRow } from "./MemberApprovalTableRow";
-import { SkeletonMemberApprovalTable } from "./SkeletonMemberApprovalTable";
+} from '@/components/ui/table'
+import { usePendingMembers } from '@/hooks/query/usePendingMembers'
+import { columns } from './columns'
+import { MemberApprovalTablePagination } from './MemberApprovalTablePagination'
+import { MemberApprovalTableRow } from './MemberApprovalTableRow'
+import { SkeletonMemberApprovalTable } from './SkeletonMemberApprovalTable'
 
 export function MemberApprovalTable({ className }: { className?: string }) {
-  const { data, isLoading } = usePendingMembers();
+  const { data, isLoading } = usePendingMembers()
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
-  });
+  })
 
   const pendingMembers = useMemo(
     () =>
@@ -38,10 +34,10 @@ export function MemberApprovalTable({ className }: { className?: string }) {
           firstName: member.firstName,
           lastName: member.lastName,
           email: member.email,
-        };
+        }
       }),
-    [data]
-  );
+    [data],
+  )
 
   const table = useReactTable({
     data: pendingMembers ?? [],
@@ -57,10 +53,10 @@ export function MemberApprovalTable({ className }: { className?: string }) {
     state: {
       pagination,
     },
-  });
+  })
 
   if (isLoading) {
-    return <SkeletonMemberApprovalTable />;
+    return <SkeletonMemberApprovalTable />
   }
 
   return (
@@ -73,12 +69,8 @@ export function MemberApprovalTable({ className }: { className?: string }) {
             <TableHead colSpan={2} className="table-cell lg:hidden">
               Email
             </TableHead>
-            <TableHead className="hidden w-[200px] lg:table-cell">
-              Set Prepaid Sessions
-            </TableHead>
-            <TableHead className="hidden w-[200px] lg:table-cell">
-              Approve
-            </TableHead>
+            <TableHead className="hidden w-[200px] lg:table-cell">Set Prepaid Sessions</TableHead>
+            <TableHead className="hidden w-[200px] lg:table-cell">Approve</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -87,8 +79,8 @@ export function MemberApprovalTable({ className }: { className?: string }) {
               .getRowModel()
               .rows.map((row) => (
                 <MemberApprovalTableRow
-                  key={row.getValue("id")}
-                  userId={row.getValue("id")}
+                  key={row.getValue('id')}
+                  userId={row.getValue('id')}
                   row={row}
                 />
               ))
@@ -118,5 +110,5 @@ export function MemberApprovalTable({ className }: { className?: string }) {
         </div>
       )}
     </div>
-  );
+  )
 }

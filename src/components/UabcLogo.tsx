@@ -1,8 +1,8 @@
-import Image from "next/image";
+import Image from 'next/image'
 
 interface UabcLogoProps {
-  className?: string;
-  size?: number;
+  className?: string
+  size?: number
 }
 
 export const UabcLogo = ({ className, size = 250 }: UabcLogoProps) => (
@@ -24,4 +24,4 @@ export const UabcLogo = ({ className, size = 250 }: UabcLogoProps) => (
       draggable={false}
     />
   </div>
-);
+)

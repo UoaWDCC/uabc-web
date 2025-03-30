@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import type { MouseEventHandler } from "react";
+import type { MouseEventHandler } from 'react'
 
-import { cn } from "@/lib/utils";
-import { Card } from "./Card";
+import { cn } from '@/lib/utils'
+import { Card } from './Card'
 
 interface MembershipTypeSelectorProps {
-  selectedMembership: boolean | undefined | null;
-  onClick: MouseEventHandler<HTMLInputElement>;
-  heading: string;
-  description1: string;
-  description2: string;
+  selectedMembership: boolean | undefined | null
+  onClick: MouseEventHandler<HTMLInputElement>
+  heading: string
+  description1: string
+  description2: string
 }
 
 export const MembershipTypeSelector = ({
@@ -22,8 +22,8 @@ export const MembershipTypeSelector = ({
 }: MembershipTypeSelectorProps) => (
   <label>
     <Card
-      variant={selectedMembership ? "primary" : "secondary"}
-      className={cn("flex cursor-pointer flex-col shadow hover:opacity-90")}
+      variant={selectedMembership ? 'primary' : 'secondary'}
+      className={cn('flex cursor-pointer flex-col shadow hover:opacity-90')}
     >
       <input
         type="radio"
@@ -35,11 +35,11 @@ export const MembershipTypeSelector = ({
 
       <h2 className="text-lg font-medium">{heading}</h2>
 
-      <div className={cn("text-sm opacity-70")}>
+      <div className={cn('text-sm opacity-70')}>
         <span>{description1}</span>
         <br />
         <span>{description2}</span>
       </div>
     </Card>
   </label>
-);
+)

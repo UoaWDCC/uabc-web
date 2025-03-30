@@ -1,14 +1,10 @@
-"use client";
+'use client'
 
-import { Card } from "@/components/Card";
-import { UabcHeaderText } from "@/components/UabcHeaderText";
-import { UabcLogo } from "@/components/UabcLogo";
+import { Card } from '@/components/Card'
+import { UabcHeaderText } from '@/components/UabcHeaderText'
+import { UabcLogo } from '@/components/UabcLogo'
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="grid min-h-dvh w-dvw place-items-center sm:p-8">
       <Card
@@ -26,5 +22,5 @@ export default function AuthLayout({
         <div className="flex w-full flex-col gap-4 lg:p-6">{children}</div>
       </Card>
     </div>
-  );
+  )
 }

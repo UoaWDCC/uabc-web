@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import { useCallback, useContext, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
-import { IoArrowBackOutline } from "react-icons/io5";
+import { useCallback, useContext, type ReactNode } from 'react'
+import { useRouter } from 'next/navigation'
+import { IoArrowBackOutline } from 'react-icons/io5'
 
-import { cn } from "@/lib/utils";
-import { OriginContext } from "./providers/OriginTracker";
-import { Button } from "./ui/button";
+import { cn } from '@/lib/utils'
+import { OriginContext } from './providers/OriginTracker'
+import { Button } from './ui/button'
 
 interface BackNavigationBarProps {
-  title: string;
-  pathName: string;
-  className?: string;
-  children?: ReactNode;
+  title: string
+  pathName: string
+  className?: string
+  children?: ReactNode
 }
 
 export const BackNavigationBar = ({
@@ -22,21 +22,16 @@ export const BackNavigationBar = ({
   children,
   ...props
 }: BackNavigationBarProps) => {
-  const router = useRouter();
-  const isWithinPage = useContext(OriginContext);
+  const router = useRouter()
+  const isWithinPage = useContext(OriginContext)
 
   const handleBackButtonClick = useCallback(() => {
-    if (isWithinPage) router.back();
-    else router.push(pathName);
-  }, [isWithinPage, pathName, router]);
+    if (isWithinPage) router.back()
+    else router.push(pathName)
+  }, [isWithinPage, pathName, router])
 
   return (
-    <div
-      className={cn(
-        "mt-4 flex items-center justify-between text-tertiary",
-        className
-      )}
-    >
+    <div className={cn('mt-4 flex items-center justify-between text-tertiary', className)}>
       <div className="flex">
         <Button
           variant="ghost"
@@ -47,11 +42,9 @@ export const BackNavigationBar = ({
         >
           <IoArrowBackOutline size={24} />
         </Button>
-        <span className="self-center text-lg font-medium leading-none">
-          {title}
-        </span>
+        <span className="self-center text-lg font-medium leading-none">{title}</span>
       </div>
       {children}
     </div>
-  );
-};
+  )
+}

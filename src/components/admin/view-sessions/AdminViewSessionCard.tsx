@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { Clock, MapPin, Users } from "lucide-react";
+import Link from 'next/link'
+import { Clock, MapPin, Users } from 'lucide-react'
 
-import { Card } from "../../Card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { OptionButtonUtils } from "@/components/ui/options-popover/OptionsButtonUtils";
-import { OptionsPopover } from "@/components/ui/options-popover/OptionsPopover";
-import { cn } from "@/lib/utils";
-import { DeleteGameSessionFormDialog } from "./DeleteGameSessionFormDialog";
-import EditGameSessionFormDialog from "./EditGameSessionFormDialog";
+import { Card } from '../../Card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { OptionButtonUtils } from '@/components/ui/options-popover/OptionsButtonUtils'
+import { OptionsPopover } from '@/components/ui/options-popover/OptionsPopover'
+import { cn } from '@/lib/utils'
+import { DeleteGameSessionFormDialog } from './DeleteGameSessionFormDialog'
+import EditGameSessionFormDialog from './EditGameSessionFormDialog'
 
 interface AdminViewSessionCardProps {
-  id: number;
-  title: string;
-  startTime: string;
-  endTime: string;
-  locationName: string;
-  locationAddress: string;
-  attendees: number;
-  totalCapacity: number;
-  state: "ongoing" | "past" | "upcoming";
-  className?: string;
+  id: number
+  title: string
+  startTime: string
+  endTime: string
+  locationName: string
+  locationAddress: string
+  attendees: number
+  totalCapacity: number
+  state: 'ongoing' | 'past' | 'upcoming'
+  className?: string
 }
 
 export function AdminViewSessionCard({
@@ -38,13 +38,10 @@ export function AdminViewSessionCard({
   className,
 }: AdminViewSessionCardProps) {
   return (
-    <Card
-      className={cn("relative flex flex-col gap-4 border", className)}
-      variant="card"
-    >
+    <Card className={cn('relative flex flex-col gap-4 border', className)} variant="card">
       <div className="flex items-center justify-between gap-4">
         <p className="text-lg font-medium leading-none">{title}</p>
-        {state === "upcoming" ? (
+        {state === 'upcoming' ? (
           <OptionsPopover>
             <OptionsPopover.DialogItem
               ButtonComponent={<OptionButtonUtils type="edit" />}
@@ -58,9 +55,9 @@ export function AdminViewSessionCard({
         ) : (
           <Badge
             className="pointer-events-none select-none"
-            variant={state === "ongoing" ? "success" : "tertiary"}
+            variant={state === 'ongoing' ? 'success' : 'tertiary'}
           >
-            {state === "ongoing" ? "Ongoing" : "Past"}
+            {state === 'ongoing' ? 'Ongoing' : 'Past'}
           </Badge>
         )}
       </div>
@@ -87,12 +84,12 @@ export function AdminViewSessionCard({
       <Link
         key={id}
         href={`/admin/view-sessions/${id}`}
-        className={cn(attendees === 0 && "pointer-events-none")}
+        className={cn(attendees === 0 && 'pointer-events-none')}
       >
         <Button className="w-full font-semibold" disabled={attendees === 0}>
           View attendees list
         </Button>
       </Link>
     </Card>
-  );
+  )
 }

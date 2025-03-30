@@ -12,10 +12,7 @@ import { GameSessionProvider } from '@/components/admin/view-sessions/GameSessio
 import { SkeletonViewSessionCard } from '@/components/admin/view-sessions/SkeletonViewSessionCard'
 import { buttonVariants } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
-import {
-  prefetchActiveDates,
-  useActiveDates,
-} from '@/hooks/query/active-dates'
+import { prefetchActiveDates, useActiveDates } from '@/hooks/query/active-dates'
 import { useGameSession } from '@/hooks/query/game-sessions'
 import { cn } from '@/lib/utils'
 import { convertTo12HourFormat, formatFullDate } from '@/lib/utils/dates'
@@ -59,11 +56,7 @@ export default function ClientViewSessionsPage() {
     router.replace(pathname + '?date=' + format(date, 'yyyy-MM-dd'))
   }
 
-  function getSessionState(
-    date: string | Date,
-    startTimeString: string,
-    endTimeString: string,
-  ) {
+  function getSessionState(date: string | Date, startTimeString: string, endTimeString: string) {
     const now = new Date()
     const startTime = parse(startTimeString, 'HH:mm:ss', date)
     const endTime = parse(endTimeString, 'HH:mm:ss', date)
@@ -134,14 +127,8 @@ export default function ClientViewSessionsPage() {
               locationName={data.data.locationName}
               locationAddress={data.data.locationAddress}
               attendees={data.data.attendees}
-              totalCapacity={
-                data.data.memberCapacity + data.data.casualCapacity
-              }
-              state={getSessionState(
-                data.data.date,
-                data.data.startTime,
-                data.data.endTime,
-              )}
+              totalCapacity={data.data.memberCapacity + data.data.casualCapacity}
+              state={getSessionState(data.data.date, data.data.startTime, data.data.endTime)}
             />
           ) : (
             <EmptyAdminViewSessionCard />
