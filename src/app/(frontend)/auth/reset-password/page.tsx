@@ -14,12 +14,10 @@ const searchParamsSchema = z.object({
   token: z.string(),
 })
 
-export default async function ResetPasswordPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined }
+export default async function ResetPasswordPage(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const parseResult = searchParamsSchema.safeParse(searchParams)
+  const parseResult = searchParamsSchema.safeParse(await props.searchParams)
 
   if (!parseResult.success) {
     return redirect('/auth/login')

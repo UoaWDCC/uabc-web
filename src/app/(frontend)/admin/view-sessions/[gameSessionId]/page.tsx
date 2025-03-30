@@ -4,9 +4,11 @@ import { z } from 'zod'
 import ClientViewSessionsPageWithId from './client-page'
 
 const routeContextSchema = z.object({
-  params: z.object({
-    gameSessionId: z.coerce.number(),
-  }),
+  params: z.promise(
+    z.object({
+      gameSessionId: z.coerce.number(),
+    }),
+  ),
 })
 
 export default async function ViewSessionsPage(ctx: z.infer<typeof routeContextSchema>) {
@@ -14,7 +16,7 @@ export default async function ViewSessionsPage(ctx: z.infer<typeof routeContextS
 
   if (!result.success) notFound()
 
-  const gameSessionId = result.data.params.gameSessionId
+  const gameSessionId = (await result.data.params).gameSessionId
 
   return (
     <div className="mx-4 flex min-h-dvh flex-col">

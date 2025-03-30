@@ -11,9 +11,9 @@ export const metadata = {
   title: 'Booking Confirmation - UABC Booking Portal',
 }
 
-async function ConfirmationPage({
-  currentUser,
-}: CurrentUserProps & { params: { bookingId: string } }) {
+async function ConfirmationPage(
+  props: CurrentUserProps & { params: Promise<{ bookingId: string }> },
+) {
   return (
     <div className="flex min-h-dvh flex-col">
       <div className="relative flex h-32 items-center justify-center overflow-hidden">
@@ -28,7 +28,7 @@ async function ConfirmationPage({
           /**
            * // TODO
            */
-          <ConfirmationMessage member={false} email={currentUser.email} />
+          <ConfirmationMessage member={false} email={await props.currentUser.email} />
         }
         <Link href="/sessions" className={buttonVariants({ variant: 'ghost' })}>
           Return Home
