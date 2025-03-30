@@ -1,0 +1,20 @@
+name: Deploy UABC App to Fly Staging
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_APP_STAGING_API_TOKEN }}
+
+jobs:
+  deploy-api:
+    name: Deploy Api
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl secrets set --config fly.staging.toml DATABASE_URI=${{ secrets.STAGING_DATABASE_URI }} PAYLOAD_SECRET=${{ secrets.STAGING_PAYLOAD_SECRET }}
+      - run: flyctl secrets deploy --config fly.staging.toml
+      - run: flyctl deploy --remote-only --config fly.staging.toml
