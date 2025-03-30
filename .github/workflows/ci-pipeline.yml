@@ -204,7 +204,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [build, lint, style, test]
+    needs: [build, lint, style, test, codegen]
     runs-on: ubuntu-latest
     steps:
       - name: All checks passed
