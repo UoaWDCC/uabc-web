@@ -111,9 +111,35 @@ jobs:
       - name: Build
         run: pnpm build
 
+  test:
+    needs: setup
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      # Restore cached node_modules
+      - name: Restore node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Test
+        run: pnpm test
+
   verify:
     name: Verify
-    needs: [build, lint, style]
+    needs: [build, lint, style, test]
     runs-on: ubuntu-latest
     steps:
       - name: All checks passed

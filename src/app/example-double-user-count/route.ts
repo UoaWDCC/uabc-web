@@ -10,5 +10,5 @@ export const GET = async () => {
     collection: 'users',
   })
 
-  return Response.json(data)
+  return Response.json(data.docs.length * 2)
 }
