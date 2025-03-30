@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-enum Roles {
+export enum Roles {
   member = 'member',
   admin = 'admin',
   casual = 'casual',
