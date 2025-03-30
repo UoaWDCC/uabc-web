@@ -7,6 +7,6 @@ export default defineConfig({
   test: {
     environment: 'node',
     setupFiles: ['dotenv/config', './tests/mongodb-setup.ts'],
-    globals: true
+    globals: true,
   },
 })
