@@ -157,6 +157,7 @@ jobs:
         run: pnpm test
 
   codegen:
+    needs: setup
     name: Codegen
     runs-on: ubuntu-latest
     steps:
