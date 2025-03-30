@@ -59,8 +59,7 @@ them when you make a pull request.
 
 If you are using `VSCode` some extensions will be recommended to you.
 
-[Open the exensions panel and find recommeneded ones](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace)
-
+[Open the extensions panel and find recommended ones](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace)
 Otherwise you are responsible for figuring out how to configure those plugins in your IDE. (Most IDEs
 like [WebStorm](https://www.jetbrains.com/webstorm/) and [Zed](https://zed.dev/) have plugins for these tools built in).
 
