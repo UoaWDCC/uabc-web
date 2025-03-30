@@ -10,7 +10,7 @@ env:
 
 jobs:
   deploy-api:
-    name: Deploy Api
+    name: Deploy UABC Staging App
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
