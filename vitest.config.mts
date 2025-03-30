@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   test: {
     environment: 'node',
-    setupFiles: ['dotenv/config', './tests/mongodb-setup.ts'],
+    setupFiles: ['dotenv/config', './tests/mongodb-setup.ts', './tests/dom-setup'],
     globals: true,
   },
 })

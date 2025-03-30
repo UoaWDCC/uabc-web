@@ -123,7 +123,7 @@ jobs:
           key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Build
-        run: pnpm build
+        run: pnpm tsc --noEmit && pnpm build
 
   test:
     needs: setup
@@ -157,6 +157,7 @@ jobs:
         run: pnpm test
 
   codegen:
+    needs: setup
     name: Codegen
     runs-on: ubuntu-latest
     steps:
@@ -203,7 +204,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [build, lint, style, test]
+    needs: [build, lint, style, test, codegen]
     runs-on: ubuntu-latest
     steps:
       - name: All checks passed
