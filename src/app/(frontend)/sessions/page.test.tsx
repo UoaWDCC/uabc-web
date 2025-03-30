@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { render, screen, userEvent } from '@/tests-frontend-utils/test-utils'
+import { render, screen } from '@/tests-frontend-utils/test-utils'
 import ClientSessionPage from './client-page'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 

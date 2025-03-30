@@ -1,51 +1,44 @@
-import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { z } from "zod";
+import React from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { useForm, type SubmitHandler } from 'react-hook-form'
+import { z } from 'zod'
 
-import { TextInput } from "../../TextInput";
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  useDialogContext,
-} from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
-import { DialogButtonsFooter } from "@/components/ui/utils/DialogUtils";
-import { useCreateScheduleMutation } from "@/hooks/mutations/schedules";
-import { weekdayEnum } from "@/lib/db/schema";
-import { QUERY_KEY } from "@/lib/utils/queryKeys";
+import { TextInput } from '../../TextInput'
+import { DialogContent, DialogHeader, DialogTitle, useDialogContext } from '@/components/ui/dialog'
+import { useToast } from '@/components/ui/use-toast'
+import { DialogButtonsFooter } from '@/components/ui/utils/DialogUtils'
+import { useCreateScheduleMutation } from '@/hooks/mutations/schedules'
+import { QUERY_KEY } from '@/lib/utils/queryKeys'
 
 interface ScheduleCreateDialogProps {
-  semesterId: number;
+  semesterId: number
 }
 
 const formSchema = z
   .object({
-    weekday: z.enum(weekdayEnum.enumValues, { message: "Expected weekday" }),
-    startTime: z.string().min(1, "Field is required"),
-    endTime: z.string().min(1, "Field is required"),
-    locationName: z.string().min(1, "Field is required"),
-    locationAddress: z.string().min(1, "Field is required"),
+    // TODO: Add weekday enum
+    weekday: z.string(),
+    startTime: z.string().min(1, 'Field is required'),
+    endTime: z.string().min(1, 'Field is required'),
+    locationName: z.string().min(1, 'Field is required'),
+    locationAddress: z.string().min(1, 'Field is required'),
     memberCapacity: z.coerce
-      .number({ message: "Capacity must be a number" })
-      .nonnegative("Capacity must be positive"),
+      .number({ message: 'Capacity must be a number' })
+      .nonnegative('Capacity must be positive'),
     casualCapacity: z.coerce
-      .number({ message: "Capacity must be a number" })
-      .nonnegative("Capacity must be positive"),
+      .number({ message: 'Capacity must be a number' })
+      .nonnegative('Capacity must be positive'),
   })
   .refine(
     (data) => {
-      return !data.endTime || data.startTime < data.endTime;
+      return !data.endTime || data.startTime < data.endTime
     },
-    { message: "Start time must be before end time", path: ["startTime"] }
-  );
+    { message: 'Start time must be before end time', path: ['startTime'] },
+  )
 
-export const CreateScheduleFormDialog = ({
-  semesterId,
-}: ScheduleCreateDialogProps) => {
-  const { handleClose: closeDialog } = useDialogContext();
+export const CreateScheduleFormDialog = ({ semesterId }: ScheduleCreateDialogProps) => {
+  const { handleClose: closeDialog } = useDialogContext()
 
   const {
     register,
@@ -54,12 +47,12 @@ export const CreateScheduleFormDialog = ({
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-  });
-  const { toast } = useToast();
+  })
+  const { toast } = useToast()
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
-  const { mutate, isPending } = useCreateScheduleMutation();
+  const { mutate, isPending } = useCreateScheduleMutation()
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
     const body = JSON.stringify({
@@ -70,7 +63,7 @@ export const CreateScheduleFormDialog = ({
       locationAddress: data.locationAddress,
       memberCapacity: data.memberCapacity,
       casualCapacity: data.casualCapacity,
-    });
+    })
 
     mutate(
       {
@@ -80,31 +73,30 @@ export const CreateScheduleFormDialog = ({
       {
         onError: () => {
           toast({
-            title: "Uh oh! Something went wrong",
-            description:
-              "An error occurred while creating the schedule. Please try again.",
-            variant: "destructive",
-          });
+            title: 'Uh oh! Something went wrong',
+            description: 'An error occurred while creating the schedule. Please try again.',
+            variant: 'destructive',
+          })
         },
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: [QUERY_KEY.SCHEDULES, semesterId],
-          });
+          })
           toast({
-            title: "Success!",
-            description: "Successfully created schedule",
-          });
-          reset();
-          closeDialog();
+            title: 'Success!',
+            description: 'Successfully created schedule',
+          })
+          reset()
+          closeDialog()
         },
-      }
-    );
-  };
+      },
+    )
+  }
 
   const handleCancel = () => {
-    reset();
-    closeDialog();
-  };
+    reset()
+    closeDialog()
+  }
 
   return (
     <DialogContent>
@@ -116,7 +108,7 @@ export const CreateScheduleFormDialog = ({
           <TextInput
             label="Day"
             type="text"
-            {...register("weekday")}
+            {...register('weekday')}
             isError={!!errors.weekday?.message}
             errorMessage={errors.weekday?.message}
             autoComplete="off"
@@ -126,7 +118,7 @@ export const CreateScheduleFormDialog = ({
           <TextInput
             label="Start Time"
             type="time"
-            {...register("startTime")}
+            {...register('startTime')}
             isError={!!errors.startTime?.message}
             errorMessage={errors.startTime?.message}
             autoComplete="off"
@@ -134,7 +126,7 @@ export const CreateScheduleFormDialog = ({
           <TextInput
             label="End Time"
             type="time"
-            {...register("endTime")}
+            {...register('endTime')}
             isError={!!errors.endTime?.message}
             errorMessage={errors.endTime?.message}
             autoComplete="off"
@@ -144,7 +136,7 @@ export const CreateScheduleFormDialog = ({
           <TextInput
             label="Venue Name"
             type="text"
-            {...register("locationName")}
+            {...register('locationName')}
             isError={!!errors.locationName?.message}
             errorMessage={errors.locationName?.message}
             autoComplete="off"
@@ -154,7 +146,7 @@ export const CreateScheduleFormDialog = ({
           <TextInput
             label="Address"
             type="text"
-            {...register("locationAddress")}
+            {...register('locationAddress')}
             isError={!!errors.locationAddress?.message}
             errorMessage={errors.locationAddress?.message}
             autoComplete="off"
@@ -164,7 +156,7 @@ export const CreateScheduleFormDialog = ({
           <TextInput
             label="Capacity"
             type="text"
-            {...register("memberCapacity")}
+            {...register('memberCapacity')}
             isError={!!errors.memberCapacity?.message}
             errorMessage={errors.memberCapacity?.message}
             autoComplete="off"
@@ -172,7 +164,7 @@ export const CreateScheduleFormDialog = ({
           <TextInput
             label="Casual Capacity"
             type="text"
-            {...register("casualCapacity")}
+            {...register('casualCapacity')}
             isError={!!errors.casualCapacity?.message}
             errorMessage={errors.casualCapacity?.message}
             autoComplete="off"
@@ -186,5 +178,5 @@ export const CreateScheduleFormDialog = ({
         />
       </form>
     </DialogContent>
-  );
-};
+  )
+}
