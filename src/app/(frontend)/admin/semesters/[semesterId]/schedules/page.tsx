@@ -5,11 +5,8 @@ import ScheduleCreateButton from '@/components/admin/schedules/ScheduleCreateBut
 import { SchedulesList } from '@/components/admin/schedules/SchedulesList'
 import { BackNavigationBar } from '@/components/BackNavigationBar'
 
-const routeContextSchema = z.object({
-  params: z.object({
-    semesterId: z.coerce.number(),
-  }),
-})
+// TODO: properly verify
+const routeContextSchema = z.object({})
 
 export async function generateMetadata(ctx: z.infer<typeof routeContextSchema>) {
   const result = routeContextSchema.safeParse(ctx)
