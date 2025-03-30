@@ -21,7 +21,7 @@ Add any other context or screenshots about the feature request here.
 
 **BEFORE MERGING**
 - [ ] Integration test written for services
-- [ ] [Schemas annotated](https://link.com) if adding new models
+- [ ] [Schemas annotated](https://payloadcms.com/docs/configuration/collections) if adding new models
 - [ ] Code generation run (*hint*: `pnpm generate:types`)
 - [ ] Appropriate mocks created where possible
 - [ ] PR Reviewed (For non-trivial changes)
