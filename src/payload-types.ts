@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     admins: Admin;
+    user: User;
     media: Media;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -76,6 +77,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     admins: AdminsSelect<false> | AdminsSelect<true>;
+    user: UserSelect<false> | UserSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -132,6 +134,20 @@ export interface Admin {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user".
+ */
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  role: 'member' | 'admin' | 'casual';
+  remainingSessions?: number | null;
+  image?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
@@ -159,6 +175,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'admins';
         value: string | Admin;
+      } | null)
+    | ({
+        relationTo: 'user';
+        value: string | User;
       } | null)
     | ({
         relationTo: 'media';
@@ -220,6 +240,19 @@ export interface AdminsSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user_select".
+ */
+export interface UserSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  role?: T;
+  remainingSessions?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
