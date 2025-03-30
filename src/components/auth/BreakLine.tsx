@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export const BreakLine = ({ label }: { label: string }) => {
   return (
@@ -9,5 +9,5 @@ export const BreakLine = ({ label }: { label: string }) => {
       </span>
       <hr className="border-0.5 w-full border-tertiary dark:border-white" />
     </div>
-  );
-};
+  )
+}

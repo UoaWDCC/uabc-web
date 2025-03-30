@@ -1,12 +1,12 @@
-import { useEffect } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { format, parse } from "date-fns";
-import { useForm } from "react-hook-form";
-import type { z } from "zod";
+import { useEffect } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { format, parse } from 'date-fns'
+import { useForm } from 'react-hook-form'
+import type { z } from 'zod'
 
-import { TextInput } from "../../TextInput";
-import { Button } from "@/components/ui/button";
+import { TextInput } from '../../TextInput'
+import { Button } from '@/components/ui/button'
 import {
   DialogClose,
   DialogContent,
@@ -15,14 +15,14 @@ import {
   DialogHeader,
   DialogTitle,
   useDialogContext,
-} from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
-import { DialogButtonsFooter } from "@/components/ui/utils/DialogUtils";
-import { useEditGameSessionMutation } from "@/hooks/mutations/game-sessions";
-import { formatFullDate } from "@/lib/utils/dates";
-import { QUERY_KEY } from "@/lib/utils/queryKeys";
-import { useGameSessionContext } from "./GameSessionContext";
-import { gameSessionFormSchema } from "./utils";
+} from '@/components/ui/dialog'
+import { useToast } from '@/components/ui/use-toast'
+import { DialogButtonsFooter } from '@/components/ui/utils/DialogUtils'
+import { useEditGameSessionMutation } from '@/hooks/mutations/game-sessions'
+import { formatFullDate } from '@/lib/utils/dates'
+import { QUERY_KEY } from '@/lib/utils/queryKeys'
+import { useGameSessionContext } from './GameSessionContext'
+import { gameSessionFormSchema } from './utils'
 
 export default function EditGameSessionFormDialog() {
   const {
@@ -34,9 +34,9 @@ export default function EditGameSessionFormDialog() {
     locationAddress,
     memberCapacity,
     casualCapacity,
-  } = useGameSessionContext();
+  } = useGameSessionContext()
 
-  const { handleClose } = useDialogContext();
+  const { handleClose } = useDialogContext()
 
   const {
     register,
@@ -54,7 +54,7 @@ export default function EditGameSessionFormDialog() {
       memberCapacity,
       casualCapacity,
     },
-  });
+  })
 
   useEffect(() => {
     reset({
@@ -64,15 +64,15 @@ export default function EditGameSessionFormDialog() {
       locationAddress: locationAddress,
       memberCapacity: memberCapacity,
       casualCapacity: casualCapacity,
-    });
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleClose]);
+  }, [handleClose])
 
-  const { mutate, isPending } = useEditGameSessionMutation();
+  const { mutate, isPending } = useEditGameSessionMutation()
 
-  const { toast } = useToast();
+  const { toast } = useToast()
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const onSubmit = (data: z.infer<typeof gameSessionFormSchema>) => {
     const body = JSON.stringify({
@@ -80,31 +80,30 @@ export default function EditGameSessionFormDialog() {
       date,
       startTime: `${data.startTime}:00`,
       endTime: `${data.endTime}:00`,
-    });
+    })
     mutate(
       { date, body },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: [QUERY_KEY.GAME_SESSION, date],
-          });
+          })
           toast({
-            title: "Success!",
-            description: "Game session updated successfully",
-          });
-          handleClose();
+            title: 'Success!',
+            description: 'Game session updated successfully',
+          })
+          handleClose()
         },
         onError: () => {
           toast({
-            title: "Uh oh! Something went wrong",
-            description:
-              "An error occurred while updating the game session. Please try again.",
-            variant: "destructive",
-          });
+            title: 'Uh oh! Something went wrong',
+            description: 'An error occurred while updating the game session. Please try again.',
+            variant: 'destructive',
+          })
         },
-      }
-    );
-  };
+      },
+    )
+  }
 
   if (!bookingOpen)
     return (
@@ -119,7 +118,7 @@ export default function EditGameSessionFormDialog() {
           </DialogClose>
         </DialogFooter>
       </DialogContent>
-    );
+    )
 
   return (
     <DialogContent>
@@ -131,7 +130,7 @@ export default function EditGameSessionFormDialog() {
           <TextInput
             label="Booking Open"
             type="text"
-            value={format(bookingOpen, "dd/MM/yy hh:mma")}
+            value={format(bookingOpen, 'dd/MM/yy hh:mma')}
             readOnly
             disabled
           />
@@ -139,12 +138,9 @@ export default function EditGameSessionFormDialog() {
             label="Booking Close"
             type="text"
             value={
-              watch("startTime")
-                ? format(
-                    parse(watch("startTime"), "HH:mm", date),
-                    "dd/MM/yy hh:mma"
-                  )
-                : format(date, "dd/MM/yy hh:mma")
+              watch('startTime')
+                ? format(parse(watch('startTime'), 'HH:mm', date), 'dd/MM/yy hh:mma')
+                : format(date, 'dd/MM/yy hh:mma')
             }
             readOnly
             disabled
@@ -154,7 +150,7 @@ export default function EditGameSessionFormDialog() {
           <TextInput
             label="Start Time"
             type="time"
-            {...register("startTime")}
+            {...register('startTime')}
             isError={!!errors.startTime}
             errorMessage={errors.startTime?.message}
             autoFocus
@@ -162,7 +158,7 @@ export default function EditGameSessionFormDialog() {
           <TextInput
             label="End Time"
             type="time"
-            {...register("endTime")}
+            {...register('endTime')}
             isError={!!errors.endTime}
             errorMessage={errors.endTime?.message}
           />
@@ -170,14 +166,14 @@ export default function EditGameSessionFormDialog() {
         <TextInput
           label="Location Name"
           type="text"
-          {...register("locationName")}
+          {...register('locationName')}
           isError={!!errors.locationName}
           errorMessage={errors.locationName?.message}
         />
         <TextInput
           label="Address"
           type="text"
-          {...register("locationAddress")}
+          {...register('locationAddress')}
           isError={!!errors.locationAddress}
           errorMessage={errors.locationAddress?.message}
         />
@@ -185,14 +181,14 @@ export default function EditGameSessionFormDialog() {
           <TextInput
             label="Capacity"
             type="text"
-            {...register("memberCapacity")}
+            {...register('memberCapacity')}
             isError={!!errors.memberCapacity}
             errorMessage={errors.memberCapacity?.message}
           />
           <TextInput
             label="Casual Capacity"
             type="text"
-            {...register("casualCapacity")}
+            {...register('casualCapacity')}
             isError={!!errors.casualCapacity}
             errorMessage={errors.casualCapacity?.message}
           />
@@ -200,5 +196,5 @@ export default function EditGameSessionFormDialog() {
         <DialogButtonsFooter disabled={isPending} type="submit" />
       </form>
     </DialogContent>
-  );
+  )
 }

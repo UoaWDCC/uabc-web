@@ -1,12 +1,12 @@
-import { Card } from "../../Card";
+import { Card } from '../../Card'
 
 type ConfirmedSessionCardProps = {
-  weekDay: string;
-  locationName: string;
-  address: string;
-  startTime: string;
-  endTime: string;
-};
+  weekDay: string
+  locationName: string
+  address: string
+  startTime: string
+  endTime: string
+}
 
 export const ConfirmedSessionCard = ({
   weekDay,
@@ -26,5 +26,5 @@ export const ConfirmedSessionCard = ({
         <p>{address}</p>
       </div>
     </Card>
-  );
-};
+  )
+}

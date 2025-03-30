@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react'
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from '@/components/ui/skeleton'
 
 const SkeletonSessionCard = () => {
   return (
@@ -9,7 +9,7 @@ const SkeletonSessionCard = () => {
       <Skeleton className="h-4 w-[125px] bg-tertiary/50" />
       <Skeleton className="h-4 w-[150px] bg-tertiary/50" />
     </Skeleton>
-  );
-};
+  )
+}
 
-export default SkeletonSessionCard;
+export default SkeletonSessionCard

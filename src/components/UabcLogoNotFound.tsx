@@ -1,9 +1,9 @@
-import React from "react";
-import clsx from "clsx";
+import React from 'react'
+import clsx from 'clsx'
 
 export const UabcLogoNotFound = ({ className }: { className?: string }) => {
   return (
-    <div className={clsx(className, "stroke-foreground")}>
+    <div className={clsx(className, 'stroke-foreground')}>
       <svg
         width="280"
         height="274"
@@ -18,5 +18,5 @@ export const UabcLogoNotFound = ({ className }: { className?: string }) => {
         />
       </svg>
     </div>
-  );
-};
+  )
+}

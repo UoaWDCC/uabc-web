@@ -1,25 +1,17 @@
-import { memo } from "react";
-import Link from "next/link";
+import { memo } from 'react'
+import Link from 'next/link'
 
-import { Card } from "../../Card";
-import { OptionButtonUtils } from "@/components/ui/options-popover/OptionsButtonUtils";
-import { OptionsPopover } from "@/components/ui/options-popover/OptionsPopover";
-import { convertTo12HourFormat } from "@/lib/utils/dates";
-import { DeleteSemesterFormDialog } from "./DeleteSemesterFormDialog";
-import { EditSemesterFormDialog } from "./EditSemesterFormDialog";
-import { useSemesterContext } from "./SemestersContext";
+import { Card } from '../../Card'
+import { OptionButtonUtils } from '@/components/ui/options-popover/OptionsButtonUtils'
+import { OptionsPopover } from '@/components/ui/options-popover/OptionsPopover'
+import { convertTo12HourFormat } from '@/lib/utils/dates'
+import { DeleteSemesterFormDialog } from './DeleteSemesterFormDialog'
+import { EditSemesterFormDialog } from './EditSemesterFormDialog'
+import { useSemesterContext } from './SemestersContext'
 
 const UnmemoizedSemesterDetailCard = () => {
-  const {
-    id,
-    name,
-    startDate,
-    endDate,
-    breakStart,
-    breakEnd,
-    bookingOpenDay,
-    bookingOpenTime,
-  } = useSemesterContext();
+  const { id, name, startDate, endDate, breakStart, breakEnd, bookingOpenDay, bookingOpenTime } =
+    useSemesterContext()
   return (
     <Card
       className="relative select-none text-sm font-medium tracking-tight text-tertiary"
@@ -43,8 +35,7 @@ const UnmemoizedSemesterDetailCard = () => {
         </OptionsPopover>
       </div>
       <p className="underline decoration-secondary/80 decoration-1 underline-offset-4">
-        Bookings open {bookingOpenDay} at{" "}
-        {convertTo12HourFormat(bookingOpenTime)}
+        Bookings open {bookingOpenDay} at {convertTo12HourFormat(bookingOpenTime)}
       </p>
       <p className="mt-2">Start date: {startDate}</p>
       <p>End date: {endDate}</p>
@@ -52,7 +43,7 @@ const UnmemoizedSemesterDetailCard = () => {
         Break period: {breakStart} - {breakEnd}
       </p>
     </Card>
-  );
-};
+  )
+}
 
-export const SemesterDetailCard = memo(UnmemoizedSemesterDetailCard);
+export const SemesterDetailCard = memo(UnmemoizedSemesterDetailCard)

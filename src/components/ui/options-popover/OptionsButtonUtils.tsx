@@ -1,15 +1,15 @@
-import React, { forwardRef } from "react";
-import { SquarePen, Trash2 } from "lucide-react";
+import React, { forwardRef } from 'react'
+import { SquarePen, Trash2 } from 'lucide-react'
 
-import { Button } from "../button";
+import { Button } from '../button'
 
-type OptionTypes = { type: "edit" | "delete" };
+type OptionTypes = { type: 'edit' | 'delete' }
 
 // * Cosmetic button components for OptionsPopover
 export const OptionButtonUtils = forwardRef<HTMLButtonElement, OptionTypes>(
-  ({ type = "edit", ...props }: OptionTypes, ref) => {
+  ({ type = 'edit', ...props }: OptionTypes, ref) => {
     switch (type) {
-      case "edit":
+      case 'edit':
         return (
           <Button
             variant="ghost"
@@ -20,9 +20,9 @@ export const OptionButtonUtils = forwardRef<HTMLButtonElement, OptionTypes>(
             <SquarePen className="mr-2 w-4" />
             <p>Edit</p>
           </Button>
-        );
+        )
 
-      case "delete":
+      case 'delete':
         return (
           <Button
             variant="ghost"
@@ -33,9 +33,9 @@ export const OptionButtonUtils = forwardRef<HTMLButtonElement, OptionTypes>(
             <Trash2 className="mr-2 w-4" />
             <p>Delete</p>
           </Button>
-        );
+        )
     }
-  }
-);
+  },
+)
 
-OptionButtonUtils.displayName = "OptionButtonUtils";
+OptionButtonUtils.displayName = 'OptionButtonUtils'

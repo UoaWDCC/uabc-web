@@ -1,7 +1,5 @@
-import { createHash } from 'crypto'
-
 export async function verifyResetPasswordToken(token: string) {
   // TODO: Implement or remove
-  console.error('Not implemented')
+  console.error('Not implemented' + token)
   return false
 }

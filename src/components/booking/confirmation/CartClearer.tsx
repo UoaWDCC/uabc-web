@@ -1,13 +1,13 @@
-"use client";
+'use client'
 
-import { useEffect } from "react";
+import { useEffect } from 'react'
 
-import { useCartStore } from "@/stores/useCartStore";
+import { useCartStore } from '@/stores/useCartStore'
 
 export function CartClearer() {
-  const clearCart = useCartStore((state) => state.clearCart);
+  const clearCart = useCartStore((state) => state.clearCart)
   useEffect(() => {
     clearCart()
-  }, [clearCart]);
-  return null;
+  }, [clearCart])
+  return null
 }

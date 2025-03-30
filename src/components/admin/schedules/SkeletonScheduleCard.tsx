@@ -1,5 +1,5 @@
-import { Card } from "../../Card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from '../../Card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export const SkeletonScheduleCard = () => {
   // Update to be more similar if time
@@ -15,5 +15,5 @@ export const SkeletonScheduleCard = () => {
       <Skeleton className="mt-4 h-4 w-28 bg-tertiary/20" />
       <Skeleton className="mt-1 h-4 w-24 bg-tertiary/20" />
     </Card>
-  );
-};
+  )
+}

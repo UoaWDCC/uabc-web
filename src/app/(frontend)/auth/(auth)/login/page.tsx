@@ -1,13 +1,13 @@
-import { Suspense } from "react";
-import Link from "next/link";
+import { Suspense } from 'react'
+import Link from 'next/link'
 
-import { BreakLine } from "@/components/auth/BreakLine";
-import { EmailLoginForm } from "@/components/auth/EmailLoginForm";
-import { GoogleSignIn } from "@/components/auth/GoogleLoginButton";
+import { BreakLine } from '@/components/auth/BreakLine'
+import { EmailLoginForm } from '@/components/auth/EmailLoginForm'
+import { GoogleSignIn } from '@/components/auth/GoogleLoginButton'
 
 export const metadata = {
-  title: "Login - UABC Booking Portal",
-};
+  title: 'Login - UABC Booking Portal',
+}
 
 export default async function LoginPage() {
   return (
@@ -22,13 +22,10 @@ export default async function LoginPage() {
           Create Account
         </Link>
         <span className="pointer-events-none mx-1">|</span>
-        <Link
-          className="text-right font-bold underline"
-          href="/auth/forgot-password"
-        >
+        <Link className="text-right font-bold underline" href="/auth/forgot-password">
           Forgot Password?
         </Link>
       </p>
     </div>
-  );
+  )
 }

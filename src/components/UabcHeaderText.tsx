@@ -1,22 +1,14 @@
-import React from "react";
+import React from 'react'
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
 interface UabcHeaderTextProps {
-  className?: string;
-  description?: boolean;
+  className?: string
+  description?: boolean
 }
 
-export const UabcHeaderText = ({
-  description,
-  className,
-}: UabcHeaderTextProps) => (
-  <div
-    className={cn(
-      "text-center font-bold leading-none text-primary dark:text-white",
-      className
-    )}
-  >
+export const UabcHeaderText = ({ description, className }: UabcHeaderTextProps) => (
+  <div className={cn('text-center font-bold leading-none text-primary dark:text-white', className)}>
     <span className="text-[4rem] leading-none tracking-tight">UABC</span>
     {description && (
       <>
@@ -25,4 +17,4 @@ export const UabcHeaderText = ({
       </>
     )}
   </div>
-);
+)

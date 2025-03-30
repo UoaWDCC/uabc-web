@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react'
 
-import { useSchedules } from "@/hooks/query/useSchedules";
-import { ScheduleDetailCard } from "./ScheduleDetailCard";
-import { ScheduleContextProvider } from "./SchedulesContext";
-import { SkeletonScheduleCard } from "./SkeletonScheduleCard";
+import { useSchedules } from '@/hooks/query/useSchedules'
+import { ScheduleDetailCard } from './ScheduleDetailCard'
+import { ScheduleContextProvider } from './SchedulesContext'
+import { SkeletonScheduleCard } from './SkeletonScheduleCard'
 
 interface SchedulesListProps {
-  semesterId: number;
+  semesterId: number
 }
 
 export const SchedulesList = ({ semesterId }: SchedulesListProps) => {
-  const { data, isLoading } = useSchedules(semesterId);
+  const { data, isLoading } = useSchedules(semesterId)
 
   const schedules = useMemo(
     () =>
@@ -27,10 +27,10 @@ export const SchedulesList = ({ semesterId }: SchedulesListProps) => {
           locationAddress: schedule.locationAddress,
           memberCapacity: schedule.memberCapacity,
           casualCapacity: schedule.casualCapacity,
-        };
+        }
       }),
-    [data]
-  );
+    [data],
+  )
 
   if (isLoading || !data) {
     return (
@@ -40,7 +40,7 @@ export const SchedulesList = ({ semesterId }: SchedulesListProps) => {
         <SkeletonScheduleCard />
         <SkeletonScheduleCard />
       </>
-    );
+    )
   }
 
   return (
@@ -51,5 +51,5 @@ export const SchedulesList = ({ semesterId }: SchedulesListProps) => {
         </ScheduleContextProvider>
       ))}
     </>
-  );
-};
+  )
+}

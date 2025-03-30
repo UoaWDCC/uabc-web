@@ -1,13 +1,13 @@
-import { CalendarClock, CalendarDays, Users } from "lucide-react";
-import { BsPersonFillCheck } from "react-icons/bs";
+import { CalendarClock, CalendarDays, Users } from 'lucide-react'
+import { BsPersonFillCheck } from 'react-icons/bs'
 
-import { DashboardButton } from "@/components/admin/DashboardButton";
-import { MemberApprovalPing } from "@/components/admin/members/MemberApprovalPing";
-import { Heading } from "@/components/Heading";
+import { DashboardButton } from '@/components/admin/DashboardButton'
+import { MemberApprovalPing } from '@/components/admin/members/MemberApprovalPing'
+import { Heading } from '@/components/Heading'
 
 export const metadata = {
-  title: "Admin Dashboard - UABC Booking Portal",
-};
+  title: 'Admin Dashboard - UABC Booking Portal',
+}
 
 export default async function AdminDashboardPage() {
   return (
@@ -33,5 +33,5 @@ export default async function AdminDashboardPage() {
         </DashboardButton>
       </div>
     </div>
-  );
+  )
 }

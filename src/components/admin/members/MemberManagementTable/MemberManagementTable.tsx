@@ -1,11 +1,7 @@
-"use client";
+'use client'
 
-import { useMemo } from "react";
-import {
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { useMemo } from 'react'
+import { getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
 
 import {
   Table,
@@ -14,13 +10,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useMembers } from "@/hooks/query/useMembers";
-import { columns } from "./columns";
-import { MemberManagementTableRow } from "./MemberManagementTableRow";
+} from '@/components/ui/table'
+import { useMembers } from '@/hooks/query/useMembers'
+import { columns } from './columns'
+import { MemberManagementTableRow } from './MemberManagementTableRow'
 
 export function MemberManagementTable({ className }: { className?: string }) {
-  const { data, isLoading } = useMembers();
+  const { data, isLoading } = useMembers()
 
   const pendingMembers = useMemo(
     () =>
@@ -30,10 +26,10 @@ export function MemberManagementTable({ className }: { className?: string }) {
           name: `${member.firstName} ${member.lastName}`,
           email: member.email,
           prepaidSessions: member.prepaidSessions,
-        };
+        }
       }),
-    [data]
-  );
+    [data],
+  )
 
   const table = useReactTable({
     data: pendingMembers ?? [],
@@ -45,10 +41,10 @@ export function MemberManagementTable({ className }: { className?: string }) {
         id: false,
       },
     },
-  });
+  })
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return <div>Loading</div>
   }
 
   return (
@@ -58,12 +54,8 @@ export function MemberManagementTable({ className }: { className?: string }) {
           <TableRow>
             <TableHead className="w-[200px]">Name</TableHead>
             <TableHead className="lg:table-cell">Email</TableHead>
-            <TableHead className="w-[200px] text-center lg:table-cell">
-              Prepaid Sessions
-            </TableHead>
-            <TableHead className="w-[200px] text-center lg:table-cell">
-              Actions
-            </TableHead>
+            <TableHead className="w-[200px] text-center lg:table-cell">Prepaid Sessions</TableHead>
+            <TableHead className="w-[200px] text-center lg:table-cell">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -72,8 +64,8 @@ export function MemberManagementTable({ className }: { className?: string }) {
               .getRowModel()
               .rows.map((row) => (
                 <MemberManagementTableRow
-                  key={row.getValue("id")}
-                  userId={row.getValue("id")}
+                  key={row.getValue('id')}
+                  userId={row.getValue('id')}
                   row={row}
                 />
               ))
@@ -90,5 +82,5 @@ export function MemberManagementTable({ className }: { className?: string }) {
         </TableBody>
       </Table>
     </div>
-  );
+  )
 }

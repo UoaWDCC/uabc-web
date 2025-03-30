@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import type { Row } from "@tanstack/react-table";
-import { Ellipsis } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import React from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import type { Row } from '@tanstack/react-table'
+import { Ellipsis } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { Card } from "../../../Card";
-import { TextInput } from "../../../TextInput";
-import { Button } from "@/components/ui/button";
+import { Card } from '../../../Card'
+import { TextInput } from '../../../TextInput'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -19,55 +19,44 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { TableCell, TableRow } from "@/components/ui/table";
-import {
-  useApproveUserMutation,
-  useRejectUserMutation,
-} from "@/hooks/mutations/user";
-import type { Member } from "./columns";
+} from '@/components/ui/dialog'
+import { TableCell, TableRow } from '@/components/ui/table'
+import { useApproveUserMutation, useRejectUserMutation } from '@/hooks/mutations/user'
+import type { Member } from './columns'
 
 interface MemberApprovalTableRowProps {
-  row: Row<Member>;
-  userId: string;
+  row: Row<Member>
+  userId: string
 }
 
 const formSchema = z.object({
-  prepaidSessions: z
-    .string()
-    .min(1, "Field is required")
-    .pipe(z.coerce.number().positive()),
-});
+  prepaidSessions: z.string().min(1, 'Field is required').pipe(z.coerce.number().positive()),
+})
 
-export function MemberApprovalTableRow({
-  row,
-  userId,
-}: MemberApprovalTableRowProps) {
+export function MemberApprovalTableRow({ row, userId }: MemberApprovalTableRowProps) {
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-  });
+  })
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
-  const { mutate: approveUser } = useApproveUserMutation(queryClient);
-  const { mutate: rejectUser } = useRejectUserMutation(queryClient);
+  const { mutate: approveUser } = useApproveUserMutation(queryClient)
+  const { mutate: rejectUser } = useRejectUserMutation(queryClient)
 
   const handleRejectClick = () => {
-    rejectUser({ userId });
-  };
+    rejectUser({ userId })
+  }
 
-  const handleApproveClick = ({
-    prepaidSessions,
-  }: z.infer<typeof formSchema>) => {
-    approveUser({ userId, prepaidSessions });
-  };
-  const firstName: string = row.getValue("firstName");
-  const lastName: string = row.getValue("lastName");
-  const email: string = row.getValue("email");
+  const handleApproveClick = ({ prepaidSessions }: z.infer<typeof formSchema>) => {
+    approveUser({ userId, prepaidSessions })
+  }
+  const firstName: string = row.getValue('firstName')
+  const lastName: string = row.getValue('lastName')
+  const email: string = row.getValue('email')
 
   return (
     <Dialog>
@@ -83,7 +72,7 @@ export function MemberApprovalTableRow({
             <TextInput
               type="number"
               className="h-10 w-[200px]"
-              {...register("prepaidSessions")}
+              {...register('prepaidSessions')}
               isError={!!errors.prepaidSessions}
               errorMessage={errors.prepaidSessions?.message}
             />
@@ -91,15 +80,10 @@ export function MemberApprovalTableRow({
           </form>
         </TableCell>
         <TableCell className="hidden w-[200px] gap-2 lg:flex">
-          <Button variant={"destructive"} onClick={handleRejectClick}>
+          <Button variant={'destructive'} onClick={handleRejectClick}>
             Reject
           </Button>
-          <Button
-            asChild
-            disabled={
-              !!errors.prepaidSessions || !touchedFields.prepaidSessions
-            }
-          >
+          <Button asChild disabled={!!errors.prepaidSessions || !touchedFields.prepaidSessions}>
             <label htmlFor={userId}>Approve</label>
           </Button>
         </TableCell>
@@ -139,7 +123,7 @@ export function MemberApprovalTableRow({
             <TextInput
               type="number"
               className="h-10 w-full"
-              {...register("prepaidSessions")}
+              {...register('prepaidSessions')}
               label="Prepaid Sessions"
               isError={!!errors.prepaidSessions}
               errorMessage={errors.prepaidSessions?.message}
@@ -153,15 +137,12 @@ export function MemberApprovalTableRow({
             <Button variant="destructive" onClick={handleRejectClick}>
               Reject
             </Button>
-            <Button
-              variant="default"
-              onClick={handleSubmit(handleApproveClick)}
-            >
+            <Button variant="default" onClick={handleSubmit(handleApproveClick)}>
               Approve
             </Button>
           </DialogFooter>
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

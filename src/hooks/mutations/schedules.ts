@@ -1,67 +1,61 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query'
 
 export const useCreateScheduleMutation = () => {
   const mutation = useMutation({
-    mutationFn: async ({
-      semesterId,
-      body,
-    }: {
-      semesterId: number;
-      body: BodyInit;
-    }) => {
+    mutationFn: async ({ semesterId, body }: { semesterId: number; body: BodyInit }) => {
       const response = await fetch(`/api/semesters/${semesterId}/schedules`, {
-        method: "POST",
+        method: 'POST',
         body,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      });
+      })
 
       if (!response.ok) {
-        throw new Error();
+        throw new Error()
       }
     },
-  });
+  })
 
-  return mutation;
-};
+  return mutation
+}
 
 export const useEditScheduleMutation = () => {
   const mutation = useMutation({
     mutationFn: async ({ id, body }: { id: number; body: BodyInit }) => {
       const response = await fetch(`/api/schedules/${id}`, {
-        method: "PUT",
+        method: 'PUT',
         body,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      });
+      })
 
       if (!response.ok) {
         await response.text().then((text) => {
-          throw new Error(text || "An error has occurred");
-        });
+          throw new Error(text || 'An error has occurred')
+        })
       }
     },
-  });
+  })
 
-  return mutation;
-};
+  return mutation
+}
 
 export const useDeleteScheduleMutation = () => {
   const mutation = useMutation({
     mutationFn: async ({ id }: { id: number }) => {
       const response = await fetch(`/api/schedules/${id}`, {
-        method: "DELETE",
-      });
+        method: 'DELETE',
+      })
 
       if (!response.ok) {
         await response.text().then((text) => {
-          throw new Error(text || "An error has occurred");
-        });
+          throw new Error(text || 'An error has occurred')
+        })
       }
     },
-  });
+  })
 
-  return mutation;
-};
+  return mutation
+}

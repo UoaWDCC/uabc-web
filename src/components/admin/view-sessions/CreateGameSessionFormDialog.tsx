@@ -1,11 +1,11 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { format, getMonth, getYear, parse } from "date-fns";
-import { useForm } from "react-hook-form";
-import type { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { format, getMonth, getYear, parse } from 'date-fns'
+import { useForm } from 'react-hook-form'
+import type { z } from 'zod'
 
-import { TextInput } from "../../TextInput";
-import { Button } from "@/components/ui/button";
+import { TextInput } from '../../TextInput'
+import { Button } from '@/components/ui/button'
 import {
   DialogClose,
   DialogContent,
@@ -14,24 +14,22 @@ import {
   DialogHeader,
   DialogTitle,
   useDialogContext,
-} from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
-import { DialogButtonsFooter } from "@/components/ui/utils/DialogUtils";
-import { useCreateGameSessionMutation } from "@/hooks/mutations/game-sessions";
-import { formatFullDate } from "@/lib/utils/dates";
-import { QUERY_KEY } from "@/lib/utils/queryKeys";
-import { useGameSessionContext } from "./GameSessionContext";
-import { gameSessionFormSchema } from "./utils";
+} from '@/components/ui/dialog'
+import { useToast } from '@/components/ui/use-toast'
+import { DialogButtonsFooter } from '@/components/ui/utils/DialogUtils'
+import { useCreateGameSessionMutation } from '@/hooks/mutations/game-sessions'
+import { formatFullDate } from '@/lib/utils/dates'
+import { QUERY_KEY } from '@/lib/utils/queryKeys'
+import { useGameSessionContext } from './GameSessionContext'
+import { gameSessionFormSchema } from './utils'
 
 interface CreateGameSessionFormDialogProps {
-  onSuccess: () => void;
+  onSuccess: () => void
 }
 
-export function CreateGameSessionFormDialog({
-  onSuccess,
-}: CreateGameSessionFormDialogProps) {
-  const { date, bookingOpen } = useGameSessionContext();
-  const { handleClose: closeDialog } = useDialogContext();
+export function CreateGameSessionFormDialog({ onSuccess }: CreateGameSessionFormDialogProps) {
+  const { date, bookingOpen } = useGameSessionContext()
+  const { handleClose: closeDialog } = useDialogContext()
 
   const {
     register,
@@ -41,13 +39,13 @@ export function CreateGameSessionFormDialog({
     reset,
   } = useForm<z.infer<typeof gameSessionFormSchema>>({
     resolver: zodResolver(gameSessionFormSchema),
-  });
+  })
 
-  const { mutate, isPending } = useCreateGameSessionMutation();
+  const { mutate, isPending } = useCreateGameSessionMutation()
 
-  const { toast } = useToast();
+  const { toast } = useToast()
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const onSubmit = (data: z.infer<typeof gameSessionFormSchema>) => {
     const body = JSON.stringify({
@@ -55,36 +53,35 @@ export function CreateGameSessionFormDialog({
       date,
       startTime: `${data.startTime}:00`,
       endTime: `${data.endTime}:00`,
-    });
+    })
     mutate(body, {
       onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: [QUERY_KEY.GAME_SESSION, date],
-        });
+        })
         queryClient.invalidateQueries({
           queryKey: [QUERY_KEY.ACTIVE_DATES, getYear(date), getMonth(date)],
-        });
+        })
         toast({
-          title: "Success!",
-          description: "Game session created successfully",
-        });
-        onSuccess();
+          title: 'Success!',
+          description: 'Game session created successfully',
+        })
+        onSuccess()
       },
       onError: () => {
         toast({
-          title: "Uh oh! Something went wrong",
-          description:
-            "An error occurred while creating the game session. Please try again.",
-          variant: "destructive",
-        });
+          title: 'Uh oh! Something went wrong',
+          description: 'An error occurred while creating the game session. Please try again.',
+          variant: 'destructive',
+        })
       },
-    });
-  };
+    })
+  }
 
   const handleCancel = () => {
-    reset();
-    closeDialog();
-  };
+    reset()
+    closeDialog()
+  }
 
   if (!bookingOpen)
     return (
@@ -99,7 +96,7 @@ export function CreateGameSessionFormDialog({
           </DialogClose>
         </DialogFooter>
       </DialogContent>
-    );
+    )
 
   return (
     <DialogContent>
@@ -111,7 +108,7 @@ export function CreateGameSessionFormDialog({
           <TextInput
             label="Booking Open"
             type="text"
-            value={format(bookingOpen, "dd/MM/yy hh:mma")}
+            value={format(bookingOpen, 'dd/MM/yy hh:mma')}
             disabled
             readOnly
           />
@@ -119,11 +116,8 @@ export function CreateGameSessionFormDialog({
             label="Booking Close"
             type="text"
             value={
-              watch("startTime") &&
-              format(
-                parse(watch("startTime"), "HH:mm", date),
-                "dd/MM/yy hh:mma"
-              )
+              watch('startTime') &&
+              format(parse(watch('startTime'), 'HH:mm', date), 'dd/MM/yy hh:mma')
             }
             disabled
             readOnly
@@ -133,7 +127,7 @@ export function CreateGameSessionFormDialog({
           <TextInput
             label="Start Time"
             type="time"
-            {...register("startTime")}
+            {...register('startTime')}
             isError={!!errors.startTime}
             errorMessage={errors.startTime?.message}
             autoFocus
@@ -141,7 +135,7 @@ export function CreateGameSessionFormDialog({
           <TextInput
             label="End Time"
             type="time"
-            {...register("endTime")}
+            {...register('endTime')}
             isError={!!errors.endTime}
             errorMessage={errors.endTime?.message}
           />
@@ -149,14 +143,14 @@ export function CreateGameSessionFormDialog({
         <TextInput
           label="Location Name"
           type="text"
-          {...register("locationName")}
+          {...register('locationName')}
           isError={!!errors.locationName}
           errorMessage={errors.locationName?.message}
         />
         <TextInput
           label="Address"
           type="text"
-          {...register("locationAddress")}
+          {...register('locationAddress')}
           isError={!!errors.locationAddress}
           errorMessage={errors.locationAddress?.message}
         />
@@ -164,24 +158,20 @@ export function CreateGameSessionFormDialog({
           <TextInput
             label="Capacity"
             type="text"
-            {...register("memberCapacity")}
+            {...register('memberCapacity')}
             isError={!!errors.memberCapacity}
             errorMessage={errors.memberCapacity?.message}
           />
           <TextInput
             label="Casual Capacity"
             type="text"
-            {...register("casualCapacity")}
+            {...register('casualCapacity')}
             isError={!!errors.casualCapacity}
             errorMessage={errors.casualCapacity?.message}
           />
         </div>
-        <DialogButtonsFooter
-          disabled={isPending}
-          type="submit"
-          onCancel={handleCancel}
-        />
+        <DialogButtonsFooter disabled={isPending} type="submit" onCancel={handleCancel} />
       </form>
     </DialogContent>
-  );
+  )
 }

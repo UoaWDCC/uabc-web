@@ -1,10 +1,10 @@
-import SemesterCreateButton from "@/components/admin/semesters/SemesterCreateButton";
-import { SemestersList } from "@/components/admin/semesters/SemestersList";
-import { BackNavigationBar } from "@/components/BackNavigationBar";
+import SemesterCreateButton from '@/components/admin/semesters/SemesterCreateButton'
+import { SemestersList } from '@/components/admin/semesters/SemestersList'
+import { BackNavigationBar } from '@/components/BackNavigationBar'
 
 export const metadata = {
-  title: "Semesters - UABC Booking Portal",
-};
+  title: 'Semesters - UABC Booking Portal',
+}
 
 const SemestersPage = () => {
   return (
@@ -16,7 +16,7 @@ const SemestersPage = () => {
         <SemestersList />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SemestersPage;
+export default SemestersPage

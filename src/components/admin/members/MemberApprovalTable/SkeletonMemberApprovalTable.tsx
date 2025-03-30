@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
   TableBody,
@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table'
 
 export function SkeletonMemberApprovalTable() {
   return (
@@ -19,12 +19,8 @@ export function SkeletonMemberApprovalTable() {
             <TableHead colSpan={2} className="table-cell lg:hidden">
               Email
             </TableHead>
-            <TableHead className="hidden w-[200px] lg:table-cell">
-              Set Prepaid Sessions
-            </TableHead>
-            <TableHead className="hidden w-[200px] lg:table-cell">
-              Approve
-            </TableHead>
+            <TableHead className="hidden w-[200px] lg:table-cell">Set Prepaid Sessions</TableHead>
+            <TableHead className="hidden w-[200px] lg:table-cell">Approve</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -53,5 +49,5 @@ export function SkeletonMemberApprovalTable() {
         </TableBody>
       </Table>
     </div>
-  );
+  )
 }

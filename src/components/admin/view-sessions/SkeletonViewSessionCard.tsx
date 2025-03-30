@@ -1,15 +1,12 @@
-import { Card } from "../../Card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from '../../Card'
+import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export const SkeletonViewSessionCard = () => (
   <Card className="flex flex-col gap-4 border p-4" variant="card">
     <div className="flex items-center justify-between gap-4">
       <Skeleton className="h-6 w-[275px] bg-tertiary/20" />
-      <Badge
-        className="animate-pulse bg-tertiary/20 text-transparent"
-        variant="outline"
-      >
+      <Badge className="animate-pulse bg-tertiary/20 text-transparent" variant="outline">
         Loading..
       </Badge>
     </div>
@@ -23,4 +20,4 @@ export const SkeletonViewSessionCard = () => (
     </div>
     <Skeleton className="h-10 w-full bg-tertiary/20" />
   </Card>
-);
+)

@@ -1,9 +1,9 @@
-import { MemberManagementTable } from "@/components/admin/members/MemberManagementTable/MemberManagementTable";
-import { BackNavigationBar } from "@/components/BackNavigationBar";
+import { MemberManagementTable } from '@/components/admin/members/MemberManagementTable/MemberManagementTable'
+import { BackNavigationBar } from '@/components/BackNavigationBar'
 
 export const metadata = {
-  title: "Members - UABC Booking Portal",
-};
+  title: 'Members - UABC Booking Portal',
+}
 
 export default function AdminMembersPage() {
   return (
@@ -16,5 +16,5 @@ export default function AdminMembersPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

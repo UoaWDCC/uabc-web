@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Pagination,
   PaginationContent,
@@ -10,19 +10,19 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from '@/components/ui/pagination'
 
 interface MemberApprovalTablePaginationProps {
-  hasPreviousPage: boolean;
-  hasNextPage: boolean;
-  pageIndex: number;
-  pageCount: number;
-  previousPage: () => void;
-  nextPage: () => void;
-  setPageIndex: (pageIndex: number) => void;
+  hasPreviousPage: boolean
+  hasNextPage: boolean
+  pageIndex: number
+  pageCount: number
+  previousPage: () => void
+  nextPage: () => void
+  setPageIndex: (pageIndex: number) => void
 }
 
-const PAGINATION_BUTTON_COUNT = 5;
+const PAGINATION_BUTTON_COUNT = 5
 
 export function MemberApprovalTablePagination({
   hasPreviousPage,
@@ -59,22 +59,44 @@ export function MemberApprovalTablePagination({
         {pageCount <= PAGINATION_BUTTON_COUNT
           ? Array.from({ length: pageCount }).map((_, index) => (
               <PaginationItem key={index}>
-                <Button
-                  variant="ghost"
-                  className="p-0"
-                  onClick={() => setPageIndex(index)}
-                >
-                  <PaginationLink isActive={index === pageIndex}>
-                    {index + 1}
-                  </PaginationLink>
+                <Button variant="ghost" className="p-0" onClick={() => setPageIndex(index)}>
+                  <PaginationLink isActive={index === pageIndex}>{index + 1}</PaginationLink>
                 </Button>
               </PaginationItem>
             ))
           : pageIndex > pageCount - Math.ceil(PAGINATION_BUTTON_COUNT / 2) - 1
-            ? Array.from({ length: PAGINATION_BUTTON_COUNT }).map(
-                (_, index) => {
+            ? Array.from({ length: PAGINATION_BUTTON_COUNT }).map((_, index) => {
+                const itemPageIndex = pageCount - PAGINATION_BUTTON_COUNT + index
+                return (
+                  <PaginationItem key={itemPageIndex}>
+                    <Button
+                      variant="ghost"
+                      className="p-0"
+                      onClick={() => setPageIndex(itemPageIndex)}
+                    >
+                      <PaginationLink isActive={pageIndex === itemPageIndex}>
+                        {itemPageIndex + 1}
+                      </PaginationLink>
+                    </Button>
+                  </PaginationItem>
+                )
+              })
+            : pageIndex < PAGINATION_BUTTON_COUNT - 2
+              ? Array.from({ length: PAGINATION_BUTTON_COUNT }).map((_, index) => (
+                  <PaginationItem key={index}>
+                    <Button variant="ghost" className="p-0" onClick={() => setPageIndex(index)}>
+                      <PaginationLink
+                        isActive={index === pageIndex}
+                        onClick={() => setPageIndex(index)}
+                      >
+                        {index + 1}
+                      </PaginationLink>
+                    </Button>
+                  </PaginationItem>
+                ))
+              : Array.from({ length: PAGINATION_BUTTON_COUNT }).map((_, index) => {
                   const itemPageIndex =
-                    pageCount - PAGINATION_BUTTON_COUNT + index;
+                    pageIndex - Math.ceil(PAGINATION_BUTTON_COUNT / 2) + index + 1
                   return (
                     <PaginationItem key={itemPageIndex}>
                       <Button
@@ -82,58 +104,16 @@ export function MemberApprovalTablePagination({
                         className="p-0"
                         onClick={() => setPageIndex(itemPageIndex)}
                       >
-                        <PaginationLink isActive={pageIndex === itemPageIndex}>
+                        <PaginationLink
+                          isActive={pageIndex === itemPageIndex}
+                          onClick={() => setPageIndex(itemPageIndex)}
+                        >
                           {itemPageIndex + 1}
                         </PaginationLink>
                       </Button>
                     </PaginationItem>
-                  );
-                }
-              )
-            : pageIndex < PAGINATION_BUTTON_COUNT - 2
-              ? Array.from({ length: PAGINATION_BUTTON_COUNT }).map(
-                  (_, index) => (
-                    <PaginationItem key={index}>
-                      <Button
-                        variant="ghost"
-                        className="p-0"
-                        onClick={() => setPageIndex(index)}
-                      >
-                        <PaginationLink
-                          isActive={index === pageIndex}
-                          onClick={() => setPageIndex(index)}
-                        >
-                          {index + 1}
-                        </PaginationLink>
-                      </Button>
-                    </PaginationItem>
                   )
-                )
-              : Array.from({ length: PAGINATION_BUTTON_COUNT }).map(
-                  (_, index) => {
-                    const itemPageIndex =
-                      pageIndex -
-                      Math.ceil(PAGINATION_BUTTON_COUNT / 2) +
-                      index +
-                      1;
-                    return (
-                      <PaginationItem key={itemPageIndex}>
-                        <Button
-                          variant="ghost"
-                          className="p-0"
-                          onClick={() => setPageIndex(itemPageIndex)}
-                        >
-                          <PaginationLink
-                            isActive={pageIndex === itemPageIndex}
-                            onClick={() => setPageIndex(itemPageIndex)}
-                          >
-                            {itemPageIndex + 1}
-                          </PaginationLink>
-                        </Button>
-                      </PaginationItem>
-                    );
-                  }
-                )}
+                })}
         <PaginationItem>
           <Button
             variant="ghost"
@@ -156,5 +136,5 @@ export function MemberApprovalTablePagination({
         </PaginationItem>
       </PaginationContent>
     </Pagination>
-  );
+  )
 }

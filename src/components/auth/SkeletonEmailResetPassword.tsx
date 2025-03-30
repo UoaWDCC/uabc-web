@@ -1,4 +1,4 @@
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from '../ui/skeleton'
 
 export const SkeletonEmailResetPassword = () => (
   <>
@@ -15,4 +15,4 @@ export const SkeletonEmailResetPassword = () => (
     </div>
     <Skeleton className="h-10 w-full bg-tertiary/20" />
   </>
-);
+)

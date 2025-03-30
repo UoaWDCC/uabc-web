@@ -1,57 +1,38 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm, type SubmitHandler } from 'react-hook-form'
+import { z } from 'zod'
 
-import { TextInput } from "../../TextInput";
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  useDialogContext,
-} from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
-import { DialogButtonsFooter } from "@/components/ui/utils/DialogUtils";
-import { QUERY_KEY } from "@/lib/utils/queryKeys";
-import { useSemesterContext } from "./SemestersContext";
-import { compareDate, formatDateInISO, validateDate } from "./utils";
+import { TextInput } from '../../TextInput'
+import { DialogContent, DialogHeader, DialogTitle, useDialogContext } from '@/components/ui/dialog'
+import { useToast } from '@/components/ui/use-toast'
+import { DialogButtonsFooter } from '@/components/ui/utils/DialogUtils'
+import { QUERY_KEY } from '@/lib/utils/queryKeys'
+import { useSemesterContext } from './SemestersContext'
+import { compareDate, formatDateInISO, validateDate } from './utils'
 
 // Schema
 const formSchema = z
   .object({
-    startDate: z
-      .string()
-      .min(1, "Field is required")
-      .refine(validateDate, "Invalid date"),
-    endDate: z
-      .string()
-      .min(1, "Field is required")
-      .refine(validateDate, "Invalid date"),
-    breakStart: z
-      .string()
-      .min(1, "Field is required")
-      .refine(validateDate, "Invalid date"),
-    breakEnd: z
-      .string()
-      .min(1, "Field is required")
-      .refine(validateDate, "Invalid date"),
-    bookingOpenDay: z
-      .string()
-      .min(1, "Field is required"),
-    bookingOpenTime: z.string().min(1, "Field is required"),
+    startDate: z.string().min(1, 'Field is required').refine(validateDate, 'Invalid date'),
+    endDate: z.string().min(1, 'Field is required').refine(validateDate, 'Invalid date'),
+    breakStart: z.string().min(1, 'Field is required').refine(validateDate, 'Invalid date'),
+    breakEnd: z.string().min(1, 'Field is required').refine(validateDate, 'Invalid date'),
+    bookingOpenDay: z.string().min(1, 'Field is required'),
+    bookingOpenTime: z.string().min(1, 'Field is required'),
   })
   .refine((data) => compareDate(data.startDate, data.breakStart) < 0, {
-    message: "Start date must be before break start date",
-    path: ["startDate"],
+    message: 'Start date must be before break start date',
+    path: ['startDate'],
   })
   .refine((data) => compareDate(data.breakStart, data.breakEnd) < 0, {
-    message: "Break start date start must be before break end date",
-    path: ["breakStart"],
+    message: 'Break start date start must be before break end date',
+    path: ['breakStart'],
   })
   .refine((data) => compareDate(data.breakEnd, data.endDate) < 0, {
-    message: "Break end date must be before end date",
-    path: ["breakEnd"],
-  });
+    message: 'Break end date must be before end date',
+    path: ['breakEnd'],
+  })
 
 export const EditSemesterFormDialog = () => {
   // Contexts
@@ -64,8 +45,8 @@ export const EditSemesterFormDialog = () => {
     id: semesterId,
     bookingOpenDay,
     bookingOpenTime,
-  } = useSemesterContext();
-  const { handleClose: closeDialog } = useDialogContext();
+  } = useSemesterContext()
+  const { handleClose: closeDialog } = useDialogContext()
 
   // Hook-forms
   const {
@@ -83,24 +64,24 @@ export const EditSemesterFormDialog = () => {
       bookingOpenDay,
       bookingOpenTime: bookingOpenTime.slice(0, 5),
     },
-  });
+  })
 
-  const { toast } = useToast();
+  const { toast } = useToast()
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: async (body: BodyInit) => {
       const response = await fetch(`/api/semesters/${semesterId}`, {
-        method: "PUT",
+        method: 'PUT',
         body,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      });
+      })
 
-      if (!response.ok) throw new Error((await response.json()).code);
+      if (!response.ok) throw new Error((await response.json()).code)
     },
-  });
+  })
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
     const body = JSON.stringify({
@@ -111,32 +92,31 @@ export const EditSemesterFormDialog = () => {
       endDate: formatDateInISO(data.endDate),
       breakStart: formatDateInISO(data.breakStart),
       breakEnd: formatDateInISO(data.breakEnd),
-    });
+    })
 
     mutation.mutate(body, {
       onError: (e) => {
-        if (e.message === "OVERLAPPING_SEMESTER") {
+        if (e.message === 'OVERLAPPING_SEMESTER') {
           toast({
-            title: "Overlapping Semester",
+            title: 'Overlapping Semester',
             description:
-              "The semester dates overlap with an existing semester. Please adjust the dates.",
-            variant: "destructive",
-          });
+              'The semester dates overlap with an existing semester. Please adjust the dates.',
+            variant: 'destructive',
+          })
         } else {
           toast({
-            title: "Uh oh! Something went wrong",
-            description:
-              "An error occurred while updating the semester. Please try again.",
-            variant: "destructive",
-          });
+            title: 'Uh oh! Something went wrong',
+            description: 'An error occurred while updating the semester. Please try again.',
+            variant: 'destructive',
+          })
         }
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.SEMESTERS] });
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.SEMESTERS] })
         toast({
-          title: "Success!",
-          description: "Semester details successfully updated",
-        });
+          title: 'Success!',
+          description: 'Semester details successfully updated',
+        })
         reset({
           startDate: data.startDate,
           endDate: data.endDate,
@@ -144,11 +124,11 @@ export const EditSemesterFormDialog = () => {
           breakEnd: data.breakEnd,
           bookingOpenDay: data.bookingOpenDay,
           bookingOpenTime: data.bookingOpenTime,
-        });
-        closeDialog();
+        })
+        closeDialog()
       },
-    });
-  };
+    })
+  }
 
   return (
     <DialogContent onCloseAutoFocus={() => reset()}>
@@ -160,7 +140,7 @@ export const EditSemesterFormDialog = () => {
           <TextInput
             label="Booking open day"
             type="text"
-            {...register("bookingOpenDay")}
+            {...register('bookingOpenDay')}
             isError={!!errors.bookingOpenDay?.message}
             errorMessage={errors.bookingOpenDay?.message}
             autoComplete="off"
@@ -168,7 +148,7 @@ export const EditSemesterFormDialog = () => {
           <TextInput
             label="Booking open time"
             type="time"
-            {...register("bookingOpenTime")}
+            {...register('bookingOpenTime')}
             isError={!!errors.bookingOpenTime?.message}
             errorMessage={errors.bookingOpenTime?.message}
             autoComplete="off"
@@ -178,7 +158,7 @@ export const EditSemesterFormDialog = () => {
           <TextInput
             label="Start date"
             type="text"
-            {...register("startDate")}
+            {...register('startDate')}
             isError={!!errors.startDate?.message}
             errorMessage={errors.startDate?.message}
             autoComplete="off"
@@ -186,7 +166,7 @@ export const EditSemesterFormDialog = () => {
           <TextInput
             label="End date"
             type="text"
-            {...register("endDate")}
+            {...register('endDate')}
             isError={!!errors.endDate?.message}
             errorMessage={errors.endDate?.message}
             autoComplete="off"
@@ -196,7 +176,7 @@ export const EditSemesterFormDialog = () => {
           <TextInput
             label="Break start date"
             type="text"
-            {...register("breakStart")}
+            {...register('breakStart')}
             isError={!!errors.breakStart?.message}
             errorMessage={errors.breakStart?.message}
             autoComplete="off"
@@ -204,19 +184,15 @@ export const EditSemesterFormDialog = () => {
           <TextInput
             label="Break end date"
             type="text"
-            {...register("breakEnd")}
+            {...register('breakEnd')}
             isError={!!errors.breakEnd?.message}
             errorMessage={errors.breakEnd?.message}
             autoComplete="off"
           />
         </div>
 
-        <DialogButtonsFooter
-          type="submit"
-          primaryText="Update"
-          disabled={mutation.isPending}
-        />
+        <DialogButtonsFooter type="submit" primaryText="Update" disabled={mutation.isPending} />
       </form>
     </DialogContent>
-  );
-};
+  )
+}

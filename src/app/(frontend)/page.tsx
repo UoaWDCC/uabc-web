@@ -1,8 +1,8 @@
-import Link from "next/link";
+import Link from 'next/link'
 
-import { Card } from "@/components/Card";
-import { UabcLogo } from "@/components/UabcLogo";
-import { Button } from "@/components/ui/button";
+import { Card } from '@/components/Card'
+import { UabcLogo } from '@/components/UabcLogo'
+import { Button } from '@/components/ui/button'
 
 export default function HomePage() {
   return (
@@ -19,12 +19,11 @@ export default function HomePage() {
             </div>
             <p>🏸 Welcome to the UABC Booking Portal 🏸</p>
             <p>
-              Easily book your badminton sessions with the University of
-              Auckland Badminton Club.
+              Easily book your badminton sessions with the University of Auckland Badminton Club.
             </p>
             <p>
-              Enjoy quick, hassle-free reservations and get on the court in no
-              time. Join our vibrant community and play your best game today!
+              Enjoy quick, hassle-free reservations and get on the court in no time. Join our
+              vibrant community and play your best game today!
             </p>
           </div>
           <Button asChild size="lg">
@@ -32,12 +31,12 @@ export default function HomePage() {
           </Button>
           <Link href="/privacy" className="text-primary underline">
             Privacy Policy
-          </Link>{" "}
+          </Link>{' '}
         </div>
         <div className="ml-12 hidden place-items-center lg:grid">
           <UabcLogo size={350}></UabcLogo>
         </div>
       </Card>
     </div>
-  );
+  )
 }

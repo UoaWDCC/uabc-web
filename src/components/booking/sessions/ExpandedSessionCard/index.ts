@@ -1,1 +1,1 @@
-export * from "./ExpandedSessionCard";
+export * from './ExpandedSessionCard'
