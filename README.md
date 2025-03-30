@@ -90,7 +90,7 @@ DATABASE_URI=mongodb://127.0.0.1/your-database-name
 PAYLOAD_SECRET=YOUR_SECRET_HERE
 ```
 
-### Code Generation
+### Type Generation
 
 We use payload's built in code generation to generate types for our project. To do this you can run the following command:
 
