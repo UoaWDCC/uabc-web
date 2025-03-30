@@ -71,6 +71,7 @@ export interface Config {
     user: User;
     media: Media;
     semester: Semester;
+    gameSessionSchedule: GameSessionSchedule;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -81,6 +82,7 @@ export interface Config {
     user: UserSelect<false> | UserSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     semester: SemesterSelect<false> | SemesterSelect<true>;
+    gameSessionSchedule: GameSessionScheduleSelect<false> | GameSessionScheduleSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -140,10 +142,25 @@ export interface Admin {
  */
 export interface User {
   id: string;
+  /**
+   * The first name of the user
+   */
   firstName: string;
+  /**
+   * The last name of the user
+   */
   lastName: string;
+  /**
+   * The role of the user
+   */
   role: 'member' | 'admin' | 'casual';
+  /**
+   * The number of remaining sessions the user has
+   */
   remainingSessions?: number | null;
+  /**
+   * The image of the user
+   */
   image?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
@@ -185,6 +202,40 @@ export interface Semester {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gameSessionSchedule".
+ */
+export interface GameSessionSchedule {
+  id: string;
+  bookingOpen: string;
+  /**
+   * The time when booking closes for this game session
+   */
+  bookingClose: string;
+  /**
+   * The start time of the game session
+   */
+  startTime: string;
+  /**
+   * The end time of the game session
+   */
+  endTime: string;
+  /**
+   * The number of players that can join this game session
+   */
+  capacity: number;
+  /**
+   * The number of casual players that can join this game session
+   */
+  casualCapacity: number;
+  /**
+   * The semester this game session schedule belongs to
+   */
+  semesterId: string | Semester;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -205,6 +256,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'semester';
         value: string | Semester;
+      } | null)
+    | ({
+        relationTo: 'gameSessionSchedule';
+        value: string | GameSessionSchedule;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -306,6 +361,21 @@ export interface SemesterSelect<T extends boolean = true> {
   breakEnd?: T;
   bookingOpenDay?: T;
   bookingOpenTime?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gameSessionSchedule_select".
+ */
+export interface GameSessionScheduleSelect<T extends boolean = true> {
+  bookingOpen?: T;
+  bookingClose?: T;
+  startTime?: T;
+  endTime?: T;
+  capacity?: T;
+  casualCapacity?: T;
+  semesterId?: T;
   updatedAt?: T;
   createdAt?: T;
 }

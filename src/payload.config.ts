@@ -11,6 +11,7 @@ import { Admin } from './collections/Admin'
 import { User } from './collections/User'
 import { Media } from './collections/Media'
 import { Semester } from './collections/Semester'
+import { GameSessionSchedule } from './collections/GameSessionSchedule'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,7 +23,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Admin, User, Media, Semester],
+  collections: [Admin, User, Media, Semester, GameSessionSchedule],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
