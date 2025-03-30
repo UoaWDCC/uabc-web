@@ -1,7 +1,7 @@
 # uabc-web
 The repository for WDCC Projects' 2025 UABC project :)
 
-## 2024 Team Leadership
+## 2025 Team Leadership
 
 - Eddie Wang (Project Manager)
 - Jeffery Ji (Tech Lead)
