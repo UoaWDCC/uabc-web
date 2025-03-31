@@ -1,4 +1,4 @@
-import { PlayerLevel } from '@/types/types'
+import { PlayLevel } from '@/types/types'
 import { CollectionConfig } from 'payload'
 
 export const Booking: CollectionConfig = {
@@ -26,7 +26,7 @@ export const Booking: CollectionConfig = {
     {
       name: 'playerLevel',
       type: 'select',
-      options: Object.values(PlayerLevel),
+      options: Object.values(PlayLevel),
       required: true,
       admin: {
         description: 'The skill level of the player',

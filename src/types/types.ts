@@ -8,7 +8,7 @@ export enum Weekday {
   sunday = 'sunday',
 }
 
-export enum PlayerLevel {
+export enum PlayLevel {
   beginner = 'beginner',
   intermediate = 'intermediate',
   advanced = 'advanced',

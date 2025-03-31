@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 import type { CartGameSession } from '@/types/game-session'
-import type { PlayLevel } from '@/types/types'
+import { PlayLevel } from '@/types/types'
 
 interface CartState {
   cart: CartGameSession[]
