@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { createDateTimeField } from './fields/dateTime'
+import { createTimeField } from './fields/dateTime'
 import { Weekday } from '@/types/types'
 
 export const Semester: CollectionConfig = {
@@ -55,6 +55,6 @@ export const Semester: CollectionConfig = {
         description: 'The day when booking opens for this semester',
       },
     },
-    createDateTimeField('bookingOpenTime', 'The time when booking opens for this semester'),
+    createTimeField('bookingOpenTime', 'The time when booking opens for this semester'),
   ],
 }

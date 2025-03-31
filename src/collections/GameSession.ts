@@ -1,15 +1,15 @@
 import { CollectionConfig } from 'payload'
-import { createDateTimeField } from './fields/dateTime'
+import { createTimeField } from './fields/dateTime'
 
 export const GameSession: CollectionConfig = {
   slug: 'gameSession',
   access: {},
   fields: [
     // Can have default values that inherits from the GameSessionSchedule collection
-    createDateTimeField('bookingOpen', 'The time when booking opens for this game session'),
-    createDateTimeField('bookingClose', 'The time when booking closes for this game session'),
-    createDateTimeField('startTime', 'The start time of the game session'),
-    createDateTimeField('endTime', 'The end time of the game session'),
+    createTimeField('bookingOpen', 'The time when booking opens for this game session'),
+    createTimeField('bookingClose', 'The time when booking closes for this game session'),
+    createTimeField('startTime', 'The start time of the game session'),
+    createTimeField('endTime', 'The end time of the game session'),
     {
       name: 'capacity',
       type: 'number',

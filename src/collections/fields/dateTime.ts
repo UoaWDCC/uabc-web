@@ -1,12 +1,12 @@
 import { Field } from 'payload'
 
 /**
- * Creates a date time field but only shows the time picker
+ * Creates a date field but only shows the time picker
  * @param name The name of the date time field
  * @param description The description of the date time field
  * @returns {Field} The date time field
  */
-export function createDateTimeField(name: string, description: string): Field {
+export function createTimeField(name: string, description: string): Field {
   return {
     name: name,
     type: 'date',
