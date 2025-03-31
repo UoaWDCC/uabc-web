@@ -85,10 +85,7 @@ export const add = (a: number, b: number) => a + b
 
 Environment variables are used to store sensitive information that should not be stored in the codebase. These are stored in a `.env` file in the root of the project.
 
-```
-DATABASE_URI=mongodb://127.0.0.1/your-database-name
-PAYLOAD_SECRET=YOUR_SECRET_HERE
-```
+Copy the `.env.example` file and rename it to `.env`.
 
 ### Type Generation
 
