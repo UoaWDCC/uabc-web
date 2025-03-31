@@ -21,7 +21,7 @@ export function createTimeField(name: string, description: string): Field {
       beforeChange: [
         (args) => {
           const date = new Date(args.value)
-          // Ensure that the hours and mintues are retained by setting the date to 1970-01-01
+          // Ensure that the hours and minutes are retained by setting the date to 1970-01-01
           const fixedDate = new Date(1970, 0, 1, date.getHours(), date.getMinutes())
           return fixedDate
         },
