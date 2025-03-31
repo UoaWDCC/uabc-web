@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { createTimeField } from '@/common/fields/dateTime'
+import { createTimeField } from '@/common/fields/date-time'
 import { Weekday } from '@/types/types'
 
 export const Semester: CollectionConfig = {

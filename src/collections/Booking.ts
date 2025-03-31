@@ -1,10 +1,5 @@
+import { PlayerLevel } from '@/types/types'
 import { CollectionConfig } from 'payload'
-
-export enum PlayerLevel {
-  beginner = 'beginner',
-  intermediate = 'intermediate',
-  advanced = 'advanced',
-}
 
 export const Booking: CollectionConfig = {
   slug: 'booking',
