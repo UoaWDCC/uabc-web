@@ -3,6 +3,8 @@
 import React from 'react'
 import Image from 'next/image'
 
+import GoogleIcon from '@/../public/images/googleIcon.svg'
+
 import { cn } from '@/lib/utils'
 
 type GoogleSignInProps = {
@@ -19,7 +21,7 @@ export const GoogleSignIn = ({ className }: GoogleSignInProps) => {
         throw new Error('AUTH NOT IMPLEMENTED YET!')
       }}
     >
-      <Image src="/images/googleIcon.svg" width={20} height={20} alt="Google Icon" />
+      <Image src={GoogleIcon} width={20} height={20} alt="Google Icon" />
       <span>Continue with Google</span>
     </button>
   )

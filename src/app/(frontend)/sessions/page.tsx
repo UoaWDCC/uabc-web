@@ -10,6 +10,8 @@ import withCurrentUser from '@/lib/hoc/withCurrentUser'
 import { getUserFromId } from '@/services/user'
 import ClientSessionPage from './client-page'
 
+import BadmintonRacketLogo from '@/../public/images/BadmintonRacketLogo.png'
+
 export const metadata = {
   title: 'Session Booking - UABC Booking Portal',
 }
@@ -29,7 +31,7 @@ async function SelectSessionPage({ currentUser }: CurrentUserProps) {
         <div className="flex items-center">
           <span className="pr-1 font-medium">Hey {user?.firstName}!</span>
           <Image
-            src="/images/BadmintonRacketLogo.png"
+            src={BadmintonRacketLogo}
             alt="Badminton Racket Logo"
             className="pointer-events-none select-none"
             width={20}

@@ -1,4 +1,6 @@
 import Image from 'next/image'
+import LogoDarkMode from '@/../public/svgs/logo-darkmode.svg'
+import Logo from '@/../public/svgs/logo.svg'
 
 interface UabcLogoProps {
   className?: string
@@ -8,7 +10,7 @@ interface UabcLogoProps {
 export const UabcLogo = ({ className, size = 250 }: UabcLogoProps) => (
   <div className={className}>
     <Image
-      src="/svgs/logo-darkmode.svg"
+      src={LogoDarkMode}
       alt="uabc logo"
       className="hidden dark:block"
       width={size}
@@ -16,7 +18,7 @@ export const UabcLogo = ({ className, size = 250 }: UabcLogoProps) => (
       draggable={false}
     />
     <Image
-      src="/svgs/logo.svg"
+      src={Logo}
       alt="uabc logo"
       className="block dark:hidden"
       width={size}
