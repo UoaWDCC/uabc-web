@@ -1,4 +1,4 @@
-import { Field } from 'payload'
+import { DateField } from 'payload'
 
 /**
  * Creates a date field but only shows the time picker
@@ -6,7 +6,7 @@ import { Field } from 'payload'
  * @param description The description of the date time field
  * @returns {Field} The date time field
  */
-export function createTimeField(name: string, description: string): Field {
+export function createTimeField(name: string, description: string): DateField {
   return {
     name: name,
     type: 'date',
