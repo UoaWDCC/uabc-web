@@ -1,10 +1,11 @@
-export type Weekday =
-  | 'Monday'
-  | 'Tuesday'
-  | 'Wednesday'
-  | 'Thursday'
-  | 'Friday'
-  | 'Saturday'
-  | 'Sunday'
+export enum Weekday {
+  monday = 'monday',
+  tuesday = 'tuesday',
+  wednesday = 'wednesday',
+  thursday = 'thursday',
+  friday = 'friday',
+  saturday = 'saturday',
+  sunday = 'sunday',
+}
 
 export type PlayLevel = 'beginner' | 'intermediate' | 'advanced'

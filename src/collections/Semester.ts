@@ -1,14 +1,6 @@
 import type { CollectionConfig } from 'payload'
-
-export enum Weekday {
-  monday = 'monday',
-  tuesday = 'tuesday',
-  wednesday = 'wednesday',
-  thursday = 'thursday',
-  friday = 'friday',
-  saturday = 'saturday',
-  sunday = 'sunday',
-}
+import { createDateTimeField } from './fields/dateTime'
+import { Weekday } from '@/types/types'
 
 export const Semester: CollectionConfig = {
   slug: 'semester',
@@ -63,26 +55,6 @@ export const Semester: CollectionConfig = {
         description: 'The day when booking opens for this semester',
       },
     },
-    {
-      name: 'bookingOpenTime',
-      type: 'date',
-      required: true,
-      admin: {
-        date: {
-          pickerAppearance: 'timeOnly',
-        },
-        description: 'The time when booking opens for this semester',
-      },
-      hooks: {
-        beforeChange: [
-          (args) => {
-            const date = new Date(args.value)
-            const totalMiliseconds =
-              date.getHours() * 60 * 60 * 1000 + date.getMinutes() * 60 * 1000
-            return totalMiliseconds
-          },
-        ],
-      },
-    },
+    createDateTimeField('bookingOpenTime', 'The time when booking opens for this semester'),
   ],
 }

@@ -1,93 +1,15 @@
 import { CollectionConfig } from 'payload'
+import { createDateTimeField } from './fields/dateTime'
 
 export const GameSession: CollectionConfig = {
   slug: 'gameSession',
   access: {},
   fields: [
-    {
-      name: 'bookingOpen',
-      type: 'date',
-      required: true,
-      admin: {
-        date: {
-          pickerAppearance: 'timeOnly',
-        },
-        description: 'The time when booking opens for this game session',
-      },
-      hooks: {
-        beforeChange: [
-          (args) => {
-            const date = new Date(args.value)
-            const totalMiliseconds =
-              date.getHours() * 60 * 60 * 1000 + date.getMinutes() * 60 * 1000
-            return totalMiliseconds
-          },
-        ],
-      },
-    },
-    {
-      name: 'bookingClose',
-      type: 'date',
-      required: true,
-      admin: {
-        date: {
-          pickerAppearance: 'timeOnly',
-        },
-        description: 'The time when booking closes for this game session',
-      },
-      hooks: {
-        beforeChange: [
-          (args) => {
-            const date = new Date(args.value)
-            const totalMiliseconds =
-              date.getHours() * 60 * 60 * 1000 + date.getMinutes() * 60 * 1000
-            return totalMiliseconds
-          },
-        ],
-      },
-    },
-    {
-      name: 'startTime',
-      type: 'date',
-      required: true,
-      admin: {
-        date: {
-          pickerAppearance: 'timeOnly',
-        },
-        description: 'The start time of the game session',
-      },
-      hooks: {
-        beforeChange: [
-          (args) => {
-            const date = new Date(args.value)
-            const totalMiliseconds =
-              date.getHours() * 60 * 60 * 1000 + date.getMinutes() * 60 * 1000
-            return totalMiliseconds
-          },
-        ],
-      },
-    },
-    {
-      name: 'endTime',
-      type: 'date',
-      required: true,
-      admin: {
-        date: {
-          pickerAppearance: 'timeOnly',
-        },
-        description: 'The end time of the game session',
-      },
-      hooks: {
-        beforeChange: [
-          (args) => {
-            const date = new Date(args.value)
-            const totalMiliseconds =
-              date.getHours() * 60 * 60 * 1000 + date.getMinutes() * 60 * 1000
-            return totalMiliseconds
-          },
-        ],
-      },
-    },
+    // Can have default values that inherits from the GameSessionSchedule collection
+    createDateTimeField('bookingOpen', 'The time when booking opens for this game session'),
+    createDateTimeField('bookingClose', 'The time when booking closes for this game session'),
+    createDateTimeField('startTime', 'The start time of the game session'),
+    createDateTimeField('endTime', 'The end time of the game session'),
     {
       name: 'capacity',
       type: 'number',
