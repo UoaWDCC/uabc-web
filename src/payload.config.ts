@@ -21,6 +21,9 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   routes: {
     admin: '/payload/admin',
+    api: '/payload/api',
+    graphQL: '/payload/graphql',
+    graphQLPlayground: '/payload/graphql-playground',
   },
   admin: {
     user: Admin.slug,
