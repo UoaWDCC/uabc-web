@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { cn } from '@/lib/utils'
-import type { PlayLevel } from '@/types/types'
+import { PlayLevel } from '@/types/types'
 
 interface LevelSelectorButtonProps {
   name?: PlayLevel

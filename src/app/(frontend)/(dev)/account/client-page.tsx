@@ -9,7 +9,7 @@ import { BackNavigationBar } from '@/components/BackNavigationBar'
 import { TextInput } from '@/components/TextInput'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import type { PlayLevel } from '@/types/types'
+import { PlayLevel } from '@/types/types'
 
 interface ClientAccountPageProps {
   firstName: string
@@ -19,8 +19,6 @@ interface ClientAccountPageProps {
   selectedLevel?: PlayLevel
   member: boolean
 }
-
-const PLAY_LEVELS: PlayLevel[] = ['beginner', 'intermediate', 'advanced']
 
 const formSchema = z.object({
   firstName: z.string().min(1, 'Field is required'),
@@ -90,7 +88,7 @@ export default function ClientAccountPage({
             {/* Play Level Selector */}
             <h2 className="mb-2 text-lg font-bold">Play Level</h2>
             <div className="grid grid-cols-3 gap-2 rounded-md border border-tertiary p-2">
-              {PLAY_LEVELS.map((level) => (
+              {Object.values(PlayLevel).map((level) => (
                 <label key={level} className="flex items-center">
                   <input type="radio" value={level} className="hidden" {...register('playLevel')} />
                   <span
