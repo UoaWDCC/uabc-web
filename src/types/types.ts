@@ -1,3 +1,8 @@
+export enum MembershipType {
+  member = 'member',
+  casual = 'casual',
+}
+
 export enum Weekday {
   monday = 'monday',
   tuesday = 'tuesday',

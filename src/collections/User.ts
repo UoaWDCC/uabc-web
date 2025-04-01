@@ -1,10 +1,5 @@
+import { MembershipType } from '@/types/types'
 import type { CollectionConfig } from 'payload'
-
-export enum Roles {
-  member = 'member',
-  admin = 'admin',
-  casual = 'casual',
-}
 
 export const User: CollectionConfig = {
   slug: 'user',
@@ -30,8 +25,8 @@ export const User: CollectionConfig = {
       name: 'role',
       type: 'select',
       required: true,
-      options: Object.values(Roles),
-      defaultValue: Roles.casual,
+      options: Object.values(MembershipType),
+      defaultValue: MembershipType.casual,
       admin: {
         description: 'The role of the user',
       },

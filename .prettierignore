@@ -2,4 +2,3 @@ src/payload-types.ts
 pnpm-lock.yaml
 *.md
 .github/
-src/app/(payload)/admin/importMap.js
