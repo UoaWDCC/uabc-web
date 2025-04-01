@@ -157,7 +157,7 @@ export interface User {
   /**
    * The role of the user
    */
-  role: 'member' | 'admin' | 'casual';
+  role: 'member' | 'casual';
   /**
    * The number of remaining sessions the user has
    */
@@ -232,13 +232,9 @@ export interface Semester {
 export interface GameSessionSchedule {
   id: string;
   /**
-   * The time when booking opens for this game session
+   * The semester this game session schedule belongs to
    */
-  bookingOpen: string;
-  /**
-   * The time when booking closes for this game session
-   */
-  bookingClose: string;
+  semester: string | Semester;
   /**
    * The start time of the game session
    */
@@ -255,10 +251,6 @@ export interface GameSessionSchedule {
    * The number of casual players that can join this game session
    */
   casualCapacity: number;
-  /**
-   * The semester this game session schedule belongs to
-   */
-  semesterId: string | Semester;
   updatedAt: string;
   createdAt: string;
 }
@@ -269,13 +261,13 @@ export interface GameSessionSchedule {
 export interface GameSession {
   id: string;
   /**
-   * The time when booking opens for this game session
+   * The game session schedule for this game session. This is optional in case there is an extra schedule that doesn't require a schedule.
    */
-  bookingOpen: string;
+  gameSessionSchedule?: (string | null) | GameSessionSchedule;
   /**
-   * The time when booking closes for this game session
+   * The semester this game session belongs to. This is required because a game session can't exist without a semester.
    */
-  bookingClose: string;
+  semester: string | Semester;
   /**
    * The start time of the game session
    */
@@ -292,10 +284,6 @@ export interface GameSession {
    * The number of casual players that can join this game session
    */
   casualCapacity: number;
-  /**
-   * The game session schedule for this game session
-   */
-  gameSessionScheduleId: string | GameSessionSchedule;
   updatedAt: string;
   createdAt: string;
 }
@@ -463,13 +451,11 @@ export interface SemesterSelect<T extends boolean = true> {
  * via the `definition` "gameSessionSchedule_select".
  */
 export interface GameSessionScheduleSelect<T extends boolean = true> {
-  bookingOpen?: T;
-  bookingClose?: T;
+  semester?: T;
   startTime?: T;
   endTime?: T;
   capacity?: T;
   casualCapacity?: T;
-  semesterId?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -478,13 +464,12 @@ export interface GameSessionScheduleSelect<T extends boolean = true> {
  * via the `definition` "gameSession_select".
  */
 export interface GameSessionSelect<T extends boolean = true> {
-  bookingOpen?: T;
-  bookingClose?: T;
+  gameSessionSchedule?: T;
+  semester?: T;
   startTime?: T;
   endTime?: T;
   capacity?: T;
   casualCapacity?: T;
-  gameSessionScheduleId?: T;
   updatedAt?: T;
   createdAt?: T;
 }

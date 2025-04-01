@@ -29,6 +29,7 @@ export default buildConfig({
     user: Admin.slug,
     importMap: {
       baseDir: path.resolve(dirname),
+      importMapFile: path.resolve(dirname) + '/app/payload/admin/importMap.js',
     },
   },
   collections: [Admin, User, Media, Semester, GameSessionSchedule, GameSession, Booking],
