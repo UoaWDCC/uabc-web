@@ -1,3 +1,5 @@
+import { PlayLevel } from '@/types/types'
+
 /**
  * TODO: Delete this file and implement your own user service
  */
@@ -9,7 +11,7 @@ export const stubUser = (id: string) => {
     member: true,
     prepaidSessions: 69,
     email: 'not@implemented.com',
-    playLevel: 'beginner',
+    playLevel: PlayLevel.beginner,
   } as const
 }
 

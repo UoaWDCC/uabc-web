@@ -68,7 +68,12 @@ export interface Config {
   blocks: {};
   collections: {
     admins: Admin;
+    user: User;
     media: Media;
+    semester: Semester;
+    gameSessionSchedule: GameSessionSchedule;
+    gameSession: GameSession;
+    booking: Booking;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -76,7 +81,12 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     admins: AdminsSelect<false> | AdminsSelect<true>;
+    user: UserSelect<false> | UserSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    semester: SemesterSelect<false> | SemesterSelect<true>;
+    gameSessionSchedule: GameSessionScheduleSelect<false> | GameSessionScheduleSelect<true>;
+    gameSession: GameSessionSelect<false> | GameSessionSelect<true>;
+    booking: BookingSelect<false> | BookingSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -132,6 +142,35 @@ export interface Admin {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user".
+ */
+export interface User {
+  id: string;
+  /**
+   * The first name of the user
+   */
+  firstName: string;
+  /**
+   * The last name of the user
+   */
+  lastName: string;
+  /**
+   * The role of the user
+   */
+  role: 'member' | 'casual';
+  /**
+   * The number of remaining sessions the user has
+   */
+  remainingSessions?: number | null;
+  /**
+   * The image of the user
+   */
+  image?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
@@ -151,6 +190,126 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "semester".
+ */
+export interface Semester {
+  id: string;
+  /**
+   * The name of the semester
+   */
+  name: string;
+  /**
+   * The start date of the semester
+   */
+  startDate: string;
+  /**
+   * The end date of the semester
+   */
+  endDate: string;
+  /**
+   * The start date of the break
+   */
+  breakStart: string;
+  /**
+   * The end date of the break
+   */
+  breakEnd: string;
+  /**
+   * The day when booking opens for this semester
+   */
+  bookingOpenDay: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+  /**
+   * The time when booking opens for this semester
+   */
+  bookingOpenTime: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gameSessionSchedule".
+ */
+export interface GameSessionSchedule {
+  id: string;
+  /**
+   * The semester this game session schedule belongs to
+   */
+  semester: string | Semester;
+  /**
+   * The start time of the game session
+   */
+  startTime: string;
+  /**
+   * The end time of the game session
+   */
+  endTime: string;
+  /**
+   * The number of players that can join this game session
+   */
+  capacity: number;
+  /**
+   * The number of casual players that can join this game session
+   */
+  casualCapacity: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gameSession".
+ */
+export interface GameSession {
+  id: string;
+  /**
+   * The game session schedule for this game session. This is optional in case there is an extra schedule that doesn't require a schedule.
+   */
+  gameSessionSchedule?: (string | null) | GameSessionSchedule;
+  /**
+   * The semester this game session belongs to. This is required because a game session can't exist without a semester.
+   */
+  semester: string | Semester;
+  /**
+   * The start time of the game session
+   */
+  startTime: string;
+  /**
+   * The end time of the game session
+   */
+  endTime: string;
+  /**
+   * The number of players that can join this game session
+   */
+  capacity: number;
+  /**
+   * The number of casual players that can join this game session
+   */
+  casualCapacity: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "booking".
+ */
+export interface Booking {
+  id: string;
+  /**
+   * The user who made the booking
+   */
+  user: string | User;
+  /**
+   * The game session that was booked
+   */
+  gameSession: string | GameSession;
+  /**
+   * The skill level of the player
+   */
+  playerLevel: 'beginner' | 'intermediate' | 'advanced';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -161,8 +320,28 @@ export interface PayloadLockedDocument {
         value: string | Admin;
       } | null)
     | ({
+        relationTo: 'user';
+        value: string | User;
+      } | null)
+    | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'semester';
+        value: string | Semester;
+      } | null)
+    | ({
+        relationTo: 'gameSessionSchedule';
+        value: string | GameSessionSchedule;
+      } | null)
+    | ({
+        relationTo: 'gameSession';
+        value: string | GameSession;
+      } | null)
+    | ({
+        relationTo: 'booking';
+        value: string | Booking;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -223,6 +402,19 @@ export interface AdminsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user_select".
+ */
+export interface UserSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  role?: T;
+  remainingSessions?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -238,6 +430,59 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "semester_select".
+ */
+export interface SemesterSelect<T extends boolean = true> {
+  name?: T;
+  startDate?: T;
+  endDate?: T;
+  breakStart?: T;
+  breakEnd?: T;
+  bookingOpenDay?: T;
+  bookingOpenTime?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gameSessionSchedule_select".
+ */
+export interface GameSessionScheduleSelect<T extends boolean = true> {
+  semester?: T;
+  startTime?: T;
+  endTime?: T;
+  capacity?: T;
+  casualCapacity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gameSession_select".
+ */
+export interface GameSessionSelect<T extends boolean = true> {
+  gameSessionSchedule?: T;
+  semester?: T;
+  startTime?: T;
+  endTime?: T;
+  capacity?: T;
+  casualCapacity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "booking_select".
+ */
+export interface BookingSelect<T extends boolean = true> {
+  user?: T;
+  gameSession?: T;
+  playerLevel?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

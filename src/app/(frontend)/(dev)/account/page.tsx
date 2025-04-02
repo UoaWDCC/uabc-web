@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import type { CurrentUserProps } from '@/lib/hoc/withCurrentUser'
 import withCurrentUser from '@/lib/hoc/withCurrentUser'
 import { getUserFromId } from '@/services/user'
-import type { PlayLevel } from '@/types/types'
+import { PlayLevel } from '@/types/types'
 import ClientAccountPage from './client-page'
 
 export const metadata = {
@@ -20,7 +20,7 @@ async function AccountPage({ currentUser }: CurrentUserProps) {
     redirect('/auth/login')
   }
 
-  const playLevel: PlayLevel = user?.playLevel ?? 'beginner'
+  const playLevel: PlayLevel = user?.playLevel ?? PlayLevel.beginner
 
   return (
     <div className="flex h-dvh flex-col">
