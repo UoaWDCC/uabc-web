@@ -7,13 +7,13 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { Admin } from './collections/Admin'
 import { User } from './collections/User'
 import { Media } from './collections/Media'
 import { Semester } from './collections/Semester'
 import { GameSessionSchedule } from './collections/GameSessionSchedule'
 import { GameSession } from './collections/GameSession'
 import { Booking } from './collections/Booking'
+// import { googleOAuth } from './business-layer/security/google'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,13 +26,13 @@ export default buildConfig({
     graphQLPlayground: '/payload/graphql-playground',
   },
   admin: {
-    user: Admin.slug,
+    user: User.slug,
     importMap: {
       baseDir: path.resolve(dirname),
       importMapFile: path.resolve(dirname) + '/app/payload/admin/importMap.js',
     },
   },
-  collections: [Admin, User, Media, Semester, GameSessionSchedule, GameSession, Booking],
+  collections: [User, Media, Semester, GameSessionSchedule, GameSession, Booking],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -44,6 +44,7 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
+    // googleOAuth,
     // storage-adapter-placeholder
   ],
 })
