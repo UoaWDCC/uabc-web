@@ -148,6 +148,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to make chang
 - Jeffery Ji (Tech Lead)
 
 ### 2025 Team Members
-- TBD
+- Ann Lowe (Designer)
 
 Shoutout to the team responsible for the prior iteration, at [UABC Portal](https://github.com/UoaWDCC/uabc-portal).
