@@ -31,3 +31,11 @@ git pull
 # You need to replace <issue number> with the issue number you are working on
 git checkout -b <issue number>-<branch-name>
 ```
+
+### Yamada UI Themes
+
+You can use the Yamada CLI to generate types for tokens of your customized theme, such as colors and font sizes. You may also use this to refer to the theme tokens in your code.
+
+```bash
+pnpm theme
+```
