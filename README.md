@@ -148,6 +148,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to make chang
 - Jeffery Ji (Tech Lead)
 
 ### 2025 Team Members
+- Brandon Chan
 - Derrick Trang
 - TBD
 
