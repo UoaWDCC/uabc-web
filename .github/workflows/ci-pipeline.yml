@@ -14,7 +14,7 @@ jobs:
     name: Check Changes
     runs-on: ubuntu-latest
     outputs:
-      should_skip: ${{ steps.filter.outputs.should_skip }}
+      code_changes: ${{ steps.filter.outputs.code_changes }}
     steps:
       - uses: actions/checkout@v4
 
@@ -23,18 +23,19 @@ jobs:
         id: filter
         with:
           filters: |
-            should_skip:
-              - '**.md'
-              - '.gitignore'
-              - '.gitattributes'
-              - '.github/**'
-              - '.vscode'
-              - '.env.example'
+            code_changes:
+              - '**'
+              - '!**.md'
+              - '!.gitignore'
+              - '!.gitattributes'
+              - '!.github/**'
+              - '!.vscode/**'
+              - '!.env.example'
 
   setup:
     name: Setup
     needs: check_changes
-    if: ${{ needs.check_changes.outputs.should_skip != 'true' }}
+    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,7 +64,7 @@ jobs:
 
   style:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.should_skip != 'true' }}
+    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
     name: Prettier
     runs-on: ubuntu-latest
     steps:
@@ -92,7 +93,7 @@ jobs:
 
   lint:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.should_skip != 'true' }}
+    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
     name: Lint
     runs-on: ubuntu-latest
     steps:
@@ -124,7 +125,7 @@ jobs:
 
   build:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.should_skip != 'true' }}
+    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -156,7 +157,7 @@ jobs:
 
   test:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.should_skip != 'true' }}
+    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
     name: Test
     runs-on: ubuntu-latest
     steps:
@@ -188,7 +189,7 @@ jobs:
 
   codegen:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.should_skip != 'true' }}
+    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
     name: Codegen
     runs-on: ubuntu-latest
     steps:
@@ -237,7 +238,7 @@ jobs:
     name: Verify
     needs: [check_changes, build, lint, style, test, codegen]
     runs-on: ubuntu-latest
-    if: ${{ always() && (needs.check_changes.outputs.should_skip == 'true' || (needs.build.result == 'success' && needs.lint.result == 'success' && needs.style.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
+    if: ${{ always() && (needs.check_changes.outputs.code_changes != 'true' || (needs.build.result == 'success' && needs.lint.result == 'success' && needs.style.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
     steps:
       - name: All checks passed
         run: echo "All checks passed!"
