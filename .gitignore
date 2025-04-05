@@ -139,3 +139,6 @@ dist
 .pnp.*
 
 .swc/
+
+# yamada-ui theme config
+theme/
