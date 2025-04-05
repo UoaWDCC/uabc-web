@@ -141,4 +141,4 @@ dist
 .swc/
 
 # yamada-ui theme config
-theme/
+/theme/
