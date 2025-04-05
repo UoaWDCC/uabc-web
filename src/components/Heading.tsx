@@ -2,13 +2,16 @@
  * @author Angela Guo <aguo921@aucklanduni.ac.nz>
  */
 
-import { cn } from '@/lib/utils'
+import { type HeadingProps, Heading as UIHeading } from '@yamada-ui/react'
+import type { FC } from 'react'
 
-interface HeadingProps {
-  children: string
-  className?: string
-}
-
-export const Heading = ({ children, className }: HeadingProps) => (
-  <h1 className={cn('text-3xl font-bold tracking-tight', className)}>{children}</h1>
+export const Heading: FC<HeadingProps> = ({ children, ...props }: HeadingProps) => (
+  <UIHeading
+    fontSize="3xl"
+    fontWeight="bold"
+    // className={cn('text-3xl font-bold tracking-tight', className)}
+    {...props}
+  >
+    {children}
+  </UIHeading>
 )
