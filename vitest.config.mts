@@ -13,5 +13,6 @@ export default defineConfig({
      * run without being flaky https://github.com/shelfio/jest-mongodb/issues/366
      */
     maxWorkers: process.env.CI === 'true' ? 1 : undefined,
+    minWorkers: process.env.CI === 'true' ? 1 : undefined,
   },
 })
