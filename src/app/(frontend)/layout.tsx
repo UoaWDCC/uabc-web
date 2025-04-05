@@ -9,6 +9,8 @@ import OriginTracker from '@/components/providers/OriginTracker'
 import QueryClientProvider from '@/components/providers/QueryClientProvider'
 import SessionProvider from '@/components/providers/SessionProvider'
 import { Toaster } from '@/components/ui/toaster'
+import { ColorModeScript } from '@yamada-ui/react'
+import { Providers } from './providers'
 
 export const metadata: Metadata = {
   title: 'UABC Booking Portal',
@@ -48,11 +50,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} font-sans`}>
-      <body>
+    <html lang="en" className={`${inter.variable} font-sans`} suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <ColorModeScript initialColorMode="light" />
         <QueryClientProvider>
           <SessionProvider>
-            <OriginTracker>{children}</OriginTracker>
+            <OriginTracker>
+              <Providers>{children}</Providers>
+            </OriginTracker>
           </SessionProvider>
         </QueryClientProvider>
         <Toaster />
