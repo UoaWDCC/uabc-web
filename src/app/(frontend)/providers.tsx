@@ -16,9 +16,14 @@ export const Providers: FC<PropsWithChildren> = memo(({ children }) => {
   const theme = extendTheme({
     semantics: {
       fonts: {
-        body: `${inter.variable}, $fonts.body`,
-        heading: `${inter.variable}, $fonts.heading`,
-        mono: `${inter.variable}, $fonts.mono`,
+        body: `${inter.style.fontFamily}, $fonts.body`,
+        heading: `${inter.style.fontFamily}, $fonts.heading`,
+        mono: `${inter.style.fontFamily}, $fonts.mono`,
+      },
+      colors: {
+        blue: {
+          500: 'hsl(215 52% 45%)',
+        },
       },
     },
   })()
