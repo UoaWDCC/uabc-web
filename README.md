@@ -148,6 +148,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to make chang
 - Jeffery Ji (Tech Lead)
 
 ### 2025 Team Members
+- Brandon Chan
+- Derrick Trang
+- TBD
+- Shintaro Jokagi
 - Benjamin Kee
 
 Shoutout to the team responsible for the prior iteration, at [UABC Portal](https://github.com/UoaWDCC/uabc-portal).
