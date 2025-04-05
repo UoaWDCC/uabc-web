@@ -8,6 +8,9 @@ on:
     paths-ignore:
       - '**.md'
       - '.gitignore'
+      - './.github'
+      - '.vscode'
+      - '.env.example'
 
 jobs:
   setup:
