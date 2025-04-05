@@ -60,7 +60,6 @@ jobs:
 
   style:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.should_skip != 'true' }}
     name: Prettier
     runs-on: ubuntu-latest
     steps:
