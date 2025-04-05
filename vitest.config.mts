@@ -8,5 +8,10 @@ export default defineConfig({
     environment: 'node',
     setupFiles: ['dotenv/config', './tests/mongodb-setup.ts', './tests/dom-setup'],
     globals: true,
+    /**
+     * Set this to one only so that MongoDB memory server can
+     * run without being flaky https://github.com/shelfio/jest-mongodb/issues/366
+     */
+    maxWorkers: process.env.CI === 'true' ? 1 : undefined,
   },
 })
