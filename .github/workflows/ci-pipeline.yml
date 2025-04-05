@@ -14,28 +14,28 @@ jobs:
     name: Check Changes
     runs-on: ubuntu-latest
     outputs:
-      code_changes: ${{ steps.filter.outputs.code_changes }}
+      exists: ${{ steps.filter.outputs.exists }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Filter changes
-        uses: dorny/paths-filter@v2
+        uses: yumemi-inc/path-filter@v2
         id: filter
         with:
-          filters: |
-            code_changes:
-              - '**'
-              - '!**.md'
-              - '!.gitignore'
-              - '!.gitattributes'
-              - '!.github/**'
-              - '!.vscode/**'
-              - '!.env.example'
+          patterns: |
+            exists:
+              '**'
+              '!**.md'
+              '!.gitignore'
+              '!.gitattributes'
+              '!.github/**'
+              '!.vscode/**'
+              '!.env.example'
 
   setup:
     name: Setup
     needs: check_changes
-    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
 
   style:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Prettier
     runs-on: ubuntu-latest
     steps:
@@ -93,7 +93,7 @@ jobs:
 
   lint:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Lint
     runs-on: ubuntu-latest
     steps:
@@ -125,7 +125,7 @@ jobs:
 
   build:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -157,7 +157,7 @@ jobs:
 
   test:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Test
     runs-on: ubuntu-latest
     steps:
@@ -189,7 +189,7 @@ jobs:
 
   codegen:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.code_changes == 'true' }}
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Codegen
     runs-on: ubuntu-latest
     steps:
@@ -238,7 +238,7 @@ jobs:
     name: Verify
     needs: [check_changes, build, lint, style, test, codegen]
     runs-on: ubuntu-latest
-    if: ${{ always() && (needs.check_changes.outputs.code_changes != 'true' || (needs.build.result == 'success' && needs.lint.result == 'success' && needs.style.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
+    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.lint.result == 'success' && needs.style.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
     steps:
       - name: All checks passed
         run: echo "All checks passed!"
