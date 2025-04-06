@@ -67,7 +67,7 @@ export default function ClientAccountForm({
     <VStack alignItems="center">
       {/* Profile Settings Tab */}
 
-      <Card w="460px" variant="outline">
+      <Card maxW="460px" w="full" variant="outline">
         <CardBody>
           <Heading as="h2" fontSize="lg" fontWeight="bold">
             Full Name
@@ -134,7 +134,7 @@ export default function ClientAccountForm({
       </Card>
 
       {/* Email Address Tab */}
-      <Card w="460px" variant="outline">
+      <Card maxW="460px" w="full" variant="outline">
         <CardBody>
           <Heading as="h2" fontSize="lg" fontWeight="bold">
             Email Address
@@ -150,7 +150,7 @@ export default function ClientAccountForm({
       </Card>
 
       {/* Password Tab */}
-      <Card w="460px" variant="outline">
+      <Card maxW="460px" w="full" variant="outline">
         <CardBody>
           <Heading as="h2" fontSize="lg" fontWeight="bold">
             Password
