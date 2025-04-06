@@ -13,7 +13,6 @@ import { Semester } from './collections/Semester'
 import { GameSessionSchedule } from './collections/GameSessionSchedule'
 import { GameSession } from './collections/GameSession'
 import { Booking } from './collections/Booking'
-// import { googleOAuth } from './business-layer/security/google'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -44,7 +43,6 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
-    // googleOAuth,
     // storage-adapter-placeholder
   ],
 })

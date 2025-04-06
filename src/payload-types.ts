@@ -67,24 +67,24 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    user: User;
     media: Media;
     semester: Semester;
     gameSessionSchedule: GameSessionSchedule;
     gameSession: GameSession;
     booking: Booking;
-    user: User;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
+    user: UserSelect<false> | UserSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     semester: SemesterSelect<false> | SemesterSelect<true>;
     gameSessionSchedule: GameSessionScheduleSelect<false> | GameSessionScheduleSelect<true>;
     gameSession: GameSessionSelect<false> | GameSessionSelect<true>;
     booking: BookingSelect<false> | BookingSelect<true>;
-    user: UserSelect<false> | UserSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -120,6 +120,43 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user".
+ */
+export interface User {
+  id: string;
+  /**
+   * The first name of the user
+   */
+  firstName: string;
+  /**
+   * The last name of the user
+   */
+  lastName: string;
+  /**
+   * The role of the user
+   */
+  role: 'member' | 'casual' | 'admin';
+  /**
+   * The number of remaining sessions the user has
+   */
+  remainingSessions?: number | null;
+  /**
+   * The image of the user
+   */
+  image?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -262,49 +299,15 @@ export interface Booking {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "user".
- */
-export interface User {
-  id: string;
-  /**
-   * The first name of the user
-   */
-  firstName: string;
-  /**
-   * The last name of the user
-   */
-  lastName: string;
-  /**
-   * The role of the user
-   */
-  role: 'member' | 'casual' | 'admin';
-  /**
-   * The number of remaining sessions the user has
-   */
-  remainingSessions?: number | null;
-  /**
-   * The image of the user
-   */
-  image?: (string | null) | Media;
-  sub?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: string;
   document?:
+    | ({
+        relationTo: 'user';
+        value: string | User;
+      } | null)
     | ({
         relationTo: 'media';
         value: string | Media;
@@ -324,10 +327,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'booking';
         value: string | Booking;
-      } | null)
-    | ({
-        relationTo: 'user';
-        value: string | User;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -370,6 +369,26 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user_select".
+ */
+export interface UserSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  role?: T;
+  remainingSessions?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -441,27 +460,6 @@ export interface BookingSelect<T extends boolean = true> {
   playerLevel?: T;
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "user_select".
- */
-export interface UserSelect<T extends boolean = true> {
-  firstName?: T;
-  lastName?: T;
-  role?: T;
-  remainingSessions?: T;
-  image?: T;
-  sub?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

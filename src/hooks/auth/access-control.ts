@@ -7,11 +7,6 @@ export const adminAccessControl = ({
   req: PayloadRequest
 }): boolean | Promise<boolean> => {
   const user = req.user
-
   // Only allow access for admins
-  if (user && user.role == MembershipType.admin) {
-    return true
-  }
-
-  return false
+  return !!(user && user.role == MembershipType.admin)
 }
