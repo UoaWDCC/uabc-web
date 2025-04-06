@@ -19,6 +19,7 @@ interface ClientSessionPageProps {
   isMember: boolean
   prepaidSessions: number
 }
+// TODO: remove this comment teesting
 
 export default function ClientSessionPage({ isMember, prepaidSessions }: ClientSessionPageProps) {
   const { push } = useRouter()
