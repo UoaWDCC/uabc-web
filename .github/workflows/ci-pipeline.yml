@@ -23,13 +23,13 @@ jobs:
         id: filter
         with:
           patterns: |
-            '**'
-            '!**.md'
-            '!.gitignore'
-            '!.gitattributes'
-            '!.github/**'
-            '!.vscode/**'
-            '!.env.example'
+              '**'
+              '!**.md'
+              '!.gitignore'
+              '!.gitattributes'
+              '!.github/**'
+              '!.vscode/**'
+              '!.env.example'
 
   setup:
     name: Setup
