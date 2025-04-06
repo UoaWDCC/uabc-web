@@ -1,6 +1,6 @@
 import { CollectionConfig } from 'payload'
 
-export const Booking: CollectionConfig = {
+export const Authentication: CollectionConfig = {
   slug: 'authentication',
   access: {},
   fields: [
