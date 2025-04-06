@@ -1,36 +1,28 @@
 'use client'
 
-import { forwardRef, useState, type InputHTMLAttributes } from 'react'
+import { forwardRef } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
-import { twMerge } from 'tailwind-merge'
+import {
+  FormControl,
+  IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Label,
+  type InputProps as YUIInputProps,
+} from '@yamada-ui/react'
+import { useState } from 'react'
+import { EyeIcon, EyeOffIcon } from '@yamada-ui/lucide'
 
-import { cn } from '@/lib/utils'
-
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<YUIInputProps, 'type'> {
   label?: string
   type: string
-  className?: string
   isError?: boolean
   errorMessage?: string
-  isSuccess?: boolean
-  successMessage?: string
 }
 
 export const TextInput = forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      label,
-      type,
-      isError,
-      className,
-      errorMessage,
-      isSuccess,
-      successMessage,
-      disabled,
-      ...props
-    }: InputProps,
-    ref,
-  ) => {
+  ({ label, type, isError, errorMessage, disabled, placeholder, ...props }: InputProps, ref) => {
     const initialIsTypePassword = type === 'password'
     const [showPassword, setShowPassword] = useState(!initialIsTypePassword)
 
@@ -39,60 +31,93 @@ export const TextInput = forwardRef<HTMLInputElement, InputProps>(
     }
 
     return (
-      <div
-        className={cn(
-          'flex w-full flex-col',
-          disabled && 'pointer-events-none opacity-50',
-          className,
-        )}
+      <FormControl
+        disabled={disabled}
+        invalid={isError}
+        errorMessage={errorMessage}
+        position="relative"
       >
-        <div className="peer relative h-11">
-          <input
-            type={initialIsTypePassword ? (showPassword ? 'text' : type) : type}
-            placeholder={props.placeholder ? props.placeholder : ' '}
-            className={twMerge(
-              'peer h-full w-full appearance-none rounded bg-background p-2 outline-none ring-1 ring-inset ring-tertiary/70 transition-colors placeholder:text-tertiary/70 focus:ring-2 focus:ring-primary dark:text-white/70',
-              (isError && '!ring-destructive') || (isSuccess && '!ring-success'),
-            )}
-            {...props}
+        <InputGroup>
+          <Input
             ref={ref}
+            type={initialIsTypePassword ? (showPassword ? 'text' : type) : type}
+            placeholder={placeholder || ' '}
+            className="peer"
+            borderWidth="2"
+            borderColor="transparentize(tertiary.500, 70%)"
+            _hover={{
+              borderColor: 'transparentize(tertiary.500, 70%)',
+              boxShadow: 'none',
+            }}
+            _active={{
+              borderColor: 'primary',
+              boxShadow: 'none',
+            }}
+            _focusVisible={{
+              borderColor: 'primary',
+              boxShadow: 'none',
+            }}
+            _placeholder={{ opacity: 0 }}
+            rounded="sm"
+            {...props}
           />
-          <span
-            className={cn(
-              'pointer-events-none absolute left-2 top-0 z-10 -translate-y-[50%] select-none whitespace-nowrap bg-background px-1 text-xs text-tertiary/70 transition-all',
-              'peer-focus:top-0 peer-focus:bg-background peer-focus:px-1 peer-focus:text-xs peer-focus:text-primary',
-              'peer-placeholder-shown:top-[50%] peer-placeholder-shown:bg-transparent peer-placeholder-shown:px-0 peer-placeholder-shown:text-base peer-placeholder-shown:text-tertiary/70',
-              !!props.placeholder &&
-                'peer-placeholder-shown:top-0 peer-placeholder-shown:bg-background peer-placeholder-shown:px-1 peer-placeholder-shown:text-xs',
-              (isError && '!text-destructive/70 peer-focus:!text-destructive') ||
-                (isSuccess && '!text-success/70 peer-focus:!text-success'),
-            )}
-          >
-            {label}
-          </span>
           {initialIsTypePassword && (
-            <div
-              className="absolute right-2 top-[50%] block aspect-square -translate-y-[50%] cursor-pointer p-1 *:opacity-80 peer-placeholder-shown:hidden"
-              onClick={togglePassword}
-            >
-              {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
-            </div>
+            <InputRightElement w="4.5rem" clickable>
+              <IconButton h="1.75rem" size="sm" onClick={togglePassword}>
+                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+              </IconButton>
+            </InputRightElement>
           )}
-        </div>
-        {/* has 3 lines(40px) of error message height */}
-        <p
-          className={twMerge(
-            'max-h-0 w-full select-none text-xs transition-[max-height] duration-150 ease-in-out',
-            ((!!errorMessage && isError) || (!!successMessage && isSuccess)) &&
-              'max-h-10 select-text',
-            isError && 'peer-has[input:focus]:!text-destructive text-destructive/80',
-            isSuccess && 'peer-has[input:focus]:!text-success text-success/80',
-          )}
+        </InputGroup>
+        <Label
+          position="absolute"
+          top="0"
+          left="sm"
+          px="xs"
+          transition="all 0.2s"
+          mb="0"
+          _peerPlaceholderShown={{
+            transform: 'translateY(35%)',
+            color: 'gray',
+          }}
+          _peerFocus={{
+            top: 0,
+            left: 'sm',
+            transform: 'translateY(-50%) scale(0.8)',
+            zIndex: 1,
+            bg: ['white', 'black'],
+            color: 'primary',
+          }}
+          sx={{
+            '&:not(:placeholder-shown)': {
+              top: 0,
+              left: 'sm',
+              transform: 'translateY(-50%) scale(0.8)',
+              zIndex: 1,
+              bg: ['white', 'black'],
+              color: 'gray',
+            },
+          }}
         >
-          {isError && errorMessage}&nbsp;
-          {isSuccess && successMessage}&nbsp;
-        </p>
-      </div>
+          {label}
+        </Label>
+        {initialIsTypePassword && (
+          <div
+            onClick={togglePassword}
+            style={{
+              position: 'absolute',
+              right: '8px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              cursor: 'pointer',
+              padding: '4px',
+              opacity: 0.8,
+            }}
+          >
+            {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
+          </div>
+        )}
+      </FormControl>
     )
   },
 )

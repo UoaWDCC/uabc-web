@@ -2,16 +2,26 @@
 
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { BackNavigationBar } from '@/components/BackNavigationBar'
 import { TextInput } from '@/components/TextInput'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 import { PlayLevel } from '@/types/types'
+import {
+  Button,
+  Card,
+  CardBody,
+  Fieldset,
+  Heading,
+  HStack,
+  SegmentedControl,
+  SegmentedControlButton,
+  Spacer,
+  Text,
+  VStack,
+} from '@yamada-ui/react'
 
-interface ClientAccountPageProps {
+interface ClientAccountFormProps {
   firstName: string
   lastName: string
   email: string
@@ -26,18 +36,17 @@ const formSchema = z.object({
   playLevel: z.union([z.literal('beginner'), z.literal('intermediate'), z.literal('advanced')]),
 })
 
-export default function ClientAccountPage({
+export default function ClientAccountForm({
   firstName: initialFirstName,
   lastName: initialLastName,
   email: initialEmail,
   playLevel: initialPlayLevel,
-  member,
-}: ClientAccountPageProps) {
+}: ClientAccountFormProps) {
   const {
-    register,
+    control,
     handleSubmit,
+    register,
     formState: { errors, isDirty },
-    watch,
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,21 +64,15 @@ export default function ClientAccountPage({
   }
 
   return (
-    <div className="mx-4 flex h-dvh flex-col gap-y-4">
-      <BackNavigationBar title="Account" pathName="/sessions" />
+    <VStack alignItems="center">
+      {/* Profile Settings Tab */}
 
-      <div className="absolute right-4 top-4 flex h-6 items-center justify-center rounded-full bg-tertiary px-4">
-        <span className="text-center text-sm font-medium text-tertiary-foreground">
-          {member ? 'Member' : 'Non-member'}
-        </span>
-      </div>
-
-      <div className="flex flex-grow flex-col items-center justify-center">
-        {/* Profile Settings Tab */}
-
-        <div className="mb-4 w-full max-w-[460px] rounded-lg border p-6">
-          <h2 className="mb-2 text-lg font-bold">Full Name</h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <Card w="460px" variant="outline">
+        <CardBody>
+          <Heading as="h2" fontSize="lg" fontWeight="bold">
+            Full Name
+          </Heading>
+          <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
             <TextInput
               label="First Name"
               type="text"
@@ -86,48 +89,77 @@ export default function ClientAccountPage({
             />
 
             {/* Play Level Selector */}
-            <h2 className="mb-2 text-lg font-bold">Play Level</h2>
-            <div className="grid grid-cols-3 gap-2 rounded-md border border-tertiary p-2">
-              {Object.values(PlayLevel).map((level) => (
-                <label key={level} className="flex items-center">
-                  <input type="radio" value={level} className="hidden" {...register('playLevel')} />
-                  <span
-                    className={cn(
-                      'flex h-12 w-full cursor-pointer items-center justify-center rounded-md text-sm font-semibold capitalize',
-                      watch('playLevel') === level
-                        ? 'bg-primary text-primary-foreground'
-                        : 'border-none bg-background text-foreground',
-                    )}
+            <Heading as="h2" fontSize="lg" fontWeight="bold">
+              Play Level
+            </Heading>
+            <Fieldset
+              invalid={!!errors.playLevel}
+              errorMessage={errors.playLevel ? errors.playLevel.message : undefined}
+              w="full"
+            >
+              <Controller
+                name="playLevel"
+                control={control}
+                rules={{ required: { value: true, message: 'Play level is required.' } }}
+                render={({ field }) => (
+                  <SegmentedControl
+                    {...field}
+                    variant="basic"
+                    colorScheme="primary"
+                    bg="white"
+                    borderWidth="1px"
+                    borderColor="tertiary"
+                    w="full"
                   >
-                    {level}
-                  </span>
-                </label>
-              ))}
-            </div>
+                    {Object.values(PlayLevel).map((level) => (
+                      <SegmentedControlButton
+                        key={level}
+                        value={level}
+                        h="12"
+                        textTransform="capitalize"
+                      >
+                        {level}
+                      </SegmentedControlButton>
+                    ))}
+                  </SegmentedControl>
+                )}
+              />
+            </Fieldset>
 
-            <Button type="submit" className="mt-4 rounded px-4 py-2" disabled={!isDirty}>
+            <Button type="submit" colorScheme="primary" disabled={!isDirty} w="fit-content">
               Save Changes
             </Button>
-          </form>
-        </div>
+          </VStack>
+        </CardBody>
+      </Card>
 
-        {/* Email Address Tab */}
-        <div className="mb-4 flex w-full max-w-[460px] flex-col items-start justify-between rounded-lg border p-6">
-          <h2 className="mb-2 text-lg font-bold">Email Address</h2>
-          <div className="flex w-full flex-col gap-2 break-words md:flex-row md:items-center md:justify-between">
-            <p>{email}</p>
-            <div>
-              <Button variant={'outline'}>Change Email</Button>
-            </div>
-          </div>
-        </div>
+      {/* Email Address Tab */}
+      <Card w="460px" variant="outline">
+        <CardBody>
+          <Heading as="h2" fontSize="lg" fontWeight="bold">
+            Email Address
+          </Heading>
+          <HStack w="full">
+            <Text>{email}</Text>
+            <Spacer />
+            <Button variant="outline" w="fit-content">
+              Change Email
+            </Button>
+          </HStack>
+        </CardBody>
+      </Card>
 
-        {/* Password Tab */}
-        <div className="mb-4 w-full max-w-[460px] rounded-lg border p-6">
-          <h2 className="mb-2 text-lg font-bold">Password</h2>
-          <Button variant={'destructive'}>Change Password</Button>
-        </div>
-      </div>
-    </div>
+      {/* Password Tab */}
+      <Card w="460px" variant="outline">
+        <CardBody>
+          <Heading as="h2" fontSize="lg" fontWeight="bold">
+            Password
+          </Heading>
+          <Button variant="solid" colorScheme="destructive">
+            Change Password
+          </Button>
+        </CardBody>
+      </Card>
+    </VStack>
   )
 }
