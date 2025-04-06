@@ -73,6 +73,7 @@ export interface Config {
     gameSessionSchedule: GameSessionSchedule;
     gameSession: GameSession;
     booking: Booking;
+    authentication: Authentication;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -85,6 +86,7 @@ export interface Config {
     gameSessionSchedule: GameSessionScheduleSelect<false> | GameSessionScheduleSelect<true>;
     gameSession: GameSessionSelect<false> | GameSessionSelect<true>;
     booking: BookingSelect<false> | BookingSelect<true>;
+    authentication: AuthenticationSelect<false> | AuthenticationSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -299,6 +301,55 @@ export interface Booking {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authentication".
+ */
+export interface Authentication {
+  id: string;
+  /**
+   * The user who owns this authentication
+   */
+  user: string | User;
+  /**
+   * The type of authentication
+   */
+  type: string;
+  /**
+   * The type of authentication
+   */
+  provider: 'google';
+  /**
+   * The provider account id of the user authentication
+   */
+  providerAccountId?: string | null;
+  /**
+   * The refresh token of the user authentication
+   */
+  refreshToken?: string | null;
+  /**
+   * The access token of the user authentication
+   */
+  accessToken: string;
+  /**
+   * The expiration time of the access token
+   */
+  expiresAt: number;
+  /**
+   * The type of token
+   */
+  tokenType?: string | null;
+  /**
+   * The scope of the token
+   */
+  scope?: string | null;
+  /**
+   * The id token of the user authentication
+   */
+  idToken?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -327,6 +378,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'booking';
         value: string | Booking;
+      } | null)
+    | ({
+        relationTo: 'authentication';
+        value: string | Authentication;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -458,6 +513,24 @@ export interface BookingSelect<T extends boolean = true> {
   user?: T;
   gameSession?: T;
   playerLevel?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authentication_select".
+ */
+export interface AuthenticationSelect<T extends boolean = true> {
+  user?: T;
+  type?: T;
+  provider?: T;
+  providerAccountId?: T;
+  refreshToken?: T;
+  accessToken?: T;
+  expiresAt?: T;
+  tokenType?: T;
+  scope?: T;
+  idToken?: T;
   updatedAt?: T;
   createdAt?: T;
 }
