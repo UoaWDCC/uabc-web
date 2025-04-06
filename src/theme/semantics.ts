@@ -2,6 +2,7 @@ import type { ThemeSemantics } from '@yamada-ui/react'
 
 export const semantics: ThemeSemantics = {
   colors: {
-    tertiary: 'hsl(215 17% 40%)',
+    tertiary: 'tertiary.500',
+    destructive: 'destructive.500',
   },
 }
