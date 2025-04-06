@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import { Download } from 'lucide-react'
 
 import { AttendeesTable } from '@/components/admin/view-sessions/gameSessionId/AttendeesList'
 import { BackNavigationBar } from '@/components/BackNavigationBar'
@@ -9,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { useGameSessionId } from '@/hooks/query/game-sessions'
 import { formatFullDate } from '@/lib/utils/dates'
+import { DownloadIcon } from '@yamada-ui/lucide'
 
 export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSessionId: number }) {
   const { data, isLoading } = useGameSessionId(gameSessionId)
@@ -51,7 +51,7 @@ export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSe
               onClick={handleDownloadcsv}
               variant="outline"
             >
-              <Download size={16} />
+              <DownloadIcon />
               Download as CSV
             </Button>
           </h1>

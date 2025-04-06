@@ -1,29 +1,19 @@
 import React from 'react'
 import Link from 'next/link'
 
-import { cn } from '@/lib/utils'
-import { ArrowRight } from '../Icons'
+import { ArrowRightIcon } from '../Icons'
+import { Button, Spacer, type ButtonProps } from '@yamada-ui/react'
 
-interface DashboardButtonProps {
-  children: React.ReactNode
+interface DashboardButtonProps extends ButtonProps {
   href: string
-  className?: string
 }
 
-export function DashboardButton({ children, href, className }: DashboardButtonProps) {
+export function DashboardButton({ children, href, ...props }: DashboardButtonProps) {
   return (
-    <>
-      <Link href={href}>
-        <div
-          className={cn(
-            'relative flex h-20 items-center gap-4 rounded-sm bg-primary pl-6 pr-16 text-lg font-medium text-primary-foreground',
-            className,
-          )}
-        >
-          {children}
-          <ArrowRight className="absolute bottom-6 right-4 fill-primary-foreground" />
-        </div>
-      </Link>
-    </>
+    <Button as={Link} href={href} colorScheme="primary" rounded="md" h="20" px="6" {...props}>
+      {children}
+      <Spacer />
+      <ArrowRightIcon h="8" w="8" />
+    </Button>
   )
 }
