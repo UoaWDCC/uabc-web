@@ -7,7 +7,7 @@
 import { Heading } from '@/components/Heading'
 import { DebitDetailsCard } from '@/components/payment/DebitDetailsCard'
 import { PaymentInfoCard } from '@/components/payment/PaymentInfoCard'
-import { Button, Container, Text, VStack } from '@yamada-ui/react'
+import { Button, Container, Spacer, Text, VStack } from '@yamada-ui/react'
 
 export default function DirectDebitPage() {
   const firstName = 'John'
@@ -22,6 +22,9 @@ export default function DirectDebitPage() {
       <VStack>
         <Heading>Payment</Heading>
         <PaymentInfoCard amount={15} />
+      </VStack>
+      <Spacer />
+      <VStack>
         <Text fontWeight="medium" textAlign="center">
           Direct Debit
         </Text>
