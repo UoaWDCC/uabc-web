@@ -2,23 +2,36 @@
  * @author Angela Guo <aguo921@aucklanduni.ac.nz>
  */
 
-import { cn } from '@/lib/utils'
-import { Card } from '../Card'
+import {
+  Card,
+  CardBody,
+  type CardProps,
+  Center,
+  FormatNumber,
+  Text,
+  VStack,
+} from '@yamada-ui/react'
 
-interface PaymentInfoCardProps {
+interface PaymentInfoCardProps extends CardProps {
   amount: number
-  className?: string
 }
 
-export const PaymentInfoCard = ({ amount, className }: PaymentInfoCardProps) => {
-  const dollarAmount = '$' + (Math.round(amount * 100) / 100).toFixed(2)
-
+export const PaymentInfoCard = ({ amount, ...props }: PaymentInfoCardProps) => {
   return (
-    //TODO: colours
-    <Card className={cn('bg-[#3767af] p-8 pt-12 text-center text-white shadow-xl', className)}>
-      <p className="text-xs text-[#AFCFFF]">Your total for this session:</p>
-      <p className="mb-5 text-3xl font-bold">{dollarAmount}</p>
-      <p className="text-xs">Casual Badminton Session</p>
+    <Card variant="solid" bg="primary" py="8" {...props}>
+      <CardBody>
+        <Center as={VStack}>
+          <Text fontSize="xs" color="transparentize(#FAFAFAB2, 70%)">
+            Your total for this session:
+          </Text>
+          <Text fontSize="3xl" fontWeight="bold" className="mb-5 text-3xl font-bold">
+            <FormatNumber value={amount} style="currency" currency="NZD" />
+          </Text>
+          <Text fontSize="xs" color="#FAFAFAB2">
+            Casual Badminton Session
+          </Text>
+        </Center>
+      </CardBody>
     </Card>
   )
 }
