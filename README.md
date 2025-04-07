@@ -95,6 +95,16 @@ We use payload's built in code generation to generate types for our project. To 
 pnpm generate:types
 ```
 
+### Theme Token Generation
+
+We use Yamada CLI to generate theme tokens for our project. This helps maintain consistent styling across the application. To generate theme tokens, run:
+
+```bash
+pnpm theme
+```
+
+This command will process the theme tokens defined in `./src/theme` and generate the necessary theme files.
+
 ### Automated Testing
 
 Automated testing is an important part of writing code that can be maintained and understood long after the developers
