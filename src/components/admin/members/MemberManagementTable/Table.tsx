@@ -4,13 +4,19 @@ import type { TdProps } from '@yamada-ui/react'
 import type { Cell, Column, PagingTableProps } from '@yamada-ui/table'
 import { useMembers } from '@/hooks/query/useMembers'
 import type { Member } from '@/types/member'
-import { useMemo } from 'react'
+import { useMemo, useState, memo, RefObject } from 'react'
+import { assignRef } from '@yamada-ui/react'
 import { Button, HStack, TableContainer, Text, EmptyState, Center, Loading } from '@yamada-ui/react'
 import { PagingTable } from '@yamada-ui/table'
 import { UsersIcon } from '@yamada-ui/lucide'
 
-export function MemberManagementTable() {
+export interface MemberManagementTableProps {
+  filterRef: RefObject<(value: string) => void>
+}
+
+export const MemberManagementTable = memo(({ filterRef }: MemberManagementTableProps) => {
   const { data, isLoading } = useMembers()
+  const [filterValue, setFilterValue] = useState('')
 
   const members = useMemo(
     () =>
@@ -22,6 +28,17 @@ export function MemberManagementTable() {
       })),
     [data],
   )
+
+  const filteredMembers = useMemo(() => {
+    if (!filterValue) return members
+    const lowercaseFilter = filterValue.toLowerCase()
+    return members?.filter(
+      (member) =>
+        member.name.toLowerCase().includes(lowercaseFilter) ||
+        member.email.toLowerCase().includes(lowercaseFilter) ||
+        member.prepaidSessions.toString().includes(lowercaseFilter),
+    )
+  }, [members, filterValue])
 
   const columns = useMemo<Column<Member>[]>(
     () => [
@@ -70,15 +87,19 @@ export function MemberManagementTable() {
     [],
   )
 
-  const cellProps: PagingTableProps<Member>['cellProps'] = ({ column }: Cell<Member, unknown>) => {
-    const props: TdProps = { verticalAlign: 'middle' }
+  const cellProps = useMemo<PagingTableProps<Member>['cellProps']>(() => {
+    return ({ column }: Cell<Member, unknown>) => {
+      const props: TdProps = { verticalAlign: 'middle' }
 
-    if (column.columnDef.header === 'Actions') {
-      props.p = 4
+      if (column.columnDef.header === 'Actions') {
+        props.p = 4
+      }
+
+      return props
     }
+  }, [])
 
-    return props
-  }
+  assignRef(filterRef, setFilterValue)
 
   if (isLoading) {
     return (
@@ -102,7 +123,7 @@ export function MemberManagementTable() {
     <TableContainer rounded="md" borderWidth="1px" pb="md" px="md">
       <PagingTable<Member>
         columns={columns}
-        data={members ?? []}
+        data={filteredMembers ?? []}
         rowId="id"
         cellProps={cellProps}
         withPagingControl
@@ -112,4 +133,6 @@ export function MemberManagementTable() {
       />
     </TableContainer>
   )
-}
+})
+
+MemberManagementTable.displayName = 'MemberManagementTable'

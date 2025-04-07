@@ -1,4 +1,4 @@
-import { MemberManagementTable } from '@/components/admin/members/MemberManagementTable'
+import { Members } from '@/components/admin/members/MemberManagementTable'
 import { BackNavigationBar } from '@/components/BackNavigationBar'
 import { Container, Heading, VStack } from '@yamada-ui/react'
 
@@ -14,7 +14,7 @@ export default function AdminMembersPage() {
         <Heading fontSize="2xl" fontWeight="semibold">
           Member Management
         </Heading>
-        <MemberManagementTable />
+        <Members />
       </VStack>
     </Container>
   )
