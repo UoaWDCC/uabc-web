@@ -6,7 +6,7 @@ import { useMembers } from '@/hooks/query/useMembers'
 import type { Member } from '@/types/member'
 import { useMemo, useState, memo, RefObject } from 'react'
 import { assignRef } from '@yamada-ui/react'
-import { Button, HStack, TableContainer, Text, Center, Loading } from '@yamada-ui/react'
+import { Button, HStack, Text, Center, Loading } from '@yamada-ui/react'
 import { PagingTable } from '@yamada-ui/table'
 
 export interface MemberManagementTableProps {
