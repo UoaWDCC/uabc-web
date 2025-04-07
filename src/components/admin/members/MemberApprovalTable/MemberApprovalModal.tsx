@@ -45,7 +45,7 @@ export const MemberApprovalModal: FC<MemberApprovalModalProps> = memo(({ row }) 
       console.log('Approving member:', row.original)
       onClose()
     } else {
-      setError('prepaidSessions', { message: 'Must be at least 0' })
+      setError('prepaidSessions', { message: 'Must be at least 1' })
     }
   }
 
