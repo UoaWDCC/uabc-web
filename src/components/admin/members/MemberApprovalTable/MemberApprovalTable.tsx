@@ -17,10 +17,6 @@ import {
   Tbody,
   Center,
   VStack,
-  Loading,
-  Card,
-  CardBody,
-  Text,
 } from '@yamada-ui/react'
 import {
   MemberApprovalCard,
