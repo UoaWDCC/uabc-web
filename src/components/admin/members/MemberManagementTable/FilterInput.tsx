@@ -15,6 +15,7 @@ export const FilterInput: FC<FilterInputProps> = memo(
       setValue('')
 
       setTimeout(() => {
+        // Trigger parent component's filter with empty string to show all items
         filterRef.current('')
       })
     })
