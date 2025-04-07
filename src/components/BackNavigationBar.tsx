@@ -30,7 +30,7 @@ export const BackNavigationBar = ({
   }, [isWithinPage, pathName, router])
 
   return (
-    <HStack>
+    <HStack w="full">
       <HStack>
         <IconButton
           variant="ghost"
