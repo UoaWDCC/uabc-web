@@ -6,9 +6,8 @@ import { useMembers } from '@/hooks/query/useMembers'
 import type { Member } from '@/types/member'
 import { useMemo, useState, memo, RefObject } from 'react'
 import { assignRef } from '@yamada-ui/react'
-import { Button, HStack, TableContainer, Text, EmptyState, Center, Loading } from '@yamada-ui/react'
+import { Button, HStack, TableContainer, Text, Center, Loading } from '@yamada-ui/react'
 import { PagingTable } from '@yamada-ui/table'
-import { UsersIcon } from '@yamada-ui/lucide'
 
 export interface MemberManagementTableProps {
   filterRef: RefObject<(value: string) => void>
@@ -88,11 +87,22 @@ export const MemberManagementTable = memo(({ filterRef }: MemberManagementTableP
   )
 
   const cellProps = useMemo<PagingTableProps<Member>['cellProps']>(() => {
-    return ({ column }: Cell<Member, unknown>) => {
+    return ({ column, row }: Cell<Member & { empty?: boolean }, unknown>) => {
       const props: TdProps = { verticalAlign: 'middle' }
 
+      if (row.original.empty) {
+        if (column.columnDef.header === 'Name') {
+          props.colSpan = 5
+          props.textAlign = 'center'
+          props.color = 'muted'
+          props.h = '3xs'
+        } else {
+          props.display = 'none'
+        }
+      }
+
       if (column.columnDef.header === 'Actions') {
-        props.p = 4
+        props.py = 2
       }
 
       return props
@@ -109,29 +119,35 @@ export const MemberManagementTable = memo(({ filterRef }: MemberManagementTableP
     )
   }
 
-  if (!members?.length) {
-    return (
-      <EmptyState
-        title="No members found"
-        description="There are currently no members in the system"
-        indicator={<UsersIcon />}
-      />
-    )
-  }
+  const hasData = !!filteredMembers?.length
+
+  const resolvedData = hasData
+    ? filteredMembers
+    : [
+        {
+          id: '',
+          name: 'No members found',
+          email: '',
+          prepaidSessions: 0,
+          empty: true,
+        },
+      ]
 
   return (
-    <TableContainer rounded="md" borderWidth="1px" pb="md" px="md">
-      <PagingTable<Member>
-        columns={columns}
-        data={filteredMembers ?? []}
-        rowId="id"
-        cellProps={cellProps}
-        withPagingControl
-        highlightOnHover
-        highlightOnSelected
-        rounded="md"
-      />
-    </TableContainer>
+    <PagingTable<Member & { empty?: boolean }>
+      sx={{ 'tbody > tr:last-of-type > td': { borderBottomWidth: '0px' } }}
+      borderCollapse="separate"
+      borderWidth="1px"
+      columns={columns}
+      data={resolvedData}
+      rowId="id"
+      cellProps={cellProps}
+      withPagingControl={hasData}
+      highlightOnHover={hasData}
+      highlightOnSelected={hasData}
+      rowsClickSelect={hasData}
+      rounded="md"
+    />
   )
 })
 

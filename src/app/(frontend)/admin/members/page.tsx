@@ -8,9 +8,9 @@ export const metadata = {
 
 export default function AdminMembersPage() {
   return (
-    <Container minH="100dvh">
+    <Container minH="100dvh" centerContent>
       <BackNavigationBar title="Members" pathName="/admin" />
-      <VStack>
+      <VStack maxW="6xl">
         <Heading fontSize="2xl" fontWeight="semibold">
           Member Management
         </Heading>
