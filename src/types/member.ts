@@ -6,3 +6,5 @@ export interface Member {
   email: MemberResponse['email']
   prepaidSessions: MemberResponse['prepaidSessions']
 }
+
+export type PendingMember = Omit<Member, 'prepaidSessions'>
