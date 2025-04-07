@@ -6,9 +6,37 @@ on:
   pull_request:
     branches: [master]
 
+env:
+  CI: 'true'
+
 jobs:
+  check_changes:
+    name: Check Changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      exists: ${{ steps.filter.outputs.exists }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Filter changes
+        uses: yumemi-inc/path-filter@v2
+        id: filter
+        with:
+          patterns: |
+              **
+              !**.md
+              !.gitignore
+              !.gitattributes
+              !.github/**
+              !.vscode/**
+              !.env.example
+
   setup:
     name: Setup
+    needs: check_changes
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,7 +64,8 @@ jobs:
           key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
 
   style:
-    needs: setup
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Prettier
     runs-on: ubuntu-latest
     steps:
@@ -64,7 +93,8 @@ jobs:
         run: pnpm prettier --check .
 
   lint:
-    needs: setup
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Lint
     runs-on: ubuntu-latest
     steps:
@@ -95,7 +125,8 @@ jobs:
         run: pnpm lint
 
   build:
-    needs: setup
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -126,7 +157,8 @@ jobs:
         run: pnpm tsc --noEmit && pnpm build
 
   test:
-    needs: setup
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Test
     runs-on: ubuntu-latest
     steps:
@@ -157,7 +189,8 @@ jobs:
         run: pnpm test
 
   codegen:
-    needs: setup
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Codegen
     runs-on: ubuntu-latest
     steps:
@@ -200,12 +233,13 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-              core.setFailed('Your code generation for typings are not up to date. Run pnpm generate:types')
+            core.setFailed('Your code generation for typings are not up to date. Run pnpm generate:types')
 
   verify:
     name: Verify
-    needs: [build, lint, style, test, codegen]
+    needs: [check_changes, build, lint, style, test, codegen]
     runs-on: ubuntu-latest
+    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.lint.result == 'success' && needs.style.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
     steps:
       - name: All checks passed
         run: echo "All checks passed!"

@@ -2,11 +2,11 @@
 
 import { useCallback, useContext, type ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
-import { IoArrowBackOutline } from 'react-icons/io5'
+import { ArrowLeftIcon } from '@yamada-ui/lucide'
+import { HStack, IconButton, Text } from '@yamada-ui/react'
 
-import { cn } from '@/lib/utils'
 import { OriginContext } from './providers/OriginTracker'
-import { Button } from './ui/button'
+import Link from 'next/link'
 
 interface BackNavigationBarProps {
   title: string
@@ -18,7 +18,6 @@ interface BackNavigationBarProps {
 export const BackNavigationBar = ({
   title,
   pathName,
-  className,
   children,
   ...props
 }: BackNavigationBarProps) => {
@@ -31,20 +30,27 @@ export const BackNavigationBar = ({
   }, [isWithinPage, pathName, router])
 
   return (
-    <div className={cn('mt-4 flex items-center justify-between text-tertiary', className)}>
-      <div className="flex">
-        <Button
+    <HStack w="full">
+      <HStack>
+        <IconButton
           variant="ghost"
-          className="mr-4 grid size-8 place-items-center"
-          size="icon"
+          as={!isWithinPage ? Link : undefined}
+          href={!isWithinPage ? pathName : undefined}
+          p={2}
+          minW={8}
+          h={8}
+          w={8}
           onClick={handleBackButtonClick}
+          colorScheme="tertiary"
           {...props}
         >
-          <IoArrowBackOutline size={24} />
-        </Button>
-        <span className="self-center text-lg font-medium leading-none">{title}</span>
-      </div>
+          <ArrowLeftIcon boxSize={6} />
+        </IconButton>
+        <Text fontSize="lg" fontWeight="medium" lineHeight="none" color="tertiary">
+          {title}
+        </Text>
+      </HStack>
       {children}
-    </div>
+    </HStack>
   )
 }
