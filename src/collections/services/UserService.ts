@@ -15,7 +15,6 @@ export default class UserService {
     email: string,
     remainingSessions?: number,
     image?: Media,
-    password?: string,
   ): Promise<User> {
     const newUser = await payload.create({
       collection: 'user',
@@ -26,7 +25,6 @@ export default class UserService {
         remainingSessions,
         image,
         email,
-        password,
       },
     })
     return newUser

@@ -1,16 +1,8 @@
-import { adminAccessControl } from '@/hooks/auth/access-control'
 import { MembershipType } from '@/types/types'
 import type { CollectionConfig } from 'payload'
 
 export const User: CollectionConfig = {
   slug: 'user',
-  auth: true,
-  admin: {
-    useAsTitle: 'email',
-  },
-  access: {
-    admin: adminAccessControl,
-  },
   fields: [
     {
       name: 'firstName',
@@ -27,6 +19,12 @@ export const User: CollectionConfig = {
       admin: {
         description: 'The last name of the user',
       },
+    },
+    {
+      name: 'email',
+      type: 'text',
+      required: true,
+      unique: true,
     },
     {
       name: 'role',
