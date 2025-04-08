@@ -1,21 +1,21 @@
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
-import { Media, User } from '@/payload-types'
-import { MembershipType } from '@/types/types'
+import { User } from '@/payload-types'
+import { CreateUserData } from '@/types/collections'
 
 const payload = await getPayload({
   config: configPromise,
 })
 
 export default class UserService {
-  public async createUser(
-    firstName: string,
-    lastName: string,
-    role: MembershipType,
-    email: string,
-    remainingSessions?: number,
-    image?: Media,
-  ): Promise<User> {
+  public async createUser({
+    firstName,
+    lastName,
+    role,
+    email,
+    remainingSessions = 0,
+    image = undefined,
+  }: CreateUserData): Promise<User> {
     const newUser = await payload.create({
       collection: 'user',
       data: {
