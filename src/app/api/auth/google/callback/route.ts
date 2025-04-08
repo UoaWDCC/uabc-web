@@ -50,8 +50,6 @@ export const GET = async (req: NextRequest) => {
 
   const {
     sub,
-    // picture,
-    // email_verified,
     email,
     family_name: lastName,
     given_name: firstName,
