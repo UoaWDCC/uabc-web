@@ -7,14 +7,14 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { User } from './collections/user'
-import { Admin } from './collections/admin'
-import { Media } from './collections/media'
-import { Semester } from './collections/semester'
-import { GameSessionSchedule } from './collections/game-session-schedule'
-import { GameSession } from './collections/game-session'
-import { Booking } from './collections/booking'
-import { Authentication } from './collections/authentication'
+import { User } from './collections/User'
+import { Admin } from './collections/Admin'
+import { Media } from './collections/Media'
+import { Semester } from './collections/Semester'
+import { GameSession } from './collections/GameSession'
+import { Booking } from './collections/Booking'
+import { Authentication } from './collections/Authentication'
+import { GameSessionSchedule } from './collections/GameSessionSchedule'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

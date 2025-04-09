@@ -19,7 +19,6 @@ describe('double user count', () => {
         firstName: 'ray',
         lastName: 'zhao',
         email: 'rayzhao@gmail.com',
-        password: '12132',
         role: 'casual',
       },
     })
@@ -35,7 +34,6 @@ describe('double user count', () => {
         firstName: 'ray',
         lastName: 'zhao',
         email: 'rayzhao@gmail.com',
-        password: '12132',
         role: 'casual',
       },
     })
@@ -46,7 +44,6 @@ describe('double user count', () => {
         firstName: 'straight',
         lastName: 'zhao',
         email: 'straight@gmail.com',
-        password: '12132',
         role: 'casual',
       },
     })
