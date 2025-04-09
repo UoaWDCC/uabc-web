@@ -3,6 +3,7 @@
 import { Card } from '@/components/Card'
 import { UabcHeaderText } from '@/components/UabcHeaderText'
 import { UabcLogo } from '@/components/UabcLogo'
+import { Container } from '@yamada-ui/react'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -19,7 +20,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <UabcHeaderText className="mb-4 lg:hidden" />
         <UabcLogo className="flex justify-center lg:hidden" />
 
-        <div className="flex w-full flex-col gap-4 lg:p-6">{children}</div>
+        <Container>{children}</Container>
       </Card>
     </div>
   )

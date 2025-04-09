@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { BreakLine } from '@/components/auth/BreakLine'
 import { EmailLoginForm } from '@/components/auth/EmailLoginForm'
 import { GoogleSignIn } from '@/components/auth/GoogleLoginButton'
+import { Center, HStack, Separator, Link as UILink, VStack } from '@yamada-ui/react'
 
 export const metadata = {
   title: 'Login - UABC Booking Portal',
@@ -11,21 +12,23 @@ export const metadata = {
 
 export default async function LoginPage() {
   return (
-    <div className="mt-8 flex w-full flex-col gap-4">
+    <VStack>
       <Suspense>
         <EmailLoginForm />
       </Suspense>
       <BreakLine label="or" />
-      <GoogleSignIn className="w-full" />
-      <p className="mt-2 text-center text-xs text-tertiary">
-        <Link className="text-left font-bold underline" href="/auth/signup">
-          Create Account
-        </Link>
-        <span className="pointer-events-none mx-1">|</span>
-        <Link className="text-right font-bold underline" href="/auth/forgot-password">
-          Forgot Password?
-        </Link>
-      </p>
-    </div>
+      <GoogleSignIn />
+      <Center fontSize="x-small">
+        <HStack gap={2} separator={<Separator orientation="vertical" height="8xs" />}>
+          <UILink as={Link} href="/auth/signup" color="tertiary" fontWeight="bold">
+            Create Account
+          </UILink>
+
+          <UILink as={Link} href="/auth/forgot-password" color="tertiary" fontWeight="bold">
+            Forgot Password?
+          </UILink>
+        </HStack>
+      </Center>
+    </VStack>
   )
 }
