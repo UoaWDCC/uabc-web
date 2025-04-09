@@ -27,9 +27,8 @@ export const GET = async (req: NextRequest) => {
   const code = params.get('code')
   if (!code) return NextResponse.json({ error: 'No code provided' }, { status: 400 })
   // Check if the scope matches
-  const scope = params.get('scope')
-  const scopes = scope?.split(' ')
-  if (!scope || !scopes || googleAuthScopes.some((scope) => !scopes.includes(scope)))
+  const scopes = params.get('scope')?.split(' ')
+  if (!scopes || googleAuthScopes.some((requiredScope) => !scopes.includes(requiredScope)))
     return NextResponse.json({ error: 'No scope or invalid scopes provided' }, { status: 400 })
   // Fetch tokens from Google based on code received
   let tokens
@@ -68,7 +67,7 @@ export const GET = async (req: NextRequest) => {
     providerAccountId: sub,
     accessToken: tokens.access_token,
     expiresAt: tokens.expiry_date,
-    scope,
+    scope: scopes.join(' '),
     idToken: tokens.id_token,
   })
 
