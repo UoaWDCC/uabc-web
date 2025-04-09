@@ -8,13 +8,20 @@ const payload = await getPayload({
 })
 
 export default class AuthService {
+  /**
+   * Method to create an authentication document.
+   * @param param0 The data to create an Authentication with
+   * @returns The Authentication document
+   */
   public async createAuth({
     user,
     type,
     provider,
     providerAccountId,
+    refreshToken,
     accessToken,
     expiresAt,
+    tokenType,
     scope,
     idToken,
   }: CreateAuthenticationData): Promise<Authentication> {
@@ -29,6 +36,8 @@ export default class AuthService {
         expiresAt,
         scope,
         idToken,
+        refreshToken,
+        tokenType,
       },
     })
   }
