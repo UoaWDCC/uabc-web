@@ -10,7 +10,7 @@ import { MembershipType } from '@/types/types'
 export const GET = async (req: NextRequest) => {
   const params = req.nextUrl.searchParams
   const cookieStore = await cookies()
-  // Check if state matches the cookies
+
   const state = params.get('state')
   const cookieState = cookieStore.get('state')
   if (!state || !cookieState?.value || state.toString() !== cookieState.value.toString()) {
@@ -21,16 +21,15 @@ export const GET = async (req: NextRequest) => {
       },
     )
   }
-  // Delete state when finished check
   cookieStore.delete('state')
-  // Check if Google code exists
+
   const code = params.get('code')
   if (!code) return NextResponse.json({ error: 'No code provided' }, { status: 400 })
-  // Check if the scope matches
+
   const scopes = params.get('scope')?.split(' ')
   if (!scopes || googleAuthScopes.some((requiredScope) => !scopes.includes(requiredScope)))
     return NextResponse.json({ error: 'No scope or invalid scopes provided' }, { status: 400 })
-  // Fetch tokens from Google based on code received
+
   let tokens
   try {
     const tokenFetchResponse = await oauth2Client.getToken(code)
@@ -42,7 +41,7 @@ export const GET = async (req: NextRequest) => {
   if (!tokens.access_token || !tokens.expiry_date || !tokens.id_token) {
     return NextResponse.json({ error: 'Error invalid google auth' }, { status: 500 })
   }
-  // Fetch user information with access_token
+
   const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
     headers: { Authorization: `Bearer ${tokens.access_token}` },
   })

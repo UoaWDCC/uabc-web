@@ -8,11 +8,9 @@ on:
 
 env:
   CI: 'true'
-  PAYLOAD_SECRET: ${{secrets.PAYLOAD_SECRET}}
   GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
   GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
   NEXT_PUBLIC_URL: ${{secrets.NEXT_PUBLIC_URL}}
-  DATABASE_URI: ${{secrets.DATABASE_URI}}
 
 jobs:
   check_changes:
