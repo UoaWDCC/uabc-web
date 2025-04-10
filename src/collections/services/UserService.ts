@@ -8,6 +8,11 @@ const payload = await getPayload({
 })
 
 export default class UserService {
+  /**
+   * Creates a new user document
+   * @param param0 the user data
+   * @returns the created user document
+   */
   public async createUser({
     firstName,
     lastName,

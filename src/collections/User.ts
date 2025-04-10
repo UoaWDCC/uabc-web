@@ -32,7 +32,6 @@ export const User: CollectionConfig = {
       required: true,
       options: Object.values(MembershipType),
       defaultValue: MembershipType.casual,
-      saveToJWT: true,
       admin: {
         description: 'The role of the user',
       },
