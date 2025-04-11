@@ -128,6 +128,8 @@ jobs:
         run: pnpm lint
 
   build:
+    env:
+      PAYLOAD_SECRET: ${{secrets.PAYLOAD_SECRET}}
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build
