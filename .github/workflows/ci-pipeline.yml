@@ -8,6 +8,9 @@ on:
 
 env:
   CI: 'true'
+  GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
+  GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
+  NEXT_PUBLIC_URL: ${{secrets.NEXT_PUBLIC_URL}}
 
 jobs:
   check_changes:
@@ -125,6 +128,9 @@ jobs:
         run: pnpm lint
 
   build:
+    env:
+      PAYLOAD_SECRET: ${{secrets.PAYLOAD_SECRET}}
+      DATABASE_URI: ${{secrets.DATABASE_URI}}
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build

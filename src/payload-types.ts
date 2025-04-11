@@ -63,30 +63,32 @@ export type SupportedTimezones =
 
 export interface Config {
   auth: {
-    admins: AdminAuthOperations;
+    admin: AdminAuthOperations;
   };
   blocks: {};
   collections: {
-    admins: Admin;
+    admin: Admin;
     user: User;
     media: Media;
     semester: Semester;
     gameSessionSchedule: GameSessionSchedule;
     gameSession: GameSession;
     booking: Booking;
+    authentication: Authentication;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
-    admins: AdminsSelect<false> | AdminsSelect<true>;
+    admin: AdminSelect<false> | AdminSelect<true>;
     user: UserSelect<false> | UserSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     semester: SemesterSelect<false> | SemesterSelect<true>;
     gameSessionSchedule: GameSessionScheduleSelect<false> | GameSessionScheduleSelect<true>;
     gameSession: GameSessionSelect<false> | GameSessionSelect<true>;
     booking: BookingSelect<false> | BookingSelect<true>;
+    authentication: AuthenticationSelect<false> | AuthenticationSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -98,7 +100,7 @@ export interface Config {
   globalsSelect: {};
   locale: null;
   user: Admin & {
-    collection: 'admins';
+    collection: 'admin';
   };
   jobs: {
     tasks: unknown;
@@ -125,7 +127,7 @@ export interface AdminAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "admins".
+ * via the `definition` "admin".
  */
 export interface Admin {
   id: string;
@@ -154,10 +156,11 @@ export interface User {
    * The last name of the user
    */
   lastName: string;
+  email: string;
   /**
    * The role of the user
    */
-  role: 'member' | 'casual';
+  role: 'member' | 'casual' | 'admin';
   /**
    * The number of remaining sessions the user has
    */
@@ -310,13 +313,62 @@ export interface Booking {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authentication".
+ */
+export interface Authentication {
+  id: string;
+  /**
+   * The user who owns this authentication
+   */
+  user: string | User;
+  /**
+   * The type of authentication
+   */
+  type: string;
+  /**
+   * The type of authentication
+   */
+  provider: 'google';
+  /**
+   * The provider account id of the user authentication
+   */
+  providerAccountId?: string | null;
+  /**
+   * The refresh token of the user authentication
+   */
+  refreshToken?: string | null;
+  /**
+   * The access token of the user authentication
+   */
+  accessToken: string;
+  /**
+   * The expiration time of the access token
+   */
+  expiresAt: number;
+  /**
+   * The type of token
+   */
+  tokenType?: string | null;
+  /**
+   * The scope of the token
+   */
+  scope?: string | null;
+  /**
+   * The id token of the user authentication
+   */
+  idToken?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'admins';
+        relationTo: 'admin';
         value: string | Admin;
       } | null)
     | ({
@@ -342,10 +394,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'booking';
         value: string | Booking;
+      } | null)
+    | ({
+        relationTo: 'authentication';
+        value: string | Authentication;
       } | null);
   globalSlug?: string | null;
   user: {
-    relationTo: 'admins';
+    relationTo: 'admin';
     value: string | Admin;
   };
   updatedAt: string;
@@ -358,7 +414,7 @@ export interface PayloadLockedDocument {
 export interface PayloadPreference {
   id: string;
   user: {
-    relationTo: 'admins';
+    relationTo: 'admin';
     value: string | Admin;
   };
   key?: string | null;
@@ -387,9 +443,9 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "admins_select".
+ * via the `definition` "admin_select".
  */
-export interface AdminsSelect<T extends boolean = true> {
+export interface AdminSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -407,6 +463,7 @@ export interface AdminsSelect<T extends boolean = true> {
 export interface UserSelect<T extends boolean = true> {
   firstName?: T;
   lastName?: T;
+  email?: T;
   role?: T;
   remainingSessions?: T;
   image?: T;
@@ -481,6 +538,24 @@ export interface BookingSelect<T extends boolean = true> {
   user?: T;
   gameSession?: T;
   playerLevel?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authentication_select".
+ */
+export interface AuthenticationSelect<T extends boolean = true> {
+  user?: T;
+  type?: T;
+  provider?: T;
+  providerAccountId?: T;
+  refreshToken?: T;
+  accessToken?: T;
+  expiresAt?: T;
+  tokenType?: T;
+  scope?: T;
+  idToken?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -9,6 +9,13 @@ declare global {
        * Secret used to secure Payload
        */
       PAYLOAD_SECRET: string
+
+      GOOGLE_CLIENT_ID: string
+      GOOGLE_CLIENT_SECRET: string
+      /**
+       * The public URL of the website
+       */
+      NEXT_PUBLIC_URL: string
     }
   }
 }

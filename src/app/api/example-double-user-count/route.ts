@@ -7,7 +7,7 @@ export const GET = async () => {
   })
 
   const data = await payload.find({
-    collection: 'admins',
+    collection: 'user',
   })
 
   return Response.json(data.docs.length * 2)

@@ -3,7 +3,6 @@ import type { CollectionConfig } from 'payload'
 
 export const User: CollectionConfig = {
   slug: 'user',
-  access: {},
   fields: [
     {
       name: 'firstName',
@@ -20,6 +19,12 @@ export const User: CollectionConfig = {
       admin: {
         description: 'The last name of the user',
       },
+    },
+    {
+      name: 'email',
+      type: 'text',
+      required: true,
+      unique: true,
     },
     {
       name: 'role',

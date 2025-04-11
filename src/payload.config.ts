@@ -11,9 +11,10 @@ import { Admin } from './collections/Admin'
 import { User } from './collections/User'
 import { Media } from './collections/Media'
 import { Semester } from './collections/Semester'
-import { GameSessionSchedule } from './collections/GameSessionSchedule'
 import { GameSession } from './collections/GameSession'
 import { Booking } from './collections/Booking'
+import { Authentication } from './collections/Authentication'
+import { GameSessionSchedule } from './collections/GameSessionSchedule'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -32,7 +33,16 @@ export default buildConfig({
       importMapFile: path.resolve(dirname) + '/app/payload/admin/importMap.js',
     },
   },
-  collections: [Admin, User, Media, Semester, GameSessionSchedule, GameSession, Booking],
+  collections: [
+    Admin,
+    User,
+    Media,
+    Semester,
+    GameSessionSchedule,
+    GameSession,
+    Booking,
+    Authentication,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
