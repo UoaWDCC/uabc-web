@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { z } from 'zod'
 
 import ClientViewSessionsPageWithId from './client-page'
+import { Container } from '@yamada-ui/react'
 
 const routeContextSchema = z.object({
   params: z.promise(
@@ -19,8 +20,8 @@ export default async function ViewSessionsPage(ctx: z.infer<typeof routeContextS
   const gameSessionId = (await result.data.params).gameSessionId
 
   return (
-    <div className="mx-4 flex min-h-dvh flex-col">
+    <Container minH="100dvh">
       <ClientViewSessionsPageWithId gameSessionId={gameSessionId} />
-    </div>
+    </Container>
   )
 }
