@@ -40,3 +40,6 @@ jobs:
       name: production
       url: https://uabc.wdcc.co.nz/
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "To be implemented"
