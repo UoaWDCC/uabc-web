@@ -125,6 +125,10 @@ jobs:
         run: pnpm lint
 
   build:
+    environment: staging
+    env:
+      PAYLOAD_SECRET: ${{secrets.PAYLOAD_SECRET}}
+      DATABASE_URI: ${{secrets.DATABASE_URI}}
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build
