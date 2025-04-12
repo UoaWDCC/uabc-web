@@ -2,17 +2,52 @@
 
 import React from 'react'
 
-import { AttendeesTable } from '@/components/admin/view-sessions/gameSessionId/AttendeesList'
 import { BackNavigationBar } from '@/components/BackNavigationBar'
-import { Button } from '@/components/ui/button'
-import { toast } from '@/components/ui/use-toast'
 import { useGameSessionId } from '@/hooks/query/game-sessions'
 import { formatFullDate } from '@/lib/utils/dates'
 import { DownloadIcon } from '@yamada-ui/lucide'
+import {
+  Button,
+  EmptyState,
+  EmptyStateDescription,
+  EmptyStateTitle,
+  HStack,
+  Skeleton,
+  Spacer,
+  Text,
+  useNotice,
+  VStack,
+} from '@yamada-ui/react'
+import { Heading } from '@/components/Heading'
+import { Attendees, Loading } from '@/components/admin/view-sessions/gameSessionId'
 
 export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSessionId: number }) {
   const { data, isLoading } = useGameSessionId(gameSessionId)
   const date = data?.date
+  const notice = useNotice()
+
+  if (isLoading) {
+    return (
+      <>
+        <BackNavigationBar title="Download Attendees List" pathName="/admin/view-sessions" />
+        <Loading />
+      </>
+    )
+  }
+
+  if (!data) {
+    return (
+      <>
+        <BackNavigationBar title="Download Attendees List" pathName="/admin/view-sessions" />
+        <EmptyState>
+          <EmptyStateTitle>No data available</EmptyStateTitle>
+          <EmptyStateDescription>
+            The game session data is currently unavailable.
+          </EmptyStateDescription>
+        </EmptyState>
+      </>
+    )
+  }
 
   async function downloadAttendeesList() {
     const res = await fetch(`/api/game-sessions/${gameSessionId}/download`)
@@ -32,36 +67,37 @@ export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSe
     try {
       await downloadAttendeesList()
     } catch {
-      toast({ variant: 'destructive', title: 'Uh oh! Something went wrong.' })
+      notice({ title: 'Uh oh! Something went wrong.', status: 'error' })
     }
   }
 
   return (
     <>
       <BackNavigationBar
-        title={isLoading ? 'Loading...' : formatFullDate(date!)}
+        title={isLoading ? 'Loading...' : formatFullDate(date!).toLocaleString()}
         pathName="/admin/view-sessions"
       />
-      <div className="flex grow flex-col items-center">
-        <div className="flex w-full flex-col gap-y-4 px-6 py-4 lg:mt-12 lg:w-4/5 lg:min-w-fit lg:px-12">
-          <h1 className="flex justify-between text-2xl font-semibold">
-            <p>Attendees</p>
-            <Button
-              className="hidden gap-2 font-semibold md:flex"
-              onClick={handleDownloadcsv}
-              variant="outline"
-            >
-              <DownloadIcon />
-              Download as CSV
-            </Button>
-          </h1>
-          <p className="text-muted-foreground">
-            Here&apos;s the attendee list for the session on{' '}
-            <strong>{isLoading ? 'Loading...' : formatFullDate(date!)}</strong>
-          </p>
-          <AttendeesTable gameSessionId={gameSessionId} />
-        </div>
-      </div>
+      <VStack>
+        <HStack>
+          <Heading>Attendees</Heading>
+          <Spacer />
+          <Button
+            display={{ base: 'inline-flex', md: 'none' }}
+            onClick={handleDownloadcsv}
+            variant="outline"
+            startIcon={<DownloadIcon />}
+          >
+            Download as CSV
+          </Button>
+        </HStack>
+        <Text color="gray.500">
+          Here&apos;s the attendee list for the session on{' '}
+          <Text as="strong">
+            {isLoading ? 'Loading...' : formatFullDate(date!).toLocaleString()}
+          </Text>
+        </Text>
+        <Attendees gameSessionId={gameSessionId} />
+      </VStack>
     </>
   )
 }
