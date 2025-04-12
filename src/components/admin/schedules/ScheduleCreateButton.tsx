@@ -1,27 +1,24 @@
 'use client'
 
-import React from 'react'
-import { Plus } from 'lucide-react'
-
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import React, { memo } from 'react'
+import { PlusIcon } from '@yamada-ui/lucide'
+import { IconButton, useDisclosure } from '@yamada-ui/react'
 import { CreateScheduleFormDialog } from './CreateScheduleFormDialog'
 
 interface ScheduleCreateButtonProps {
   semesterId: number
 }
 
-const ScheduleCreateButton = ({ semesterId }: ScheduleCreateButtonProps) => {
+const UnmemoizedScheduleCreateButton = ({ semesterId }: ScheduleCreateButtonProps) => {
+  const { open, onClose, onOpen } = useDisclosure()
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="default" className="aspect-square">
-          <Plus className="absolute w-5 stroke-white" />
-        </Button>
-      </DialogTrigger>
-      <CreateScheduleFormDialog semesterId={semesterId} />
-    </Dialog>
+    <>
+      <IconButton variant="solid" colorScheme="primary" onClick={onOpen}>
+        <PlusIcon />
+      </IconButton>
+      <CreateScheduleFormDialog semesterId={semesterId} open={open} onClose={onClose} />
+    </>
   )
 }
 
-export default ScheduleCreateButton
+export default memo(UnmemoizedScheduleCreateButton)

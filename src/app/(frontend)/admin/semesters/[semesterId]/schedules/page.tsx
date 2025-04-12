@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { z } from 'zod'
+import { Container, Spacer, VStack } from '@yamada-ui/react'
 
 import ScheduleCreateButton from '@/components/admin/schedules/ScheduleCreateButton'
 import { SchedulesList } from '@/components/admin/schedules/SchedulesList'
@@ -31,13 +32,14 @@ export default async function SchedulesPage(ctx: z.infer<typeof routeContextSche
   const semesterId = (await result.data.params).semesterId
 
   return (
-    <div className="max-w-dvw relative flex min-h-dvh flex-col overflow-x-hidden bg-background px-4">
-      <BackNavigationBar title={'lol'} pathName="/admin/semesters" className="mb-4">
+    <Container minH="100dvh">
+      <BackNavigationBar title="Schedules" pathName="/admin/semesters">
+        <Spacer />
         <ScheduleCreateButton semesterId={semesterId} />
       </BackNavigationBar>
-      <div className="mb-4 flex flex-col gap-4 empty:grow empty:after:grid empty:after:h-full empty:after:w-full empty:after:grow empty:after:place-items-center empty:after:text-lg empty:after:font-medium empty:after:text-tertiary empty:after:content-['No_schedules_set']">
+      <VStack>
         <SchedulesList semesterId={semesterId} />
-      </div>
-    </div>
+      </VStack>
+    </Container>
   )
 }

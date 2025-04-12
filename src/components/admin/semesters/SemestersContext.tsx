@@ -1,4 +1,4 @@
-import React, { createContext, useContext, type PropsWithChildren } from 'react'
+import React, { createContext, useContext, type PropsWithChildren, memo } from 'react'
 
 type SemesterDetailCardProps = {
   id: number
@@ -21,9 +21,11 @@ export const useSemesterContext = () => {
   return context
 }
 
-export const SemesterContextProvider = ({
+const UnmemoizedSemesterContextProvider = ({
   value,
   children,
 }: PropsWithChildren<{ value: SemesterDetailCardProps }>) => {
   return <SemesterContext.Provider value={value}>{children}</SemesterContext.Provider>
 }
+
+export const SemesterContextProvider = memo(UnmemoizedSemesterContextProvider)

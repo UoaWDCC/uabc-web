@@ -1,58 +1,90 @@
-import React from 'react'
+import React, { FC, memo } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { DialogContent, DialogHeader, DialogTitle, useDialogContext } from '@/components/ui/dialog'
-import { toast } from '@/components/ui/use-toast'
-import { DialogButtonsFooter } from '@/components/ui/utils/DialogUtils'
 import { useDeleteScheduleMutation } from '@/hooks/mutations/schedules'
 import { QUERY_KEY } from '@/lib/utils/queryKeys'
 import { useScheduleContext } from './SchedulesContext'
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Text,
+  useNotice,
+} from '@yamada-ui/react'
 
-export const DeleteScheduleFormDialog = () => {
-  const { id, weekday, semesterId } = useScheduleContext()
-  const { handleClose: closeDialog } = useDialogContext()
-
-  const queryClient = useQueryClient()
-  const { mutate, isPending } = useDeleteScheduleMutation()
-
-  const handleDelete = () => {
-    mutate(
-      { id },
-      {
-        onError: () => {
-          toast({
-            title: 'Uh oh! Something went wrong',
-            description: 'An error occurred while deleting the schedule. Please try again.',
-            variant: 'destructive',
-          })
-        },
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: [QUERY_KEY.SCHEDULES, semesterId],
-          })
-          toast({
-            title: 'Schedule deleted!',
-            description: `${weekday} has been deleted`,
-          })
-          closeDialog()
-        },
-      },
-    )
-  }
-
-  return (
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Delete {weekday}&apos;s Schedule?</DialogTitle>
-      </DialogHeader>
-      <p className="text-tertiary">Are you sure you want to delete this schedule?</p>
-      <DialogButtonsFooter
-        variant="destructive"
-        primaryText="Delete"
-        secondaryText="Cancel"
-        disabled={isPending}
-        onClick={handleDelete}
-      />
-    </DialogContent>
-  )
+interface DeleteScheduleFormDialogProps {
+  open: boolean
+  onClose: () => void
 }
+
+export const DeleteScheduleFormDialog: FC<DeleteScheduleFormDialogProps> = memo(
+  ({ open, onClose }) => {
+    const { id, weekday, semesterId } = useScheduleContext()
+    const notice = useNotice()
+
+    const queryClient = useQueryClient()
+    const { mutate, isPending } = useDeleteScheduleMutation()
+
+    const handleDelete = () => {
+      mutate(
+        { id },
+        {
+          onError: () => {
+            notice({
+              title: 'Uh oh! Something went wrong',
+              description: 'An error occurred while deleting the schedule. Please try again.',
+              status: 'error',
+            })
+          },
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: [QUERY_KEY.SCHEDULES, semesterId],
+            })
+            notice({
+              title: 'Schedule deleted!',
+              description: `${weekday} has been deleted`,
+            })
+            onClose()
+          },
+        },
+      )
+    }
+
+    return (
+      <Dialog open={open} onClose={onClose}>
+        <DialogHeader>Delete {weekday}&apos;s Schedule?</DialogHeader>
+        <DialogBody>
+          <Text className="text-tertiary">Are you sure you want to delete this schedule?</Text>
+          <Alert
+            status="warning"
+            flexDir="column"
+            alignItems="flex-start"
+            variant="subtle"
+            colorScheme="danger"
+          >
+            <AlertTitle>Warning</AlertTitle>
+            <AlertDescription>
+              By deleting this schedule, all related game sessions will also be deleted. This action
+              is irreversible.
+            </AlertDescription>
+          </Alert>
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="ghost" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button colorScheme="danger" loading={isPending} onClick={handleDelete}>
+            Delete
+          </Button>
+        </DialogFooter>
+      </Dialog>
+    )
+  },
+)
+
+DeleteScheduleFormDialog.displayName = 'DeleteScheduleFormDialog'
