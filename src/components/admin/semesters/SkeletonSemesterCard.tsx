@@ -1,6 +1,7 @@
 import { Card, CardBody, CardHeader, HStack, Skeleton, Spacer } from '@yamada-ui/react'
+import { memo } from 'react'
 
-export const SkeletonSemesterCard = () => {
+const UnmemoizedSkeletonSemesterCard = () => {
   return (
     <Card fontSize="sm" color="tertiary" variant="subtle">
       <CardHeader>
@@ -19,3 +20,5 @@ export const SkeletonSemesterCard = () => {
     </Card>
   )
 }
+
+export const SkeletonSemesterCard = memo(UnmemoizedSkeletonSemesterCard)
