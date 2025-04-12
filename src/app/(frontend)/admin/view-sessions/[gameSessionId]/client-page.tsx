@@ -12,7 +12,6 @@ import {
   EmptyStateDescription,
   EmptyStateTitle,
   HStack,
-  Skeleton,
   Spacer,
   Text,
   useNotice,
