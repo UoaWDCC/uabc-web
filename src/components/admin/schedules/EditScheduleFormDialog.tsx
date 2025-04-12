@@ -3,13 +3,20 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 
-import { DialogContent, DialogHeader, DialogTitle, useDialogContext } from '@/components/ui/dialog'
-import { DialogButtonsFooter } from '@/components/ui/utils/DialogUtils'
 import { useEditScheduleMutation } from '@/hooks/mutations/schedules'
 import { QUERY_KEY } from '@/lib/utils/queryKeys'
 import { TextInput } from '../../TextInput'
-import { useToast } from '@/components/ui/use-toast'
 import { useScheduleContext } from './SchedulesContext'
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  HStack,
+  useNotice,
+} from '@yamada-ui/react'
+import { FC, memo } from 'react'
 
 const formSchema = z
   .object({
@@ -31,7 +38,12 @@ const formSchema = z
     { message: 'Start time must be before end time', path: ['startTime'] },
   )
 
-export const EditScheduleFormDialog = () => {
+interface EditScheduleFormDialogProps {
+  open: boolean
+  onClose: () => void
+}
+
+export const EditScheduleFormDialog: FC<EditScheduleFormDialogProps> = memo(({ open, onClose }) => {
   const {
     id,
     semesterId,
@@ -43,7 +55,6 @@ export const EditScheduleFormDialog = () => {
     memberCapacity,
     casualCapacity,
   } = useScheduleContext()
-  const { handleClose: closeDialog } = useDialogContext()
 
   const {
     register,
@@ -62,7 +73,7 @@ export const EditScheduleFormDialog = () => {
     },
   })
 
-  const { toast } = useToast()
+  const notice = useNotice()
 
   const queryClient = useQueryClient()
   const { mutate, isPending } = useEditScheduleMutation()
@@ -83,17 +94,17 @@ export const EditScheduleFormDialog = () => {
       { id, body },
       {
         onError: () => {
-          toast({
+          notice({
             title: 'Uh oh! Something went wrong',
             description: 'An error occurred while updating the schedule. Please try again.',
-            variant: 'destructive',
+            status: 'error',
           })
         },
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: [QUERY_KEY.SCHEDULES, semesterId],
           })
-          toast({
+          notice({
             title: 'Success!',
             description: 'Schedule details successfully updated',
           })
@@ -105,22 +116,21 @@ export const EditScheduleFormDialog = () => {
             memberCapacity: data.memberCapacity,
             casualCapacity: data.casualCapacity,
           })
-          closeDialog()
+          onClose()
         },
       },
     )
   }
 
   return (
-    <DialogContent onCloseAutoFocus={() => reset()}>
-      <DialogHeader>
-        <DialogTitle>Edit {weekday}&apos;s Schedule</DialogTitle>
-      </DialogHeader>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex gap-2 *:grow">
+    <Dialog open={open} onClose={onClose}>
+      <DialogHeader>Edit {weekday}&apos;s Schedule</DialogHeader>
+      <DialogBody as="form" onSubmit={handleSubmit(onSubmit)} my="0" py="md">
+        <HStack w="full">
           <TextInput
             label="Start Time"
             type="time"
+            flex={1}
             {...register('startTime')}
             isError={!!errors.startTime?.message}
             errorMessage={errors.startTime?.message}
@@ -129,14 +139,16 @@ export const EditScheduleFormDialog = () => {
           <TextInput
             label="End Time"
             type="time"
+            flex={1}
             {...register('endTime')}
             isError={!!errors.endTime?.message}
             errorMessage={errors.endTime?.message}
             autoComplete="off"
           />
-        </div>
-        <div className="flex gap-2 *:grow">
+        </HStack>
+        <HStack w="full">
           <TextInput
+            flex={1}
             label="Venue Name"
             type="text"
             {...register('locationName')}
@@ -144,9 +156,10 @@ export const EditScheduleFormDialog = () => {
             errorMessage={errors.locationName?.message}
             autoComplete="off"
           />
-        </div>
-        <div className="flex gap-2 *:grow">
+        </HStack>
+        <HStack w="full">
           <TextInput
+            flex={1}
             label="Address"
             type="text"
             {...register('locationAddress')}
@@ -154,9 +167,10 @@ export const EditScheduleFormDialog = () => {
             errorMessage={errors.locationAddress?.message}
             autoComplete="off"
           />
-        </div>
-        <div className="flex gap-2 *:grow">
+        </HStack>
+        <HStack w="full">
           <TextInput
+            flex={1}
             label="Capacity"
             type="number"
             {...register('memberCapacity')}
@@ -165,6 +179,7 @@ export const EditScheduleFormDialog = () => {
             autoComplete="off"
           />
           <TextInput
+            flex={1}
             label="Casual Capacity"
             type="number"
             {...register('casualCapacity')}
@@ -172,9 +187,18 @@ export const EditScheduleFormDialog = () => {
             errorMessage={errors.casualCapacity?.message}
             autoComplete="off"
           />
-        </div>
-        <DialogButtonsFooter type="submit" primaryText="Update" disabled={isPending} />
-      </form>
-    </DialogContent>
+        </HStack>
+      </DialogBody>
+      <DialogFooter>
+        <Button variant="ghost" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button colorScheme="primary" loading={isPending} onClick={handleSubmit(onSubmit)}>
+          Update
+        </Button>
+      </DialogFooter>
+    </Dialog>
   )
-}
+})
+
+EditScheduleFormDialog.displayName = 'EditScheduleFormDialog'
