@@ -18,7 +18,7 @@ RUN npm install -g pnpm@$PNPM_VERSION
 
 
 # Throw-away build stage to reduce size of final image
-FROM base AS build
+FROM base AS builder
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
@@ -37,17 +37,12 @@ RUN npx next build --experimental-build-mode compile
 # Remove development dependencies
 RUN pnpm prune --prod
 
-# Final stage for app image
-FROM base
+# Stage 3: Production server
+FROM base AS runner
+WORKDIR /app
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+RUN if [ -d "/app/public" ]; then cp -r /app/public ./public; fi # Copy public folder if it exists
 
-# Copy built application
-COPY --from=build /app/.next/standalone /app
-COPY --from=build /app/.next/static /app/.next/static
-COPY --from=build /app/public /app/public
-
-# Entrypoint sets up the container.
-ENTRYPOINT [ "/docker-entrypoint.js" ]
-
-# Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "node", "server.js" ]
+CMD ["node", "server.js"]
