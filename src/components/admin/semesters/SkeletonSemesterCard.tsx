@@ -1,17 +1,21 @@
-import { Card } from '../../Card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Card, CardBody, CardHeader, HStack, Skeleton, Spacer } from '@yamada-ui/react'
 
 export const SkeletonSemesterCard = () => {
   return (
-    <Card
-      className="relative flex min-h-36 w-full select-none flex-col gap-1 px-6 py-4 text-sm font-medium tracking-tight text-tertiary"
-      variant="card"
-    >
-      <Skeleton className="h-6 w-40 bg-tertiary/20" />
-      <Skeleton className="mt-1 h-4 w-60 bg-tertiary/20" />
-      <Skeleton className="mt-2 h-4 w-36 bg-tertiary/20" />
-      <Skeleton className="h-4 w-32 bg-tertiary/20" />
-      <Skeleton className="mt-4 h-4 w-60 bg-tertiary/20" />
+    <Card fontSize="sm" color="tertiary" variant="subtle">
+      <CardHeader>
+        <HStack w="full">
+          <Skeleton h="6" w="40" />
+          <Spacer />
+          <Skeleton h="8" w="8" rounded="md" />
+        </HStack>
+      </CardHeader>
+      <CardBody gap="sm" pt="sm">
+        <Skeleton h="4" w="64" />
+        <Skeleton h="4" w="48" />
+        <Skeleton h="4" w="44" />
+        <Skeleton h="4" w="56" />
+      </CardBody>
     </Card>
   )
 }

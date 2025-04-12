@@ -18,6 +18,11 @@ export const compareDate = (date1: string, date2: string) => {
  * Formats a date string of the format "dd/MM/yyyy" into "yyyy-MM-dd"
  */
 export const formatDateInISO = (date: string) => {
+  // Check if the date is already in ISO format
+  const isoDateRegex = /^\d{4}-\d{2}-\d{2}/
+  if (isoDateRegex.test(date)) {
+    return date.split('T')[0] // Return just the date part if it's already ISO
+  }
   return formatDate(parse(date, 'dd/MM/yyyy', new Date()), 'yyyy-MM-dd')
 }
 

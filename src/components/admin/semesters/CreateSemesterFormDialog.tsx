@@ -1,17 +1,26 @@
-import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 
 import { TextInput } from '../../TextInput'
-import { DialogContent, DialogHeader, DialogTitle, useDialogContext } from '@/components/ui/dialog'
-import { useToast } from '@/components/ui/use-toast'
-import { DialogButtonsFooter } from '@/components/ui/utils/DialogUtils'
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  HStack,
+  useNotice,
+} from '@yamada-ui/react'
 import { QUERY_KEY } from '@/lib/utils/queryKeys'
 import { compareDate, formatDateInISO, validateDate } from './utils'
 
-//Schema
+interface CreateSemesterFormDialogProps {
+  open: boolean
+  onClose: () => void
+}
+
 const formSchema = z
   .object({
     name: z.string().min(1, 'Field is required'),
@@ -19,10 +28,7 @@ const formSchema = z
     endDate: z.string().min(1, 'Field is required').refine(validateDate, 'Invalid date'),
     breakStart: z.string().min(1, 'Field is required').refine(validateDate, 'Invalid date'),
     breakEnd: z.string().min(1, 'Field is required').refine(validateDate, 'Invalid date'),
-    bookingOpenDay: z
-      .string()
-      // TODO: add weekday enum
-      .min(1, 'Field is required'),
+    bookingOpenDay: z.string().min(1, 'Field is required'),
     bookingOpenTime: z.string().min(1, 'Field is required'),
   })
   .refine((data) => compareDate(data.startDate, data.breakStart) < 0, {
@@ -38,21 +44,18 @@ const formSchema = z
     path: ['breakEnd'],
   })
 
-export const CreateSemesterFormDialog = () => {
-  const { handleClose: closeDialog } = useDialogContext()
-
+export const CreateSemesterFormDialog = ({ open, onClose }: CreateSemesterFormDialogProps) => {
   const {
     register,
     handleSubmit,
     reset,
     setError,
     formState: { errors },
-  } = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  })
-  const { toast } = useToast()
+  } = useForm<z.infer<typeof formSchema>>({ resolver: zodResolver(formSchema) })
 
+  const notice = useNotice()
   const queryClient = useQueryClient()
+
   const mutation = useMutation({
     mutationFn: async (body: BodyInit) => {
       const response = await fetch('/api/semesters', {
@@ -90,120 +93,110 @@ export const CreateSemesterFormDialog = () => {
       onError: (e) => {
         if (e.message === 'DUPLICATE_NAME') return
         if (e.message === 'OVERLAPPING_SEMESTER') {
-          toast({
+          notice({
             title: 'Overlapping Semester',
             description:
               'The semester dates overlap with an existing semester. Please adjust the dates.',
-            variant: 'destructive',
+            status: 'error',
           })
         } else {
-          toast({
+          notice({
             title: 'Uh oh! Something went wrong',
             description: 'An error occurred while updating the semester. Please try again.',
-            variant: 'destructive',
+            status: 'error',
           })
         }
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: [QUERY_KEY.SEMESTERS] })
-        toast({
+        notice({
           title: 'Success!',
           description: 'Semester successfully created.',
         })
         reset()
-        closeDialog()
+        onClose()
       },
     })
   }
 
-  const handleCancel = () => {
-    reset()
-    closeDialog()
-  }
-
   return (
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Create a new semester</DialogTitle>
-      </DialogHeader>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+    <Dialog open={open} onClose={onClose}>
+      <DialogHeader>Create a new semester</DialogHeader>
+      <DialogBody as="form" onSubmit={handleSubmit(onSubmit)} my="0" py="md">
         <TextInput
           label="Name"
           type="text"
+          w="full"
           {...register('name')}
           isError={!!errors.name?.message}
           errorMessage={errors.name?.message}
           autoComplete="off"
         />
-        <div className="flex gap-2 *:grow">
+        <HStack w="full">
           <TextInput
-            label="Booking open day"
-            type="text"
+            label="Open day"
+            type="date"
+            flex={1}
             {...register('bookingOpenDay')}
             isError={!!errors.bookingOpenDay?.message}
             errorMessage={errors.bookingOpenDay?.message}
             autoComplete="off"
-            placeholder="Monday"
           />
           <TextInput
-            label="Booking open time"
+            label="Open time"
             type="time"
-            className="min-w-0"
+            flex={1}
             {...register('bookingOpenTime')}
             isError={!!errors.bookingOpenTime?.message}
             errorMessage={errors.bookingOpenTime?.message}
             autoComplete="off"
-            placeholder="09:00:00"
           />
-        </div>
-        <div className="flex gap-2 *:grow">
+        </HStack>
+        <HStack w="full">
           <TextInput
+            type="date"
             label="Start date"
-            type="text"
+            flex={1}
             {...register('startDate')}
             isError={!!errors.startDate?.message}
             errorMessage={errors.startDate?.message}
-            autoComplete="off"
-            placeholder="dd/MM/yyyy"
           />
           <TextInput
+            type="date"
             label="End date"
-            type="text"
+            flex={1}
             {...register('endDate')}
             isError={!!errors.endDate?.message}
             errorMessage={errors.endDate?.message}
-            autoComplete="off"
-            placeholder="dd/MM/yyyy"
           />
-        </div>
-        <div className="flex gap-2 *:grow">
+        </HStack>
+        <HStack w="full" gap="md">
           <TextInput
+            type="date"
             label="Break start date"
-            type="text"
+            flex={1}
             {...register('breakStart')}
             isError={!!errors.breakStart?.message}
             errorMessage={errors.breakStart?.message}
-            autoComplete="off"
-            placeholder="dd/MM/yyyy"
           />
           <TextInput
+            type="date"
             label="Break end date"
-            type="text"
+            flex={1}
             {...register('breakEnd')}
             isError={!!errors.breakEnd?.message}
             errorMessage={errors.breakEnd?.message}
-            autoComplete="off"
-            placeholder="dd/MM/yyyy"
           />
-        </div>
-
-        <DialogButtonsFooter
-          type="submit"
-          primaryText="Create"
-          disabled={mutation.isPending}
-          onCancel={handleCancel}
-        />
-      </form>
-    </DialogContent>
+        </HStack>
+      </DialogBody>
+      <DialogFooter>
+        <Button variant="ghost" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button colorScheme="primary" loading={mutation.isPending} onClick={handleSubmit(onSubmit)}>
+          Create
+        </Button>
+      </DialogFooter>
+    </Dialog>
   )
 }
