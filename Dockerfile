@@ -1,34 +1,51 @@
-# To use this Dockerfile, you have to set `output: 'standalone'` in your next.config.mjs file.
-# From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
+# syntax = docker/dockerfile:1
 
+# Adjust NODE_VERSION as desired
 ARG NODE_VERSION=22.14.0
 FROM node:${NODE_VERSION}-slim AS base
 
-# Stage 1: Install dependencies
-FROM base AS deps
-WORKDIR /app
-ENV NODE_ENV=production
+LABEL fly_launch_runtime="Next.js"
 
-COPY package.json pnpm-lock.yaml ./
-RUN corepack enable pnpm && pnpm install --frozen-lockfile
-
-# Stage 2: Build the application
-FROM base AS builder
+# Next.js app lives here
 WORKDIR /app
 
+# Set production environment
+ENV NODE_ENV="production"
+
+# Install pnpm
+ARG PNPM_VERSION=9.0.0
+RUN npm install -g pnpm@$PNPM_VERSION
+
+
+# Throw-away build stage to reduce size of final image
+FROM base AS build
+
+# Install packages needed to build node modules
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
+
+# Install node modules
+COPY .npmrc package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod=false
+
+# Copy application code
 COPY . .
-ENV NODE_ENV=production
-RUN corepack enable pnpm && pnpm install --frozen-lockfile && pnpm run build
-RUN pnpm prune --prod
-# Remove development dependencies
-RUN pnpm prune --prod
 
-# Stage 3: Production server
-FROM base AS runner
-WORKDIR /app
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-RUN if [ -d "/app/public" ]; then cp -r /app/public ./public; fi # Copy public folder if it exists
+# Build application
+RUN npx next build --experimental-build-mode compile
 
+
+# Final stage for app image
+FROM base
+
+# Copy built application
+COPY --from=build /app/.next/standalone /app
+COPY --from=build /app/.next/static /app/.next/static
+COPY --from=build /app/public /app/public
+
+# Entrypoint sets up the container.
+ENTRYPOINT [ "/app/docker-entrypoint.js" ]
+
+# Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD [ "node", "server.js" ]
