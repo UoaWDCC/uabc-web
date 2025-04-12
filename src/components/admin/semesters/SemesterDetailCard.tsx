@@ -58,11 +58,11 @@ const UnmemoizedSemesterDetailCard = () => {
             textDecorationThickness="1"
             textUnderlineOffset="4"
           >
-            Bookings open {formatFullDate(bookingOpenDay)} at{' '}
+            Bookings open {formatFullDate(bookingOpenDay).toLocaleString()} at{' '}
             {convertTo12HourFormat(bookingOpenTime)}
           </Text>
-          <Text>Start date: {formatFullDate(startDate)}</Text>
-          <Text>End date: {formatFullDate(endDate)}</Text>
+          <Text>Start date: {formatFullDate(startDate).toLocaleString()}</Text>
+          <Text>End date: {formatFullDate(endDate).toLocaleString()}</Text>
           <Text>
             Break period: {breakStart} - {breakEnd}
           </Text>
