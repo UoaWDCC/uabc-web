@@ -13,19 +13,15 @@ COPY package.json pnpm-lock.yaml ./
 RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
 # Stage 2: Build the application
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
-
-# Install node modules
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod=false
+FROM base AS builder
+WORKDIR /app
 
 COPY . .
-RUN corepack enable pnpm && pnpm run build
-
+ENV NODE_ENV=production
+RUN corepack enable pnpm && pnpm install --frozen-lockfile && pnpm run build
+RUN pnpm prune --prod
 # Remove development dependencies
 RUN pnpm prune --prod
-
 
 # Stage 3: Production server
 FROM base AS runner
