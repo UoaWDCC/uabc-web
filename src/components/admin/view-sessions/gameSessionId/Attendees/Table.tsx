@@ -167,7 +167,7 @@ export const AttendeesTable = memo(({ filterRef, gameSessionId }: AttendeesTable
     ? filteredAttendees
     : [
         {
-          id: '',
+          id: 0,
           firstName: '',
           lastName: '',
           name: 'No Attendees',
