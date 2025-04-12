@@ -1,7 +1,8 @@
 # To use this Dockerfile, you have to set `output: 'standalone'` in your next.config.mjs file.
 # From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 
-FROM node:22.14.0-alpine AS base
+ARG NODE_VERSION=22.14.0
+FROM node:${NODE_VERSION}-slim AS base
 
 # Stage 1: Install dependencies
 FROM base AS deps
@@ -15,6 +16,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN corepack enable pnpm && pnpm run build
+
+RUN pnpm prune --prod
+
 
 # Stage 3: Production server
 FROM base AS runner
