@@ -1,0 +1,48 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Manual deployment environment'
+        type: environment
+        required: true
+
+jobs:
+  deploy-to-staging:
+    name: Deploy UABC Staging App
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_APP_API_TOKEN }}
+    environment:
+      name: staging
+      url: https://wdcc-uabc-staging.fly.dev/
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl secrets set --config fly.staging.toml DATABASE_URI=${{ secrets.DATABASE_URI }} PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+      - run: flyctl secrets deploy --config fly.staging.toml
+      - run: flyctl deploy --remote-only --config fly.staging.toml
+
+  deploy-to-production:
+    name: Deploy UABC Production App
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production'
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_APP_API_TOKEN }}
+    environment:
+      name: production
+      url: https://uabc.wdcc.co.nz/
+    runs-on: ubuntu-latest
+    # steps:
+    #   - uses: actions/checkout@v3
+    #   - uses: superfly/flyctl-actions/setup-flyctl@master
+      # - run: flyctl secrets set --config fly.production.toml DATABASE_URI=${{ secrets.DATABASE_URI }} PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+    #   - run: flyctl secrets deploy --config fly.production.toml
+    #   - run: flyctl deploy --remote-only --config fly.production.toml
