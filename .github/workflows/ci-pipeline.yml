@@ -8,9 +8,6 @@ on:
 
 env:
   CI: 'true'
-  GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
-  GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
-  NEXT_PUBLIC_URL: ${{secrets.NEXT_PUBLIC_URL}}
 
 jobs:
   check_changes:
