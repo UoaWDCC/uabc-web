@@ -34,6 +34,8 @@ COPY . .
 # Build application
 RUN npx next build --experimental-build-mode compile
 
+# Remove development dependencies
+RUN pnpm prune --prod
 
 # Final stage for app image
 FROM base
@@ -44,7 +46,7 @@ COPY --from=build /app/.next/static /app/.next/static
 COPY --from=build /app/public /app/public
 
 # Entrypoint sets up the container.
-ENTRYPOINT [ "/app/docker-entrypoint.js" ]
+ENTRYPOINT [ "/docker-entrypoint.js" ]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
