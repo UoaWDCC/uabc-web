@@ -7,23 +7,29 @@ FROM node:${NODE_VERSION}-slim AS base
 # Stage 1: Install dependencies
 FROM base AS deps
 WORKDIR /app
+ENV NODE_ENV=production
+
 COPY package.json pnpm-lock.yaml ./
 RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
 # Stage 2: Build the application
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
+
+# Install node modules
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod=false
+
 COPY . .
 RUN corepack enable pnpm && pnpm run build
 
+# Remove development dependencies
 RUN pnpm prune --prod
 
 
 # Stage 3: Production server
 FROM base AS runner
 WORKDIR /app
-ENV NODE_ENV=production
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 RUN if [ -d "/app/public" ]; then cp -r /app/public ./public; fi # Copy public folder if it exists
