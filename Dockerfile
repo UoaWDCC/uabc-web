@@ -8,7 +8,6 @@ FROM base AS deps
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN corepack enable pnpm && pnpm install --frozen-lockfile
-RUN pnpm prune --prod
 
 # Stage 2: Build the application
 FROM base AS builder
