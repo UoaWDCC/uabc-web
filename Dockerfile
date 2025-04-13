@@ -3,15 +3,11 @@
 
 FROM node:22.14.0-alpine AS base
 
-# Stage 1: Install dependencies
+# Stage 1: Install dependencies and build app
 FROM base AS deps
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN corepack enable pnpm && pnpm install --frozen-lockfile
-
-# Stage 2: Build the application
-FROM deps AS builder
-WORKDIR /app
 COPY . .
 RUN corepack enable pnpm && pnpm run build
 RUN pnpm prune --prod
