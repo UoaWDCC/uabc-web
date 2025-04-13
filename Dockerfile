@@ -10,14 +10,13 @@ COPY package.json pnpm-lock.yaml ./
 RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
 # Stage 2: Build the application
-FROM base AS builder
+FROM deps AS builder
 WORKDIR /app
-RUN corepack enable pnpm
 COPY . .
 RUN corepack enable pnpm && pnpm run build
 RUN pnpm prune --prod
 
-# Stage 3: Production server
+# Stage 2: Production server
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
