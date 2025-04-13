@@ -5,7 +5,7 @@ FROM node:22.14.0-slim AS base
 LABEL fly_launch_runtime="Next.js"
 
 # Stage 1: Install dependencies and build app
-FROM base AS deps
+FROM base AS builder
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN corepack enable pnpm && pnpm install --frozen-lockfile --prod=false
@@ -17,8 +17,8 @@ RUN pnpm prune --prod
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=deps /app/.next/standalone ./
-COPY --from=deps /app/.next/static ./.next/static
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 RUN if [ -d "/app/public" ]; then cp -r /app/public ./public; fi # Copy public folder if it exists
 
 EXPOSE 3000
