@@ -1,19 +1,23 @@
 # To use this Dockerfile, you have to set `output: 'standalone'` in your next.config.mjs file.
 # From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 
-FROM node:22.14.0-slim AS base
-LABEL fly_launch_runtime="Next.js"
+FROM node:22.14.0-alpine AS base
 
-# Stage 1: Install dependencies and build app
-FROM base AS builder
+# Stage 1: Install dependencies
+FROM base AS deps
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
-RUN corepack enable pnpm && pnpm install --frozen-lockfile --prod=false
-COPY . .
-RUN corepack enable pnpm && npx next build --experimental-build-mode compile
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
 RUN pnpm prune --prod
 
-# Stage 2: Production server
+# Stage 2: Build the application
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN corepack enable pnpm && pnpm run build
+
+# Stage 3: Production server
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
