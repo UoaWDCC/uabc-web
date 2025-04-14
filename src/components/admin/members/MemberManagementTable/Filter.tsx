@@ -8,22 +8,16 @@ import { FilterResetButton } from './FilterResetButton'
 
 type FilterProps = {
   filterRef: RefObject<(value: string) => void>
-  resetRef: RefObject<() => void>
 }
 
-export const Filter = memo(({ filterRef, resetRef }: FilterProps) => {
-  const prevHasValueRef = useRef<boolean>(false)
-  const showResetRef = useRef<() => void>(noop)
+export const Filter = memo(({ filterRef }: FilterProps) => {
+  const hasFilterRef = useRef<(hasValue: boolean) => void>(noop)
+  const resetFilterRef = useRef<() => void>(noop)
 
   return (
     <HStack gap="sm">
-      <FilterInput
-        resetRef={resetRef}
-        filterRef={filterRef}
-        prevHasValueRef={prevHasValueRef}
-        showResetRef={showResetRef}
-      />
-      <FilterResetButton showResetRef={showResetRef} resetRef={resetRef} />
+      <FilterInput passHasRef={hasFilterRef} passValueRef={filterRef} resetRef={resetFilterRef} />
+      <FilterResetButton hasFilterRef={hasFilterRef} resetFilterRef={resetFilterRef} />
     </HStack>
   )
 })
