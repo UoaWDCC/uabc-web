@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import { Button, Text, VStack } from '@yamada-ui/react'
+import { Button, Heading, VStack } from '@yamada-ui/react'
 
 import { TextInput } from '../TextInput'
 import { emailSchema } from './formSchema'
@@ -60,9 +60,10 @@ export const EmailLoginForm = () => {
         as="form"
         onSubmit={handleSubmit(onSubmit)}
         display={{ base: open ? 'flex' : 'none', lg: 'flex' }}
-        gap={4}
       >
-        <Text textAlign="center">Login to your account</Text>
+        <Heading as="h2" fontSize="2xl" textAlign="center">
+          Login to your account
+        </Heading>
 
         <TextInput
           autoFocus
