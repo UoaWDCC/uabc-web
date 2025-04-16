@@ -10,10 +10,6 @@ import { GoogleSignIn } from '@/components/auth/GoogleLoginButton'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-export const metadata = {
-  title: 'Login - UABC Booking Portal',
-}
-
 export default function LoginPage() {
   const router = useRouter()
 
