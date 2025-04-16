@@ -2,9 +2,8 @@
  * @author David Zhu <dzhu292@aucklanduni.ac.nz>
  */
 
-import { MdContentCopy } from 'react-icons/md'
-
-import { Card } from '../Card'
+import { CheckIcon, CopyIcon } from '@yamada-ui/lucide'
+import { Card, CardBody, Text, HStack, IconButton, VStack, useClipboard } from '@yamada-ui/react'
 
 interface DebitDetailsCardProps {
   title: string
@@ -19,23 +18,33 @@ export const DebitDetailsCard = ({
   sessionId,
   copyText,
 }: DebitDetailsCardProps) => {
+  const { onCopy, hasCopied } = useClipboard(copyText)
   return (
-    <Card className="relative mt-0 bg-gray-200 p-5 pt-52 font-normal">
-      <p className="top-5 text-xl font-medium">{title}</p>
-      <p className="text-gray-500">{subtitle}</p>
+    <Card variant="solid" bg="gray.50" color={['black', 'white']}>
+      <CardBody gap="0" pt="10" px="lg">
+        <HStack w="full">
+          <VStack gap="xs">
+            <Text fontSize="xl" fontWeight="medium">
+              {title}
+            </Text>
+            <Text color="tertiary">{subtitle}</Text>
 
-      {sessionId && (
-        <p className="bg-gray-200 pt-5">
-          SessionID: <span className="font-bold">{sessionId}</span>
-        </p>
-      )}
-      {/* Clipboard button is positioned absolute relative to the parent card container */}
-      <button
-        onPointerDown={() => copyText && navigator.clipboard.writeText(copyText)}
-        className="absolute right-4 top-1/2 translate-y-1/2 rounded-lg p-2"
-      >
-        <MdContentCopy className="text-3xl" />
-      </button>
+            {sessionId && (
+              <Text>
+                SessionID:{' '}
+                <Text as="span" fontWeight="bold">
+                  {sessionId}
+                </Text>
+              </Text>
+            )}
+          </VStack>
+          {copyText && (
+            <IconButton variant="ghost" onClick={onCopy} placeSelf="flex-end">
+              {hasCopied ? <CheckIcon fontSize="3xl" /> : <CopyIcon fontSize="3xl" />}
+            </IconButton>
+          )}
+        </HStack>
+      </CardBody>
     </Card>
   )
 }

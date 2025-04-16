@@ -1,16 +1,34 @@
 'use client'
 
 import Link from 'next/link'
-import { Clock, MapPin, Users } from 'lucide-react'
+import {
+  Badge,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  IconButton,
+  List,
+  ListItem,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+  useDisclosure,
+} from '@yamada-ui/react'
 
-import { Card } from '../../Card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { OptionButtonUtils } from '@/components/ui/options-popover/OptionsButtonUtils'
-import { OptionsPopover } from '@/components/ui/options-popover/OptionsPopover'
-import { cn } from '@/lib/utils'
 import { DeleteGameSessionFormDialog } from './DeleteGameSessionFormDialog'
-import EditGameSessionFormDialog from './EditGameSessionFormDialog'
+import {
+  ClockIcon,
+  EllipsisIcon,
+  FilePenLineIcon,
+  MapPinIcon,
+  Trash2Icon,
+  UsersIcon,
+} from '@yamada-ui/lucide'
+import { EditGameSessionFormDialog } from './EditGameSessionFormDialog'
 
 interface AdminViewSessionCardProps {
   id: number
@@ -22,7 +40,6 @@ interface AdminViewSessionCardProps {
   attendees: number
   totalCapacity: number
   state: 'ongoing' | 'past' | 'upcoming'
-  className?: string
 }
 
 export function AdminViewSessionCard({
@@ -35,61 +52,89 @@ export function AdminViewSessionCard({
   attendees,
   totalCapacity,
   state,
-  className,
 }: AdminViewSessionCardProps) {
+  const editDisclosure = useDisclosure()
+  const deleteDisclosure = useDisclosure()
   return (
-    <Card className={cn('relative flex flex-col gap-4 border', className)} variant="card">
-      <div className="flex items-center justify-between gap-4">
-        <p className="text-lg font-medium leading-none">{title}</p>
+    <Card variant="outline" w="full" size="lg">
+      <CardHeader justifyContent="space-between">
+        <Text fontSize="lg" fontWeight="medium" lineHeight="1">
+          {title}
+        </Text>
         {state === 'upcoming' ? (
-          <OptionsPopover>
-            <OptionsPopover.DialogItem
-              ButtonComponent={<OptionButtonUtils type="edit" />}
-              DialogComponent={<EditGameSessionFormDialog />}
+          <>
+            <Menu>
+              <MenuButton as={IconButton} variant="ghost" h="6">
+                <EllipsisIcon />
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={editDisclosure.onOpen}
+                  icon={<FilePenLineIcon color={['black', 'white']} />}
+                >
+                  Edit
+                </MenuItem>
+                <MenuItem
+                  onClick={deleteDisclosure.onOpen}
+                  icon={<Trash2Icon color="danger" />}
+                  color="danger"
+                >
+                  Delete
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            <EditGameSessionFormDialog
+              open={editDisclosure.open}
+              onClose={editDisclosure.onClose}
             />
-            <OptionsPopover.DialogItem
-              ButtonComponent={<OptionButtonUtils type="delete" />}
-              DialogComponent={<DeleteGameSessionFormDialog />}
+            <DeleteGameSessionFormDialog
+              open={deleteDisclosure.open}
+              onClose={deleteDisclosure.onClose}
             />
-          </OptionsPopover>
+          </>
         ) : (
           <Badge
-            className="pointer-events-none select-none"
-            variant={state === 'ongoing' ? 'success' : 'tertiary'}
+            pointerEvents="none"
+            userSelect="none"
+            colorScheme={state === 'ongoing' ? 'green' : 'gray'}
           >
             {state === 'ongoing' ? 'Ongoing' : 'Past'}
           </Badge>
         )}
-      </div>
-      <div className="mx-1 flex grow flex-col justify-center space-y-2 text-sm font-medium text-tertiary *:flex *:items-center *:gap-x-2">
-        <div>
-          <Clock size={24} className="min-w-6" />
-          <p>
-            {startTime} - {endTime}
-          </p>
-        </div>
-        <div>
-          <MapPin size={24} className="min-w-6" />
-          <div className="leading-tight">
-            {locationName} <br /> {locationAddress}
-          </div>
-        </div>
-        <div>
-          <Users size={24} className="min-w-6" />
-          <p>
-            {attendees} / {totalCapacity} attendees
-          </p>
-        </div>
-      </div>
-      <Link
-        key={id}
-        href={`/admin/view-sessions/${id}`}
-        className={cn(attendees === 0 && 'pointer-events-none')}
-      >
-        <Button className="w-full font-semibold" disabled={attendees === 0}>
+      </CardHeader>
+      <CardBody>
+        <List fontSize="sm" fontWeight="medium" color="tertiary">
+          <ListItem display="flex" gap="sm" alignItems="center">
+            <ClockIcon fontSize={24} />
+            <Text>
+              {startTime} - {endTime}
+            </Text>
+          </ListItem>
+          <ListItem display="flex" gap="sm" alignItems="center">
+            <MapPinIcon fontSize={24} />
+            <Text lineHeight="tight">
+              {locationName} <br /> {locationAddress}
+            </Text>
+          </ListItem>
+          <ListItem display="flex" gap="sm" alignItems="center">
+            <UsersIcon fontSize={24} />
+            <Text>
+              {attendees} / {totalCapacity} attendees
+            </Text>
+          </ListItem>
+        </List>
+      </CardBody>
+      <CardFooter>
+        <Button
+          as={Link}
+          href={`/admin/view-sessions/${id}`}
+          w="full"
+          disabled={attendees === 0}
+          colorScheme="primary"
+        >
           View attendees list
         </Button>
-      </Link>
+      </CardFooter>
     </Card>
   )
 }

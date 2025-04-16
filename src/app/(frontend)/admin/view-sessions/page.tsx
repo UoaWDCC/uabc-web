@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 
 import { BackNavigationBar } from '@/components/BackNavigationBar'
 import ClientViewSessionsPage from './client-page'
+import { Container } from '@yamada-ui/react'
 
 export const metadata = {
   title: 'View Sessions - UABC Booking Portal',
@@ -9,11 +10,11 @@ export const metadata = {
 
 export default function ViewSessionsPage() {
   return (
-    <div className="mx-4 mt-0 flex min-h-dvh flex-col">
-      <BackNavigationBar title="View Sessions" pathName="/admin"></BackNavigationBar>
+    <Container minH="100dvh" centerContent>
+      <BackNavigationBar title="View Sessions" pathName="/admin" />
       <Suspense>
         <ClientViewSessionsPage />
       </Suspense>
-    </div>
+    </Container>
   )
 }

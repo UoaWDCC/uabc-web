@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { type FC, memo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { format, parse } from 'date-fns'
@@ -6,195 +6,203 @@ import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
 
 import { TextInput } from '../../TextInput'
-import { Button } from '@/components/ui/button'
 import {
-  DialogClose,
-  DialogContent,
-  DialogDescription,
+  Button,
+  Dialog,
+  DialogBody,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  useDialogContext,
-} from '@/components/ui/dialog'
-import { useToast } from '@/components/ui/use-toast'
-import { DialogButtonsFooter } from '@/components/ui/utils/DialogUtils'
+  HStack,
+  useNotice,
+} from '@yamada-ui/react'
 import { useEditGameSessionMutation } from '@/hooks/mutations/game-sessions'
 import { formatFullDate } from '@/lib/utils/dates'
 import { QUERY_KEY } from '@/lib/utils/queryKeys'
 import { useGameSessionContext } from './GameSessionContext'
 import { gameSessionFormSchema } from './utils'
 
-export default function EditGameSessionFormDialog() {
-  const {
-    date,
-    bookingOpen,
-    startTime,
-    endTime,
-    locationName,
-    locationAddress,
-    memberCapacity,
-    casualCapacity,
-  } = useGameSessionContext()
+interface EditGameSessionFormDialogProps {
+  open: boolean
+  onClose: () => void
+}
 
-  const { handleClose } = useDialogContext()
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    reset,
-  } = useForm<z.infer<typeof gameSessionFormSchema>>({
-    resolver: zodResolver(gameSessionFormSchema),
-    defaultValues: {
-      startTime: startTime?.slice(0, 5),
-      endTime: endTime?.slice(0, 5),
+export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = memo(
+  ({ open, onClose }) => {
+    const {
+      date,
+      bookingOpen,
+      startTime,
+      endTime,
       locationName,
       locationAddress,
       memberCapacity,
       casualCapacity,
-    },
-  })
+    } = useGameSessionContext()
 
-  useEffect(() => {
-    reset({
-      startTime: startTime?.slice(0, 5),
-      endTime: endTime?.slice(0, 5),
-      locationName: locationName,
-      locationAddress: locationAddress,
-      memberCapacity: memberCapacity,
-      casualCapacity: casualCapacity,
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleClose])
-
-  const { mutate, isPending } = useEditGameSessionMutation()
-
-  const { toast } = useToast()
-
-  const queryClient = useQueryClient()
-
-  const onSubmit = (data: z.infer<typeof gameSessionFormSchema>) => {
-    const body = JSON.stringify({
-      ...data,
-      date,
-      startTime: `${data.startTime}:00`,
-      endTime: `${data.endTime}:00`,
-    })
-    mutate(
-      { date, body },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: [QUERY_KEY.GAME_SESSION, date],
-          })
-          toast({
-            title: 'Success!',
-            description: 'Game session updated successfully',
-          })
-          handleClose()
-        },
-        onError: () => {
-          toast({
-            title: 'Uh oh! Something went wrong',
-            description: 'An error occurred while updating the game session. Please try again.',
-            variant: 'destructive',
-          })
-        },
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+      watch,
+      reset,
+    } = useForm<z.infer<typeof gameSessionFormSchema>>({
+      resolver: zodResolver(gameSessionFormSchema),
+      defaultValues: {
+        startTime: startTime?.slice(0, 5),
+        endTime: endTime?.slice(0, 5),
+        locationName,
+        locationAddress,
+        memberCapacity,
+        casualCapacity,
       },
-    )
-  }
+    })
 
-  if (!bookingOpen)
+    reset()
+
+    const { mutate, isPending } = useEditGameSessionMutation()
+
+    const notice = useNotice()
+    const queryClient = useQueryClient()
+
+    const onSubmit = (data: z.infer<typeof gameSessionFormSchema>) => {
+      const body = JSON.stringify({
+        ...data,
+        date,
+        startTime: `${data.startTime}:00`,
+        endTime: `${data.endTime}:00`,
+      })
+      mutate(
+        { date, body },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: [QUERY_KEY.GAME_SESSION, date],
+            })
+            notice({
+              title: 'Success!',
+              description: 'Game session updated successfully',
+            })
+            onClose()
+          },
+          onError: () => {
+            notice({
+              title: 'Uh oh! Something went wrong',
+              description: 'An error occurred while updating the game session. Please try again.',
+              status: 'error',
+            })
+          },
+        },
+      )
+    }
+
+    if (!bookingOpen)
+      return (
+        <Dialog open={open} onClose={onClose}>
+          <DialogHeader>Error</DialogHeader>
+          <DialogBody>An unexpected error has occurred.</DialogBody>
+          <DialogFooter>
+            <Button onClick={onClose} colorScheme="primary">
+              Done
+            </Button>
+          </DialogFooter>
+        </Dialog>
+      )
+
     return (
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Error</DialogTitle>
-        </DialogHeader>
-        <DialogDescription>An unexpected error has occured.</DialogDescription>
+      <Dialog open={open} onClose={onClose}>
+        <DialogHeader>{formatFullDate(date).toLocaleString()}</DialogHeader>
+        <DialogBody as="form" onSubmit={handleSubmit(onSubmit)} my="0" py="md">
+          <HStack w="full">
+            <TextInput
+              label="Booking Open"
+              type="text"
+              flex={1}
+              value={format(bookingOpen, 'dd/MM/yy hh:mma')}
+              readOnly
+              disabled
+            />
+            <TextInput
+              label="Booking Close"
+              type="text"
+              flex={1}
+              value={
+                watch('startTime')
+                  ? format(parse(watch('startTime'), 'HH:mm', date), 'dd/MM/yy hh:mma')
+                  : format(date, 'dd/MM/yy hh:mma')
+              }
+              readOnly
+              disabled
+            />
+          </HStack>
+          <HStack w="full">
+            <TextInput
+              label="Start Time"
+              type="time"
+              flex={1}
+              {...register('startTime')}
+              isError={!!errors.startTime}
+              errorMessage={errors.startTime?.message}
+              autoFocus
+            />
+            <TextInput
+              label="End Time"
+              type="time"
+              flex={1}
+              {...register('endTime')}
+              isError={!!errors.endTime}
+              errorMessage={errors.endTime?.message}
+            />
+          </HStack>
+          <HStack w="full">
+            <TextInput
+              flex={1}
+              label="Location Name"
+              type="text"
+              {...register('locationName')}
+              isError={!!errors.locationName}
+              errorMessage={errors.locationName?.message}
+            />
+          </HStack>
+          <HStack w="full">
+            <TextInput
+              flex={1}
+              label="Address"
+              type="text"
+              {...register('locationAddress')}
+              isError={!!errors.locationAddress}
+              errorMessage={errors.locationAddress?.message}
+            />
+          </HStack>
+          <HStack w="full">
+            <TextInput
+              flex={1}
+              label="Capacity"
+              type="text"
+              {...register('memberCapacity')}
+              isError={!!errors.memberCapacity}
+              errorMessage={errors.memberCapacity?.message}
+            />
+            <TextInput
+              flex={1}
+              label="Casual Capacity"
+              type="text"
+              {...register('casualCapacity')}
+              isError={!!errors.casualCapacity}
+              errorMessage={errors.casualCapacity?.message}
+            />
+          </HStack>
+        </DialogBody>
         <DialogFooter>
-          <DialogClose asChild>
-            <Button>Done</Button>
-          </DialogClose>
+          <Button variant="ghost" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button colorScheme="primary" type="submit" loading={isPending}>
+            Save
+          </Button>
         </DialogFooter>
-      </DialogContent>
+      </Dialog>
     )
+  },
+)
 
-  return (
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>{formatFullDate(date)}</DialogTitle>
-      </DialogHeader>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-2 gap-2">
-          <TextInput
-            label="Booking Open"
-            type="text"
-            value={format(bookingOpen, 'dd/MM/yy hh:mma')}
-            readOnly
-            disabled
-          />
-          <TextInput
-            label="Booking Close"
-            type="text"
-            value={
-              watch('startTime')
-                ? format(parse(watch('startTime'), 'HH:mm', date), 'dd/MM/yy hh:mma')
-                : format(date, 'dd/MM/yy hh:mma')
-            }
-            readOnly
-            disabled
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          <TextInput
-            label="Start Time"
-            type="time"
-            {...register('startTime')}
-            isError={!!errors.startTime}
-            errorMessage={errors.startTime?.message}
-            autoFocus
-          />
-          <TextInput
-            label="End Time"
-            type="time"
-            {...register('endTime')}
-            isError={!!errors.endTime}
-            errorMessage={errors.endTime?.message}
-          />
-        </div>
-        <TextInput
-          label="Location Name"
-          type="text"
-          {...register('locationName')}
-          isError={!!errors.locationName}
-          errorMessage={errors.locationName?.message}
-        />
-        <TextInput
-          label="Address"
-          type="text"
-          {...register('locationAddress')}
-          isError={!!errors.locationAddress}
-          errorMessage={errors.locationAddress?.message}
-        />
-        <div className="grid grid-cols-2 gap-2">
-          <TextInput
-            label="Capacity"
-            type="text"
-            {...register('memberCapacity')}
-            isError={!!errors.memberCapacity}
-            errorMessage={errors.memberCapacity?.message}
-          />
-          <TextInput
-            label="Casual Capacity"
-            type="text"
-            {...register('casualCapacity')}
-            isError={!!errors.casualCapacity}
-            errorMessage={errors.casualCapacity?.message}
-          />
-        </div>
-        <DialogButtonsFooter disabled={isPending} type="submit" />
-      </form>
-    </DialogContent>
-  )
-}
+EditGameSessionFormDialog.displayName = 'EditGameSessionFormDialog'
