@@ -16,7 +16,7 @@ export default async function LoginPage() {
       <Suspense>
         <EmailLoginForm />
       </Suspense>
-      
+
       <BreakLine label="OR" />
 
       <GoogleLoginButton />

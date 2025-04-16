@@ -1,7 +1,6 @@
 'use client'
 
-import { forwardRef } from 'react'
-import { Eye, EyeOff } from 'lucide-react'
+import { EyeIcon, EyeOffIcon } from '@yamada-ui/lucide'
 import {
   FormControl,
   IconButton,
@@ -9,10 +8,10 @@ import {
   InputGroup,
   InputRightElement,
   Label,
+  useBoolean,
   type InputProps as YUIInputProps,
 } from '@yamada-ui/react'
-import { useState } from 'react'
-import { EyeIcon, EyeOffIcon } from '@yamada-ui/lucide'
+import { forwardRef } from 'react'
 
 export interface InputProps extends Omit<YUIInputProps, 'type'> {
   label?: string
@@ -24,11 +23,7 @@ export interface InputProps extends Omit<YUIInputProps, 'type'> {
 export const TextInput = forwardRef<HTMLInputElement, InputProps>(
   ({ label, type, isError, errorMessage, disabled, placeholder, ...props }: InputProps, ref) => {
     const initialIsTypePassword = type === 'password'
-    const [showPassword, setShowPassword] = useState(!initialIsTypePassword)
-
-    const togglePassword = () => {
-      setShowPassword(!showPassword)
-    }
+    const [passwordShown, { toggle }] = useBoolean(!initialIsTypePassword)
 
     return (
       <FormControl
@@ -40,7 +35,7 @@ export const TextInput = forwardRef<HTMLInputElement, InputProps>(
         <InputGroup>
           <Input
             ref={ref}
-            type={initialIsTypePassword ? (showPassword ? 'text' : type) : type}
+            type={initialIsTypePassword ? (passwordShown ? 'text' : type) : type}
             placeholder={placeholder || ' '}
             className="peer"
             borderWidth="2"
@@ -62,9 +57,9 @@ export const TextInput = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {initialIsTypePassword && (
-            <InputRightElement w="4.5rem" clickable>
-              <IconButton h="1.75rem" size="sm" onClick={togglePassword}>
-                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+            <InputRightElement clickable>
+              <IconButton h="1.75rem" size="sm" onClick={toggle} variant="ghost">
+                {passwordShown ? <EyeOffIcon /> : <EyeIcon />}
               </IconButton>
             </InputRightElement>
           )}
@@ -101,22 +96,6 @@ export const TextInput = forwardRef<HTMLInputElement, InputProps>(
         >
           {label}
         </Label>
-        {initialIsTypePassword && (
-          <div
-            onClick={togglePassword}
-            style={{
-              position: 'absolute',
-              right: '8px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              cursor: 'pointer',
-              padding: '4px',
-              opacity: 0.8,
-            }}
-          >
-            {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
-          </div>
-        )}
       </FormControl>
     )
   },
