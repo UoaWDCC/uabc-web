@@ -13,7 +13,7 @@ import {
 } from '@yamada-ui/react'
 import { forwardRef } from 'react'
 
-export interface InputProps extends Omit<UIInputProps, 'type'> {
+export interface InputProps extends Omit<YUIInputProps, 'type'> {
   label?: string
   type: string
   isError?: boolean
