@@ -4,9 +4,15 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 
 import { TextInput } from '../../TextInput'
-import { DialogContent, DialogHeader, DialogTitle, useDialogContext } from '@/components/ui/dialog'
-import { useToast } from '@/components/ui/use-toast'
-import { DialogButtonsFooter } from '@/components/ui/utils/DialogUtils'
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  HStack,
+  useNotice,
+} from '@yamada-ui/react'
 import { QUERY_KEY } from '@/lib/utils/queryKeys'
 import { useSemesterContext } from './SemestersContext'
 import { compareDate, formatDateInISO, validateDate } from './utils'
@@ -34,7 +40,12 @@ const formSchema = z
     path: ['breakEnd'],
   })
 
-export const EditSemesterFormDialog = () => {
+interface EditSemesterFormDialogProps {
+  open: boolean
+  onClose: () => void
+}
+
+export const EditSemesterFormDialog = ({ open, onClose }: EditSemesterFormDialogProps) => {
   // Contexts
   const {
     name,
@@ -46,7 +57,6 @@ export const EditSemesterFormDialog = () => {
     bookingOpenDay,
     bookingOpenTime,
   } = useSemesterContext()
-  const { handleClose: closeDialog } = useDialogContext()
 
   // Hook-forms
   const {
@@ -57,16 +67,16 @@ export const EditSemesterFormDialog = () => {
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      startDate,
-      endDate,
-      breakStart,
-      breakEnd,
-      bookingOpenDay,
+      startDate: formatDateInISO(startDate),
+      endDate: formatDateInISO(endDate),
+      breakStart: formatDateInISO(breakStart),
+      breakEnd: formatDateInISO(breakEnd),
+      bookingOpenDay: formatDateInISO(bookingOpenDay),
       bookingOpenTime: bookingOpenTime.slice(0, 5),
     },
   })
 
-  const { toast } = useToast()
+  const notice = useNotice()
 
   const queryClient = useQueryClient()
   const mutation = useMutation({
@@ -97,23 +107,23 @@ export const EditSemesterFormDialog = () => {
     mutation.mutate(body, {
       onError: (e) => {
         if (e.message === 'OVERLAPPING_SEMESTER') {
-          toast({
+          notice({
             title: 'Overlapping Semester',
             description:
               'The semester dates overlap with an existing semester. Please adjust the dates.',
-            variant: 'destructive',
+            status: 'error',
           })
         } else {
-          toast({
+          notice({
             title: 'Uh oh! Something went wrong',
             description: 'An error occurred while updating the semester. Please try again.',
-            variant: 'destructive',
+            status: 'error',
           })
         }
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: [QUERY_KEY.SEMESTERS] })
-        toast({
+        notice({
           title: 'Success!',
           description: 'Semester details successfully updated',
         })
@@ -125,74 +135,80 @@ export const EditSemesterFormDialog = () => {
           bookingOpenDay: data.bookingOpenDay,
           bookingOpenTime: data.bookingOpenTime,
         })
-        closeDialog()
+        onClose()
       },
     })
   }
 
   return (
-    <DialogContent onCloseAutoFocus={() => reset()}>
-      <DialogHeader>
-        <DialogTitle>Edit {name}</DialogTitle>
-      </DialogHeader>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex gap-2 *:grow">
+    <Dialog open={open} onClose={onClose}>
+      <DialogHeader>Edit {name}</DialogHeader>
+      <DialogBody as="form" onSubmit={handleSubmit(onSubmit)} my="0" py="md">
+        <HStack w="full">
           <TextInput
-            label="Booking open day"
-            type="text"
+            label="Open day"
+            type="date"
+            flex={1}
             {...register('bookingOpenDay')}
             isError={!!errors.bookingOpenDay?.message}
             errorMessage={errors.bookingOpenDay?.message}
             autoComplete="off"
           />
           <TextInput
-            label="Booking open time"
+            label="Open time"
             type="time"
+            flex={1}
             {...register('bookingOpenTime')}
             isError={!!errors.bookingOpenTime?.message}
             errorMessage={errors.bookingOpenTime?.message}
             autoComplete="off"
           />
-        </div>
-        <div className="flex gap-2 *:grow">
+        </HStack>
+        <HStack w="full">
           <TextInput
+            type="date"
             label="Start date"
-            type="text"
+            flex={1}
             {...register('startDate')}
             isError={!!errors.startDate?.message}
             errorMessage={errors.startDate?.message}
-            autoComplete="off"
           />
           <TextInput
+            type="date"
             label="End date"
-            type="text"
+            flex={1}
             {...register('endDate')}
             isError={!!errors.endDate?.message}
             errorMessage={errors.endDate?.message}
-            autoComplete="off"
           />
-        </div>
-        <div className="flex gap-2 *:grow">
+        </HStack>
+        <HStack w="full" gap="md">
           <TextInput
+            type="date"
             label="Break start date"
-            type="text"
+            flex={1}
             {...register('breakStart')}
             isError={!!errors.breakStart?.message}
             errorMessage={errors.breakStart?.message}
-            autoComplete="off"
           />
           <TextInput
+            type="date"
             label="Break end date"
-            type="text"
+            flex={1}
             {...register('breakEnd')}
             isError={!!errors.breakEnd?.message}
             errorMessage={errors.breakEnd?.message}
-            autoComplete="off"
           />
-        </div>
-
-        <DialogButtonsFooter type="submit" primaryText="Update" disabled={mutation.isPending} />
-      </form>
-    </DialogContent>
+        </HStack>
+      </DialogBody>
+      <DialogFooter>
+        <Button variant="ghost" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button colorScheme="primary" loading={mutation.isPending} onClick={handleSubmit(onSubmit)}>
+          Update
+        </Button>
+      </DialogFooter>
+    </Dialog>
   )
 }

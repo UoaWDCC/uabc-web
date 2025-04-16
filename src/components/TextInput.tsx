@@ -1,7 +1,6 @@
 'use client'
 
 import { forwardRef } from 'react'
-import { Eye, EyeOff } from 'lucide-react'
 import {
   FormControl,
   IconButton,
@@ -9,12 +8,12 @@ import {
   InputGroup,
   InputRightElement,
   Label,
-  type InputProps as YUIInputProps,
+  type InputProps as UIInputProps,
 } from '@yamada-ui/react'
 import { useState } from 'react'
 import { EyeIcon, EyeOffIcon } from '@yamada-ui/lucide'
 
-export interface InputProps extends Omit<YUIInputProps, 'type'> {
+export interface InputProps extends Omit<UIInputProps, 'type'> {
   label?: string
   type: string
   isError?: boolean
@@ -101,22 +100,6 @@ export const TextInput = forwardRef<HTMLInputElement, InputProps>(
         >
           {label}
         </Label>
-        {initialIsTypePassword && (
-          <div
-            onClick={togglePassword}
-            style={{
-              position: 'absolute',
-              right: '8px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              cursor: 'pointer',
-              padding: '4px',
-              opacity: 0.8,
-            }}
-          >
-            {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
-          </div>
-        )}
       </FormControl>
     )
   },
