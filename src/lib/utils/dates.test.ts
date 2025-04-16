@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { convertTo12HourFormat } from '@/lib/utils/dates'
 
 describe('convertTo12HourFormat', () => {

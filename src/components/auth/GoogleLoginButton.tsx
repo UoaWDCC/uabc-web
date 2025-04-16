@@ -17,9 +17,7 @@ export const GoogleSignIn = ({ className }: GoogleSignInProps) => {
         'flex h-11 min-w-72 cursor-pointer select-none items-center justify-center gap-4 rounded border-2 border-tertiary bg-white font-semibold text-tertiary hover:opacity-90',
         className,
       )}
-      onClick={() => {
-        throw new Error('AUTH NOT IMPLEMENTED YET!')
-      }}
+      onClick={() => window.location.href = '/api/auth/google'}
     >
       <Image src={GoogleIcon} width={20} height={20} alt="Google Icon" />
       <span>Continue with Google</span>

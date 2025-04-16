@@ -4,7 +4,6 @@ import React from 'react'
 
 import { render, screen, userEvent } from '@/tests-frontend-utils/test-utils'
 import { SelectableCard } from '../SelectableCard'
-import { describe, it, expect, vi } from 'vitest'
 
 const session = {
   id: 1,
