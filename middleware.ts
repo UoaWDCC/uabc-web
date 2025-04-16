@@ -7,14 +7,17 @@ export function middleware(req: NextRequest) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
-      id: string,
+      id: string
       email: string
       role: string
     }
 
     if (req.nextUrl.pathname.startsWith('/api/admin')) {
       if (decoded.role !== 'admin') {
-        return NextResponse.json({ error: 'Forbidden: admin level access is required' }, { status: 403 })
+        return NextResponse.json(
+          { error: 'Forbidden: admin level access is required' },
+          { status: 403 },
+        )
       }
     }
 
@@ -26,5 +29,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/api/admin/:path*']
+  matcher: ['/api/admin/:path*'],
 }

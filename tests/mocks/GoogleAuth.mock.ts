@@ -25,8 +25,8 @@ export const googleUserMock: UserInfoResponse = {
 
 export const tokensMock = {
   access_token: 'mock_access_token',
-  expiry_date: Date.now() + 3600 * 1000 ,// 1 hour
-  id_token: 'mock_id_token'
+  expiry_date: Date.now() + 3600 * 1000, // 1 hour
+  id_token: 'mock_id_token',
 }
 
 // URL param mocks

@@ -79,17 +79,17 @@ export const GET = async (req: NextRequest) => {
   const token = jwt.sign(
     {
       profile: user,
-      accessToken: tokens.access_token
+      accessToken: tokens.access_token,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: '1h' },
   )
 
   const response = NextResponse.json({ token })
 
   response.cookies.set('auth_token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', 
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
     maxAge: 60 * 60,
   })

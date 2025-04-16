@@ -10,18 +10,19 @@ import {
   JWT_SECRET_MOCK,
   createMockNextRequest,
   googleUserMock,
-  tokensMock
+  tokensMock,
 } from 'tests/mocks/GoogleAuth.mock'
 
-
 vi.mock('@/business-layer/security/google', async () => {
-  const actual = await vi.importActual<typeof import('@/business-layer/security/google')>('@/business-layer/security/google')
+  const actual = await vi.importActual<typeof import('@/business-layer/security/google')>(
+    '@/business-layer/security/google',
+  )
 
   return {
     ...actual,
     oauth2Client: {
       getToken: vi.fn().mockResolvedValue({
-        tokens: tokensMock
+        tokens: tokensMock,
       }),
     },
   }
@@ -70,8 +71,10 @@ describe('GET /api/auth/google/callback', () => {
   })
 
   it('returns JWT token on success auth', async () => {
-    const req = createMockNextRequest(`/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`)
-    req.cookies.set("state", STATE_MOCK)
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
+    )
+    req.cookies.set('state', STATE_MOCK)
 
     const response = await callback(req)
     const json = await response.json()
@@ -82,13 +85,15 @@ describe('GET /api/auth/google/callback', () => {
 
     expect(decoded).toMatchObject({
       profile: userMock,
-      accessToken: tokensMock.access_token
+      accessToken: tokensMock.access_token,
     })
   })
 
   it('returns 400 if state does not match', async () => {
-    const req = createMockNextRequest(`/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}}`)
-    req.cookies.set("state", STATE_MOCK)
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}}`,
+    )
+    req.cookies.set('state', STATE_MOCK)
 
     const response = await callback(req)
     const json = await response.json()
@@ -98,12 +103,14 @@ describe('GET /api/auth/google/callback', () => {
   })
 
   it('returns 400 if code is missing', async () => {
-    const req = createMockNextRequest(`/api/auth/google/callback?state=${STATE_MOCK}&scope=${SCOPES}`)
-    req.cookies.set("state", STATE_MOCK)
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?state=${STATE_MOCK}&scope=${SCOPES}`,
+    )
+    req.cookies.set('state', STATE_MOCK)
 
     const response = await callback(req)
     const json = await response.json()
-  
+
     expect(response.status).toBe(400)
     expect(json.error).toMatch(/code/i)
   })
