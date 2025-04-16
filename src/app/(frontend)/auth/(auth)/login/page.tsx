@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
+import { Center, HStack, Separator, Link as UILink, VStack } from '@yamada-ui/react'
 
 import { BreakLine } from '@/components/auth/BreakLine'
 import { EmailLoginForm } from '@/components/auth/EmailLoginForm'
-import { GoogleSignIn } from '@/components/auth/GoogleLoginButton'
-import { Center, HStack, Separator, Link as UILink, VStack } from '@yamada-ui/react'
+import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton'
 
 export const metadata = {
   title: 'Login - UABC Booking Portal',
@@ -16,14 +16,16 @@ export default async function LoginPage() {
       <Suspense>
         <EmailLoginForm />
       </Suspense>
-      <BreakLine label="or" />
-      <GoogleSignIn />
-      <Center fontSize="x-small">
+      
+      <BreakLine label="OR" />
+
+      <GoogleLoginButton />
+
+      <Center fontSize="xs">
         <HStack gap={2} separator={<Separator orientation="vertical" height="8xs" />}>
           <UILink as={Link} href="/auth/signup" color="tertiary" fontWeight="bold">
             Create Account
           </UILink>
-
           <UILink as={Link} href="/auth/forgot-password" color="tertiary" fontWeight="bold">
             Forgot Password?
           </UILink>
