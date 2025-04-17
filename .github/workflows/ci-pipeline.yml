@@ -90,7 +90,7 @@ jobs:
           key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Check formatting
-        run: pnpm prettier --check .
+        run: pnpm biome check .
 
   lint:
     needs: [check_changes, setup]

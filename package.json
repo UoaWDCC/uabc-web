@@ -10,7 +10,7 @@
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
-    "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation biome lint",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "cross-env NODE_ENV=test vitest",
@@ -65,6 +65,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@eslint/eslintrc": "^3.2.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
