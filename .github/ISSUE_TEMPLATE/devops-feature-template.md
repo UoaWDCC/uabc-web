@@ -3,7 +3,7 @@ name: DevOps feature template
 about: Features relating to the development operations
 title: "[DevOps] "
 type: Feature
-labels: devop
+labels: devops
 assignees: ''
 
 ---
