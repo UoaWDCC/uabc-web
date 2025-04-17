@@ -1,12 +1,12 @@
 ---
-name: Design template
-about: For issues relating to design
-title: ''
-labels: design
+name: DevOps feature template
+about: Features relating to the development operations
+title: "[DevOps] "
+type: Feature
+labels: devops
 assignees: ''
 
 ---
-
 **Is your feature request related to a problem? Please describe.**
 <!-- A clear and concise description of what the problem is. Ex. I'm always frustrated when [...] -->
 
@@ -21,3 +21,10 @@ assignees: ''
 
 **Acceptance Criteria**
 <!-- Define the acceptance criteria for the feature -->
+
+**BEFORE MERGING**
+
+- [ ] Acceptance criteria met
+- [ ] PR Reviewed (For non-trivial changes)
+- [ ] Changes tested after rebasing on master or merging in master (*hint*: `git fetch origin master:master`, then `git rebase master` or `git merge master`)
+- [ ] All required PR checks passing
