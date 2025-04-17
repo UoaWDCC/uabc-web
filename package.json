@@ -15,7 +15,9 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "cross-env NODE_ENV=test vitest",
     "theme": "yamada-cli tokens ./src/theme",
-    "postinstall": "pnpm theme"
+    "postinstall": "pnpm theme",
+    "prepare": "husky",
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",
@@ -78,7 +80,9 @@
     "dotenv": "^16.4.7",
     "eslint": "^9.16.0",
     "eslint-config-next": "15.2.3",
+    "husky": "^9.1.7",
     "jsdom": "^26.0.0",
+    "lint-staged": "^15.5.1",
     "mongodb-memory-server": "^10.1.4",
     "postcss": "^8.5.3",
     "prettier": "^3.4.2",
