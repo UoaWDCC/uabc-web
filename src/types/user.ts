@@ -1,5 +1,7 @@
 import z from 'zod'
 
+import { MembershipType } from "./types"
+
 // Payload Media Schema
 const MediaSchema = z.object({
   id: z.string(),
@@ -23,7 +25,7 @@ export const UserSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().email(),
-  role: z.enum(['member', 'casual', 'admin']),
+  role: z.enum(Object.values(MembershipType) as [string, ...string[]]),
   remainingSessions: z.number().nullable().optional(),
   image: z.union([z.string(), MediaSchema]).nullable().optional(),
   updatedAt: z.string(),
