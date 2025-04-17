@@ -2,25 +2,19 @@
 
 import React from 'react'
 import Image from 'next/image'
+import { Button } from '@yamada-ui/react'
 
 import GoogleIcon from '@/../public/images/googleIcon.svg'
 
-import { cn } from '@/lib/utils'
-
-type GoogleSignInProps = {
-  className?: string
-}
-export const GoogleSignIn = ({ className }: GoogleSignInProps) => {
+export const GoogleLoginButton = () => {
   return (
-    <button
-      className={cn(
-        'flex h-11 min-w-72 cursor-pointer select-none items-center justify-center gap-4 rounded border-2 border-tertiary bg-white font-semibold text-tertiary hover:opacity-90',
-        className,
-      )}
+    <Button
       onClick={() => (window.location.href = '/api/auth/google')}
+      startIcon={<Image src={GoogleIcon} width={20} height={20} alt="Google Icon" />}
+      colorScheme="neutral"
+      variant="outline"
     >
-      <Image src={GoogleIcon} width={20} height={20} alt="Google Icon" />
-      <span>Continue with Google</span>
-    </button>
+      Continue with Google
+    </Button>
   )
 }
