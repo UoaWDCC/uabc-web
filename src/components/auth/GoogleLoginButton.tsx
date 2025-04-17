@@ -10,7 +10,7 @@ export const GoogleLoginButton = () => {
   return (
     <Button
       onClick={() => {
-        throw new Error('AUTH NOT IMPLEMENTED YET!')
+        throw new Error('NOT IMPLEMENTED')
       }}
       startIcon={<Image src={GoogleIcon} width={20} height={20} alt="Google Icon" />}
       colorScheme="neutral"

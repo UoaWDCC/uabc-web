@@ -10,7 +10,7 @@ export const metadata = {
   title: 'Login - UABC Booking Portal',
 }
 
-export default async function LoginPage() {
+export default function LoginPage() {
   return (
     <VStack>
       <Suspense>

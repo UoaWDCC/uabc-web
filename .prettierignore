@@ -2,3 +2,4 @@ src/payload-types.ts
 pnpm-lock.yaml
 *.md
 .github/
+.lintstagedrc
