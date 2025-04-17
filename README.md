@@ -1,11 +1,11 @@
-# UOA Badminton Club Website
+# UOA Badminton Club Website 🏸
 Project initiated by WDCC in 2023.
 
-## About
+## About ⚡
 
-**2025:** We are focused on creating a functional website for the University of Auckland Badminton Club. The functional website will comprise a membership process (sign-up, sign-in, sign-out), membership management system, court booking process and more. The website will be built to be user-friendly, aesthetic alongside having an effective and efficient back-end to satisfy the clients.
+**2025:** We are focused on creating a functional website for the University of Auckland Badminton Club. The functional website will comprise a membership process (sign-up, sign-in, sign-out), membership management system, court booking process and more. The website will be built to be user-friendly and aesthetic alongside having an effective and efficient back-end to satisfy the clients.
 
-## Setting up the project
+## Setting up the project 💻
 
 ### Prerequisites
 
@@ -129,7 +129,7 @@ To run a single test you can use the following command
 pnpm test src/app/example-double-admin-count/route.test.ts
 ```
 
-## Tech Stack
+## Tech Stack ⚙
 
 The project is _mainly_ built around the following technologies:
 
@@ -147,23 +147,25 @@ The project is _mainly_ built around the following technologies:
 Additional information is to be documented on the [wiki](https://github.com/UoaWDCC/uabc-web/wiki) for some of the
 smaller dependencies
 
-## Contributing
+## Contributing 📝
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to make changes to this project.
 
-## Acknowledgements
+## Acknowledgements ⭐
 
-### 2025 Team Leadership
-- Eddie Wang (Project Manager)
-- Jeffery Ji (Tech Lead)
+### 2025 Team 😎
 
-### 2025 Team Members
-- Ann Lowe (Designer)
-- Mikai Somerville
-- Brandon Chan
-- Derrick Trang
-- Shintaro Jokagi
-- Benjamin Kee
-- TBD
+| Name     |   Role   |
+|----------|----------|
+| Eddie Wang    | Project Manager  |
+| Jeffery Ji   | Tech Lead     |
+| Seungbeom Yang   | Developer/Designer   |
+| Benjamin Kee   | Developer     |
+| Brandon Chan   | Developer     |
+| Derrick Trang   | Developer     |
+| Mikai Somerville   | Developer     |
+| Shintaro Jokagi   | Developer     |
+| Ann Lowe   | Designer     |
+| Yvonne Lo   | Designer     |
 
-Shoutout to the team responsible for the prior iteration, at [UABC Portal](https://github.com/UoaWDCC/uabc-portal).
+Shoutout to the team responsible for the prior iteration 👍 At [UABC Portal](https://github.com/UoaWDCC/uabc-portal).
