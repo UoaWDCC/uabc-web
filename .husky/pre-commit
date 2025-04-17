@@ -1,1 +1,1 @@
-prettier --write .
+pnpm run precommit
