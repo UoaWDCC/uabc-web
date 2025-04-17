@@ -9,11 +9,11 @@ import {
   InputRightElement,
   Label,
   useBoolean,
-  type InputProps as YUIInputProps,
+  type InputProps as UIInputProps,
 } from '@yamada-ui/react'
 import { forwardRef } from 'react'
 
-export interface InputProps extends Omit<YUIInputProps, 'type'> {
+export interface InputProps extends Omit<UIInputProps, 'type'> {
   label?: string
   type: string
   isError?: boolean
