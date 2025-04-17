@@ -6,6 +6,7 @@ FROM node:22.14.0-alpine AS base
 # Stage 1: Install dependencies
 FROM base AS deps
 WORKDIR /app
+ENV NODE_ENV=production
 COPY package.json pnpm-lock.yaml ./
 RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
