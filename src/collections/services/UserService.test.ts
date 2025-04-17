@@ -1,5 +1,3 @@
-import { describe, it, expect, afterEach } from 'vitest'
-
 import dotenv from 'dotenv'
 import { clearCollection, testPayloadObject } from 'tests/utils'
 import UserService from './UserService'
