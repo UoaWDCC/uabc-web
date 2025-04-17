@@ -15,7 +15,7 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "cross-env NODE_ENV=test vitest",
     "theme": "yamada-cli tokens ./src/theme",
-    "postinstall": "node src/tooling/postinstall.js"
+    "postinstall": "node -e \"if (process.env.NODE_ENV !== 'production') require('child_process').execSync('pnpm theme', { stdio: 'inherit' })\""
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",
