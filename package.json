@@ -15,7 +15,7 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "cross-env NODE_ENV=test vitest",
     "theme": "yamada-cli tokens ./src/theme",
-    "postinstall": "pnpm theme"
+    "postinstall": "node src/tooling/postinstall.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",
