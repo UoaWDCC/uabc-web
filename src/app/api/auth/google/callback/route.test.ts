@@ -65,10 +65,8 @@ describe('GET /api/auth/google/callback', () => {
     process.env.JWT_SECRET = JWT_SECRET_MOCK
   })
 
-  afterEach(() => {
-    vi.restoreAllMocks()
-    process.env.JWT_SECRET = JWT_SECRET
-  })
+  afterEach(() => vi.restoreAllMocks())
+  afterAll(() => process.env.JWT_SECRET = JWT_SECRET)
 
   it('returns JWT token on success auth', async () => {
     const req = createMockNextRequest(
