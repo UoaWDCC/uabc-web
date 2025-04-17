@@ -3,7 +3,7 @@ Project initiated by WDCC in 2023.
 
 ## About ⚡
 
-**2025:** We are focused on creating a functional website for the University of Auckland Badminton Club. The functional website will comprises a membership process (sign-up, sign-in, sign-out), membership management system, court booking process and more. The website will be built to be user-friendly and aesthetic, alongside having an effective and efficient back-end to satisfy the clients.
+**2025:** We are focused on creating a functional website for the University of Auckland Badminton Club. The functional website will comprise a membership process (sign-up, sign-in, sign-out), membership management system, court booking process and more. The website will be built to be user-friendly and aesthetic, alongside having an effective and efficient back-end to satisfy the clients.
 
 ## Setting up the project 💻
 
