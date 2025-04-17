@@ -1,48 +1,77 @@
 import { memo } from 'react'
 import Link from 'next/link'
 
-import { Card } from '../../Card'
-import { OptionButtonUtils } from '@/components/ui/options-popover/OptionsButtonUtils'
-import { OptionsPopover } from '@/components/ui/options-popover/OptionsPopover'
-import { convertTo12HourFormat } from '@/lib/utils/dates'
+import { convertTo12HourFormat, formatFullDate } from '@/lib/utils/dates'
 import { DeleteSemesterFormDialog } from './DeleteSemesterFormDialog'
 import { EditSemesterFormDialog } from './EditSemesterFormDialog'
 import { useSemesterContext } from './SemestersContext'
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Heading,
+  HStack,
+  IconButton,
+  LinkBox,
+  LinkOverlay,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spacer,
+  Text,
+  useDisclosure,
+} from '@yamada-ui/react'
+import { EllipsisIcon } from '@yamada-ui/lucide'
 
 const UnmemoizedSemesterDetailCard = () => {
   const { id, name, startDate, endDate, breakStart, breakEnd, bookingOpenDay, bookingOpenTime } =
     useSemesterContext()
+  const editDisclosure = useDisclosure()
+  const deleteDisclosure = useDisclosure()
+
   return (
-    <Card
-      className="relative select-none text-sm font-medium tracking-tight text-tertiary"
-      variant="card"
-    >
-      <Link
-        href={`semesters/${id}/schedules`}
-        className="absolute left-0 top-0 z-10 h-full w-full"
-      />
-      <div className="flex items-center justify-between">
-        <h3 className="truncate text-lg text-foreground">{name}</h3>
-        <OptionsPopover>
-          <OptionsPopover.DialogItem
-            ButtonComponent={<OptionButtonUtils type="edit" />}
-            DialogComponent={<EditSemesterFormDialog />}
-          />
-          <OptionsPopover.DialogItem
-            ButtonComponent={<OptionButtonUtils type="delete" />}
-            DialogComponent={<DeleteSemesterFormDialog />}
-          />
-        </OptionsPopover>
-      </div>
-      <p className="underline decoration-secondary/80 decoration-1 underline-offset-4">
-        Bookings open {bookingOpenDay} at {convertTo12HourFormat(bookingOpenTime)}
-      </p>
-      <p className="mt-2">Start date: {startDate}</p>
-      <p>End date: {endDate}</p>
-      <p className="mt-2">
-        Break period: {breakStart} - {breakEnd}
-      </p>
-    </Card>
+    <>
+      <Card as={LinkBox} fontSize="sm" color="tertiary" variant="subtle">
+        <LinkOverlay as={Link} href={`semesters/${id}/schedules`} />
+        <CardHeader>
+          <HStack w="full">
+            <Heading as="h3" isTruncated fontSize="md" color={['black', 'white']}>
+              {name}
+            </Heading>
+            <Spacer />
+            <Menu>
+              <MenuButton as={IconButton} variant="ghost">
+                <EllipsisIcon />
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={editDisclosure.onOpen}>Edit</MenuItem>
+                <MenuItem onClick={deleteDisclosure.onOpen}>Delete</MenuItem>
+              </MenuList>
+            </Menu>
+          </HStack>
+        </CardHeader>
+        <CardBody gap="sm" pt="sm">
+          <Text
+            textDecoration="underline"
+            textDecorationColor="transparentize(tertiary, 50%)"
+            textDecorationThickness="1"
+            textUnderlineOffset="4"
+          >
+            Bookings open {formatFullDate(bookingOpenDay).toLocaleString()} at{' '}
+            {convertTo12HourFormat(bookingOpenTime)}
+          </Text>
+          <Text>Start date: {formatFullDate(startDate).toLocaleString()}</Text>
+          <Text>End date: {formatFullDate(endDate).toLocaleString()}</Text>
+          <Text>
+            Break period: {breakStart} - {breakEnd}
+          </Text>
+        </CardBody>
+      </Card>
+
+      <EditSemesterFormDialog open={editDisclosure.open} onClose={editDisclosure.onClose} />
+      <DeleteSemesterFormDialog open={deleteDisclosure.open} onClose={deleteDisclosure.onClose} />
+    </>
   )
 }
 

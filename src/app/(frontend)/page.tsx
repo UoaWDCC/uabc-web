@@ -21,8 +21,8 @@ export default function HomePage() {
       as={Grid}
       minH="100dvh"
       bg={{
-        base: 'primary',
-        sm: ['white', 'black'],
+        base: ['white', 'black'],
+        sm: 'primary',
       }}
       justifyContent="center"
       p={{ sm: '0' }}
@@ -36,8 +36,8 @@ export default function HomePage() {
           textAlign="center"
           flexDir="row"
           p={{
-            base: '12',
-            sm: '6',
+            base: '6',
+            sm: '12',
           }}
           gap="12"
         >
@@ -54,8 +54,8 @@ export default function HomePage() {
             </Heading>
             <Center
               display={{
-                base: 'none',
-                lg: 'grid',
+                base: 'grid',
+                lg: 'none',
               }}
               placeItems="center"
             >
@@ -91,8 +91,8 @@ export default function HomePage() {
           </CardBody>
           <CardFooter
             display={{
-              base: 'grid',
-              lg: 'none',
+              base: 'none',
+              lg: 'grid',
             }}
             p="0"
           >

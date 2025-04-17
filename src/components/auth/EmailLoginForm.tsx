@@ -3,10 +3,9 @@
 import React, { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
+import { Button, Heading, VStack } from '@yamada-ui/react'
 
-import { cn } from '@/lib/utils'
 import { TextInput } from '../TextInput'
-import { Button } from '../ui/button'
 import { emailSchema } from './formSchema'
 
 interface SignUpFormData {
@@ -46,43 +45,45 @@ export const EmailLoginForm = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <VStack>
       {/* Button to open the form on mobile view */}
-      {!open && (
-        <Button
-          large
-          onClick={openEmailLogin}
-          className="lg:hidden" // Show only on mobile view
-        >
-          Login with Email
-        </Button>
-      )}
+      <Button
+        onClick={openEmailLogin}
+        colorScheme="primary"
+        display={{ base: !open ? 'grid' : 'none', lg: 'none' }}
+      >
+        Login with Email
+      </Button>
 
       {/* Form, hidden on mobile view by default and shown only when open */}
-      <div className={cn({ block: open, hidden: !open }, 'lg:block')}>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <span className="text-center text-foreground">Login to your account</span>
-          <TextInput
-            autoFocus
-            className="text-foreground"
-            label="Email"
-            type="email"
-            isError={!!errors.email}
-            {...register('email')}
-          />
-          <TextInput
-            className="text-foreground"
-            label="Password"
-            type="password"
-            isError={!!errors.email}
-            errorMessage={errors.email?.message}
-            {...register('password')}
-          />
-          <Button large type="submit" disabled={buttonDisabled}>
-            Login with Email
-          </Button>
-        </form>
-      </div>
-    </div>
+      <VStack
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
+        display={{ base: open ? 'flex' : 'none', lg: 'flex' }}
+      >
+        <Heading as="h2" fontSize="2xl" textAlign="center">
+          Login to your account
+        </Heading>
+
+        <TextInput
+          autoFocus
+          label="Email"
+          type="email"
+          isError={!!errors.email}
+          {...register('email')}
+        />
+        <TextInput
+          label="Password"
+          type="password"
+          isError={!!errors.email}
+          errorMessage={errors.email?.message}
+          {...register('password')}
+        />
+
+        <Button type="submit" disabled={buttonDisabled} colorScheme="primary">
+          Login with Email
+        </Button>
+      </VStack>
+    </VStack>
   )
 }

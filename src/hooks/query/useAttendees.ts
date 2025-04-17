@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { QUERY_KEY } from '@/lib/utils/queryKeys'
 
 export type AttendeesListResponse = {
+  id: number
   firstName: string | null
   lastName: string | null
   email: string

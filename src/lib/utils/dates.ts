@@ -22,12 +22,31 @@ export function nzstParse(
  * Formats date as Tuesday 9th July 2024
  */
 export function formatFullDate(date: string | Date) {
-  return format(new Date(date), 'eeee do MMMM yyyy')
+  try {
+    const formatted = format(new Date(date), 'eeee do MMMM yyyy')
+    if (date === formatted) return date
+    return formatted
+  } catch (error) {
+    console.error('Error formatting date:', date, error)
+    return date
+  }
 }
 
 /**
  * Converts from military Time to 12-hour format
  */
 export function convertTo12HourFormat(militaryTime: string): string {
-  return format(parse(militaryTime, 'HH:mm:ss', new Date()), 'h:mma')
+  try {
+    // Handle time format without seconds
+    const timeFormat = militaryTime.includes(':')
+      ? militaryTime.split(':').length === 3
+        ? 'HH:mm:ss'
+        : 'HH:mm'
+      : 'HHmm'
+
+    return format(parse(militaryTime, timeFormat, new Date()), 'h:mma')
+  } catch (error) {
+    console.error('Error converting time:', militaryTime, error)
+    return militaryTime
+  }
 }

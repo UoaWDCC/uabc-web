@@ -1,46 +1,38 @@
 import { assignRef, Input } from '@yamada-ui/react'
-import { FC, memo, useState } from 'react'
+import { type FC, memo, type RefObject, useRef } from 'react'
 
 interface FilterInputProps {
-  resetRef: React.RefObject<() => void>
-  filterRef: React.RefObject<(value: string) => void>
-  prevHasValueRef: React.RefObject<boolean>
-  showResetRef: React.RefObject<(value: boolean) => void>
+  passHasRef: RefObject<(hasValue: boolean) => void>
+  passValueRef: RefObject<(value: string) => void>
+  resetRef: RefObject<() => void>
 }
 
-export const FilterInput: FC<FilterInputProps> = memo(
-  ({ resetRef, filterRef, prevHasValueRef, showResetRef }) => {
-    const [value, setValue] = useState<string>('')
-    assignRef(resetRef, () => {
-      setValue('')
+export const FilterInput: FC<FilterInputProps> = memo(({ passHasRef, passValueRef, resetRef }) => {
+  const inputRef = useRef<HTMLInputElement>(null)
+  assignRef(resetRef, () => {
+    if (inputRef.current) {
+      inputRef.current.value = ''
+    }
 
-      setTimeout(() => {
-        // Trigger parent component's filter with empty string to show all items
-        filterRef.current('')
-      })
+    setTimeout(() => {
+      // Trigger parent component's filter with empty string to show all items
+      passValueRef.current('')
+      passHasRef.current(false)
     })
-    return (
-      <Input
-        placeholder="Filter members..."
-        value={value}
-        onChange={(ev) => {
-          setValue(ev.target.value)
-          const hasValue = !!ev.target.value
-          prevHasValueRef.current = hasValue
-          if (hasValue) {
-            showResetRef.current(true)
-          } else {
-            showResetRef.current(false)
-          }
-
-          setTimeout(() => {
-            filterRef.current(ev.target.value)
-          })
-        }}
-        w="300px"
-      />
-    )
-  },
-)
+  })
+  return (
+    <Input
+      ref={inputRef}
+      placeholder="Filter members..."
+      onChange={(ev) => {
+        setTimeout(() => {
+          passValueRef.current(ev.target.value)
+          passHasRef.current(!!ev.target.value)
+        })
+      }}
+      w="300px"
+    />
+  )
+})
 
 FilterInput.displayName = 'FilterInput'

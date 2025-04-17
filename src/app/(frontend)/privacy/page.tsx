@@ -9,7 +9,7 @@ export default function PrivacyPolicyPage() {
   return (
     <Container minH="100dvh" centerContent>
       <Card
-        variant={{ base: 'outline', sm: 'unstyled' }}
+        variant={{ base: 'unstyled', sm: 'outline' }}
         w="full"
         maxW="3xl"
         textWrap="pretty"
