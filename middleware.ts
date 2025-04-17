@@ -1,27 +1,29 @@
-import { type NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
+
+import { JWTResponseSchema } from '@/types/middleware'
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get('access_token')?.value
   if (!token) return NextResponse.redirect(new URL('/auth/google', req.url))
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
-      id: string
-      email: string
-      role: string
-    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const response = JWTResponseSchema.safeParse(decoded)
 
-    if (req.nextUrl.pathname.startsWith('/api/admin')) {
-      if (decoded.role !== 'admin') {
-        return NextResponse.json(
-          { error: 'Forbidden: admin level access is required' },
-          { status: 403 },
-        )
+    if (!response.success) return NextResponse.json({ status: StatusCodes.UNAUTHORIZED })
+    else {
+      if (req.nextUrl.pathname.startsWith('/api/admin')) {
+        const data = response.data
+
+        if (data.user.role !== 'admin') {
+          return NextResponse.json({ status: StatusCodes.FORBIDDEN })
+        }
       }
-    }
 
-    return NextResponse.next()
+      return NextResponse.next()
+    }
   } catch {
     // Invalid or expired token
     return NextResponse.redirect(new URL('/auth/google', req.url))
