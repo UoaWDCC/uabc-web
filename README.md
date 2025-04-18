@@ -57,6 +57,14 @@ The development server will be running at `http://localhost:3000`.
 
 We rely on [Biome](http://biomejs.dev/) to keep the codebase clean and consistent with linting and formatting. [husky](https://typicode.github.io/husky/) and [lint-staged](https://www.npmjs.com/package/lint-staged) has been installed to setup pre-commit hooks that will automatically format your files when committing. CI tests will run Biome checks to ensure your code has been formatted properly and follows linting rules.
 
+If you want to manually run Biome commands yourself:
+```bash
+pnpm biome format . # Check formatting
+pnpm biome lint .   # Check linting
+pnpm biome check .  # Check both
+```
+You can also add the `--write` flag to these commands to apply fixes to the code.
+
 #### IDE Setup
 
 If you are using `VSCode`, extensions will be recommended to you (namely Biome's VSC plugin). You can [open the extensions panel](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace), find the recommended ones and install them. VSC files have already been setup as part of the project to assist with Biome formatting.
