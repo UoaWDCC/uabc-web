@@ -1,8 +1,8 @@
 import {
-  extendConfig,
-  extendTheme,
   type ThemeConfig,
   type UsageTheme,
+  extendConfig,
+  extendTheme,
   withDefaultColorScheme,
 } from '@yamada-ui/react'
 import { breakpoint } from './config'

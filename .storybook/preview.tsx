@@ -3,12 +3,12 @@ import { DocsContainer } from '@storybook/blocks'
 import { addons } from '@storybook/preview-api'
 import type { Preview } from '@storybook/react'
 import { themes } from '@storybook/theming'
-import { UIProvider, useColorMode, VStack } from '@yamada-ui/react'
+import { UIProvider, VStack, useColorMode } from '@yamada-ui/react'
 import type { FC, PropsWithChildren } from 'react'
 import React, { useEffect, useState } from 'react'
 import { DARK_MODE_EVENT_NAME } from 'storybook-dark-mode'
+import { config, theme } from '../src/theme'
 import { customThemes } from './themes'
-import { theme, config } from '../src/theme'
 
 const channel = addons.getChannel()
 

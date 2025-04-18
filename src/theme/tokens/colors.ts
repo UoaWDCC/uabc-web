@@ -1,4 +1,4 @@
-import { generate, type ThemeTokens } from '@yamada-ui/react'
+import { type ThemeTokens, generate } from '@yamada-ui/react'
 
 export const colors: ThemeTokens = {
   black: '#141414',

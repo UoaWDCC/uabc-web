@@ -1,6 +1,6 @@
-import { PropsTable } from '.storybook/components'
 import type { Meta, StoryFn } from '@storybook/react'
 import { FONT_SIZES, Heading, HeadingProps } from './Heading'
+import { PropsTable } from '.storybook/components'
 
 type Story = StoryFn<typeof Heading>
 

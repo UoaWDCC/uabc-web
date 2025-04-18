@@ -1,7 +1,7 @@
 import {
   type HTMLUIProps,
-  omitThemeProps,
   type ThemeProps,
+  omitThemeProps,
   ui,
   useComponentStyle,
 } from '@yamada-ui/react'

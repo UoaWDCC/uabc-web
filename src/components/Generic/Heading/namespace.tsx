@@ -1,5 +1,5 @@
-import { Heading } from './Heading'
 import type { FC } from 'react'
+import { Heading } from './Heading'
 import type { HeadingProps } from './Heading'
 
 type HeadingComponent = FC<HeadingProps> & {

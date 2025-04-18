@@ -1,7 +1,7 @@
-import { PropsTable } from '.storybook/components'
 import type { Meta, StoryFn } from '@storybook/react'
 import { SEMANTIC_COLOR_SCHEMES } from '../../../theme/semantics'
 import { Button } from './Button'
+import { PropsTable } from '.storybook/components'
 
 type Story = StoryFn<typeof Button>
 

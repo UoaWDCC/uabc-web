@@ -1,5 +1,5 @@
-import { Members } from '@/components/Composite/admin/members/MemberManagementTable'
 import { BackNavigationBar } from '@/components/Composite/BackNavigationBar'
+import { Members } from '@/components/Composite/admin/members/MemberManagementTable'
 import { Container, Heading, VStack } from '@yamada-ui/react'
 
 export const metadata = {

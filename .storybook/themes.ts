@@ -1,6 +1,6 @@
 import { themes } from '@storybook/theming'
-import { defaultTheme } from '../src/theme'
 import type { BaseTheme } from '@yamada-ui/react'
+import { defaultTheme } from '../src/theme'
 
 const fonts = defaultTheme.fonts as BaseTheme['fonts']
 const colors = defaultTheme.colors as BaseTheme['colors']

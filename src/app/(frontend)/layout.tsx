@@ -8,9 +8,9 @@ import { Inter } from 'next/font/google'
 import OriginTracker from '@/components/Composite/providers/OriginTracker'
 import QueryClientProvider from '@/components/Composite/providers/QueryClientProvider'
 import SessionProvider from '@/components/Composite/providers/SessionProvider'
-import { Providers } from '../../components/Composite/providers/UIProvider'
 import { Toaster } from '@/components/Generic/ui/toaster'
 import { ColorModeScript } from '@yamada-ui/react'
+import { Providers } from '../../components/Composite/providers/UIProvider'
 
 export const metadata: Metadata = {
   title: 'UABC Booking Portal',

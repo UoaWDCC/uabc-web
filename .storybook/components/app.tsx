@@ -1,4 +1,4 @@
-import { Center, Image, type CenterProps } from '@yamada-ui/react'
+import { Center, type CenterProps, Image } from '@yamada-ui/react'
 import type { FC } from 'react'
 
 interface AppProps extends CenterProps {}
