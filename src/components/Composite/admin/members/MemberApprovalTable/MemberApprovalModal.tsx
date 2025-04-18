@@ -1,3 +1,4 @@
+import { TextInput } from '@/components/Composite/TextInput'
 import { Row } from '@tanstack/react-table'
 import { EllipsisIcon } from '@yamada-ui/lucide'
 import {
@@ -11,13 +12,12 @@ import {
   ModalFooter,
   ModalHeader,
   Text,
-  useDisclosure,
   VStack,
+  useDisclosure,
 } from '@yamada-ui/react'
 import { FC, memo } from 'react'
-import { TextInput } from '@/components/Composite/TextInput'
+import { Controller, useForm } from 'react-hook-form'
 import { Member } from './columns'
-import { useForm, Controller } from 'react-hook-form'
 
 interface MemberApprovalModalProps {
   row: Row<Member>

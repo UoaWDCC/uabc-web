@@ -1,17 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useForgotPasswordMutation } from '@/hooks/mutations/forgot-password'
-import { Card } from '../Card'
-import { TextInput } from '../TextInput'
 import { Button } from '../../Generic/ui/button'
 import { useToast } from '../../Generic/ui/use-toast'
+import { Card } from '../Card'
+import { TextInput } from '../TextInput'
 
 const formSchema = z.object({
   email: z.string().email(),

@@ -2,7 +2,6 @@
 
 import { render, screen } from '@/tests-frontend-utils/test-utils'
 import ClientSessionPage from './client-page'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 vi.mock('next/navigation', () => ({
   useRouter() {

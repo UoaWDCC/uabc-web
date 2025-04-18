@@ -1,9 +1,7 @@
-import { describe, it, expect, afterEach } from 'vitest'
-
 import dotenv from 'dotenv'
+import { userMock } from 'tests/mocks/User.mock'
 import { clearCollection, testPayloadObject } from 'tests/utils'
 import UserService from './UserService'
-import { userMock } from 'tests/mocks/User.mock'
 
 dotenv.config()
 

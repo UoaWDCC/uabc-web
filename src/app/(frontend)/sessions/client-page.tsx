@@ -4,13 +4,13 @@
 
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { twJoin } from 'tailwind-merge'
 
+import { CountIndicator } from '@/components/Composite/CountIndicator'
 import { PendingApprovalAlert } from '@/components/Composite/booking/sessions/PendingApprovalAlert'
 import { SelectSessionList } from '@/components/Composite/booking/sessions/SelectSessionList'
-import { CountIndicator } from '@/components/Composite/CountIndicator'
 import { Button } from '@/components/Generic/ui/button'
 import { MEMBER_MAX_SESSIONS, NON_MEMBER_MAX_SESSIONS } from '@/lib/constants'
 import { useCartStore } from '@/stores/useCartStore'

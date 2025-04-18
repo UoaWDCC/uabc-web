@@ -22,7 +22,6 @@ export const PropsTable = <Y extends string, M extends string>({
 
         {columns.map((column, colIndex) => (
           <GridItem
-            // biome-ignore lint/suspicious/noArrayIndexKey: we don't have id to the columns
             key={colIndex}
             color="fg.emphasized"
             fontWeight="medium"

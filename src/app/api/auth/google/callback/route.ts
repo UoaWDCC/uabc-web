@@ -7,6 +7,8 @@ import UserService from '@/collections/services/UserService'
 import { UserInfoResponse, UserInfoResponseSchema } from '@/types/auth'
 import { MembershipType } from '@/types/types'
 
+import jwt from 'jsonwebtoken'
+
 export const GET = async (req: NextRequest) => {
   const params = req.nextUrl.searchParams
   const cookieStore = await cookies()
@@ -59,7 +61,7 @@ export const GET = async (req: NextRequest) => {
     user = await userService.createUser({ firstName, lastName, role: MembershipType.casual, email })
 
   const authService = new AuthService()
-  const newAuthData = await authService.createAuth({
+  await authService.createAuth({
     user,
     type: 'oauth',
     provider: 'google',
@@ -70,5 +72,27 @@ export const GET = async (req: NextRequest) => {
     idToken: tokens.id_token,
   })
 
-  return NextResponse.json(newAuthData)
+  /**
+   * JWT token including user info and the Google access token.
+   * Expires in 1 hour (same duration as Google access token)
+   */
+  const token = jwt.sign(
+    {
+      profile: user,
+      accessToken: tokens.access_token,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' },
+  )
+
+  const response = NextResponse.json({ token })
+
+  response.cookies.set('auth_token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 60 * 60,
+  })
+
+  return response
 }

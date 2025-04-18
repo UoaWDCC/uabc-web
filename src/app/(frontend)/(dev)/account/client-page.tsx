@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -13,13 +13,13 @@ import {
   CardBody,
   Fieldset,
   HStack,
+  Heading,
   SegmentedControl,
   SegmentedControlButton,
   Spacer,
   Text,
   VStack,
 } from '@yamada-ui/react'
-import { Heading } from '@/components/Generic/Heading'
 
 interface ClientAccountFormProps {
   firstName: string

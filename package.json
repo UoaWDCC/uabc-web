@@ -10,7 +10,7 @@
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
-    "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation biome lint",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "cross-env NODE_ENV=test vitest",
@@ -50,6 +50,8 @@
     "date-fns-tz": "^3.2.0",
     "googleapis": "^148.0.0",
     "graphql": "^16.8.1",
+    "http-status-codes": "^2.3.0",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.485.0",
     "next": "15.2.3",
     "payload": "latest",
@@ -68,6 +70,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@eslint/eslintrc": "^3.2.0",
     "@storybook/addon-a11y": "^8.6.12",
     "@storybook/addon-backgrounds": "^8.6.12",
@@ -85,6 +88,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.5.4",
     "@types/react": "19.0.12",
     "@types/react-dom": "19.0.4",
@@ -94,7 +98,6 @@
     "@yamada-ui/cli": "^1.2.4",
     "autoprefixer": "^10.4.21",
     "dotenv": "^16.4.7",
-    "eslint": "^9.16.0",
     "eslint-config-next": "15.2.3",
     "eslint-plugin-storybook": "^0.12.0",
     "husky": "^9.1.7",
@@ -103,7 +106,6 @@
     "mongodb-memory-server": "^10.1.4",
     "playwright": "^1.51.1",
     "postcss": "^8.5.3",
-    "prettier": "^3.4.2",
     "storybook": "8.6.12",
     "tailwindcss": "^4.0.17",
     "typescript": "5.7.3",
@@ -115,9 +117,7 @@
     "pnpm": "^9"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp"
-    ]
+    "onlyBuiltDependencies": ["sharp"]
   },
   "volta": {
     "node": "22.14.0"

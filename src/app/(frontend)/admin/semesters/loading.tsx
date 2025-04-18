@@ -1,4 +1,4 @@
-import { Container, IconButton, Spacer, VStack, Skeleton } from '@yamada-ui/react'
+import { Container, IconButton, Skeleton, Spacer, VStack } from '@yamada-ui/react'
 
 import { BackNavigationBar } from '@/components/Composite/BackNavigationBar'
 import { SkeletonScheduleCard } from '@/components/Composite/admin/schedules/SkeletonScheduleCard'
