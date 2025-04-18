@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken'
-
 import { authenticationMock } from 'tests/mocks/Authentication.mock'
 import { userMock } from 'tests/mocks/User.mock'
 
@@ -46,6 +44,7 @@ vi.mock('@/collections/services/AuthService', () => {
 })
 
 import { GET as callback } from '@/app/api/auth/google/callback/route'
+import { redirect } from 'next/navigation'
 
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -54,6 +53,10 @@ vi.mock('next/headers', () => ({
     get: (key: string) => ({ value: key === 'state' ? STATE_MOCK : undefined }),
     delete: vi.fn(),
   }),
+}))
+
+vi.mock('next/navigation', () => ({
+  redirect: vi.fn(),
 }))
 
 describe('GET /api/auth/google/callback', () => {
@@ -68,24 +71,7 @@ describe('GET /api/auth/google/callback', () => {
   afterEach(() => vi.restoreAllMocks())
   afterAll(() => (process.env.JWT_SECRET = JWT_SECRET))
 
-  it('returns JWT token on success auth', async () => {
-    const req = createMockNextRequest(
-      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
-    )
-    req.cookies.set('state', STATE_MOCK)
-
-    const response = await callback(req)
-    const json = await response.json()
-
-    expect(json.token).toBeDefined()
-
-    const decoded = jwt.verify(json.token, process.env.JWT_SECRET)
-
-    expect(decoded).toMatchObject({
-      profile: userMock,
-      accessToken: tokensMock.access_token,
-    })
-  })
+  it('redirects user on success auth', () => expect(redirect).toBeCalled())
 
   it('returns 400 if state does not match', async () => {
     const req = createMockNextRequest(

@@ -8,6 +8,7 @@ import { UserInfoResponse, UserInfoResponseSchema } from '@/types/auth'
 import { MembershipType } from '@/types/types'
 
 import jwt from 'jsonwebtoken'
+import { redirect } from 'next/navigation'
 
 export const GET = async (req: NextRequest) => {
   const params = req.nextUrl.searchParams
@@ -85,14 +86,12 @@ export const GET = async (req: NextRequest) => {
     { expiresIn: '1h' },
   )
 
-  const response = NextResponse.json({ token })
-
-  response.cookies.set('auth_token', token, {
+  cookieStore.set('auth_token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
     maxAge: 60 * 60,
   })
 
-  return response
+  return redirect('/onboarding/name')
 }
