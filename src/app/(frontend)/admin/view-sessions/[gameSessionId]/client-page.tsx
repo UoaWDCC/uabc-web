@@ -3,6 +3,8 @@
 import React from 'react'
 
 import { BackNavigationBar } from '@/components/BackNavigationBar'
+import { Heading } from '@/components/Heading'
+import { Attendees, Loading } from '@/components/admin/view-sessions/gameSessionId'
 import { useGameSessionId } from '@/hooks/query/game-sessions'
 import { formatFullDate } from '@/lib/utils/dates'
 import { DownloadIcon } from '@yamada-ui/lucide'
@@ -14,11 +16,9 @@ import {
   HStack,
   Spacer,
   Text,
-  useNotice,
   VStack,
+  useNotice,
 } from '@yamada-ui/react'
-import { Heading } from '@/components/Heading'
-import { Attendees, Loading } from '@/components/admin/view-sessions/gameSessionId'
 
 export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSessionId: number }) {
   const { data, isLoading } = useGameSessionId(gameSessionId)

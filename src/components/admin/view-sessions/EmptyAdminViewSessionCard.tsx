@@ -1,18 +1,18 @@
 'use client'
 
-import { isPast } from 'date-fns'
+import { formatFullDate } from '@/lib/utils/dates'
+import { CalendarIcon } from '@yamada-ui/lucide'
 import {
+  Button,
   EmptyState,
+  EmptyStateDescription,
   EmptyStateIndicator,
   EmptyStateTitle,
-  EmptyStateDescription,
-  Button,
-  useNotice,
   memo,
   useDisclosure,
+  useNotice,
 } from '@yamada-ui/react'
-import { CalendarIcon } from '@yamada-ui/lucide'
-import { formatFullDate } from '@/lib/utils/dates'
+import { isPast } from 'date-fns'
 import { CreateGameSessionFormDialog } from './CreateGameSessionFormDialog'
 import { useGameSessionContext } from './GameSessionContext'
 

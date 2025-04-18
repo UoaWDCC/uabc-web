@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
+import { UabcHeaderText } from '@/components/UabcHeaderText'
 import { CartClearer } from '@/components/booking/confirmation/CartClearer'
 import ConfirmationMessage from '@/components/booking/confirmation/ConfirmationMessage'
-import { UabcHeaderText } from '@/components/UabcHeaderText'
 import { buttonVariants } from '@/components/ui/button'
 import type { CurrentUserProps } from '@/lib/hoc/withCurrentUser'
 import withCurrentUser from '@/lib/hoc/withCurrentUser'

@@ -1,12 +1,12 @@
 import {
   Card,
-  CardHeader,
   CardBody,
-  VStack,
-  Skeleton,
   CardFooter,
+  CardHeader,
   HStack,
+  Skeleton,
   Spacer,
+  VStack,
 } from '@yamada-ui/react'
 
 export const SkeletonViewSessionCard = () => (

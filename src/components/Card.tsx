@@ -2,8 +2,8 @@
  * @author Angela Guo <aguo921@aucklanduni.ac.nz>
  */
 
-import type { PropsWithChildren } from 'react'
 import { cva } from 'class-variance-authority'
+import type { PropsWithChildren } from 'react'
 
 import { cn } from '@/lib/utils'
 

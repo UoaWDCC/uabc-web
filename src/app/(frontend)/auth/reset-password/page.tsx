@@ -2,9 +2,9 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
-import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm'
 import { BackNavigationBar } from '@/components/BackNavigationBar'
 import { Card } from '@/components/Card'
+import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm'
 
 export const metadata = {
   title: 'Reset Password - UABC Booking Portal',

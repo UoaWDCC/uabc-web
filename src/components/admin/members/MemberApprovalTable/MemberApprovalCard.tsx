@@ -1,22 +1,22 @@
-import { FC, memo } from 'react'
+import { Row } from '@tanstack/react-table'
+import { UsersIcon } from '@yamada-ui/lucide'
 import {
   Card,
-  CardHeader,
   CardFooter,
-  Text,
-  Spacer,
+  CardHeader,
   Center,
-  Loading,
   EmptyState,
-  EmptyStateIndicator,
-  EmptyStateTitle,
   EmptyStateDescription,
+  EmptyStateIndicator,
   EmptyStateProps,
+  EmptyStateTitle,
+  Loading,
+  Spacer,
+  Text,
 } from '@yamada-ui/react'
-import { Row } from '@tanstack/react-table'
+import { FC, memo } from 'react'
 import { MemberApprovalModal } from './MemberApprovalModal'
 import { Member } from './columns'
-import { UsersIcon } from '@yamada-ui/lucide'
 
 interface MemberApprovalCardProps {
   row: Row<Member>

@@ -1,4 +1,4 @@
-import { assignRef, Input } from '@yamada-ui/react'
+import { Input, assignRef } from '@yamada-ui/react'
 import { type FC, memo, useState } from 'react'
 
 interface FilterInputProps {

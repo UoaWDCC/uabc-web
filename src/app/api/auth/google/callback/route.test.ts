@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken'
 
-import { userMock } from 'tests/mocks/User.mock'
 import { authenticationMock } from 'tests/mocks/Authentication.mock'
+import { userMock } from 'tests/mocks/User.mock'
 
 import {
   CODE_MOCK,
-  STATE_MOCK,
-  SCOPES,
   JWT_SECRET_MOCK,
+  SCOPES,
+  STATE_MOCK,
   createMockNextRequest,
   googleUserMock,
   tokensMock,

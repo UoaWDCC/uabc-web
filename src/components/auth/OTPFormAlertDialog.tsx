@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import type { AlertDialogProps } from '@radix-ui/react-alert-dialog'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useRegisterMutation, useResendCodeMutation } from '@/hooks/mutations/registration'

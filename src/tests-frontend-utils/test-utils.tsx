@@ -1,7 +1,7 @@
-/* eslint-disable react/display-name */
-import type { ReactElement, ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render as rtlRender } from '@testing-library/react'
+/* eslint-disable react/display-name */
+import type { ReactElement, ReactNode } from 'react'
 
 const createTestQueryClient = () =>
   new QueryClient({

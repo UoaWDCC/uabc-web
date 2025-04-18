@@ -1,13 +1,13 @@
-import React, { Suspense } from 'react'
 import { redirect } from 'next/navigation'
+import React, { Suspense } from 'react'
 
+import { BackNavigationBar } from '@/components/BackNavigationBar'
 import type { CurrentUserProps } from '@/lib/hoc/withCurrentUser'
 import withCurrentUser from '@/lib/hoc/withCurrentUser'
 import { getUserFromId } from '@/services/user'
 import { PlayLevel } from '@/types/types'
-import { BackNavigationBar } from '@/components/BackNavigationBar'
-import ClientAccountForm from './client-page'
 import { Center, Container, Loading, Spacer, Tag, Text, VStack } from '@yamada-ui/react'
+import ClientAccountForm from './client-page'
 
 export const metadata = {
   title: 'Account Settings - UABC Booking Portal',

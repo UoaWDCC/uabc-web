@@ -1,19 +1,19 @@
-import Link from 'next/link'
+import { UabcLogo } from '@/components/UabcLogo'
 import {
-  Card,
   Button,
-  Container,
-  VStack,
-  Text,
-  Heading,
-  Link as UILink,
+  Card,
   CardBody,
-  Center,
   CardFooter,
+  Center,
+  Container,
   Grid,
   GridItem,
+  Heading,
+  Text,
+  Link as UILink,
+  VStack,
 } from '@yamada-ui/react'
-import { UabcLogo } from '@/components/UabcLogo'
+import Link from 'next/link'
 
 export default function HomePage() {
   return (

@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { type SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { TextInput } from '../../TextInput'
+import { useCreateScheduleMutation } from '@/hooks/mutations/schedules'
+import { QUERY_KEY } from '@/lib/utils/queryKeys'
 import {
   Button,
   Dialog,
@@ -13,8 +14,7 @@ import {
   HStack,
   useNotice,
 } from '@yamada-ui/react'
-import { useCreateScheduleMutation } from '@/hooks/mutations/schedules'
-import { QUERY_KEY } from '@/lib/utils/queryKeys'
+import { TextInput } from '../../TextInput'
 
 interface ScheduleCreateDialogProps {
   semesterId: number

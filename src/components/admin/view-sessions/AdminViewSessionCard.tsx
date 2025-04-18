@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import {
   Badge,
   Button,
@@ -18,8 +17,8 @@ import {
   Text,
   useDisclosure,
 } from '@yamada-ui/react'
+import Link from 'next/link'
 
-import { DeleteGameSessionFormDialog } from './DeleteGameSessionFormDialog'
 import {
   ClockIcon,
   EllipsisIcon,
@@ -28,6 +27,7 @@ import {
   Trash2Icon,
   UsersIcon,
 } from '@yamada-ui/lucide'
+import { DeleteGameSessionFormDialog } from './DeleteGameSessionFormDialog'
 import { EditGameSessionFormDialog } from './EditGameSessionFormDialog'
 
 interface AdminViewSessionCardProps {

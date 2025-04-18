@@ -1,7 +1,7 @@
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
-import { CreateAuthenticationData } from '@/types/collections'
 import { Authentication } from '@/payload-types'
+import { CreateAuthenticationData } from '@/types/collections'
+import configPromise from '@payload-config'
+import { getPayload } from 'payload'
 
 const payload = await getPayload({
   config: configPromise,

@@ -1,9 +1,9 @@
 'use client'
 
-import { type FC, memo, useRef } from 'react'
 import { noop } from '@yamada-ui/react'
-import { AttendeesTable } from './Table'
+import { type FC, memo, useRef } from 'react'
 import { Filter } from './Filter'
+import { AttendeesTable } from './Table'
 
 interface AttendeesProps {
   gameSessionId: number

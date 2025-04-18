@@ -1,7 +1,7 @@
 'use client'
 
-import { createContext, useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
+import { createContext, useEffect, useRef, useState } from 'react'
 
 export const OriginContext = createContext<boolean>(false)
 

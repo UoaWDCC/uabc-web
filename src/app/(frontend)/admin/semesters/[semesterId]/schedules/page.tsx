@@ -1,10 +1,10 @@
+import { Container, Spacer, VStack } from '@yamada-ui/react'
 import { notFound } from 'next/navigation'
 import { z } from 'zod'
-import { Container, Spacer, VStack } from '@yamada-ui/react'
 
+import { BackNavigationBar } from '@/components/BackNavigationBar'
 import ScheduleCreateButton from '@/components/admin/schedules/ScheduleCreateButton'
 import { SchedulesList } from '@/components/admin/schedules/SchedulesList'
-import { BackNavigationBar } from '@/components/BackNavigationBar'
 
 const routeContextSchema = z.object({
   params: z.promise(
