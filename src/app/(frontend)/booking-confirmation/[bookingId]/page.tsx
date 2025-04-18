@@ -28,6 +28,7 @@ async function ConfirmationPage(
           /**
            * // TODO
            */
+          // @ts-ignore
           <ConfirmationMessage member={false} email={await props.currentUser.email} />
         }
         <Link href="/sessions" className={buttonVariants({ variant: 'ghost' })}>

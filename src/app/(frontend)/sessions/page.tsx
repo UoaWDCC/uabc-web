@@ -17,6 +17,7 @@ export const metadata = {
 }
 
 async function SelectSessionPage({ currentUser }: CurrentUserProps) {
+  // @ts-ignore
   const user = (await getUserFromId(currentUser.id))!
 
   return (
