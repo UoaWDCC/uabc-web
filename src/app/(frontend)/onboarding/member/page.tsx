@@ -2,9 +2,9 @@
 
 import { redirect, useRouter } from 'next/navigation'
 
-import { BackNavigationBar } from '@/components/BackNavigationBar'
-import { MembershipTypeSelector } from '@/components/MembershipTypeSelector'
-import { Button } from '@/components/ui/button'
+import { BackNavigationBar } from '@/components/Composite/BackNavigationBar'
+import { MembershipTypeSelector } from '@/components/Composite/MembershipTypeSelector'
+import { Button } from '@/components/Generic/ui/button'
 import { useOnboardingDetailsStore } from '@/stores/useOnboardingDetailsStore'
 
 const MembershipType = () => {

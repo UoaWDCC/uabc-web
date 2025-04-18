@@ -1,5 +1,5 @@
-import { MemberApprovalTable } from '@/components/admin/members/MemberApprovalTable'
-import { BackNavigationBar } from '@/components/BackNavigationBar'
+import { MemberApprovalTable } from '@/components/Composite/admin/members/MemberApprovalTable'
+import { BackNavigationBar } from '@/components/Composite/BackNavigationBar'
 import { Container, Heading, Text, VStack } from '@yamada-ui/react'
 
 export const metadata = {

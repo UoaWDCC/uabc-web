@@ -1,9 +1,9 @@
 import Link from 'next/link'
 
-import { CartClearer } from '@/components/booking/confirmation/CartClearer'
-import ConfirmationMessage from '@/components/booking/confirmation/ConfirmationMessage'
-import { UabcHeaderText } from '@/components/UabcHeaderText'
-import { buttonVariants } from '@/components/ui/button'
+import { CartClearer } from '@/components/Composite/booking/confirmation/CartClearer'
+import ConfirmationMessage from '@/components/Composite/booking/confirmation/ConfirmationMessage'
+import { UabcHeaderText } from '@/components/Composite/UabcHeaderText'
+import { buttonVariants } from '@/components/Generic/ui/button'
 import type { CurrentUserProps } from '@/lib/hoc/withCurrentUser'
 import withCurrentUser from '@/lib/hoc/withCurrentUser'
 

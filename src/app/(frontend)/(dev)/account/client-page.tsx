@@ -5,14 +5,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { TextInput } from '@/components/TextInput'
+import { TextInput } from '@/components/Composite/TextInput'
 import { PlayLevel } from '@/types/types'
 import {
   Button,
   Card,
   CardBody,
   Fieldset,
-  Heading,
   HStack,
   SegmentedControl,
   SegmentedControlButton,
@@ -20,6 +19,7 @@ import {
   Text,
   VStack,
 } from '@yamada-ui/react'
+import { Heading } from '@/components/Generic/Heading'
 
 interface ClientAccountFormProps {
   firstName: string

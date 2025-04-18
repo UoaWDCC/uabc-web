@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { BackNavigationBar } from '@/components/BackNavigationBar'
+import { BackNavigationBar } from '@/components/Composite/BackNavigationBar'
 import ClientViewSessionsPage from './client-page'
 import { Container } from '@yamada-ui/react'
 
