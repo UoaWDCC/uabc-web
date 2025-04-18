@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { TextInput } from '@/components/Composite/TextInput'
+import { TextInput } from '@/components/Generic/TextInput/TextInput'
 import { PlayLevel } from '@/types/types'
 import {
   Button,

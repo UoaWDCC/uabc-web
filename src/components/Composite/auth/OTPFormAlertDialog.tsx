@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useRegisterMutation, useResendCodeMutation } from '@/hooks/mutations/registration'
+import { TextInput } from '../../Generic/TextInput/TextInput'
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -15,7 +16,6 @@ import {
 } from '../../Generic/ui/alert-dialog'
 import { Button } from '../../Generic/ui/button'
 import { useToast } from '../../Generic/ui/use-toast'
-import { TextInput } from '../TextInput'
 
 interface OTPFormAlertDialogProps extends AlertDialogProps {
   email: string

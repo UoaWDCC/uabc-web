@@ -15,7 +15,7 @@ import {
   useNotice,
 } from '@yamada-ui/react'
 import { FC, memo } from 'react'
-import { TextInput } from '../../TextInput'
+import { TextInput } from '../../../Generic/TextInput'
 import { useScheduleContext } from './SchedulesContext'
 
 const formSchema = z

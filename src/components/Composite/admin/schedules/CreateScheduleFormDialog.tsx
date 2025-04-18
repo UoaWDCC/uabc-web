@@ -14,7 +14,7 @@ import {
   HStack,
   useNotice,
 } from '@yamada-ui/react'
-import { TextInput } from '../../TextInput'
+import { TextInput } from '../../../Generic/TextInput'
 
 interface ScheduleCreateDialogProps {
   semesterId: number

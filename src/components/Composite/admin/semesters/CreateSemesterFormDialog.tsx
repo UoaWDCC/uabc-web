@@ -13,7 +13,7 @@ import {
   HStack,
   useNotice,
 } from '@yamada-ui/react'
-import { TextInput } from '../../TextInput'
+import { TextInput } from '../../../Generic/TextInput'
 import { compareDate, formatDateInISO, validateDate } from './utils'
 
 interface CreateSemesterFormDialogProps {

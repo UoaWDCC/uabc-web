@@ -17,7 +17,7 @@ import {
   useNotice,
 } from '@yamada-ui/react'
 import { type FC, memo } from 'react'
-import { TextInput } from '../../TextInput'
+import { TextInput } from '../../../Generic/TextInput'
 import { useGameSessionContext } from './GameSessionContext'
 import { gameSessionFormSchema } from './utils'
 

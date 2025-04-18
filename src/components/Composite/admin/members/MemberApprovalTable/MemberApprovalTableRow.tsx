@@ -9,7 +9,7 @@ import { z } from 'zod'
 
 import { useApproveUserMutation, useRejectUserMutation } from '@/hooks/mutations/user'
 import { Button, ButtonGroup, Label, Td, Text, Tr } from '@yamada-ui/react'
-import { TextInput } from '../../../TextInput'
+import { TextInput } from '../../../../Generic/TextInput/TextInput'
 import type { Member } from './columns'
 
 interface MemberApprovalTableRowProps {

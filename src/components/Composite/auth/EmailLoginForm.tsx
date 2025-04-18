@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { TextInput } from '../TextInput'
+import { TextInput } from '../../Generic/TextInput/TextInput'
 import { emailSchema } from './formSchema'
 
 interface SignUpFormData {

@@ -6,9 +6,9 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useValidateEmailMutation } from '@/hooks/mutations/registration'
+import { TextInput } from '../../Generic/TextInput/TextInput'
 import { Button } from '../../Generic/ui/button'
 import { useToast } from '../../Generic/ui/use-toast'
-import { TextInput } from '../TextInput'
 import { OTPFormAlertDialog } from './OTPFormAlertDialog'
 import { emailSchema, passwordSchema } from './formSchema'
 

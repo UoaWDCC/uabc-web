@@ -8,10 +8,10 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useForgotPasswordMutation } from '@/hooks/mutations/forgot-password'
+import { TextInput } from '../../Generic/TextInput/TextInput'
 import { Button } from '../../Generic/ui/button'
 import { useToast } from '../../Generic/ui/use-toast'
 import { Card } from '../Card'
-import { TextInput } from '../TextInput'
 
 const formSchema = z.object({
   email: z.string().email(),

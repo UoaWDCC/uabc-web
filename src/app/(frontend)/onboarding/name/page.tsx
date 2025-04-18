@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation'
 
-import { TextInput } from '@/components/Composite/TextInput'
 import { UabcHeaderText } from '@/components/Composite/UabcHeaderText'
+import { TextInput } from '@/components/Generic/TextInput/TextInput'
 import { Button } from '@/components/Generic/ui/button'
 import { useOnboardingDetailsStore } from '@/stores/useOnboardingDetailsStore'
 
