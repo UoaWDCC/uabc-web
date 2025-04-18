@@ -1,7 +1,7 @@
 'use client'
 import { defaultConfig, defaultTheme } from '@/theme'
-import { extendConfig, extendTheme, UIProvider } from '@yamada-ui/react'
-import { FC, memo, PropsWithChildren } from 'react'
+import { UIProvider, extendConfig, extendTheme } from '@yamada-ui/react'
+import { FC, PropsWithChildren, memo } from 'react'
 
 export const Providers: FC<PropsWithChildren> = memo(({ children }) => {
   const config = extendConfig(defaultConfig)

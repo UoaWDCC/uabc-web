@@ -8,8 +8,8 @@ import {
   InputGroup,
   InputRightElement,
   Label,
-  useBoolean,
   type InputProps as UIInputProps,
+  useBoolean,
 } from '@yamada-ui/react'
 import { forwardRef } from 'react'
 

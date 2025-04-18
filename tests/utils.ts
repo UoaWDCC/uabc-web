@@ -1,6 +1,6 @@
-// setup-teardown-hook.js
-import { CollectionSlug, getPayload, Payload } from 'payload'
 import configPromise from '@payload-config'
+// setup-teardown-hook.js
+import { CollectionSlug, Payload, getPayload } from 'payload'
 
 /**
  * Payload object to use in integration tests

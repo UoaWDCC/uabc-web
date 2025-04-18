@@ -1,7 +1,7 @@
 'use client'
 
-import { useMemo } from 'react'
 import { redirect, useRouter } from 'next/navigation'
+import { useMemo } from 'react'
 
 import { BackNavigationBar } from '@/components/BackNavigationBar'
 import { ExpandedSessionCard } from '@/components/booking/sessions/ExpandedSessionCard'

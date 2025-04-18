@@ -1,6 +1,6 @@
-import { Suspense } from 'react'
-import Link from 'next/link'
 import { Center, HStack, Separator, Link as UILink, VStack } from '@yamada-ui/react'
+import Link from 'next/link'
+import { Suspense } from 'react'
 
 import { BreakLine } from '@/components/auth/BreakLine'
 import { EmailLoginForm } from '@/components/auth/EmailLoginForm'

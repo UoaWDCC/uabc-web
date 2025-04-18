@@ -1,10 +1,10 @@
-import React from 'react'
-import Image from 'next/image'
 import { LogOut } from 'lucide-react'
+import Image from 'next/image'
+import React from 'react'
 
-import { PrepaidSessionsCounter } from '@/components/booking/sessions/PrepaidSessionsCounter'
 import { Heading } from '@/components/Heading'
 import { LogOutButton } from '@/components/LogOutButton'
+import { PrepaidSessionsCounter } from '@/components/booking/sessions/PrepaidSessionsCounter'
 import type { CurrentUserProps } from '@/lib/hoc/withCurrentUser'
 import withCurrentUser from '@/lib/hoc/withCurrentUser'
 import { getUserFromId } from '@/services/user'
@@ -17,6 +17,7 @@ export const metadata = {
 }
 
 async function SelectSessionPage({ currentUser }: CurrentUserProps) {
+  // @ts-ignore
   const user = (await getUserFromId(currentUser.id))!
 
   return (

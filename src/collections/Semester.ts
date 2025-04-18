@@ -1,6 +1,6 @@
-import type { CollectionConfig } from 'payload'
 import { createTimeField } from '@/common/fields/date-time'
 import { Weekday } from '@/types/types'
+import type { CollectionConfig } from 'payload'
 
 export const Semester: CollectionConfig = {
   slug: 'semester',

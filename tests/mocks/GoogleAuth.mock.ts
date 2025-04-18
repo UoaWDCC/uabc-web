@@ -1,5 +1,5 @@
-import { NextRequest } from 'next/server'
 import type { UserInfoResponse } from '@/types/auth'
+import { NextRequest } from 'next/server'
 
 // Mock Next Request
 export function createMockNextRequest(url: string) {

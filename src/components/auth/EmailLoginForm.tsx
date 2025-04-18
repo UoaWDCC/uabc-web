@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { useForm } from 'react-hook-form'
 import { Button, Heading, VStack } from '@yamada-ui/react'
+import { useSearchParams } from 'next/navigation'
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 import { TextInput } from '../TextInput'
 import { emailSchema } from './formSchema'

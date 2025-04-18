@@ -1,8 +1,8 @@
 import { CalendarClockIcon, CalendarDaysIcon, UserCheckIcon, UsersIcon } from '@yamada-ui/lucide'
 
+import { Heading } from '@/components/Heading'
 import { DashboardButton } from '@/components/admin/DashboardButton'
 import { MemberApprovalPing } from '@/components/admin/members/MemberApprovalPing'
-import { Heading } from '@/components/Heading'
 import { Container, VStack } from '@yamada-ui/react'
 
 export const metadata = {

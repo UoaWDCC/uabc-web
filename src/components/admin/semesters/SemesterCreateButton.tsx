@@ -1,8 +1,8 @@
 'use client'
 
-import React, { memo } from 'react'
 import { PlusIcon } from '@yamada-ui/lucide'
 import { IconButton, useDisclosure } from '@yamada-ui/react'
+import React, { memo } from 'react'
 import { CreateSemesterFormDialog } from './CreateSemesterFormDialog'
 
 const UnmemoizedSemesterCreateButton = () => {

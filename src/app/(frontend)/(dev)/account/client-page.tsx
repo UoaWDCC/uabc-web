@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -12,8 +12,8 @@ import {
   Card,
   CardBody,
   Fieldset,
-  Heading,
   HStack,
+  Heading,
   SegmentedControl,
   SegmentedControlButton,
   Spacer,

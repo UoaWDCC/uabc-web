@@ -1,16 +1,16 @@
-import { type FC, memo } from 'react'
 import {
-  TableContainer,
-  NativeTable,
-  Thead,
-  Tr,
-  Th,
   Center,
   Checkbox,
+  Loading,
+  NativeTable,
+  TableContainer,
   Tbody,
   Td,
-  Loading,
+  Th,
+  Thead,
+  Tr,
 } from '@yamada-ui/react'
+import { type FC, memo } from 'react'
 
 export const SkeletonTable: FC = memo(() => {
   return (

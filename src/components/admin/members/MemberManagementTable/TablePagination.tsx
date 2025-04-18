@@ -1,6 +1,6 @@
+import { Grid, GridItem, Option, Pagination, Select, assignRef } from '@yamada-ui/react'
 import type { FC, RefObject } from 'react'
 import { memo, useCallback, useState } from 'react'
-import { Grid, GridItem, Pagination, Select, Option, assignRef } from '@yamada-ui/react'
 
 interface TableProps {
   totalPageRef: RefObject<(value: number) => void>

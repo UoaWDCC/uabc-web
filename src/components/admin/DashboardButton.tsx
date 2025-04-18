@@ -1,8 +1,8 @@
-import React from 'react'
 import Link from 'next/link'
+import React from 'react'
 
+import { Button, type ButtonProps, Spacer } from '@yamada-ui/react'
 import { ArrowRightIcon } from '../Icons'
-import { Button, Spacer, type ButtonProps } from '@yamada-ui/react'
 
 interface DashboardButtonProps extends ButtonProps {
   href: string

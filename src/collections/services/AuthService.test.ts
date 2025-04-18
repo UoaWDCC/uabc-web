@@ -1,8 +1,8 @@
 import dotenv from 'dotenv'
-import { clearCollection, testPayloadObject } from 'tests/utils'
-import AuthService from './AuthService'
 import { authenticationCreateMock } from 'tests/mocks/Authentication.mock'
 import { userMock } from 'tests/mocks/User.mock'
+import { clearCollection, testPayloadObject } from 'tests/utils'
+import AuthService from './AuthService'
 
 dotenv.config()
 

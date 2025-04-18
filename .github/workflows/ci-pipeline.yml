@@ -63,10 +63,10 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
 
-  style:
+  biome:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Prettier
+    name: Biome
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -90,39 +90,7 @@ jobs:
           key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Check formatting
-        run: pnpm prettier --check .
-
-  lint:
-    needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-          run_install: false
-
-      # Restore cached node_modules
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
-
-      - name: Run linting
-        run: pnpm lint
+        run: pnpm biome check .
 
   build:
     environment: staging
@@ -241,9 +209,9 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build, lint, style, test, codegen]
+    needs: [check_changes, build, biome, test, codegen]
     runs-on: ubuntu-latest
-    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.lint.result == 'success' && needs.style.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
+    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.biome.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
     steps:
       - name: All checks passed
         run: echo "All checks passed!"
