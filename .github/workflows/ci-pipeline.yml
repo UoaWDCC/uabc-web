@@ -63,7 +63,7 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
 
-  style:
+  biome:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Biome
@@ -209,7 +209,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build, style, test, codegen]
+    needs: [check_changes, build, biome, test, codegen]
     runs-on: ubuntu-latest
     if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.lint.result == 'success' && needs.style.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
     steps:

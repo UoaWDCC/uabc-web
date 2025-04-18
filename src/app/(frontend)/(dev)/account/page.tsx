@@ -14,6 +14,7 @@ export const metadata = {
 }
 
 async function AccountPage({ currentUser }: CurrentUserProps) {
+  // @ts-ignore
   const user = await getUserFromId(currentUser.id)
 
   // Check if the user or any required fields are missing
