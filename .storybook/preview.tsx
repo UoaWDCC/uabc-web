@@ -60,7 +60,6 @@ const preview: Preview = {
     darkMode: { ...customThemes },
     docs: {
       container: ({ children, theme, ...rest }: PropsWithChildren<DocsContainerProps>) => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         const darkMode = useDarkMode()
         const colorMode = darkMode ? 'dark' : 'light'
 
