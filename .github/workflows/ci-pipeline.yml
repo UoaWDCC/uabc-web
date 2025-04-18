@@ -211,7 +211,7 @@ jobs:
     name: Verify
     needs: [check_changes, build, biome, test, codegen]
     runs-on: ubuntu-latest
-    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.lint.result == 'success' && needs.style.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
+    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.biome.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
     steps:
       - name: All checks passed
         run: echo "All checks passed!"
