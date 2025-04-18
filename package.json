@@ -71,6 +71,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@mdx-js/react": "^3.1.0",
     "@storybook/addon-a11y": "^8.6.12",
     "@storybook/addon-backgrounds": "^8.6.12",
     "@storybook/addon-docs": "^8.6.12",
@@ -114,7 +115,9 @@
     "pnpm": "^9"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["sharp"]
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
   },
   "volta": {
     "node": "22.14.0"
