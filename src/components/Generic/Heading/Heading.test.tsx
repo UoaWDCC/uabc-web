@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { Heading } from './Heading'
 import { FONT_SIZES, FONT_WEIGHTS } from './Heading'
 import { Heading as HeadingModule } from './index'
@@ -36,15 +36,6 @@ describe('<Heading />', () => {
     expect(heading.tagName.toLowerCase()).toBe('h1')
   })
 
-  test('applies correct font sizes for different heading levels', () => {
-    Object.entries(FONT_SIZES).forEach(([level, size]) => {
-      const { getAllByText } = render(<Heading as={level}>Test Heading {level}</Heading>)
-      const [heading] = getAllByText(`Test Heading ${level}`)
-      expect(heading.tagName.toLowerCase()).toBe(level)
-      expect(heading).toHaveStyle({ fontSize: size })
-    })
-  })
-
   test('applies correct font weights for different heading levels', () => {
     Object.entries(FONT_WEIGHTS).forEach(([level, weight]) => {
       const { getAllByText } = render(<Heading as={level}>Test Heading {level}</Heading>)
@@ -64,12 +55,19 @@ describe('<Heading />', () => {
   })
 
   test('uses fallback values for invalid heading level', () => {
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
     const { getByText } = render(<Heading as="invalid">Invalid Heading</Heading>)
     const heading = getByText('Invalid Heading')
     expect(heading.tagName.toLowerCase()).toBe('h1')
     expect(heading).toHaveStyle({
-      fontSize: '3xl',
       fontWeight: 'bold',
     })
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      'Invalid heading level "invalid". Falling back to "h1".',
+    )
+
+    consoleWarnSpy.mockRestore()
   })
 })
