@@ -2,7 +2,7 @@ import type { FC } from 'react'
 import { Heading } from './Heading'
 import type { HeadingProps } from './Heading'
 
-type HeadingComponent = FC<HeadingProps> & {
+interface HeadingComponent extends FC<Omit<HeadingProps, 'as'>> {
   h1: FC<HeadingProps>
   h2: FC<HeadingProps>
   h3: FC<HeadingProps>

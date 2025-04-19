@@ -2,8 +2,15 @@ import { screen } from '@testing-library/dom'
 import { render } from '@testing-library/react'
 import { describe, expect, test } from 'vitest'
 import { Button } from './Button'
+import * as ButtonModule from './index'
 
 describe('<Button />', () => {
+  it('should re-export the Button component', () => {
+    expect(ButtonModule.Button).toBeDefined() // Check if Button exists
+
+    expect(typeof ButtonModule.Button).toBe('object')
+  })
+
   test('renders with icon', () => {
     const { getByText, rerender } = render(<Button endIcon={<>end icon</>} />)
     expect(getByText('end icon')).toBeTruthy()

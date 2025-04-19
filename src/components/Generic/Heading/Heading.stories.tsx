@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react'
-import { FONT_SIZES, Heading, HeadingProps } from './Heading'
+import { FONT_SIZES, Heading } from './Heading'
 import { PropsTable } from '.storybook/components'
 
 type Story = StoryFn<typeof Heading>
@@ -22,7 +22,7 @@ export const Variant: Story = () => {
     <PropsTable rows={variants} variant="column">
       {(_, row, key) => {
         return (
-          <Heading key={key} as={row as HeadingProps['as']}>
+          <Heading key={key} as={row}>
             Heading {row}
           </Heading>
         )
