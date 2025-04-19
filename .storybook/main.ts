@@ -20,7 +20,6 @@ const config: StorybookConfig = {
     '@storybook/addon-storysource',
     'storybook-dark-mode',
     '@storybook/addon-onboarding',
-    '@storybook/experimental-addon-test',
   ],
   core: { disableTelemetry: true },
   framework: {

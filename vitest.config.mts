@@ -6,6 +6,14 @@ export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   test: {
     environment: 'node',
+    workspace: [
+      {
+        extends: true,
+        test: {
+          environment: 'jsdom',
+        },
+      },
+    ],
     setupFiles: ['dotenv/config', './tests/mongodb-setup.ts', './tests/dom-setup'],
     globals: true,
     /**

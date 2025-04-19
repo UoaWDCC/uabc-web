@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 env:
-  CI: 'true'
+  CI: "true"
 
 jobs:
   check_changes:
@@ -25,13 +25,13 @@ jobs:
         id: filter
         with:
           patterns: |
-              **
-              !**.md
-              !.gitignore
-              !.gitattributes
-              !.github/**
-              !.vscode/**
-              !.env.example
+            **
+            !**.md
+            !.gitignore
+            !.gitattributes
+            !.github/**
+            !.vscode/**
+            !.env.example
 
   setup:
     name: Setup
@@ -44,7 +44,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: ".nvmrc"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -74,7 +74,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: ".nvmrc"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -107,7 +107,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: ".nvmrc"
 
       - name: Enable Corepack
         run: corepack enable
@@ -139,7 +139,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: ".nvmrc"
 
       - name: Enable Corepack
         run: corepack enable
@@ -157,9 +157,6 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
-
       - name: Test
         run: pnpm test
 
@@ -174,7 +171,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: ".nvmrc"
 
       - name: Enable Corepack
         run: corepack enable
