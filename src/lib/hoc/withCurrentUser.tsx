@@ -1,14 +1,27 @@
 import 'server-only'
 
-import { redirect } from 'next/navigation'
+import { AuthToken } from '@/lib/utils/auth-token'
+import type { User } from '@/payload-types'
+import { cookies } from 'next/headers'
 
 const withCurrentUser = <T,>(Component: React.ComponentType<T & CurrentUserProps>) => {
+  let currentUser: User | undefined
+
   const WrappedComponent = async (props: T) => {
-    const currentUser = true
-    if (!currentUser) redirect('/auth/login')
+    const cookieStore = await cookies()
+    const token = cookieStore.get('auth_token')?.value
+
+    if (token) {
+      const auth = new AuthToken(token)
+
+      if (auth.isValid()) {
+        currentUser = auth.data?.user
+      }
+    }
 
     return <Component {...props} currentUser={currentUser} />
   }
+
   WrappedComponent.displayName = `withCurrentUser(${Component.displayName})`
   return WrappedComponent
 }
@@ -16,6 +29,5 @@ const withCurrentUser = <T,>(Component: React.ComponentType<T & CurrentUserProps
 export default withCurrentUser
 
 export interface CurrentUserProps {
-  // TODO: Replace any with the correct type
-  currentUser: unknown
+  currentUser?: User
 }
