@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { authenticationMock } from 'tests/mocks/Authentication.mock'
 import { userMock } from 'tests/mocks/User.mock'
 
@@ -43,14 +44,10 @@ vi.mock('@/collections/services/AuthService', () => {
   }
 })
 
-import { GET as callback } from '@/app/api/auth/google/callback/route'
-import { redirect } from 'next/navigation'
-
-const JWT_SECRET = process.env.JWT_SECRET
-
 vi.mock('next/headers', () => ({
   cookies: () => ({
     get: (key: string) => ({ value: key === 'state' ? STATE_MOCK : undefined }),
+    set: vi.fn(),
     delete: vi.fn(),
   }),
 }))
@@ -58,6 +55,10 @@ vi.mock('next/headers', () => ({
 vi.mock('next/navigation', () => ({
   redirect: vi.fn(),
 }))
+
+import { GET as callback } from '@/app/api/auth/google/callback/route'
+
+const JWT_SECRET = process.env.JWT_SECRET
 
 describe('GET /api/auth/google/callback', () => {
   beforeAll(() => {
@@ -71,11 +72,19 @@ describe('GET /api/auth/google/callback', () => {
   afterEach(() => vi.restoreAllMocks())
   afterAll(() => (process.env.JWT_SECRET = JWT_SECRET))
 
-  it('redirects user on success auth', () => expect(redirect).toBeCalled())
+  it('redirects user on success auth', async () => {
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
+    )
+    req.cookies.set('state', STATE_MOCK)
+
+    await callback(req)
+    expect(redirect).toHaveBeenCalled()
+  })
 
   it('returns 400 if state does not match', async () => {
     const req = createMockNextRequest(
-      `/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}}`,
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}`,
     )
     req.cookies.set('state', STATE_MOCK)
 
