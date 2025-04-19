@@ -11,7 +11,7 @@ Project initiated by WDCC in 2023.
 
 #### Node.js installation
 
-The first thing you will need to do is install `Node.js` so you can access the `pnpm` package manager.
+You will first need to install `Node.js` in order to access the `pnpm` package manager.
 
 **Volta (Recommended)**
 
@@ -21,13 +21,13 @@ Follow the [instructions](https://docs.volta.sh/guide/getting-started) on the we
 
 **nvm (Node Version Manager)**
 
-However, if you are having problems or do not want to use `Volta` it is also advisable to use `nvm` to manage the Node.js
+However, if you are having problems, or do not want to use `Volta`, a recommended alternative is to use `nvm` to manage the Node.js
 version.
 
 - [Windows installation](https://github.com/coreybutler/nvm-windows/releases)
 - [UNIX](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
 
-In the same directory as this `README.md` file, run the following commands to install the correct version of Node.js:
+In the root directory, run the following commands to install the correct version of Node.js:
 
 ```bash
 nvm install
@@ -55,20 +55,26 @@ The development server will be running at `http://localhost:3000`.
 
 ### Keeping a clean codebase
 
-We rely on the plugins [`eslint`](https://eslint.org/docs/latest/) and [`prettier`](https://prettier.io/docs/) to keep
-the codebase clean and consistent. It is optional to use these plugins locally, but your code will be checked against
-them when you make a pull request.
+We rely on [Biome](http://biomejs.dev/) to keep the codebase clean and consistent with linting and formatting. [husky](https://typicode.github.io/husky/) and [lint-staged](https://www.npmjs.com/package/lint-staged) has been installed to setup pre-commit hooks that will automatically format your files when committing. CI tests will run Biome checks to ensure your code has been formatted properly and follows linting rules.
+
+If you want to manually run Biome commands yourself:
+```bash
+pnpm biome format . # Check formatting
+pnpm biome lint .   # Check linting
+pnpm biome check .  # Check both
+```
+You can also add the `--write` flag to these commands to apply fixes to the code.
 
 #### IDE Setup
 
-If you are using `VSCode` some extensions will be recommended to you. You can [open the extensions panel](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace) and find the recommended ones.
+If you are using `VSCode`, extensions will be recommended to you (namely Biome's VSC plugin). You can [open the extensions panel](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace), find the recommended ones and install them. VSC files have already been setup as part of the project to assist with Biome formatting.
 
 Otherwise, you are responsible for figuring out how to configure those plugins in your IDE. (Most IDEs
 like [WebStorm](https://www.jetbrains.com/webstorm/) and [Zed](https://zed.dev/) have plugins for these tools built in).
 
 #### Documentation
 
-We recommend that everyone uses the [`JSDoc`](https://jsdoc.app/) syntax to document their code. This will help other developers understand the function of the code more easily, as names can be misleading. 
+We recommend usage of the [`JSDoc`](https://jsdoc.app/) syntax to document code. This will help other developers understand the function of code more easily, as names can be misleading. 
 
 For example:
 ```ts
@@ -85,7 +91,7 @@ export const add = (a: number, b: number) => a + b
 
 Environment variables are used to store sensitive information that should not be stored in the codebase. These are stored in a `.env` file in the root of the project.
 
-Copy the `.env.example` file and rename it to `.env`, then edit the value accordingly.
+Copy the `.env.example` file and rename it to `.env`, then edit the values according to the keys.
 
 ### Type Generation
 
