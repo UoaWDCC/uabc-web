@@ -2,9 +2,9 @@
 
 import React from 'react'
 
-import { BackNavigationBar } from '@/components/BackNavigationBar'
-import { Heading } from '@/components/Heading'
-import { Attendees, Loading } from '@/components/admin/view-sessions/gameSessionId'
+import { BackNavigationBar } from '@/components/Composite/BackNavigationBar'
+import { Attendees, Loading } from '@/components/Composite/admin/view-sessions/gameSessionId'
+import { Heading } from '@/components/Generic/Heading/Heading'
 import { useGameSessionId } from '@/hooks/query/game-sessions'
 import { formatFullDate } from '@/lib/utils/dates'
 import { DownloadIcon } from '@yamada-ui/lucide'

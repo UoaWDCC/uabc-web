@@ -1,6 +1,6 @@
-import { BackNavigationBar } from '@/components/BackNavigationBar'
-import SemesterCreateButton from '@/components/admin/semesters/SemesterCreateButton'
-import { SemestersList } from '@/components/admin/semesters/SemestersList'
+import { BackNavigationBar } from '@/components/Composite/BackNavigationBar'
+import SemesterCreateButton from '@/components/Composite/admin/semesters/SemesterCreateButton'
+import { SemestersList } from '@/components/Composite/admin/semesters/SemestersList'
 import { Container, Spacer, VStack } from '@yamada-ui/react'
 
 export const metadata = {

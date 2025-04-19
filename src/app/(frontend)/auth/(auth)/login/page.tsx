@@ -2,9 +2,9 @@ import { Center, HStack, Separator, Link as UILink, VStack } from '@yamada-ui/re
 import Link from 'next/link'
 import { Suspense } from 'react'
 
-import { BreakLine } from '@/components/auth/BreakLine'
-import { EmailLoginForm } from '@/components/auth/EmailLoginForm'
-import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton'
+import { BreakLine } from '@/components/Composite/auth/BreakLine'
+import { EmailLoginForm } from '@/components/Composite/auth/EmailLoginForm'
+import { GoogleLoginButton } from '@/components/Composite/auth/GoogleLoginButton'
 
 export const metadata = {
   title: 'Login - UABC Booking Portal',

@@ -3,10 +3,10 @@
 import { redirect, useRouter } from 'next/navigation'
 import { useMemo } from 'react'
 
-import { BackNavigationBar } from '@/components/BackNavigationBar'
-import { ExpandedSessionCard } from '@/components/booking/sessions/ExpandedSessionCard'
-import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
+import { BackNavigationBar } from '@/components/Composite/BackNavigationBar'
+import { ExpandedSessionCard } from '@/components/Composite/booking/sessions/ExpandedSessionCard'
+import { Button } from '@/components/Generic/ui/button'
+import { useToast } from '@/components/Generic/ui/use-toast'
 import { useBookingMutation } from '@/hooks/mutations/booking'
 import { useCartStore } from '@/stores/useCartStore'
 

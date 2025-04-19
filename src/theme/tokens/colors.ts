@@ -1,17 +1,38 @@
-import type { ThemeTokens } from '@yamada-ui/react'
+import { type ThemeTokens, generate } from '@yamada-ui/react'
 
 export const colors: ThemeTokens = {
+  black: '#141414',
+  white: '#fbfbfb',
   blue: {
     500: 'hsl(215 52% 45%)',
     600: 'hsl(215 52% 48%)',
   },
-  tertiary: {
-    50: 'hsl(215 17% 90%)',
-    500: 'hsl(215 17% 40%)',
-    600: 'hsl(215 17% 43%)',
+  tertiary: generate.tones('#556377'),
+  destructive: generate.tones('#ad3838'),
+  blackAlpha: {
+    50: 'rgba(0, 0, 0, 0.04)',
+    100: 'rgba(0, 0, 0, 0.06)',
+    200: 'rgba(0, 0, 0, 0.08)',
+    300: 'rgba(0, 0, 0, 0.16)',
+    400: 'rgba(0, 0, 0, 0.24)',
+    500: 'rgba(0, 0, 0, 0.36)',
+    600: 'rgba(0, 0, 0, 0.48)',
+    700: 'rgba(0, 0, 0, 0.64)',
+    800: 'rgba(0, 0, 0, 0.80)',
+    900: 'rgba(0, 0, 0, 0.92)',
+    950: 'rgba(0, 0, 0, 0.96)',
   },
-  destructive: {
-    500: 'hsl(0 51% 45%)',
-    600: 'hsl(0 51% 48%)',
+  whiteAlpha: {
+    50: 'rgba(255, 255, 255, 0.04)',
+    100: 'rgba(255, 255, 255, 0.06)',
+    200: 'rgba(255, 255, 255, 0.08)',
+    300: 'rgba(255, 255, 255, 0.16)',
+    400: 'rgba(255, 255, 255, 0.24)',
+    500: 'rgba(255, 255, 255, 0.36)',
+    600: 'rgba(255, 255, 255, 0.48)',
+    700: 'rgba(255, 255, 255, 0.64)',
+    800: 'rgba(255, 255, 255, 0.80)',
+    900: 'rgba(255, 255, 255, 0.92)',
+    950: 'rgba(255, 255, 255, 0.96)',
   },
 }

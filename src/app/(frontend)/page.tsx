@@ -1,4 +1,5 @@
-import { UabcLogo } from '@/components/UabcLogo'
+import { UabcLogo } from '@/components/Composite/UabcLogo'
+import { Heading } from '@/components/Generic/Heading'
 import {
   Button,
   Card,
@@ -8,7 +9,6 @@ import {
   Container,
   Grid,
   GridItem,
-  Heading,
   Text,
   Link as UILink,
   VStack,
@@ -49,9 +49,7 @@ export default function HomePage() {
             alignItems="center"
             justifyContent="center"
           >
-            <Heading size="2xl" lineHeight="10">
-              UABC Booking Portal
-            </Heading>
+            <Heading.h2 lineHeight="10">UABC Booking Portal</Heading.h2>
             <Center
               display={{
                 base: 'grid',

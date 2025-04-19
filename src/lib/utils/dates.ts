@@ -37,6 +37,35 @@ export function formatFullDate(date: string | Date) {
  */
 export function convertTo12HourFormat(militaryTime: string): string {
   try {
+    if (!militaryTime || typeof militaryTime !== 'string') {
+      return militaryTime
+    }
+
+    // Validate time format and ranges
+    const parts = militaryTime.split(':')
+    if (militaryTime.includes(':')) {
+      const [hours, minutes, seconds] = parts
+      const numHours = parseInt(hours)
+      const numMinutes = parseInt(minutes)
+      const numSeconds = seconds ? parseInt(seconds) : 0
+
+      if (
+        isNaN(numHours) ||
+        numHours < 0 ||
+        numHours > 23 ||
+        isNaN(numMinutes) ||
+        numMinutes < 0 ||
+        numMinutes > 59 ||
+        (seconds && (isNaN(numSeconds) || numSeconds < 0 || numSeconds > 59))
+      ) {
+        return militaryTime
+      }
+    } else {
+      if (!/^([01]?[0-9]|2[0-3])[0-5][0-9]$/.test(militaryTime)) {
+        return militaryTime
+      }
+    }
+
     // Handle time format without seconds
     const timeFormat = militaryTime.includes(':')
       ? militaryTime.split(':').length === 3

@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
-import { BreakLine } from '@/components/auth/BreakLine'
-import { EmailSignUpForm } from '@/components/auth/EmailSignUpForm'
-import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton'
+import { BreakLine } from '@/components/Composite/auth/BreakLine'
+import { EmailSignUpForm } from '@/components/Composite/auth/EmailSignUpForm'
+import { GoogleLoginButton } from '@/components/Composite/auth/GoogleLoginButton'
 
 export const metadata = {
   title: 'Sign Up - UABC Booking Portal',
