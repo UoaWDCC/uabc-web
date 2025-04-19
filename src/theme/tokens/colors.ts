@@ -7,11 +7,6 @@ export const colors: ThemeTokens = {
     500: 'hsl(215 52% 45%)',
     600: 'hsl(215 52% 48%)',
   },
-  // tertiary: {
-  //   50: 'hsl(215 17% 90%)',
-  //   500: 'hsl(215 17% 40%)',
-  //   600: 'hsl(215 17% 43%)',
-  // },
   tertiary: generate.tones('#556377'),
   destructive: generate.tones('#ad3838'),
   blackAlpha: {

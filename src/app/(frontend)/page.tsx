@@ -49,9 +49,7 @@ export default function HomePage() {
             alignItems="center"
             justifyContent="center"
           >
-            <Heading.h2 fontSize="2xl" lineHeight="10">
-              UABC Booking Portal
-            </Heading.h2>
+            <Heading.h2 lineHeight="10">UABC Booking Portal</Heading.h2>
             <Center
               display={{
                 base: 'grid',

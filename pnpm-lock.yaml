@@ -41,15 +41,6 @@ importers:
       '@radix-ui/react-toast':
         specifier: ^1.2.6
         version: 1.2.6(@types/react-dom@19.0.4(@types/react@19.0.12))(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@storybook/preview-api':
-        specifier: ^8.6.12
-        version: 8.6.12(storybook@8.6.12(prettier@3.5.3))
-      '@storybook/test':
-        specifier: ^8.6.12
-        version: 8.6.12(storybook@8.6.12(prettier@3.5.3))
-      '@storybook/theming':
-        specifier: ^8.6.12
-        version: 8.6.12(storybook@8.6.12(prettier@3.5.3))
       '@tailwindcss/postcss':
         specifier: ^4.0.17
         version: 4.1.2
@@ -128,9 +119,6 @@ importers:
       sharp:
         specifier: 0.32.6
         version: 0.32.6
-      storybook-dark-mode:
-        specifier: ^4.0.2
-        version: 4.0.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12(prettier@3.5.3))
       tailwind-merge:
         specifier: ^3.0.2
         version: 3.1.0
@@ -186,9 +174,15 @@ importers:
       '@storybook/experimental-nextjs-vite':
         specifier: 8.6.12
         version: 8.6.12(@babel/core@7.26.10)(@storybook/test@8.6.12(storybook@8.6.12(prettier@3.5.3)))(next@15.2.3(@babel/core@7.26.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.39.0)(storybook@8.6.12(prettier@3.5.3))(typescript@5.7.3)(vite@6.2.5(@types/node@22.14.0)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.77.4)(terser@5.39.0)(tsx@4.19.2)(yaml@2.7.1))
+      '@storybook/preview-api':
+        specifier: ^8.6.12
+        version: 8.6.12(storybook@8.6.12(prettier@3.5.3))
       '@storybook/react':
         specifier: 8.6.12
         version: 8.6.12(@storybook/test@8.6.12(storybook@8.6.12(prettier@3.5.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12(prettier@3.5.3))(typescript@5.7.3)
+      '@storybook/theming':
+        specifier: ^8.6.12
+        version: 8.6.12(storybook@8.6.12(prettier@3.5.3))
       '@testing-library/dom':
         specifier: ^10.4.0
         version: 10.4.0
@@ -246,15 +240,15 @@ importers:
       mongodb-memory-server:
         specifier: ^10.1.4
         version: 10.1.4(@aws-sdk/credential-providers@3.782.0)(gcp-metadata@6.1.1)
-      playwright:
-        specifier: ^1.51.1
-        version: 1.51.1
       postcss:
         specifier: ^8.5.3
         version: 8.5.3
       storybook:
         specifier: 8.6.12
         version: 8.6.12(prettier@3.5.3)
+      storybook-dark-mode:
+        specifier: ^4.0.2
+        version: 4.0.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12(prettier@3.5.3))
       tailwindcss:
         specifier: ^4.0.17
         version: 4.1.2
@@ -12510,13 +12504,15 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  playwright-core@1.51.1: {}
+  playwright-core@1.51.1:
+    optional: true
 
   playwright@1.51.1:
     dependencies:
       playwright-core: 1.51.1
     optionalDependencies:
       fsevents: 2.3.2
+    optional: true
 
   pluralize@8.0.0: {}
 

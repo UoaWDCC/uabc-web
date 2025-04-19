@@ -29,7 +29,7 @@ export const Heading: FC<HeadingProps> = memo(({ children, as = 'h1', ...props }
   const fontSize = FONT_SIZES[as] || '3xl'
   const fontWeight = FONT_WEIGHTS[as] || 'bold'
 
-  if (!as.match(/^h[1-6]$/)) {
+  if (!Object.keys(FONT_SIZES).includes(as)) {
     console.warn(`Invalid heading level "${as}". Falling back to "h1".`)
     as = 'h1'
   }

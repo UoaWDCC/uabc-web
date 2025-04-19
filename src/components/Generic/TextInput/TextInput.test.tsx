@@ -1,5 +1,4 @@
 import { fireEvent, render } from '@testing-library/react'
-import { describe, expect, test } from 'vitest'
 import { TextInput } from './TextInput'
 import * as TextInputModule from './index'
 

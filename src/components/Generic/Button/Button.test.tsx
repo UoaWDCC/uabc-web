@@ -1,6 +1,5 @@
 import { screen } from '@testing-library/dom'
 import { render } from '@testing-library/react'
-import { describe, expect, test } from 'vitest'
 import { Button } from './Button'
 import * as ButtonModule from './index'
 

@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react'
-import { describe, expect, test, vi } from 'vitest'
 import { Heading } from './Heading'
 import { FONT_SIZES, FONT_WEIGHTS } from './Heading'
 import { Heading as HeadingModule } from './index'
