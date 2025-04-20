@@ -1,6 +1,6 @@
 import { GET } from '@/app/api/example-double-user-count/route'
 
-import { clearCollection, testPayloadObject } from '@/test-config/utils'
+import { clearCollection, testPayloadObject } from '@/test-config/backend-utils'
 import dotenv from 'dotenv'
 
 dotenv.config()

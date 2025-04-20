@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-import { render, screen, userEvent } from '@/tests-frontend-utils/test-utils'
+import { render, screen, userEvent } from '@/test-config/frontend-utils'
 import { SelectableCard } from '../SelectableCard'
 
 const session = {

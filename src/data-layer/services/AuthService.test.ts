@@ -1,6 +1,6 @@
+import { clearCollection, testPayloadObject } from '@/test-config/backend-utils'
 import { authenticationCreateMock } from '@/test-config/mocks/Authentication.mock'
 import { userMock } from '@/test-config/mocks/User.mock'
-import { clearCollection, testPayloadObject } from '@/test-config/utils'
 import dotenv from 'dotenv'
 import AuthService from './AuthService'
 

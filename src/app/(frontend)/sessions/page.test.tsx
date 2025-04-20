@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { render, screen } from '@/tests-frontend-utils/test-utils'
+import { render, screen } from '@/test-config/frontend-utils'
 import ClientSessionPage from './client-page'
 
 vi.mock('next/navigation', () => ({
