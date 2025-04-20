@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { BreakLine } from '@/components/auth/BreakLine'
 import { ForgotPasswordForm } from '@/components/auth/ForgotPasswordForm'
 import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton'
+import { Center, Link as UILink, Text, VStack } from '@yamada-ui/react'
 
 export const metadata = {
   title: 'Forgot Password - UABC Booking Portal',
@@ -10,16 +11,26 @@ export const metadata = {
 
 export default async function ForgotPasswordPage() {
   return (
-    <div className="mt-8 flex w-full flex-col gap-4">
+    <VStack>
       <ForgotPasswordForm />
-      <BreakLine label="or" />
+
+      <BreakLine label="OR" />
+
       <GoogleLoginButton />
-      <p className="mt-2 text-center text-xs text-tertiary dark:text-white">
-        Back to{' '}
-        <Link className="font-bold underline" href="/auth/login?open=true">
-          Login
-        </Link>
-      </p>
-    </div>
+
+      <Center fontSize="xs">
+        <Text color="tertiary">
+          Back to&nbsp;
+          <UILink
+            as={Link}
+            href="/auth/login?open=true"
+            color={['tertiary', 'white']}
+            fontWeight="bold"
+          >
+            Login
+          </UILink>
+        </Text>
+      </Center>
+    </VStack>
   )
 }
