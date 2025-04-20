@@ -7,14 +7,14 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
-import { Admin } from './collections/Admin'
-import { Authentication } from './collections/Authentication'
-import { Booking } from './collections/Booking'
-import { GameSession } from './collections/GameSession'
-import { GameSessionSchedule } from './collections/GameSessionSchedule'
-import { Media } from './collections/Media'
-import { Semester } from './collections/Semester'
-import { User } from './collections/User'
+import { Admin } from './data-layer/collections/Admin'
+import { Authentication } from './data-layer/collections/Authentication'
+import { Booking } from './data-layer/collections/Booking'
+import { GameSession } from './data-layer/collections/GameSession'
+import { GameSessionSchedule } from './data-layer/collections/GameSessionSchedule'
+import { Media } from './data-layer/collections/Media'
+import { Semester } from './data-layer/collections/Semester'
+import { User } from './data-layer/collections/User'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
