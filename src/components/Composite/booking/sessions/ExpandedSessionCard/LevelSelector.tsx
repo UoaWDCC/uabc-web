@@ -1,7 +1,3 @@
-/**
- * @author Angela Guo <aguo921@aucklanduni.ac.nz>
- */
-
 import React from 'react'
 
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/Generic/ui/drawer'
