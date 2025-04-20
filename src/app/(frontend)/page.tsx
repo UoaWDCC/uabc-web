@@ -1,19 +1,19 @@
-import Link from 'next/link'
+import { UabcLogo } from '@/components/Composite/UabcLogo'
+import { Heading } from '@/components/Generic/Heading'
 import {
-  Card,
   Button,
-  Container,
-  VStack,
-  Text,
-  Heading,
-  Link as UILink,
+  Card,
   CardBody,
-  Center,
   CardFooter,
+  Center,
+  Container,
   Grid,
   GridItem,
+  Text,
+  Link as UILink,
+  VStack,
 } from '@yamada-ui/react'
-import { UabcLogo } from '@/components/UabcLogo'
+import Link from 'next/link'
 
 export default function HomePage() {
   return (
@@ -49,9 +49,7 @@ export default function HomePage() {
             alignItems="center"
             justifyContent="center"
           >
-            <Heading size="2xl" lineHeight="10">
-              UABC Booking Portal
-            </Heading>
+            <Heading.h2 lineHeight="10">UABC Booking Portal</Heading.h2>
             <Center
               display={{
                 base: 'grid',

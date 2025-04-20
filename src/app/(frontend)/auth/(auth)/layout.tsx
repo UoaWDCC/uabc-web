@@ -1,8 +1,8 @@
 'use client'
 
-import { Card } from '@/components/Card'
-import { UabcHeaderText } from '@/components/UabcHeaderText'
-import { UabcLogo } from '@/components/UabcLogo'
+import { Card } from '@/components/Composite/Card'
+import { UabcHeaderText } from '@/components/Composite/UabcHeaderText'
+import { UabcLogo } from '@/components/Composite/UabcLogo'
 import { Container } from '@yamada-ui/react'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {

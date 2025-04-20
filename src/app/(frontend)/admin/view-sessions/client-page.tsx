@@ -1,19 +1,19 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { addMonths, format, parse, subMonths } from 'date-fns'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
 import { z } from 'zod'
 
-import { AdminViewSessionCard } from '@/components/admin/view-sessions/AdminViewSessionCard'
-import { EmptyAdminViewSessionCard } from '@/components/admin/view-sessions/EmptyAdminViewSessionCard'
-import { GameSessionProvider } from '@/components/admin/view-sessions/GameSessionContext'
-import { SkeletonViewSessionCard } from '@/components/admin/view-sessions/SkeletonViewSessionCard'
-import { Calendar } from '@yamada-ui/calendar'
+import { AdminViewSessionCard } from '@/components/Composite/admin/view-sessions/AdminViewSessionCard'
+import { EmptyAdminViewSessionCard } from '@/components/Composite/admin/view-sessions/EmptyAdminViewSessionCard'
+import { GameSessionProvider } from '@/components/Composite/admin/view-sessions/GameSessionContext'
+import { SkeletonViewSessionCard } from '@/components/Composite/admin/view-sessions/SkeletonViewSessionCard'
 import { prefetchActiveDates, useActiveDates } from '@/hooks/query/active-dates'
 import { useGameSession } from '@/hooks/query/game-sessions'
 import { convertTo12HourFormat, formatFullDate } from '@/lib/utils/dates'
+import { Calendar } from '@yamada-ui/calendar'
 import { Center, VStack } from '@yamada-ui/react'
 
 const searchParamsSchema = z.object({

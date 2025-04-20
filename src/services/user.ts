@@ -1,4 +1,4 @@
-import { stubUser, User } from '@/services/stub-user'
+import { User, stubUser } from '@/services/stub-user'
 
 export async function getUserFromId(userId: string) {
   return stubUser(userId)

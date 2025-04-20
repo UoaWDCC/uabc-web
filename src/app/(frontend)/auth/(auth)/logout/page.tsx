@@ -1,4 +1,4 @@
-import { LogOutButton } from '@/components/LogOutButton'
+import { LogOutButton } from '@/components/Composite/LogOutButton'
 
 export const metadata = {
   title: 'Log Out - UABC Booking Portal',

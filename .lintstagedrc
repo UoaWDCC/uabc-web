@@ -1,0 +1,3 @@
+{
+  "**/*.{js,ts,jsx,tsx,mjs,mts}": "biome check --write ."
+}

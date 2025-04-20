@@ -1,7 +1,7 @@
-import { Container, IconButton, Spacer, VStack, Skeleton } from '@yamada-ui/react'
+import { Container, IconButton, Skeleton, Spacer, VStack } from '@yamada-ui/react'
 
-import { BackNavigationBar } from '@/components/BackNavigationBar'
-import { SkeletonScheduleCard } from '@/components/admin/schedules/SkeletonScheduleCard'
+import { BackNavigationBar } from '@/components/Composite/BackNavigationBar'
+import { SkeletonScheduleCard } from '@/components/Composite/admin/schedules/SkeletonScheduleCard'
 
 export default function Loading() {
   return (

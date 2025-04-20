@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { Center, Link as UILink, Text, VStack } from '@yamada-ui/react'
 
-import { BreakLine } from '@/components/auth/BreakLine'
-import { ForgotPasswordForm } from '@/components/auth/ForgotPasswordForm'
-import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton'
+import { BreakLine } from '@/components/Composite/auth/BreakLine'
+import { ForgotPasswordForm } from '@/components/Composite/auth/ForgotPasswordForm'
+import { GoogleLoginButton } from '@/components/Composite/auth/GoogleLoginButton'
 
 export const metadata = {
   title: 'Forgot Password - UABC Booking Portal',

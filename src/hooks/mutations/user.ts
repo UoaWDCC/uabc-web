@@ -1,7 +1,7 @@
 import type { QueryClient } from '@tanstack/react-query'
 import { useMutation } from '@tanstack/react-query'
 
-import { toast } from '@/components/ui/use-toast'
+import { toast } from '@/components/Generic/ui/use-toast'
 import { QUERY_KEY } from '@/lib/utils/queryKeys'
 import type { PendingMemberResponse } from '../query/usePendingMembers'
 

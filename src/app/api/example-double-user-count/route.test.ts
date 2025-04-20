@@ -1,5 +1,3 @@
-import { describe, it, expect, afterEach } from 'vitest'
-
 import { GET } from '@/app/api/example-double-user-count/route'
 
 import dotenv from 'dotenv'

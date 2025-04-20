@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @config "../../../tailwind.config.ts";
 
@@ -108,7 +108,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: "Inter", sans-serif;
 
   @keyframes accordion-down {
     from {
@@ -168,7 +168,7 @@
 .date-with-dot::after {
   position: absolute;
   bottom: 4px;
-  content: '';
+  content: "";
   height: 5px; /* Dot size */
   width: 5px; /* Dot size */
   background-color: currentColor;
@@ -181,7 +181,7 @@
 }
 
 /* hide microsoft password reveal */
-input[type='password']::-ms-reveal,
-input[type='password']::-ms-clear {
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
   display: none;
 }

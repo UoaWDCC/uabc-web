@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
-import { UabcHeaderText } from '@/components/UabcHeaderText'
-import { UabcLogoNotFound } from '@/components/UabcLogoNotFound'
-import { Button } from '@/components/ui/button'
+import { UabcHeaderText } from '@/components/Composite/UabcHeaderText'
+import { UabcLogoNotFound } from '@/components/Composite/UabcLogoNotFound'
+import { Button } from '@/components/Generic/ui/button'
 
 export const metadata = {
   title: 'Not Found - UABC Booking Portal',

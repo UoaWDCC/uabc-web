@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
 
-import { BackNavigationBar } from '@/components/BackNavigationBar'
-import ClientViewSessionsPage from './client-page'
+import { BackNavigationBar } from '@/components/Composite/BackNavigationBar'
 import { Container } from '@yamada-ui/react'
+import ClientViewSessionsPage from './client-page'
 
 export const metadata = {
   title: 'View Sessions - UABC Booking Portal',

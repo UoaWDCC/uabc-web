@@ -17,5 +17,5 @@ export default withCurrentUser
 
 export interface CurrentUserProps {
   // TODO: Replace any with the correct type
-  currentUser: any
+  currentUser: unknown
 }
