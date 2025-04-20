@@ -14,7 +14,11 @@ export default defineConfig({
         },
       },
     ],
-    setupFiles: ['dotenv/config', './tests/mongodb-setup.ts', './tests/dom-setup'],
+    setupFiles: [
+      'dotenv/config',
+      './src/test-config/mongodb-setup.ts',
+      './src/test-config/dom-setup',
+    ],
     globals: true,
     /**
      * Set this to one only so that MongoDB memory server can
