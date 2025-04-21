@@ -1,16 +1,18 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Text, Link as UILink, VStack } from '@yamada-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Button, Heading, Link as UILink, Text, VStack } from '@yamada-ui/react'
 
-import { useForgotPasswordMutation } from '@/hooks/mutations/forgot-password'
+import { Button } from '@/components/Generic/Button'
+import { Heading } from '@/components/Generic/Heading'
 import { TextInput } from '@/components/Generic/TextInput'
 import { useToast } from '@/components/Generic/ui/use-toast'
+import { useForgotPasswordMutation } from '@/hooks/mutations/forgot-password'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -58,9 +60,7 @@ export const ForgotPasswordForm = () => {
 
   return (
     <VStack>
-      <Heading as="h2" fontSize="2xl" textAlign="center">
-        Forgot Password?
-      </Heading>
+      <Heading.h2 textAlign="center">Forgot Password?</Heading.h2>
       {!isSubmitted ? (
         <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
           <TextInput
