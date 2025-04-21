@@ -1,5 +1,5 @@
+import { Center, Text, Link as UILink, VStack } from '@yamada-ui/react'
 import Link from 'next/link'
-import { Center, Link as UILink, Text, VStack } from '@yamada-ui/react'
 
 import { BreakLine } from '@/components/Composite/auth/BreakLine'
 import { ForgotPasswordForm } from '@/components/Composite/auth/ForgotPasswordForm'
