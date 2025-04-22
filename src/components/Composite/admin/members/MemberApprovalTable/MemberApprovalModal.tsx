@@ -1,4 +1,4 @@
-import { TextInput } from '@/components/Generic/TextInput/TextInput'
+import { InputType, TextInput } from '@/components/Generic/TextInput/TextInput'
 import { Row } from '@tanstack/react-table'
 import { EllipsisIcon } from '@yamada-ui/lucide'
 import {
@@ -79,7 +79,7 @@ export const MemberApprovalModal: FC<MemberApprovalModalProps> = memo(({ row }) 
               render={({ field }) => (
                 <TextInput
                   label="Prepaid Sessions"
-                  type="number"
+                  type={InputType.Number}
                   {...field}
                   isError={!!errors.prepaidSessions}
                   errorMessage={errors.prepaidSessions?.message}

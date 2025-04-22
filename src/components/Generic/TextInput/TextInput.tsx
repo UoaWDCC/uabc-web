@@ -126,6 +126,10 @@ export enum InputType {
   Search = 'search',
   Tel = 'tel',
   Url = 'url',
+  Time = 'time',
+  Date = 'date',
+  Month = 'month',
+  Week = 'week',
 }
 
 /**

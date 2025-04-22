@@ -14,7 +14,7 @@ import {
   HStack,
   useNotice,
 } from '@yamada-ui/react'
-import { TextInput } from '../../../Generic/TextInput'
+import { InputType, TextInput } from '../../../Generic/TextInput'
 
 interface ScheduleCreateDialogProps {
   semesterId: number
@@ -105,7 +105,7 @@ export const CreateScheduleFormDialog = ({
       <DialogBody as="form" onSubmit={handleSubmit(onSubmit)} my="0" py="md">
         <TextInput
           label="Day"
-          type="text"
+          type={InputType.Date}
           w="full"
           {...register('weekday')}
           isError={!!errors.weekday?.message}
@@ -115,7 +115,7 @@ export const CreateScheduleFormDialog = ({
         <HStack w="full">
           <TextInput
             label="Start Time"
-            type="time"
+            type={InputType.Time}
             flex={1}
             {...register('startTime')}
             isError={!!errors.startTime?.message}
@@ -124,7 +124,7 @@ export const CreateScheduleFormDialog = ({
           />
           <TextInput
             label="End Time"
-            type="time"
+            type={InputType.Time}
             flex={1}
             {...register('endTime')}
             isError={!!errors.endTime?.message}
@@ -134,7 +134,7 @@ export const CreateScheduleFormDialog = ({
         </HStack>
         <TextInput
           label="Venue Name"
-          type="text"
+          type={InputType.Text}
           w="full"
           {...register('locationName')}
           isError={!!errors.locationName?.message}
@@ -143,7 +143,7 @@ export const CreateScheduleFormDialog = ({
         />
         <TextInput
           label="Address"
-          type="text"
+          type={InputType.Text}
           w="full"
           {...register('locationAddress')}
           isError={!!errors.locationAddress?.message}
@@ -153,7 +153,7 @@ export const CreateScheduleFormDialog = ({
         <HStack w="full">
           <TextInput
             label="Capacity"
-            type="text"
+            type={InputType.Text}
             flex={1}
             {...register('memberCapacity')}
             isError={!!errors.memberCapacity?.message}
@@ -162,7 +162,7 @@ export const CreateScheduleFormDialog = ({
           />
           <TextInput
             label="Casual Capacity"
-            type="text"
+            type={InputType.Text}
             flex={1}
             {...register('casualCapacity')}
             isError={!!errors.casualCapacity?.message}

@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react'
 import { Heading } from './Heading'
-import { FONT_SIZES, FONT_WEIGHTS } from './Heading'
+import { DEFAULT_FONT_SIZES, DEFAULT_FONT_WEIGHTS } from './Heading'
 import { Heading as HeadingModule } from './index'
 
-const headingLevels = Object.keys(FONT_SIZES)
+const headingLevels = Object.keys(DEFAULT_FONT_SIZES)
 
 describe('<Heading />', () => {
   it('should re-export the Heading component with namespace', () => {
@@ -36,7 +36,7 @@ describe('<Heading />', () => {
   })
 
   test('applies correct font weights for different heading levels', () => {
-    Object.entries(FONT_WEIGHTS).forEach(([level, weight]) => {
+    Object.entries(DEFAULT_FONT_WEIGHTS).forEach(([level, weight]) => {
       const { getAllByText } = render(<Heading as={level}>Test Heading {level}</Heading>)
       const [heading] = getAllByText(`Test Heading ${level}`)
       expect(heading).toHaveStyle({ fontWeight: weight })
