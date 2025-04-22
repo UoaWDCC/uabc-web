@@ -1,17 +1,16 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Button, Text, Link as UILink, VStack } from '@yamada-ui/react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { Heading } from '@/components/Generic/Heading'
+import { TextInput } from '@/components/Generic/TextInput'
+import { useToast } from '@/components/Generic/ui/use-toast'
 import { useForgotPasswordMutation } from '@/hooks/mutations/forgot-password'
-import { TextInput } from '../../Generic/TextInput/TextInput'
-import { Button } from '../../Generic/ui/button'
-import { useToast } from '../../Generic/ui/use-toast'
-import { Card } from '../Card'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -19,7 +18,6 @@ const formSchema = z.object({
 
 export const ForgotPasswordForm = () => {
   console.log('rerender')
-  const router = useRouter()
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
   const { toast } = useToast()
 
@@ -57,45 +55,44 @@ export const ForgotPasswordForm = () => {
     })
   }
 
-  if (isSubmitted)
-    return (
-      <div className="flex w-full flex-col justify-center gap-4">
-        <span className="text-center text-foreground">Forgot Password?</span>
-        <Card variant="card" className="space-y-2 text-sm">
-          <p>
-            We&apos;ve emailed a password reset link to <strong>{getValues('email')}</strong>.
-            Please check your inbox and follow the instructions to reset your password.
-          </p>
-          <p>
-            If you did not receive an email, please sign up for an account{' '}
-            <Link className="text-right font-bold underline" href="/auth/signup">
-              here
-            </Link>
-            .
-          </p>
-        </Card>
-        <Button large onClick={() => router.push('/auth/login?open=true')}>
-          Back to Login
-        </Button>
-      </div>
-    )
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col gap-4">
-        <span className="text-center text-foreground">Forgot Password?</span>
-        <TextInput
-          autoFocus
-          label="Email"
-          type="email"
-          isError={!!errors.email}
-          errorMessage={errors.email?.message}
-          {...register('email')}
-        />
-        <Button large type="submit" disabled={isPending}>
-          Send Reset Link
-        </Button>
-      </div>
-    </form>
+    <VStack>
+      <Heading.h2 textAlign="center">Forgot Password?</Heading.h2>
+      {!isSubmitted ? (
+        <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
+          <TextInput
+            autoFocus
+            label="Email"
+            type="email"
+            isError={!!errors.email}
+            errorMessage={errors.email?.message}
+            {...register('email')}
+          />
+          <Button type="submit" disabled={isPending} colorScheme="primary">
+            Send Reset Link
+          </Button>
+        </VStack>
+      ) : (
+        <VStack>
+          <Text>
+            We&apos;ve emailed a password reset link to{' '}
+            <Text as="span" fontWeight="bold">
+              {getValues('email')}
+            </Text>
+            . Please check your inbox and follow the instructions to reset your password.
+          </Text>
+          <Text>
+            If you did not receive an email, please sign up for an account{' '}
+            <UILink as={Link} href="/auth/signup" color="primary" fontWeight="bold">
+              here
+            </UILink>
+            .
+          </Text>
+          <Button as={Link} href="/auth/login?open=true" colorScheme="primary">
+            Back to Login
+          </Button>
+        </VStack>
+      )}
+    </VStack>
   )
 }
