@@ -279,5 +279,3 @@ export const Button: ComponentStyle<'Button'> = {
 }
 
 export const BUTTON_VARIANTS = Object.keys(Button.variants || {})
-
-console.log(BUTTON_VARIANTS)
