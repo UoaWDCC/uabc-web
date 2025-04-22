@@ -1,7 +1,7 @@
+import { fontSizes } from '@/theme/tokens/font-sizes'
+import { fontWeights } from '@/theme/tokens/font-weights'
 import type { Meta, StoryFn } from '@storybook/react'
-import { fontSizes } from 'theme/tokens/font-sizes'
-import { fontWeights } from 'theme/tokens/font-weights'
-import { DEFAULT_FONT_SIZES, DEFAULT_FONT_WEIGHTS, FONT_WEIGHTS, Heading } from './Heading'
+import { DEFAULT_FONT_SIZES, FONT_WEIGHTS, Heading } from './Heading'
 import { PropsTable } from '.storybook/components'
 
 type Story = StoryFn<typeof Heading>
