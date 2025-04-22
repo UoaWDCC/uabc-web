@@ -7,26 +7,95 @@ type Story = StoryFn<typeof Heading>
 const meta: Meta<typeof Heading> = {
   component: Heading,
   title: 'Components / Heading',
+  argTypes: {
+    as: {
+      control: { type: 'select' },
+      options: Object.keys(FONT_SIZES),
+      description: 'The HTML heading level which determines font size and weight',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'h1' },
+      },
+    },
+    children: {
+      control: { type: 'text' },
+      description: 'The text content of the heading',
+      table: {
+        type: { summary: 'ReactNode' },
+      },
+    },
+    color: {
+      control: { type: 'color' },
+      description: 'The text color of the heading',
+      table: {
+        type: { summary: 'string' },
+        category: 'Styling',
+      },
+    },
+    textAlign: {
+      control: { type: 'select' },
+      options: ['left', 'center', 'right', 'justify'],
+      description: 'Text alignment of the heading',
+      table: {
+        type: { summary: 'string' },
+        category: 'Styling',
+      },
+    },
+    fontStyle: {
+      control: { type: 'select' },
+      options: ['normal', 'italic', 'oblique'],
+      description: 'Font style of the heading',
+      table: {
+        type: { summary: 'string' },
+        category: 'Styling',
+      },
+    },
+    textDecoration: {
+      control: { type: 'select' },
+      options: ['none', 'underline', 'overline', 'line-through'],
+      description: 'Text decoration of the heading',
+      table: {
+        type: { summary: 'string' },
+        category: 'Styling',
+      },
+    },
+  },
 }
 
 export default meta
 
 const variants = Object.keys(FONT_SIZES)
 
-export const Basic: Story = () => {
-  return <Heading>Heading</Heading>
+export const Basic: Story = (args) => {
+  return <Heading {...args}>Heading</Heading>
 }
 
-export const Variant: Story = () => {
+export const Variant: Story = (args) => {
   return (
     <PropsTable rows={variants} variant="column">
       {(_, row, key) => {
         return (
-          <Heading key={key} as={row}>
+          <Heading key={key} as={row} {...args}>
             Heading {row}
           </Heading>
         )
       }}
     </PropsTable>
   )
+}
+
+Basic.parameters = {
+  docs: {
+    description: {
+      story: 'A basic heading component with default h1 styling',
+    },
+  },
+}
+
+Variant.parameters = {
+  docs: {
+    description: {
+      story: 'Demonstrates different heading levels with corresponding font sizes and weights',
+    },
+  },
 }

@@ -1,52 +1,47 @@
-import {
-  Component,
-  Link,
-  Button as UIButton,
-  type ButtonProps as UIButtonProps,
-} from '@yamada-ui/react'
-import { type ComponentPropsWithoutRef, type ElementType, type FC, forwardRef } from 'react'
-import React from 'react'
+import { Button as UIButton, type ButtonProps as UIButtonProps } from '@yamada-ui/react'
+import { type FC, forwardRef, memo } from 'react'
 
-// Re-evaluate the ButtonProps to conditionally include props from the 'as' component
-export type ButtonProps<As extends ElementType = 'button'> = {
+/**
+ * Additional options for the Button component
+ *
+ * @remarks
+ * The `href` prop should ONLY be used when you intend to render the button as:
+ * - Next.js Link component
+ * - Yamada UI Link component
+ * - HTML anchor (`<a>`) element
+ *
+ * When `href` is provided, the button will automatically be transformed
+ * into a navigation element. Do not use `href` for non-navigation buttons.
+ */
+type ButtonOptions = {
   /**
-   * The component used for the root node.
-   * Either a string to use a HTML element or a component.
+   * Optional href for navigation buttons
+   * @see {@link https://nextjs.org/docs/app/api-reference/components/link Next.js Link}
+   * @see {@link https://yamada-ui.com/components/navigation/link Yamada UI Link}
    */
-  as?: As
-} & UIButtonProps & // Include the original UIButtonProps
-  Omit<ComponentPropsWithoutRef<As>, keyof UIButtonProps | 'as' | 'children'> // Include props from the 'as' component,
-// omitting those already present in UIButtonProps and some common ones
-
-// Define the type for the polymorphic component using forwardRef
-export type PolymorphicRef<T extends ElementType> = React.ComponentPropsWithRef<T>['ref']
-
-export type PolymorphicComponentProps<T extends ElementType, Props = {}> = Props &
-  Omit<React.ComponentPropsWithoutRef<T>, keyof Props>
-
-export interface ButtonComponent {
-  <As extends ElementType = 'button'>(
-    props: ButtonProps<As> & { ref?: PolymorphicRef<As> },
-  ): React.ReactElement | null
-  displayName?: string
+  href?: string
 }
 
-export const Button = forwardRef(function Button<As extends ElementType = 'button'>(
-  { as, children, type, ...rest }: ButtonProps<As>,
-  ref?: React.Ref<HTMLButtonElement>,
-) {
-  const Component = as || 'button'
+export type ButtonProps = UIButtonProps & ButtonOptions
 
-  return (
-    <UIButton
-      type={Component === 'button' ? type || 'button' : undefined}
-      as={Component}
-      ref={ref}
-      {...rest}
-    >
-      {children}
-    </UIButton>
-  )
-}) as ButtonComponent
+/**
+ * Generic Button component based on Yamada UI Button
+ *
+ * @param props - Combined Yamada UI Button props and custom options
+ * @returns A memoized button component
+ *
+ * @example
+ * // Standard button
+ * <Button>Click me</Button>
+ *
+ * @example
+ * // Navigation button
+ * <Button href="/home">Go to Home</Button>
+ */
+export const Button: FC<ButtonProps> = memo(
+  forwardRef(({ ...props }, ref) => {
+    return <UIButton ref={ref} {...props} />
+  }),
+)
 
 Button.displayName = 'Button'
