@@ -4,13 +4,13 @@ import type { FC } from 'react'
 import { memo, useMemo } from 'react'
 
 /**
- * Predefined font sizes for different heading levels
+ * Default font sizes for different heading levels
  *
  * @remarks
- * Provides consistent font size styling across different heading levels
+ * Provides default font size styling across different heading levels
  * h1 is the largest, while h6 is the smallest for visual hierarchy
  */
-export const FONT_SIZES: Record<string, string> = {
+export const DEFAULT_FONT_SIZES: Record<string, string> = {
   h1: '3xl',
   h2: '2xl',
   h3: 'xl',
@@ -20,19 +20,36 @@ export const FONT_SIZES: Record<string, string> = {
 }
 
 /**
- * Predefined font weights for different heading levels
+ * Default font weights for different heading levels
  *
  * @remarks
- * Provides consistent font weight styling across different heading levels
+ * Provides default font weight styling across different heading levels
  * h1-h3 use bold, while h4-h6 use semibold for visual hierarchy
  */
-export const FONT_WEIGHTS: Record<string, string> = {
+export const DEFAULT_FONT_WEIGHTS: Record<string, string> = {
   h1: 'bold',
   h2: 'bold',
   h3: 'bold',
   h4: 'semibold',
   h5: 'semibold',
   h6: 'semibold',
+}
+
+/**
+ * Available font weights
+ *
+ * @remarks
+ * These weights are available for use in the {@link Heading} component
+ */
+export enum FONT_WEIGHTS {
+  BOLD = 'bold',
+  HAIRLINE = 'hairline',
+  THIN = 'thin',
+  LIGHT = 'light',
+  MEDIUM = 'medium',
+  SEMIBOLD = 'semibold',
+  EXTRABOLD = 'extrabold',
+  BLACK = 'black',
 }
 
 /**
@@ -79,10 +96,10 @@ export interface HeadingProps extends Omit<UIHeadingProps, 'as'> {
  * @returns A styled heading element
  */
 export const Heading: FC<HeadingProps> = memo(({ children, as = 'h1', ...props }) => {
-  const fontSize = FONT_SIZES[as as string] || '3xl'
-  const fontWeight = FONT_WEIGHTS[as as string] || 'bold'
+  const fontSize = DEFAULT_FONT_SIZES[as as string] || '3xl'
+  const fontWeight = DEFAULT_FONT_WEIGHTS[as as string] || 'bold'
 
-  if (!Object.keys(FONT_SIZES).includes(as as string)) {
+  if (!Object.keys(DEFAULT_FONT_SIZES).includes(as as string)) {
     console.warn(`Invalid heading level "${as}". Falling back to "h1".`)
     as = 'h1'
   }

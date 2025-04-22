@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react'
-import { TextInput } from './TextInput'
+import { INPUT_STATES, INPUT_TYPES, InputType, TextInput } from './TextInput'
 import { PropsTable } from '.storybook/components'
 
 type Story = StoryFn<typeof TextInput>
@@ -18,11 +18,11 @@ const meta: Meta<typeof TextInput> = {
     },
     type: {
       control: 'select',
-      options: ['text', 'password', 'email', 'number', 'search', 'tel', 'url'],
+      options: INPUT_TYPES,
       description: 'The type of the input',
       table: {
-        type: { summary: '"text" | "password" | "email" | "number" | "search" | "tel" | "url"' },
-        defaultValue: { summary: '"text"' },
+        type: { summary: `"${INPUT_TYPES.join('" | "')}"` },
+        defaultValue: { summary: `"${InputType.Text}"` },
       },
     },
     disabled: {
@@ -95,17 +95,17 @@ const meta: Meta<typeof TextInput> = {
 export default meta
 
 export const Basic: Story = ({ type, ...args }) => {
-  return <TextInput label="Label" type={type || 'text'} {...args} />
+  return <TextInput label="Label" type={type || InputType.Text} {...args} />
 }
 
 export const Types: Story = ({ type, ...args }) => {
   return (
-    <PropsTable rows={['text', 'password', 'email', 'number']} variant="column">
+    <PropsTable rows={INPUT_TYPES} variant="column">
       {(_, row, key) => (
         <TextInput
           key={key}
-          label={`${row.charAt(0).toUpperCase()}${row.slice(1)} Input`}
-          type={type || row}
+          type={row as InputType}
+          label={row.charAt(0).toUpperCase() + row.slice(1)}
           {...args}
         />
       )}
@@ -115,7 +115,7 @@ export const Types: Story = ({ type, ...args }) => {
 
 export const States: Story = ({ type, ...args }) => {
   return (
-    <PropsTable rows={['default', 'disabled', 'error']} variant="column">
+    <PropsTable rows={INPUT_STATES} variant="column">
       {(_, row, key) => {
         const props = {
           ...(row === 'disabled' && { disabled: true }),
@@ -126,7 +126,7 @@ export const States: Story = ({ type, ...args }) => {
           <TextInput
             key={key}
             label="Input Label"
-            type={type || 'text'}
+            type={type || InputType.Text}
             placeholder="Placeholder text"
             {...props}
             {...args}
@@ -141,7 +141,7 @@ export const CustomStyles: Story = ({ type, ...args }) => {
   return (
     <TextInput
       label="Label"
-      type={type || 'text'}
+      type={type || InputType.Text}
       placeholderShownLabelCSS={{
         color: 'blue',
       }}

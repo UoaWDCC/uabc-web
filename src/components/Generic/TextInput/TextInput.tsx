@@ -53,7 +53,7 @@ export interface InputProps extends Omit<UIInputProps, 'type'> {
    *
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types HTML Input Types}
    */
-  type: string
+  type?: InputType
 
   /**
    * Indicates whether the input field is in an error state.
@@ -115,6 +115,33 @@ export interface InputProps extends Omit<UIInputProps, 'type'> {
 }
 
 /**
+ * Supported HTML input types for the TextInput component
+ * @enum {string}
+ */
+export enum InputType {
+  Text = 'text',
+  Password = 'password',
+  Email = 'email',
+  Number = 'number',
+  Search = 'search',
+  Tel = 'tel',
+  Url = 'url',
+}
+
+/**
+ * Array of supported input types for easy iteration and Storybook controls
+ */
+export const INPUT_TYPES = Object.values(InputType)
+
+export enum InputState {
+  Default = 'default',
+  Disabled = 'disabled',
+  Error = 'error',
+}
+
+export const INPUT_STATES = Object.values(InputState)
+
+/**
  * A customizable text input component with dynamic label and optional password visibility toggle.
  *
  * @param props - Input component properties
@@ -125,7 +152,7 @@ export const TextInput = memo(
     (
       {
         label,
-        type,
+        type = InputType.Text,
         isError,
         errorMessage,
         disabled,
@@ -139,7 +166,7 @@ export const TextInput = memo(
       }: InputProps,
       ref,
     ) => {
-      const initialIsTypePassword = type === 'password'
+      const initialIsTypePassword = type === InputType.Password
       const [passwordShown, { toggle }] = useBoolean(!initialIsTypePassword)
 
       return (
@@ -202,7 +229,7 @@ export const TextInput = memo(
             <Input
               className="peer"
               ref={ref}
-              type={initialIsTypePassword ? (passwordShown ? 'text' : type) : type}
+              type={initialIsTypePassword ? (passwordShown ? 'text' : InputType.Password) : type}
               placeholder={placeholder || label || ''}
               borderWidth="2"
               borderColor="transparentize(tertiary.500, 70%)"

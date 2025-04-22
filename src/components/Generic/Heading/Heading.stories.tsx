@@ -1,5 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react'
-import { FONT_SIZES, Heading } from './Heading'
+import { fontSizes } from 'theme/tokens/font-sizes'
+import { fontWeights } from 'theme/tokens/font-weights'
+import { DEFAULT_FONT_SIZES, DEFAULT_FONT_WEIGHTS, FONT_WEIGHTS, Heading } from './Heading'
 import { PropsTable } from '.storybook/components'
 
 type Story = StoryFn<typeof Heading>
@@ -10,7 +12,7 @@ const meta: Meta<typeof Heading> = {
   argTypes: {
     as: {
       control: { type: 'select' },
-      options: Object.keys(FONT_SIZES),
+      options: Object.keys(DEFAULT_FONT_SIZES),
       description: 'The HTML heading level which determines font size and weight',
       table: {
         type: { summary: 'string' },
@@ -59,12 +61,30 @@ const meta: Meta<typeof Heading> = {
         category: 'Styling',
       },
     },
+    fontSize: {
+      control: { type: 'select' },
+      options: Object.values(fontSizes).concat(Object.values(DEFAULT_FONT_SIZES)),
+      description: 'The font size of the heading',
+      table: {
+        type: { summary: 'string' },
+        category: 'Styling',
+      },
+    },
+    fontWeight: {
+      control: { type: 'select' },
+      options: Object.values(fontWeights).concat(Object.values(FONT_WEIGHTS)),
+      description: 'The font weight of the heading',
+      table: {
+        type: { summary: 'string' },
+        category: 'Styling',
+      },
+    },
   },
 }
 
 export default meta
 
-const variants = Object.keys(FONT_SIZES)
+const variants = Object.keys(DEFAULT_FONT_SIZES)
 
 export const Basic: Story = (args) => {
   return <Heading {...args}>Heading</Heading>

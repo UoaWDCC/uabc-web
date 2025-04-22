@@ -1,3 +1,4 @@
+import { BUTTON_VARIANTS } from '@/theme/components/button'
 import type { Meta, StoryFn } from '@storybook/react'
 import Link from 'next/link'
 import { SEMANTIC_COLOR_SCHEMES } from '../../../theme/semantics'
@@ -21,10 +22,10 @@ const meta: Meta<typeof Button> = {
     },
     variant: {
       control: 'select',
-      options: ['solid', 'subtle', 'surface', 'outline', 'ghost'],
+      options: BUTTON_VARIANTS,
       description: 'The variant of the button',
       table: {
-        type: { summary: '"solid" | "subtle" | "surface" | "outline" | "ghost"' },
+        type: { summary: `"${BUTTON_VARIANTS.join('" | "')}"` },
         defaultValue: { summary: 'solid' },
       },
     },
@@ -65,10 +66,7 @@ export const Basic: Story = (args) => {
 
 export const Variant: Story = (args) => {
   return (
-    <PropsTable
-      columns={['solid', 'subtle', 'surface', 'outline', 'ghost']}
-      rows={SEMANTIC_COLOR_SCHEMES}
-    >
+    <PropsTable columns={BUTTON_VARIANTS} rows={SEMANTIC_COLOR_SCHEMES}>
       {(column, row, key) => {
         return (
           <Button key={key} colorScheme={row} variant={column} {...args}>
@@ -82,10 +80,7 @@ export const Variant: Story = (args) => {
 
 export const Disabled: Story = (args) => {
   return (
-    <PropsTable
-      columns={['solid', 'subtle', 'surface', 'outline', 'ghost']}
-      rows={SEMANTIC_COLOR_SCHEMES}
-    >
+    <PropsTable columns={BUTTON_VARIANTS} rows={SEMANTIC_COLOR_SCHEMES}>
       {(column, row, key) => {
         return (
           <Button key={key} colorScheme={row} variant={column} disabled {...args}>
@@ -99,10 +94,7 @@ export const Disabled: Story = (args) => {
 
 export const ButtonLink: Story = (args) => {
   return (
-    <PropsTable
-      columns={['link', 'solid', 'subtle', 'surface', 'outline', 'ghost']}
-      rows={SEMANTIC_COLOR_SCHEMES}
-    >
+    <PropsTable columns={BUTTON_VARIANTS} rows={SEMANTIC_COLOR_SCHEMES}>
       {(column, row, key) => {
         return (
           <Button key={key} colorScheme={row} variant={column} as={Link} href="#" {...args}>
