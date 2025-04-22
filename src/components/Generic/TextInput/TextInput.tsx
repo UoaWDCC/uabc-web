@@ -24,13 +24,13 @@ import { forwardRef, memo } from 'react'
  *
  * @example
  * // Basic usage
- * <TextInput label="Email" type="email" />
+ * <TextInput label="Email" type={InputType.Email} />
  *
  * @example
  * // With error handling
  * <TextInput
  *   label="Password"
- *   type="password"
+ *   type={InputType.Password}
  *   isError={true}
  *   errorMessage="Invalid password"
  * />
@@ -120,14 +120,15 @@ export interface InputProps extends Omit<UIInputProps, 'type'> {
  */
 export enum InputType {
   Text = 'text',
-  Password = 'password',
   Email = 'email',
+  Password = 'password',
   Number = 'number',
-  Search = 'search',
   Tel = 'tel',
   Url = 'url',
-  Time = 'time',
+  Search = 'search',
   Date = 'date',
+  Time = 'time',
+  Datetime = 'datetime-local',
   Month = 'month',
   Week = 'week',
 }
