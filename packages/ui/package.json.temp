@@ -1,0 +1,53 @@
+{
+  "name": "@repo/ui",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./components/*": "./src/components/*",
+    "./theme*": "./src/theme/*"
+  },
+  "scripts": {
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation biome check .",
+    "check-types": "tsc --noEmit",
+    "theme": "yamada-cli tokens ./src/theme"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@mdx-js/react": "^3.1.0",
+    "@repo/typescript-config": "workspace:*",
+    "@storybook/addon-a11y": "^8.6.12",
+    "@storybook/addon-backgrounds": "^8.6.12",
+    "@storybook/addon-docs": "^8.6.12",
+    "@storybook/addon-essentials": "8.6.12",
+    "@storybook/addon-measure": "^8.6.12",
+    "@storybook/addon-onboarding": "8.6.12",
+    "@storybook/addon-storysource": "^8.6.12",
+    "@storybook/addon-viewport": "^8.6.12",
+    "@storybook/blocks": "8.6.12",
+    "@storybook/experimental-nextjs-vite": "8.6.12",
+    "@storybook/preview-api": "^8.6.12",
+    "@storybook/react": "8.6.12",
+    "@storybook/theming": "^8.6.12",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@turbo/gen": "^2.5.0",
+    "@types/node": "^22.5.4",
+    "@types/react": "19.0.12",
+    "@types/react-dom": "19.0.4",
+    "@vitest/browser": "3.1.1",
+    "@vitest/coverage-v8": "3.1.1",
+    "@vitest/ui": "3.1.1",
+    "storybook": "8.6.12",
+    "storybook-dark-mode": "^4.0.2",
+    "tsup": "^8.4.0",
+    "typescript": "5.7.3"
+  },
+  "dependencies": {
+    "@yamada-ui/react": "^1.7.6",
+    "next": "15.2.3",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  }
+}
