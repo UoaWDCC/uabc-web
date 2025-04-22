@@ -3,10 +3,7 @@ import { type ThemeTokens, generate } from '@yamada-ui/react'
 export const colors: ThemeTokens = {
   black: '#141414',
   white: '#fbfbfb',
-  blue: {
-    500: 'hsl(215 52% 45%)',
-    600: 'hsl(215 52% 48%)',
-  },
+  blue: generate.tones('#3769ae'),
   tertiary: generate.tones('#556377'),
   destructive: generate.tones('#ad3838'),
   blackAlpha: {

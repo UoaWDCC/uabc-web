@@ -1,7 +1,7 @@
 import { UabcLogo } from '@/components/Composite/UabcLogo'
+import { Button } from '@/components/Generic/Button'
 import { Heading } from '@/components/Generic/Heading'
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,

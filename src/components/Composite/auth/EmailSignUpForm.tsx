@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useValidateEmailMutation } from '@/hooks/mutations/registration'
-import { TextInput } from '../../Generic/TextInput/TextInput'
+import { InputType, TextInput } from '../../Generic/TextInput/TextInput'
 import { Button } from '../../Generic/ui/button'
 import { useToast } from '../../Generic/ui/use-toast'
 import { OTPFormAlertDialog } from './OTPFormAlertDialog'
@@ -73,14 +73,14 @@ export const EmailSignUpForm = () => {
           <TextInput
             autoFocus
             label="Email"
-            type="email"
+            type={InputType.Email}
             isError={!!errors.email}
             errorMessage={errors.email?.message}
             {...register('email')}
           />
           <TextInput
             label="Password"
-            type="password"
+            type={InputType.Password}
             isError={!!errors.password}
             errorMessage={errors.password?.message}
             {...register('password')}

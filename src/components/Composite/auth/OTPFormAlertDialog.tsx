@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useRegisterMutation, useResendCodeMutation } from '@/hooks/mutations/registration'
-import { TextInput } from '../../Generic/TextInput/TextInput'
+import { InputType, TextInput } from '../../Generic/TextInput/TextInput'
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -80,7 +80,7 @@ export function OTPFormAlertDialog({
             <TextInput
               autoFocus
               label="Verification Code"
-              type="text"
+              type={InputType.Text}
               isError={isRegisterError}
               errorMessage={'Invalid code. Please double check and try again.'}
               value={verificationCode}

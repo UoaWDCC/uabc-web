@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { Heading } from '@/components/Generic/Heading'
-import { TextInput } from '@/components/Generic/TextInput'
+import { InputType, TextInput } from '@/components/Generic/TextInput'
 import { useToast } from '@/components/Generic/ui/use-toast'
 import { useForgotPasswordMutation } from '@/hooks/mutations/forgot-password'
 
@@ -63,7 +63,7 @@ export const ForgotPasswordForm = () => {
           <TextInput
             autoFocus
             label="Email"
-            type="email"
+            type={InputType.Email}
             isError={!!errors.email}
             errorMessage={errors.email?.message}
             {...register('email')}

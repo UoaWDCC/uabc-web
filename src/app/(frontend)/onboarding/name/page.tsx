@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 
 import { UabcHeaderText } from '@/components/Composite/UabcHeaderText'
-import { TextInput } from '@/components/Generic/TextInput/TextInput'
+import { InputType, TextInput } from '@/components/Generic/TextInput/TextInput'
 import { Button } from '@/components/Generic/ui/button'
 import { useOnboardingDetailsStore } from '@/stores/useOnboardingDetailsStore'
 
@@ -30,7 +30,7 @@ export default function NamePage() {
           <TextInput
             label="First Name"
             value={firstName}
-            type="text"
+            type={InputType.Text}
             isError={false}
             onChange={(e) => updateFirstName(e.target.value)}
             autoFocus
@@ -38,7 +38,7 @@ export default function NamePage() {
           <TextInput
             label="Last Name"
             value={lastName}
-            type="text"
+            type={InputType.Text}
             isError={false}
             onChange={(e) => updateLastName(e.target.value)}
           />

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { TextInput } from '@/components/Generic/TextInput/TextInput'
+import { InputType, TextInput } from '@/components/Generic/TextInput/TextInput'
 import { PlayLevel } from '@/types/types'
 import {
   Button,
@@ -75,14 +75,14 @@ export default function ClientAccountForm({
           <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
             <TextInput
               label="First Name"
-              type="text"
+              type={InputType.Text}
               {...register('firstName')}
               isError={!!errors.firstName?.message}
               errorMessage={errors.firstName?.message}
             />
             <TextInput
               label="Last Name"
-              type="text"
+              type={InputType.Text}
               {...register('lastName')}
               isError={!!errors.lastName?.message}
               errorMessage={errors.lastName?.message}
