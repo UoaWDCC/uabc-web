@@ -31,17 +31,58 @@ export const TextInput = forwardRef<HTMLInputElement, InputProps>(
         invalid={isError}
         errorMessage={errorMessage}
         position="relative"
+        sx={{
+          '&:not(:has(input:placeholder-shown)) label': {
+            top: 0,
+            left: 'sm',
+            transform: 'translateY(-50%) scale(0.8)',
+            zIndex: 1,
+            bg: ['white', 'black'],
+            _disabled: {
+              opacity: 1,
+              bg: 'transparentize(black, 40%)',
+              color: 'gray.600',
+            },
+            color: 'tertiary',
+            _invalid: {
+              color: 'danger.400',
+            },
+            cursor: 'text',
+          },
+          '&:has(input:placeholder-shown) label': {
+            transform: 'translateY(35%)',
+            cursor: 'text',
+            color: 'gray',
+            _invalid: {
+              color: 'danger.400',
+            },
+          },
+          '&:has(input:focus-visible) label': {
+            top: 0,
+            left: 'sm',
+            transform: 'translateY(-50%) scale(0.8)',
+            zIndex: 1,
+            bg: ['white', 'black'],
+            color: 'primary',
+            _invalid: {
+              color: 'danger.400',
+            },
+          },
+          '&:has(input:active) label': {
+            color: 'primary',
+          },
+        }}
       >
         <InputGroup>
           <Input
+            className="peer"
             ref={ref}
             type={initialIsTypePassword ? (passwordShown ? 'text' : type) : type}
-            placeholder={placeholder || ' '}
-            className="peer"
+            placeholder={placeholder || label || ''}
             borderWidth="2"
             borderColor="transparentize(tertiary.500, 70%)"
             _hover={{
-              borderColor: 'transparentize(tertiary.500, 70%)',
+              borderColor: 'transparentize(tertiary.500, 50%)',
               boxShadow: 'none',
             }}
             _active={{
@@ -71,28 +112,7 @@ export const TextInput = forwardRef<HTMLInputElement, InputProps>(
           px="xs"
           transition="all 0.2s"
           mb="0"
-          _peerPlaceholderShown={{
-            transform: 'translateY(35%)',
-            color: 'gray',
-          }}
-          _peerFocus={{
-            top: 0,
-            left: 'sm',
-            transform: 'translateY(-50%) scale(0.8)',
-            zIndex: 1,
-            bg: ['white', 'black'],
-            color: 'primary',
-          }}
-          sx={{
-            '&:not(:placeholder-shown)': {
-              top: 0,
-              left: 'sm',
-              transform: 'translateY(-50%) scale(0.8)',
-              zIndex: 1,
-              bg: ['white', 'black'],
-              color: 'gray',
-            },
-          }}
+          userSelect="none"
         >
           {label}
         </Label>

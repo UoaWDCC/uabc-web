@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react'
+import Link from 'next/link'
 import { SEMANTIC_COLOR_SCHEMES } from '../../../theme/semantics'
 import { Button } from './Button'
 import { PropsTable } from '.storybook/components'
@@ -42,6 +43,23 @@ export const Disabled: Story = () => {
       {(column, row, key) => {
         return (
           <Button key={key} colorScheme={row} variant={column} disabled>
+            Button
+          </Button>
+        )
+      }}
+    </PropsTable>
+  )
+}
+
+export const ButtonLink: Story = () => {
+  return (
+    <PropsTable
+      columns={['link', 'solid', 'subtle', 'surface', 'outline', 'ghost']}
+      rows={SEMANTIC_COLOR_SCHEMES}
+    >
+      {(column, row, key) => {
+        return (
+          <Button key={key} colorScheme={row} variant={column} as={Link} href="#">
             Button
           </Button>
         )
