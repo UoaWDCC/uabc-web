@@ -1,14 +1,12 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Text, Link as UILink, VStack } from '@yamada-ui/react'
+import { Button, Text, Link as UILink, VStack } from '@yamada-ui/react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Button } from '@/components/Generic/Button'
 import { Heading } from '@/components/Generic/Heading'
 import { TextInput } from '@/components/Generic/TextInput'
 import { useToast } from '@/components/Generic/ui/use-toast'
@@ -20,7 +18,6 @@ const formSchema = z.object({
 
 export const ForgotPasswordForm = () => {
   console.log('rerender')
-  const router = useRouter()
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
   const { toast } = useToast()
 
@@ -71,7 +68,7 @@ export const ForgotPasswordForm = () => {
             errorMessage={errors.email?.message}
             {...register('email')}
           />
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" disabled={isPending} colorScheme="primary">
             Send Reset Link
           </Button>
         </VStack>
@@ -91,7 +88,7 @@ export const ForgotPasswordForm = () => {
             </UILink>
             .
           </Text>
-          <Button onClick={() => router.push('/auth/login?open=true')} colorScheme="primary">
+          <Button as={Link} href="/auth/login?open=true" colorScheme="primary">
             Back to Login
           </Button>
         </VStack>
