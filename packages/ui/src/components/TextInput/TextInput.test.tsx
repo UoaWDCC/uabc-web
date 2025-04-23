@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@testing-library/react"
+import { fireEvent, render } from "@/tests"
 import { InputType, TextInput } from "./TextInput"
 import * as TextInputModule from "./index"
 

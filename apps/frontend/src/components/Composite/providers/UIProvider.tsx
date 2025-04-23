@@ -1,5 +1,5 @@
 "use client"
-import { config, theme } from "@/theme"
+import { config, theme } from "@repo/theme"
 import { UIProvider } from "@yamada-ui/react"
 import { FC, PropsWithChildren, memo } from "react"
 

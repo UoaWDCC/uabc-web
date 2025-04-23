@@ -4,9 +4,9 @@ import React from "react"
 
 import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
 import { Attendees, Loading } from "@/components/Composite/admin/view-sessions/gameSessionId"
-import { Heading } from "@/components/Generic/Heading"
 import { useGameSessionId } from "@/hooks/query/game-sessions"
 import { formatFullDate } from "@/lib/utils/dates"
+import { Heading } from "@repo/ui/components/Heading"
 import { DownloadIcon } from "@yamada-ui/lucide"
 import {
   Button,

@@ -1,4 +1,4 @@
-import { InputType, TextInput } from "@/components/Generic/TextInput"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import { Row } from "@tanstack/react-table"
 import { EllipsisIcon } from "@yamada-ui/lucide"
 import {

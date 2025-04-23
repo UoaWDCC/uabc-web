@@ -4,10 +4,10 @@ import React from "react"
 
 import { LogOutButton } from "@/components/Composite/LogOutButton"
 import { PrepaidSessionsCounter } from "@/components/Composite/booking/sessions/PrepaidSessionsCounter"
-import { Heading } from "@/components/Generic/Heading/Heading"
 import type { CurrentUserProps } from "@/lib/hoc/withCurrentUser"
 import withCurrentUser from "@/lib/hoc/withCurrentUser"
 import { getUserFromId } from "@/services/user"
+import { Heading } from "@repo/ui/components/Heading"
 import ClientSessionPage from "./client-page"
 
 import BadmintonRacketLogo from "../../public/images/BadmintonRacketLogo.png"

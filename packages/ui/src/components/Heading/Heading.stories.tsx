@@ -1,10 +1,12 @@
-import { fontSizes } from "@/theme/tokens/font-sizes"
-import { fontWeights } from "@/theme/tokens/font-weights"
+import { defaultTheme } from "@repo/theme"
+import { DEFAULT_FONT_SIZES, FONT_WEIGHTS, Heading } from "@repo/ui/components/Heading"
 import type { Meta, StoryFn } from "@storybook/react"
-import { DEFAULT_FONT_SIZES, FONT_WEIGHTS, Heading } from "./Heading"
 import { PropsTable } from ".storybook/components"
 
 type Story = StoryFn<typeof Heading>
+
+const fontSizes = Object.keys(defaultTheme.fontSizes ?? {})
+const fontWeights = Object.keys(defaultTheme.fontWeights ?? {})
 
 const meta: Meta<typeof Heading> = {
   component: Heading,

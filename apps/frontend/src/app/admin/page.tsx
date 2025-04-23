@@ -2,7 +2,7 @@ import { CalendarClockIcon, CalendarDaysIcon, UserCheckIcon, UsersIcon } from "@
 
 import { DashboardButton } from "@/components/Composite/admin/DashboardButton"
 import { MemberApprovalPing } from "@/components/Composite/admin/members/MemberApprovalPing"
-import { Heading } from "@/components/Generic/Heading/Heading"
+import { Heading } from "@repo/ui/components/Heading"
 import { Container, VStack } from "@yamada-ui/react"
 
 export const metadata = {

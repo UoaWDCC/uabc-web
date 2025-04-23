@@ -1,4 +1,4 @@
-import react from "@vitejs/plugin-react"
+import react from "@vitejs/plugin-react-swc"
 import tsconfigPaths from "vite-tsconfig-paths"
 import { coverageConfigDefaults, defineConfig } from "vitest/config"
 
@@ -14,7 +14,12 @@ export default defineConfig({
         },
       },
     ],
-    setupFiles: ["dotenv/config", "./tests/mongodb-setup.ts", "./tests/dom-setup"],
+    setupFiles: [
+      "dotenv/config",
+      "./apps/backend/src/tests/mongodb-setup.ts",
+      "./apps/frontend/src/tests/mocks/dom-setup.ts",
+      "./packages/ui/src/tests/mocks/dom-setup.ts",
+    ],
     globals: true,
     /**
      * Set this to one only so that MongoDB memory server can

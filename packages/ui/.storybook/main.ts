@@ -1,7 +1,7 @@
 import type { StorybookConfig } from "@storybook/experimental-nextjs-vite"
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: ["../../../packages/ui/src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: [
     {
       name: "@storybook/addon-essentials",
@@ -16,13 +16,12 @@ const config: StorybookConfig = {
     "@storybook/addon-measure",
     "@storybook/addon-storysource",
     "storybook-dark-mode",
-    "@storybook/addon-onboarding",
   ],
   core: { disableTelemetry: true },
   framework: {
     name: "@storybook/experimental-nextjs-vite",
     options: {},
   },
-  staticDirs: ["../public"],
+  staticDirs: ["../../../apps/frontend/public"],
 }
 export default config

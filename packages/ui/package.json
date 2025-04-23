@@ -3,16 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./components/*": "./src/components/*",
-    "./theme*": "./src/theme/*"
+    "./components/Button": "./src/components/Button/index.ts",
+    "./components/Heading": "./src/components/Heading/index.ts",
+    "./components/TextInput": "./src/components/TextInput/index.ts"
   },
   "scripts": {
-    "lint": "cross-env NODE_OPTIONS=--no-deprecation biome check .",
     "check-types": "tsc --noEmit",
-    "theme": "yamada-cli tokens ./src/theme"
+    "theme": "yamada-cli tokens ./src/theme",
+    "storybook": "storybook dev -p 6006 -c .storybook",
+    "storybook:build": "storybook build -c .storybook"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
     "@mdx-js/react": "^3.1.0",
     "@repo/typescript-config": "workspace:*",
     "@storybook/addon-a11y": "^8.6.12",
@@ -20,34 +21,28 @@
     "@storybook/addon-docs": "^8.6.12",
     "@storybook/addon-essentials": "8.6.12",
     "@storybook/addon-measure": "^8.6.12",
-    "@storybook/addon-onboarding": "8.6.12",
     "@storybook/addon-storysource": "^8.6.12",
     "@storybook/addon-viewport": "^8.6.12",
-    "@storybook/blocks": "8.6.12",
-    "@storybook/experimental-nextjs-vite": "8.6.12",
     "@storybook/preview-api": "^8.6.12",
     "@storybook/react": "8.6.12",
-    "@storybook/theming": "^8.6.12",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
-    "@testing-library/user-event": "^14.6.1",
     "@turbo/gen": "^2.5.0",
     "@types/node": "^22.5.4",
     "@types/react": "19.0.12",
     "@types/react-dom": "19.0.4",
-    "@vitest/browser": "3.1.1",
-    "@vitest/coverage-v8": "3.1.1",
-    "@vitest/ui": "3.1.1",
-    "storybook": "8.6.12",
     "storybook-dark-mode": "^4.0.2",
-    "tsup": "^8.4.0",
-    "typescript": "5.7.3"
+    "typescript": "5.7.3",
+    "vitest": "^3.0.9"
   },
   "dependencies": {
+    "@repo/theme": "workspace:*",
+    "@yamada-ui/lucide": "^1.10.5",
     "@yamada-ui/react": "^1.7.6",
     "next": "15.2.3",
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "@storybook/blocks": "8.6.12",
+    "@storybook/experimental-nextjs-vite": "8.6.12",
+    "@storybook/theming": "^8.6.12",
+    "storybook": "^8.6.12"
   }
 }

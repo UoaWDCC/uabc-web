@@ -3,7 +3,7 @@
 import { ArrowLeftIcon } from "@yamada-ui/lucide"
 import { HStack, IconButton } from "@yamada-ui/react"
 
-import { Heading } from "@/components/Generic/Heading"
+import { Heading } from "@repo/ui/components/Heading"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ReactNode, useCallback, useContext } from "react"

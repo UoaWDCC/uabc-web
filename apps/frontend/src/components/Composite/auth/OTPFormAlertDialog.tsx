@@ -4,8 +4,8 @@ import type { AlertDialogProps } from "@radix-ui/react-alert-dialog"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
-import { InputType, TextInput } from "@/components/Generic/TextInput"
 import { useRegisterMutation, useResendCodeMutation } from "@/hooks/mutations/registration"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import {
   AlertDialog,
   AlertDialogCancel,

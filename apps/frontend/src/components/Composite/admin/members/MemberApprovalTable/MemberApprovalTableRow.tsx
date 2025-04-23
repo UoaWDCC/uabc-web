@@ -7,8 +7,8 @@ import React from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { InputType, TextInput } from "@/components/Generic/TextInput"
 import { useApproveUserMutation, useRejectUserMutation } from "@/hooks/mutations/user"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import { Button, ButtonGroup, Label, Td, Text, Tr } from "@yamada-ui/react"
 import type { Member } from "./columns"
 

@@ -14,7 +14,7 @@
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "test": "cross-env NODE_ENV=test vitest",
-    "test:coverage": "cross-env NODE_ENV=test vitest -- --coverage",
+    "test:coverage": "cross-env NODE_ENV=test vitest --coverage",
     "theme": "turbo run theme",
     "prepare": "husky",
     "precommit": "lint-staged",
@@ -25,30 +25,28 @@
     "ui:install": "pnpm install --recursive --filter=@repo/ui"
   },
   "dependencies": {
+    "@vitejs/plugin-react-swc": "^3.9.0",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@yamada-ui/cli": "^1.2.4",
-    "autoprefixer": "^10.4.21",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitest/browser": "3.1.1",
+    "@vitest/coverage-v8": "3.1.1",
+    "@vitest/ui": "3.1.1",
     "dotenv": "^16.4.7",
     "husky": "^9.1.7",
     "jsdom": "^26.0.0",
     "lint-staged": "^15.5.1",
     "mongodb-memory-server": "^10.1.4",
-    "postcss": "^8.5.3",
-    "@radix-ui/react-accordion": "^1.2.3",
-    "@radix-ui/react-alert-dialog": "^1.1.6",
-    "@radix-ui/react-dialog": "^1.1.6",
-    "@radix-ui/react-select": "^2.1.6",
-    "@radix-ui/react-slot": "^1.1.2",
-    "@radix-ui/react-toast": "^1.2.6",
-    "tailwindcss": "^4.0.17",
     "turbo": "^2.5.0",
     "typescript": "5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.9"
+    "vitest": "3.1.1"
   },
   "engines": {
     "node": ">=22",

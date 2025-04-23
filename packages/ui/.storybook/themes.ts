@@ -1,9 +1,9 @@
+import { defaultTheme } from "@repo/theme"
 import { themes } from "@storybook/theming"
 import type { BaseTheme } from "@yamada-ui/react"
-import { defaultTheme } from "../src/theme"
 
 const fonts = defaultTheme.fonts as BaseTheme["fonts"]
-const colors = defaultTheme.colors as BaseTheme["colors"]
+const colors = defaultTheme.colors as Record<string, Record<string, string>>
 
 const sharedTheme = {
   appBorderRadius: 0,

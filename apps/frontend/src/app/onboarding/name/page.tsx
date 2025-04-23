@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation"
 
 import { UabcHeaderText } from "@/components/Composite/UabcHeaderText"
-import { InputType, TextInput } from "@/components/Generic/TextInput"
 import { Button } from "@/components/Generic/ui/button"
 import { useOnboardingDetailsStore } from "@/stores/useOnboardingDetailsStore"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 
 export default function NamePage() {
   const router = useRouter()

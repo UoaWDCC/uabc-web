@@ -7,10 +7,10 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { Heading } from "@/components/Generic/Heading"
-import { InputType, TextInput } from "@/components/Generic/TextInput"
 import { useToast } from "@/components/Generic/ui/use-toast"
 import { useForgotPasswordMutation } from "@/hooks/mutations/forgot-password"
+import { Heading } from "@repo/ui/components/Heading"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 
 const formSchema = z.object({
   email: z.string().email(),

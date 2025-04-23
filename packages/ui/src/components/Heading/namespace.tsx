@@ -17,7 +17,7 @@ import type { HeadingProps } from "./Heading"
  * // Using default heading with additional props
  * <Heading color="blue.500" textAlign="center">Centered Heading</Heading>
  */
-interface HeadingComponent extends FC<Omit<HeadingProps, "as">> {
+interface HeadingComponent extends FC<HeadingProps> {
   /**
    * Heading level 1 component
    * @param props - Heading properties excluding 'as'

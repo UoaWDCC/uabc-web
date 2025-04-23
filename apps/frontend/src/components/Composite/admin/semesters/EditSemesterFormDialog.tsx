@@ -3,8 +3,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { InputType, TextInput } from "@/components/Generic/TextInput"
 import { QUERY_KEY } from "@/lib/utils/queryKeys"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import {
   Button,
   Dialog,

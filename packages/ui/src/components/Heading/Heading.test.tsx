@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react"
+import { render } from "@/tests"
 import { Heading } from "./Heading"
 import { DEFAULT_FONT_SIZES, DEFAULT_FONT_WEIGHTS } from "./Heading"
 import { Heading as HeadingModule } from "./index"
@@ -37,8 +37,11 @@ describe("<Heading />", () => {
 
   test("applies correct font weights for different heading levels", () => {
     Object.entries(DEFAULT_FONT_WEIGHTS).forEach(([level, weight]) => {
-      const { getAllByText } = render(<Heading as={level}>Test Heading {level}</Heading>)
+      const { getAllByText } = render(<Heading as={level}>Test Heading {level}</Heading>, {
+        withProvider: false,
+      })
       const [heading] = getAllByText(`Test Heading ${level}`)
+      console.log(weight)
       expect(heading).toHaveStyle({ fontWeight: weight })
     })
   })
@@ -56,7 +59,9 @@ describe("<Heading />", () => {
   test("uses fallback values for invalid heading level", () => {
     const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
 
-    const { getByText } = render(<Heading as="invalid">Invalid Heading</Heading>)
+    const { getByText } = render(<Heading as="invalid">Invalid Heading</Heading>, {
+      withProvider: false,
+    })
     const heading = getByText("Invalid Heading")
     expect(heading.tagName.toLowerCase()).toBe("h1")
     expect(heading).toHaveStyle({

@@ -36,5 +36,5 @@
       "bracketSpacing": true
     }
   },
-  "overrides": [{ "include": ["**/*.ts?(x)"] }]
+  "overrides": [{ "include": ["**/*.{ts,tsx}"] }]
 }

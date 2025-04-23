@@ -1,5 +1,5 @@
+import { INPUT_STATES, INPUT_TYPES, InputType, TextInput } from "@repo/ui/components/TextInput"
 import type { Meta, StoryFn } from "@storybook/react"
-import { INPUT_STATES, INPUT_TYPES, InputType, TextInput } from "./TextInput"
 import { PropsTable } from ".storybook/components"
 
 type Story = StoryFn<typeof TextInput>

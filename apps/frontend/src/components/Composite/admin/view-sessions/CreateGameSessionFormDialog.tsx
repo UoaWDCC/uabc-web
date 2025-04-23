@@ -4,10 +4,10 @@ import { format, getMonth, getYear, parse } from "date-fns"
 import { useForm } from "react-hook-form"
 import type { z } from "zod"
 
-import { InputType, TextInput } from "@/components/Generic/TextInput"
 import { useCreateGameSessionMutation } from "@/hooks/mutations/game-sessions"
 import { formatFullDate } from "@/lib/utils/dates"
 import { QUERY_KEY } from "@/lib/utils/queryKeys"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import {
   Button,
   Dialog,

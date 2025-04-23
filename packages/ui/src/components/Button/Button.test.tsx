@@ -1,5 +1,4 @@
-import { screen } from "@testing-library/dom"
-import { render } from "@testing-library/react"
+import { render, screen } from "@/tests"
 import { Button } from "./Button"
 import * as ButtonModule from "./index"
 

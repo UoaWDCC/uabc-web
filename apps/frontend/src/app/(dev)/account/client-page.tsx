@@ -5,8 +5,8 @@ import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { InputType, TextInput } from "@/components/Generic/TextInput"
 import { PlayLevel } from "@/types/types"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import {
   Button,
   Card,
