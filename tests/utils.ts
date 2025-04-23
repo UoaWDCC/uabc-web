@@ -38,6 +38,23 @@ export const clearCollection = async (payloadObject: Payload, collectionName: Co
     },
   })
 }
+
+/**
+ * Convert parameters to a promise
+ *
+ * @param params The parameters to convert to a promise
+ * @returns A promise that resolves to the parameters
+ */
+export const paramsToPromise = <T extends Record<string, unknown>>(params: T): Promise<T> => {
+  return Promise.resolve(params)
+}
+
+/**
+ * Send a Post Request Mock to URL
+ * @param url
+ * @param body Post Request body
+ * @returns
+ */
 export function createMockNextPostRequest(url: string, body: Record<string, unknown>) {
   return new NextRequest(new URL(url, 'http://localhost:3000'), {
     method: 'POST',
