@@ -1,24 +1,24 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss"
 
-import tailwindcss_animate from 'tailwindcss-animate'
+import tailwindcss_animate from "tailwindcss-animate"
 
-const config: Omit<Config, 'content'> = {
-  darkMode: 'class',
-  prefix: '',
+const config: Omit<Config, "content"> = {
+  darkMode: "class",
+  prefix: "",
   theme: {
     container: {
       center: true,
-      padding: '2rem',
+      padding: "2rem",
       screens: {
-        '2xl': '1400px',
+        "2xl": "1400px",
       },
     },
     extend: {
       screens: {
-        xs: '400px',
+        xs: "400px",
       },
       transitionproperty: {
-        'max-height': 'max-height',
+        "max-height": "max-height",
       },
     },
   },

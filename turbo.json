@@ -1,17 +1,18 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [".env", ".env.local"],
-  "globalEnv": ["NODE_ENV", "PAYLOAD_SECRET", "MONGODB_URI"],
+  "globalEnv": [],
   "ui": "tui",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"],
       "cache": true
     },
     "dev": {
       "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "persistent": true
     },
     "lint": {
