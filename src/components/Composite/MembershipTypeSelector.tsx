@@ -3,6 +3,7 @@
 import type { MouseEventHandler } from 'react'
 
 import { cn } from '@/lib/utils'
+import { Box, Heading, Input, Text, VStack } from '@yamada-ui/react'
 import { Card } from './Card'
 
 interface MembershipTypeSelectorProps {
@@ -19,27 +20,32 @@ export const MembershipTypeSelector = ({
   heading,
   description1,
   description2,
-}: MembershipTypeSelectorProps) => (
-  <label>
-    <Card
-      variant={selectedMembership ? 'primary' : 'secondary'}
-      className={cn('flex cursor-pointer flex-col shadow hover:opacity-90')}
-    >
-      <input
-        type="radio"
-        name="membership-type-selector"
-        className="hidden"
-        checked={selectedMembership ?? false}
-        onClick={onClick}
-      />
+}: MembershipTypeSelectorProps) => {
+  return (
+    <>
+      <Box as="label">
+        <Card
+          variant={selectedMembership ? 'primary' : 'secondary'}
+          className={cn('flex cursor-pointer flex-col shadow hover:opacity-90')}
+        >
+          <Input
+            type="radio"
+            display="none"
+            name="membership-type-selector"
+            defaultChecked={selectedMembership ?? false}
+            onClick={onClick}
+          />
 
-      <h2 className="text-lg font-medium">{heading}</h2>
+          <Heading as="h2" fontSize="lg" fontWeight="medium">
+            {heading}
+          </Heading>
 
-      <div className={cn('text-sm opacity-70')}>
-        <span>{description1}</span>
-        <br />
-        <span>{description2}</span>
-      </div>
-    </Card>
-  </label>
-)
+          <VStack gapY={0} fontSize="sm" opacity="70%">
+            <Text>{description1}</Text>
+            <Text>{description2}</Text>
+          </VStack>
+        </Card>
+      </Box>
+    </>
+  )
+}

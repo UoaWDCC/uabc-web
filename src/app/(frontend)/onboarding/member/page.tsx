@@ -5,6 +5,8 @@ import { redirect, useRouter } from 'next/navigation'
 import { BackNavigationBar } from '@/components/Composite/BackNavigationBar'
 import { MembershipTypeSelector } from '@/components/Composite/MembershipTypeSelector'
 import { Button } from '@/components/Generic/ui/button'
+import { Flex, VStack } from '@yamada-ui/react'
+
 import { useOnboardingDetailsStore } from '@/stores/useOnboardingDetailsStore'
 
 const MembershipType = () => {
@@ -52,7 +54,7 @@ const MembershipType = () => {
   }
 
   return (
-    <div className="mx-4 flex h-dvh flex-col gap-y-4">
+    <VStack h="100dvh" gapY={4} paddingX={4}>
       <BackNavigationBar title="Select your membership type" pathName="/onboarding/name" />
 
       <MembershipTypeSelector
@@ -71,7 +73,7 @@ const MembershipType = () => {
         description2="(limit of 1 session per week)"
       />
 
-      <div className="mb-10 flex flex-grow">
+      <Flex grow="1" marginBottom="10">
         <Button
           className="w-full self-end"
           onClick={handleNextButtonClick}
@@ -79,8 +81,8 @@ const MembershipType = () => {
         >
           Next
         </Button>
-      </div>
-    </div>
+      </Flex>
+    </VStack>
   )
 }
 
