@@ -22,30 +22,28 @@ export const MembershipTypeSelector = ({
   description2,
 }: MembershipTypeSelectorProps) => {
   return (
-    <>
-      <Box as="label">
-        <Card
-          variant={selectedMembership ? 'primary' : 'secondary'}
-          className={cn('flex cursor-pointer flex-col shadow hover:opacity-90')}
-        >
-          <Input
-            type="radio"
-            display="none"
-            name="membership-type-selector"
-            defaultChecked={selectedMembership ?? false}
-            onClick={onClick}
-          />
+    <Box as="label">
+      <Card
+        variant={selectedMembership ? 'primary' : 'secondary'}
+        className={cn('flex cursor-pointer flex-col shadow hover:opacity-90')}
+      >
+        <Input
+          type="radio"
+          display="none"
+          name="membership-type-selector"
+          defaultChecked={selectedMembership ?? false}
+          onClick={onClick}
+        />
 
-          <Heading as="h2" fontSize="lg" fontWeight="medium">
-            {heading}
-          </Heading>
+        <Heading as="h2" fontSize="lg" fontWeight="medium">
+          {heading}
+        </Heading>
 
-          <VStack gapY={0} fontSize="sm" opacity="70%">
-            <Text>{description1}</Text>
-            <Text>{description2}</Text>
-          </VStack>
-        </Card>
-      </Box>
-    </>
+        <VStack gapY={0} fontSize="sm" opacity="70%">
+          <Text>{description1}</Text>
+          <Text>{description2}</Text>
+        </VStack>
+      </Card>
+    </Box>
   )
 }
