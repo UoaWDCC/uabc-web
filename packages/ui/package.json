@@ -11,7 +11,8 @@
     "check-types": "tsc --noEmit",
     "theme": "yamada-cli tokens ./src/theme",
     "storybook": "storybook dev -p 6006 -c .storybook",
-    "storybook:build": "storybook build -c .storybook"
+    "build": "storybook build -c .storybook",
+    "start": "serve -l 3002 .storybook-static"
   },
   "devDependencies": {
     "@mdx-js/react": "^3.1.0",
@@ -35,14 +36,15 @@
   },
   "dependencies": {
     "@repo/theme": "workspace:*",
-    "@yamada-ui/lucide": "^1.10.5",
-    "@yamada-ui/react": "^1.7.6",
-    "next": "15.2.3",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
     "@storybook/blocks": "8.6.12",
     "@storybook/experimental-nextjs-vite": "8.6.12",
     "@storybook/theming": "^8.6.12",
+    "@yamada-ui/lucide": "^1.10.5",
+    "@yamada-ui/react": "^1.7.6",
+    "hono": "^4.7.7",
+    "next": "15.2.3",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "storybook": "^8.6.12"
   }
 }
