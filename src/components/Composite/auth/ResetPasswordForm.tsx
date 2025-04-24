@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useResetPasswordMutation } from '@/hooks/mutations/reset-password'
-import { TextInput } from '../../Generic/TextInput/TextInput'
+import { InputType, TextInput } from '../../Generic/TextInput/TextInput'
 import { Button } from '../../Generic/ui/button'
 import { ToastAction } from '../../Generic/ui/toast'
 import { useToast } from '../../Generic/ui/use-toast'
@@ -99,14 +99,14 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
           <TextInput
             autoFocus
             label="New Password"
-            type="password"
+            type={InputType.Password}
             isError={!!errors.newPassword}
             errorMessage={errors.newPassword?.message}
             {...register('newPassword')}
           />
           <TextInput
             label="Confirm Password"
-            type="password"
+            type={InputType.Password}
             isError={!!errors.confirmPassword}
             errorMessage={errors.confirmPassword?.message}
             {...register('confirmPassword')}

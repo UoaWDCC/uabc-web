@@ -17,7 +17,7 @@ import {
   HStack,
   useNotice,
 } from '@yamada-ui/react'
-import { TextInput } from '../../../Generic/TextInput'
+import { InputType, TextInput } from '../../../Generic/TextInput'
 import { useGameSessionContext } from './GameSessionContext'
 import { gameSessionFormSchema } from './utils'
 
@@ -115,7 +115,7 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
           <HStack w="full">
             <TextInput
               label="Booking Open"
-              type="text"
+              type={InputType.Text}
               flex={1}
               value={format(bookingOpen, 'dd/MM/yy hh:mma')}
               readOnly
@@ -123,7 +123,7 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
             />
             <TextInput
               label="Booking Close"
-              type="text"
+              type={InputType.Text}
               flex={1}
               value={
                 watch('startTime')
@@ -137,7 +137,7 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
           <HStack w="full">
             <TextInput
               label="Start Time"
-              type="time"
+              type={InputType.Time}
               flex={1}
               {...register('startTime')}
               isError={!!errors.startTime}
@@ -146,7 +146,7 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
             />
             <TextInput
               label="End Time"
-              type="time"
+              type={InputType.Time}
               flex={1}
               {...register('endTime')}
               isError={!!errors.endTime}
@@ -157,7 +157,7 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
             <TextInput
               flex={1}
               label="Location Name"
-              type="text"
+              type={InputType.Text}
               {...register('locationName')}
               isError={!!errors.locationName}
               errorMessage={errors.locationName?.message}
@@ -167,7 +167,7 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
             <TextInput
               flex={1}
               label="Address"
-              type="text"
+              type={InputType.Text}
               {...register('locationAddress')}
               isError={!!errors.locationAddress}
               errorMessage={errors.locationAddress?.message}
@@ -177,7 +177,7 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
             <TextInput
               flex={1}
               label="Capacity"
-              type="text"
+              type={InputType.Text}
               {...register('memberCapacity')}
               isError={!!errors.memberCapacity}
               errorMessage={errors.memberCapacity?.message}
@@ -185,7 +185,7 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
             <TextInput
               flex={1}
               label="Casual Capacity"
-              type="text"
+              type={InputType.Text}
               {...register('casualCapacity')}
               isError={!!errors.casualCapacity}
               errorMessage={errors.casualCapacity?.message}

@@ -13,7 +13,7 @@ import {
   HStack,
   useNotice,
 } from '@yamada-ui/react'
-import { TextInput } from '../../../Generic/TextInput'
+import { InputType, TextInput } from '../../../Generic/TextInput'
 import { useSemesterContext } from './SemestersContext'
 import { compareDate, formatDateInISO, validateDate } from './utils'
 
@@ -147,7 +147,7 @@ export const EditSemesterFormDialog = ({ open, onClose }: EditSemesterFormDialog
         <HStack w="full">
           <TextInput
             label="Open day"
-            type="date"
+            type={InputType.Date}
             flex={1}
             {...register('bookingOpenDay')}
             isError={!!errors.bookingOpenDay?.message}
@@ -156,7 +156,7 @@ export const EditSemesterFormDialog = ({ open, onClose }: EditSemesterFormDialog
           />
           <TextInput
             label="Open time"
-            type="time"
+            type={InputType.Time}
             flex={1}
             {...register('bookingOpenTime')}
             isError={!!errors.bookingOpenTime?.message}
@@ -166,7 +166,7 @@ export const EditSemesterFormDialog = ({ open, onClose }: EditSemesterFormDialog
         </HStack>
         <HStack w="full">
           <TextInput
-            type="date"
+            type={InputType.Date}
             label="Start date"
             flex={1}
             {...register('startDate')}
@@ -174,7 +174,7 @@ export const EditSemesterFormDialog = ({ open, onClose }: EditSemesterFormDialog
             errorMessage={errors.startDate?.message}
           />
           <TextInput
-            type="date"
+            type={InputType.Date}
             label="End date"
             flex={1}
             {...register('endDate')}
@@ -184,7 +184,7 @@ export const EditSemesterFormDialog = ({ open, onClose }: EditSemesterFormDialog
         </HStack>
         <HStack w="full" gap="md">
           <TextInput
-            type="date"
+            type={InputType.Date}
             label="Break start date"
             flex={1}
             {...register('breakStart')}
@@ -192,7 +192,7 @@ export const EditSemesterFormDialog = ({ open, onClose }: EditSemesterFormDialog
             errorMessage={errors.breakStart?.message}
           />
           <TextInput
-            type="date"
+            type={InputType.Date}
             label="Break end date"
             flex={1}
             {...register('breakEnd')}

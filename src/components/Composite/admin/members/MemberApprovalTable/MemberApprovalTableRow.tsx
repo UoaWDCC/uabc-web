@@ -9,7 +9,7 @@ import { z } from 'zod'
 
 import { useApproveUserMutation, useRejectUserMutation } from '@/hooks/mutations/user'
 import { Button, ButtonGroup, Label, Td, Text, Tr } from '@yamada-ui/react'
-import { TextInput } from '../../../../Generic/TextInput/TextInput'
+import { InputType, TextInput } from '../../../../Generic/TextInput/TextInput'
 import type { Member } from './columns'
 
 interface MemberApprovalTableRowProps {
@@ -59,14 +59,14 @@ export function MemberApprovalTableRow({ row, userId }: MemberApprovalTableRowPr
       <Td>
         <form onSubmit={handleSubmit(handleApproveClick)}>
           <TextInput
-            type="number"
+            id={userId}
+            type={InputType.Number}
             h="10"
             w="200px"
             {...register('prepaidSessions')}
             isError={!!errors.prepaidSessions}
             errorMessage={errors.prepaidSessions?.message}
           />
-          <input type="submit" id={userId} className="hidden" />
         </form>
       </Td>
       <Td>

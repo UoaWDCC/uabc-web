@@ -15,7 +15,7 @@ import {
   useNotice,
 } from '@yamada-ui/react'
 import { FC, memo } from 'react'
-import { TextInput } from '../../../Generic/TextInput'
+import { InputType, TextInput } from '../../../Generic/TextInput'
 import { useScheduleContext } from './SchedulesContext'
 
 const formSchema = z
@@ -129,7 +129,7 @@ export const EditScheduleFormDialog: FC<EditScheduleFormDialogProps> = memo(({ o
         <HStack w="full">
           <TextInput
             label="Start Time"
-            type="time"
+            type={InputType.Time}
             flex={1}
             {...register('startTime')}
             isError={!!errors.startTime?.message}
@@ -138,7 +138,7 @@ export const EditScheduleFormDialog: FC<EditScheduleFormDialogProps> = memo(({ o
           />
           <TextInput
             label="End Time"
-            type="time"
+            type={InputType.Time}
             flex={1}
             {...register('endTime')}
             isError={!!errors.endTime?.message}
@@ -150,7 +150,7 @@ export const EditScheduleFormDialog: FC<EditScheduleFormDialogProps> = memo(({ o
           <TextInput
             flex={1}
             label="Venue Name"
-            type="text"
+            type={InputType.Text}
             {...register('locationName')}
             isError={!!errors.locationName?.message}
             errorMessage={errors.locationName?.message}
@@ -161,7 +161,7 @@ export const EditScheduleFormDialog: FC<EditScheduleFormDialogProps> = memo(({ o
           <TextInput
             flex={1}
             label="Address"
-            type="text"
+            type={InputType.Text}
             {...register('locationAddress')}
             isError={!!errors.locationAddress?.message}
             errorMessage={errors.locationAddress?.message}
@@ -172,7 +172,7 @@ export const EditScheduleFormDialog: FC<EditScheduleFormDialogProps> = memo(({ o
           <TextInput
             flex={1}
             label="Capacity"
-            type="number"
+            type={InputType.Number}
             {...register('memberCapacity')}
             isError={!!errors.memberCapacity?.message}
             errorMessage={errors.memberCapacity?.message}
@@ -181,7 +181,7 @@ export const EditScheduleFormDialog: FC<EditScheduleFormDialogProps> = memo(({ o
           <TextInput
             flex={1}
             label="Casual Capacity"
-            type="number"
+            type={InputType.Number}
             {...register('casualCapacity')}
             isError={!!errors.casualCapacity?.message}
             errorMessage={errors.casualCapacity?.message}

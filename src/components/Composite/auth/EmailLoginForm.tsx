@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { TextInput } from '../../Generic/TextInput/TextInput'
+import { InputType, TextInput } from '../../Generic/TextInput/TextInput'
 import { emailSchema } from './formSchema'
 
 interface SignUpFormData {
@@ -68,13 +68,14 @@ export const EmailLoginForm = () => {
         <TextInput
           autoFocus
           label="Email"
-          type="email"
+          type={InputType.Email}
           isError={!!errors.email}
+          errorMessage={errors.email?.message}
           {...register('email')}
         />
         <TextInput
           label="Password"
-          type="password"
+          type={InputType.Password}
           isError={!!errors.email}
           errorMessage={errors.email?.message}
           {...register('password')}
