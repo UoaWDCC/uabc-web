@@ -22,13 +22,14 @@
     "start": "turbo run start",
     "storybook": "turbo run storybook",
     "storybook:build": "turbo run storybook:build",
-    "test": "cross-env NODE_ENV=test vitest run",
-    "test:watch": "cross-env NODE_ENV=test vitest",
-    "test:coverage": "cross-env NODE_ENV=test vitest --coverage",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
+    "test:coverage": "turbo run test:coverage",
     "theme": "yamada-cli tokens ./packages/theme/src/theme",
     "postinstall": "pnpm theme"
   },
   "dependencies": {
+    "@repo/test-config": "workspace:*",
     "cross-env": "^7.0.3"
   },
   "devDependencies": {

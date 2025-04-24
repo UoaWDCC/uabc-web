@@ -16,8 +16,8 @@ export default defineConfig({
     ],
     setupFiles: [
       "dotenv/config",
-      "./apps/backend/src/test-config/mongodb-setup.ts",
-      "./apps/frontend/src/test-config/mocks/dom-setup.ts",
+      "@repo/test-config/src/mongodb-setup.ts",
+      "@repo/test-config/src/dom-setup.ts",
     ],
     globals: true,
     /**
