@@ -1,14 +1,12 @@
 'use client'
 
-import type { MouseEventHandler } from 'react'
+import type { ChangeEventHandler } from 'react'
 
-import { cn } from '@/lib/utils'
-import { Box, Heading, Input, Text, VStack } from '@yamada-ui/react'
-import { Card } from './Card'
+import { RadioCard, Text } from '@yamada-ui/react'
 
 interface MembershipTypeSelectorProps {
   selectedMembership: boolean | undefined | null
-  onClick: MouseEventHandler<HTMLInputElement>
+  onClick: ChangeEventHandler<HTMLInputElement>
   heading: string
   description1: string
   description2: string
@@ -22,28 +20,21 @@ export const MembershipTypeSelector = ({
   description2,
 }: MembershipTypeSelectorProps) => {
   return (
-    <Box as="label">
-      <Card
-        variant={selectedMembership ? 'primary' : 'secondary'}
-        className={cn('flex cursor-pointer flex-col shadow hover:opacity-90')}
-      >
-        <Input
-          type="radio"
-          display="none"
-          name="membership-type-selector"
-          defaultChecked={selectedMembership ?? false}
-          onClick={onClick}
-        />
-
-        <Heading as="h2" fontSize="lg" fontWeight="medium">
-          {heading}
-        </Heading>
-
-        <VStack gapY={0} fontSize="sm" opacity="70%">
-          <Text>{description1}</Text>
-          <Text>{description2}</Text>
-        </VStack>
-      </Card>
-    </Box>
+    <RadioCard
+      name="membership-type-selector"
+      label={heading}
+      description={
+        <Text>
+          {description1}
+          <br />
+          {description2}
+        </Text>
+      }
+      checked={selectedMembership ?? false}
+      variant="surface"
+      colorScheme={selectedMembership ? 'primary' : 'secondary'}
+      size="lg"
+      onChange={onClick}
+    />
   )
 }
