@@ -10,8 +10,8 @@ export const metadata = {
 
 export default function ViewSessionsPage() {
   return (
-    <Container minH="100dvh" centerContent>
-      <BackNavigationBar title="View Sessions" pathName="/admin" />
+    <Container centerContent minH="100dvh">
+      <BackNavigationBar pathName="/admin" title="View Sessions" />
       <Suspense>
         <ClientViewSessionsPage />
       </Suspense>

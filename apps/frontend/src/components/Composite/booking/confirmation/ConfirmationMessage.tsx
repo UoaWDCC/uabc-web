@@ -10,9 +10,9 @@ export default function ConfirmationMessage({ member, email }: ConfirmationMessa
   return (
     <div className="w-full max-w-96 text-pretty">
       {member ? (
-        <BsCheckCircle size={120} className="mx-auto text-success" />
+        <BsCheckCircle className="mx-auto text-success" size={120} />
       ) : (
-        <BsClock size={120} className="mx-auto text-yellow-500" />
+        <BsClock className="mx-auto text-yellow-500" size={120} />
       )}
       <div className="mt-4 space-y-2 text-center">
         <p className="text-lg font-medium">{member ? "Confirmed" : "Awaiting Payment"}</p>

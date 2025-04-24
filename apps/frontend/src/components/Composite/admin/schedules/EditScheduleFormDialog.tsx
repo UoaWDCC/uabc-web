@@ -15,7 +15,7 @@ import {
   HStack,
   useNotice,
 } from "@yamada-ui/react"
-import { FC, memo } from "react"
+import { type FC, memo } from "react"
 import { useScheduleContext } from "./SchedulesContext"
 
 const formSchema = z
@@ -123,27 +123,27 @@ export const EditScheduleFormDialog: FC<EditScheduleFormDialogProps> = memo(({ o
   }
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog onClose={onClose} open={open}>
       <DialogHeader>Edit {weekday}&apos;s Schedule</DialogHeader>
-      <DialogBody as="form" onSubmit={handleSubmit(onSubmit)} my="0" py="md">
+      <DialogBody as="form" my="0" onSubmit={handleSubmit(onSubmit)} py="md">
         <HStack w="full">
           <TextInput
+            flex={1}
             label="Start Time"
             type={InputType.Time}
-            flex={1}
             {...register("startTime")}
-            isError={!!errors.startTime?.message}
-            errorMessage={errors.startTime?.message}
             autoComplete="off"
+            errorMessage={errors.startTime?.message}
+            isError={!!errors.startTime?.message}
           />
           <TextInput
+            flex={1}
             label="End Time"
             type={InputType.Time}
-            flex={1}
             {...register("endTime")}
-            isError={!!errors.endTime?.message}
-            errorMessage={errors.endTime?.message}
             autoComplete="off"
+            errorMessage={errors.endTime?.message}
+            isError={!!errors.endTime?.message}
           />
         </HStack>
         <HStack w="full">
@@ -152,9 +152,9 @@ export const EditScheduleFormDialog: FC<EditScheduleFormDialogProps> = memo(({ o
             label="Venue Name"
             type={InputType.Text}
             {...register("locationName")}
-            isError={!!errors.locationName?.message}
-            errorMessage={errors.locationName?.message}
             autoComplete="off"
+            errorMessage={errors.locationName?.message}
+            isError={!!errors.locationName?.message}
           />
         </HStack>
         <HStack w="full">
@@ -163,9 +163,9 @@ export const EditScheduleFormDialog: FC<EditScheduleFormDialogProps> = memo(({ o
             label="Address"
             type={InputType.Text}
             {...register("locationAddress")}
-            isError={!!errors.locationAddress?.message}
-            errorMessage={errors.locationAddress?.message}
             autoComplete="off"
+            errorMessage={errors.locationAddress?.message}
+            isError={!!errors.locationAddress?.message}
           />
         </HStack>
         <HStack w="full">
@@ -174,23 +174,23 @@ export const EditScheduleFormDialog: FC<EditScheduleFormDialogProps> = memo(({ o
             label="Capacity"
             type={InputType.Number}
             {...register("memberCapacity")}
-            isError={!!errors.memberCapacity?.message}
-            errorMessage={errors.memberCapacity?.message}
             autoComplete="off"
+            errorMessage={errors.memberCapacity?.message}
+            isError={!!errors.memberCapacity?.message}
           />
           <TextInput
             flex={1}
             label="Casual Capacity"
             type={InputType.Number}
             {...register("casualCapacity")}
-            isError={!!errors.casualCapacity?.message}
-            errorMessage={errors.casualCapacity?.message}
             autoComplete="off"
+            errorMessage={errors.casualCapacity?.message}
+            isError={!!errors.casualCapacity?.message}
           />
         </HStack>
       </DialogBody>
       <DialogFooter>
-        <Button variant="ghost" onClick={onClose}>
+        <Button onClick={onClose} variant="ghost">
           Cancel
         </Button>
         <Button colorScheme="primary" loading={isPending} onClick={handleSubmit(onSubmit)}>

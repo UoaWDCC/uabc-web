@@ -13,13 +13,13 @@ interface PaymentOptionCardProps {
 
 export const PaymentOptionCard = ({ onClick, title, subtitle }: PaymentOptionCardProps) => {
   return (
-    <Card onClick={onClick} variant="solid" bg="gray.50" color={["black", "white"]}>
+    <Card bg="gray.50" color={["black", "white"]} onClick={onClick} variant="solid">
       <CardBody gap="0" pt="10" px="lg">
         <Text fontSize="xl" fontWeight="medium">
           {title}
         </Text>
         <HStack w="full">
-          <Text fontWeight="medium" color="tertiary">
+          <Text color="tertiary" fontWeight="medium">
             {subtitle}
           </Text>
           <Spacer />

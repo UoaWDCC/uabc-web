@@ -69,7 +69,7 @@ export const Variant: Story = (args) => {
     <PropsTable columns={BUTTON_VARIANTS} rows={SEMANTIC_COLOR_SCHEMES}>
       {(column, row, key) => {
         return (
-          <Button key={key} colorScheme={row} variant={column} {...args}>
+          <Button colorScheme={row} key={key} variant={column} {...args}>
             Button
           </Button>
         )
@@ -83,7 +83,7 @@ export const Disabled: Story = (args) => {
     <PropsTable columns={BUTTON_VARIANTS} rows={SEMANTIC_COLOR_SCHEMES}>
       {(column, row, key) => {
         return (
-          <Button key={key} colorScheme={row} variant={column} disabled {...args}>
+          <Button colorScheme={row} disabled key={key} variant={column} {...args}>
             Button
           </Button>
         )
@@ -97,7 +97,7 @@ export const ButtonLink: Story = (args) => {
     <PropsTable columns={BUTTON_VARIANTS} rows={SEMANTIC_COLOR_SCHEMES}>
       {(column, row, key) => {
         return (
-          <Button key={key} colorScheme={row} variant={column} as={Link} href="#" {...args}>
+          <Button as={Link} colorScheme={row} href="#" key={key} variant={column} {...args}>
             Button
           </Button>
         )

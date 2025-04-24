@@ -1,5 +1,5 @@
 import { PlayLevel } from "@/types/types"
-import { CollectionConfig } from "payload"
+import type { CollectionConfig } from "payload"
 
 export const Booking: CollectionConfig = {
   slug: "booking",

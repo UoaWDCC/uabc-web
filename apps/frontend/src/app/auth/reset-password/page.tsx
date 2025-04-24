@@ -26,12 +26,13 @@ export default async function ResetPasswordPage(props: {
   const { token } = parseResult.data
 
   // TODO: Check if token is expired
-  if (true) {
+  const tokenExpired = !token
+  if (tokenExpired) {
     return (
       <div className="mx-4 flex min-h-dvh flex-col">
-        <BackNavigationBar title="Reset Your Password" pathName="/auth/login?open=true" />
+        <BackNavigationBar pathName="/auth/login?open=true" title="Reset Your Password" />
         <div className="grid grow place-items-center">
-          <Card variant="card" className="bg-destructive text-destructive-foreground">
+          <Card className="bg-destructive text-destructive-foreground" variant="card">
             <h1 className="pb-1 text-lg font-semibold tracking-tight">Expired Link</h1>
             This password reset link has expired. Please request a new one{" "}
             <Link className="text-right font-bold underline" href="/auth/forgot-password">
@@ -43,13 +44,4 @@ export default async function ResetPasswordPage(props: {
       </div>
     )
   }
-
-  return (
-    <div className="mx-4 flex min-h-dvh flex-col">
-      <BackNavigationBar title="Reset Your Password" pathName="/auth/login?open=true" />
-      <div className="grid grow place-items-center">
-        <ResetPasswordForm token={token} />
-      </div>
-    </div>
-  )
 }

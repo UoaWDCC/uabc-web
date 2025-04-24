@@ -1,4 +1,4 @@
-import { DateField } from "payload"
+import type { DateField } from "payload"
 
 /**
  * Creates a date field but only shows the time picker

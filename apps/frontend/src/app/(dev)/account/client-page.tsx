@@ -67,7 +67,7 @@ export default function ClientAccountForm({
     <VStack alignItems="center">
       {/* Profile Settings Tab */}
 
-      <Card maxW="460px" w="full" variant="outline">
+      <Card maxW="460px" variant="outline" w="full">
         <CardBody>
           <Heading as="h2" fontSize="lg" fontWeight="bold">
             Full Name
@@ -77,15 +77,15 @@ export default function ClientAccountForm({
               label="First Name"
               type={InputType.Text}
               {...register("firstName")}
-              isError={!!errors.firstName?.message}
               errorMessage={errors.firstName?.message}
+              isError={!!errors.firstName?.message}
             />
             <TextInput
               label="Last Name"
               type={InputType.Text}
               {...register("lastName")}
-              isError={!!errors.lastName?.message}
               errorMessage={errors.lastName?.message}
+              isError={!!errors.lastName?.message}
             />
 
             {/* Play Level Selector */}
@@ -93,40 +93,40 @@ export default function ClientAccountForm({
               Play Level
             </Heading>
             <Fieldset
-              invalid={!!errors.playLevel}
               errorMessage={errors.playLevel ? errors.playLevel.message : undefined}
+              invalid={!!errors.playLevel}
               w="full"
             >
               <Controller
-                name="playLevel"
                 control={control}
-                rules={{ required: { value: true, message: "Play level is required." } }}
+                name="playLevel"
                 render={({ field }) => (
                   <SegmentedControl
                     {...field}
-                    variant="basic"
-                    colorScheme="primary"
                     bg="white"
-                    borderWidth="1px"
                     borderColor="tertiary"
+                    borderWidth="1px"
+                    colorScheme="primary"
+                    variant="basic"
                     w="full"
                   >
                     {Object.values(PlayLevel).map((level) => (
                       <SegmentedControlButton
-                        key={level}
-                        value={level}
                         h="12"
+                        key={level}
                         textTransform="capitalize"
+                        value={level}
                       >
                         {level}
                       </SegmentedControlButton>
                     ))}
                   </SegmentedControl>
                 )}
+                rules={{ required: { value: true, message: "Play level is required." } }}
               />
             </Fieldset>
 
-            <Button type="submit" colorScheme="primary" disabled={!isDirty} w="fit-content">
+            <Button colorScheme="primary" disabled={!isDirty} type="submit" w="fit-content">
               Save Changes
             </Button>
           </VStack>
@@ -134,7 +134,7 @@ export default function ClientAccountForm({
       </Card>
 
       {/* Email Address Tab */}
-      <Card maxW="460px" w="full" variant="outline">
+      <Card maxW="460px" variant="outline" w="full">
         <CardBody>
           <Heading as="h2" fontSize="lg" fontWeight="bold">
             Email Address
@@ -150,12 +150,12 @@ export default function ClientAccountForm({
       </Card>
 
       {/* Password Tab */}
-      <Card maxW="460px" w="full" variant="outline">
+      <Card maxW="460px" variant="outline" w="full">
         <CardBody>
           <Heading as="h2" fontSize="lg" fontWeight="bold">
             Password
           </Heading>
-          <Button variant="solid" colorScheme="destructive">
+          <Button colorScheme="destructive" variant="solid">
             Change Password
           </Button>
         </CardBody>

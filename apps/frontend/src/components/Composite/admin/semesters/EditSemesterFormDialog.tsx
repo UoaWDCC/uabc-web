@@ -141,68 +141,68 @@ export const EditSemesterFormDialog = ({ open, onClose }: EditSemesterFormDialog
   }
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog onClose={onClose} open={open}>
       <DialogHeader>Edit {name}</DialogHeader>
-      <DialogBody as="form" onSubmit={handleSubmit(onSubmit)} my="0" py="md">
+      <DialogBody as="form" my="0" onSubmit={handleSubmit(onSubmit)} py="md">
         <HStack w="full">
           <TextInput
+            flex={1}
             label="Open day"
             type={InputType.Date}
-            flex={1}
             {...register("bookingOpenDay")}
-            isError={!!errors.bookingOpenDay?.message}
-            errorMessage={errors.bookingOpenDay?.message}
             autoComplete="off"
+            errorMessage={errors.bookingOpenDay?.message}
+            isError={!!errors.bookingOpenDay?.message}
           />
           <TextInput
+            flex={1}
             label="Open time"
             type={InputType.Time}
-            flex={1}
             {...register("bookingOpenTime")}
-            isError={!!errors.bookingOpenTime?.message}
-            errorMessage={errors.bookingOpenTime?.message}
             autoComplete="off"
+            errorMessage={errors.bookingOpenTime?.message}
+            isError={!!errors.bookingOpenTime?.message}
           />
         </HStack>
         <HStack w="full">
           <TextInput
-            type={InputType.Date}
-            label="Start date"
             flex={1}
+            label="Start date"
+            type={InputType.Date}
             {...register("startDate")}
-            isError={!!errors.startDate?.message}
             errorMessage={errors.startDate?.message}
+            isError={!!errors.startDate?.message}
           />
           <TextInput
-            type={InputType.Date}
-            label="End date"
             flex={1}
+            label="End date"
+            type={InputType.Date}
             {...register("endDate")}
-            isError={!!errors.endDate?.message}
             errorMessage={errors.endDate?.message}
+            isError={!!errors.endDate?.message}
           />
         </HStack>
-        <HStack w="full" gap="md">
+        <HStack gap="md" w="full">
           <TextInput
-            type={InputType.Date}
-            label="Break start date"
             flex={1}
+            label="Break start date"
+            type={InputType.Date}
             {...register("breakStart")}
-            isError={!!errors.breakStart?.message}
             errorMessage={errors.breakStart?.message}
+            isError={!!errors.breakStart?.message}
           />
           <TextInput
-            type={InputType.Date}
-            label="Break end date"
             flex={1}
+            label="Break end date"
+            type={InputType.Date}
             {...register("breakEnd")}
-            isError={!!errors.breakEnd?.message}
             errorMessage={errors.breakEnd?.message}
+            isError={!!errors.breakEnd?.message}
           />
         </HStack>
       </DialogBody>
       <DialogFooter>
-        <Button variant="ghost" onClick={onClose}>
+        <Button onClick={onClose} variant="ghost">
           Cancel
         </Button>
         <Button colorScheme="primary" loading={mutation.isPending} onClick={handleSubmit(onSubmit)}>

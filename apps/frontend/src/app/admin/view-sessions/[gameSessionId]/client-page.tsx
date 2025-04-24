@@ -28,7 +28,7 @@ export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSe
   if (isLoading) {
     return (
       <>
-        <BackNavigationBar title="Download Attendees List" pathName="/admin/view-sessions" />
+        <BackNavigationBar pathName="/admin/view-sessions" title="Download Attendees List" />
         <Loading />
       </>
     )
@@ -37,7 +37,7 @@ export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSe
   if (!data) {
     return (
       <>
-        <BackNavigationBar title="Download Attendees List" pathName="/admin/view-sessions" />
+        <BackNavigationBar pathName="/admin/view-sessions" title="Download Attendees List" />
         <EmptyState>
           <EmptyStateTitle>No data available</EmptyStateTitle>
           <EmptyStateDescription>
@@ -57,7 +57,7 @@ export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSe
     const a = document.createElement("a")
     const url = URL.createObjectURL(fileContents)
     a.href = url
-    a.download = `${formatFullDate(date!)} attendees list.csv`
+    a.download = `${date ? formatFullDate(date) : "unknown-date"} attendees list.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -73,8 +73,10 @@ export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSe
   return (
     <>
       <BackNavigationBar
-        title={isLoading ? "Loading..." : formatFullDate(date!).toLocaleString()}
         pathName="/admin/view-sessions"
+        title={
+          isLoading ? "Loading..." : date ? formatFullDate(date).toLocaleString() : "Unknown Date"
+        }
       />
       <VStack>
         <HStack>
@@ -83,8 +85,8 @@ export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSe
           <Button
             display={{ base: "inline-flex", md: "none" }}
             onClick={handleDownloadcsv}
-            variant="outline"
             startIcon={<DownloadIcon />}
+            variant="outline"
           >
             Download as CSV
           </Button>
@@ -92,7 +94,11 @@ export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSe
         <Text color="gray.500">
           Here&apos;s the attendee list for the session on{" "}
           <Text as="strong">
-            {isLoading ? "Loading..." : formatFullDate(date!).toLocaleString()}
+            {isLoading
+              ? "Loading..."
+              : date
+                ? formatFullDate(date).toLocaleString()
+                : "Unknown Date"}
           </Text>
         </Text>
         <Attendees gameSessionId={gameSessionId} />

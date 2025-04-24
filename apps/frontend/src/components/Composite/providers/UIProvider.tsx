@@ -1,7 +1,7 @@
 "use client"
 import { config, theme } from "@repo/theme"
 import { UIProvider } from "@yamada-ui/react"
-import { FC, PropsWithChildren, memo } from "react"
+import { type FC, type PropsWithChildren, memo } from "react"
 
 export const Providers: FC<PropsWithChildren> = memo(({ children }) => {
   return (

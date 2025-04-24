@@ -63,16 +63,16 @@ export const DeleteSemesterFormDialog = ({ open, onClose }: DeleteSemesterFormDi
   }
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog onClose={onClose} open={open}>
       <DialogHeader>Delete {name}?</DialogHeader>
       <DialogBody>
         <Text className="text-tertiary">Are you sure you want to delete this semester?</Text>
         <Alert
-          status="warning"
-          flexDir="column"
           alignItems="flex-start"
-          variant="subtle"
           colorScheme="danger"
+          flexDir="column"
+          status="warning"
+          variant="subtle"
         >
           <AlertTitle>Warning</AlertTitle>
           <AlertDescription>
@@ -82,7 +82,7 @@ export const DeleteSemesterFormDialog = ({ open, onClose }: DeleteSemesterFormDi
         </Alert>
       </DialogBody>
       <DialogFooter>
-        <Button variant="ghost" onClick={onClose}>
+        <Button onClick={onClose} variant="ghost">
           Cancel
         </Button>
         <Button colorScheme="danger" loading={mutation.isPending} onClick={handleDelete}>

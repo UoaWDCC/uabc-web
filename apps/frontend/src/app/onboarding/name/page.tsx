@@ -28,22 +28,22 @@ export default function NamePage() {
         <form className="flex flex-col gap-6 py-6" onSubmit={handleFormSubmit}>
           <p className="text-center">What&apos;s your name?</p>
           <TextInput
-            label="First Name"
-            value={firstName}
-            type={InputType.Text}
-            isError={false}
-            onChange={(e) => updateFirstName(e.target.value)}
             autoFocus
+            isError={false}
+            label="First Name"
+            onChange={(e) => updateFirstName(e.target.value)}
+            type={InputType.Text}
+            value={firstName}
           />
           <TextInput
-            label="Last Name"
-            value={lastName}
-            type={InputType.Text}
             isError={false}
+            label="Last Name"
             onChange={(e) => updateLastName(e.target.value)}
+            type={InputType.Text}
+            value={lastName}
           />
           <div className="pb-10">
-            <Button large className="w-full" type="submit" disabled={!firstName || !lastName}>
+            <Button className="w-full" disabled={!firstName || !lastName} large type="submit">
               Continue
             </Button>
           </div>

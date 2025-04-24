@@ -9,6 +9,7 @@ import { Button } from "@/components/Generic/ui/button"
 import { useToast } from "@/components/Generic/ui/use-toast"
 import { useBookingMutation } from "@/hooks/mutations/booking"
 import { useCartStore } from "@/stores/useCartStore"
+import { PlayLevel } from "@/types/types"
 
 export default function ClientSelectPlayLevelPage() {
   const router = useRouter()
@@ -38,7 +39,7 @@ export default function ClientSelectPlayLevelPage() {
   const handleConfirmButtonClick = async () => {
     const payload = sortedSessions.map((session) => ({
       gameSessionId: session.id,
-      playLevel: session.playLevel!,
+      playLevel: session.playLevel ?? PlayLevel.beginner, // Provide a default if undefined
     }))
 
     mutate(payload, {
@@ -65,7 +66,7 @@ export default function ClientSelectPlayLevelPage() {
         } else if (code === "LIMIT_REACHED") {
           toast({
             title: "Maximum booking limit reached.",
-            description: `You have already reached the session booking limit for this week.`,
+            description: "You have already reached the session booking limit for this week.",
             variant: "destructive",
           })
         } else if (code === "TOO_MANY_REQUESTS") {
@@ -94,10 +95,10 @@ export default function ClientSelectPlayLevelPage() {
 
   return (
     <div className="mx-4 flex h-dvh flex-col gap-y-4">
-      <BackNavigationBar title="Select your level of play" pathName="/sessions" />
+      <BackNavigationBar pathName="/sessions" title="Select your level of play" />
 
       {sortedSessions.map((session) => (
-        <div key={session.id} className="mb-4">
+        <div className="mb-4" key={session.id}>
           <ExpandedSessionCard gameSession={session} />
         </div>
       ))}
@@ -105,8 +106,8 @@ export default function ClientSelectPlayLevelPage() {
       <div className="mb-10 flex flex-grow">
         <Button
           className="w-full self-end"
-          onClick={handleConfirmButtonClick}
           disabled={!isPlayLevelSelected || isPending}
+          onClick={handleConfirmButtonClick}
         >
           Confirm
         </Button>

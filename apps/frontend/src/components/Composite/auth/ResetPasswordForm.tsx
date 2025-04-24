@@ -98,17 +98,17 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         <div className="flex flex-col gap-4">
           <TextInput
             autoFocus
+            errorMessage={errors.newPassword?.message}
+            isError={!!errors.newPassword}
             label="New Password"
             type={InputType.Password}
-            isError={!!errors.newPassword}
-            errorMessage={errors.newPassword?.message}
             {...register("newPassword")}
           />
           <TextInput
+            errorMessage={errors.confirmPassword?.message}
+            isError={!!errors.confirmPassword}
             label="Confirm Password"
             type={InputType.Password}
-            isError={!!errors.confirmPassword}
-            errorMessage={errors.confirmPassword?.message}
             {...register("confirmPassword")}
           />
           <Button disabled={isPending} type="submit">

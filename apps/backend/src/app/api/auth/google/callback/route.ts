@@ -1,11 +1,11 @@
 import { googleAuthScopes, oauth2Client } from "@/business-layer/security/google"
 import AuthService from "@/collections/services/AuthService"
 import UserService from "@/collections/services/UserService"
-import { UserInfoResponse, UserInfoResponseSchema } from "@/types/auth"
+import { type UserInfoResponse, UserInfoResponseSchema } from "@/types/auth"
 import { MembershipType } from "@/types/types"
 import jwt from "jsonwebtoken"
 import { cookies } from "next/headers"
-import { NextRequest, NextResponse } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
 
 export const GET = async (req: NextRequest) => {
   const params = req.nextUrl.searchParams
@@ -30,7 +30,12 @@ export const GET = async (req: NextRequest) => {
   if (!scopes || googleAuthScopes.some((requiredScope) => !scopes.includes(requiredScope)))
     return NextResponse.json({ error: "No scope or invalid scopes provided" }, { status: 400 })
 
-  let tokens
+  let tokens: {
+    access_token?: string | null
+    expiry_date?: number | null
+    id_token?: string | null
+  } = {}
+
   try {
     const tokenFetchResponse = await oauth2Client.getToken(code)
     tokens = tokenFetchResponse.tokens

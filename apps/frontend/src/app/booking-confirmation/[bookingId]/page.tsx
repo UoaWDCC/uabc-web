@@ -17,7 +17,7 @@ async function ConfirmationPage(
   return (
     <div className="flex min-h-dvh flex-col">
       <div className="relative flex h-32 items-center justify-center overflow-hidden">
-        <div className="absolute -z-10 h-full w-[120%] rounded-b-[50%] bg-secondary md:w-[110%]"></div>
+        <div className="absolute -z-10 h-full w-[120%] rounded-b-[50%] bg-secondary md:w-[110%]" />
         <Link href="/">
           <UabcHeaderText className="mt-4" />
         </Link>
@@ -29,9 +29,9 @@ async function ConfirmationPage(
            * // TODO
            */
           // @ts-ignore
-          <ConfirmationMessage member={false} email={await props.currentUser.email} />
+          <ConfirmationMessage email={await props.currentUser.email} member={false} />
         }
-        <Link href="/sessions" className={buttonVariants({ variant: "ghost" })}>
+        <Link className={buttonVariants({ variant: "ghost" })} href="/sessions">
           Return Home
         </Link>
       </div>

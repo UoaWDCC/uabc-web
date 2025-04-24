@@ -113,7 +113,7 @@ export const Heading: FC<HeadingProps> = memo(({ children, as = "h1", ...props }
   )
 
   return (
-    <UIHeading as={as as As} __css={css} {...props}>
+    <UIHeading __css={css} as={as as As} {...props}>
       {children}
     </UIHeading>
   )

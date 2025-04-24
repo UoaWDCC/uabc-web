@@ -10,20 +10,20 @@ interface UabcLogoProps {
 export const UabcLogo = ({ className, size = 250 }: UabcLogoProps) => (
   <div className={className}>
     <Image
-      src={LogoDarkMode}
       alt="uabc logo"
       className="hidden dark:block"
-      width={size}
-      height={size}
       draggable={false}
+      height={size}
+      src={LogoDarkMode}
+      width={size}
     />
     <Image
-      src={Logo}
       alt="uabc logo"
       className="block dark:hidden"
-      width={size}
-      height={size}
       draggable={false}
+      height={size}
+      src={Logo}
+      width={size}
     />
   </div>
 )

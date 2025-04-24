@@ -28,10 +28,10 @@ async function AccountPage({ currentUser }: CurrentUserProps) {
   return (
     <Container h="100dvh">
       <VStack>
-        <BackNavigationBar title="Account" pathName="/sessions">
+        <BackNavigationBar pathName="/sessions" title="Account">
           <Spacer />
           <Suspense fallback={<Text>Loading...</Text>}>
-            <Tag colorScheme="tertiary" rounded="full" variant="solid" size="sm">
+            <Tag colorScheme="tertiary" rounded="full" size="sm" variant="solid">
               {user?.member ? "Member" : "Non-member"}
             </Tag>
           </Suspense>
@@ -45,11 +45,11 @@ async function AccountPage({ currentUser }: CurrentUserProps) {
           }
         >
           <ClientAccountForm
+            email={user?.email || ""}
             firstName={user?.firstName || ""}
             lastName={user?.lastName || ""}
-            email={user?.email || ""}
-            playLevel={playLevel}
             member={user?.member || false}
+            playLevel={playLevel}
           />
         </Suspense>
       </VStack>

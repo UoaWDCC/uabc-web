@@ -35,10 +35,10 @@ const UnmemoizedScheduleDetailCard = () => {
 
   return (
     <>
-      <Card fontSize="sm" color="tertiary" variant="subtle">
+      <Card color="tertiary" fontSize="sm" variant="subtle">
         <CardHeader>
           <HStack w="full">
-            <Heading as="h3" isTruncated fontSize="md" color={["black", "white"]}>
+            <Heading as="h3" color={["black", "white"]} fontSize="md" isTruncated>
               {weekday}
             </Heading>
             <Spacer />
@@ -64,8 +64,8 @@ const UnmemoizedScheduleDetailCard = () => {
         </CardBody>
       </Card>
 
-      <EditScheduleFormDialog open={editDisclosure.open} onClose={editDisclosure.onClose} />
-      <DeleteScheduleFormDialog open={deleteDisclosure.open} onClose={deleteDisclosure.onClose} />
+      <EditScheduleFormDialog onClose={editDisclosure.onClose} open={editDisclosure.open} />
+      <DeleteScheduleFormDialog onClose={deleteDisclosure.onClose} open={deleteDisclosure.open} />
     </>
   )
 }

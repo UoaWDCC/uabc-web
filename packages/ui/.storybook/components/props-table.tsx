@@ -20,11 +20,11 @@ export const PropsTable = <Y extends string, M extends string>({
       <Grid templateColumns={`auto repeat(${columns.length}, 1fr)`} w="full">
         <GridItem />
 
-        {columns.map((column, colIndex) => (
+        {columns.map((column) => (
           <GridItem
-            key={colIndex}
             color="fg.emphasized"
             fontWeight="medium"
+            key={`column-${column}`}
             p="md"
             textAlign="center"
           >
@@ -42,13 +42,13 @@ export const PropsTable = <Y extends string, M extends string>({
               <For each={columns}>
                 {(column, colIndex) => (
                   <GridItem
-                    key={colIndex}
                     as={Center}
                     borderBottomWidth="1px"
                     borderColor="purple.ghost"
                     borderLeftWidth={!colIndex ? "1px" : undefined}
                     borderRightWidth="1px"
                     borderTopWidth={!rowIndex ? "1px" : undefined}
+                    key={colIndex}
                     p="md"
                     roundedBottomLeft={!colIndex && rowIndex === rows.length - 1 ? "l3" : undefined}
                     roundedBottomRight={

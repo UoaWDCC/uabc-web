@@ -104,8 +104,8 @@ export const Types: Story = ({ type, ...args }) => {
       {(_, row, key) => (
         <TextInput
           key={key}
-          type={row as InputType}
           label={row.charAt(0).toUpperCase() + row.slice(1)}
+          type={row as InputType}
           {...args}
         />
       )}
@@ -126,8 +126,8 @@ export const States: Story = ({ type, ...args }) => {
           <TextInput
             key={key}
             label="Input Label"
-            type={type || InputType.Text}
             placeholder="Placeholder text"
+            type={type || InputType.Text}
             {...props}
             {...args}
           />
@@ -140,23 +140,23 @@ export const States: Story = ({ type, ...args }) => {
 export const CustomStyles: Story = ({ type, ...args }) => {
   return (
     <TextInput
-      label="Label"
-      type={type || InputType.Text}
-      placeholderShownLabelCSS={{
-        color: "blue",
-      }}
-      placeholderHiddenLabelCSS={{
-        color: "green",
+      activeLabelCSS={{
+        color: "orange",
       }}
       focusedLabelCSS={{
         color: "red",
       }}
-      activeLabelCSS={{
-        color: "orange",
-      }}
+      label="Label"
       labelProps={{
         className: "font-bold",
       }}
+      placeholderHiddenLabelCSS={{
+        color: "green",
+      }}
+      placeholderShownLabelCSS={{
+        color: "blue",
+      }}
+      type={type || InputType.Text}
       {...args}
     />
   )

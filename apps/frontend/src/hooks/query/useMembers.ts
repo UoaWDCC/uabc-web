@@ -11,7 +11,7 @@ export type MemberResponse = {
 }
 
 const fetchMembers = async (): Promise<MemberResponse[]> => {
-  const response = await fetch(`/api/users?member=true&verified=true`, {
+  const response = await fetch("/api/users?member=true&verified=true", {
     cache: "no-store",
   })
   return response.json()

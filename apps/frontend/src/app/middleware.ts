@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes"
 import jwt from "jsonwebtoken"
-import { NextRequest, NextResponse } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
 
 import { JWTResponseSchema } from "@/types/middleware"
 
@@ -13,17 +13,16 @@ export function middleware(req: NextRequest) {
     const response = JWTResponseSchema.safeParse(decoded)
 
     if (!response.success) return NextResponse.json({ status: StatusCodes.UNAUTHORIZED })
-    else {
-      if (req.nextUrl.pathname.startsWith("/api/admin")) {
-        const data = response.data
 
-        if (data.user.role !== "admin") {
-          return NextResponse.json({ status: StatusCodes.FORBIDDEN })
-        }
+    if (req.nextUrl.pathname.startsWith("/api/admin")) {
+      const data = response.data
+
+      if (data.user.role !== "admin") {
+        return NextResponse.json({ status: StatusCodes.FORBIDDEN })
       }
-
-      return NextResponse.next()
     }
+
+    return NextResponse.next()
   } catch {
     // Invalid or expired token
     return NextResponse.redirect(new URL("/auth/google", req.url))

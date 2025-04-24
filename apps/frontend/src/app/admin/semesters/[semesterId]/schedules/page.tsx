@@ -20,7 +20,7 @@ export async function generateMetadata(ctx: z.infer<typeof routeContextSchema>) 
   if (!result.success) notFound()
 
   return {
-    title: `no schedules`,
+    title: "no schedules",
   }
 }
 
@@ -33,7 +33,7 @@ export default async function SchedulesPage(ctx: z.infer<typeof routeContextSche
 
   return (
     <Container minH="100dvh">
-      <BackNavigationBar title="Schedules" pathName="/admin/semesters">
+      <BackNavigationBar pathName="/admin/semesters" title="Schedules">
         <Spacer />
         <ScheduleCreateButton semesterId={semesterId} />
       </BackNavigationBar>

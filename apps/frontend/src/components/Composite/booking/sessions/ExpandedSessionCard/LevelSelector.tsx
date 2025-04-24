@@ -20,19 +20,22 @@ export const LevelSelector = ({ id, selectedLevel }: LevelSelectorProps) => {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <button className="h-12 w-full rounded-b-md bg-tertiary text-sm font-semibold capitalize text-tertiary-foreground">
+        <button
+          className="h-12 w-full rounded-b-md bg-tertiary text-sm font-semibold capitalize text-tertiary-foreground"
+          type="button"
+        >
           {selectedLevel ?? "Select Play Level"}
         </button>
       </DrawerTrigger>
-      <DrawerContent className="bg-neutral p-4 pb-10">
-        <span className="mb-4 text-center font-medium">Please select a play level</span>
+      <DrawerContent>
+        <div className="mb-4 text-center font-medium">Please select a play level</div>
         <div className="grid grid-cols-3 gap-2 rounded-xl bg-white p-2">
-          {Object.values(PlayLevel).map((playLevel, index) => (
+          {Object.values(PlayLevel).map((playLevel) => (
             <LevelSelectorButton
-              key={index}
+              handleClick={() => updatePlayLevelById(id, playLevel)}
+              key={playLevel}
               name={playLevel}
               selected={selectedLevel === playLevel}
-              handleClick={() => updatePlayLevelById(id, playLevel)}
             />
           ))}
         </div>

@@ -98,8 +98,8 @@ export const MemberApprovalTable = memo(() => {
                 .rows.map((row) => (
                   <MemberApprovalTableRow
                     key={row.getValue("id")}
-                    userId={row.getValue("id")}
                     row={row}
+                    userId={row.getValue("id")}
                   />
                 ))
             ) : (
@@ -115,12 +115,12 @@ export const MemberApprovalTable = memo(() => {
       {table.getPageCount() > 1 && (
         <Center>
           <MemberApprovalTablePagination
-            hasPreviousPage={table.getCanPreviousPage()}
             hasNextPage={table.getCanNextPage()}
-            pageIndex={pagination.pageIndex}
-            pageCount={table.getPageCount()}
-            previousPage={table.previousPage}
+            hasPreviousPage={table.getCanPreviousPage()}
             nextPage={table.nextPage}
+            pageCount={table.getPageCount()}
+            pageIndex={pagination.pageIndex}
+            previousPage={table.previousPage}
             setPageIndex={table.setPageIndex}
           />
         </Center>

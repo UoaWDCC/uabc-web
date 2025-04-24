@@ -1,4 +1,4 @@
-import { Row } from "@tanstack/react-table"
+import type { Row } from "@tanstack/react-table"
 import { UsersIcon } from "@yamada-ui/lucide"
 import {
   Card,
@@ -8,15 +8,15 @@ import {
   EmptyState,
   EmptyStateDescription,
   EmptyStateIndicator,
-  EmptyStateProps,
+  type EmptyStateProps,
   EmptyStateTitle,
   Loading,
   Spacer,
   Text,
 } from "@yamada-ui/react"
-import { FC, memo } from "react"
+import { type FC, memo } from "react"
 import { MemberApprovalModal } from "./MemberApprovalModal"
-import { Member } from "./columns"
+import type { Member } from "./columns"
 
 interface MemberApprovalCardProps {
   row: Row<Member>
@@ -24,7 +24,7 @@ interface MemberApprovalCardProps {
 
 export const MemberApprovalCard: FC<MemberApprovalCardProps> = memo(({ row }) => {
   return (
-    <Card key={row.getValue("id")} flexDir="row" py="md" bg="blackAlpha.50">
+    <Card bg="blackAlpha.50" flexDir="row" key={row.getValue("id")} py="md">
       <CardHeader pt="0">
         <Text>
           {row.getValue("firstName")} {row.getValue("lastName")}
@@ -42,7 +42,7 @@ MemberApprovalCard.displayName = "MemberApprovalCard"
 
 export const MemberApprovalCardEmpty: FC<EmptyStateProps> = memo(({ ...props }) => {
   return (
-    <EmptyState borderWidth="1px" borderColor="border" rounded="md" p="lg" {...props}>
+    <EmptyState borderColor="border" borderWidth="1px" p="lg" rounded="md" {...props}>
       <EmptyStateIndicator>
         <UsersIcon />
       </EmptyStateIndicator>

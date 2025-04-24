@@ -45,18 +45,18 @@ export function convertTo12HourFormat(militaryTime: string): string {
     const parts = militaryTime.split(":")
     if (militaryTime.includes(":")) {
       const [hours, minutes, seconds] = parts
-      const numHours = parseInt(hours)
-      const numMinutes = parseInt(minutes)
-      const numSeconds = seconds ? parseInt(seconds) : 0
+      const numHours = Number.parseInt(hours)
+      const numMinutes = Number.parseInt(minutes)
+      const numSeconds = seconds ? Number.parseInt(seconds) : 0
 
       if (
-        isNaN(numHours) ||
+        Number.isNaN(numHours) ||
         numHours < 0 ||
         numHours > 23 ||
-        isNaN(numMinutes) ||
+        Number.isNaN(numMinutes) ||
         numMinutes < 0 ||
         numMinutes > 59 ||
-        (seconds && (isNaN(numSeconds) || numSeconds < 0 || numSeconds > 59))
+        (seconds && (Number.isNaN(numSeconds) || numSeconds < 0 || numSeconds > 59))
       ) {
         return militaryTime
       }

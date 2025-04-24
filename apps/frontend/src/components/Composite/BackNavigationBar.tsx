@@ -6,7 +6,7 @@ import { HStack, IconButton } from "@yamada-ui/react"
 import { Heading } from "@repo/ui/components/Heading"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ReactNode, useCallback, useContext } from "react"
+import { type ReactNode, useCallback, useContext } from "react"
 import { OriginContext } from "./providers/OriginTracker"
 
 interface BackNavigationBarProps {
@@ -34,20 +34,20 @@ export const BackNavigationBar = ({
     <HStack w="full">
       <HStack>
         <IconButton
-          variant="ghost"
           as={!isWithinPage ? Link : undefined}
-          href={!isWithinPage ? pathName : undefined}
-          p={2}
-          minW={8}
-          h={8}
-          w={8}
-          onClick={handleBackButtonClick}
           colorScheme="tertiary"
+          h={8}
+          href={!isWithinPage ? pathName : undefined}
+          minW={8}
+          onClick={handleBackButtonClick}
+          p={2}
+          variant="ghost"
+          w={8}
           {...props}
         >
           <ArrowLeftIcon boxSize={6} />
         </IconButton>
-        <Heading.h1 fontSize="lg" fontWeight="medium" lineHeight="none" color="tertiary">
+        <Heading.h1 color="tertiary" fontSize="lg" fontWeight="medium" lineHeight="none">
           {title}
         </Heading.h1>
       </HStack>

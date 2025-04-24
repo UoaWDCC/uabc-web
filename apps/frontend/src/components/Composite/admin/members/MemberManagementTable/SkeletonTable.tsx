@@ -18,17 +18,17 @@ export const SkeletonTable: FC = memo(() => {
       <NativeTable borderCollapse="separate" borderWidth="1px" rounded="md">
         <Thead>
           <Tr>
-            <Th w="0" px="3" py="2">
+            <Th px="3" py="2" w="0">
               <Center h="full">
                 <Checkbox disabled />
               </Center>
             </Th>
             <Th w="200px">Name</Th>
             <Th>Email</Th>
-            <Th w="150px" textAlign="center">
+            <Th textAlign="center" w="150px">
               Prepaid Sessions
             </Th>
-            <Th w="150px" textAlign="center">
+            <Th textAlign="center" w="150px">
               Actions
             </Th>
           </Tr>

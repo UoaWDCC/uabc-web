@@ -75,27 +75,27 @@ export function OTPFormAlertDialog({
             in 3 minutes.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
           <div>
             <TextInput
               autoFocus
-              label="Verification Code"
-              type={InputType.Text}
-              isError={isRegisterError}
               errorMessage={"Invalid code. Please double check and try again."}
-              value={verificationCode}
+              isError={isRegisterError}
+              label="Verification Code"
               onChange={(e) => setVerificationCode(e.target.value)}
+              type={InputType.Text}
+              value={verificationCode}
             />
           </div>
-          <Button type="submit" disabled={!verificationCode}>
+          <Button disabled={!verificationCode} type="submit">
             Next
           </Button>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <Button
-            type="button"
-            onClick={handleResendCodeClick}
-            disabled={isResendingCode}
             className="p-0"
+            disabled={isResendingCode}
+            onClick={handleResendCodeClick}
+            type="button"
             variant="link"
           >
             Resend Code

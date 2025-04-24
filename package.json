@@ -1,34 +1,10 @@
 {
-  "name": "uabc-web",
-  "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
-  "license": "MIT",
-  "type": "module",
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "cross-env NODE_OPTIONS=--no-deprecation biome check .",
-    "start": "turbo run start",
-    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
-    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
-    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
-    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "test": "cross-env NODE_ENV=test vitest",
-    "test:coverage": "cross-env NODE_ENV=test vitest --coverage",
-    "theme": "turbo run theme",
-    "prepare": "husky",
-    "precommit": "lint-staged",
-    "storybook": "turbo run storybook",
-    "storybook:build": "turbo run storybook:build",
-    "frontend:install": "pnpm install --recursive --filter=frontend",
-    "backend:install": "pnpm install --recursive --filter=backend",
-    "ui:install": "pnpm install --recursive --filter=@repo/ui"
-  },
   "dependencies": {
     "@vitejs/plugin-react-swc": "^3.9.0",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3"
   },
+  "description": "A blank template to get started with Payload 3.0",
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@testing-library/dom": "^10.4.0",
@@ -52,11 +28,33 @@
     "node": ">=22",
     "pnpm": "^9"
   },
+  "license": "MIT",
+  "name": "uabc-web",
+  "packageManager": "pnpm@9.0.0",
   "pnpm": {
     "onlyBuiltDependencies": ["sharp"]
   },
+  "scripts": {
+    "build": "turbo run build",
+    "check-types": "turbo run check-types",
+    "dev": "turbo run dev",
+    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation biome check .",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "precommit": "lint-staged",
+    "prepare": "husky",
+    "start": "turbo run start",
+    "storybook": "turbo run storybook",
+    "storybook:build": "turbo run storybook:build",
+    "test": "cross-env NODE_ENV=test vitest",
+    "test:coverage": "cross-env NODE_ENV=test vitest --coverage",
+    "theme": "turbo run theme"
+  },
+  "type": "module",
+  "version": "1.0.0",
   "volta": {
     "node": "22.14.0"
-  },
-  "packageManager": "pnpm@9.0.0"
+  }
 }

@@ -12,9 +12,9 @@ export const OptionButtonUtils = forwardRef<HTMLButtonElement, OptionTypes>(
       case "edit":
         return (
           <Button
-            variant="ghost"
             className="h-8 w-full justify-start text-foreground hover:bg-secondary"
             ref={ref}
+            variant="ghost"
             {...props}
           >
             <SquarePen className="mr-2 w-4" />
@@ -25,9 +25,9 @@ export const OptionButtonUtils = forwardRef<HTMLButtonElement, OptionTypes>(
       case "delete":
         return (
           <Button
-            variant="ghost"
             className="h-8 w-full justify-start text-destructive hover:bg-destructive/20"
             ref={ref}
+            variant="ghost"
             {...props}
           >
             <Trash2 className="mr-2 w-4" />

@@ -1,5 +1,5 @@
-import { User } from "@/payload-types"
-import { CreateUserData } from "@/types/collections"
+import type { User } from "@/payload-types"
+import type { CreateUserData } from "@/types/collections"
 
 export const userMock: User = {
   id: "60a4fa6ff8ba5b0a929c1143",

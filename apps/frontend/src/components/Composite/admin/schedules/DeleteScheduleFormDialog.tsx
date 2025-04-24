@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query"
-import React, { FC, memo } from "react"
+import React, { type FC, memo } from "react"
 
 import { useDeleteScheduleMutation } from "@/hooks/mutations/schedules"
 import { QUERY_KEY } from "@/lib/utils/queryKeys"
@@ -56,16 +56,16 @@ export const DeleteScheduleFormDialog: FC<DeleteScheduleFormDialogProps> = memo(
     }
 
     return (
-      <Dialog open={open} onClose={onClose}>
+      <Dialog onClose={onClose} open={open}>
         <DialogHeader>Delete {weekday}&apos;s Schedule?</DialogHeader>
         <DialogBody>
           <Text className="text-tertiary">Are you sure you want to delete this schedule?</Text>
           <Alert
-            status="warning"
-            flexDir="column"
             alignItems="flex-start"
-            variant="subtle"
             colorScheme="danger"
+            flexDir="column"
+            status="warning"
+            variant="subtle"
           >
             <AlertTitle>Warning</AlertTitle>
             <AlertDescription>
@@ -75,7 +75,7 @@ export const DeleteScheduleFormDialog: FC<DeleteScheduleFormDialogProps> = memo(
           </Alert>
         </DialogBody>
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose}>
+          <Button onClick={onClose} variant="ghost">
             Cancel
           </Button>
           <Button colorScheme="danger" loading={isPending} onClick={handleDelete}>

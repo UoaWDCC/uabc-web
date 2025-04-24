@@ -32,13 +32,13 @@ export const TablePagination: FC<TableProps> = memo(
     assignRef(totalPageRef, setPages)
 
     return (
-      <Grid gridTemplateColumns="repeat(3, 1fr)" gap="md" placeItems="center">
+      <Grid gap="md" gridTemplateColumns="repeat(3, 1fr)" placeItems="center">
         <GridItem />
         <GridItem>
-          <Pagination page={currentPage} total={pages} onChange={handlePageChange} withEdges />
+          <Pagination onChange={handlePageChange} page={currentPage} total={pages} withEdges />
         </GridItem>
         <GridItem>
-          <Select onChange={handlePerPageChange} defaultValue="20" w="32">
+          <Select defaultValue="20" onChange={handlePerPageChange} w="32">
             <Option value="10">10</Option>
             <Option value="20">20</Option>
             <Option value="50">50</Option>

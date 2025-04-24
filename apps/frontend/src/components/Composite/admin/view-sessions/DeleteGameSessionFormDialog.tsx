@@ -47,11 +47,11 @@ export const DeleteGameSessionFormDialog: FC<DeleteGameSessionFormDialogProps> =
     }
 
     return (
-      <Dialog open={open} onClose={onClose}>
+      <Dialog onClose={onClose} open={open}>
         <DialogHeader>Delete Game Session?</DialogHeader>
         <DialogBody>Are you sure you want to delete this session?</DialogBody>
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose}>
+          <Button onClick={onClose} variant="ghost">
             Cancel
           </Button>
           <Button colorScheme="red" loading={isPending} onClick={handleSubmit}>

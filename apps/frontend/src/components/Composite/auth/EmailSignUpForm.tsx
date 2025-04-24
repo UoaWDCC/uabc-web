@@ -72,29 +72,29 @@ export const EmailSignUpForm = () => {
           <span className="text-center text-foreground">Create an Account</span>
           <TextInput
             autoFocus
+            errorMessage={errors.email?.message}
+            isError={!!errors.email}
             label="Email"
             type={InputType.Email}
-            isError={!!errors.email}
-            errorMessage={errors.email?.message}
             {...register("email")}
           />
           <TextInput
+            errorMessage={errors.password?.message}
+            isError={!!errors.password}
             label="Password"
             type={InputType.Password}
-            isError={!!errors.password}
-            errorMessage={errors.password?.message}
             {...register("password")}
           />
-          <Button large type="submit" disabled={isPending}>
+          <Button disabled={isPending} large type="submit">
             Sign Up with Email
           </Button>
         </div>
       </form>
       <OTPFormAlertDialog
-        open={dialogOpen}
+        email={formData.email}
         onOpenChange={setDialogOpen}
         onSuccess={handleSuccessfulSignUp}
-        email={formData.email}
+        open={dialogOpen}
         password={formData.password}
       />
     </>

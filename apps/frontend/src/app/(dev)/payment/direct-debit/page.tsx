@@ -30,15 +30,15 @@ export default function DirectDebitPage() {
         </Text>
         <VStack>
           <DebitDetailsCard
-            title="Account Number:"
-            subtitle={accountNumber}
             copyText={accountNumber}
+            subtitle={accountNumber}
+            title="Account Number:"
           />
           <DebitDetailsCard
-            title="Reference:"
-            subtitle={`${firstName} ${lastName}`}
-            sessionId={sessionId}
             copyText={sessionId}
+            sessionId={sessionId}
+            subtitle={`${firstName} ${lastName}`}
+            title="Reference:"
           />
         </VStack>
         <Button colorScheme="primary" onClick={() => alert("DONE")}>

@@ -97,11 +97,11 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
 
     if (!bookingOpen)
       return (
-        <Dialog open={open} onClose={onClose}>
+        <Dialog onClose={onClose} open={open}>
           <DialogHeader>Error</DialogHeader>
           <DialogBody>An unexpected error has occurred.</DialogBody>
           <DialogFooter>
-            <Button onClick={onClose} colorScheme="primary">
+            <Button colorScheme="primary" onClick={onClose}>
               Done
             </Button>
           </DialogFooter>
@@ -109,48 +109,48 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
       )
 
     return (
-      <Dialog open={open} onClose={onClose}>
+      <Dialog onClose={onClose} open={open}>
         <DialogHeader>{formatFullDate(date).toLocaleString()}</DialogHeader>
-        <DialogBody as="form" onSubmit={handleSubmit(onSubmit)} my="0" py="md">
+        <DialogBody as="form" my="0" onSubmit={handleSubmit(onSubmit)} py="md">
           <HStack w="full">
             <TextInput
-              label="Booking Open"
-              type={InputType.Text}
-              flex={1}
-              value={format(bookingOpen, "dd/MM/yy hh:mma")}
-              readOnly
               disabled
+              flex={1}
+              label="Booking Open"
+              readOnly
+              type={InputType.Text}
+              value={format(bookingOpen, "dd/MM/yy hh:mma")}
             />
             <TextInput
-              label="Booking Close"
-              type={InputType.Text}
+              disabled
               flex={1}
+              label="Booking Close"
+              readOnly
+              type={InputType.Text}
               value={
                 watch("startTime")
                   ? format(parse(watch("startTime"), "HH:mm", date), "dd/MM/yy hh:mma")
                   : format(date, "dd/MM/yy hh:mma")
               }
-              readOnly
-              disabled
             />
           </HStack>
           <HStack w="full">
             <TextInput
+              flex={1}
               label="Start Time"
               type={InputType.Time}
-              flex={1}
               {...register("startTime")}
-              isError={!!errors.startTime}
-              errorMessage={errors.startTime?.message}
               autoFocus
+              errorMessage={errors.startTime?.message}
+              isError={!!errors.startTime}
             />
             <TextInput
+              flex={1}
               label="End Time"
               type={InputType.Time}
-              flex={1}
               {...register("endTime")}
-              isError={!!errors.endTime}
               errorMessage={errors.endTime?.message}
+              isError={!!errors.endTime}
             />
           </HStack>
           <HStack w="full">
@@ -159,8 +159,8 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
               label="Location Name"
               type={InputType.Text}
               {...register("locationName")}
-              isError={!!errors.locationName}
               errorMessage={errors.locationName?.message}
+              isError={!!errors.locationName}
             />
           </HStack>
           <HStack w="full">
@@ -169,8 +169,8 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
               label="Address"
               type={InputType.Text}
               {...register("locationAddress")}
-              isError={!!errors.locationAddress}
               errorMessage={errors.locationAddress?.message}
+              isError={!!errors.locationAddress}
             />
           </HStack>
           <HStack w="full">
@@ -179,24 +179,24 @@ export const EditGameSessionFormDialog: FC<EditGameSessionFormDialogProps> = mem
               label="Capacity"
               type={InputType.Text}
               {...register("memberCapacity")}
-              isError={!!errors.memberCapacity}
               errorMessage={errors.memberCapacity?.message}
+              isError={!!errors.memberCapacity}
             />
             <TextInput
               flex={1}
               label="Casual Capacity"
               type={InputType.Text}
               {...register("casualCapacity")}
-              isError={!!errors.casualCapacity}
               errorMessage={errors.casualCapacity?.message}
+              isError={!!errors.casualCapacity}
             />
           </HStack>
         </DialogBody>
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose}>
+          <Button onClick={onClose} variant="ghost">
             Cancel
           </Button>
-          <Button colorScheme="primary" type="submit" loading={isPending}>
+          <Button colorScheme="primary" loading={isPending} type="submit">
             Save
           </Button>
         </DialogFooter>

@@ -27,7 +27,7 @@ import type { FC } from "react"
 
 interface ColorPalletsProps {
   name: string
-  colors: Dict<Dict>
+  colors: Record<string, string>
 }
 
 export const ColorPallets: FC<ColorPalletsProps> = ({ name, colors }) => {

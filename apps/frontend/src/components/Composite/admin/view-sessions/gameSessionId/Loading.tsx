@@ -9,10 +9,10 @@ export const Loading = memo(() => {
         <Heading>Attendees</Heading>
         <Spacer />
         <Button
-          display={{ base: "inline-flex", md: "none" }}
-          variant="outline"
           disabled
+          display={{ base: "inline-flex", md: "none" }}
           startIcon={<DownloadIcon />}
+          variant="outline"
         >
           Download as CSV
         </Button>

@@ -1,5 +1,5 @@
 import { InputType, TextInput } from "@repo/ui/components/TextInput"
-import { Row } from "@tanstack/react-table"
+import type { Row } from "@tanstack/react-table"
 import { EllipsisIcon } from "@yamada-ui/lucide"
 import {
   Button,
@@ -15,9 +15,9 @@ import {
   VStack,
   useDisclosure,
 } from "@yamada-ui/react"
-import { FC, memo } from "react"
+import { type FC, memo } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { Member } from "./columns"
+import type { Member } from "./columns"
 
 interface MemberApprovalModalProps {
   row: Row<Member>
@@ -40,7 +40,7 @@ export const MemberApprovalModal: FC<MemberApprovalModalProps> = memo(({ row }) 
   })
 
   const onSubmit = (data: FormData) => {
-    if (data && data.prepaidSessions && data.prepaidSessions > 0) {
+    if (data?.prepaidSessions && data.prepaidSessions > 0) {
       console.log("Form data:", data)
       console.log("Approving member:", row.original)
       onClose()
@@ -52,14 +52,14 @@ export const MemberApprovalModal: FC<MemberApprovalModalProps> = memo(({ row }) 
   return (
     <>
       <IconButton
-        variant="ghost"
-        display={{ base: "none", lg: "inline-flex" }}
         bg={["white", "black"]}
+        display={{ base: "none", lg: "inline-flex" }}
         onClick={onOpen}
+        variant="ghost"
       >
         <EllipsisIcon w="4" />
       </IconButton>
-      <Modal open={open} onClose={onClose}>
+      <Modal onClose={onClose} open={open}>
         <ModalHeader>Approve Member</ModalHeader>
         <ModalBody>
           <Card variant="outline">
@@ -74,26 +74,26 @@ export const MemberApprovalModal: FC<MemberApprovalModalProps> = memo(({ row }) 
         <ModalFooter>
           <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
             <Controller
-              name="prepaidSessions"
               control={control}
+              name="prepaidSessions"
               render={({ field }) => (
                 <TextInput
                   label="Prepaid Sessions"
                   type={InputType.Number}
                   {...field}
-                  isError={!!errors.prepaidSessions}
                   errorMessage={errors.prepaidSessions?.message}
+                  isError={!!errors.prepaidSessions}
                 />
               )}
             />
-            <ButtonGroup placeSelf="flex-end" gap="sm">
-              <Button variant="outline" onClick={onClose}>
+            <ButtonGroup gap="sm" placeSelf="flex-end">
+              <Button onClick={onClose} variant="outline">
                 Cancel
               </Button>
-              <Button variant="solid" colorScheme="danger" onClick={onClose}>
+              <Button colorScheme="danger" onClick={onClose} variant="solid">
                 Reject
               </Button>
-              <Button type="submit" colorScheme="primary" disabled={!isValid || !isDirty}>
+              <Button colorScheme="primary" disabled={!isValid || !isDirty} type="submit">
                 Approve
               </Button>
             </ButtonGroup>

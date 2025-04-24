@@ -20,7 +20,7 @@ export const useEditGameSessionMutation = () => {
 export const useCreateGameSessionMutation = () => {
   const mutation = useMutation({
     mutationFn: async (body: BodyInit) => {
-      const response = await fetch(`/api/game-sessions`, {
+      const response = await fetch("/api/game-sessions", {
         method: "POST",
         body,
         headers: {

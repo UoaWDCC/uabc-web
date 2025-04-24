@@ -10,20 +10,23 @@ interface SelectableCardProps {
 }
 
 export const SelectableCard = ({ session, checked, handleSessionClick }: SelectableCardProps) => (
-  <div
-    data-testid="session-card"
-    key={session.id}
+  <label
     className={session.isFull ? "pointer-events-none" : "cursor-pointer hover:opacity-90"}
-    onClick={() => !session.isFull && handleSessionClick(session.id)}
-    role="checkbox"
-    aria-checked={checked}
+    data-testid="session-card"
   >
+    <input
+      checked={checked}
+      className="hidden"
+      disabled={session.isFull}
+      onChange={() => handleSessionClick(session.id)}
+      type="checkbox"
+    />
     <SelectSessionCard
       day={session.weekday}
-      startTime={session.startTime}
       endTime={session.endTime}
       location={session.locationName}
+      startTime={session.startTime}
       status={session.isFull ? "disabled" : checked ? "selected" : "default"}
     />
-  </div>
+  </label>
 )

@@ -21,8 +21,6 @@ export const FilterInput: FC<FilterInputProps> = memo(
     })
     return (
       <Input
-        placeholder="Filter members..."
-        value={value}
         onChange={(ev) => {
           setValue(ev.target.value)
           const hasValue = !!ev.target.value
@@ -37,6 +35,8 @@ export const FilterInput: FC<FilterInputProps> = memo(
             filterRef.current(ev.target.value)
           })
         }}
+        placeholder="Filter members..."
+        value={value}
         w="300px"
       />
     )

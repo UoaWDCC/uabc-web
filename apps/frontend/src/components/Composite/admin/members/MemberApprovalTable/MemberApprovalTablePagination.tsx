@@ -1,4 +1,4 @@
-import { Pagination, PaginationProps } from "@yamada-ui/react"
+import { Pagination, type PaginationProps } from "@yamada-ui/react"
 import { memo } from "react"
 
 interface MemberApprovalTablePaginationProps {

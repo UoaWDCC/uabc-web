@@ -34,7 +34,7 @@ type CurrentGameSessionResponse = {
 }
 
 const fetchCurrentGameSessions = async (): Promise<CurrentGameSessionResponse[]> => {
-  const response = await fetch(`/api/game-sessions/current`, {
+  const response = await fetch("/api/game-sessions/current", {
     cache: "no-store",
   })
   return response.json()

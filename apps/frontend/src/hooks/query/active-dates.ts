@@ -24,7 +24,7 @@ export const prefetchActiveDates = async (date: Date, queryClient: QueryClient) 
   await queryClient.prefetchQuery({
     queryKey: [QUERY_KEY.ACTIVE_DATES, date.getFullYear(), date.getMonth()],
     queryFn: () => fetchActiveDates(date),
-    staleTime: Infinity,
+    staleTime: Number.POSITIVE_INFINITY,
   })
 }
 
@@ -32,7 +32,7 @@ export const useActiveDates = (date: Date) => {
   const query = useQuery({
     queryKey: [QUERY_KEY.ACTIVE_DATES, date.getFullYear(), date.getMonth()],
     queryFn: () => fetchActiveDates(date),
-    staleTime: Infinity,
+    staleTime: Number.POSITIVE_INFINITY,
   })
 
   return query

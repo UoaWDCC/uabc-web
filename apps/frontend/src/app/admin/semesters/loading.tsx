@@ -6,7 +6,7 @@ import { SkeletonScheduleCard } from "@/components/Composite/admin/schedules/Ske
 export default function Loading() {
   return (
     <Container minH="100dvh">
-      <BackNavigationBar title="Semesters" pathName="/admin">
+      <BackNavigationBar pathName="/admin" title="Semesters">
         <Spacer />
         <Skeleton>
           <IconButton />
@@ -14,7 +14,7 @@ export default function Loading() {
       </BackNavigationBar>
       <VStack>
         {Array.from({ length: 3 }).map((_, index) => (
-          <SkeletonScheduleCard key={index} />
+          <SkeletonScheduleCard key={`skeleton-${index + 1}`} />
         ))}
       </VStack>
     </Container>

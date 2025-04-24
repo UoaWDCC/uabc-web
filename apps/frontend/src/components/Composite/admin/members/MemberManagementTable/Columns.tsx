@@ -39,7 +39,7 @@ export const EMAIL_COLUMN: Column<Member> = {
 }
 
 const PrepaidSessionsCell = memo(({ value }: { value: number }) => (
-  <Text as="span" textAlign="center" display="block">
+  <Text as="span" display="block" textAlign="center">
     {value}
   </Text>
 ))
@@ -62,7 +62,7 @@ const EditButton = memo(() => {
   }, [])
 
   return (
-    <Button size="sm" variant="outline" onClick={handleClick}>
+    <Button onClick={handleClick} size="sm" variant="outline">
       Edit
     </Button>
   )

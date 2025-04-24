@@ -23,9 +23,9 @@ export default async function ForgotPasswordPage() {
           Back to&nbsp;
           <UILink
             as={Link}
-            href="/auth/login?open=true"
             color={["tertiary", "white"]}
             fontWeight="bold"
+            href="/auth/login?open=true"
           >
             Login
           </UILink>

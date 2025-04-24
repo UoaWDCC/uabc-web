@@ -47,7 +47,7 @@ export default function ClientViewSessionsPage() {
   }, [monthDate, queryClient])
 
   function setDate(date: Date) {
-    router.replace(pathname + "?date=" + format(date, "yyyy-MM-dd"))
+    router.replace(`${pathname}?date=${format(date, "yyyy-MM-dd")}`)
   }
 
   function getSessionState(date: string | Date, startTimeString: string, endTimeString: string) {
@@ -78,35 +78,35 @@ export default function ClientViewSessionsPage() {
     <Center as={VStack} maxW="md">
       <Calendar
         borderWidth="1px"
-        rounded="md"
-        p="md"
-        today
-        value={date}
+        colorScheme="primary"
+        labelProps={{ mx: "md", h: "8" }}
+        nextProps={{ variant: "outline", w: "8", h: "8" }}
         onChange={(date: Date | undefined) => {
           setDate(date ?? new Date())
           if (date?.getMonth() !== monthDate.getMonth()) {
             setMonth(date ?? new Date())
           }
         }}
-        labelProps={{ mx: "md", h: "8" }}
+        p="md"
         prevProps={{ variant: "outline", w: "8", h: "8" }}
-        nextProps={{ variant: "outline", w: "8", h: "8" }}
-        colorScheme="primary"
+        rounded="md"
+        today
+        value={date}
       />
       <GameSessionProvider value={value}>
         {isLoading ? (
           <SkeletonViewSessionCard />
         ) : data?.exists ? (
           <AdminViewSessionCard
-            id={data.data.id}
-            title={formatFullDate(date).toLocaleString()}
-            startTime={convertTo12HourFormat(data.data.startTime)}
-            endTime={convertTo12HourFormat(data.data.endTime)}
-            locationName={data.data.locationName}
-            locationAddress={data.data.locationAddress}
             attendees={data.data.attendees}
-            totalCapacity={data.data.memberCapacity + data.data.casualCapacity}
+            endTime={convertTo12HourFormat(data.data.endTime)}
+            id={data.data.id}
+            locationAddress={data.data.locationAddress}
+            locationName={data.data.locationName}
+            startTime={convertTo12HourFormat(data.data.startTime)}
             state={getSessionState(data.data.date, data.data.startTime, data.data.endTime)}
+            title={formatFullDate(date).toLocaleString()}
+            totalCapacity={data.data.memberCapacity + data.data.casualCapacity}
           />
         ) : (
           <EmptyAdminViewSessionCard />

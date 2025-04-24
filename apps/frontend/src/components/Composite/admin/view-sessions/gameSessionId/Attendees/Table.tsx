@@ -82,7 +82,7 @@ export const AttendeesTable = memo(({ filterRef, gameSessionId }: AttendeesTable
         header: "Play Level",
         css: { w: "150px", textAlign: "center" },
         cell: ({ getValue }) => (
-          <Text as="span" textAlign="center" display="block" textTransform="capitalize">
+          <Text as="span" display="block" textAlign="center" textTransform="capitalize">
             {getValue() as string}
           </Text>
         ),
@@ -92,7 +92,7 @@ export const AttendeesTable = memo(({ filterRef, gameSessionId }: AttendeesTable
         header: "Member",
         css: { w: "150px", textAlign: "center" },
         cell: ({ getValue }) => (
-          <Text as="span" textAlign="center" display="block">
+          <Text as="span" display="block" textAlign="center">
             {getValue() ? "Yes" : "No"}
           </Text>
         ),
@@ -132,17 +132,17 @@ export const AttendeesTable = memo(({ filterRef, gameSessionId }: AttendeesTable
         <NativeTable borderCollapse="separate" borderWidth="1px" rounded="md">
           <Thead>
             <Tr>
-              <Th w="0" px="3" py="2">
+              <Th px="3" py="2" w="0">
                 <Center h="full">
                   <Checkbox disabled />
                 </Center>
               </Th>
               <Th w="200px">Name</Th>
               <Th>Email</Th>
-              <Th w="150px" textAlign="center">
+              <Th textAlign="center" w="150px">
                 Play Level
               </Th>
-              <Th w="150px" textAlign="center">
+              <Th textAlign="center" w="150px">
                 Member
               </Th>
             </Tr>
@@ -181,18 +181,18 @@ export const AttendeesTable = memo(({ filterRef, gameSessionId }: AttendeesTable
 
   return (
     <PagingTable<ExtendedAttendee>
-      sx={{ "tbody > tr:last-of-type > td": { borderBottomWidth: "0px" } }}
       borderCollapse="separate"
       borderWidth="1px"
+      cellProps={cellProps}
       columns={columns}
       data={resolvedData}
-      rowId="id"
-      cellProps={cellProps}
-      withPagingControl={hasData}
       highlightOnHover={hasData}
       highlightOnSelected={hasData}
-      rowsClickSelect={hasData}
       rounded="md"
+      rowId="id"
+      rowsClickSelect={hasData}
+      sx={{ "tbody > tr:last-of-type > td": { borderBottomWidth: "0px" } }}
+      withPagingControl={hasData}
     />
   )
 })

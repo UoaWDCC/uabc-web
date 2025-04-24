@@ -3,12 +3,12 @@ import { memo } from "react"
 
 const UnmemoizedSkeletonSemesterCard = () => {
   return (
-    <Card fontSize="sm" color="tertiary" variant="subtle">
+    <Card color="tertiary" fontSize="sm" variant="subtle">
       <CardHeader>
         <HStack w="full">
           <Skeleton h="6" w="40" />
           <Spacer />
-          <Skeleton h="8" w="8" rounded="md" />
+          <Skeleton h="8" rounded="md" w="8" />
         </HStack>
       </CardHeader>
       <CardBody gap="sm" pt="sm">

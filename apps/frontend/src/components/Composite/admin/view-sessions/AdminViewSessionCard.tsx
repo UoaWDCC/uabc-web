@@ -56,7 +56,7 @@ export function AdminViewSessionCard({
   const editDisclosure = useDisclosure()
   const deleteDisclosure = useDisclosure()
   return (
-    <Card variant="outline" w="full" size="lg">
+    <Card size="lg" variant="outline" w="full">
       <CardHeader justifyContent="space-between">
         <Text fontSize="lg" fontWeight="medium" lineHeight="1">
           {title}
@@ -64,59 +64,59 @@ export function AdminViewSessionCard({
         {state === "upcoming" ? (
           <>
             <Menu>
-              <MenuButton as={IconButton} variant="ghost" h="6">
+              <MenuButton as={IconButton} h="6" variant="ghost">
                 <EllipsisIcon />
               </MenuButton>
               <MenuList>
                 <MenuItem
-                  onClick={editDisclosure.onOpen}
                   icon={<FilePenLineIcon color={["black", "white"]} />}
+                  onClick={editDisclosure.onOpen}
                 >
                   Edit
                 </MenuItem>
                 <MenuItem
-                  onClick={deleteDisclosure.onOpen}
-                  icon={<Trash2Icon color="danger" />}
                   color="danger"
+                  icon={<Trash2Icon color="danger" />}
+                  onClick={deleteDisclosure.onOpen}
                 >
                   Delete
                 </MenuItem>
               </MenuList>
             </Menu>
             <EditGameSessionFormDialog
-              open={editDisclosure.open}
               onClose={editDisclosure.onClose}
+              open={editDisclosure.open}
             />
             <DeleteGameSessionFormDialog
-              open={deleteDisclosure.open}
               onClose={deleteDisclosure.onClose}
+              open={deleteDisclosure.open}
             />
           </>
         ) : (
           <Badge
+            colorScheme={state === "ongoing" ? "green" : "gray"}
             pointerEvents="none"
             userSelect="none"
-            colorScheme={state === "ongoing" ? "green" : "gray"}
           >
             {state === "ongoing" ? "Ongoing" : "Past"}
           </Badge>
         )}
       </CardHeader>
       <CardBody>
-        <List fontSize="sm" fontWeight="medium" color="tertiary">
-          <ListItem display="flex" gap="sm" alignItems="center">
+        <List color="tertiary" fontSize="sm" fontWeight="medium">
+          <ListItem alignItems="center" display="flex" gap="sm">
             <ClockIcon fontSize={24} />
             <Text>
               {startTime} - {endTime}
             </Text>
           </ListItem>
-          <ListItem display="flex" gap="sm" alignItems="center">
+          <ListItem alignItems="center" display="flex" gap="sm">
             <MapPinIcon fontSize={24} />
             <Text lineHeight="tight">
               {locationName} <br /> {locationAddress}
             </Text>
           </ListItem>
-          <ListItem display="flex" gap="sm" alignItems="center">
+          <ListItem alignItems="center" display="flex" gap="sm">
             <UsersIcon fontSize={24} />
             <Text>
               {attendees} / {totalCapacity} attendees
@@ -127,10 +127,10 @@ export function AdminViewSessionCard({
       <CardFooter>
         <Button
           as={Link}
+          colorScheme="primary"
+          disabled={attendees === 0}
           href={`/admin/view-sessions/${id}`}
           w="full"
-          disabled={attendees === 0}
-          colorScheme="primary"
         >
           View attendees list
         </Button>

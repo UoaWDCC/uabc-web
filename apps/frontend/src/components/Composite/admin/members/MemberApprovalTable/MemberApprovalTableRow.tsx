@@ -48,24 +48,24 @@ export function MemberApprovalTableRow({ row, userId }: MemberApprovalTableRowPr
 
   return (
     <Tr>
-      <Td w="75px" maxW="125px" verticalAlign="middle">
+      <Td maxW="125px" verticalAlign="middle" w="75px">
         <Text isTruncated>
           {firstName} {lastName}
         </Text>
       </Td>
-      <Td minW="100px" maxW="150px" verticalAlign="middle">
+      <Td maxW="150px" minW="100px" verticalAlign="middle">
         <Text isTruncated>{email}</Text>
       </Td>
       <Td>
         <form onSubmit={handleSubmit(handleApproveClick)}>
           <TextInput
+            h="10"
             id={userId}
             type={InputType.Number}
-            h="10"
             w="200px"
             {...register("prepaidSessions")}
-            isError={!!errors.prepaidSessions}
             errorMessage={errors.prepaidSessions?.message}
+            isError={!!errors.prepaidSessions}
           />
         </form>
       </Td>
@@ -75,8 +75,8 @@ export function MemberApprovalTableRow({ row, userId }: MemberApprovalTableRowPr
             Reject
           </Button>
           <Button
-            disabled={!!errors.prepaidSessions || !touchedFields.prepaidSessions}
             colorScheme="primary"
+            disabled={!!errors.prepaidSessions || !touchedFields.prepaidSessions}
           >
             <Label htmlFor={userId}>Approve</Label>
           </Button>

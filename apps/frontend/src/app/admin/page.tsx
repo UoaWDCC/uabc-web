@@ -27,16 +27,16 @@ export default async function AdminDashboardPage() {
           Edit Semester Schedules
         </DashboardButton>
         <DashboardButton
-          href="/admin/members"
           className="relative"
+          href="/admin/members"
           startIcon={<UsersIcon fontSize={24} minW="6" />}
         >
           Manage Members
         </DashboardButton>
         {/* TODO: Possibly replace with lucide icon */}
         <DashboardButton
-          href="/admin/member-approval"
           className="relative"
+          href="/admin/member-approval"
           startIcon={<UserCheckIcon fontSize={24} minW="6" />}
         >
           <MemberApprovalPing />

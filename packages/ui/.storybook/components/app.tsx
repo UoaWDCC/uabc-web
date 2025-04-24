@@ -18,9 +18,9 @@ export const App: FC<AppProps> = ({ children, ...rest }) => {
     >
       {children ?? (
         <Image
-          src="https://raw.githubusercontent.com/UoaWDCC/uabc-web/refs/heads/master/public/svgs/logo.svg"
           alt="UABC Logo"
           maxW="xl"
+          src="https://raw.githubusercontent.com/UoaWDCC/uabc-web/refs/heads/master/public/svgs/logo.svg"
           w="full"
         />
       )}

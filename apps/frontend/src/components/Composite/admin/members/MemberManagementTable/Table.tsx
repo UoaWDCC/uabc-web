@@ -155,17 +155,17 @@ export const MemberManagementTable: FC<MemberManagementTableProps> = memo(
 
     return (
       <Table<Member & { empty?: boolean }>
-        sx={{ "tbody > tr:last-of-type > td": { borderBottomWidth: "0px" } }}
         borderCollapse="separate"
         borderWidth="1px"
+        cellProps={cellProps}
         columns={columns}
         data={resolvedData}
-        rowId="id"
-        cellProps={cellProps}
         highlightOnHover={hasData}
         highlightOnSelected={hasData}
-        rowsClickSelect={hasData}
         rounded="md"
+        rowId="id"
+        rowsClickSelect={hasData}
+        sx={{ "tbody > tr:last-of-type > td": { borderBottomWidth: "0px" } }}
       />
     )
   },

@@ -1,24 +1,24 @@
 {
-  "name": "@repo/theme",
-  "version": "0.0.0",
-  "private": true,
-  "exports": {
-    ".": "./src/theme/index.ts",
-    "./tokens": "./src/theme/tokens/index.ts",
-    "./semantics": "./src/theme/semantics/index.ts",
-    "./components": "./src/theme/components/index.ts"
-  },
-  "scripts": {
-    "check-types": "tsc --noEmit",
-    "theme": "yamada-cli tokens ./src/theme"
+  "dependencies": {
+    "@yamada-ui/core": "^1.7.6",
+    "@yamada-ui/theme-tools": "^1.1.18",
+    "@yamada-ui/utils": "^1.7.2"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "typescript": "5.7.3"
   },
-  "dependencies": {
-    "@yamada-ui/core": "^1.7.6",
-    "@yamada-ui/theme-tools": "^1.1.18",
-    "@yamada-ui/utils": "^1.7.2"
-  }
+  "exports": {
+    ".": "./src/theme/index.ts",
+    "./components": "./src/theme/components/index.ts",
+    "./semantics": "./src/theme/semantics/index.ts",
+    "./tokens": "./src/theme/tokens/index.ts"
+  },
+  "name": "@repo/theme",
+  "private": true,
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "theme": "yamada-cli tokens ./src/theme"
+  },
+  "version": "0.0.0"
 }

@@ -29,7 +29,7 @@ export function render(
 
   if (withProvider)
     rest.wrapper ??= (props: UIProviderProps) => (
-      <UIProvider theme={theme} config={config} {...props} />
+      <UIProvider config={config} theme={theme} {...props} />
     )
 
   const result = reactRender(ui, rest)
@@ -62,7 +62,7 @@ export function renderHook<
 ) {
   if (withProvider)
     rest.wrapper ??= (props: UIProviderProps) => (
-      <UIProvider {...props} theme={theme} config={config} {...providerProps} />
+      <UIProvider {...props} config={config} theme={theme} {...providerProps} />
     )
 
   return reactRenderHook<Y, M, D, H, R>(render, rest)

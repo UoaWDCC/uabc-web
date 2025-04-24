@@ -19,11 +19,11 @@ export const FilterResetButton: FC<FilterResetButtonProps> = memo(({ resetRef, s
   if (!isShow) return null
   return (
     <Button
-      variant="ghost"
       endIcon={<XIcon />}
       onClick={() => {
         resetRef.current()
       }}
+      variant="ghost"
     >
       Reset
     </Button>

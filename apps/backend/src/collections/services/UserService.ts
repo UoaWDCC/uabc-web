@@ -1,5 +1,5 @@
-import { User } from "@/payload-types"
-import { CreateUserData } from "@/types/collections"
+import type { User } from "@/payload-types"
+import type { CreateUserData } from "@/types/collections"
 import configPromise from "@payload-config"
 import { getPayload } from "payload"
 

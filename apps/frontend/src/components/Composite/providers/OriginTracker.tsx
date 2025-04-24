@@ -8,7 +8,7 @@ export const OriginContext = createContext<boolean>(false)
 export default function OriginTracker({ children }: React.PropsWithChildren) {
   const [isWithinPage, setIsWithinPage] = useState(false)
   const isInitialLoadRef = useRef(true)
-  const pathname = usePathname()
+  const _pathname = usePathname()
 
   useEffect(() => {
     if (isInitialLoadRef.current) {
@@ -18,7 +18,7 @@ export default function OriginTracker({ children }: React.PropsWithChildren) {
 
     setIsWithinPage(true)
     return () => setIsWithinPage(false)
-  }, [pathname])
+  }, [])
 
   return <OriginContext.Provider value={isWithinPage}>{children}</OriginContext.Provider>
 }

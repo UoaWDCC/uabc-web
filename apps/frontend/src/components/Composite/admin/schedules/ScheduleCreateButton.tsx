@@ -13,10 +13,10 @@ const UnmemoizedScheduleCreateButton = ({ semesterId }: ScheduleCreateButtonProp
   const { open, onClose, onOpen } = useDisclosure()
   return (
     <>
-      <IconButton variant="solid" colorScheme="primary" onClick={onOpen}>
+      <IconButton colorScheme="primary" onClick={onOpen} variant="solid">
         <PlusIcon />
       </IconButton>
-      <CreateScheduleFormDialog semesterId={semesterId} open={open} onClose={onClose} />
+      <CreateScheduleFormDialog onClose={onClose} open={open} semesterId={semesterId} />
     </>
   )
 }

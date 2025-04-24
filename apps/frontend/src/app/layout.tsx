@@ -50,7 +50,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} font-sans`} suppressHydrationWarning>
+    <html className={`${inter.variable} font-sans`} lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <ColorModeScript initialColorMode="light" />
         <QueryClientProvider>

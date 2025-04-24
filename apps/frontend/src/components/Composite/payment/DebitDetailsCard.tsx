@@ -20,7 +20,7 @@ export const DebitDetailsCard = ({
 }: DebitDetailsCardProps) => {
   const { onCopy, hasCopied } = useClipboard(copyText)
   return (
-    <Card variant="solid" bg="gray.50" color={["black", "white"]}>
+    <Card bg="gray.50" color={["black", "white"]} variant="solid">
       <CardBody gap="0" pt="10" px="lg">
         <HStack w="full">
           <VStack gap="xs">
@@ -39,7 +39,7 @@ export const DebitDetailsCard = ({
             )}
           </VStack>
           {copyText && (
-            <IconButton variant="ghost" onClick={onCopy} placeSelf="flex-end">
+            <IconButton onClick={onCopy} placeSelf="flex-end" variant="ghost">
               {hasCopied ? <CheckIcon fontSize="3xl" /> : <CopyIcon fontSize="3xl" />}
             </IconButton>
           )}

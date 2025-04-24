@@ -3,10 +3,10 @@ import type { FC } from "react"
 
 export const ArrowRightIcon: FC<IconProps> = (props) => (
   <Icon
-    width="32"
+    fill="currentColor"
     height="16"
     viewBox="1 0 32 16"
-    fill="currentColor"
+    width="32"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >

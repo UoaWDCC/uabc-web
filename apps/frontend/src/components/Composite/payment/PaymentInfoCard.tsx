@@ -18,16 +18,16 @@ interface PaymentInfoCardProps extends CardProps {
 
 export const PaymentInfoCard = ({ amount, ...props }: PaymentInfoCardProps) => {
   return (
-    <Card variant="solid" bg="primary" py="8" {...props}>
+    <Card bg="primary" py="8" variant="solid" {...props}>
       <CardBody>
         <Center as={VStack}>
-          <Text fontSize="xs" color="transparentize(#FAFAFAB2, 70%)">
+          <Text color="transparentize(#FAFAFAB2, 70%)" fontSize="xs">
             Your total for this session:
           </Text>
-          <Text fontSize="3xl" fontWeight="bold" className="mb-5 text-3xl font-bold">
-            <FormatNumber value={amount} style="currency" currency="NZD" />
+          <Text className="mb-5 text-3xl font-bold" fontSize="3xl" fontWeight="bold">
+            <FormatNumber currency="NZD" style="currency" value={amount} />
           </Text>
-          <Text fontSize="xs" color="#FAFAFAB2">
+          <Text color="#FAFAFAB2" fontSize="xs">
             Casual Badminton Session
           </Text>
         </Center>

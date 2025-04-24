@@ -32,11 +32,11 @@ const UnmemoizedSemesterDetailCard = () => {
 
   return (
     <>
-      <Card as={LinkBox} fontSize="sm" color="tertiary" variant="subtle">
+      <Card as={LinkBox} color="tertiary" fontSize="sm" variant="subtle">
         <LinkOverlay as={Link} href={`semesters/${id}/schedules`} />
         <CardHeader>
           <HStack w="full">
-            <Heading as="h3" isTruncated fontSize="md" color={["black", "white"]}>
+            <Heading as="h3" color={["black", "white"]} fontSize="md" isTruncated>
               {name}
             </Heading>
             <Spacer />
@@ -69,8 +69,8 @@ const UnmemoizedSemesterDetailCard = () => {
         </CardBody>
       </Card>
 
-      <EditSemesterFormDialog open={editDisclosure.open} onClose={editDisclosure.onClose} />
-      <DeleteSemesterFormDialog open={deleteDisclosure.open} onClose={deleteDisclosure.onClose} />
+      <EditSemesterFormDialog onClose={editDisclosure.onClose} open={editDisclosure.open} />
+      <DeleteSemesterFormDialog onClose={deleteDisclosure.onClose} open={deleteDisclosure.open} />
     </>
   )
 }

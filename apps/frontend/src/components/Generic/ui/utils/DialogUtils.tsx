@@ -22,7 +22,7 @@ export const DialogButtonsFooter = ({
   return (
     <DialogFooter className="flex gap-2">
       <DialogClose asChild>
-        <Button variant="outline" onClick={onCancel}>
+        <Button onClick={onCancel} variant="outline">
           {secondaryText}
         </Button>
       </DialogClose>

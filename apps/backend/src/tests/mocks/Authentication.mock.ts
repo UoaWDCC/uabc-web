@@ -1,5 +1,5 @@
-import { Authentication } from "@/payload-types"
-import { CreateAuthenticationData } from "@/types/collections"
+import type { Authentication } from "@/payload-types"
+import type { CreateAuthenticationData } from "@/types/collections"
 import { userMock } from "./User.mock"
 
 export const authenticationCreateMock: CreateAuthenticationData = {

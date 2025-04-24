@@ -22,11 +22,11 @@ export default function LoginPage() {
       <GoogleLoginButton />
 
       <Center fontSize="xs">
-        <HStack gap={2} separator={<Separator orientation="vertical" height="8xs" />}>
-          <UILink as={Link} href="/auth/signup" color="tertiary" fontWeight="bold">
+        <HStack gap={2} separator={<Separator height="8xs" orientation="vertical" />}>
+          <UILink as={Link} color="tertiary" fontWeight="bold" href="/auth/signup">
             Create Account
           </UILink>
-          <UILink as={Link} href="/auth/forgot-password" color="tertiary" fontWeight="bold">
+          <UILink as={Link} color="tertiary" fontWeight="bold" href="/auth/forgot-password">
             Forgot Password?
           </UILink>
         </HStack>

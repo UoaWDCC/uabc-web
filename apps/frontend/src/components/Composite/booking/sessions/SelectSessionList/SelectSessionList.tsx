@@ -56,7 +56,7 @@ export function SelectSessionList({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessions])
+  }, [sessions, cart, updateCart])
 
   function handleSessionClick(id: number) {
     if (!sessions?.length) return
@@ -68,7 +68,10 @@ export function SelectSessionList({
     } else if (isInCart) {
       updateCart(cart.filter((session) => session.id !== id))
     } else {
-      updateCart([...cart, sessions.find((session) => session.id === id)!])
+      const sessionToAdd = sessions.find((session) => session.id === id)
+      if (sessionToAdd) {
+        updateCart([...cart, sessionToAdd])
+      }
     }
   }
 
@@ -88,10 +91,10 @@ export function SelectSessionList({
     <div className={cn("flex flex-col gap-3 overflow-y-auto overscroll-contain", className)}>
       {sessions.map((session) => (
         <SelectableCard
-          key={session.id}
-          session={session}
           checked={cart.some((s) => s.id === session.id)}
           handleSessionClick={handleSessionClick}
+          key={session.id}
+          session={session}
         />
       ))}
     </div>

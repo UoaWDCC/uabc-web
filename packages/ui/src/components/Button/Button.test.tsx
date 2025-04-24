@@ -70,7 +70,7 @@ describe("<Button />", () => {
     expect(getByTestId("btn")).toHaveAttribute("type", "button")
 
     rerender(
-      <Button type="submit" data-testid="btn">
+      <Button data-testid="btn" type="submit">
         Submit
       </Button>,
     )

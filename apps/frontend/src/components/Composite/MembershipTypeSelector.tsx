@@ -22,15 +22,15 @@ export const MembershipTypeSelector = ({
 }: MembershipTypeSelectorProps) => (
   <label>
     <Card
-      variant={selectedMembership ? "primary" : "secondary"}
       className={cn("flex cursor-pointer flex-col shadow hover:opacity-90")}
+      variant={selectedMembership ? "primary" : "secondary"}
     >
       <input
-        type="radio"
-        name="membership-type-selector"
-        className="hidden"
         checked={selectedMembership ?? false}
+        className="hidden"
+        name="membership-type-selector"
         onClick={onClick}
+        type="radio"
       />
 
       <h2 className="text-lg font-medium">{heading}</h2>

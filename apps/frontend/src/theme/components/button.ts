@@ -117,7 +117,7 @@ export const Button: ComponentStyle<"Button"> = {
       bg: isGray(c)
         ? [`${c}.50`, `${c}.700`]
         : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
-      color: [isGray(c) || isAccessible(c) ? `black` : `white`, `white`],
+      color: [isGray(c) || isAccessible(c) ? "black" : "white", "white"],
       vars: [
         {
           name: "errorBorderColor",

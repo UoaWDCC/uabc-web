@@ -34,7 +34,7 @@ export const EmptyAdminViewSessionCard = memo(() => {
   }
 
   return (
-    <EmptyState borderWidth="1px" borderColor="border" rounded="md" p="lg">
+    <EmptyState borderColor="border" borderWidth="1px" p="lg" rounded="md">
       <EmptyStateIndicator>
         <CalendarIcon />
       </EmptyStateIndicator>
@@ -43,15 +43,15 @@ export const EmptyAdminViewSessionCard = memo(() => {
         No sessions found on {formatFullDate(date).toLocaleString()}
       </EmptyStateDescription>
       <Button
-        w="full"
-        variant="solid"
         colorScheme="primary"
-        onClick={handleButtonClick}
         disabled={isPast(date)}
+        onClick={handleButtonClick}
+        variant="solid"
+        w="full"
       >
         Create session
       </Button>
-      {canCreate && <CreateGameSessionFormDialog open={open} onClose={onClose} />}
+      {canCreate && <CreateGameSessionFormDialog onClose={onClose} open={open} />}
     </EmptyState>
   )
 })

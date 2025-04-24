@@ -1,5 +1,5 @@
-import path from "path"
-import { fileURLToPath } from "url"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 // storage-adapter-import-placeholder
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
 import { payloadCloudPlugin } from "@payloadcms/payload-cloud"
@@ -30,7 +30,7 @@ export default buildConfig({
     user: Admin.slug,
     importMap: {
       baseDir: path.resolve(dirname),
-      importMapFile: path.resolve(dirname) + "/app/payload/admin/importMap.js",
+      importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
   collections: [

@@ -46,18 +46,18 @@ export default function ClientSessionPage({ isMember, prepaidSessions }: ClientS
         <PendingApprovalAlert />
       </div>
       <SelectSessionList
-        onLimitReached={() => setShake(true)}
+        className="mx-4 grow empty:grow empty:after:grid empty:after:h-full empty:after:w-full empty:after:grow empty:after:place-items-center empty:after:text-lg empty:after:font-medium empty:after:text-tertiary/70 empty:after:content-['No_more_sessions_for_this_week']"
         isMember={isMember}
         maxSessions={maxSessions}
-        className="mx-4 grow empty:grow empty:after:grid empty:after:h-full empty:after:w-full empty:after:grow empty:after:place-items-center empty:after:text-lg empty:after:font-medium empty:after:text-tertiary/70 empty:after:content-['No_more_sessions_for_this_week']"
+        onLimitReached={() => setShake(true)}
       />
 
       <div className="mx-4 mb-10 mt-6 flex justify-center">
         <Button
           // TODO: check if needs approval
+          className="w-full"
           disabled={sessionsSelected === 0}
           onClick={() => push("/sessions/select-play-level")}
-          className="w-full"
         >
           Next
         </Button>

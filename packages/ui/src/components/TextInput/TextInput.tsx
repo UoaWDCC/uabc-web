@@ -2,7 +2,7 @@
 
 import { EyeIcon, EyeOffIcon } from "@yamada-ui/lucide"
 import {
-  CSSUIObject,
+  type CSSUIObject,
   FormControl,
   IconButton,
   Input,
@@ -177,8 +177,8 @@ export const TextInput = memo(
       return (
         <FormControl
           disabled={disabled}
-          invalid={isError}
           errorMessage={errorMessage}
+          invalid={isError}
           position="relative"
           sx={{
             // placeholder is hidden
@@ -232,43 +232,43 @@ export const TextInput = memo(
         >
           <InputGroup>
             <Input
-              className="peer"
-              ref={ref}
-              type={initialIsTypePassword ? (passwordShown ? "text" : InputType.Password) : type}
-              placeholder={placeholder || label || ""}
-              borderWidth="2"
-              borderColor="transparentize(tertiary.500, 70%)"
-              _hover={{
-                borderColor: "transparentize(tertiary.500, 50%)",
-                boxShadow: "none",
-              }}
               _active={{
                 borderColor: "primary",
                 boxShadow: "none",
               }}
-              _focusVisible={{
-                borderColor: "primary",
-                boxShadow: "none",
-              }}
-              _placeholder={{ opacity: 0 }}
               _disabled={{
                 _invalid: {
                   borderColor: "transparentize(danger.400, 70%)",
                 },
               }}
+              _focusVisible={{
+                borderColor: "primary",
+                boxShadow: "none",
+              }}
+              _hover={{
+                borderColor: "transparentize(tertiary.500, 50%)",
+                boxShadow: "none",
+              }}
+              _placeholder={{ opacity: 0 }}
+              borderColor="transparentize(tertiary.500, 70%)"
+              borderWidth="2"
+              className="peer"
+              placeholder={placeholder || label || ""}
+              ref={ref}
               rounded="sm"
+              type={initialIsTypePassword ? (passwordShown ? "text" : InputType.Password) : type}
               {...props}
             />
             {initialIsTypePassword && (
               <InputRightElement clickable>
-                <IconButton h="1.75rem" size="sm" onClick={toggle} variant="ghost">
+                <IconButton h="1.75rem" onClick={toggle} size="sm" variant="ghost">
                   {passwordShown ? <EyeOffIcon /> : <EyeIcon />}
                 </IconButton>
               </InputRightElement>
             )}
           </InputGroup>
           {label && (
-            <Label {...labelProps} position="absolute" top="0" left="sm" pointerEvents="none">
+            <Label {...labelProps} left="sm" pointerEvents="none" position="absolute" top="0">
               {label}
             </Label>
           )}

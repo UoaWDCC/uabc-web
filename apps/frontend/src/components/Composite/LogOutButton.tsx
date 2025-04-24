@@ -11,11 +11,11 @@ export const LogOutButton = ({
   variant = "ghost",
 }: PropsWithChildren<ButtonProps>) => (
   <Button
-    size={size}
-    variant={variant}
     onClick={() => {
       throw new Error("Log Out Button Not Implemented")
     }}
+    size={size}
+    variant={variant}
   >
     {children}
   </Button>

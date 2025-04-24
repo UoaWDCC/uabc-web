@@ -17,7 +17,7 @@ const session = {
 
 describe("SelectableCard", () => {
   it("should render the card correctly", () => {
-    render(<SelectableCard session={session} checked={false} handleSessionClick={() => {}} />)
+    render(<SelectableCard checked={false} handleSessionClick={() => {}} session={session} />)
     const card = screen.getByTestId("session-card")
 
     expect(card.textContent?.includes(session.weekday)).toBe(true)
@@ -29,9 +29,9 @@ describe("SelectableCard", () => {
   it("should render the card as disabled if the session is full", () => {
     render(
       <SelectableCard
-        session={{ ...session, isFull: true }}
         checked={false}
         handleSessionClick={() => {}}
+        session={{ ...session, isFull: true }}
       />,
     )
     const card = screen.getByTestId("session-card")
@@ -44,7 +44,7 @@ describe("SelectableCard", () => {
     const handleSessionClick = vi.fn()
     const user = userEvent.setup()
     render(
-      <SelectableCard session={session} checked={false} handleSessionClick={handleSessionClick} />,
+      <SelectableCard checked={false} handleSessionClick={handleSessionClick} session={session} />,
     )
     const card = screen.getByTestId("session-card")
 

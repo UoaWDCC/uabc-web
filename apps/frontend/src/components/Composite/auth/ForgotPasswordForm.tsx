@@ -62,13 +62,13 @@ export const ForgotPasswordForm = () => {
         <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
           <TextInput
             autoFocus
+            errorMessage={errors.email?.message}
+            isError={!!errors.email}
             label="Email"
             type={InputType.Email}
-            isError={!!errors.email}
-            errorMessage={errors.email?.message}
             {...register("email")}
           />
-          <Button type="submit" disabled={isPending} colorScheme="primary">
+          <Button colorScheme="primary" disabled={isPending} type="submit">
             Send Reset Link
           </Button>
         </VStack>
@@ -83,12 +83,12 @@ export const ForgotPasswordForm = () => {
           </Text>
           <Text>
             If you did not receive an email, please sign up for an account{" "}
-            <UILink as={Link} href="/auth/signup" color="primary" fontWeight="bold">
+            <UILink as={Link} color="primary" fontWeight="bold" href="/auth/signup">
               here
             </UILink>
             .
           </Text>
-          <Button as={Link} href="/auth/login?open=true" colorScheme="primary">
+          <Button as={Link} colorScheme="primary" href="/auth/login?open=true">
             Back to Login
           </Button>
         </VStack>

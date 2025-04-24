@@ -28,16 +28,16 @@ export const PagingTable: FC<PagingTableProps> = memo(({ filterRef }) => {
     <>
       <TableContainer>
         <MemberManagementTable
-          filterRef={filterRef}
-          perPageRef={perPageRef}
           currentPageRef={currentPageRef}
+          filterRef={filterRef}
           onTotalPageChange={onTotalPageChange}
+          perPageRef={perPageRef}
         />
       </TableContainer>
       <TablePagination
-        totalPageRef={totalPageRef}
-        onPerPageChange={onPerPageChange}
         onPageChange={onPageChange}
+        onPerPageChange={onPerPageChange}
+        totalPageRef={totalPageRef}
       />
     </>
   )

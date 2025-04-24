@@ -18,12 +18,12 @@ export const Filter = memo(({ filterRef, resetRef }: FilterProps) => {
   return (
     <HStack gap="sm">
       <FilterInput
-        resetRef={resetRef}
         filterRef={filterRef}
         prevHasValueRef={prevHasValueRef}
+        resetRef={resetRef}
         showResetRef={showResetRef}
       />
-      <FilterResetButton showResetRef={showResetRef} resetRef={resetRef} />
+      <FilterResetButton resetRef={resetRef} showResetRef={showResetRef} />
     </HStack>
   )
 })

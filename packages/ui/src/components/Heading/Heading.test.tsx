@@ -23,7 +23,7 @@ describe("<Heading />", () => {
     const { getByRole } = render(HeadingComponent({ children: `Heading ${level}` }))
     const headingElement = getByRole("heading", {
       name: `Heading ${level}`,
-      level: parseInt(level.slice(1), 10),
+      level: Number.parseInt(level.slice(1), 10),
     })
     expect(headingElement).toBeInTheDocument()
   })
@@ -36,19 +36,16 @@ describe("<Heading />", () => {
   })
 
   test("applies correct font weights for different heading levels", () => {
-    Object.entries(DEFAULT_FONT_WEIGHTS).forEach(([level, weight]) => {
-      const { getAllByText } = render(<Heading as={level}>Test Heading {level}</Heading>, {
-        withProvider: false,
-      })
-      const [heading] = getAllByText(`Test Heading ${level}`)
-      console.log(weight)
+    for (const [level, weight] of Object.entries(DEFAULT_FONT_WEIGHTS)) {
+      const { getAllByText } = render(<Heading as={level}>Test Heading {level}</Heading>, {})
+      const heading = getAllByText(`Test Heading ${level}`)[0]
       expect(heading).toHaveStyle({ fontWeight: weight })
-    })
+    }
   })
 
   test("forwards additional props to UIHeading", () => {
     const { getByTestId } = render(
-      <Heading data-testid="custom-heading" color="blue">
+      <Heading color="blue" data-testid="custom-heading">
         Custom Heading
       </Heading>,
     )

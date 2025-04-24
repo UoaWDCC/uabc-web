@@ -10,7 +10,7 @@ interface DashboardButtonProps extends ButtonProps {
 
 export function DashboardButton({ children, href, ...props }: DashboardButtonProps) {
   return (
-    <Button as={Link} href={href} colorScheme="primary" rounded="md" h="20" px="6" {...props}>
+    <Button as={Link} colorScheme="primary" h="20" href={href} px="6" rounded="md" {...props}>
       {children}
       <Spacer />
       <ArrowRightIcon h="8" w="8" />

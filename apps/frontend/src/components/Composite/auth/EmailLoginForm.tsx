@@ -48,9 +48,9 @@ export const EmailLoginForm = () => {
     <VStack>
       {/* Button to open the form on mobile view */}
       <Button
-        onClick={openEmailLogin}
         colorScheme="primary"
         display={{ base: !open ? "grid" : "none", lg: "none" }}
+        onClick={openEmailLogin}
       >
         Login with Email
       </Button>
@@ -58,8 +58,8 @@ export const EmailLoginForm = () => {
       {/* Form, hidden on mobile view by default and shown only when open */}
       <VStack
         as="form"
-        onSubmit={handleSubmit(onSubmit)}
         display={{ base: open ? "flex" : "none", lg: "flex" }}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <Heading as="h2" fontSize="2xl" textAlign="center">
           Login to your account
@@ -67,21 +67,21 @@ export const EmailLoginForm = () => {
 
         <TextInput
           autoFocus
+          errorMessage={errors.email?.message}
+          isError={!!errors.email}
           label="Email"
           type={InputType.Email}
-          isError={!!errors.email}
-          errorMessage={errors.email?.message}
           {...register("email")}
         />
         <TextInput
+          errorMessage={errors.email?.message}
+          isError={!!errors.email}
           label="Password"
           type={InputType.Password}
-          isError={!!errors.email}
-          errorMessage={errors.email?.message}
           {...register("password")}
         />
 
-        <Button type="submit" disabled={buttonDisabled} colorScheme="primary">
+        <Button colorScheme="primary" disabled={buttonDisabled} type="submit">
           Login with Email
         </Button>
       </VStack>

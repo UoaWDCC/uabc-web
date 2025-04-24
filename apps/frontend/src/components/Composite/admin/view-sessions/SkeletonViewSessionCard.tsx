@@ -10,25 +10,25 @@ import {
 } from "@yamada-ui/react"
 
 export const SkeletonViewSessionCard = () => (
-  <Card variant="outline" w="full" size="lg">
+  <Card size="lg" variant="outline" w="full">
     <CardHeader>
       <Skeleton height="6" w="60%" />
       <Spacer />
       <Skeleton height="6" w="24px" />
     </CardHeader>
     <CardBody>
-      <VStack mx="1" flex="1" justify="center" gap="sm">
-        <HStack gap="sm" alignItems="center" w="full">
+      <VStack flex="1" gap="sm" justify="center" mx="1">
+        <HStack alignItems="center" gap="sm" w="full">
           <Skeleton height="6" w="24px" />
-          <Skeleton height="4" flex="1" />
+          <Skeleton flex="1" height="4" />
         </HStack>
-        <HStack gap="sm" alignItems="center" w="full">
+        <HStack alignItems="center" gap="sm" w="full">
           <Skeleton height="6" w="24px" />
-          <Skeleton height="8" flex="1" />
+          <Skeleton flex="1" height="8" />
         </HStack>
-        <HStack gap="sm" alignItems="center" w="full">
+        <HStack alignItems="center" gap="sm" w="full">
           <Skeleton height="6" w="24px" />
-          <Skeleton height="4" flex="1" />
+          <Skeleton flex="1" height="4" />
         </HStack>
       </VStack>
     </CardBody>

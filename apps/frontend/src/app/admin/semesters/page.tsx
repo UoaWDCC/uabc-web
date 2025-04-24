@@ -10,7 +10,7 @@ export const metadata = {
 const SemestersPage = () => {
   return (
     <Container minH="100dvh">
-      <BackNavigationBar title="Semesters" pathName="/admin">
+      <BackNavigationBar pathName="/admin" title="Semesters">
         <Spacer />
         <SemesterCreateButton />
       </BackNavigationBar>

@@ -8,8 +8,8 @@ export const metadata = {
 
 export default function AdminMemberApprovalPage() {
   return (
-    <Container minH="100dvh" centerContent>
-      <BackNavigationBar title="Members" pathName="/admin" />
+    <Container centerContent minH="100dvh">
+      <BackNavigationBar pathName="/admin" title="Members" />
       <VStack maxW="6xl">
         <Heading fontSize="2xl" fontWeight="semibold">
           Approve Members

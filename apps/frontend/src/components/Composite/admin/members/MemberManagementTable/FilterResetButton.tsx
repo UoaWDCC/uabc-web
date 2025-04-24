@@ -28,7 +28,7 @@ export const FilterResetButton: FC<FilterResetButtonProps> = memo(
 
     if (!isShow) return null
     return (
-      <Button variant="ghost" endIcon={<XIcon />} onClick={onReset}>
+      <Button endIcon={<XIcon />} onClick={onReset} variant="ghost">
         Reset
       </Button>
     )

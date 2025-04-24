@@ -19,35 +19,35 @@ export default function HomePage() {
   return (
     <Container
       as={Grid}
-      minH="100dvh"
       bg={{
         base: ["white", "black"],
         sm: "primary",
       }}
       justifyContent="center"
+      minH="100dvh"
       p={{ sm: "0" }}
     >
       <GridItem as={Center}>
         <Card
           bg={["white", "black"]}
-          variant="solid"
           color={["black", "white"]}
-          w="fit-content"
-          textAlign="center"
           flexDir="row"
+          gap="12"
           p={{
             base: "6",
             sm: "12",
           }}
-          gap="12"
+          textAlign="center"
+          variant="solid"
+          w="fit-content"
         >
           <CardBody
+            alignItems="center"
             as={VStack}
             gap="6"
-            p="0"
-            maxW="500px"
-            alignItems="center"
             justifyContent="center"
+            maxW="500px"
+            p="0"
           >
             <Heading.h2 lineHeight="10">UABC Booking Portal</Heading.h2>
             <Center
@@ -68,22 +68,22 @@ export default function HomePage() {
               vibrant community and play your best game today!
             </Text>
             <Button
-              as={Link}
-              size="lg"
-              w="full"
-              href="/sessions"
-              colorScheme="primary"
-              fontSize="sm"
-              fontWeight="normal"
-              lineHeight="5"
-              height="2.75rem"
               _hover={{
                 bg: "transparentize(primary, 90%)",
               }}
+              as={Link}
+              colorScheme="primary"
+              fontSize="sm"
+              fontWeight="normal"
+              height="2.75rem"
+              href="/sessions"
+              lineHeight="5"
+              size="lg"
+              w="full"
             >
               Book a session!
             </Button>
-            <UILink as={Link} href="/privacy" color="primary" textDecoration="underline">
+            <UILink as={Link} color="primary" href="/privacy" textDecoration="underline">
               Privacy Policy
             </UILink>
           </CardBody>

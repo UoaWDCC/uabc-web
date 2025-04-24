@@ -2,13 +2,13 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [".env", ".env.local"],
   "globalEnv": [],
-  "ui": "tui",
+  "remoteCache": {
+    "enabled": true
+  },
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"],
       "cache": true,
+      "dependsOn": ["^build"],
       "env": [
         "DATABASE_URI",
         "PAYLOAD_SECRET",
@@ -18,7 +18,12 @@
         "JWT_SECRET",
         "TURBO_TEAM",
         "TURBO_TOKEN"
-      ]
+      ],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
     },
     "dev": {
       "cache": false,
@@ -28,24 +33,22 @@
     "lint": {
       "dependsOn": ["^lint"]
     },
+    "start": {
+      "dependsOn": ["^start"]
+    },
     "storybook": {
       "cache": false,
       "persistent": true
     },
     "storybook:build": {
+      "cache": true,
       "dependsOn": ["^storybook:build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "!**/*.stories.{tsx,jsx,mdx}"],
-      "outputs": ["storybook-static/**"],
-      "cache": true
+      "outputs": ["storybook-static/**"]
     },
     "theme": {
       "dependsOn": ["^theme"]
-    },
-    "start": {
-      "dependsOn": ["^start"]
     }
   },
-  "remoteCache": {
-    "enabled": true
-  }
+  "ui": "tui"
 }

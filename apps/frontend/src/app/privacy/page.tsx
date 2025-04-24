@@ -7,13 +7,13 @@ export const metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <Container minH="100dvh" centerContent>
+    <Container centerContent minH="100dvh">
       <Card
+        maxW="3xl"
+        size="lg"
+        textWrap="pretty"
         variant={{ base: "unstyled", sm: "outline" }}
         w="full"
-        maxW="3xl"
-        textWrap="pretty"
-        size="lg"
       >
         <CardBody gap="md">
           <Heading fontSize="3xl" fontWeight="extrabold">

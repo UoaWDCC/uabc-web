@@ -9,7 +9,7 @@ import { Popover, PopoverContext } from "../popover"
 export const OptionsPopover = ({ children }: { children?: ReactNode }) => {
   return (
     <Popover>
-      <Popover.Trigger variant="outline" className="z-10 h-6 w-8">
+      <Popover.Trigger className="z-10 h-6 w-8" variant="outline">
         <Ellipsis className="absolute w-4 stroke-tertiary" />
       </Popover.Trigger>
       <Popover.Menubar>{children}</Popover.Menubar>

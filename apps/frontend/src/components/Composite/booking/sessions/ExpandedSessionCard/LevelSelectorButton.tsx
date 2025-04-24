@@ -1,7 +1,7 @@
 import React from "react"
 
 import { cn } from "@/lib/utils"
-import { PlayLevel } from "@/types/types"
+import type { PlayLevel } from "@/types/types"
 
 interface LevelSelectorButtonProps {
   name?: PlayLevel
@@ -18,6 +18,7 @@ export const LevelSelectorButton = ({ name, selected, handleClick }: LevelSelect
         : "bg-white text-tertiary hover:bg-tertiary/10 hover:text-tertiary",
     )}
     onClick={handleClick}
+    type="button"
   >
     {name}
   </button>

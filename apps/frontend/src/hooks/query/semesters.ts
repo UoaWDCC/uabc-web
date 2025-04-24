@@ -14,7 +14,7 @@ export type SemesterResponse = {
 }
 
 const fetchSemesters = async (): Promise<SemesterResponse[]> => {
-  const response = await fetch(`/api/semesters`, {
+  const response = await fetch("/api/semesters", {
     cache: "no-store",
   })
   return response.json()

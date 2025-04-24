@@ -97,7 +97,7 @@ export const Variant: Story = (args) => {
     <PropsTable rows={variants} variant="column">
       {(_, row, key) => {
         return (
-          <Heading key={key} as={row} {...args}>
+          <Heading as={row} key={key} {...args}>
             Heading {row}
           </Heading>
         )

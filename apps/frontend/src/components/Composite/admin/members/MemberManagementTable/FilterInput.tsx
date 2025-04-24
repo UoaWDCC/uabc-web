@@ -22,14 +22,14 @@ export const FilterInput: FC<FilterInputProps> = memo(({ passHasRef, passValueRe
   })
   return (
     <Input
-      ref={inputRef}
-      placeholder="Filter members..."
       onChange={(ev) => {
         setTimeout(() => {
           passValueRef.current(ev.target.value)
           passHasRef.current(!!ev.target.value)
         })
       }}
+      placeholder="Filter members..."
+      ref={inputRef}
       w="300px"
     />
   )

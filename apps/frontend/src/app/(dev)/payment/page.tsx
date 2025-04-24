@@ -25,13 +25,13 @@ export default function PaymentOptionsPage() {
         <VStack>
           <PaymentOptionCard
             onClick={() => alert("Direct debit")}
-            title="Direct Debit"
             subtitle="Pay via Bank Transfer"
+            title="Direct Debit"
           />
           <PaymentOptionCard
             onClick={() => alert("Pay now")}
-            title="Pay Now"
             subtitle="Pay via a Debit or Credit Card"
+            title="Pay Now"
           />
         </VStack>
       </VStack>
