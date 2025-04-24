@@ -1,28 +1,4 @@
-import type {
-  Dict,
-  SegmentedControlProps,
-  SelectProps,
-  SliderProps,
-  StackProps,
-  SwitchProps,
-  ThemeProps,
-} from "@yamada-ui/react"
-import {
-  Box,
-  FormControl,
-  HStack,
-  SegmentedControl,
-  Select,
-  Slider,
-  SliderThumb,
-  Switch,
-  Text,
-  Tooltip,
-  VStack,
-  isArray,
-  useColorMode,
-  useDisclosure,
-} from "@yamada-ui/react"
+import { Box, HStack, Text, VStack, isArray, useColorMode } from "@yamada-ui/react"
 import type { FC } from "react"
 
 interface ColorPalletsProps {

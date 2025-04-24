@@ -2,7 +2,6 @@
 
 import { Button } from "@yamada-ui/react"
 import Image from "next/image"
-import React from "react"
 
 import GoogleIcon from "../../../public/images/googleIcon.svg"
 

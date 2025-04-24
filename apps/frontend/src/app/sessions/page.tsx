@@ -1,6 +1,5 @@
 import { LogOut } from "lucide-react"
 import Image from "next/image"
-import React from "react"
 
 import { LogOutButton } from "@/components/Composite/LogOutButton"
 import { PrepaidSessionsCounter } from "@/components/Composite/booking/sessions/PrepaidSessionsCounter"

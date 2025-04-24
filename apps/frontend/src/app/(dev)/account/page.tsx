@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
-import React, { Suspense } from "react"
+import { Suspense } from "react"
 
 import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
 import type { CurrentUserProps } from "@/lib/hoc/withCurrentUser"

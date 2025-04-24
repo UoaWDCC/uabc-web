@@ -2,7 +2,7 @@
 
 import { Button, Heading, VStack } from "@yamada-ui/react"
 import { useSearchParams } from "next/navigation"
-import React, { useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 import { InputType, TextInput } from "@repo/ui/components/TextInput"

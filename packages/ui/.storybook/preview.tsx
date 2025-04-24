@@ -6,7 +6,7 @@ import type { Preview } from "@storybook/react"
 import { themes } from "@storybook/theming"
 import { UIProvider, VStack, useColorMode } from "@yamada-ui/react"
 import type { FC, PropsWithChildren } from "react"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { DARK_MODE_EVENT_NAME } from "storybook-dark-mode"
 import { customThemes } from "./themes"
 

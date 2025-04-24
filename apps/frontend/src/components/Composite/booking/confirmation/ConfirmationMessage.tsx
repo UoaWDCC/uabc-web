@@ -1,4 +1,3 @@
-import React from "react"
 import { BsCheckCircle, BsClock } from "react-icons/bs"
 
 interface ConfirmationMessageProps {

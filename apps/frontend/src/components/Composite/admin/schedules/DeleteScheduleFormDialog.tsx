@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query"
-import React, { type FC, memo } from "react"
+import { type FC, memo } from "react"
 
 import { useDeleteScheduleMutation } from "@/hooks/mutations/schedules"
 import { QUERY_KEY } from "@/lib/utils/queryKeys"

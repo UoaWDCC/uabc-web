@@ -1,7 +1,3 @@
-// @vitest-environment jsdom
-
-import React from "react"
-
 import { render, screen, userEvent } from "@/tests-frontend-utils/test-utils"
 import { SelectableCard } from "../SelectableCard"
 

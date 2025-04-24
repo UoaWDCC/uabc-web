@@ -1,5 +1,4 @@
 import Link from "next/link"
-import React from "react"
 
 import { Button, type ButtonProps, Spacer } from "@yamada-ui/react"
 import { ArrowRightIcon } from "../Icons"

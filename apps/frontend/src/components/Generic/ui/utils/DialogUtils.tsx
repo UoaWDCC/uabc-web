@@ -1,5 +1,4 @@
 import { DialogClose } from "@radix-ui/react-dialog"
-import React from "react"
 
 import { Button, type ButtonProps } from "../button"
 import { DialogFooter } from "../dialog"

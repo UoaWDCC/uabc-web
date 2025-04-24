@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useMemo } from "react"
+import { useMemo } from "react"
 
 import { useSchedules } from "@/hooks/query/useSchedules"
 import { ScheduleDetailCard } from "./ScheduleDetailCard"

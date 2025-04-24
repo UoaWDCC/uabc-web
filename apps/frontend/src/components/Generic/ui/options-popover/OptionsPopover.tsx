@@ -1,6 +1,6 @@
 import { DialogTrigger } from "@radix-ui/react-dialog"
 import { Ellipsis } from "lucide-react"
-import React, { useContext, type ReactNode } from "react"
+import { type ReactNode, useContext } from "react"
 
 import { Dialog } from "../dialog"
 import { Popover, PopoverContext } from "../popover"

@@ -1,5 +1,4 @@
 import clsx from "clsx"
-import React from "react"
 
 export const UabcLogoNotFound = ({ className }: { className?: string }) => {
   return (

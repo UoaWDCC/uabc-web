@@ -2,7 +2,7 @@
 
 import { PlusIcon } from "@yamada-ui/lucide"
 import { IconButton, useDisclosure } from "@yamada-ui/react"
-import React, { memo } from "react"
+import { memo } from "react"
 import { CreateScheduleFormDialog } from "./CreateScheduleFormDialog"
 
 interface ScheduleCreateButtonProps {

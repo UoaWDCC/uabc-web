@@ -4,7 +4,6 @@ import { z } from "zod"
 
 import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
 import { Card } from "@/components/Composite/Card"
-import { ResetPasswordForm } from "@/components/Composite/auth/ResetPasswordForm"
 
 export const metadata = {
   title: "Reset Password - UABC Booking Portal",

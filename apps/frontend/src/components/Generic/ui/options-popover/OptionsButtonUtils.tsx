@@ -1,5 +1,5 @@
 import { SquarePen, Trash2 } from "lucide-react"
-import React, { forwardRef } from "react"
+import { forwardRef } from "react"
 
 import { Button } from "../button"
 

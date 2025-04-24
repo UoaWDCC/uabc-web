@@ -1,5 +1,3 @@
-import React from "react"
-
 import type { CartGameSession } from "@/types/game-session"
 import { SelectSessionCard } from "./SelectSessionCard"
 

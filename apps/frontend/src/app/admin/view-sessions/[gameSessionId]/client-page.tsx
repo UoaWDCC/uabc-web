@@ -1,7 +1,5 @@
 "use client"
 
-import React from "react"
-
 import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
 import { Attendees, Loading } from "@/components/Composite/admin/view-sessions/gameSessionId"
 import { useGameSessionId } from "@/hooks/query/game-sessions"
