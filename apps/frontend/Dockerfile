@@ -50,6 +50,7 @@ COPY --from=installer /app/apps/frontend/.next/standalone ./
 COPY --from=installer /app/apps/frontend/.next/static ./apps/frontend/.next/static
 COPY --from=installer /app/apps/frontend/public ./apps/frontend/public
 
-EXPOSE 3000
+ENV PORT=3001
+EXPOSE 3001
 
 CMD ["node", "apps/frontend/server.js"]

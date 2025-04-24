@@ -9,7 +9,7 @@ services:
         - TURBO_TOKEN=${TURBO_TOKEN}
     restart: always
     ports:
-      - 3000:3000
+      - 3001:3001
     networks:
       - app_network
     
@@ -29,7 +29,7 @@ services:
         TURBO_TOKEN: ${TURBO_TOKEN}
     restart: always
     ports:
-      - 3001:3001
+      - 3000:3000
     depends_on:
       - mongo
     networks:
