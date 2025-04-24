@@ -95,10 +95,11 @@ jobs:
             ${{ steps.deploy-backend.outcome == 'success' && format('Completed at: {0}', steps.timestamp.outputs.time) || 'Check workflow logs for details.' }}
             
             ### Frontend Status
-            ${{ steps.deploy-backend.outcome == 'success' && '🚀 Frontend deployment in progress...' || '⏳ Waiting for backend deployment to succeed...' }}
+            ${{ steps.deploy-frontend.outcome == 'success' && '✅ Frontend deployment successful!' || steps.deploy-backend.outcome == 'success' && '❌ Frontend deployment failed!' || '⏸️ Frontend deployment skipped' }}
             URL: https://wdcc-uabc-frontend-staging.fly.dev/
+            ${{ steps.deploy-frontend.outcome == 'success' && format('Completed at: {0}', steps.timestamp.outputs.time) || steps.deploy-backend.outcome == 'success' && 'Check workflow logs for details.' || 'Waiting for backend deployment to succeed.' }}
             
-            ${{ steps.deploy-backend.outcome == 'success' && 'Please wait while frontend deployment completes...' || 'Deployment stopped due to backend failure.' }}
+            ${{ (steps.deploy-backend.outcome == 'success' && steps.deploy-frontend.outcome == 'success') && '✨ All deployments completed successfully!' || '❌ Deployment process encountered errors. Please check the workflow logs for more details.' }}
       
       # Deploy Frontend (only if backend succeeded)
       - name: Set Frontend Secrets
@@ -131,9 +132,9 @@ jobs:
             ${{ steps.deploy-backend.outcome == 'success' && format('Completed at: {0}', steps.timestamp.outputs.time) || 'Check workflow logs for details.' }}
             
             ### Frontend Status
-            ${{ steps.deploy-frontend.outcome == 'success' && '✅ Frontend deployment successful!' || (steps.deploy-backend.outcome == 'success' ? '❌ Frontend deployment failed!' : '⏸️ Frontend deployment skipped') }}
+            ${{ steps.deploy-frontend.outcome == 'success' && '✅ Frontend deployment successful!' || steps.deploy-backend.outcome == 'success' && '❌ Frontend deployment failed!' || '⏸️ Frontend deployment skipped' }}
             URL: https://wdcc-uabc-frontend-staging.fly.dev/
-            ${{ steps.deploy-frontend.outcome == 'success' && format('Completed at: {0}', steps.timestamp.outputs.time) || (steps.deploy-backend.outcome == 'success' ? 'Check workflow logs for details.' : 'Waiting for backend deployment to succeed.') }}
+            ${{ steps.deploy-frontend.outcome == 'success' && format('Completed at: {0}', steps.timestamp.outputs.time) || steps.deploy-backend.outcome == 'success' && 'Check workflow logs for details.' || 'Waiting for backend deployment to succeed.' }}
             
             ${{ (steps.deploy-backend.outcome == 'success' && steps.deploy-frontend.outcome == 'success') && '✨ All deployments completed successfully!' || '❌ Deployment process encountered errors. Please check the workflow logs for more details.' }}
 
