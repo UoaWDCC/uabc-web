@@ -1,13 +1,12 @@
+import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { googleAuthScopes, oauth2Client } from '@/business-layer/security/google'
-import AuthService from '@/collections/services/AuthService'
-import UserService from '@/collections/services/UserService'
+import AuthService from '@/data-layer/services/AuthService'
+import UserService from '@/data-layer/services/UserService'
 import { UserInfoResponse, UserInfoResponseSchema } from '@/types/auth'
 import { MembershipType } from '@/types/types'
-
-import jwt from 'jsonwebtoken'
 
 export const GET = async (req: NextRequest) => {
   const params = req.nextUrl.searchParams

@@ -1,6 +1,6 @@
+import { clearCollection, testPayloadObject } from '@/test-config/backend-utils'
+import { userMock } from '@/test-config/mocks/User.mock'
 import dotenv from 'dotenv'
-import { userMock } from 'tests/mocks/User.mock'
-import { clearCollection, testPayloadObject } from 'tests/utils'
 import UserService from './UserService'
 
 dotenv.config()

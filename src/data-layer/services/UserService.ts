@@ -13,33 +13,18 @@ export default class UserService {
    * @param param0 the user data
    * @returns the created user document
    */
-  public async createUser({
-    firstName,
-    lastName,
-    role,
-    email,
-    remainingSessions = 0,
-    image = undefined,
-  }: CreateUserData): Promise<User> {
-    const newUser = await payload.create({
+  public async createUser(newUser: CreateUserData): Promise<User> {
+    return await payload.create({
       collection: 'user',
-      data: {
-        firstName,
-        lastName,
-        role,
-        remainingSessions,
-        image,
-        email,
-      },
+      data: newUser,
     })
-    return newUser
   }
   /**
    * Finds a user with target email or returns undefined if not found
    * @param email the email of the user to find
    * @returns The user document if exists
    */
-  public async getUserByEmail(email: string): Promise<User | undefined> {
+  public async getUserByEmail(email: string): Promise<User> {
     const userDocs = (
       await payload.find({
         collection: 'user',
@@ -50,7 +35,6 @@ export default class UserService {
         },
       })
     ).docs
-    if (!userDocs.length) return undefined
     return userDocs[0]
   }
 }

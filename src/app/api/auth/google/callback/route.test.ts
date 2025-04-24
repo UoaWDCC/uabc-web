@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
-import { authenticationMock } from 'tests/mocks/Authentication.mock'
-import { userMock } from 'tests/mocks/User.mock'
+import { authenticationMock } from '@/test-config/mocks/Authentication.mock'
+import { userMock } from '@/test-config/mocks/User.mock'
 
 import {
   CODE_MOCK,
@@ -11,7 +11,7 @@ import {
   createMockNextRequest,
   googleUserMock,
   tokensMock,
-} from 'tests/mocks/GoogleAuth.mock'
+} from '@/test-config/mocks/GoogleAuth.mock'
 
 vi.mock('@/business-layer/security/google', async () => {
   const actual = await vi.importActual<typeof import('@/business-layer/security/google')>(
@@ -28,7 +28,7 @@ vi.mock('@/business-layer/security/google', async () => {
   }
 })
 
-vi.mock('@/collections/services/UserService', () => {
+vi.mock('@/data-layer/services/UserService', () => {
   return {
     default: vi.fn().mockImplementation(() => ({
       getUserByEmail: vi.fn().mockResolvedValue(userMock),
@@ -37,7 +37,7 @@ vi.mock('@/collections/services/UserService', () => {
   }
 })
 
-vi.mock('@/collections/services/AuthService', () => {
+vi.mock('@/data-layer/services/AuthService', () => {
   return {
     default: vi.fn().mockImplementation(() => ({
       createAuth: vi.fn().mockResolvedValue(authenticationMock),
