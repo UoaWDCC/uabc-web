@@ -7,6 +7,8 @@ on:
     paths-ignore:
       - '**.md'
       - '.gitignore'
+  pull_request:
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
     inputs:
       environment:
@@ -16,20 +18,133 @@ on:
 
 jobs:
   deploy-to-staging:
-    name: Deploy UABC Staging App
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    name: Deploy UABC Staging Apps
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_APP_API_TOKEN }}
     environment:
       name: staging
-      url: https://wdcc-uabc-staging.fly.dev/
+      url: https://wdcc-uabc-frontend-staging.fly.dev/
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl secrets set --config fly.staging.toml DATABASE_URI=${{ secrets.DATABASE_URI }} PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} TURBO_TEAM=${{ secrets.TURBO_TEAM }} TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
-      - run: flyctl secrets deploy --config fly.staging.toml
-      - run: flyctl deploy --remote-only --config fly.staging.toml
+      
+      # Create deployment status comment for PR
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        if: github.event_name == 'pull_request'
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Staging Deployment Status
+          
+      - name: Create Initial Comment
+        uses: peter-evans/create-or-update-comment@v3
+        if: github.event_name == 'pull_request'
+        id: initial-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## Staging Deployment Status
+            
+            ### Backend Status
+            🚀 Backend deployment in progress...
+            URL: https://wdcc-uabc-backend-staging.fly.dev/
+            
+            ### Frontend Status
+            ⏳ Waiting for backend deployment...
+            URL: https://wdcc-uabc-frontend-staging.fly.dev/
+            
+            Please wait while the deployments complete...
+      
+      # Deploy Backend
+      - name: Set Backend Secrets
+        run: flyctl secrets set --config fly.staging.backend.toml DATABASE_URI=${{ secrets.DATABASE_URI }} PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} TURBO_TEAM=${{ secrets.TURBO_TEAM }} TURBO_TOKEN=${{ secrets.TURBO_TOKEN }} NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+      - name: Deploy Backend Secrets
+        run: flyctl secrets deploy --config fly.staging.backend.toml
+      - name: Deploy Backend
+        id: deploy-backend
+        run: flyctl deploy --remote-only --config fly.staging.backend.toml
+        
+      # Update comment after backend deployment
+      - name: Update Comment After Backend
+        uses: peter-evans/create-or-update-comment@v3
+        if: github.event_name == 'pull_request'
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## Staging Deployment Status
+            
+            ### Backend Status
+            ✅ Backend deployment successful!
+            URL: https://wdcc-uabc-backend-staging.fly.dev/
+            Completed at: ${{ steps.deploy-time.outputs.time }}
+            
+            ### Frontend Status
+            🚀 Frontend deployment in progress...
+            URL: https://wdcc-uabc-frontend-staging.fly.dev/
+            
+            Please wait while frontend deployment completes...
+      
+      # Deploy Frontend
+      - name: Set Frontend Secrets
+        run: flyctl secrets set --config fly.staging.frontend.toml NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} TURBO_TEAM=${{ secrets.TURBO_TEAM }} TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
+      - name: Deploy Frontend Secrets
+        run: flyctl secrets deploy --config fly.staging.frontend.toml
+      - name: Deploy Frontend
+        id: deploy-frontend
+        run: flyctl deploy --remote-only --config fly.staging.frontend.toml
+        
+      # Update deployment status comment
+      - name: Update Comment with Success
+        uses: peter-evans/create-or-update-comment@v3
+        if: success() && github.event_name == 'pull_request'
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## Staging Deployment Status
+            
+            ### Backend Status
+            ✅ Backend deployment successful!
+            URL: https://wdcc-uabc-backend-staging.fly.dev/
+            Completed at: ${{ steps.deploy-time.outputs.time }}
+            
+            ### Frontend Status
+            ✅ Frontend deployment successful!
+            URL: https://wdcc-uabc-frontend-staging.fly.dev/
+            Completed at: ${{ steps.deploy-time.outputs.time }}
+            
+            ✨ All deployments completed successfully! You can now test your changes in the staging environment.
+            
+      - name: Update Comment with Failure
+        uses: peter-evans/create-or-update-comment@v3
+        if: failure() && github.event_name == 'pull_request'
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## Staging Deployment Status
+            
+            ### Backend Status
+            ${{ steps.deploy-backend.outcome == 'success' && '✅ Backend deployment successful!' || '❌ Backend deployment failed!' }}
+            URL: https://wdcc-uabc-backend-staging.fly.dev/
+            ${{ steps.deploy-backend.outcome == 'success' && format('Completed at: {0}', steps.deploy-time.outputs.time) || 'Check workflow logs for details.' }}
+            
+            ### Frontend Status
+            ${{ steps.deploy-frontend.outcome == 'success' && '✅ Frontend deployment successful!' || '❌ Frontend deployment failed!' }}
+            URL: https://wdcc-uabc-frontend-staging.fly.dev/
+            ${{ steps.deploy-frontend.outcome == 'success' && format('Completed at: {0}', steps.deploy-time.outputs.time) || 'Check workflow logs for details.' }}
+            
+            ❌ Deployment process encountered errors. Please check the workflow logs for more details.
 
   deploy-to-production:
     name: Deploy UABC Production App
