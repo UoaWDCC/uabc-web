@@ -17,8 +17,28 @@ on:
         required: true
 
 jobs:
+  wait-for-ci:
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for CI checks
+        id: wait-for-ci
+        uses: lewagon/wait-on-check-action@v1.3.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          check-name: 'Verify'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+          allowed-conclusions: success
+
   setup-deployment:
-    if: github.event_name == 'push' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    needs: [wait-for-ci]
+    if: |
+      success() && 
+      (
+        (github.event_name == 'push' || github.event_name == 'pull_request') ||
+        (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+      )
     runs-on: ubuntu-latest
     outputs:
       comment-id: ${{ steps.deployment-comment.outputs.comment-id }}
