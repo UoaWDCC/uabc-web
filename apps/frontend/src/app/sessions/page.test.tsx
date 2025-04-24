@@ -28,6 +28,26 @@ vi.mock("next-auth/react", () => {
   }
 })
 
+vi.mock("@/hooks/query/game-sessions", () => ({
+  useCurrentGameSessions: () => ({
+    data: [
+      {
+        id: 1,
+        date: "2024-03-20",
+        startTime: "18:00",
+        endTime: "20:00",
+        locationName: "Test Location",
+        locationAddress: "123 Test St",
+        memberCapacity: 20,
+        casualCapacity: 10,
+        memberBookingCount: 0,
+        casualBookingCount: 0,
+      },
+    ],
+    isLoading: false,
+  }),
+}))
+
 describe("Select Sessions page", () => {
   beforeEach(() => {
     render(<ClientSessionPage isMember={true} prepaidSessions={2} />)

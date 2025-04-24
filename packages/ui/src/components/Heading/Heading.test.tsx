@@ -37,7 +37,9 @@ describe("<Heading />", () => {
 
   test("applies correct font weights for different heading levels", () => {
     for (const [level, weight] of Object.entries(DEFAULT_FONT_WEIGHTS)) {
-      const { getAllByText } = render(<Heading as={level}>Test Heading {level}</Heading>, {})
+      const { getAllByText } = render(<Heading as={level}>Test Heading {level}</Heading>, {
+        withProvider: false,
+      })
       const heading = getAllByText(`Test Heading ${level}`)[0]
       expect(heading).toHaveStyle({ fontWeight: weight })
     }
