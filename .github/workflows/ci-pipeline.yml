@@ -232,6 +232,15 @@ jobs:
     needs: [check_changes, build, biome, test, codegen]
     runs-on: ubuntu-latest
     if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.biome.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
+    outputs:
+      success: ${{ steps.set-result.outputs.success }}
     steps:
-      - name: All checks passed
-        run: echo "All checks passed!"
+      - name: Set Result
+        id: set-result
+        run: |
+          if [[ "${{ needs.build.result }}" == "success" && "${{ needs.biome.result }}" == "success" && "${{ needs.test.result }}" == "success" && "${{ needs.codegen.result }}" == "success" ]]; then
+            echo "success=true" >> $GITHUB_OUTPUT
+          else
+            echo "success=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
