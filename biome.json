@@ -8,7 +8,17 @@
     }
   },
   "files": {
-    "ignore": ["src/payload-types.ts", "pnpm-lock.yaml", "*.md", ".github/", ".lintstagedrc"],
+    "ignore": [
+      "src/payload-types.ts",
+      "pnpm-lock.yaml",
+      "*.md",
+      ".github/",
+      ".lintstagedrc",
+      ".next",
+      "dist",
+      ".turbo",
+      ".vscode"
+    ],
     "ignoreUnknown": false
   },
   "formatter": {
@@ -38,11 +48,21 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "correctness": { "noUnusedVariables": "error" },
-      "suspicious": { "noExplicitAny": "warn" }
+      "correctness": {
+        "noUnusedVariables": "error",
+        "noUnusedImports": "error"
+      },
+      "suspicious": {
+        "noExplicitAny": "warn"
+      }
     }
   },
-  "organizeImports": { "enabled": true },
-  "overrides": [{ "include": ["**/*.{ts,tsx}"] }],
-  "vcs": { "clientKind": "git", "enabled": true, "useIgnoreFile": true }
+  "organizeImports": {
+    "enabled": true
+  },
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "useIgnoreFile": true
+  }
 }

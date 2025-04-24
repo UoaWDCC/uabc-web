@@ -35,7 +35,6 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.485.0",
     "next": "15.2.3",
-    "payload": "latest",
     "react": "19.0.0",
     "react-hook-form": "^7.55.0",
     "react-icons": "^5.5.0",
