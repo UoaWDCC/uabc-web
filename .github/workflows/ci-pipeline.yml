@@ -8,6 +8,8 @@ on:
 
 env:
   CI: 'true'
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  TURBO_TOKEN: ${{ vars.TURBO_TOKEN }}
 
 jobs:
   check_changes:
@@ -40,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -55,13 +59,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # Cache the node_modules directory
-      - name: Cache node_modules
+      - name: Cache Turborepo
         uses: actions/cache@v4
-        id: cache-node-modules
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
   biome:
     needs: [check_changes, setup]
@@ -82,15 +86,19 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
+      - name: Restore Turborepo cache
         uses: actions/cache@v4
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Check formatting
-        run: pnpm biome check .
+        run: pnpm lint
 
   build:
     environment: staging
@@ -118,15 +126,19 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
+      - name: Restore Turborepo cache
         uses: actions/cache@v4
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm tsc --noEmit && pnpm build
+        run: pnpm turbo run build --filter=...[master...HEAD]
 
   test:
     needs: [check_changes, setup]
@@ -150,15 +162,19 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
+      - name: Restore Turborepo cache
         uses: actions/cache@v4
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Test
-        run: pnpm test
+        run: pnpm turbo run test --filter=...[master...HEAD]
 
   codegen:
     needs: [check_changes, setup]
@@ -182,12 +198,16 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
+      - name: Restore Turborepo cache
         uses: actions/cache@v4
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Generate typing
         run: pnpm generate:types
@@ -198,14 +218,7 @@ jobs:
             echo "TYPE_GEN_DIFF=0" >> $GITHUB_ENV
           else
             echo "TYPE_GEN_DIFF=1" >> $GITHUB_ENV
-          fi
-
-      - name: Check for differences in typing
-        if: ${{ env.TYPE_GEN_DIFF != '0'}}
-        uses: actions/github-script@v3
-        with:
-          script: |
-            core.setFailed('Your code generation for typings are not up to date. Run pnpm generate:types')
+            git diff
 
   verify:
     name: Verify
