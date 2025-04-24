@@ -174,7 +174,7 @@ jobs:
         run: pnpm install
 
       - name: Test
-        run: pnpm turbo run test
+        run: pnpm run test
 
   codegen:
     needs: [check_changes, setup]
