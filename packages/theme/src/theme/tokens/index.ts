@@ -9,3 +9,5 @@ export const tokens = {
   fontSizes,
   fontWeights,
 }
+
+export { COLORS } from "./colors"

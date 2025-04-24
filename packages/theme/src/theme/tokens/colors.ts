@@ -34,3 +34,5 @@ export const colors: ThemeTokens = {
     950: "rgba(255, 255, 255, 0.96)",
   },
 }
+
+export const COLORS = ["blue", "tertiary", "destructive"]

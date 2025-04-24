@@ -11,19 +11,18 @@
     "check-types": "tsc --noEmit",
     "theme": "yamada-cli tokens ./src/theme",
     "storybook": "storybook dev -p 6006 -c .storybook",
-    "build": "storybook build -c .storybook",
-    "start": "serve -l 3002 .storybook-static"
+    "storybook:build": "storybook build -c .storybook"
   },
   "devDependencies": {
     "@mdx-js/react": "^3.1.0",
     "@repo/typescript-config": "workspace:*",
     "@storybook/addon-a11y": "^8.6.12",
     "@storybook/addon-backgrounds": "^8.6.12",
-    "@storybook/addon-docs": "^8.6.12",
     "@storybook/addon-essentials": "8.6.12",
     "@storybook/addon-measure": "^8.6.12",
     "@storybook/addon-storysource": "^8.6.12",
     "@storybook/addon-viewport": "^8.6.12",
+    "@storybook/addon-docs": "^8.6.12",
     "@storybook/preview-api": "^8.6.12",
     "@storybook/react": "8.6.12",
     "@turbo/gen": "^2.5.0",

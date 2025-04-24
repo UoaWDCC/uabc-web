@@ -6,15 +6,19 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", "!**/*.stories.{tsx,jsx,mdx}"],
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "!.next/cache/**",
-        "public/dist/**",
-        "storybook-static/**"
-      ],
-      "cache": true
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"],
+      "cache": true,
+      "env": [
+        "DATABASE_URI",
+        "PAYLOAD_SECRET",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "NEXT_PUBLIC_URL",
+        "JWT_SECRET",
+        "TURBO_TEAM",
+        "TURBO_TOKEN"
+      ]
     },
     "dev": {
       "cache": false,
@@ -27,6 +31,12 @@
     "storybook": {
       "cache": false,
       "persistent": true
+    },
+    "storybook:build": {
+      "dependsOn": ["^storybook:build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "!**/*.stories.{tsx,jsx,mdx}"],
+      "outputs": ["storybook-static/**"],
+      "cache": true
     },
     "theme": {
       "dependsOn": ["^theme"]

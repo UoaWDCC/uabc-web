@@ -1,11 +1,12 @@
-app = 'wdcc-uabc-staging'
+app = 'wdcc-uabc-backend-staging'
 primary_region = 'syd'
 
 [build]
-  dockerfile = "Dockerfile"
+  context = "."
+  dockerfile = "apps/backend/Dockerfile"
 
 [http_service]
-  internal_port = 3000
+  internal_port = 3001
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true

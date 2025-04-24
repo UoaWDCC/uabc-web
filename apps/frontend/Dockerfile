@@ -8,6 +8,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 
 RUN corepack enable pnpm && pnpm install -g turbo
 
+# Stage 1: Setup build environment
 FROM base AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk update
@@ -16,7 +17,7 @@ WORKDIR /app
 COPY . .
 RUN turbo prune frontend --docker
 
-# Stage 1: Install dependencies
+# Stage 2: Install dependencies
 FROM base AS installer
 RUN apk update
 RUN apk add --no-cache libc6-compat
@@ -48,6 +49,7 @@ ENV NODE_ENV=production
 COPY --from=installer /app/apps/frontend/.next/standalone ./
 COPY --from=installer /app/apps/frontend/.next/static ./apps/frontend/.next/static
 COPY --from=installer /app/apps/frontend/public ./apps/frontend/public
-# RUN if [ -d "/app/public" ]; then cp -r /app/public ./public; fi # Copy public folder if it exists
+
+EXPOSE 3000
 
 CMD ["node", "apps/frontend/server.js"]

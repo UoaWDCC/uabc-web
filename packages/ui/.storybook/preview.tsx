@@ -75,7 +75,7 @@ const preview: Preview = {
     layout: "fullscreen",
     options: {
       storySort: {
-        order: ["Components", "Hooks", "Styled System", "Theme"],
+        order: ["Theme", "Components"],
       },
     },
   },

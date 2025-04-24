@@ -8,6 +8,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 
 RUN corepack enable pnpm && pnpm install -g turbo
 
+# Stage 1: Setup build environment
 FROM base AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk update
@@ -16,7 +17,7 @@ WORKDIR /app
 COPY . .
 RUN turbo prune backend --docker
 
-# Stage 1: Install dependencies
+# Stage 2: Install dependencies
 FROM base AS installer
 RUN apk update
 RUN apk add --no-cache libc6-compat
@@ -31,9 +32,21 @@ RUN pnpm install --frozen-lockfile
 COPY --from=builder /app/out/full/ .
 
 ARG TURBO_TEAM
-ENV TURBO_TEAM=$TURBO_TEAM
- 
 ARG TURBO_TOKEN
+ARG DATABASE_URI
+ARG PAYLOAD_SECRET
+ARG GOOGLE_CLIENT_ID
+ARG GOOGLE_CLIENT_SECRET
+ARG NEXT_PUBLIC_URL
+ARG JWT_SECRET
+
+ENV DATABASE_URI=$DATABASE_URI
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
+ENV GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+ENV GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+ENV NEXT_PUBLIC_URL=$NEXT_PUBLIC_URL
+ENV JWT_SECRET=$JWT_SECRET
+ENV TURBO_TEAM=$TURBO_TEAM
 ENV TURBO_TOKEN=$TURBO_TOKEN
 
 RUN pnpm build --filter backend
@@ -48,6 +61,22 @@ ENV NODE_ENV=production
 COPY --from=installer /app/apps/backend/.next/standalone ./
 COPY --from=installer /app/apps/backend/.next/static ./apps/backend/.next/static
 COPY --from=installer /app/apps/backend/public ./apps/backend/public
-# RUN if [ -d "/app/public" ]; then cp -r /app/public ./public; fi # Copy public folder if it exists
+
+ARG DATABASE_URI
+ARG PAYLOAD_SECRET
+ARG GOOGLE_CLIENT_ID
+ARG GOOGLE_CLIENT_SECRET
+ARG NEXT_PUBLIC_URL
+ARG JWT_SECRET
+
+ENV DATABASE_URI=$DATABASE_URI
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
+ENV GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+ENV GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+ENV NEXT_PUBLIC_URL=$NEXT_PUBLIC_URL
+ENV JWT_SECRET=$JWT_SECRET
+ENV PORT=3001
+
+EXPOSE 3001
 
 CMD ["node", "apps/backend/server.js"]
