@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import "@testing-library/jest-dom"
 
 import { render, screen } from "@/test-config/test-utils"
 import ClientSessionPage from "./client-page"
