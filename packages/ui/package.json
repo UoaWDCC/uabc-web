@@ -10,8 +10,7 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006 -c .storybook",
-    "storybook:build": "storybook build -c .storybook",
-    "theme": "yamada-cli tokens ./src/theme"
+    "storybook:build": "storybook build -c .storybook"
   },
   "dependencies": {
     "@repo/theme": "workspace:*",

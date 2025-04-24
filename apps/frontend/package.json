@@ -7,8 +7,7 @@
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
     "check-types": "tsc --noEmit",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --port 3001",
-    "start": "next start --port 3001",
-    "theme": "yamada-cli tokens ./src/theme"
+    "start": "next start --port 3001"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",

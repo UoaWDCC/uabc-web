@@ -57,9 +57,6 @@
       "dependsOn": ["^storybook:build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "!**/*.stories.{tsx,jsx,mdx}"],
       "outputs": ["storybook-static/**"]
-    },
-    "theme": {
-      "dependsOn": ["^theme"]
     }
   },
   "ui": "tui"

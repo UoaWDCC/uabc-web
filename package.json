@@ -24,7 +24,8 @@
     "storybook:build": "turbo run storybook:build",
     "test": "cross-env NODE_ENV=test vitest",
     "test:coverage": "cross-env NODE_ENV=test vitest --coverage",
-    "theme": "turbo run theme"
+    "theme": "yamada-cli tokens ./packages/theme/src/theme",
+    "postinstall": "pnpm theme"
   },
   "dependencies": {
     "@vitejs/plugin-react-swc": "^3.9.0",
@@ -40,6 +41,7 @@
     "@vitest/browser": "3.1.1",
     "@vitest/coverage-v8": "3.1.1",
     "@vitest/ui": "3.1.1",
+    "@yamada-ui/cli": "^1.2.4",
     "dotenv": "^16.4.7",
     "husky": "^9.1.7",
     "jsdom": "^26.0.0",
@@ -52,7 +54,9 @@
   },
   "packageManager": "pnpm@9.0.0",
   "pnpm": {
-    "onlyBuiltDependencies": ["sharp"]
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
   },
   "volta": {
     "node": "22.14.0"
