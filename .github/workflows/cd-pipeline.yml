@@ -41,7 +41,7 @@ jobs:
       )
     runs-on: ubuntu-latest
     outputs:
-      comment-id: ${{ steps.deployment-comment.outputs.comment-id }}
+      comment-id: ${{ steps.find-comment.outputs.comment-id }}
       timestamp: ${{ steps.timestamp.outputs.time }}
     steps:
       - name: Find Comment
@@ -52,6 +52,7 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
           body-includes: Staging Deployment Status
+          direction: last
           
       - name: Get timestamp
         if: github.event_name == 'pull_request'
@@ -68,6 +69,10 @@ jobs:
           edit-mode: replace
           body: |
             ## Staging Deployment Status
+            
+            ### Deployment Information
+            🔄 New deployment triggered for commit: ${{ github.event.pull_request.head.sha }}
+            🕒 Started at: ${{ steps.timestamp.outputs.time }}
             
             ### Backend Status
             🚀 Backend deployment in progress...
