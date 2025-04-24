@@ -39,7 +39,7 @@ export default class UserService {
    * @param email the email of the user to find
    * @returns The user document if exists
    */
-  public async getUserByEmail(email: string): Promise<User | undefined> {
+  public async getUserByEmail(email: string): Promise<User> {
     const userDocs = (
       await payload.find({
         collection: "user",
@@ -50,7 +50,6 @@ export default class UserService {
         },
       })
     ).docs
-    if (!userDocs.length) return undefined
     return userDocs[0]
   }
 }

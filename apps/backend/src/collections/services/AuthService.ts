@@ -13,32 +13,10 @@ export default class AuthService {
    * @param param0 The data to create an Authentication with
    * @returns The Authentication document
    */
-  public async createAuth({
-    user,
-    type,
-    provider,
-    providerAccountId,
-    refreshToken,
-    accessToken,
-    expiresAt,
-    tokenType,
-    scope,
-    idToken,
-  }: CreateAuthenticationData): Promise<Authentication> {
+  public async createAuth(newAuth: CreateAuthenticationData): Promise<Authentication> {
     return await payload.create({
       collection: "authentication",
-      data: {
-        user,
-        type,
-        provider,
-        providerAccountId,
-        accessToken,
-        expiresAt,
-        scope,
-        idToken,
-        refreshToken,
-        tokenType,
-      },
+      data: newAuth,
     })
   }
 }
