@@ -54,39 +54,35 @@ const MembershipType = () => {
   }
 
   return (
-    <VStack h="100dvh" gapY={4} paddingX={4}>
-      <BackNavigationBar title="Select your membership type" pathName="/onboarding/name" />
+    <Container h="100dvh">
+      <VStack h="100%">
+        <BackNavigationBar title="Select your membership type" pathName="/onboarding/name" />
 
-      <RadioCardGroup withIcon={false} direction="column">
-        <MembershipTypeSelector
-          selectedMembership={member === true}
-          onClick={() => toggleMemberSelection(true)}
-          heading="Prepaid Member"
-          description1="Package of 6, 11 or 22 prepaid sessions for the semester"
-          description2="(limit of 2 sessions per week)"
-        />
+        <RadioCardGroup withIcon={false} direction="column">
+          <MembershipTypeSelector
+            selectedMembership={member === true}
+            onClick={() => toggleMemberSelection(true)}
+            heading="Prepaid Member"
+            description1="Package of 6, 11 or 22 prepaid sessions for the semester"
+            description2="(limit of 2 sessions per week)"
+          />
 
-        <MembershipTypeSelector
-          selectedMembership={member === false}
-          onClick={() => toggleMemberSelection(false)}
-          heading="Non-Member (Casual)"
-          description1="$8.00 per session"
-          description2="(limit of 1 session per week)"
-        />
-      </RadioCardGroup>
+          <MembershipTypeSelector
+            selectedMembership={member === false}
+            onClick={() => toggleMemberSelection(false)}
+            heading="Non-Member (Casual)"
+            description1="$8.00 per session"
+            description2="(limit of 1 session per week)"
+          />
+        </RadioCardGroup>
 
-      <Spacer />
+        <Spacer />
 
-      <Flex grow="1" marginBottom="10">
-        <Button
-          className="w-full self-end"
-          onClick={handleNextButtonClick}
-          disabled={member === null}
-        >
+        <Button onClick={handleNextButtonClick} disabled={member === null}>
           Next
         </Button>
-      </Flex>
-    </VStack>
+      </VStack>
+    </Container>
   )
 }
 
