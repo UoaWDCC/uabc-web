@@ -138,7 +138,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm turbo run build --filter=...[master...HEAD]
+        run: pnpm turbo run build --affected
 
   test:
     needs: [check_changes, setup]
@@ -174,7 +174,7 @@ jobs:
         run: pnpm install
 
       - name: Test
-        run: pnpm turbo run test --filter=...[master...HEAD]
+        run: pnpm turbo run test --affected
 
   codegen:
     needs: [check_changes, setup]
@@ -218,7 +218,14 @@ jobs:
             echo "TYPE_GEN_DIFF=0" >> $GITHUB_ENV
           else
             echo "TYPE_GEN_DIFF=1" >> $GITHUB_ENV
-            git diff
+          fi
+
+      - name: Check for differences in typing
+        if: ${{ env.TYPE_GEN_DIFF != '0'}}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Your code generation for typings are not up to date. Run pnpm generate:types')
 
   verify:
     name: Verify

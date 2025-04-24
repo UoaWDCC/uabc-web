@@ -30,8 +30,20 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "persistent": true
     },
+    "generate:importmap": {
+      "cache": true,
+      "inputs": ["$TURBO_DEFAULT$"]
+    },
+    "generate:types": {
+      "cache": true,
+      "inputs": ["$TURBO_DEFAULT$"]
+    },
     "lint": {
       "dependsOn": ["^lint"]
+    },
+    "payload": {
+      "cache": false,
+      "persistent": true
     },
     "start": {
       "dependsOn": ["^start"]

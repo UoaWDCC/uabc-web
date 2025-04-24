@@ -1,4 +1,18 @@
 {
+  "name": "@repo/ui",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./components/Button": "./src/components/Button/index.ts",
+    "./components/Heading": "./src/components/Heading/index.ts",
+    "./components/TextInput": "./src/components/TextInput/index.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006 -c .storybook",
+    "storybook:build": "storybook build -c .storybook",
+    "theme": "yamada-cli tokens ./src/theme"
+  },
   "dependencies": {
     "@repo/theme": "workspace:*",
     "@storybook/blocks": "8.6.12",
@@ -31,19 +45,5 @@
     "storybook-dark-mode": "^4.0.2",
     "typescript": "5.7.3",
     "vitest": "^3.0.9"
-  },
-  "exports": {
-    "./components/Button": "./src/components/Button/index.ts",
-    "./components/Heading": "./src/components/Heading/index.ts",
-    "./components/TextInput": "./src/components/TextInput/index.ts"
-  },
-  "name": "@repo/ui",
-  "private": true,
-  "scripts": {
-    "check-types": "tsc --noEmit",
-    "storybook": "storybook dev -p 6006 -c .storybook",
-    "storybook:build": "storybook build -c .storybook",
-    "theme": "yamada-cli tokens ./src/theme"
-  },
-  "version": "0.0.0"
+  }
 }

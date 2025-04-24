@@ -1,10 +1,36 @@
 {
+  "name": "uabc-web",
+  "version": "1.0.0",
+  "description": "A blank template to get started with Payload 3.0",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22",
+    "pnpm": "^9"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "check-types": "turbo run check-types",
+    "dev": "turbo run dev",
+    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "generate:importmap": "turbo run generate:importmap",
+    "generate:types": "turbo run generate:types",
+    "payload": "turbo run payload",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation biome check .",
+    "precommit": "lint-staged",
+    "prepare": "husky",
+    "start": "turbo run start",
+    "storybook": "turbo run storybook",
+    "storybook:build": "turbo run storybook:build",
+    "test": "cross-env NODE_ENV=test vitest",
+    "test:coverage": "cross-env NODE_ENV=test vitest --coverage",
+    "theme": "turbo run theme"
+  },
   "dependencies": {
     "@vitejs/plugin-react-swc": "^3.9.0",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3"
   },
-  "description": "A blank template to get started with Payload 3.0",
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@testing-library/dom": "^10.4.0",
@@ -24,36 +50,10 @@
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "3.1.1"
   },
-  "engines": {
-    "node": ">=22",
-    "pnpm": "^9"
-  },
-  "license": "MIT",
-  "name": "uabc-web",
   "packageManager": "pnpm@9.0.0",
   "pnpm": {
     "onlyBuiltDependencies": ["sharp"]
   },
-  "scripts": {
-    "build": "turbo run build",
-    "check-types": "turbo run check-types",
-    "dev": "turbo run dev",
-    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
-    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
-    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
-    "lint": "cross-env NODE_OPTIONS=--no-deprecation biome check .",
-    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "precommit": "lint-staged",
-    "prepare": "husky",
-    "start": "turbo run start",
-    "storybook": "turbo run storybook",
-    "storybook:build": "turbo run storybook:build",
-    "test": "cross-env NODE_ENV=test vitest",
-    "test:coverage": "cross-env NODE_ENV=test vitest --coverage",
-    "theme": "turbo run theme"
-  },
-  "type": "module",
-  "version": "1.0.0",
   "volta": {
     "node": "22.14.0"
   }
