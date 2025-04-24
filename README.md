@@ -122,9 +122,9 @@ We use Payload's built in code generation to generate types for our project. To 
 pnpm generate:types
 ```
 
-### Theme Token Generation
+### Update Type Definitions
 
-We use Yamada CLI to generate theme tokens for our project. This helps maintain consistent styling across the application. To generate theme tokens, run:
+To ensure proper type completions for Yamada UI theme tokens in Style Props, we use the Yamada CLI to update type definitions. This process helps maintain accurate TypeScript completions for our customized theme. The script is configured in our package.json to point to our custom theme location.
 
 ```bash
 pnpm theme
