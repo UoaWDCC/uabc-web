@@ -1,5 +1,5 @@
-import { userMock } from "@/tests/mocks/User.mock"
-import { clearCollection, testPayloadObject } from "@/tests/utils"
+import { clearCollection, testPayloadObject } from "@/test-config/backend-utils"
+import { userCreateMock } from "@/test-config/mocks/User.mock"
 import dotenv from "dotenv"
 import UserService from "./UserService"
 
@@ -13,7 +13,7 @@ describe("user service", () => {
   })
 
   it("should create a user document", async () => {
-    const newUser = await userService.createUser(userMock)
+    const newUser = await userService.createUser(userCreateMock)
     const fetchedUser = await testPayloadObject.find({
       collection: "user",
       where: {
@@ -26,8 +26,8 @@ describe("user service", () => {
   })
 
   it("should be able to get a user document by email", async () => {
-    const newUser = await userService.createUser(userMock)
-    const fetchedUser = await userService.getUserByEmail(userMock.email)
+    const newUser = await userService.createUser(userCreateMock)
+    const fetchedUser = await userService.getUserByEmail(userCreateMock.email)
     expect(fetchedUser).toEqual(newUser)
   })
 

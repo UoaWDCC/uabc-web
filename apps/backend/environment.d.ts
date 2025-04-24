@@ -20,7 +20,7 @@ declare global {
       JWT_SECRET: string
 
       /**
-       * The public URL of the website
+       * The public URL of the backend
        */
       NEXT_PUBLIC_URL: string
     }

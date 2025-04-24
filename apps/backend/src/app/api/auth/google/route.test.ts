@@ -1,6 +1,6 @@
 import type { Mock } from "vitest"
 
-import { SCOPES, STATE_MOCK } from "@/tests/mocks/GoogleAuth.mock"
+import { SCOPES, STATE_MOCK } from "@/test-config/mocks/GoogleAuth.mock"
 import { GET } from "./route"
 
 import { redirect } from "next/navigation"

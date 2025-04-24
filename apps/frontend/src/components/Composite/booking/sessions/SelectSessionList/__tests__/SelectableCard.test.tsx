@@ -1,4 +1,4 @@
-import { render, screen, userEvent } from "@/tests-frontend-utils/test-utils"
+import { render, screen, userEvent } from "@/test-config/test-utils"
 import { SelectableCard } from "../SelectableCard"
 
 const session = {

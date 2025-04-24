@@ -138,7 +138,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm turbo run build
+        run: pnpm turbo run tsc build
 
   test:
     needs: [check_changes, setup]
