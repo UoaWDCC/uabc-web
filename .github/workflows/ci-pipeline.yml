@@ -63,6 +63,8 @@ jobs:
             .turbo
             node_modules
             */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
@@ -96,6 +98,8 @@ jobs:
             .turbo
             node_modules
             */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
@@ -136,6 +140,8 @@ jobs:
             .turbo
             node_modules
             */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
@@ -172,6 +178,8 @@ jobs:
             .turbo
             node_modules
             */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
@@ -208,6 +216,8 @@ jobs:
             .turbo
             node_modules
             */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
