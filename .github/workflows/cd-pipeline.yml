@@ -108,7 +108,7 @@ jobs:
       
       - name: Deploy Backend
         id: deploy-backend
-        run: flyctl deploy --remote-only --config fly.staging.backend.toml
+        run: flyctl deploy --remote-only --config fly.staging.backend.toml --build-arg DATABASE_URI=${{ secrets.DATABASE_URI }} --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} --build-arg PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} --build-arg GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} --build-arg GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} --build-arg NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} --build-arg TURBO_TEAM=${{ vars.TURBO_TEAM }} --build-arg TURBO_TOKEN=${{ secrets.TURBO_TOKEN }} --build-arg NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
 
       - name: Update Backend Status
         if: always() && github.event_name == 'pull_request'
@@ -154,7 +154,7 @@ jobs:
       
       - name: Deploy Frontend
         id: deploy-frontend
-        run: flyctl deploy --remote-only --config fly.staging.frontend.toml
+        run: flyctl deploy --remote-only --config fly.staging.frontend.toml --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} --build-arg NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} --build-arg TURBO_TEAM=${{ vars.TURBO_TEAM }} --build-arg TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
 
       - name: Update Frontend Status
         if: always() && github.event_name == 'pull_request'
