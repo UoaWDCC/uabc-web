@@ -1,12 +1,12 @@
 name: CD Pipeline
 
 on:
-  workflow_run:
-    workflows: ["CI Pipeline"]
-    types:
-      - completed
+  push:
     branches:
       - master
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
   pull_request:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
@@ -17,11 +17,26 @@ on:
         required: true
 
 jobs:
+  wait-for-ci:
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      checks: read
+    steps:
+      - name: Wait for CI checks
+        id: wait-for-ci
+        uses: poseidon/wait-for-status-checks@v0.6.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
   setup-deployment:
+    needs: [wait-for-ci]
     if: |
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.name == 'CI Pipeline') ||
-      github.event_name == 'pull_request' ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+      success() && 
+      (
+        (github.event_name == 'push' || github.event_name == 'pull_request') ||
+        (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+      )
     runs-on: ubuntu-latest
     outputs:
       comment-id: ${{ steps.find-comment.outputs.comment-id }}
@@ -70,10 +85,7 @@ jobs:
   deploy-backend:
     name: Deploy Backend
     needs: setup-deployment
-    if: |
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.name == 'CI Pipeline') ||
-      github.event_name == 'pull_request' ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_SERVER_API_TOKEN  }}
     environment:
@@ -88,7 +100,7 @@ jobs:
       
       - name: Set Backend Secrets
         id: backend-secrets
-        run: flyctl secrets set --config fly.staging.backend.toml DATABASE_URI=${{ secrets.DATABASE_URI }} JWT_SECRET=${{ secrets.JWT_SECRET }} PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} TURBO_TEAM=${{ secrets.TURBO_TEAM }} TURBO_TOKEN=${{ secrets.TURBO_TOKEN }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+        run: flyctl secrets set --config fly.staging.backend.toml DATABASE_URI=${{ secrets.DATABASE_URI }} JWT_SECRET=${{ secrets.JWT_SECRET }} PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} TURBO_TEAM=${{ vars.TURBO_TEAM }} TURBO_TOKEN=${{ secrets.TURBO_TOKEN }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
       
       - name: Deploy Backend Secrets
         id: backend-secrets-deploy
@@ -119,10 +131,7 @@ jobs:
   deploy-frontend:
     name: Deploy Frontend
     needs: setup-deployment
-    if: |
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.name == 'CI Pipeline') ||
-      github.event_name == 'pull_request' ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_CLIENT_API_TOKEN }}
     environment:
@@ -137,7 +146,7 @@ jobs:
       
       - name: Set Frontend Secrets
         id: frontend-secrets
-        run: flyctl secrets set --config fly.staging.frontend.toml NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} JWT_SECRET=${{ secrets.JWT_SECRET }} TURBO_TEAM=${{ secrets.TURBO_TEAM }} TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
+        run: flyctl secrets set --config fly.staging.frontend.toml NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} JWT_SECRET=${{ secrets.JWT_SECRET }} TURBO_TEAM=${{ vars.TURBO_TEAM }} TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
       
       - name: Deploy Frontend Secrets
         id: frontend-secrets-deploy

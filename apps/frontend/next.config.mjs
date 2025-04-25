@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  export: "standalone",
+  output: "standalone",
 }
 
 export default nextConfig
