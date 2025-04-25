@@ -89,7 +89,7 @@ jobs:
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_SERVER_API_TOKEN  }}
     environment:
-      name: backend-staging
+      name: staging
       url: https://wdcc-uabc-backend-staging.fly.dev/
     runs-on: ubuntu-latest
     outputs:
@@ -135,7 +135,7 @@ jobs:
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_CLIENT_API_TOKEN }}
     environment:
-      name: frontend-staging
+      name: staging
       url: https://wdcc-uabc-frontend-staging.fly.dev/
     runs-on: ubuntu-latest
     outputs:
