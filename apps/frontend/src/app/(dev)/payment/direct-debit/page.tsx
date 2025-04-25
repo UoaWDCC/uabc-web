@@ -1,7 +1,3 @@
-/**
- * @author David Zhu <dzhu292@aucklanduni.ac.nz>
- */
-
 "use client"
 
 import { DebitDetailsCard } from "@/components/Composite/payment/DebitDetailsCard"

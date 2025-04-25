@@ -1,7 +1,3 @@
-/**
- * @author David Zhu <dzhu292@aucklanduni.ac.nz>
- */
-
 import { CheckIcon, CopyIcon } from "@yamada-ui/lucide"
 import { Card, CardBody, HStack, IconButton, Text, VStack, useClipboard } from "@yamada-ui/react"
 

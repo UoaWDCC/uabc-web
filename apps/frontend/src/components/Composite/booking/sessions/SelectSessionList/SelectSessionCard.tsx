@@ -1,7 +1,3 @@
-/**
- * @author Moeka Nakane <mnak534@aucklanduni.ac.nz>
- */
-
 import { memo } from "react"
 import { IoCheckmarkCircle } from "react-icons/io5"
 import { twJoin } from "tailwind-merge"

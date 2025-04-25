@@ -1,7 +1,3 @@
-/**
- * @author Angela Guo <aguo921@aucklanduni.ac.nz>
- */
-
 "use client"
 
 import { PaymentInfoCard } from "@/components/Composite/payment/PaymentInfoCard"

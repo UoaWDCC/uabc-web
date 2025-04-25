@@ -1,7 +1,3 @@
-/**
- * @author Angela Guo <aguo921@aucklanduni.ac.nz>
- */
-
 import { cva } from "class-variance-authority"
 import type { PropsWithChildren } from "react"
 

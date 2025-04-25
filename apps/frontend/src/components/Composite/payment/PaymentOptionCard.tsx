@@ -1,7 +1,3 @@
-/**
- * @author Angela Guo <aguo921@aucklanduni.ac.nz>
- */
-
 import { Card, CardBody, HStack, Spacer, Text } from "@yamada-ui/react"
 import { ArrowRightIcon } from "../Icons"
 
