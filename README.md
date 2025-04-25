@@ -110,9 +110,30 @@ export const add = (a: number, b: number) => a + b
 
 ### Environment Variables
 
-Environment variables are used to store sensitive information that should not be stored in the codebase. These are stored in a `.env` file in the root of the project.
+Environment variables are used to store sensitive information that should not be stored in the codebase. Due to our monorepo structure with Turborepo, we have separate environment variable files for different parts of the project:
 
-Copy the `.env.example` file and rename it to `.env`, then edit the values according to the keys.
+- Root directory (`.env`): Contains shared environment variables
+- `apps/frontend/.env`: Frontend-specific environment variables
+- `apps/backend/.env`: Backend-specific environment variables
+
+Each directory has its own `.env.example` file that serves as a template. To set up your environment:
+
+1. Copy each `.env.example` file to `.env` in its respective directory
+2. Edit the values according to the keys in each file
+
+For example:
+```bash
+# Root directory
+cp .env.example .env
+
+# Frontend
+cp apps/frontend/.env.example apps/frontend/.env
+
+# Backend
+cp apps/backend/.env.example apps/backend/.env
+```
+
+Then edit each `.env` file with the appropriate values.
 
 ### Type Generation
 
