@@ -31,16 +31,6 @@ RUN pnpm install --frozen-lockfile
 
 COPY --from=builder /app/out/full/ .
 
-ARG TURBO_TEAM
-ARG TURBO_TOKEN
-ARG DATABASE_URI
-ARG PAYLOAD_SECRET
-ARG GOOGLE_CLIENT_ID
-ARG GOOGLE_CLIENT_SECRET
-ARG NEXT_PUBLIC_URL
-ARG NEXT_PUBLIC_API_URL
-ARG JWT_SECRET
-
 ENV DATABASE_URI=$DATABASE_URI
 ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
 ENV GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
@@ -63,13 +53,6 @@ ENV NODE_ENV=production
 COPY --from=installer /app/apps/backend/.next/standalone ./
 COPY --from=installer /app/apps/backend/.next/static ./apps/backend/.next/static
 COPY --from=installer /app/apps/backend/public ./apps/backend/public
-
-ARG DATABASE_URI
-ARG PAYLOAD_SECRET
-ARG GOOGLE_CLIENT_ID
-ARG GOOGLE_CLIENT_SECRET
-ARG NEXT_PUBLIC_URL
-ARG JWT_SECRET
 
 ENV DATABASE_URI=$DATABASE_URI
 ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
