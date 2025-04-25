@@ -59,7 +59,8 @@
       "outputs": ["storybook-static/**"]
     },
     "test": {
-      "dependsOn": ["transit"]
+      "dependsOn": ["transit"],
+      "cache": true
     },
     "transit": {
       "dependsOn": ["^transit"]
