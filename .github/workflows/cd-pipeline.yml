@@ -124,7 +124,7 @@ jobs:
             TURBO_TOKEN="${TURBO_TOKEN}"
           
           echo "Deploying application..."
-          flyctl deploy --remote-only --config fly.staging.backend.toml --env-only
+          flyctl deploy --remote-only --config fly.staging.backend.toml
 
       - name: Update Backend Status
         if: always() && github.event_name == 'pull_request'
@@ -178,7 +178,7 @@ jobs:
             TURBO_TOKEN="${TURBO_TOKEN}"
           
           echo "Deploying application..."
-          flyctl deploy --remote-only --config fly.staging.frontend.toml --env-only
+          flyctl deploy --remote-only --config fly.staging.frontend.toml
 
       - name: Update Frontend Status
         if: always() && github.event_name == 'pull_request'
