@@ -65,8 +65,8 @@ RUN --mount=type=secret,id=DATABASE_URI \
     echo "GOOGLE_CLIENT_ID=$(cat /run/secrets/GOOGLE_CLIENT_ID)" >> apps/backend/.env && \
     echo "GOOGLE_CLIENT_SECRET=$(cat /run/secrets/GOOGLE_CLIENT_SECRET)" >> apps/backend/.env && \
     echo "NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL)" >> apps/backend/.env && \
-    echo "TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM)" >> apps/backend/.env && \
-    echo "TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)" >> apps/backend/.env && \
+    echo "TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM)" >> .env && \
+    echo "TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)" >> .env && \
     echo "NEXT_PUBLIC_API_URL=$(cat /run/secrets/NEXT_PUBLIC_API_URL)" >> apps/backend/.env
 
 # Now run the build

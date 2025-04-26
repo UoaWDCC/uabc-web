@@ -41,8 +41,8 @@ RUN --mount=type=secret,id=NEXT_PUBLIC_URL \
     echo "NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL)" >> apps/frontend/.env && \
     echo "NEXT_PUBLIC_API_URL=$(cat /run/secrets/NEXT_PUBLIC_API_URL)" >> apps/frontend/.env && \
     echo "JWT_SECRET=$(cat /run/secrets/JWT_SECRET)" >> apps/frontend/.env && \
-    echo "TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM)" >> apps/frontend/.env && \
-    echo "TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)" >> apps/frontend/.env
+    echo "TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM)" >> .env && \
+    echo "TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)" >> .env
 
 RUN pnpm build --filter frontend
 
