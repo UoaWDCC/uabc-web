@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { Weekday } from '../types'
 
 export const UpdateSemesterRequestBody = z.object({
   name: z.string().optional(),
@@ -26,9 +27,7 @@ export const UpdateSemesterRequestBody = z.object({
       message: 'Invalid date format, should be in ISO 8601 format',
     })
     .optional(),
-  bookingOpenDay: z
-    .enum(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
-    .optional(),
+  bookingOpenDay: z.nativeEnum(Weekday).optional(),
   bookingOpenTime: z
     .string()
     .refine((val) => !isNaN(Date.parse(val)), {
@@ -51,15 +50,7 @@ export const CreateSemesterRequestBody = z.object({
   breakEnd: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: 'Invalid date format, should be in ISO 8601 format',
   }),
-  bookingOpenDay: z.enum([
-    'monday',
-    'tuesday',
-    'wednesday',
-    'thursday',
-    'friday',
-    'saturday',
-    'sunday',
-  ]),
+  bookingOpenDay: z.nativeEnum(Weekday),
   bookingOpenTime: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: 'Invalid time format, should be in ISO 8601 format',
   }),

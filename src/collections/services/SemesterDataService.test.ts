@@ -1,5 +1,5 @@
 import { clearCollection, testPayloadObject } from '@/../tests/utils'
-import SemesterService from './SemesterService'
+import SemesterService from './SemesterDataService'
 import { semesterCreateMock, semesterUpdateMock } from '@/../tests/mocks/Semester.mock'
 import { afterEach, describe, expect, it } from 'vitest'
 

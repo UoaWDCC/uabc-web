@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import SemesterService from '@/collections/services/SemesterService'
+import SemesterService from '@/collections/services/SemesterDataService'
 import { semesterCreateMock } from '@/../tests/mocks/Semester.mock'
 import { clearCollection, paramsToPromise, testPayloadObject } from '@/../tests/utils'
 import { DELETE } from './route'

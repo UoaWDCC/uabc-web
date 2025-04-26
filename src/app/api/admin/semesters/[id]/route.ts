@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes'
 import { NextRequest, NextResponse } from 'next/server'
 import { NotFound } from 'payload'
 
-import SemesterService from '@/collections/services/SemesterService'
+import SemesterService from '@/collections/services/SemesterDataService'
 
 /**
  * DELETE method to delete a semester.
