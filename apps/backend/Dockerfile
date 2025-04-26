@@ -46,6 +46,8 @@ COPY turbo.json turbo.json
 # ENV GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
 # ENV NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
 # ENV JWT_SECRET=${JWT_SECRET}
+# ENV TURBO_TEAM=${TURBO_TEAM}
+# ENV TURBO_TOKEN=${TURBO_TOKEN}
 
 # Mount build secrets
 RUN --mount=type=secret,id=DATABASE_URI \
@@ -67,8 +69,8 @@ RUN --mount=type=secret,id=DATABASE_URI \
     echo "TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)" >> .env && \
     echo "NEXT_PUBLIC_API_URL=$(cat /run/secrets/NEXT_PUBLIC_API_URL)" >> apps/backend/.env
 
-ENV TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM)
-ENV TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)
+ENV TURBO_TEAM=${TURBO_TEAM}
+ENV TURBO_TOKEN=${TURBO_TOKEN}
 
 # Now run the build
 RUN pnpm build --filter backend
