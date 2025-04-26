@@ -1,23 +1,12 @@
 {
-  "npm.packageManager": "pnpm",
-  "editor.defaultFormatter": "biomejs.biome",
-  "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.biome": "explicit"
-    }
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.biome": "explicit"
-    }
-  },
   "[javascript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.biome": "explicit"
+    },
     "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": true
+  },
+  "[javascript][typescript][typescriptreact]": {
     "editor.codeActionsOnSave": {
       "source.fixAll.biome": "explicit"
     }
@@ -30,11 +19,22 @@
     "editor.defaultFormatter": "biomejs.biome",
     "editor.formatOnSave": true
   },
-  "editor.formatOnSaveMode": "file",
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "[javascript][typescript][typescriptreact]": {
+  "[typescript]": {
     "editor.codeActionsOnSave": {
       "source.fixAll.biome": "explicit"
-    }
-  }
+    },
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.biome": "explicit"
+    },
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.formatOnSave": true
+  },
+  "editor.defaultFormatter": "biomejs.biome",
+  "editor.formatOnSaveMode": "file",
+  "npm.packageManager": "pnpm",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
