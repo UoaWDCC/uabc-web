@@ -360,9 +360,9 @@ importers:
       '@storybook/blocks':
         specifier: 8.6.12
         version: 8.6.12(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12(prettier@3.5.3))
-      '@storybook/experimental-nextjs-vite':
-        specifier: 8.6.12
-        version: 8.6.12(@babel/core@7.26.10)(@storybook/test@8.6.12(storybook@8.6.12(prettier@3.5.3)))(next@15.2.3(@babel/core@7.26.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.40.0)(storybook@8.6.12(prettier@3.5.3))(typescript@5.7.3)(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.77.4)(tsx@4.19.2)(yaml@2.7.1))
+      '@storybook/react-vite':
+        specifier: ^8.6.12
+        version: 8.6.12(@storybook/test@8.6.12(storybook@8.6.12(prettier@3.5.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.40.0)(storybook@8.6.12(prettier@3.5.3))(typescript@5.7.3)(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.77.4)(tsx@4.19.2)(yaml@2.7.1))
       '@storybook/theming':
         specifier: ^8.6.12
         version: 8.6.12(storybook@8.6.12(prettier@3.5.3))
@@ -2372,21 +2372,6 @@ packages:
     resolution: {integrity: sha512-6s8CnP1aoKPb3XtC0jRLUp8M5vTA8RhGAwQDKUsFpCC7g89JR9CaKs9FY2ZSzsNbjR15uASi7b3K8BzeYumYQg==}
     peerDependencies:
       storybook: ^8.6.12
-
-  '@storybook/experimental-nextjs-vite@8.6.12':
-    resolution: {integrity: sha512-GleItZB9oAzHJzUs5KiVpkLVNn4k2IfPCWNr1hFTcysMPfKARli96BWwVCBTnt4GDUgO3fy78waheG/uhefwJg==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      '@storybook/test': 8.6.12
-      next: ^14.1.0 || ^15.0.0
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
-      storybook: ^8.6.12
-      typescript: '*'
-      vite: ^5.0.0 || ^6.0.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
 
   '@storybook/global@5.0.0':
     resolution: {integrity: sha512-FcOqPAXACP0I3oJ/ws6/rrPT9WGhu915Cg8D02a9YxLo0DE9zI+a9A5gRGvmQ09fiWPukqI8ZAEoQEdWUKMQdQ==}
@@ -5275,9 +5260,6 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  module-alias@2.2.3:
-    resolution: {integrity: sha512-23g5BFj4zdQL/b6tor7Ji+QY4pEfNH784BMslY9Qb0UnJWRAt+lQGLYmRaM0KDBwIG23ffEBELhZDP2rhi9f/Q==}
-
   monaco-editor@0.52.2:
     resolution: {integrity: sha512-GEQWEZmfkOGLdd3XK8ryrfWz3AIP8YymVXiPHEdewrUq7mh0qrKrfHLNCXcbB6sTnMLnOZ3ztSiKcciFUkIJwQ==}
 
@@ -6663,14 +6645,6 @@ packages:
     resolution: {integrity: sha512-V+IxPAE2FvXpTCHXyNem0M+gWm6J7eRyWPR6vYoG/Gl+IscNOjXzztUhimQgTxaAoUoj40Qqimaa0NLIOOAH4w==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
-
-  vite-plugin-storybook-nextjs@1.1.5:
-    resolution: {integrity: sha512-doFAXLvfEtIgMbDA+0VzyanoWoAUAwMLMfTpFnv3rxaN/tGHtWAwyhK73OA3UJzyXrp6rDPTqbjWUYJ6noxNww==}
-    peerDependencies:
-      '@storybook/test': ^8.3.0
-      next: ^14.1.0 || ^15.0.0
-      storybook: ^8.3.0
-      vite: ^5.0.0 || ^6.0.0
 
   vite-tsconfig-paths@5.1.4:
     resolution: {integrity: sha512-cYj0LRuLV2c2sMqhqhGpaO3LretdtMn/BVX4cPLanIZuwwrkVl+lK84E/miEXkCHWXuq65rhNN4rXsBcOB3S4w==}
@@ -9377,28 +9351,6 @@ snapshots:
     dependencies:
       storybook: 8.6.12(prettier@3.5.3)
       unplugin: 1.16.1
-
-  '@storybook/experimental-nextjs-vite@8.6.12(@babel/core@7.26.10)(@storybook/test@8.6.12(storybook@8.6.12(prettier@3.5.3)))(next@15.2.3(@babel/core@7.26.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.40.0)(storybook@8.6.12(prettier@3.5.3))(typescript@5.7.3)(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.77.4)(tsx@4.19.2)(yaml@2.7.1))':
-    dependencies:
-      '@storybook/builder-vite': 8.6.12(storybook@8.6.12(prettier@3.5.3))(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.77.4)(tsx@4.19.2)(yaml@2.7.1))
-      '@storybook/react': 8.6.12(@storybook/test@8.6.12(storybook@8.6.12(prettier@3.5.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12(prettier@3.5.3))(typescript@5.7.3)
-      '@storybook/react-vite': 8.6.12(@storybook/test@8.6.12(storybook@8.6.12(prettier@3.5.3)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.40.0)(storybook@8.6.12(prettier@3.5.3))(typescript@5.7.3)(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.77.4)(tsx@4.19.2)(yaml@2.7.1))
-      '@storybook/test': 8.6.12(storybook@8.6.12(prettier@3.5.3))
-      next: 15.2.3(@babel/core@7.26.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-      storybook: 8.6.12(prettier@3.5.3)
-      styled-jsx: 5.1.6(@babel/core@7.26.10)(react@19.0.0)
-      vite: 6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.77.4)(tsx@4.19.2)(yaml@2.7.1)
-      vite-plugin-storybook-nextjs: 1.1.5(@storybook/test@8.6.12(storybook@8.6.12(prettier@3.5.3)))(next@15.2.3(@babel/core@7.26.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(storybook@8.6.12(prettier@3.5.3))(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.77.4)(tsx@4.19.2)(yaml@2.7.1))
-    optionalDependencies:
-      sharp: 0.33.5
-      typescript: 5.7.3
-    transitivePeerDependencies:
-      - '@babel/core'
-      - babel-plugin-macros
-      - rollup
-      - supports-color
 
   '@storybook/global@5.0.0': {}
 
@@ -13304,8 +13256,6 @@ snapshots:
 
   mkdirp@3.0.1: {}
 
-  module-alias@2.2.3: {}
-
   monaco-editor@0.52.2: {}
 
   mongodb-connection-string-url@3.0.2:
@@ -14842,18 +14792,6 @@ snapshots:
       - terser
       - tsx
       - yaml
-
-  vite-plugin-storybook-nextjs@1.1.5(@storybook/test@8.6.12(storybook@8.6.12(prettier@3.5.3)))(next@15.2.3(@babel/core@7.26.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(storybook@8.6.12(prettier@3.5.3))(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.77.4)(tsx@4.19.2)(yaml@2.7.1)):
-    dependencies:
-      '@next/env': 15.3.1
-      '@storybook/test': 8.6.12(storybook@8.6.12(prettier@3.5.3))
-      image-size: 2.0.2
-      magic-string: 0.30.17
-      module-alias: 2.2.3
-      next: 15.2.3(@babel/core@7.26.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)
-      storybook: 8.6.12(prettier@3.5.3)
-      ts-dedent: 2.2.0
-      vite: 6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.77.4)(tsx@4.19.2)(yaml@2.7.1)
 
   vite-tsconfig-paths@5.1.4(typescript@5.7.3)(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.77.4)(tsx@4.19.2)(yaml@2.7.1)):
     dependencies:

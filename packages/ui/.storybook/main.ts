@@ -1,4 +1,4 @@
-import type { StorybookConfig } from "@storybook/experimental-nextjs-vite"
+import type { StorybookConfig } from "@storybook/react-vite"
 
 const config: StorybookConfig = {
   stories: ["../../../packages/ui/src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
@@ -18,10 +18,7 @@ const config: StorybookConfig = {
     "storybook-dark-mode",
   ],
   core: { disableTelemetry: true },
-  framework: {
-    name: "@storybook/experimental-nextjs-vite",
-    options: {},
-  },
+  framework: "@storybook/react-vite",
   staticDirs: ["../../../apps/frontend/public"],
 }
 export default config

@@ -14,6 +14,9 @@ on:
         type: environment
         required: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   deploy-backend:
     name: Deploy Backend

@@ -1,7 +1,7 @@
 import { defaultTheme } from "@repo/theme"
-import { DEFAULT_FONT_SIZES, FONT_WEIGHTS, Heading } from "@repo/ui/components/Heading"
 import type { Meta, StoryFn } from "@storybook/react"
-import { PropsTable } from ".storybook/components"
+import { PropsTable } from "../../../.storybook/components"
+import { DEFAULT_FONT_SIZES, FONT_WEIGHTS, Heading } from "./Heading"
 
 type Story = StoryFn<typeof Heading>
 
