@@ -1,7 +1,16 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [".env", ".env.local"],
-  "globalEnv": [],
+  "globalEnv": [
+    "DATABASE_URI",
+    "PAYLOAD_SECRET",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "NEXT_PUBLIC_URL",
+    "JWT_SECRET",
+    "TURBO_TEAM",
+    "TURBO_TOKEN"
+  ],
   "remoteCache": {
     "enabled": true
   },
@@ -9,16 +18,6 @@
     "build": {
       "cache": true,
       "dependsOn": ["^build"],
-      "env": [
-        "DATABASE_URI",
-        "PAYLOAD_SECRET",
-        "GOOGLE_CLIENT_ID",
-        "GOOGLE_CLIENT_SECRET",
-        "NEXT_PUBLIC_URL",
-        "JWT_SECRET",
-        "TURBO_TEAM",
-        "TURBO_TOKEN"
-      ],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
     },
