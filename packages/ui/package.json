@@ -18,7 +18,7 @@
   "dependencies": {
     "@repo/theme": "workspace:*",
     "@storybook/blocks": "8.6.12",
-    "@storybook/experimental-nextjs-vite": "8.6.12",
+    "@storybook/react-vite": "^8.6.12",
     "@storybook/theming": "^8.6.12",
     "@yamada-ui/lucide": "^1.10.5",
     "@yamada-ui/react": "^1.7.6",

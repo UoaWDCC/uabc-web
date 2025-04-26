@@ -1,9 +1,9 @@
 import { BUTTON_VARIANTS } from "@repo/theme/components"
 import { SEMANTIC_COLOR_SCHEMES } from "@repo/theme/semantics"
-import { Button } from "@repo/ui/components/Button"
 import type { Meta, StoryFn } from "@storybook/react"
 import Link from "next/link"
-import { PropsTable } from ".storybook/components"
+import { PropsTable } from "../../../.storybook/components"
+import { Button } from "./Button"
 
 type Story = StoryFn<typeof Button>
 
