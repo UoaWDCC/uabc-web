@@ -1,22 +1,44 @@
-version: '3'
-
 services:
-  payload:
-    image: node:22.14.0-alpine
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile
+      # args:
+      #   - TURBO_TEAM=${TURBO_TEAM}
+      #   - TURBO_TOKEN=${TURBO_TOKEN}
+      #   - NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
+      #   - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      #   - JWT_SECRET=${JWT_SECRET}
+    restart: always
     ports:
-      - '3000:3000'
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm dev"
+      - 3001:3001
+    networks:
+      - app_network
+    
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: ./apps/backend/Dockerfile
+      # args:
+      #   DATABASE_URI: ${DATABASE_URI}
+      #   PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      #   GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      #   GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      #   NEXT_PUBLIC_URL: ${NEXT_PUBLIC_URL}
+      #   NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      #   JWT_SECRET: ${JWT_SECRET}
+      #   TURBO_TEAM: ${TURBO_TEAM}
+      #   TURBO_TOKEN: ${TURBO_TOKEN}
+    restart: always
+    ports:
+      - 3000:3000
     depends_on:
       - mongo
-      # - postgres
-    env_file:
-      - .env
+    networks:
+      - app_network
 
-  # Ensure your DATABASE_URI uses 'mongo' as the hostname ie. mongodb://mongo/my-db-name
   mongo:
     image: mongo:latest
     ports:
@@ -28,16 +50,11 @@ services:
     logging:
       driver: none
 
-  # Uncomment the following to use postgres
-  # postgres:
-  #   restart: always
-  #   image: postgres:latest
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-  #   ports:
-  #     - "5432:5432"
+# Define a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+networks:
+  app_network:
+    external: true
 
 volumes:
   data:
-  # pgdata:
-  node_modules:

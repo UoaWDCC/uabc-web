@@ -5,6 +5,15 @@ Project initiated by WDCC in 2023.
 
 **2025:** We are focused on creating a functional website for the University of Auckland Badminton Club. The functional website will comprise a membership process (sign-up, sign-in, sign-out), membership management system, court booking process and more. The website will be built to be user-friendly and aesthetic, alongside having an effective and efficient back-end to satisfy the clients.
 
+## Project Structure 🏗
+
+This project is set up as a monorepo using [Turborepo](https://turbo.build/repo), which helps us manage multiple applications and packages efficiently. The project is split into two main applications:
+
+- `apps/frontend`: The Next.js frontend application
+- `apps/backend`: The PayloadCMS backend application
+
+Each application has its own deployment pipeline and can be developed independently.
+
 ## Setting up the project 💻
 
 ### Prerequisites
@@ -45,13 +54,25 @@ corepack enable
 pnpm install
 ```
 
-Once `pnpm install` has finished, you can start the development server by running:
+To start all applications in development mode:
 
 ```bash
 pnpm dev
 ```
 
-The development server will be running at `http://localhost:3000`.
+To run specific applications:
+
+```bash
+# Run only the frontend
+pnpm dev --filter=frontend
+
+# Run only the backend
+pnpm dev --filter=backend
+```
+
+The development servers will be running at:
+- Frontend: `http://localhost:3001`
+- Backend: `http://localhost:3000`
 
 ### Keeping a clean codebase
 
@@ -89,9 +110,30 @@ export const add = (a: number, b: number) => a + b
 
 ### Environment Variables
 
-Environment variables are used to store sensitive information that should not be stored in the codebase. These are stored in a `.env` file in the root of the project.
+Environment variables are used to store sensitive information that should not be stored in the codebase. Due to our monorepo structure with Turborepo, we have separate environment variable files for different parts of the project:
 
-Copy the `.env.example` file and rename it to `.env`, then edit the values according to the keys.
+- Root directory (`.env`): Contains shared environment variables
+- `apps/frontend/.env`: Frontend-specific environment variables
+- `apps/backend/.env`: Backend-specific environment variables
+
+Each directory has its own `.env.example` file that serves as a template. To set up your environment:
+
+1. Copy each `.env.example` file to `.env` in its respective directory
+2. Edit the values according to the keys in each file
+
+For example:
+```bash
+# Root directory
+cp .env.example .env
+
+# Frontend
+cp apps/frontend/.env.example apps/frontend/.env
+
+# Backend
+cp apps/backend/.env.example apps/backend/.env
+```
+
+Then edit each `.env` file with the appropriate values.
 
 ### Type Generation
 
@@ -101,9 +143,9 @@ We use Payload's built in code generation to generate types for our project. To 
 pnpm generate:types
 ```
 
-### Theme Token Generation
+### Update Type Definitions
 
-We use Yamada CLI to generate theme tokens for our project. This helps maintain consistent styling across the application. To generate theme tokens, run:
+To ensure proper type completions for Yamada UI theme tokens in Style Props, we use the Yamada CLI to update type definitions. This process helps maintain accurate TypeScript completions for our customized theme. The script is configured in our package.json to point to our custom theme location.
 
 ```bash
 pnpm theme
@@ -139,19 +181,24 @@ pnpm test src/app/example-double-admin-count/route.test.ts
 
 The project is _mainly_ built around the following technologies:
 
+- [Turborepo](https://turbo.build/repo)
+    - Our monorepo build system that helps us manage multiple applications and packages efficiently, enabling faster builds and better dependency management.
 - [Next.js](https://nextjs.org/)
-    - The main framework for this project, it is most important to understand that we are using
-      the [App Router](https://nextjs.org/docs/app)
-      and [API Routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) to build the
-      project. Note that you will need to have some understanding of [React](https://react.dev/learn) to work on this
-      project.
+    - Powers our frontend application using the [App Router](https://nextjs.org/docs/app) architecture. Note that you will need to have some understanding of [React](https://react.dev/learn) to work on this project.
 - [PayloadCMS](https://payloadcms.com/)
-    - We are using PayloadCMS to manage the content of the website, as well as define the shape of our data. This takes
-      away a lot of the hard work that is put into setting up a database and API. You will have to familiarise yourself
-      with how to use Payload's [local API](https://payloadcms.com/docs/local-api/overview).
+    - Our backend system that manages content and defines our data structure. This takes away a lot of the hard work that is put into setting up a database and API. You will have to familiarise yourself with how to use Payload's [local API](https://payloadcms.com/docs/local-api/overview).
 
 Additional information is to be documented on the [wiki](https://github.com/UoaWDCC/uabc-web/wiki) for some of the
 smaller dependencies
+
+## Deployment 🚀
+
+The project is deployed in two separate environments:
+
+- Frontend: Deployed on Vercel for optimal Next.js performance
+- Backend: Deployed on Railway with MongoDB Atlas for the database
+
+Each deployment has its own CI/CD pipeline and environment configurations. Refer to the deployment documentation in each app's directory for more details.
 
 ## Contributing 📝
 

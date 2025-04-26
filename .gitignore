@@ -144,3 +144,9 @@ dist
 /theme/
 
 *storybook.log
+
+.turbo/
+# Turborepo
+.turbo
+
+storybook-static
