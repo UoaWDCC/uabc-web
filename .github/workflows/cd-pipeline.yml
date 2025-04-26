@@ -15,21 +15,88 @@ on:
         required: true
 
 jobs:
-  deploy-to-staging:
-    name: Deploy UABC Staging App
+  deploy-backend:
+    name: Deploy Backend
     if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
     env:
-      FLY_API_TOKEN: ${{ secrets.FLY_APP_API_TOKEN }}
+      FLY_API_TOKEN: ${{ secrets.FLY_SERVER_API_TOKEN }}
     environment:
       name: staging
-      url: https://wdcc-uabc-staging.fly.dev/
+      url: https://wdcc-uabc-backend-staging.fly.dev/
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl secrets set --config fly.staging.toml DATABASE_URI=${{ secrets.DATABASE_URI }} PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
-      - run: flyctl secrets deploy --config fly.staging.toml
-      - run: flyctl deploy --remote-only --config fly.staging.toml
+
+      - name: Set Backend Secrets
+        id: backend-secrets
+        run: >
+          flyctl secrets set --config apps/backend/fly.staging.toml
+          DATABASE_URI=${{ secrets.DATABASE_URI }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}
+          GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+          NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
+          TURBO_TEAM=${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
+          NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+
+      - name: Deploy Backend Secrets
+        id: backend-secrets-deploy
+        run: flyctl secrets deploy --config apps/backend/fly.staging.toml
+
+      - name: Deploy Backend
+        id: deploy-backend
+        run: >
+          flyctl deploy --remote-only --config apps/backend/fly.staging.toml
+          --build-arg DATABASE_URI="${{ secrets.DATABASE_URI }}"
+          --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}"
+          --build-arg PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}"
+          --build-arg GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}"
+          --build-arg GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}"
+          --build-arg NEXT_PUBLIC_URL="${{ secrets.NEXT_PUBLIC_URL }}"
+          --build-arg TURBO_TEAM="${{ vars.TURBO_TEAM }}"
+          --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}"
+          --build-arg NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}"
+
+  deploy-frontend:
+    name: Deploy Frontend
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_CLIENT_API_TOKEN }}
+    environment:
+      name: staging
+      url: https://wdcc-uabc-frontend-staging.fly.dev/
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Set Frontend Secrets
+        id: frontend-secrets
+        run: >
+          flyctl secrets set --config apps/frontend/fly.staging.toml
+          NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          TURBO_TEAM=${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
+
+      - name: Deploy Frontend Secrets
+        id: frontend-secrets-deploy
+        run: flyctl secrets deploy --config apps/frontend/fly.staging.toml
+
+      - name: Deploy Frontend
+        id: deploy-frontend
+        run: >
+          flyctl deploy --remote-only --config apps/frontend/fly.staging.toml
+          --build-arg NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}"
+          --build-arg NEXT_PUBLIC_URL="${{ secrets.NEXT_PUBLIC_URL }}"
+          --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}"
+          --build-arg TURBO_TEAM="${{ vars.TURBO_TEAM }}"
+          --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}"
 
   deploy-to-production:
     name: Deploy UABC Production App

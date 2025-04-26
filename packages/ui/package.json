@@ -1,0 +1,51 @@
+{
+  "name": "@repo/ui",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./components/Button": "./src/components/Button/index.ts",
+    "./components/Heading": "./src/components/Heading/index.ts",
+    "./components/TextInput": "./src/components/TextInput/index.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006 -c .storybook",
+    "storybook:build": "storybook build -c .storybook",
+    "test": "cross-env NODE_ENV=test vitest run",
+    "test:watch": "cross-env NODE_ENV=test vitest",
+    "test:coverage": "cross-env NODE_ENV=test vitest run --coverage"
+  },
+  "dependencies": {
+    "@repo/theme": "workspace:*",
+    "@storybook/blocks": "8.6.12",
+    "@storybook/experimental-nextjs-vite": "8.6.12",
+    "@storybook/theming": "^8.6.12",
+    "@yamada-ui/lucide": "^1.10.5",
+    "@yamada-ui/react": "^1.7.6",
+    "hono": "^4.7.7",
+    "next": "15.2.3",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "storybook": "^8.6.12"
+  },
+  "devDependencies": {
+    "@mdx-js/react": "^3.1.0",
+    "@repo/typescript-config": "workspace:*",
+    "@storybook/addon-a11y": "^8.6.12",
+    "@storybook/addon-backgrounds": "^8.6.12",
+    "@storybook/addon-docs": "^8.6.12",
+    "@storybook/addon-essentials": "8.6.12",
+    "@storybook/addon-measure": "^8.6.12",
+    "@storybook/addon-storysource": "^8.6.12",
+    "@storybook/addon-viewport": "^8.6.12",
+    "@storybook/preview-api": "^8.6.12",
+    "@storybook/react": "8.6.12",
+    "@turbo/gen": "^2.5.0",
+    "@types/node": "^22.5.4",
+    "@types/react": "19.0.12",
+    "@types/react-dom": "19.0.4",
+    "storybook-dark-mode": "^4.0.2",
+    "typescript": "5.7.3",
+    "vitest": "^3.0.9"
+  }
+}

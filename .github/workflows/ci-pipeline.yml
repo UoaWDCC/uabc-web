@@ -8,6 +8,8 @@ on:
 
 env:
   CI: 'true'
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
 jobs:
   check_changes:
@@ -40,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -52,16 +56,21 @@ jobs:
           version: latest
           run_install: false
 
-      - name: Install dependencies
-        run: pnpm install
-
-      # Cache the node_modules directory
-      - name: Cache node_modules
+      - name: Cache Turborepo
         uses: actions/cache@v4
-        id: cache-node-modules
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: |
+            .turbo
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
   biome:
     needs: [check_changes, setup]
@@ -82,18 +91,23 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
+      - name: Restore Turborepo cache
         uses: actions/cache@v4
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: |
+            .turbo
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Check formatting
         run: pnpm biome check .
 
   build:
-    environment: staging
     env:
       PAYLOAD_SECRET: ${{secrets.PAYLOAD_SECRET}}
       DATABASE_URI: ${{secrets.DATABASE_URI}}
@@ -118,15 +132,21 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
+      - name: Restore Turborepo cache
         uses: actions/cache@v4
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: |
+            .turbo
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Build
-        run: pnpm tsc --noEmit && pnpm build
+        run: pnpm turbo run check-types && pnpm turbo run build
 
   test:
     needs: [check_changes, setup]
@@ -150,15 +170,21 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
+      - name: Restore Turborepo cache
         uses: actions/cache@v4
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: |
+            .turbo
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Test
-        run: pnpm test
+        run: pnpm turbo run test
 
   codegen:
     needs: [check_changes, setup]
@@ -182,15 +208,21 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
+      - name: Restore Turborepo cache
         uses: actions/cache@v4
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: |
+            .turbo
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Generate typing
-        run: pnpm generate:types
+        run: pnpm turbo run generate:types
 
       - name: Write git diff
         run: |
@@ -212,6 +244,15 @@ jobs:
     needs: [check_changes, build, biome, test, codegen]
     runs-on: ubuntu-latest
     if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.biome.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
+    outputs:
+      success: ${{ steps.set-result.outputs.success }}
     steps:
-      - name: All checks passed
-        run: echo "All checks passed!"
+      - name: Set Result
+        id: set-result
+        run: |
+          if [[ "${{ needs.build.result }}" == "success" && "${{ needs.biome.result }}" == "success" && "${{ needs.test.result }}" == "success" && "${{ needs.codegen.result }}" == "success" ]]; then
+            echo "success=true" >> $GITHUB_OUTPUT
+          else
+            echo "success=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
