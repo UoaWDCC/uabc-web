@@ -55,7 +55,7 @@ const MembershipType = () => {
 
   return (
     <Container h="100dvh">
-      <VStack h="100%">
+      <VStack h="full">
         <BackNavigationBar pathName="/onboarding/name" title="Select your membership type" />
 
         <RadioCardGroup direction="column" withIcon={false}>
@@ -78,7 +78,7 @@ const MembershipType = () => {
 
         <Spacer />
 
-        <Button disabled={member === null} onClick={handleNextButtonClick}>
+        <Button colorScheme="primary" disabled={member === null} onClick={handleNextButtonClick}>
           Next
         </Button>
       </VStack>
