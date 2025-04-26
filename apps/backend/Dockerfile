@@ -81,7 +81,7 @@ ENV NODE_ENV=production
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=installer /app/apps/backend/.next/standalone ./
 COPY --from=installer /app/apps/backend/.next/static ./apps/backend/.next/static
-COPY --from=installer /app/apps/backend/public ./apps/backend/public
+# COPY --from=installer /app/apps/backend/public ./apps/backend/public
 
 # ARG DATABASE_URI
 # ARG PAYLOAD_SECRET
