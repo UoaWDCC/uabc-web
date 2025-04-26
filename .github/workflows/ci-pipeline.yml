@@ -146,7 +146,7 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: Build
-        run: pnpm turbo run check-types && pnpm turbo run build
+        run: pnpm turbo run check-types build storybook:build
 
   test:
     needs: [check_changes, setup]
