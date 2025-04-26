@@ -3,7 +3,7 @@ primary_region = 'syd'
 
 [build]
   context = "."
-  dockerfile = "apps/frontend/Dockerfile"
+  dockerfile = "Dockerfile"
 
 [http_service]
   internal_port = 3001
@@ -15,4 +15,4 @@ primary_region = 'syd'
 [[vm]]
   cpu_kind = 'shared'
   cpus = 1
-  memory_mb = 512
+  memory_mb = 1024
