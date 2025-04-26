@@ -148,8 +148,46 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
-      - name: Build and Type Check
-        run: pnpm turbo run check-types build
+      - name: Build
+        run: pnpm turbo run build
+
+  typecheck:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: TypeScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+
+      - name: Restore Turborepo cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .turbo
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Type Check
+        run: pnpm turbo run check-types
 
   test:
     needs: [check_changes, setup]
@@ -244,16 +282,16 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build, biome, test, codegen]
+    needs: [check_changes, build, biome, test, codegen, typecheck]
     runs-on: ubuntu-latest
-    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.biome.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
+    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.biome.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success' && needs.typecheck.result == 'success')) }}
     outputs:
       success: ${{ steps.set-result.outputs.success }}
     steps:
       - name: Set Result
         id: set-result
         run: |
-          if [[ "${{ needs.build.result }}" == "success" && "${{ needs.biome.result }}" == "success" && "${{ needs.test.result }}" == "success" && "${{ needs.codegen.result }}" == "success" ]]; then
+          if [[ "${{ needs.build.result }}" == "success" && "${{ needs.biome.result }}" == "success" && "${{ needs.test.result }}" == "success" && "${{ needs.codegen.result }}" == "success" && "${{ needs.typecheck.result }}" == "success" ]]; then
             echo "success=true" >> $GITHUB_OUTPUT
           else
             echo "success=false" >> $GITHUB_OUTPUT
