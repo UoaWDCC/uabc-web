@@ -31,7 +31,7 @@ jobs:
       - name: Set Backend Secrets
         id: backend-secrets
         run: >
-          flyctl secrets set --config apps/backend/fly.staging.backend.toml
+          flyctl secrets set --config apps/backend/fly.staging.toml
           DATABASE_URI=${{ secrets.DATABASE_URI }}
           JWT_SECRET=${{ secrets.JWT_SECRET }}
           PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}
@@ -45,12 +45,12 @@ jobs:
 
       - name: Deploy Backend Secrets
         id: backend-secrets-deploy
-        run: flyctl secrets deploy --config apps/backend/fly.staging.backend.toml
+        run: flyctl secrets deploy --config apps/backend/fly.staging.toml
 
       - name: Deploy Backend
         id: deploy-backend
         run: >
-          flyctl deploy --remote-only --config apps/backend/fly.staging.backend.toml
+          flyctl deploy --remote-only --config apps/backend/fly.staging.toml
           --build-arg DATABASE_URI="${{ secrets.DATABASE_URI }}"
           --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}"
           --build-arg PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}"
@@ -77,7 +77,7 @@ jobs:
       - name: Set Frontend Secrets
         id: frontend-secrets
         run: >
-          flyctl secrets set --config apps/frontend/fly.staging.frontend.toml
+          flyctl secrets set --config apps/frontend/fly.staging.toml
           NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
           NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
           JWT_SECRET=${{ secrets.JWT_SECRET }}
@@ -86,12 +86,12 @@ jobs:
 
       - name: Deploy Frontend Secrets
         id: frontend-secrets-deploy
-        run: flyctl secrets deploy --config apps/frontend/fly.staging.frontend.toml
+        run: flyctl secrets deploy --config apps/frontend/fly.staging.toml
 
       - name: Deploy Frontend
         id: deploy-frontend
         run: >
-          flyctl deploy --remote-only --config apps/frontend/fly.staging.frontend.toml
+          flyctl deploy --remote-only --config apps/frontend/fly.staging.toml
           --build-arg NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}"
           --build-arg NEXT_PUBLIC_URL="${{ secrets.NEXT_PUBLIC_URL }}"
           --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}"
