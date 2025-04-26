@@ -44,6 +44,9 @@ RUN --mount=type=secret,id=NEXT_PUBLIC_URL \
     echo "TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM)" >> .env && \
     echo "TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)" >> .env
 
+ENV TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM)
+ENV TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)
+
 RUN pnpm build --filter frontend
 
 # Stage 3: Production server
