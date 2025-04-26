@@ -32,27 +32,23 @@ RUN pnpm install --frozen-lockfile
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
-# Mount build secrets
-RUN --mount=type=secret,id=DATABASE_URI \
-    --mount=type=secret,id=JWT_SECRET \
-    --mount=type=secret,id=PAYLOAD_SECRET \
-    --mount=type=secret,id=GOOGLE_CLIENT_ID \
-    --mount=type=secret,id=GOOGLE_CLIENT_SECRET \
-    --mount=type=secret,id=NEXT_PUBLIC_URL \
-    --mount=type=secret,id=TURBO_TEAM \
-    --mount=type=secret,id=TURBO_TOKEN \
-    --mount=type=secret,id=NEXT_PUBLIC_API_URL \
-    echo "DATABASE_URI=$(cat /run/secrets/DATABASE_URI)" >> apps/backend/.env && \
-    echo "JWT_SECRET=$(cat /run/secrets/JWT_SECRET)" >> apps/backend/.env && \
-    echo "PAYLOAD_SECRET=$(cat /run/secrets/PAYLOAD_SECRET)" >> apps/backend/.env && \
-    echo "GOOGLE_CLIENT_ID=$(cat /run/secrets/GOOGLE_CLIENT_ID)" >> apps/backend/.env && \
-    echo "GOOGLE_CLIENT_SECRET=$(cat /run/secrets/GOOGLE_CLIENT_SECRET)" >> apps/backend/.env && \
-    echo "NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL)" >> apps/backend/.env && \
-    echo "TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM)" >> .env && \
-    echo "TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)" >> .env && \
-    echo "NEXT_PUBLIC_API_URL=$(cat /run/secrets/NEXT_PUBLIC_API_URL)" >> apps/backend/.env && \
-    export TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM) && \
-    export TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)
+ARG DATABASE_URI
+ARG JWT_SECRET
+ARG PAYLOAD_SECRET
+ARG GOOGLE_CLIENT_ID
+ARG GOOGLE_CLIENT_SECRET
+ARG NEXT_PUBLIC_URL
+ARG NEXT_PUBLIC_API_URL
+ARG TURBO_TEAM
+ARG TURBO_TOKEN
+
+ENV DATABASE_URI=${DATABASE_URI}
+ENV JWT_SECRET=${JWT_SECRET}
+ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
+ENV GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+ENV GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+ENV NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
 # Now run the build
 RUN pnpm build --filter backend
