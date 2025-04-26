@@ -32,20 +32,17 @@ RUN pnpm install --frozen-lockfile
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
-# ARG NEXT_PUBLIC_URL
-# ENV NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
-
-# ARG NEXT_PUBLIC_API_URL
-# ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-
-# ARG JWT_SECRET
-# ENV JWT_SECRET=${JWT_SECRET}
-
-# ARG TURBO_TEAM
-# ENV TURBO_TEAM=${TURBO_TEAM}
- 
-# ARG TURBO_TOKEN
-# ENV TURBO_TOKEN=${TURBO_TOKEN}
+# Mount build secrets
+RUN --mount=type=secret,id=NEXT_PUBLIC_URL \
+    --mount=type=secret,id=NEXT_PUBLIC_API_URL \
+    --mount=type=secret,id=JWT_SECRET \
+    --mount=type=secret,id=TURBO_TEAM \
+    --mount=type=secret,id=TURBO_TOKEN \
+    echo "NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL)" >> apps/frontend/.env && \
+    echo "NEXT_PUBLIC_API_URL=$(cat /run/secrets/NEXT_PUBLIC_API_URL)" >> apps/frontend/.env && \
+    echo "JWT_SECRET=$(cat /run/secrets/JWT_SECRET)" >> apps/frontend/.env && \
+    echo "TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM)" >> apps/frontend/.env && \
+    echo "TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)" >> apps/frontend/.env
 
 RUN pnpm build --filter frontend
 

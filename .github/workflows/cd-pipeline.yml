@@ -98,33 +98,26 @@ jobs:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
       
+      - name: Set Backend Secrets
+        id: backend-secrets
+        run: flyctl secrets set --config fly.staging.backend.toml DATABASE_URI=${{ secrets.DATABASE_URI }} JWT_SECRET=${{ secrets.JWT_SECRET }} PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} TURBO_TEAM=${{ vars.TURBO_TEAM }} TURBO_TOKEN=${{ secrets.TURBO_TOKEN }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+      
+      - name: Deploy Backend Secrets
+        id: backend-secrets-deploy
+        run: flyctl secrets deploy --config fly.staging.backend.toml
+      
       - name: Deploy Backend
         id: deploy-backend
-        env:
-          DATABASE_URI: ${{ secrets.DATABASE_URI }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-        run: |
-          echo "Setting secrets..."
-          flyctl secrets set --config fly.staging.backend.toml \
-            DATABASE_URI="${DATABASE_URI}" \
-            JWT_SECRET="${JWT_SECRET}" \
-            PAYLOAD_SECRET="${PAYLOAD_SECRET}" \
-            GOOGLE_CLIENT_ID="${GOOGLE_CLIENT_ID}" \
-            GOOGLE_CLIENT_SECRET="${GOOGLE_CLIENT_SECRET}" \
-            NEXT_PUBLIC_URL="${NEXT_PUBLIC_URL}" \
-            NEXT_PUBLIC_API_URL="${NEXT_PUBLIC_API_URL}" \
-            TURBO_TEAM="${TURBO_TEAM}" \
-            TURBO_TOKEN="${TURBO_TOKEN}"
-          
-          echo "Deploying application..."
-          flyctl deploy --remote-only --config fly.staging.backend.toml
+        run: flyctl deploy --remote-only --config fly.staging.backend.toml \
+          --build-secret DATABASE_URI=${{ secrets.DATABASE_URI }} \
+          --build-secret JWT_SECRET=${{ secrets.JWT_SECRET }} \
+          --build-secret PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} \
+          --build-secret GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
+          --build-secret GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} \
+          --build-secret NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} \
+          --build-secret TURBO_TEAM=${{ vars.TURBO_TEAM }} \
+          --build-secret TURBO_TOKEN=${{ secrets.TURBO_TOKEN }} \
+          --build-secret NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
 
       - name: Update Backend Status
         if: always() && github.event_name == 'pull_request'
@@ -160,25 +153,22 @@ jobs:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
       
+      - name: Set Frontend Secrets
+        id: frontend-secrets
+        run: flyctl secrets set --config fly.staging.frontend.toml NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} JWT_SECRET=${{ secrets.JWT_SECRET }} TURBO_TEAM=${{ vars.TURBO_TEAM }} TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
+      
+      - name: Deploy Frontend Secrets
+        id: frontend-secrets-deploy
+        run: flyctl secrets deploy --config fly.staging.frontend.toml
+      
       - name: Deploy Frontend
         id: deploy-frontend
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-        run: |
-          echo "Setting secrets..."
-          flyctl secrets set --config fly.staging.frontend.toml \
-            NEXT_PUBLIC_API_URL="${NEXT_PUBLIC_API_URL}" \
-            NEXT_PUBLIC_URL="${NEXT_PUBLIC_URL}" \
-            JWT_SECRET="${JWT_SECRET}" \
-            TURBO_TEAM="${TURBO_TEAM}" \
-            TURBO_TOKEN="${TURBO_TOKEN}"
-          
-          echo "Deploying application..."
-          flyctl deploy --remote-only --config fly.staging.frontend.toml
+        run: flyctl deploy --remote-only --config fly.staging.frontend.toml \
+          --build-secret NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} \
+          --build-secret NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} \
+          --build-secret JWT_SECRET=${{ secrets.JWT_SECRET }} \
+          --build-secret TURBO_TEAM=${{ vars.TURBO_TEAM }} \
+          --build-secret TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
 
       - name: Update Frontend Status
         if: always() && github.event_name == 'pull_request'
