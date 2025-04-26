@@ -42,7 +42,7 @@ export default function NamePage() {
             type={InputType.Text}
             value={lastName}
           />
-          <Button disabled={!firstName || !lastName} type="submit">
+          <Button colorScheme="primary" disabled={!firstName || !lastName} type="submit">
             Continue
           </Button>
         </VStack>
