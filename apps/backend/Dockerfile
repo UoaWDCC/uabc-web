@@ -31,23 +31,6 @@ RUN pnpm install --frozen-lockfile
 
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
-# ARG TURBO_TEAM
-# ARG TURBO_TOKEN
-# ARG DATABASE_URI
-# ARG PAYLOAD_SECRET
-# ARG GOOGLE_CLIENT_ID
-# ARG GOOGLE_CLIENT_SECRET
-# ARG NEXT_PUBLIC_URL
-# ARG JWT_SECRET
-
-# ENV DATABASE_URI=${DATABASE_URI}
-# ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
-# ENV GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-# ENV GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-# ENV NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
-# ENV JWT_SECRET=${JWT_SECRET}
-# ENV TURBO_TEAM=${TURBO_TEAM}
-# ENV TURBO_TOKEN=${TURBO_TOKEN}
 
 # Mount build secrets
 RUN --mount=type=secret,id=DATABASE_URI \
@@ -67,10 +50,9 @@ RUN --mount=type=secret,id=DATABASE_URI \
     echo "NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL)" >> apps/backend/.env && \
     echo "TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM)" >> .env && \
     echo "TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)" >> .env && \
-    echo "NEXT_PUBLIC_API_URL=$(cat /run/secrets/NEXT_PUBLIC_API_URL)" >> apps/backend/.env
-
-ENV TURBO_TEAM=${TURBO_TEAM}
-ENV TURBO_TOKEN=${TURBO_TOKEN}
+    echo "NEXT_PUBLIC_API_URL=$(cat /run/secrets/NEXT_PUBLIC_API_URL)" >> apps/backend/.env && \
+    export TURBO_TEAM=$(cat /run/secrets/TURBO_TEAM) && \
+    export TURBO_TOKEN=$(cat /run/secrets/TURBO_TOKEN)
 
 # Now run the build
 RUN pnpm build --filter backend
@@ -84,21 +66,7 @@ ENV NODE_ENV=production
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=installer /app/apps/backend/.next/standalone ./
 COPY --from=installer /app/apps/backend/.next/static ./apps/backend/.next/static
-# COPY --from=installer /app/apps/backend/public ./apps/backend/public
 
-# ARG DATABASE_URI
-# ARG PAYLOAD_SECRET
-# ARG GOOGLE_CLIENT_ID
-# ARG GOOGLE_CLIENT_SECRET
-# ARG NEXT_PUBLIC_URL
-# ARG JWT_SECRET
-
-# ENV DATABASE_URI=${DATABASE_URI}
-# ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
-# ENV GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-# ENV GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-# ENV NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
-# ENV JWT_SECRET=${JWT_SECRET}
 ENV PORT=3000
 
 EXPOSE 3000
