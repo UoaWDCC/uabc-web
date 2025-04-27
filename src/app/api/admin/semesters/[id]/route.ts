@@ -1,4 +1,4 @@
-import { StatusCodes } from 'http-status-codes'
+import { getReasonPhrase, StatusCodes } from 'http-status-codes'
 import { NextRequest, NextResponse } from 'next/server'
 import { NotFound } from 'payload'
 
@@ -24,10 +24,9 @@ export const DELETE = async (
       return NextResponse.json({ error: 'Semester not found' }, { status: StatusCodes.NOT_FOUND })
     } else {
       console.error(error)
-      return NextResponse.json(
-        { error: 'Internal server error' },
-        { status: StatusCodes.INTERNAL_SERVER_ERROR },
-      )
+      return NextResponse.json(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), {
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+      })
     }
   }
 }
