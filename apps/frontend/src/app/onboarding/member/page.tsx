@@ -4,7 +4,9 @@ import { redirect, useRouter } from "next/navigation"
 
 import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
 import { MembershipTypeSelector } from "@/components/Composite/MembershipTypeSelector"
-import { Button } from "@/components/Generic/ui/button"
+import { Button } from "@repo/ui/components/Button"
+import { Container, RadioCardGroup, Spacer, VStack } from "@yamada-ui/react"
+
 import { useOnboardingDetailsStore } from "@/stores/useOnboardingDetailsStore"
 
 const MembershipType = () => {
@@ -52,35 +54,35 @@ const MembershipType = () => {
   }
 
   return (
-    <div className="mx-4 flex h-dvh flex-col gap-y-4">
-      <BackNavigationBar pathName="/onboarding/name" title="Select your membership type" />
+    <Container h="100dvh">
+      <VStack h="full">
+        <BackNavigationBar pathName="/onboarding/name" title="Select your membership type" />
 
-      <MembershipTypeSelector
-        description1="Package of 6, 11 or 22 prepaid sessions for the semester"
-        description2="(limit of 2 sessions per week)"
-        heading="Prepaid Member"
-        onClick={() => toggleMemberSelection(true)}
-        selectedMembership={member === true}
-      />
+        <RadioCardGroup direction="column" withIcon={false}>
+          <MembershipTypeSelector
+            description1="Package of 6, 11 or 22 prepaid sessions for the semester"
+            description2="(limit of 2 sessions per week)"
+            heading="Prepaid Member"
+            onClick={() => toggleMemberSelection(true)}
+            selectedMembership={member === true}
+          />
 
-      <MembershipTypeSelector
-        description1="$8.00 per session"
-        description2="(limit of 1 session per week)"
-        heading="Non-Member (Casual)"
-        onClick={() => toggleMemberSelection(false)}
-        selectedMembership={member === false}
-      />
+          <MembershipTypeSelector
+            description1="$8.00 per session"
+            description2="(limit of 1 session per week)"
+            heading="Non-Member (Casual)"
+            onClick={() => toggleMemberSelection(false)}
+            selectedMembership={member === false}
+          />
+        </RadioCardGroup>
 
-      <div className="mb-10 flex flex-grow">
-        <Button
-          className="w-full self-end"
-          disabled={member === null}
-          onClick={handleNextButtonClick}
-        >
+        <Spacer />
+
+        <Button colorScheme="primary" disabled={member === null} onClick={handleNextButtonClick}>
           Next
         </Button>
-      </div>
-    </div>
+      </VStack>
+    </Container>
   )
 }
 
