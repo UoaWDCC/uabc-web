@@ -18,12 +18,7 @@ const formSchema = z.object({
 })
 
 export const EmailSignUpForm = () => {
-  const notice = useNotice({
-    limit: 3,
-    placement: "bottom-right",
-    isClosable: true,
-    closeStrategy: "element",
-  })
+  const notice = useNotice()
 
   const [dialogOpen, setDialogOpen] = useState(false)
 
