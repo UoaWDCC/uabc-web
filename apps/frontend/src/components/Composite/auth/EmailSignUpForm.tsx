@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, VStack } from "@yamada-ui/react"
+import { Button, VStack, useNotice } from "@yamada-ui/react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -9,7 +9,6 @@ import { z } from "zod"
 import { useValidateEmailMutation } from "@/hooks/mutations/registration"
 import { Heading } from "@repo/ui/components/Heading"
 import { InputType, TextInput } from "@repo/ui/components/TextInput"
-import { useToast } from "../../Generic/ui/use-toast"
 import { OTPFormAlertDialog } from "./OTPFormAlertDialog"
 import { emailSchema, passwordSchema } from "./formSchema"
 
@@ -19,7 +18,12 @@ const formSchema = z.object({
 })
 
 export const EmailSignUpForm = () => {
-  const { toast } = useToast()
+  const notice = useNotice({
+    limit: 3,
+    placement: "bottom-right",
+    isClosable: true,
+    closeStrategy: "element",
+  })
 
   const [dialogOpen, setDialogOpen] = useState(false)
 
@@ -52,10 +56,10 @@ export const EmailSignUpForm = () => {
             message: "Email already in use",
           })
         } else {
-          toast({
+          notice({
             title: "Uh oh! Something went wrong",
             description: "An error occurred while creating your account. Please try again.",
-            variant: "destructive",
+            status: "error",
           })
         }
       },
