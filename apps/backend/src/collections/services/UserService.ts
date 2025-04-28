@@ -32,6 +32,7 @@ export default class UserService {
         email,
       },
     })
+
     return newUser
   }
 
@@ -73,6 +74,7 @@ export default class UserService {
       return user
     } catch (error) {
       console.error(`Error fetching user by ID ${id}:`, (error as Error).message)
+
       return null
     }
   }
@@ -88,6 +90,7 @@ export default class UserService {
     data: Partial<Omit<User, "id" | "updatedAt" | "createdAt">>,
   ): Promise<User | null> {
     const existingUser = await this.getUserById(id)
+
     if (!existingUser) {
       return null
     }
@@ -108,6 +111,7 @@ export default class UserService {
    */
   public async deleteUser(id: string): Promise<User | null> {
     const existingUser = await this.getUserById(id)
+
     if (!existingUser) {
       return null
     }
