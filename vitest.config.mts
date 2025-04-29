@@ -27,12 +27,14 @@ export default defineConfig({
     maxWorkers: process.env.CI === "true" ? 1 : undefined,
     minWorkers: process.env.CI === "true" ? 1 : undefined,
     coverage: {
+      provider: "istanbul",
       exclude: [
         ...coverageConfigDefaults.exclude,
         "**/.storybook/**",
         "**/*.stories.*",
         "**/storybook-static/**",
       ],
+      reporter: ["json", "text-summary", "lcov"],
     },
   },
 })
