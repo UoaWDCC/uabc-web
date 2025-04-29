@@ -268,15 +268,7 @@ export const TextInput = memo(
             )}
           </InputGroup>
           {label && (
-            <Label
-              left="sm"
-              pointerEvents="none"
-              position="absolute"
-              top="0"
-              {...labelProps}
-              // TODO: remove this, this is to test the workflow
-              onClick={() => console.log("Label Clicked")}
-            >
+            <Label {...labelProps} left="sm" pointerEvents="none" position="absolute" top="0">
               {label}
             </Label>
           )}
