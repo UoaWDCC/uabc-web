@@ -108,6 +108,7 @@ jobs:
           
           # Filter files needing tests
           files_needing_tests=$(echo "$coverage_report" | awk '
+            BEGIN { FS = OFS = "\t" }
             NR > 2 && $1 != "All" && $1 != "----------------------" {
               # Check if file is in changed files and has less than 100% coverage
               if (system("echo \"" changed_files "\" | grep -q \"" $1 "\"") == 0 && 
