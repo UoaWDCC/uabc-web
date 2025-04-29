@@ -61,11 +61,19 @@ jobs:
           pnpm nyc merge .nyc_output coverage/coverage.json
           pnpm nyc report --temp-dir .nyc_output --report-dir coverage --reporter=lcov --reporter=text-summary
 
-      - name: Generate Coverage Summary
-        id: coverage-summary
+      - name: Generate Overall Coverage Summary
+        id: overall-coverage-summary
         run: |
-          echo "COVERAGE_SUMMARY<<EOF" >> $GITHUB_OUTPUT
+          echo "OVERALL_COVERAGE_SUMMARY<<EOF" >> $GITHUB_OUTPUT
           pnpm nyc report --temp-dir .nyc_output --reporter=text-summary | sed -n '/^=======/,/^$/p' >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Generate PR Line Coverage
+        id: pr-line-coverage
+        run: |
+          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} > changed_files.txt
+          echo "PR_LINE_COVERAGE<<EOF" >> $GITHUB_OUTPUT
+          pnpm nyc report --temp-dir .nyc_output --reporter=text-summary --files-list changed_files.txt | sed -n '/^=======/,/^$/p' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Find Previous Coverage Comment
@@ -84,10 +92,14 @@ jobs:
           body: |
             ## Vitest Coverage Report
 
-            Coverage for this PR:
-
+            ### Overall Repository Coverage
             ```
-            ${{ steps.coverage-summary.outputs.COVERAGE_SUMMARY }}
+            ${{ steps.overall-coverage-summary.outputs.OVERALL_COVERAGE_SUMMARY }}
+            ```
+
+            ### PR Line Coverage
+            ```
+            ${{ steps.pr-line-coverage.outputs.PR_LINE_COVERAGE }}
             ```
 
             [View detailed coverage report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})

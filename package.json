@@ -56,14 +56,10 @@
   },
   "packageManager": "pnpm@9.0.0",
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp"
-    ]
+    "onlyBuiltDependencies": ["sharp"]
   },
   "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-      "biome check --write ."
-    ]
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["biome check --write ."]
   },
   "volta": {
     "node": "22.14.0"
