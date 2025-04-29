@@ -1,0 +1,73 @@
+name: Vitest Coverage Report
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  coverage:
+    name: Coverage Report
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Coverage
+        run: pnpm turbo run test:coverage
+
+      - name: Combine Coverage Reports
+        run: |
+          pnpm install -g nyc
+          mkdir -p coverage
+          nyc merge ./apps/backend/coverage ./apps/frontend/coverage ./packages/ui/coverage coverage/coverage-final.json
+
+      - name: Get Coverage Summary for Changed Lines
+        id: coverage-summary
+        run: |
+          echo "COVERAGE_SUMMARY<<EOF" >> $GITHUB_OUTPUT
+          nyc report --reporter=text-summary --temp-dir=coverage >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Find Previous Coverage Comment
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '## Vitest Coverage Report'
+
+      - name: Create or Update Coverage Comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ## Vitest Coverage Report
+
+            Coverage for changed lines in this PR:
+
+            ```
+            ${{ steps.coverage-summary.outputs.COVERAGE_SUMMARY }}
+            ```
+
+            To view detailed coverage, run `pnpm vitest run --coverage` locally.
+          edit-mode: replace
