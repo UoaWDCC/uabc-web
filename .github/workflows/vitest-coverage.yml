@@ -64,12 +64,29 @@ jobs:
       - name: Calculate PR Line Coverage
         id: pr-line-coverage
         run: |
+          # Debug: Show current directory and list files
+          pwd
+          ls -la
+          
+          # Debug: Show git diff details
+          git diff --name-only HEAD^
+          
           # Get list of changed files in the PR
           CHANGED_FILES=$(git diff --name-only HEAD^)
+          
+          # Debug: Show changed files
+          echo "Changed files: $CHANGED_FILES"
           
           # Initialize variables
           TOTAL_LINES=0
           COVERED_LINES=0
+          
+          # Debug: Show contents of .nyc_output
+          echo "Contents of .nyc_output:"
+          ls -la .nyc_output
+          
+          # Debug: Show available coverage files
+          find . -name "coverage-final.json"
           
           # Process each changed file
           for file in $CHANGED_FILES; do
@@ -78,8 +95,12 @@ jobs:
               continue
             fi
             
+            echo "Processing file: $file"
+            
             # Use nyc to get coverage for the specific file
             FILE_COVERAGE=$(pnpm nyc report --temp-dir .nyc_output --reporter=text-summary | grep "$file" || true)
+            
+            echo "File coverage for $file: $FILE_COVERAGE"
             
             if [[ ! -z "$FILE_COVERAGE" ]]; then
               # Extract total and covered lines
@@ -88,6 +109,9 @@ jobs:
               
               TOTAL_LINES=$((TOTAL_LINES + FILE_TOTAL_LINES))
               COVERED_LINES=$((COVERED_LINES + FILE_COVERED_LINES))
+              
+              echo "File total lines: $FILE_TOTAL_LINES"
+              echo "File covered lines: $FILE_COVERED_LINES"
             fi
           done
           
@@ -98,6 +122,8 @@ jobs:
             PR_COVERAGE="N/A"
           fi
           
+          echo "Total lines: $TOTAL_LINES"
+          echo "Covered lines: $COVERED_LINES"
           echo "PR_LINE_COVERAGE=$PR_COVERAGE" >> $GITHUB_OUTPUT
 
       - name: Generate Overall Coverage Summary
