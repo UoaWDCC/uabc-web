@@ -97,42 +97,6 @@ jobs:
           
           echo "PR_LINE_COVERAGE=$coverage_status" >> $GITHUB_OUTPUT
 
-      - name: Identify Files Needing Tests
-        id: files-needing-tests
-        run: |
-          # Get list of changed files in this PR
-          changed_files=$(git diff --name-only origin/master HEAD | grep -E '\.(ts|tsx|js|jsx)$')
-          
-          # Temporary file to store files needing tests
-          test_needs_file=$(mktemp)
-          
-          # Iterate through changed files and check their coverage
-          for file in $changed_files; do
-            # Skip if file doesn't exist in coverage report
-            coverage_file=$(find .nyc_output -name "*coverage-final.json")
-            if ! jq -e --arg file "$file" 'has($file)' $coverage_file > /dev/null 2>&1; then
-              continue
-            fi
-            
-            # Extract coverage for the specific file
-            file_coverage=$(jq -r --arg file "$file" '.[$file].lines.pct // 0' $coverage_file)
-            
-            # Check if coverage is less than 100%
-            if (( $(echo "$file_coverage < 100" | bc -l) )); then
-              echo "- \`$file\`: $file_coverage% coverage" >> "$test_needs_file"
-            fi
-          done
-          
-          # Output the list of files needing tests
-          if [ -s "$test_needs_file" ]; then
-            echo "FILES_NEEDING_TESTS<<EOF" >> $GITHUB_OUTPUT
-            cat "$test_needs_file" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          else
-            echo "FILES_NEEDING_TESTS=" >> $GITHUB_OUTPUT
-          fi
-        shell: bash
-
       - name: Find Previous Coverage Comment
         uses: peter-evans/find-comment@v3
         id: find-comment
@@ -155,8 +119,6 @@ jobs:
             ```
 
             **PR Coverage: ${{ steps.pr-line-coverage.outputs.PR_LINE_COVERAGE }}** comparing to master branch coverage.
-
-            ${{ steps.files-needing-tests.outputs.FILES_NEEDING_TESTS == '' && '✅ All changed files meet coverage requirements!' || format('<details>\n<summary>📊 Files Needing More Tests</summary>\n\n{0}\n</details>', steps.files-needing-tests.outputs.FILES_NEEDING_TESTS) }}
 
             [View detailed coverage report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
