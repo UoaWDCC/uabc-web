@@ -3,6 +3,14 @@ name: Vitest Coverage Report
 on:
   pull_request:
     branches: [master]
+    paths-ignore:
+      - '**'
+      - '!*.md'
+      - '!.gitignore'
+      - '!.gitattributes'
+      - '!.github/**'
+      - '!.vscode/**'
+      - '!.env.example'
 
 env:
   CI: 'true'
@@ -40,19 +48,24 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run Coverage
-        run: pnpm turbo run test:coverage
+        run: |
+          mkdir -p coverage
+          pnpm turbo run test:coverage
 
       - name: Combine Coverage Reports
         run: |
-          pnpm install -g nyc
-          mkdir -p coverage
-          nyc merge ./apps/backend/coverage ./apps/frontend/coverage ./packages/ui/coverage coverage/coverage-final.json
+          mkdir -p .nyc_output
+          cp apps/frontend/coverage/coverage-final.json .nyc_output/frontend-coverage.json
+          cp apps/backend/coverage/coverage-final.json .nyc_output/backend-coverage.json
+          cp packages/ui/coverage/coverage-final.json .nyc_output/ui-coverage.json
+          pnpm nyc merge .nyc_output coverage/coverage.json
+          pnpm nyc report --temp-dir .nyc_output --report-dir coverage --reporter=lcov --reporter=text-summary
 
-      - name: Get Coverage Summary for Changed Lines
+      - name: Generate Coverage Summary
         id: coverage-summary
         run: |
           echo "COVERAGE_SUMMARY<<EOF" >> $GITHUB_OUTPUT
-          nyc report --reporter=text-summary --temp-dir=coverage >> $GITHUB_OUTPUT
+          pnpm nyc report --temp-dir .nyc_output --reporter=text-summary | sed -n '/^=======/,/^$/p' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Find Previous Coverage Comment
@@ -71,11 +84,13 @@ jobs:
           body: |
             ## Vitest Coverage Report
 
-            Coverage for changed lines in this PR:
+            Coverage for this PR:
 
             ```
             ${{ steps.coverage-summary.outputs.COVERAGE_SUMMARY }}
             ```
 
-            To view detailed coverage, run `pnpm test:coverage` locally.
+            [View detailed coverage report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            To view detailed coverage locally, run `pnpm test:coverage`.
           edit-mode: replace
