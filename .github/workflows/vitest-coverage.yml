@@ -61,6 +61,45 @@ jobs:
           pnpm nyc merge .nyc_output coverage/coverage.json
           pnpm nyc report --temp-dir .nyc_output --report-dir coverage --reporter=lcov --reporter=text-summary
 
+      - name: Calculate PR Line Coverage
+        id: pr-line-coverage
+        run: |
+          # Get list of changed files in the PR
+          CHANGED_FILES=$(git diff --name-only HEAD^)
+          
+          # Initialize variables
+          TOTAL_LINES=0
+          COVERED_LINES=0
+          
+          # Process each changed file
+          for file in $CHANGED_FILES; do
+            # Skip non-source files
+            if [[ ! $file =~ \.(js|ts|jsx|tsx|vue)$ ]]; then
+              continue
+            fi
+            
+            # Use nyc to get coverage for the specific file
+            FILE_COVERAGE=$(pnpm nyc report --temp-dir .nyc_output --reporter=text-summary | grep "$file" || true)
+            
+            if [[ ! -z "$FILE_COVERAGE" ]]; then
+              # Extract total and covered lines
+              FILE_TOTAL_LINES=$(echo "$FILE_COVERAGE" | awk '{print $2}')
+              FILE_COVERED_LINES=$(echo "$FILE_COVERAGE" | awk '{print $3}')
+              
+              TOTAL_LINES=$((TOTAL_LINES + FILE_TOTAL_LINES))
+              COVERED_LINES=$((COVERED_LINES + FILE_COVERED_LINES))
+            fi
+          done
+          
+          # Calculate coverage percentage
+          if [[ $TOTAL_LINES -gt 0 ]]; then
+            PR_COVERAGE=$(printf "%.2f%%" $(echo "scale=2; ($COVERED_LINES / $TOTAL_LINES) * 100" | bc))
+          else
+            PR_COVERAGE="N/A"
+          fi
+          
+          echo "PR_LINE_COVERAGE=$PR_COVERAGE" >> $GITHUB_OUTPUT
+
       - name: Generate Overall Coverage Summary
         id: overall-coverage-summary
         run: |
@@ -68,24 +107,6 @@ jobs:
           pnpm nyc report --temp-dir .nyc_output --reporter=text-summary | sed -n '/^=======/,/^$/p' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Generate PR Line Coverage
-        id: pr-line-coverage
-        run: |
-          # Get changed files, filtering for source files
-          git diff --name-only --diff-filter=ACMR ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | \
-          grep -E '\.(js|jsx|ts|tsx)$' > changed_files.txt
-          
-          # Check if there are any changed files
-          if [ -s changed_files.txt ]; then
-            # Calculate line coverage for changed files
-            pnpm nyc report --temp-dir .nyc_output --reporter=text-summary --files-to-report $(cat changed_files.txt) > pr_coverage.txt
-            
-            # Extract PR line coverage percentage, handling potential errors
-            PR_LINE_COVERAGE=$(grep "Lines" pr_coverage.txt | awk '{print $3}' || echo "N/A")
-            echo "PR_LINE_COVERAGE=$PR_LINE_COVERAGE" >> $GITHUB_OUTPUT
-          else
-            echo "PR_LINE_COVERAGE=No changed source files" >> $GITHUB_OUTPUT
-          fi
 
       - name: Find Previous Coverage Comment
         uses: peter-evans/find-comment@v3
