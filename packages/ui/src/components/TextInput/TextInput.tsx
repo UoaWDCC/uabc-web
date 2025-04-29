@@ -268,7 +268,14 @@ export const TextInput = memo(
             )}
           </InputGroup>
           {label && (
-            <Label {...labelProps} left="sm" pointerEvents="none" position="absolute" top="0">
+            <Label
+              {...labelProps}
+              left="sm"
+              pointerEvents="none"
+              position="absolute"
+              px="md"
+              top="0"
+            >
               {label}
             </Label>
           )}
