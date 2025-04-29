@@ -154,11 +154,15 @@ jobs:
 
             **PR Coverage: ${{ steps.pr-line-coverage.outputs.PR_LINE_COVERAGE }}** comparing to master branch coverage.
 
+            {{# if steps.files-needing-tests.outputs.FILES_NEEDING_TESTS }}
             <details>
             <summary>📊 Files Needing More Tests</summary>
 
-            ${{ steps.files-needing-tests.outputs.FILES_NEEDING_TESTS || '✅ All changed files meet coverage requirements!' }}
+            ${{ steps.files-needing-tests.outputs.FILES_NEEDING_TESTS }}
             </details>
+            {{else}}
+            ✅ All changed files meet coverage requirements!
+            {{/if}}
 
             [View detailed coverage report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
