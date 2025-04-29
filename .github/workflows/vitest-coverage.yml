@@ -69,5 +69,5 @@ jobs:
             ${{ steps.coverage-summary.outputs.COVERAGE_SUMMARY }}
             ```
 
-            To view detailed coverage, run `pnpm vitest run --coverage` locally.
+            To view detailed coverage, run `pnpm test:coverage` locally.
           edit-mode: replace
