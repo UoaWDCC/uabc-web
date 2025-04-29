@@ -34,7 +34,7 @@ export default defineConfig({
         "**/*.stories.*",
         "**/storybook-static/**",
       ],
-      reporter: ["json", "text", "lcov", "html"],
+      reporter: ["json", "text", "lcov", "html", "text-summary"],
     },
   },
 })

@@ -100,7 +100,7 @@ jobs:
       - name: Find Files Needing Tests
         id: files-needing-tests
         run: |
-          coverage_report=$(pnpm nyc report --temp-dir .nyc_output --reporter=text-summary)
+          coverage_report=$(pnpm nyc report --temp-dir .nyc_output --reporter=text)
           echo "$coverage_report"
           
           # Filter out files with 100% coverage and format the output
