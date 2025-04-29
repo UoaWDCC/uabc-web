@@ -118,7 +118,7 @@ jobs:
             ${{ steps.overall-coverage-summary.outputs.OVERALL_COVERAGE_SUMMARY }}
             ```
 
-            **PR Coverage: ${{ steps.pr-line-coverage.outputs.PR_LINE_COVERAGE }}** comparing to overall repository coverage.
+            **PR Coverage: ${{ steps.pr-line-coverage.outputs.PR_LINE_COVERAGE }}** comparing to master branch coverage.
 
             [View detailed coverage report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
