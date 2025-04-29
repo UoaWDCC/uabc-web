@@ -71,10 +71,16 @@ jobs:
       - name: Generate PR Line Coverage
         id: pr-line-coverage
         run: |
-          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} > changed_files.txt
-          echo "PR_LINE_COVERAGE<<EOF" >> $GITHUB_OUTPUT
-          pnpm nyc report --temp-dir .nyc_output --reporter=text-summary --files-list changed_files.txt | sed -n '/^=======/,/^$/p' >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          # Get changed files, filtering for source files
+          git diff --name-only --diff-filter=ACMR ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | \
+          grep -E '\.(js|jsx|ts|tsx)$' > changed_files.txt
+          
+          # Calculate line coverage for changed files
+          pnpm nyc report --temp-dir .nyc_output --reporter=text-summary --files $(cat changed_files.txt) > pr_coverage.txt
+          
+          # Extract PR line coverage percentage
+          PR_LINE_COVERAGE=$(grep "Lines" pr_coverage.txt | awk '{print $3}')
+          echo "PR_LINE_COVERAGE=$PR_LINE_COVERAGE" >> $GITHUB_OUTPUT
 
       - name: Find Previous Coverage Comment
         uses: peter-evans/find-comment@v3
@@ -97,10 +103,7 @@ jobs:
             ${{ steps.overall-coverage-summary.outputs.OVERALL_COVERAGE_SUMMARY }}
             ```
 
-            ### PR Line Coverage
-            ```
-            ${{ steps.pr-line-coverage.outputs.PR_LINE_COVERAGE }}
-            ```
+            **PR Coverage: ${{ steps.pr-line-coverage.outputs.PR_LINE_COVERAGE }}** comparing to overall repository coverage.
 
             [View detailed coverage report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
