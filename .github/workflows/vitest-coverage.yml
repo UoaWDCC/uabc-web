@@ -75,12 +75,17 @@ jobs:
           git diff --name-only --diff-filter=ACMR ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | \
           grep -E '\.(js|jsx|ts|tsx)$' > changed_files.txt
           
-          # Calculate line coverage for changed files
-          pnpm nyc report --temp-dir .nyc_output --reporter=text-summary --files $(cat changed_files.txt) > pr_coverage.txt
-          
-          # Extract PR line coverage percentage
-          PR_LINE_COVERAGE=$(grep "Lines" pr_coverage.txt | awk '{print $3}')
-          echo "PR_LINE_COVERAGE=$PR_LINE_COVERAGE" >> $GITHUB_OUTPUT
+          # Check if there are any changed files
+          if [ -s changed_files.txt ]; then
+            # Calculate line coverage for changed files
+            pnpm nyc report --temp-dir .nyc_output --reporter=text-summary --files-to-report $(cat changed_files.txt) > pr_coverage.txt
+            
+            # Extract PR line coverage percentage, handling potential errors
+            PR_LINE_COVERAGE=$(grep "Lines" pr_coverage.txt | awk '{print $3}' || echo "N/A")
+            echo "PR_LINE_COVERAGE=$PR_LINE_COVERAGE" >> $GITHUB_OUTPUT
+          else
+            echo "PR_LINE_COVERAGE=No changed source files" >> $GITHUB_OUTPUT
+          fi
 
       - name: Find Previous Coverage Comment
         uses: peter-evans/find-comment@v3
