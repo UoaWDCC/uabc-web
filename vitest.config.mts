@@ -27,7 +27,7 @@ export default defineConfig({
     maxWorkers: process.env.CI === "true" ? 1 : undefined,
     minWorkers: process.env.CI === "true" ? 1 : undefined,
     coverage: {
-      provider: "v8",
+      provider: "istanbul",
       exclude: [
         ...coverageConfigDefaults.exclude,
         "**/.storybook/**",
