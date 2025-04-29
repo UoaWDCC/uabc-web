@@ -61,71 +61,6 @@ jobs:
           pnpm nyc merge .nyc_output coverage/coverage.json
           pnpm nyc report --temp-dir .nyc_output --report-dir coverage --reporter=lcov --reporter=text-summary
 
-      - name: Calculate PR Line Coverage
-        id: pr-line-coverage
-        run: |
-          # Debug: Show current directory and list files
-          pwd
-          ls -la
-          
-          # Debug: Show git diff details
-          git diff --name-only HEAD^
-          
-          # Get list of changed files in the PR
-          CHANGED_FILES=$(git diff --name-only HEAD^)
-          
-          # Debug: Show changed files
-          echo "Changed files: $CHANGED_FILES"
-          
-          # Initialize variables
-          TOTAL_LINES=0
-          COVERED_LINES=0
-          
-          # Debug: Show contents of .nyc_output
-          echo "Contents of .nyc_output:"
-          ls -la .nyc_output
-          
-          # Debug: Show available coverage files
-          find . -name "coverage-final.json"
-          
-          # Process each changed file
-          for file in $CHANGED_FILES; do
-            # Skip non-source files
-            if [[ ! $file =~ \.(js|ts|jsx|tsx|vue)$ ]]; then
-              continue
-            fi
-            
-            echo "Processing file: $file"
-            
-            # Use nyc to get coverage for the specific file
-            FILE_COVERAGE=$(pnpm nyc report --temp-dir .nyc_output --reporter=text-summary | grep "$file" || true)
-            
-            echo "File coverage for $file: $FILE_COVERAGE"
-            
-            if [[ ! -z "$FILE_COVERAGE" ]]; then
-              # Extract total and covered lines
-              FILE_TOTAL_LINES=$(echo "$FILE_COVERAGE" | awk '{print $2}')
-              FILE_COVERED_LINES=$(echo "$FILE_COVERAGE" | awk '{print $3}')
-              
-              TOTAL_LINES=$((TOTAL_LINES + FILE_TOTAL_LINES))
-              COVERED_LINES=$((COVERED_LINES + FILE_COVERED_LINES))
-              
-              echo "File total lines: $FILE_TOTAL_LINES"
-              echo "File covered lines: $FILE_COVERED_LINES"
-            fi
-          done
-          
-          # Calculate coverage percentage
-          if [[ $TOTAL_LINES -gt 0 ]]; then
-            PR_COVERAGE=$(printf "%.2f%%" $(echo "scale=2; ($COVERED_LINES / $TOTAL_LINES) * 100" | bc))
-          else
-            PR_COVERAGE="N/A"
-          fi
-          
-          echo "Total lines: $TOTAL_LINES"
-          echo "Covered lines: $COVERED_LINES"
-          echo "PR_LINE_COVERAGE=$PR_COVERAGE" >> $GITHUB_OUTPUT
-
       - name: Generate Overall Coverage Summary
         id: overall-coverage-summary
         run: |
@@ -133,6 +68,34 @@ jobs:
           pnpm nyc report --temp-dir .nyc_output --reporter=text-summary | sed -n '/^=======/,/^$/p' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: Fetch Master Branch Coverage
+        run: |
+          git fetch origin master:master
+          git checkout master
+          mkdir -p .master-coverage
+          pnpm turbo run test:coverage
+          cp apps/frontend/coverage/coverage-final.json .master-coverage/frontend-coverage.json
+          cp apps/backend/coverage/coverage-final.json .master-coverage/backend-coverage.json
+          cp packages/ui/coverage/coverage-final.json .master-coverage/ui-coverage.json
+          pnpm nyc merge .master-coverage .master-coverage/coverage.json
+          pnpm nyc report --temp-dir .master-coverage --report-dir .master-coverage --reporter=text-summary > .master-coverage/summary.txt
+          git checkout -
+
+      - name: Compare PR and Master Coverage
+        id: pr-line-coverage
+        run: |
+          master_total=$(grep -oP 'Lines\s+:\s+\K[\d.]+' .master-coverage/summary.txt)
+          pr_total=$(pnpm nyc report --temp-dir .nyc_output --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+')
+          
+          diff=$(echo "scale=2; $pr_total - $master_total" | bc)
+          
+          if (( $(echo "$diff >= 0" | bc -l) )); then
+            coverage_status="+$diff%"
+          else
+            coverage_status="$diff%"
+          fi
+          
+          echo "PR_LINE_COVERAGE=$coverage_status" >> $GITHUB_OUTPUT
 
       - name: Find Previous Coverage Comment
         uses: peter-evans/find-comment@v3
