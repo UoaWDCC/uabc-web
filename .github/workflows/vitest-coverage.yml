@@ -97,6 +97,30 @@ jobs:
           
           echo "PR_LINE_COVERAGE=$coverage_status" >> $GITHUB_OUTPUT
 
+      - name: Find Files Needing More Tests
+        id: files-needing-tests
+        run: |
+          # Get list of changed files in the PR
+          changed_files=$(git diff --name-only origin/master...HEAD | grep -E '\.(js|ts|tsx|jsx)$')
+          
+          # Initialize an empty array for files needing more tests
+          files_needing_tests=()
+          
+          # Check coverage for each changed file
+          for file in $changed_files; do
+            # Run nyc check-coverage for the specific file
+            file_coverage=$(pnpm nyc check-coverage --per-file --lines 80 "$file" 2>&1 || true)
+            
+            # If coverage is low, add to the list
+            if [[ "$file_coverage" == *"ERROR: Coverage for lines"* ]]; then
+              files_needing_tests+=("$file")
+            fi
+          done
+          
+          # Convert array to JSON string for GitHub Actions output
+          files_json=$(printf '%s\n' "${files_needing_tests[@]}" | jq -R . | jq -s .)
+          echo "FILES_NEEDING_TESTS=$files_json" >> $GITHUB_OUTPUT
+
       - name: Find Previous Coverage Comment
         uses: peter-evans/find-comment@v3
         id: find-comment
@@ -105,7 +129,7 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: '## Vitest Coverage Report'
 
-      - name: Create or Update Coverage Comment
+      - name: Update Coverage Comment with Files Needing Tests
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
@@ -119,6 +143,12 @@ jobs:
             ```
 
             **PR Coverage: ${{ steps.pr-line-coverage.outputs.PR_LINE_COVERAGE }}** comparing to master branch coverage.
+
+            <details>
+            <summary>📊 Files Needing More Tests</summary>
+
+            ${{ fromJson(steps.files-needing-tests.outputs.FILES_NEEDING_TESTS == '[]' && '"✅ All changed files meet coverage requirements!"' || steps.files-needing-tests.outputs.FILES_NEEDING_TESTS) }}
+            </details>
 
             [View detailed coverage report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
