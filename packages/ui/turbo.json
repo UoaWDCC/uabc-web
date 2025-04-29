@@ -8,12 +8,6 @@
     "start": {
       "dependsOn": ["^start"],
       "inputs": ["storybook-static/**"]
-    },
-    "test:coverage": {
-      "dependsOn": ["^test:coverage"],
-      "cache": true,
-      "persistent": false,
-      "outputs": ["coverage/**"]
     }
   }
 }
