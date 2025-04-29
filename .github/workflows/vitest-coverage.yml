@@ -104,32 +104,38 @@ jobs:
           changed_files=$(git diff --name-only origin/master...HEAD | grep -E '\.(js|ts|tsx|jsx)$')
           
           # Generate coverage report and filter for changed files with low coverage
-          coverage_report=$(pnpm nyc report --temp-dir .nyc_output --reporter=text-summary)
+          coverage_report=$(pnpm test:coverage)
           
           # Create a markdown formatted list of files needing tests
           files_needing_tests=""
           
-          # Iterate through changed files and check their coverage
-          for file in $changed_files; do
-            # Extract coverage for the specific file
-            file_coverage=$(echo "$coverage_report" | grep -F "$file" || true)
-            
-            # Check if file has low coverage (less than 80% lines)
-            if [[ -n "$file_coverage" ]]; then
-              lines_coverage=$(echo "$file_coverage" | awk '{print $3}' | tr -d '%')
-              
-              # Convert to numeric for comparison
-              if [[ -n "$lines_coverage" ]] && (( $(echo "$lines_coverage < 80" | bc -l) )); then
-                files_needing_tests+="- \`$file\`: $lines_coverage% line coverage\n"
-              fi
+          # Use awk to parse the coverage report
+          while IFS= read -r line; do
+            # Skip header and separator lines
+            if [[ "$line" =~ ^(File|-------------------------) ]]; then
+              continue
             fi
-          done
+            
+            # Extract file path and line coverage
+            file=$(echo "$line" | awk '{print $1}')
+            lines_coverage=$(echo "$line" | awk '{print $5}' | tr -d '%')
+            
+            # Check if the file is in changed files and has low coverage
+            if [[ " $changed_files " == *" $file "* ]] && (( $(echo "$lines_coverage < 80" | bc -l) )); then
+              files_needing_tests+="- \`$file\`: $lines_coverage% line coverage\n"
+            fi
+          done < <(echo "$coverage_report" | sed -n '/^All files/,/^$/p')
           
-          # Escape newlines for GitHub Actions output
+          # Remove trailing newline and escape for GitHub Actions
+          files_needing_tests=$(echo -e "$files_needing_tests" | sed '$d')
           files_needing_tests="${files_needing_tests//$'\n'/\\n}"
           
           # Output the list
           echo "FILES_NEEDING_TESTS=$files_needing_tests" >> $GITHUB_OUTPUT
+          
+          # Debug output
+          echo "Changed files: $changed_files"
+          echo "Files needing tests: $files_needing_tests"
 
       - name: Find Previous Coverage Comment
         uses: peter-evans/find-comment@v3
