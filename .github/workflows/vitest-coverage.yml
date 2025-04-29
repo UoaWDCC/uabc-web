@@ -100,39 +100,30 @@ jobs:
       - name: Find Files Needing Tests
         id: files-needing-tests
         run: |
+          # Generate coverage report
           coverage_report=$(pnpm nyc report --temp-dir .nyc_output --reporter=text)
-          echo "$coverage_report"
           
           # Get the list of changed files in the PR
           changed_files=$(git diff --name-only origin/master)
           
-          # Filter out files with 100% coverage and format the output
-          files_needing_tests=$(echo "$coverage_report" | awk -v changed_files="$changed_files" '
-            BEGIN {
-              split(changed_files, changed_array, "\n")
-              for (i in changed_array) {
-                changed_map[changed_array[i]] = 1
+          # Filter files needing tests
+          files_needing_tests=$(echo "$coverage_report" | awk '
+            NR > 2 && $1 != "All" && $1 != "----------------------" {
+              # Check if file is in changed files and has less than 100% coverage
+              if (system("echo \"" changed_files "\" | grep -q \"" $1 "\"") == 0 && 
+                  ($2 < 100 || $3 < 100 || $4 < 100 || $5 < 100)) {
+                # Add two spaces if the file name ends with an extension
+                if ($1 ~ /\.[a-zA-Z0-9]+$/) {
+                  print "- `" $1 "`  "
+                } else {
+                  print "- `" $1 "`"
+                }
               }
             }
-            /^[[:space:]]*[^%]+\s+\|/ {
-              split($0, parts, "|")
-              file = parts[1]
-              gsub(/^[[:space:]]+|[[:space:]]+$/, "", file)
-              
-              # Skip header and total rows
-              if (file == "File" || file == "All files" || file == "----------------------") next
-              
-              # Only show files that are changed in the PR and have less than 100% coverage
-              if (file in changed_map && ($2 != "100" || $3 != "100" || $4 != "100" || $5 != "100")) {
-                print "- `" file "`"
-              }
-            }
-          ')
+          ' changed_files="$changed_files")
           
-          # Escape newlines for GitHub Actions output
-          files_needing_tests="${files_needing_tests//'%'/'%25'}"
-          files_needing_tests="${files_needing_tests//$'\n'/'%0A'}"
-          files_needing_tests="${files_needing_tests//$'\r'/'%0D'}"
+          # Escape special characters for GitHub Actions output
+          files_needing_tests=$(printf '%s' "$files_needing_tests" | sed 's/%/%25/g; s/\n/%0A/g; s/\r/%0D/g')
           
           echo "FILES_NEEDING_TESTS=$files_needing_tests" >> $GITHUB_OUTPUT
 
