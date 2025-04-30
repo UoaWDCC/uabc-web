@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@/tests"
+import { fireEvent, render } from "@/test-utils"
 import { InputType, TextInput } from "./TextInput"
 import * as TextInputModule from "./index"
 

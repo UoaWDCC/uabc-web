@@ -1,3 +1,4 @@
+import fs from "node:fs"
 import react from "@vitejs/plugin-react-swc"
 import tsconfigPaths from "vite-tsconfig-paths"
 import { coverageConfigDefaults, defineConfig } from "vitest/config"
@@ -31,8 +32,15 @@ export default defineConfig({
       exclude: [
         ...coverageConfigDefaults.exclude,
         "**/.storybook/**",
-        "**/*.stories.*",
+        "**/*.{stories,config}.*",
         "**/storybook-static/**",
+        "**/*.{mjs,js}",
+        "packages/(?!ui)/**",
+        "**/*test-*/**",
+        ...(fs.readFileSync(`${__dirname}/.gitignore`, "utf8") || "")
+          .split(/\r?\n/)
+          .filter((line: string) => !!line.trim())
+          .map((line: string) => `**/${line.trim()}**`),
       ],
       reporter: ["json", "text", "lcov", "html", "text-summary"],
     },

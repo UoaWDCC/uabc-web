@@ -36,6 +36,18 @@ describe("user service", () => {
     expect(fetchedUser).toBeNull()
   })
 
+  it("should use default values for remainingSessions and image when not provided", async () => {
+    const userWithoutOptionals = {
+      firstName: userCreateMock.firstName,
+      lastName: userCreateMock.lastName,
+      role: userCreateMock.role,
+      email: "defaultvalues@example.com",
+    }
+    const newUser = await userService.createUser(userWithoutOptionals)
+    expect(newUser.remainingSessions).toBe(0)
+    expect(newUser.image).toBeUndefined()
+  })
+
   describe("getUserById", () => {
     it("should get a user by ID", async () => {
       const newUser = await userService.createUser(userCreateMock)

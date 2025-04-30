@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    ".": "./src/theme/index.ts",
-    "./components": "./src/theme/components/index.ts",
-    "./semantics": "./src/theme/semantics/index.ts",
-    "./tokens": "./src/theme/tokens/index.ts"
+    ".": "./src/index.ts",
+    "./components": "./src/components/index.ts",
+    "./semantics": "./src/semantics/index.ts",
+    "./tokens": "./src/tokens/index.ts"
   },
   "scripts": {
     "check-types": "tsc --noEmit",
