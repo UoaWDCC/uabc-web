@@ -1,11 +1,6 @@
+import { payload } from "@/data-layer/adapters/Payload"
 import type { Authentication } from "@/payload-types"
 import type { CreateAuthenticationData } from "@/types/collections"
-import configPromise from "@payload-config"
-import { getPayload } from "payload"
-
-const payload = await getPayload({
-  config: configPromise,
-})
 
 export default class AuthService {
   /**

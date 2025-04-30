@@ -1,4 +1,4 @@
-import { clearCollection, testPayloadObject } from "@/test-config/backend-utils"
+import { payload } from "@/data-layer/adapters/Payload"
 import { authenticationCreateMock } from "@/test-config/mocks/Authentication.mock"
 import { userMock } from "@/test-config/mocks/User.mock"
 import dotenv from "dotenv"
@@ -9,19 +9,15 @@ dotenv.config()
 const authService = new AuthService()
 
 describe("auth service", () => {
-  afterEach(async () => {
-    await clearCollection(testPayloadObject, "authentication")
-  })
-
   it("should create an authentication document", async () => {
     // Create user first so that the auth mock will have an existent user
-    await testPayloadObject.create({
+    await payload.create({
       collection: "user",
       data: userMock,
     })
 
     const newAuth = await authService.createAuth(authenticationCreateMock)
-    const fetchedAuth = await testPayloadObject.find({
+    const fetchedAuth = await payload.find({
       collection: "authentication",
       where: {
         id: {

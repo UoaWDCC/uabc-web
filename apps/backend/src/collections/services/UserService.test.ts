@@ -1,4 +1,4 @@
-import { clearCollection, testPayloadObject } from "@/test-config/backend-utils"
+import { testPayloadObject } from "@/test-config/backend-utils"
 import { userCreateMock } from "@/test-config/mocks/User.mock"
 import dotenv from "dotenv"
 import UserService from "./UserService"
@@ -8,10 +8,6 @@ dotenv.config()
 const userService = new UserService()
 
 describe("user service", () => {
-  afterEach(async () => {
-    await clearCollection(testPayloadObject, "user")
-  })
-
   it("should create a user document", async () => {
     const newUser = await userService.createUser(userCreateMock)
     const fetchedUser = await testPayloadObject.find({

@@ -1,11 +1,6 @@
+import { payload } from "@/data-layer/adapters/Payload"
 import type { User } from "@/payload-types"
 import type { CreateUserData } from "@/types/collections"
-import configPromise from "@payload-config"
-import { getPayload } from "payload"
-
-const payload = await getPayload({
-  config: configPromise,
-})
 
 export default class UserService {
   /**
