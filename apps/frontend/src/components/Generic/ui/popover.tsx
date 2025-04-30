@@ -43,7 +43,7 @@ const PopoverMenubar = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <div
-        className={cn("fixed left-0 top-0 z-40 h-dvh w-dvw", open ? "block" : "hidden")}
+        className={cn("fixed top-0 left-0 z-40 h-dvh w-dvw", open ? "block" : "hidden")}
         onClick={handleClose}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -55,7 +55,7 @@ const PopoverMenubar = ({ children }: { children: ReactNode }) => {
       />
       <div
         className={cn(
-          "absolute right-6 top-4 z-50 flex w-56 flex-col rounded-md bg-background p-1 shadow-lg ring-1 ring-secondary",
+          "absolute top-4 right-6 z-50 flex w-56 flex-col rounded-md bg-background p-1 shadow-lg ring-1 ring-secondary",
           open ? "block" : "hidden",
         )}
       >

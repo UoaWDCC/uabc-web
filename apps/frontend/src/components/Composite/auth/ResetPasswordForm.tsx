@@ -86,10 +86,10 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   return (
     <Card className="flex w-[415px] flex-col gap-4" variant="card">
       <div className="mb-2">
-        <h1 className="pb-1 text-lg font-semibold tracking-tight text-foreground">
+        <h1 className="pb-1 font-semibold text-foreground text-lg tracking-tight">
           Reset your password
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Enter your new password below. Make sure it is strong and unique to keep your account
           secure.
         </p>
