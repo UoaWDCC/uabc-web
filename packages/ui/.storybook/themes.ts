@@ -9,7 +9,7 @@ const sharedTheme = {
   appBorderRadius: 0,
   barSelectedColor: colors.blue[500],
   // brandTitle: 'UABC',
-  brandTitle: `<div style="display: flex; align-items: center; gap: 0.5rem;"><img src="https://raw.githubusercontent.com/UoaWDCC/uabc-web/refs/heads/master/public/svgs/logo.svg" width="20px" height="20px"/> UABC</div>`,
+  brandTitle: `<div style="display: flex; align-items: center; gap: 0.5rem;"><img src="https://raw.githubusercontent.com/UoaWDCC/uabc-web/refs/heads/master/apps/frontend/public/svgs/logo.svg" width="20px" height="20px"/> UABC</div>`,
   brandUrl: "https://wdcc-uabc-staging.fly.dev",
   // If prefer image over title
   // brandImage:
