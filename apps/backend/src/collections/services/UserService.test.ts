@@ -1,4 +1,4 @@
-import { testPayloadObject } from "@/test-config/backend-utils"
+import { payload } from "@/data-layer/adapters/Payload"
 import { userCreateMock } from "@/test-config/mocks/User.mock"
 import dotenv from "dotenv"
 import UserService from "./UserService"
@@ -10,7 +10,7 @@ const userService = new UserService()
 describe("user service", () => {
   it("should create a user document", async () => {
     const newUser = await userService.createUser(userCreateMock)
-    const fetchedUser = await testPayloadObject.find({
+    const fetchedUser = await payload.find({
       collection: "user",
       where: {
         id: {
