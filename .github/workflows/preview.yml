@@ -1,7 +1,12 @@
 name: Deploy Preview App
 on:
     pull_request:
-      branches: [master]
+      types: [opened, reopened, synchronize, closed]
+      branches:
+        - master
+      paths-ignore:
+        - '**.md'
+        - '.gitignore'
 
 concurrency:
     group: pr-${{ github.event.number }}
