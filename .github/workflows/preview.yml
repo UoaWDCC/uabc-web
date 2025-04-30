@@ -8,9 +8,6 @@ on:
       - '**.md'
       - '.gitignore'
 
-env:
-  FLY_API_TOKEN: ${{ secrets.FLY_CLIENT_API_TOKEN }}
-
 jobs:
   preview_app:
     runs-on: ubuntu-latest
@@ -19,6 +16,8 @@ jobs:
     concurrency:
       group: pr-${{ github.event.number }}
 
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_CLIENT_API_TOKEN }}
     environment:
       name: Preview
       url: ${{ steps.deploy.outputs.url }}
@@ -29,3 +28,10 @@ jobs:
       - name: Deploy Preview app to Fly.io
         id: deploy
         uses: superfly/fly-pr-review-apps@1.2.1
+        with:
+            build-args:
+                - "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}"
+                - "NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}"
+                - "JWT_SECRET=${{ secrets.JWT_SECRET }}"
+                - "TURBO_TEAM=${{ vars.TURBO_TEAM }}"
+                - "TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}"
