@@ -4,9 +4,6 @@ on:
       types: [opened, reopened, synchronize, closed]
       branches:
         - master
-      paths-ignore:
-        - '**.md'
-        - '.gitignore'
 
 concurrency:
     group: pr-${{ github.event.number }}
@@ -36,3 +33,10 @@ jobs:
                 - "JWT_SECRET=${{ secrets.JWT_SECRET }}"
                 - "TURBO_TEAM=${{ vars.TURBO_TEAM }}"
                 - "TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}"
+
+      - name: Clean up GitHub environment
+        uses: strumwolf/delete-deployment-environment@v2
+        if: ${{ github.event.action == 'closed' }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: pr-${{ github.event.number }}
