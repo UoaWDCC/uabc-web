@@ -9,6 +9,12 @@ export const bookingCreateMock: CreateBookingData = {
   playerLevel: "beginner",
 }
 
+export const bookingCreateMock2: CreateBookingData = {
+  user: userMock,
+  gameSession: gameSessionMock,
+  playerLevel: "advanced",
+}
+
 export const bookingMock: Booking = {
   id: "uabcisareallycoolclub",
   user: userMock,

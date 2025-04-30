@@ -1,4 +1,4 @@
-import type { Booking, GameSession, User } from "@/payload-types"
+import type { Booking } from "@/payload-types"
 import type { CreateBookingData } from "@/types/collections"
 import configPromise from "@payload-config"
 import { type PaginatedDocs, getPayload } from "payload"
@@ -23,26 +23,6 @@ export default class BookingService {
   }
 
   /**
-   * Finds Booking documents by game session.
-   * @param gameSession The game session to search for Bookings
-   * @returns Paginated docs of Bookings if any found, null otherwise
-   */
-  public async getBookingsByGameSession(
-    gameSession: GameSession,
-  ): Promise<PaginatedDocs<Booking> | null> {
-    const bookingDocs = await payload.find({
-      collection: "booking",
-      where: {
-        gameSession: {
-          equals: gameSession,
-        },
-      },
-    })
-
-    return bookingDocs.docs.length ? bookingDocs : null
-  }
-
-  /**
    * Finds a Booking document by ID.
    * @param id The ID of the Booking to find
    * @returns the Booking document if found, null otherwise.
@@ -61,21 +41,12 @@ export default class BookingService {
   }
 
   /**
-   * Finds Booking documents by user.
-   * @param user The user to search for Bookings
-   * @returns Paginated docs of Bookings if any found, null otherwise
+   * Finds all Booking documents.
+   * @returns the paginated docs of all Bookings found
    */
-  public async getBookingsByUser(user: User): Promise<PaginatedDocs<Booking> | null> {
-    const bookingDocs = await payload.find({
-      collection: "booking",
-      where: {
-        user: {
-          equals: user,
-        },
-      },
-    })
-
-    return bookingDocs.docs.length ? bookingDocs : null
+  public async getAllBookings(): Promise<PaginatedDocs<Booking>> {
+    const allBookings = await payload.find({ collection: "booking" })
+    return allBookings
   }
 
   /**
