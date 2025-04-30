@@ -1,7 +1,6 @@
 import { BUTTON_VARIANTS } from "@repo/theme/components"
 import { SEMANTIC_COLOR_SCHEMES } from "@repo/theme/semantics"
 import type { Meta, StoryFn } from "@storybook/react"
-import Link from "next/link"
 import { PropsTable } from "../../../.storybook/components"
 import { Button } from "./Button"
 
@@ -92,26 +91,16 @@ export const Disabled: Story = (args) => {
   )
 }
 
-export const ButtonLink: Story = (args) => {
+export const Hovered: Story = (args) => {
   return (
     <PropsTable columns={BUTTON_VARIANTS} rows={SEMANTIC_COLOR_SCHEMES}>
       {(column, row, key) => {
         return (
-          <Button as={Link} colorScheme={row} href="#" key={key} variant={column} {...args}>
+          <Button colorScheme={row} data-hover="true" key={key} variant={column} {...args}>
             Button
           </Button>
         )
       }}
     </PropsTable>
   )
-}
-
-ButtonLink.argTypes = {
-  href: {
-    control: "text",
-    description: "The href attribute of the link",
-    table: {
-      type: { summary: "string" },
-    },
-  },
 }

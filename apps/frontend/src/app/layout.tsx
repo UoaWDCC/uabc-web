@@ -8,8 +8,7 @@ import { Inter } from "next/font/google"
 import OriginTracker from "@/components/Composite/providers/OriginTracker"
 import QueryClientProvider from "@/components/Composite/providers/QueryClientProvider"
 import SessionProvider from "@/components/Composite/providers/SessionProvider"
-import { Providers } from "@/components/Composite/providers/UIProvider"
-import { Toaster } from "@/components/Generic/ui/toaster"
+import { UIProvider } from "@repo/ui/providers"
 import { ColorModeScript } from "@yamada-ui/react"
 
 export const metadata: Metadata = {
@@ -50,17 +49,16 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html className={`${inter.variable} font-sans`} lang="en" suppressHydrationWarning>
+    <html className={`${inter.variable}`} lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <ColorModeScript initialColorMode="light" />
         <QueryClientProvider>
           <SessionProvider>
             <OriginTracker>
-              <Providers>{children}</Providers>
+              <UIProvider>{children}</UIProvider>
             </OriginTracker>
           </SessionProvider>
         </QueryClientProvider>
-        <Toaster />
       </body>
     </html>
   )

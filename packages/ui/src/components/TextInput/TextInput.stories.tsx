@@ -120,6 +120,10 @@ export const States: Story = ({ type, ...args }) => {
         const props = {
           ...(row === "disabled" && { disabled: true }),
           ...(row === "error" && { isError: true, errorMessage: "Error message" }),
+          ...(row === "hovered" && { "data-hover": true }),
+          ...(row === "focused" && { "data-focused": true }),
+          ...(row === "active" && { "data-active": true }),
+          ...(row === "has-value" && { defaultValue: "Value" }),
         }
 
         return (
