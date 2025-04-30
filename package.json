@@ -58,7 +58,7 @@
     "onlyBuiltDependencies": ["sharp"]
   },
   "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["biome check --write ."]
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["biome check ."]
   },
   "volta": {
     "node": "22.14.0"
