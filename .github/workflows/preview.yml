@@ -1,8 +1,7 @@
 name: Deploy Preview App
 on:
   pull_request:
-    branches:
-      - master
+    branches: [master]
     paths-ignore:
       - '**.md'
       - '.gitignore'
