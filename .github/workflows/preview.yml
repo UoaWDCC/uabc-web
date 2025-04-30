@@ -2,9 +2,9 @@ name: Deploy Preview App
 on:
     pull_request:
       branches: [master]
-      
+
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+    group: pr-${{ github.event.number }}
 
 jobs:
   preview_app:
