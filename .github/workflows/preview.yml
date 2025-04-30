@@ -4,9 +4,9 @@ on:
     types: [opened, reopened, synchronize, closed]
     branches:
       - master
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
+    # paths-ignore:
+    #   - '**.md'
+    #   - '.gitignore'
 
 jobs:
   preview_app:
