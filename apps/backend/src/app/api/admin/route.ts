@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server"
 
 import SemesterService from "@/collections/services/SemesterDataService"
 import type { CreateSemesterData } from "@/types/collections"
-import { CreateSemesterRequestBody } from "@/types/request-models/SemesterRequests"
+import { CreateSemesterRequestBody } from "@/types/request-models.ts/SemesterRequests"
 import { ZodError } from "zod"
 
 /**
