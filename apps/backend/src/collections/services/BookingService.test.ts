@@ -55,19 +55,58 @@ describe("booking service", () => {
     const createdBooking2 = await bookingService.createBooking(bookingCreateMock2)
 
     const allBookings = await bookingService.getAllBookings()
-    // TODO: find out if there is an alternative to compare arrays
-    expect(allBookings.docs.length).toBe(2)
-    expect(allBookings.docs).toContain(createdBooking)
-    expect(allBookings.docs).toContain(createdBooking2)
+    expect(allBookings.docs).toEqual(expect.arrayContaining([createdBooking, createdBooking2]))
   })
 
-  it("should update a booking", async () => {})
+  it("should update a booking with the correct data", async () => {
+    const updateData: Partial<Omit<Booking, "id" | "createdAt" | "updatedAt">> = {
+      playerLevel: "intermediate",
+    }
 
-  it("should update a booking with the correct data", async () => {})
+    // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
+    const updatedBooking = await bookingService.updateBooking(createdBooking!.id, updateData)
+    expect(updatedBooking).toEqual({ ...createdBooking, playerLevel: updateData.playerLevel })
+  })
 
-  it("should return null when no booking was found to update", async () => {})
+  it("should return null when no booking was found to update", async () => {
+    const updateData: Partial<Omit<Booking, "id" | "createdAt" | "updatedAt">> = {
+      playerLevel: "intermediate",
+    }
 
-  it("should delete a booking", async () => {})
+    const updatedBooking = await bookingService.updateBooking("Not a booking ID", updateData)
+    expect(updatedBooking).toBeNull()
+  })
 
-  it("should return null when no booking was found to delete", async () => {})
+  it("should delete a booking successfully", async () => {
+    // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
+    const deletedBooking = await bookingService.deleteBooking(createdBooking!.id)
+    expect(deletedBooking).toEqual(createdBooking)
+
+    const fetchedBooking = await testPayloadObject.find({
+      collection: "booking",
+      where: {
+        id: {
+          // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
+          equals: createdBooking!.id,
+        },
+      },
+    })
+    expect(fetchedBooking).toBeNull()
+  })
+
+  it("should return null when no booking was found to delete", async () => {
+    const deletedBooking = await bookingService.deleteBooking("Not a booking ID")
+    expect(deletedBooking).toBeNull()
+
+    const fetchedBooking = await testPayloadObject.find({
+      collection: "booking",
+      where: {
+        id: {
+          // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
+          equals: createdBooking!.id,
+        },
+      },
+    })
+    expect(fetchedBooking.docs[0]).toEqual(createdBooking)
+  })
 })
