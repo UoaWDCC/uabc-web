@@ -16,7 +16,7 @@ export const bookingCreateMock2: CreateBookingData = {
 }
 
 export const bookingMock: Booking = {
-  id: "uabcisareallycoolclub",
+  id: "ccaf8f75ceb9f059773d4774",
   user: userMock,
   gameSession: gameSessionMock,
   playerLevel: "beginner",

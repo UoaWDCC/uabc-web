@@ -11,7 +11,7 @@ export const gameSessionCreateMock: CreateGameSessionData = {
 }
 
 export const gameSessionMock: GameSession = {
-  id: "installthecomicmonofont",
+  id: "87efbe48887bc7ae09e305ed",
   semester: semesterMock,
   startTime: "2025-04-28T7:00:00.000+12:00",
   endTime: "2025-04-28T9:00:00.000+12:00",

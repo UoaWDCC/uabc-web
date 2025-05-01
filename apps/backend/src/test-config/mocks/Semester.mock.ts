@@ -12,7 +12,7 @@ export const semesterCreateMock: CreateSemesterData = {
 }
 
 export const semesterMock: Semester = {
-  id: "carrotsaregudforeyesight",
+  id: "e0b2e0db3b65d10f864aeedb",
   name: "Semester 1 2025",
   startDate: "2025-03-03T00:00:00.000+13:00",
   endDate: "2025-06-30T00:00:00.000+12:00",

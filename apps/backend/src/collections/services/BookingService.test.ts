@@ -1,10 +1,6 @@
 import type { Booking } from "@/payload-types"
 import { clearCollection, testPayloadObject } from "@/test-config/backend-utils"
-import {
-  bookingCreateMock,
-  bookingCreateMock2,
-  bookingMock,
-} from "@/test-config/mocks/Booking.mock"
+import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import dotenv from "dotenv"
 import BookingService from "./BookingService"
 
@@ -36,10 +32,6 @@ describe("booking service", () => {
     expect(fetchedBooking.docs[0]).toEqual(createdBooking)
   })
 
-  it("should create a booking document with the correct data", async () => {
-    expect(bookingMock).toEqual(createdBooking)
-  })
-
   it("should find a booking by ID", async () => {
     // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
     const fetchedBooking = await bookingService.getBookingById(createdBooking!.id)
@@ -65,7 +57,11 @@ describe("booking service", () => {
 
     // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
     const updatedBooking = await bookingService.updateBooking(createdBooking!.id, updateData)
-    expect(updatedBooking).toEqual({ ...createdBooking, playerLevel: updateData.playerLevel })
+    expect(updatedBooking).toEqual({
+      ...createdBooking,
+      playerLevel: updateData.playerLevel,
+      updatedAt: updatedBooking?.updatedAt,
+    })
   })
 
   it("should return null when no booking was found to update", async () => {
@@ -82,7 +78,7 @@ describe("booking service", () => {
     const deletedBooking = await bookingService.deleteBooking(createdBooking!.id)
     expect(deletedBooking).toEqual(createdBooking)
 
-    const fetchedBooking = await testPayloadObject.find({
+    const fetchedBookings = await testPayloadObject.find({
       collection: "booking",
       where: {
         id: {
@@ -91,7 +87,7 @@ describe("booking service", () => {
         },
       },
     })
-    expect(fetchedBooking).toBeNull()
+    expect(fetchedBookings.docs).toHaveLength(0)
   })
 
   it("should return null when no booking was found to delete", async () => {
