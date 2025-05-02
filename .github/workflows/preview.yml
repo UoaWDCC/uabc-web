@@ -25,7 +25,7 @@ jobs:
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_CLIENT_API_TOKEN }}
     environment:
-      name: Frontend Preview pr-${{ github.event.number }}
+      name: staging
       url: ${{ steps.deploy.outputs.url }}
     steps:
       - name: Get code
@@ -44,9 +44,3 @@ jobs:
             TURBO_TEAM=${{ vars.TURBO_TEAM }}
             TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
 
-      - name: Clean up GitHub environment
-        uses: strumwolf/delete-deployment-environment@v2
-        if: ${{ github.event.action == 'closed' }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          environment: Frontend Preview pr-${{ github.event.number }}
