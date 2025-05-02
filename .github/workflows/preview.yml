@@ -24,7 +24,7 @@ jobs:
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_CLIENT_API_TOKEN }}
     environment:
-      name: Preview
+      name: Frontend Preview
       url: ${{ steps.deploy.outputs.url }}
     steps:
       - name: Get code
