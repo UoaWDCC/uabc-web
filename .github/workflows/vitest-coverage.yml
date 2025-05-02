@@ -148,6 +148,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+
+      - name: Install pnpm
+        run: pnpm install --frozen-lockfile
+
       - name: Download Local Coverage
         uses: actions/download-artifact@v4
         with:
