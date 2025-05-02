@@ -163,7 +163,7 @@ jobs:
       - name: Compare PR and Master Coverage
         id: pr-line-coverage
         run: |
-          master_total=$(grep -oP 'Lines\s+:\s+\K[\d.]+' .master-coverage/summary.txt)
+          master_total=$(pnpm nyc report --temp-dir .master-coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+')
           pr_total=$(pnpm nyc report --temp-dir coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+')
           
           diff=$(echo "scale=2; $pr_total - $master_total" | bc)
