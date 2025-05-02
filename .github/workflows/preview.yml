@@ -35,11 +35,11 @@ jobs:
         uses: superfly/fly-pr-review-apps@1.2.1
         with:
           build_args:
-            - "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}"
-            - "NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}"
-            - "JWT_SECRET=${{ secrets.JWT_SECRET }}"
-            - "TURBO_TEAM=${{ vars.TURBO_TEAM }}"
-            - "TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}"
+            - NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+            - NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
+            - JWT_SECRET=${{ secrets.JWT_SECRET }}
+            - TURBO_TEAM=${{ vars.TURBO_TEAM }}
+            - TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
 
       - name: Clean up GitHub environment
         uses: strumwolf/delete-deployment-environment@v2
