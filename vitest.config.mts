@@ -42,6 +42,7 @@ export default defineConfig({
           .filter((line: string) => !!line.trim())
           .map((line: string) => `**/${line.trim()}**`),
       ],
+      reporter: ["json", "text", "lcov", "html", "text-summary"],
     },
   },
 })
