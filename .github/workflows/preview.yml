@@ -25,7 +25,7 @@ jobs:
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_CLIENT_API_TOKEN }}
     environment:
-      name: Frontend Preview \#${{ github.event.number }}
+      name: Frontend Preview pr-${{ github.event.number }}
       url: ${{ steps.deploy.outputs.url }}
     steps:
       - name: Get code
@@ -47,4 +47,4 @@ jobs:
         if: ${{ github.event.action == 'closed' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          environment: Frontend Preview \#${{ github.event.number }}
+          environment: Frontend Preview pr-${{ github.event.number }}
