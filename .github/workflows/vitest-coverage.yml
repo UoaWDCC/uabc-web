@@ -3,14 +3,17 @@ name: Vitest Coverage Report
 on:
   pull_request:
     branches: [master]
-    paths-ignore:
-      - '**'
-      - '!*.md'
-      - '!.gitignore'
-      - '!.gitattributes'
-      - '!.github/**'
-      - '!.vscode/**'
-      - '!.env.example'
+    paths:
+      - 'apps/frontend/**'
+      - 'apps/backend/**'
+      - 'packages/ui/**'
+      - 'apps/*/package.json'
+      - 'packages/*/package.json'
+      - '**/*.test.ts'
+      - '**/*.test.tsx'
+      - 'vitest.config.mts'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
 
 env:
   CI: 'true'
