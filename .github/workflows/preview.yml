@@ -37,6 +37,7 @@ jobs:
         with:
           name: wdcc-uabc-frontend-preview-${{ github.event.number }}
           config: apps/frontend/fly.preview.toml
+          org: uoa-wdcc
           args: |
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
             NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
