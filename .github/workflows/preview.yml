@@ -24,6 +24,7 @@ jobs:
 
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_CLIENT_API_TOKEN }}
+      FLY_ORG: uoa-wdcc
     environment:
       name: staging
       url: ${{ steps.deploy.outputs.url }}
@@ -37,7 +38,6 @@ jobs:
         with:
           name: wdcc-uabc-frontend-preview-${{ github.event.number }}
           config: apps/frontend/fly.preview.toml
-          org: uoa-wdcc
           args: |
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
             NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
