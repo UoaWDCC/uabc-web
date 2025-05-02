@@ -120,22 +120,23 @@ jobs:
 
       - name: Run Master Coverage
         run: |
-          mkdir -p .master-coverage
+          mkdir -p coverage
           pnpm turbo run test:coverage
 
       - name: Combine Master Coverage Reports
         run: |
-          cp apps/frontend/coverage/coverage-final.json .master-coverage/frontend-coverage.json
-          cp apps/backend/coverage/coverage-final.json .master-coverage/backend-coverage.json
-          cp packages/ui/coverage/coverage-final.json .master-coverage/ui-coverage.json
-          pnpm nyc merge .master-coverage .master-coverage/coverage.json
-          pnpm nyc report --temp-dir .master-coverage --report-dir .master-coverage --reporter=text-summary > .master-coverage/summary.txt
-
+          mkdir -p .nyc_output
+          cp apps/frontend/coverage/coverage-final.json .nyc_output/frontend-coverage.json
+          cp apps/backend/coverage/coverage-final.json .nyc_output/backend-coverage.json
+          cp packages/ui/coverage/coverage-final.json .nyc_output/ui-coverage.json
+          pnpm nyc merge .nyc_output coverage/coverage.json
+          pnpm nyc report --temp-dir .nyc_output --report-dir coverage --reporter=lcov --reporter=text-summary
+    
       - name: Upload Master Coverage Artifact
         uses: actions/upload-artifact@v4
         with:
           name: master-coverage
-          path: .master-coverage/
+          path: coverage/
 
   compare-coverage:
     name: Compare Coverage and Comment
