@@ -34,5 +34,6 @@ export const CODE_MOCK = 'mock_code'
 export const STATE_MOCK = 'mock_state'
 export const SCOPES = encodeURIComponent(googleAuthScopes.join(' '))
 
-// JWT token secret mock
+// JWT token mocks
 export const JWT_SECRET_MOCK = 'mock_jwt_secret'
+export const JWT_TOKEN_MOCK = 'mock_jwt_token'

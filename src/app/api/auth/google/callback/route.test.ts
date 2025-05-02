@@ -5,6 +5,7 @@ import { userMock } from 'tests/mocks/User.mock'
 import {
   CODE_MOCK,
   JWT_SECRET_MOCK,
+  JWT_TOKEN_MOCK,
   SCOPES,
   STATE_MOCK,
   createMockNextRequest,
@@ -44,24 +45,37 @@ vi.mock('@/collections/services/AuthService', () => {
   }
 })
 
+const cookieStoreMock = {
+  get: vi.fn((key: string) => ({ value: key === 'state' ? STATE_MOCK : undefined })),
+  set: vi.fn(),
+  delete: vi.fn(),
+}
+
 vi.mock('next/headers', () => ({
-  cookies: () => ({
-    get: (key: string) => ({ value: key === 'state' ? STATE_MOCK : undefined }),
-    set: vi.fn(),
-    delete: vi.fn(),
-  }),
+  cookies: () => cookieStoreMock,
 }))
 
 vi.mock('next/navigation', () => ({
   redirect: vi.fn(),
 }))
 
-import { GET as callback } from '@/app/api/auth/google/callback/route'
+vi.mock('jsonwebtoken', async () => {
+  const actual = await vi.importActual<typeof import('jsonwebtoken')>('jsonwebtoken')
+
+  return {
+    ...actual,
+    sign: vi.fn().mockReturnValue(JWT_TOKEN_MOCK),
+  }
+})
+
+let callback: typeof import('@/app/api/auth/google/callback/route').GET
 
 const JWT_SECRET = process.env.JWT_SECRET
 
 describe('GET /api/auth/google/callback', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
+    callback = (await import('@/app/api/auth/google/callback/route')).GET
+
     vi.spyOn(globalThis, 'fetch').mockResolvedValue({
       json: vi.fn().mockResolvedValue(googleUserMock),
     } as unknown as Response)
@@ -79,7 +93,20 @@ describe('GET /api/auth/google/callback', () => {
     req.cookies.set('state', STATE_MOCK)
 
     await callback(req)
+
     expect(redirect).toHaveBeenCalled()
+
+    expect(cookieStoreMock.set).toHaveBeenCalled()
+    const [key, token, options] = cookieStoreMock.set.mock.calls[0]
+
+    expect(key).toBe('auth_token')
+    expect(token).toBe(JWT_TOKEN_MOCK)
+    expect(options).toMatchObject({
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60,
+    })
   })
 
   it('returns 400 if state does not match', async () => {
