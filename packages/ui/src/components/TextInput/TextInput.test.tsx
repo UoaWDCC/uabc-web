@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@/tests"
+import { fireEvent, render } from "@/test-utils"
 import { InputType, TextInput } from "./TextInput"
 import * as TextInputModule from "./index"
 
@@ -74,5 +74,11 @@ describe("<TextInput />", () => {
     const input = getByPlaceholderText("Enter text")
     fireEvent.change(input, { target: { value: "Test value" } })
     expect(input).toHaveValue("Test value")
+  })
+
+  test("handles default text input type", () => {
+    const { getByTestId } = render(<TextInput data-testid="default-input" label="Default Input" />)
+    const input = getByTestId("default-input") as HTMLInputElement
+    expect(input.type).toBe("text")
   })
 })

@@ -1,0 +1,226 @@
+name: Vitest Coverage Report
+
+on:
+  pull_request:
+    branches: [master]
+    paths-ignore:
+      - '**'
+      - '!*.md'
+      - '!.gitignore'
+      - '!.gitattributes'
+      - '!.github/**'
+      - '!.vscode/**'
+      - '!.env.example'
+
+env:
+  CI: 'true'
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  local-coverage:
+    name: Local Branch Coverage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+
+      - name: Restore Turborepo cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .turbo
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-turbo-coverage-local-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-coverage-local-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Local Coverage
+        run: |
+          mkdir -p coverage
+          pnpm turbo run test:coverage
+
+      - name: Combine Local Coverage Reports
+        run: |
+          mkdir -p .nyc_output
+          cp apps/frontend/coverage/coverage-final.json .nyc_output/frontend-coverage.json
+          cp apps/backend/coverage/coverage-final.json .nyc_output/backend-coverage.json
+          cp packages/ui/coverage/coverage-final.json .nyc_output/ui-coverage.json
+          pnpm nyc merge .nyc_output coverage/coverage.json
+          pnpm nyc report --temp-dir .nyc_output --report-dir coverage --reporter=lcov --reporter=text-summary
+        
+      - name: Upload Local Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-coverage
+          path: coverage/
+
+  master-coverage:
+    name: Master Branch Coverage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          ref: master
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+
+      - name: Restore Turborepo cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .turbo
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-turbo-coverage-master-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-coverage-master-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Master Coverage
+        run: |
+          mkdir -p coverage
+          pnpm turbo run test:coverage
+
+      - name: Combine Master Coverage Reports
+        run: |
+          mkdir -p .nyc_output
+          cp apps/frontend/coverage/coverage-final.json .nyc_output/frontend-coverage.json
+          cp apps/backend/coverage/coverage-final.json .nyc_output/backend-coverage.json
+          cp packages/ui/coverage/coverage-final.json .nyc_output/ui-coverage.json
+          pnpm nyc merge .nyc_output coverage/coverage.json
+          pnpm nyc report --temp-dir .nyc_output --report-dir coverage --reporter=lcov --reporter=text-summary
+    
+      - name: Upload Master Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: master-coverage
+          path: coverage/
+
+  compare-coverage:
+    name: Compare Coverage and Comment
+    needs: [local-coverage, master-coverage]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+
+      - name: Install pnpm
+        run: pnpm install --frozen-lockfile
+
+      - name: Download Local Coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: local-coverage
+          path: coverage
+
+      - name: Download Master Coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: master-coverage
+          path: .master-coverage
+
+      - name: Compare PR and Master Coverage
+        id: pr-line-coverage
+        run: |
+          master_total=$(pnpm nyc report --temp-dir .master-coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+')
+          pr_total=$(pnpm nyc report --temp-dir coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+')
+          
+          diff=$(echo "scale=2; $pr_total - $master_total" | bc)
+          
+          if (( $(echo "$diff >= 0" | bc -l) )); then
+            coverage_status="+$diff%"
+          else
+            coverage_status="$diff%"
+          fi
+          
+          echo "PR_LINE_COVERAGE=$coverage_status" >> $GITHUB_OUTPUT
+
+      - name: Generate Overall Coverage Summary
+        id: overall-coverage-summary
+        run: |
+          echo "OVERALL_COVERAGE_SUMMARY<<EOF" >> $GITHUB_OUTPUT
+          pnpm nyc report --temp-dir coverage --reporter=text-summary | sed -n '/^=======/,/^$/p' >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Find Previous Coverage Comment
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '## Vitest Coverage Report'
+
+      - name: Update Coverage Comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ## Vitest Coverage Report
+
+            ### Overall Repository Coverage
+            ```
+            ${{ steps.overall-coverage-summary.outputs.OVERALL_COVERAGE_SUMMARY }}
+            ```
+
+            **PR Coverage: ${{ steps.pr-line-coverage.outputs.PR_LINE_COVERAGE }}** comparing to master branch coverage.
+
+            [View detailed coverage report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            To view detailed coverage locally, run `pnpm test:coverage`.
+          edit-mode: replace

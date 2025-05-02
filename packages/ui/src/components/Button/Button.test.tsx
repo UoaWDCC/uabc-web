@@ -1,4 +1,4 @@
-import { render, screen } from "@/tests"
+import { render, screen } from "@/test-utils"
 import { Button } from "./Button"
 import * as ButtonModule from "./index"
 

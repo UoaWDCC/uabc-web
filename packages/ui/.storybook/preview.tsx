@@ -39,6 +39,7 @@ const App: FC<PropsWithChildren> = ({ children }) => {
         base: "calc(100dvh - {spaces.lg} * 2)",
         md: "calc(100dvh - {spaces.md} * 2)",
       }}
+      overflowX="auto"
       p={{ base: "lg", md: "md" }}
     >
       {children}

@@ -6,7 +6,7 @@ interface UabcHeaderTextProps {
 }
 
 export const UabcHeaderText = ({ description, className }: UabcHeaderTextProps) => (
-  <div className={cn("text-center font-bold leading-none text-primary dark:text-white", className)}>
+  <div className={cn("text-center font-bold text-primary leading-none dark:text-white", className)}>
     <span className="text-[4rem] leading-none tracking-tight">UABC</span>
     {description && (
       <>

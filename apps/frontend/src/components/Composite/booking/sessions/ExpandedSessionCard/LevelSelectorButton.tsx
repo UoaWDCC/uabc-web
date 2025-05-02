@@ -10,7 +10,7 @@ interface LevelSelectorButtonProps {
 export const LevelSelectorButton = ({ name, selected, handleClick }: LevelSelectorButtonProps) => (
   <button
     className={cn(
-      "h-12 break-words rounded p-1 text-sm font-medium capitalize",
+      "h-12 break-words rounded p-1 font-medium text-sm capitalize",
       selected
         ? "bg-primary text-primary-foreground"
         : "bg-white text-tertiary hover:bg-tertiary/10 hover:text-tertiary",

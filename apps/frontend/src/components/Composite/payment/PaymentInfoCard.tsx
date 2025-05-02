@@ -20,7 +20,7 @@ export const PaymentInfoCard = ({ amount, ...props }: PaymentInfoCardProps) => {
           <Text color="transparentize(#FAFAFAB2, 70%)" fontSize="xs">
             Your total for this session:
           </Text>
-          <Text className="mb-5 text-3xl font-bold" fontSize="3xl" fontWeight="bold">
+          <Text className="mb-5 font-bold text-3xl" fontSize="3xl" fontWeight="bold">
             <FormatNumber currency="NZD" style="currency" value={amount} />
           </Text>
           <Text color="#FAFAFAB2" fontSize="xs">

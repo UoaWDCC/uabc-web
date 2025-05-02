@@ -74,8 +74,9 @@
     },
     "test:coverage": {
       "dependsOn": ["transit"],
-      "cache": false,
-      "persistent": true
+      "cache": true,
+      "persistent": false,
+      "outputs": ["coverage/**"]
     }
   },
   "ui": "tui"
