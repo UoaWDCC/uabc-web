@@ -35,7 +35,7 @@ jobs:
         id: deploy
         uses: superfly/fly-pr-review-apps@1.2.1
         with:
-          name: wdcc-uabc-frontend-preview
+          name: wdcc-uabc-frontend-preview-${{ github.event.number }}
           config: apps/frontend/fly.preview.toml
           args: |
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
