@@ -15,7 +15,7 @@ export const LevelSelector = ({ id, selectedLevel }: LevelSelectorProps) => {
     <Drawer>
       <DrawerTrigger asChild>
         <button
-          className="h-12 w-full rounded-b-md bg-tertiary text-sm font-semibold capitalize text-tertiary-foreground"
+          className="h-12 w-full rounded-b-md bg-tertiary font-semibold text-sm text-tertiary-foreground capitalize"
           type="button"
         >
           {selectedLevel ?? "Select Play Level"}

@@ -28,13 +28,13 @@ export default function ClientSessionPage({ isMember, prepaidSessions }: ClientS
   return (
     <>
       <div className="flex h-16 items-center justify-between p-4">
-        <p className="max-w-[70%] text-sm font-medium">
+        <p className="max-w-[70%] font-medium text-sm">
           Please select a badminton session for this week
         </p>
         <CountIndicator
           className={twJoin(
             "w-16",
-            shake && "error-shake border-2 border-solid border-destructive text-destructive",
+            shake && "error-shake border-2 border-destructive border-solid text-destructive",
           )}
           onAnimationEnd={() => setShake(false)}
         >
@@ -46,13 +46,13 @@ export default function ClientSessionPage({ isMember, prepaidSessions }: ClientS
         <PendingApprovalAlert />
       </div>
       <SelectSessionList
-        className="mx-4 grow empty:grow empty:after:grid empty:after:h-full empty:after:w-full empty:after:grow empty:after:place-items-center empty:after:text-lg empty:after:font-medium empty:after:text-tertiary/70 empty:after:content-['No_more_sessions_for_this_week']"
+        className="mx-4 grow empty:grow empty:after:grid empty:after:h-full empty:after:w-full empty:after:grow empty:after:place-items-center empty:after:font-medium empty:after:text-lg empty:after:text-tertiary/70 empty:after:content-['No_more_sessions_for_this_week']"
         isMember={isMember}
         maxSessions={maxSessions}
         onLimitReached={() => setShake(true)}
       />
 
-      <div className="mx-4 mb-10 mt-6 flex justify-center">
+      <div className="mx-4 mt-6 mb-10 flex justify-center">
         <Button
           // TODO: check if needs approval
           className="w-full"

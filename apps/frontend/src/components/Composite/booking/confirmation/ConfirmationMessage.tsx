@@ -14,8 +14,8 @@ export default function ConfirmationMessage({ member, email }: ConfirmationMessa
         <BsClock className="mx-auto text-yellow-500" size={120} />
       )}
       <div className="mt-4 space-y-2 text-center">
-        <p className="text-lg font-medium">{member ? "Confirmed" : "Awaiting Payment"}</p>
-        <p className="text-sm font-medium text-tertiary">
+        <p className="font-medium text-lg">{member ? "Confirmed" : "Awaiting Payment"}</p>
+        <p className="font-medium text-sm text-tertiary">
           {member ? (
             <>
               Booking successful! A confirmation email has been sent to{" "}
