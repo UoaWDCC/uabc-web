@@ -25,6 +25,7 @@ jobs:
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_CLIENT_API_TOKEN }}
       FLY_ORG: uoa-wdcc
+      FLY_REGION: syd
     environment:
       name: staging
       url: ${{ steps.deploy.outputs.url }}
