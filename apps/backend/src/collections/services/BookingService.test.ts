@@ -34,9 +34,10 @@ describe("booking service", () => {
     expect(fetchedBooking).toEqual(createdBooking)
   })
 
-  it("should return null when a booking was not found by ID", async () => {
-    const fetchedBooking = await bookingService.getBookingById("Not a Booking ID")
-    expect(fetchedBooking).toBeNull()
+  it("should throw a Not Found error when a booking is not found by ID", async () => {
+    await expect(() => bookingService.getBookingById("Not a Booking ID")).rejects.toThrowError(
+      "Not Found",
+    )
   })
 
   it("should find all bookings", async () => {
@@ -61,13 +62,14 @@ describe("booking service", () => {
     })
   })
 
-  it("should return null when no booking was found to update", async () => {
+  it("should throw a Not Found error when no booking is found to update", async () => {
     const updateData: Partial<Omit<Booking, "id" | "createdAt" | "updatedAt">> = {
       playerLevel: "intermediate",
     }
 
-    const updatedBooking = await bookingService.updateBooking("Not a booking ID", updateData)
-    expect(updatedBooking).toBeNull()
+    await expect(() =>
+      bookingService.updateBooking("Not a booking ID", updateData),
+    ).rejects.toThrowError("Not Found")
   })
 
   it("should delete a booking successfully", async () => {
@@ -86,8 +88,9 @@ describe("booking service", () => {
     expect(fetchedBookings.docs).toHaveLength(0)
   })
 
-  it("should return null when no booking was found to delete", async () => {
-    const deletedBooking = await bookingService.deleteBooking("Not a booking ID")
-    expect(deletedBooking).toBeNull()
+  it("should throw a Not Found error when no booking is found to delete", async () => {
+    await expect(() => bookingService.deleteBooking("Not a booking ID")).rejects.toThrowError(
+      "Not Found",
+    )
   })
 })
