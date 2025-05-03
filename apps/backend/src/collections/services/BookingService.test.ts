@@ -44,8 +44,14 @@ describe("booking service", () => {
     const createdBooking = await bookingService.createBooking(bookingCreateMock)
     const createdBooking2 = await bookingService.createBooking(bookingCreateMock2)
 
-    const allBookings = await bookingService.getAllBookings()
-    expect(allBookings.docs).toEqual(expect.arrayContaining([createdBooking, createdBooking2]))
+    // Test getting pages (with 1 Booking per page).
+    const limit = 1
+    expect((await bookingService.getAllBookings(limit, 1)).docs).toEqual(
+      expect.arrayContaining([createdBooking2]),
+    )
+    expect((await bookingService.getAllBookings(limit, 2)).docs).toEqual(
+      expect.arrayContaining([createdBooking]),
+    )
   })
 
   it("should update a booking with the correct data", async () => {

@@ -38,10 +38,12 @@ export default class BookingService {
 
   /**
    * Finds all {@link Booking} documents.
-   * @returns the paginated docs of all Bookings found
+   * @param limit The maximum documents to be returned
+   * @param page The specific page number to offset to
+   * @returns The docs of all Bookings found on the given page
    */
-  public async getAllBookings(): Promise<PaginatedDocs<Booking>> {
-    const allBookings = await payload.find({ collection: "booking" })
+  public async getAllBookings(limit: number, page: number): Promise<PaginatedDocs<Booking>> {
+    const allBookings = await payload.find({ collection: "booking", limit, page })
     return allBookings
   }
 
@@ -73,9 +75,6 @@ export default class BookingService {
    * @returns The deleted Booking if successful, null otherwise.
    */
   public async deleteBooking(id: string): Promise<Booking | null> {
-    const booking = await this.getBookingById(id)
-    if (!booking) return null
-
     const deletedBooking = await payload.delete({
       collection: "booking",
       id,
