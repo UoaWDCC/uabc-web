@@ -2,7 +2,7 @@ import { payload } from "@/data-layer/adapters/Payload"
 import { authenticationCreateMock } from "@/test-config/mocks/Authentication.mock"
 import { userMock } from "@/test-config/mocks/User.mock"
 import dotenv from "dotenv"
-import AuthService from "./AuthService"
+import AuthService from "./AuthDataService"
 
 dotenv.config()
 
