@@ -1,10 +1,7 @@
 import { payload } from "@/data-layer/adapters/Payload"
 import { clearCollection } from "@/test-config/backend-utils"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
-import dotenv from "dotenv"
 import GameSessionScheduleService from "./GameSessionScheduleService"
-
-dotenv.config()
 
 const gameSessionScheduleService = new GameSessionScheduleService()
 
@@ -31,7 +28,8 @@ describe("game session schedule service", () => {
   describe("getGameSessionSchedules", () => {
     it("should get all game session schedules when not using page and limit", async () => {
       await gameSessionScheduleService.createGameSessionSchedule(gameSessionScheduleCreateMock)
-      const fetchedGameSessionSchedules = await gameSessionScheduleService.getGameSessionSchedules()
+      const fetchedGameSessionSchedules =
+        await gameSessionScheduleService.getPaginatedGameSessionSchedules()
       expect(fetchedGameSessionSchedules).not.toBeNull()
       expect(fetchedGameSessionSchedules?.totalDocs).toBeGreaterThan(0)
 

@@ -27,19 +27,18 @@ export default class GameSessionScheduleService {
    * Gets all game session schedules
    * @returns all game session schedules or null if there is an error
    */
-  public async getGameSessionSchedules(
-    options: {
-      page?: number
-      limit?: number
-      skip?: number
-    } = {},
-  ): Promise<PaginatedDocs<GameSessionSchedule> | null> {
+  public async getPaginatedGameSessionSchedules({
+    page = 1,
+    limit = 10,
+  }: {
+    page?: number
+    limit?: number
+  } = {}): Promise<PaginatedDocs<GameSessionSchedule> | null> {
     try {
-      const { page = 1, limit = 10, skip } = options
       const gameSessionSchedules = await payload.find({
         collection: "gameSessionSchedule",
-        // use skip if given else use default
-        ...(skip != null ? { skip } : { page, limit }),
+        page,
+        limit,
       })
       return gameSessionSchedules
     } catch (error) {
