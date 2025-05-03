@@ -1,9 +1,6 @@
 import { payload } from "@/data-layer/adapters/Payload"
 import { userCreateMock } from "@/test-config/mocks/User.mock"
-import dotenv from "dotenv"
 import UserService from "./UserDataService"
-
-dotenv.config()
 
 const userService = new UserService()
 
