@@ -62,7 +62,7 @@ jobs:
       - name: Run Local Coverage
         run: |
           mkdir -p coverage
-          pnpm turbo run test:coverage
+          pnpm test:coverage
 
       - name: Combine Local Coverage Reports
         run: |
@@ -72,7 +72,7 @@ jobs:
           cp packages/ui/coverage/coverage-final.json .nyc_output/ui-coverage.json
           pnpm nyc merge .nyc_output coverage/coverage.json
           pnpm nyc report --temp-dir .nyc_output --report-dir coverage --reporter=lcov --reporter=text-summary
-        
+
       - name: Upload Local Coverage Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -121,7 +121,7 @@ jobs:
       - name: Run Master Coverage
         run: |
           mkdir -p coverage
-          pnpm turbo run test:coverage
+          pnpm test:coverage
 
       - name: Combine Master Coverage Reports
         run: |
@@ -131,7 +131,7 @@ jobs:
           cp packages/ui/coverage/coverage-final.json .nyc_output/ui-coverage.json
           pnpm nyc merge .nyc_output coverage/coverage.json
           pnpm nyc report --temp-dir .nyc_output --report-dir coverage --reporter=lcov --reporter=text-summary
-    
+
       - name: Upload Master Coverage Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -179,15 +179,15 @@ jobs:
         run: |
           master_total=$(pnpm nyc report --temp-dir .master-coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+')
           pr_total=$(pnpm nyc report --temp-dir coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+')
-          
+
           diff=$(echo "scale=2; $pr_total - $master_total" | bc)
-          
+
           if (( $(echo "$diff >= 0" | bc -l) )); then
             coverage_status="+$diff%"
           else
             coverage_status="$diff%"
           fi
-          
+
           echo "PR_LINE_COVERAGE=$coverage_status" >> $GITHUB_OUTPUT
 
       - name: Generate Overall Coverage Summary
