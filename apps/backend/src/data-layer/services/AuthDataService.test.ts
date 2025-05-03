@@ -1,19 +1,17 @@
 import { payload } from "@/data-layer/adapters/Payload"
 import { authenticationCreateMock } from "@/test-config/mocks/Authentication.mock"
 import { userMock } from "@/test-config/mocks/User.mock"
-import AuthService from "./AuthDataService"
+import AuthDataService from "./AuthDataService"
+import UserDataService from "./UserDataService"
 
-const authService = new AuthService()
+const authDataService = new AuthDataService()
+const userDataService = new UserDataService()
 
 describe("auth service", () => {
   it("should create an authentication document", async () => {
-    // Create user first so that the auth mock will have an existent user
-    await payload.create({
-      collection: "user",
-      data: userMock,
-    })
+    userDataService.createUser(userMock)
 
-    const newAuth = await authService.createAuth(authenticationCreateMock)
+    const newAuth = await authDataService.createAuth(authenticationCreateMock)
     const fetchedAuth = await payload.find({
       collection: "authentication",
       where: {

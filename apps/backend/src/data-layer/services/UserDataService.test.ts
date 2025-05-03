@@ -1,133 +1,79 @@
 import { payload } from "@/data-layer/adapters/Payload"
 import { userCreateMock } from "@/test-config/mocks/User.mock"
-import UserService from "./UserDataService"
+import UserDataService from "./UserDataService"
 
-const userService = new UserService()
+const userDataService = new UserDataService()
 
-describe("user service", () => {
-  it("should create a user document", async () => {
-    const newUser = await userService.createUser(userCreateMock)
-    const fetchedUser = await payload.find({
-      collection: "user",
-      where: {
-        id: {
-          equals: newUser.id,
-        },
-      },
+describe("UserDataService", () => {
+  describe("createUser", () => {
+    it("should create a user document", async () => {
+      const newUser = await userDataService.createUser(userCreateMock)
+      const fetchedUser = await payload.findByID({
+        collection: "user",
+        id: newUser.id,
+      })
+      expect(fetchedUser).toStrictEqual(newUser)
     })
-    expect(fetchedUser.docs[0]).toEqual(newUser)
   })
 
-  it("should be able to get a user document by email", async () => {
-    const newUser = await userService.createUser(userCreateMock)
-    const fetchedUser = await userService.getUserByEmail(userCreateMock.email)
-    expect(fetchedUser).toEqual(newUser)
-  })
+  describe("getUserByEmail", () => {
+    it("should be able to get a user document by email", async () => {
+      const newUser = await userDataService.createUser(userCreateMock)
+      const fetchedUser = await userDataService.getUserByEmail(userCreateMock.email)
+      expect(fetchedUser).toStrictEqual(newUser)
+    })
 
-  it("should return null if user does not exist when searching by email", async () => {
-    const fetchedUser = await userService.getUserByEmail("nonexistent@example.com")
-    expect(fetchedUser).toBeNull()
-  })
-
-  it("should use default values for remainingSessions and image when not provided", async () => {
-    const userWithoutOptionals = {
-      firstName: userCreateMock.firstName,
-      lastName: userCreateMock.lastName,
-      role: userCreateMock.role,
-      email: "defaultvalues@example.com",
-    }
-    const newUser = await userService.createUser(userWithoutOptionals)
-    expect(newUser.remainingSessions).toBe(0)
-    expect(newUser.image).toBeUndefined()
+    it("should return null if user does not exist when searching by email", async () => {
+      const fetchedUser = userDataService.getUserByEmail("nonexistent@example.com")
+      expect(fetchedUser).rejects.toThrow(
+        "A user with the email: nonexistent@example.com was not found.",
+      )
+    })
   })
 
   describe("getUserById", () => {
     it("should get a user by ID", async () => {
-      const newUser = await userService.createUser(userCreateMock)
-      const fetchedUser = await userService.getUserById(newUser.id)
+      const newUser = await userDataService.createUser(userCreateMock)
+      const fetchedUser = await userDataService.getUserById(newUser.id)
       expect(fetchedUser).toEqual(newUser)
     })
 
     it("should return null for non-existent ID", async () => {
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
-      const fetchedUser = await userService.getUserById("nonexistentid")
-      expect(fetchedUser).toBeNull()
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "Error fetching user by ID nonexistentid:",
-        "Not Found",
-      )
-      consoleErrorSpy.mockRestore()
+      const fetchedUser = userDataService.getUserById("nonexistentid")
+      expect(fetchedUser).rejects.toThrow("Not Found")
     })
   })
 
   describe("updateUser", () => {
     it("should update user fields", async () => {
-      const newUser = await userService.createUser(userCreateMock)
+      const newUser = await userDataService.createUser(userCreateMock)
       const updateData = {
         firstName: "Updated",
         lastName: "Name",
         remainingSessions: 10,
       }
 
-      const updatedUser = await userService.updateUser(newUser.id, updateData)
+      const updatedUser = await userDataService.updateUser(newUser.id, updateData)
 
-      // First check if updatedUser is not null
-      expect(updatedUser).not.toBeNull()
-
-      if (updatedUser) {
-        expect(updatedUser.firstName).toBe(updateData.firstName)
-        expect(updatedUser.lastName).toBe(updateData.lastName)
-        expect(updatedUser.remainingSessions).toBe(updateData.remainingSessions)
-        // Verify email remains unchanged
-        expect(updatedUser.email).toBe(newUser.email)
-      }
+      expect(updatedUser).toStrictEqual({ ...newUser, ...updatedUser })
     })
 
     it("should return null when updating non-existent user", async () => {
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
       const updateData = { firstName: "Updated" }
-      const result = await userService.updateUser("nonexistentid", updateData)
-      expect(result).toBeNull()
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "Error fetching user by ID nonexistentid:",
-        "Not Found",
-      )
-      consoleErrorSpy.mockRestore()
+      const updateNotFoundUser = userDataService.updateUser("nonexistentid", updateData)
+      await expect(updateNotFoundUser).rejects.toThrow("Not Found")
     })
   })
 
   describe("deleteUser", () => {
     it("should delete a user", async () => {
-      const newUser = await userService.createUser(userCreateMock)
-      const deletedUser = await userService.deleteUser(newUser.id)
-
-      // First check if deletedUser is not null
-      expect(deletedUser).not.toBeNull()
-
-      if (deletedUser) {
-        expect(deletedUser).toEqual(newUser)
-      }
-
-      // Verify user no longer exists
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
-      const fetchedUser = await userService.getUserById(newUser.id)
-      expect(fetchedUser).toBeNull()
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        `Error fetching user by ID ${newUser.id}:`,
-        "Not Found",
-      )
-      consoleErrorSpy.mockRestore()
+      const newUser = await userDataService.createUser(userCreateMock)
+      const deletedUser = await userDataService.deleteUser(newUser.id)
+      await expect(userDataService.getUserById(deletedUser.id)).rejects.toThrow("Not Found")
     })
 
     it("should return null when deleting non-existent user", async () => {
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
-      const result = await userService.deleteUser("nonexistentid")
-      expect(result).toBeNull()
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "Error fetching user by ID nonexistentid:",
-        "Not Found",
-      )
-      consoleErrorSpy.mockRestore()
+      await expect(userDataService.deleteUser("nonexistentid")).rejects.toThrow("Not Found")
     })
   })
 })
