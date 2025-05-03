@@ -1,4 +1,5 @@
-import { clearCollection, testPayloadObject } from "@/test-config/backend-utils"
+import { payload } from "@/data-layer/adapters/Payload"
+import { clearCollection } from "@/test-config/backend-utils"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import dotenv from "dotenv"
 import GameSessionScheduleService from "./GameSessionScheduleService"
@@ -9,14 +10,14 @@ const gameSessionScheduleService = new GameSessionScheduleService()
 
 describe("game session schedule service", () => {
   afterEach(async () => {
-    await clearCollection(testPayloadObject, "gameSessionSchedule")
+    await clearCollection(payload, "gameSessionSchedule")
   })
 
   it("should create a game session schedule document", async () => {
     const newGameSessionSchedule = await gameSessionScheduleService.createGameSessionSchedule(
       gameSessionScheduleCreateMock,
     )
-    const fetchedGameSessionSchedule = await testPayloadObject.find({
+    const fetchedGameSessionSchedule = await payload.find({
       collection: "gameSessionSchedule",
       where: {
         id: {
