@@ -212,7 +212,7 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: Test
-        run: pnpm turbo run test
+        run: pnpm test
 
   codegen:
     needs: [check_changes, setup]
