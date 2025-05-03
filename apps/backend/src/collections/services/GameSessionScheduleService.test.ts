@@ -53,32 +53,25 @@ describe("game session schedule service", () => {
         ),
       )
 
-      const pageToFetch = 2
-      const limit = 5
-
-      const expectedPages = Math.ceil(totalToSeed / limit)
-      const expectedFetchedLength =
-        expectedPages === pageToFetch ? (totalToSeed % limit) + 1 : limit
-      const hasPrevPage = pageToFetch > 1
-      const hasNextPage = pageToFetch < expectedPages
-
-      const fetchedGameSessionSchedules = await gameSessionScheduleService.getGameSessionSchedules({
-        page: pageToFetch,
-        limit: limit,
-      })
+      // test for getting page 2, where each page has a limit of 5 docs
+      const fetchedGameSessionSchedules =
+        await gameSessionScheduleService.getPaginatedGameSessionSchedules({
+          page: 2,
+          limit: 5,
+        })
       expect(fetchedGameSessionSchedules).not.toBeNull()
 
-      expect(fetchedGameSessionSchedules?.docs).toHaveLength(expectedFetchedLength)
-      expect(fetchedGameSessionSchedules?.totalDocs).toBe(totalToSeed)
+      expect(fetchedGameSessionSchedules?.docs).toHaveLength(5)
+      expect(fetchedGameSessionSchedules?.totalDocs).toBe(15)
 
-      expect(fetchedGameSessionSchedules?.page).toBe(pageToFetch)
-      expect(fetchedGameSessionSchedules?.limit).toBe(limit)
-      expect(fetchedGameSessionSchedules?.totalPages).toBe(expectedPages)
+      expect(fetchedGameSessionSchedules?.page).toBe(2)
+      expect(fetchedGameSessionSchedules?.limit).toBe(5)
+      expect(fetchedGameSessionSchedules?.totalPages).toBe(3)
 
-      expect(fetchedGameSessionSchedules?.hasPrevPage).toBe(hasPrevPage)
-      expect(fetchedGameSessionSchedules?.prevPage).toBe(hasPrevPage ? pageToFetch - 1 : null)
-      expect(fetchedGameSessionSchedules?.hasNextPage).toBe(hasNextPage)
-      expect(fetchedGameSessionSchedules?.nextPage).toBe(hasNextPage ? pageToFetch + 1 : null)
+      expect(fetchedGameSessionSchedules?.hasPrevPage).toBe(true)
+      expect(fetchedGameSessionSchedules?.prevPage).toBe(1)
+      expect(fetchedGameSessionSchedules?.hasNextPage).toBe(true)
+      expect(fetchedGameSessionSchedules?.nextPage).toBe(3)
     })
   })
 
