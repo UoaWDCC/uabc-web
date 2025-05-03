@@ -64,15 +64,6 @@ jobs:
           mkdir -p coverage
           pnpm test:coverage
 
-      - name: Combine Local Coverage Reports
-        run: |
-          mkdir -p .nyc_output
-          cp apps/frontend/coverage/coverage-final.json .nyc_output/frontend-coverage.json
-          cp apps/backend/coverage/coverage-final.json .nyc_output/backend-coverage.json
-          cp packages/ui/coverage/coverage-final.json .nyc_output/ui-coverage.json
-          pnpm nyc merge .nyc_output coverage/coverage.json
-          pnpm nyc report --temp-dir .nyc_output --report-dir coverage --reporter=lcov --reporter=text-summary
-
       - name: Upload Local Coverage Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -122,15 +113,6 @@ jobs:
         run: |
           mkdir -p coverage
           pnpm test:coverage
-
-      - name: Combine Master Coverage Reports
-        run: |
-          mkdir -p .nyc_output
-          cp apps/frontend/coverage/coverage-final.json .nyc_output/frontend-coverage.json
-          cp apps/backend/coverage/coverage-final.json .nyc_output/backend-coverage.json
-          cp packages/ui/coverage/coverage-final.json .nyc_output/ui-coverage.json
-          pnpm nyc merge .nyc_output coverage/coverage.json
-          pnpm nyc report --temp-dir .nyc_output --report-dir coverage --reporter=lcov --reporter=text-summary
 
       - name: Upload Master Coverage Artifact
         uses: actions/upload-artifact@v4
