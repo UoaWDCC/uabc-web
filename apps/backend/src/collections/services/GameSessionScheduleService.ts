@@ -68,7 +68,7 @@ export default class GameSessionScheduleService {
    */
   public async updateGameSessionSchedule(
     id: string,
-    data: Partial<GameSessionSchedule>,
+    data: Partial<CreateGameSessionScheduleData>,
   ): Promise<GameSessionSchedule | null> {
     try {
       const updatedGameSessionSchedule = await payload.update({
