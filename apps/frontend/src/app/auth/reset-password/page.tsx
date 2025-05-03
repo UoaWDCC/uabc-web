@@ -32,7 +32,7 @@ export default async function ResetPasswordPage(props: {
         <BackNavigationBar pathName="/auth/login?open=true" title="Reset Your Password" />
         <div className="grid grow place-items-center">
           <Card className="bg-destructive text-destructive-foreground" variant="card">
-            <h1 className="pb-1 text-lg font-semibold tracking-tight">Expired Link</h1>
+            <h1 className="pb-1 font-semibold text-lg tracking-tight">Expired Link</h1>
             This password reset link has expired. Please request a new one{" "}
             <Link className="text-right font-bold underline" href="/auth/forgot-password">
               here
