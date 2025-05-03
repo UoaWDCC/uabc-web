@@ -9,7 +9,7 @@ const payload = await getPayload({
 
 export default class BookingService {
   /**
-   * Creates a booking document.
+   * Creates a {@link Booking} document.
    * @param bookingData The data to create a Booking with
    * @returns The created Booking document
    */
@@ -23,25 +23,21 @@ export default class BookingService {
   }
 
   /**
-   * Finds a Booking document by ID.
+   * Finds a {@link Booking} document by ID.
    * @param id The ID of the Booking to find
    * @returns the Booking document if found, null otherwise.
    */
   public async getBookingById(id: string): Promise<Booking | null> {
-    try {
-      const foundBooking = await payload.findByID({
-        collection: "booking",
-        id,
-      })
+    const foundBooking = await payload.findByID({
+      collection: "booking",
+      id,
+    })
 
-      return foundBooking
-    } catch (_error) {
-      return null
-    }
+    return foundBooking
   }
 
   /**
-   * Finds all Booking documents.
+   * Finds all {@link Booking} documents.
    * @returns the paginated docs of all Bookings found
    */
   public async getAllBookings(): Promise<PaginatedDocs<Booking>> {
@@ -50,7 +46,7 @@ export default class BookingService {
   }
 
   /**
-   * Updates a Booking by ID.
+   * Updates a {@link Booking} by ID.
    * @param id The ID of the Booking to update
    * @param data Data to update the Booking with
    * @returns The updated Booking if successful, null otherwise
@@ -72,7 +68,7 @@ export default class BookingService {
   }
 
   /**
-   * Deletes a Booking by ID.
+   * Deletes a {@link Booking} by ID.
    * @param id The ID of the Booking to delete.
    * @returns The deleted Booking if successful, null otherwise.
    */

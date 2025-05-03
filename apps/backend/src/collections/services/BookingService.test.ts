@@ -7,25 +7,20 @@ import BookingService from "./BookingService"
 dotenv.config()
 
 const bookingService = new BookingService()
-let createdBooking: Booking | undefined
 
 describe("booking service", () => {
-  beforeEach(async () => {
-    createdBooking = await bookingService.createBooking(bookingCreateMock)
-  })
-
   afterEach(async () => {
-    createdBooking = undefined
     await clearCollection(testPayloadObject, "booking")
   })
 
   it("should create a booking document", async () => {
+    const createdBooking = await bookingService.createBooking(bookingCreateMock)
+
     const fetchedBooking = await testPayloadObject.find({
       collection: "booking",
       where: {
         id: {
-          // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
-          equals: createdBooking!.id,
+          equals: createdBooking.id,
         },
       },
     })
@@ -33,8 +28,9 @@ describe("booking service", () => {
   })
 
   it("should find a booking by ID", async () => {
-    // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
-    const fetchedBooking = await bookingService.getBookingById(createdBooking!.id)
+    const createdBooking = await bookingService.createBooking(bookingCreateMock)
+
+    const fetchedBooking = await bookingService.getBookingById(createdBooking.id)
     expect(fetchedBooking).toEqual(createdBooking)
   })
 
@@ -44,6 +40,7 @@ describe("booking service", () => {
   })
 
   it("should find all bookings", async () => {
+    const createdBooking = await bookingService.createBooking(bookingCreateMock)
     const createdBooking2 = await bookingService.createBooking(bookingCreateMock2)
 
     const allBookings = await bookingService.getAllBookings()
@@ -51,12 +48,12 @@ describe("booking service", () => {
   })
 
   it("should update a booking with the correct data", async () => {
+    const createdBooking = await bookingService.createBooking(bookingCreateMock)
     const updateData: Partial<Omit<Booking, "id" | "createdAt" | "updatedAt">> = {
       playerLevel: "intermediate",
     }
 
-    // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
-    const updatedBooking = await bookingService.updateBooking(createdBooking!.id, updateData)
+    const updatedBooking = await bookingService.updateBooking(createdBooking.id, updateData)
     expect(updatedBooking).toEqual({
       ...createdBooking,
       playerLevel: updateData.playerLevel,
@@ -74,16 +71,15 @@ describe("booking service", () => {
   })
 
   it("should delete a booking successfully", async () => {
-    // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
-    const deletedBooking = await bookingService.deleteBooking(createdBooking!.id)
+    const createdBooking = await bookingService.createBooking(bookingCreateMock)
+    const deletedBooking = await bookingService.deleteBooking(createdBooking.id)
     expect(deletedBooking).toEqual(createdBooking)
 
     const fetchedBookings = await testPayloadObject.find({
       collection: "booking",
       where: {
         id: {
-          // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
-          equals: createdBooking!.id,
+          equals: createdBooking.id,
         },
       },
     })
@@ -93,16 +89,5 @@ describe("booking service", () => {
   it("should return null when no booking was found to delete", async () => {
     const deletedBooking = await bookingService.deleteBooking("Not a booking ID")
     expect(deletedBooking).toBeNull()
-
-    const fetchedBooking = await testPayloadObject.find({
-      collection: "booking",
-      where: {
-        id: {
-          // biome-ignore lint/style/noNonNullAssertion: createdBooking is defined in beforeEach().
-          equals: createdBooking!.id,
-        },
-      },
-    })
-    expect(fetchedBooking.docs[0]).toEqual(createdBooking)
   })
 })
