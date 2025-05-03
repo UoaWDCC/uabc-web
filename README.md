@@ -101,11 +101,12 @@ For example:
 ```ts
 /**
  * Adds two numbers together
- * @param {number} a - The first number
- * @param {number} b - The second number
- * @returns {number} The sum of the two numbers
+ *
+ * @param a The first number
+ * @param b The second number
+ * @returns The sum of the two numbers
  */
-export const add = (a: number, b: number) => a + b
+export const add = (a: number, b: number): number => a + b
 ```
 
 ### Environment Variables
