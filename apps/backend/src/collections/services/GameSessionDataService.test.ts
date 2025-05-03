@@ -1,9 +1,9 @@
 import { payload } from "@/data-layer/adapters/Payload"
 import { clearCollection } from "@/test-config/backend-utils"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
-import GameSessionScheduleService from "./GameSessionScheduleService"
+import GameSessionDataService from "./GameSessionDataService"
 
-const gameSessionScheduleService = new GameSessionScheduleService()
+const gameSessionDataService = new GameSessionDataService()
 
 describe("game session schedule service", () => {
   afterEach(async () => {
@@ -11,7 +11,7 @@ describe("game session schedule service", () => {
   })
 
   it("should create a game session schedule document", async () => {
-    const newGameSessionSchedule = await gameSessionScheduleService.createGameSessionSchedule(
+    const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
       gameSessionScheduleCreateMock,
     )
     const fetchedGameSessionSchedule = await payload.find({
@@ -27,9 +27,9 @@ describe("game session schedule service", () => {
 
   describe("getGameSessionSchedules", () => {
     it("should get all game session schedules when not using page and limit", async () => {
-      await gameSessionScheduleService.createGameSessionSchedule(gameSessionScheduleCreateMock)
+      await gameSessionDataService.createGameSessionSchedule(gameSessionScheduleCreateMock)
       const fetchedGameSessionSchedules =
-        await gameSessionScheduleService.getPaginatedGameSessionSchedules()
+        await gameSessionDataService.getPaginatedGameSessionSchedules()
       expect(fetchedGameSessionSchedules).not.toBeNull()
       expect(fetchedGameSessionSchedules?.totalDocs).toBeGreaterThan(0)
 
@@ -47,13 +47,13 @@ describe("game session schedule service", () => {
       const totalToSeed = 15
       await Promise.all(
         Array.from({ length: totalToSeed }).map(() =>
-          gameSessionScheduleService.createGameSessionSchedule(gameSessionScheduleCreateMock),
+          gameSessionDataService.createGameSessionSchedule(gameSessionScheduleCreateMock),
         ),
       )
 
       // test for getting page 2, where each page has a limit of 5 docs
       const fetchedGameSessionSchedules =
-        await gameSessionScheduleService.getPaginatedGameSessionSchedules({
+        await gameSessionDataService.getPaginatedGameSessionSchedules({
           page: 2,
           limit: 5,
         })
@@ -75,24 +75,25 @@ describe("game session schedule service", () => {
 
   describe("getGameSessionScheduleById", () => {
     it("should get a game session schedule by ID", async () => {
-      const newGameSessionSchedule = await gameSessionScheduleService.createGameSessionSchedule(
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
         gameSessionScheduleCreateMock,
       )
-      const fetchedGameSessionSchedule =
-        await gameSessionScheduleService.getGameSessionScheduleById(newGameSessionSchedule.id)
+      const fetchedGameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(
+        newGameSessionSchedule.id,
+      )
       expect(fetchedGameSessionSchedule).toEqual(newGameSessionSchedule)
     })
 
     it("should return null if game session schedule does not exist when searching by ID", async () => {
       await expect(
-        gameSessionScheduleService.getGameSessionScheduleById("fakeid"),
+        gameSessionDataService.getGameSessionScheduleById("fakeid"),
       ).rejects.toThrowError("Not Found")
     })
   })
 
   describe("updateGameSessionSchedule", () => {
     it("should update a game session schedule", async () => {
-      const newGameSessionSchedule = await gameSessionScheduleService.createGameSessionSchedule(
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
         gameSessionScheduleCreateMock,
       )
       const updatedData = {
@@ -100,7 +101,7 @@ describe("game session schedule service", () => {
         casualCapacity: 10,
       }
 
-      const updatedGameSessionSchedule = await gameSessionScheduleService.updateGameSessionSchedule(
+      const updatedGameSessionSchedule = await gameSessionDataService.updateGameSessionSchedule(
         newGameSessionSchedule.id,
         updatedData,
       )
@@ -116,7 +117,7 @@ describe("game session schedule service", () => {
         casualCapacity: 10,
       }
 
-      const updatedGameSessionSchedule = await gameSessionScheduleService.updateGameSessionSchedule(
+      const updatedGameSessionSchedule = await gameSessionDataService.updateGameSessionSchedule(
         "fakeid",
         updatedData,
       )
@@ -131,11 +132,11 @@ describe("game session schedule service", () => {
 
   describe("deleteGameSessionSchedule", () => {
     it("should delete a game session schedule", async () => {
-      const newGameSessionSchedule = await gameSessionScheduleService.createGameSessionSchedule(
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
         gameSessionScheduleCreateMock,
       )
 
-      const deletedGameSessionSchedule = await gameSessionScheduleService.deleteGameSessionSchedule(
+      const deletedGameSessionSchedule = await gameSessionDataService.deleteGameSessionSchedule(
         newGameSessionSchedule.id,
       )
       expect(deletedGameSessionSchedule).not.toBeNull()
@@ -143,9 +144,9 @@ describe("game session schedule service", () => {
     })
 
     it("should return null if game session schedule does not exist when deleting", async () => {
-      await expect(
-        gameSessionScheduleService.deleteGameSessionSchedule("fakeid"),
-      ).rejects.toThrowError("Not Found")
+      await expect(gameSessionDataService.deleteGameSessionSchedule("fakeid")).rejects.toThrowError(
+        "Not Found",
+      )
     })
   })
 })

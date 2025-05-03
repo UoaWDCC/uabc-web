@@ -7,7 +7,7 @@ const payload = await getPayload({
   config: configPromise,
 })
 
-export default class GameSessionScheduleService {
+export default class GameSessionDataService {
   /**
    * Creates a new game session schedule document
    * @param newGameSessionScheduleData the game session schedule data
