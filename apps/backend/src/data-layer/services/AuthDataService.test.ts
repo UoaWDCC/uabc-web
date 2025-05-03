@@ -9,7 +9,7 @@ const userDataService = new UserDataService()
 
 describe("auth service", () => {
   it("should create an authentication document", async () => {
-    userDataService.createUser(userMock)
+    await userDataService.createUser(userMock)
 
     const newAuth = await authDataService.createAuth(authenticationCreateMock)
     const fetchedAuth = await payload.find({
