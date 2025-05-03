@@ -54,16 +54,11 @@ export default class GameSessionScheduleService {
    * @returns the game session schedule document if it exists, otherwise null
    */
   public async getGameSessionScheduleById(id: string): Promise<GameSessionSchedule | null> {
-    try {
-      const gameSessionSchedule = await payload.findByID({
-        collection: "gameSessionSchedule",
-        id,
-      })
-      return gameSessionSchedule
-    } catch (error) {
-      console.error(`Error fetching game session schedule by ID ${id}:`, (error as Error).message)
-      return null
-    }
+    const gameSessionSchedule = await payload.findByID({
+      collection: "gameSessionSchedule",
+      id,
+    })
+    return gameSessionSchedule
   }
 
   /**
@@ -95,15 +90,10 @@ export default class GameSessionScheduleService {
    * @returns the deleted game session schedule document if it exists, otherwise null
    */
   public async deleteGameSessionSchedule(id: string): Promise<GameSessionSchedule | null> {
-    try {
-      const deletedGameSessionSchedule = await payload.delete({
-        collection: "gameSessionSchedule",
-        id,
-      })
-      return deletedGameSessionSchedule
-    } catch (error) {
-      console.error(`Error deleting game session schedule with ID ${id}:`, (error as Error).message)
-      return null
-    }
+    const deletedGameSessionSchedule = await payload.delete({
+      collection: "gameSessionSchedule",
+      id,
+    })
+    return deletedGameSessionSchedule
   }
 }

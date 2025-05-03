@@ -92,15 +92,9 @@ describe("game session schedule service", () => {
     })
 
     it("should return null if game session schedule does not exist when searching by ID", async () => {
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
-      const fetchedGameSessionSchedule =
-        await gameSessionScheduleService.getGameSessionScheduleById("fakeid")
-      expect(fetchedGameSessionSchedule).toBeNull()
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "Error fetching game session schedule by ID fakeid:",
-        "Not Found",
-      )
-      consoleErrorSpy.mockRestore()
+      await expect(
+        gameSessionScheduleService.getGameSessionScheduleById("fakeid"),
+      ).rejects.toThrowError("Not Found")
     })
   })
 
@@ -157,16 +151,9 @@ describe("game session schedule service", () => {
     })
 
     it("should return null if game session schedule does not exist when deleting", async () => {
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
-
-      const deletedGameSessionSchedule =
-        await gameSessionScheduleService.deleteGameSessionSchedule("fakeid")
-      expect(deletedGameSessionSchedule).toBeNull()
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "Error deleting game session schedule with ID fakeid:",
-        "Not Found",
-      )
-      consoleErrorSpy.mockRestore()
+      await expect(
+        gameSessionScheduleService.deleteGameSessionSchedule("fakeid"),
+      ).rejects.toThrowError("Not Found")
     })
   })
 })
