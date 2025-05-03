@@ -112,7 +112,7 @@ jobs:
       - name: Run Master Coverage
         run: |
           mkdir -p coverage
-          pnpm test:coverage
+          pnpm vitest --coverage
 
       - name: Upload Master Coverage Artifact
         uses: actions/upload-artifact@v4
