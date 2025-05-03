@@ -1,11 +1,7 @@
+import { payload } from "@/data-layer/adapters/Payload"
 import type { Booking } from "@/payload-types"
 import type { CreateBookingData } from "@/types/collections"
-import configPromise from "@payload-config"
-import { type PaginatedDocs, getPayload } from "payload"
-
-const payload = await getPayload({
-  config: configPromise,
-})
+import type { PaginatedDocs } from "payload"
 
 export default class BookingService {
   /**
