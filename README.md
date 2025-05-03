@@ -95,7 +95,7 @@ like [WebStorm](https://www.jetbrains.com/webstorm/) and [Zed](https://zed.dev/)
 
 #### Documentation
 
-We recommend usage of the [`JSDoc`](https://jsdoc.app/) syntax to document code. This will help other developers understand the function of code more easily, as names can be misleading. 
+We recommend usage of the [`JSDoc`](https://jsdoc.app/) syntax to document code. This will help other developers understand the function of code more easily, as names can be misleading.
 
 For example:
 ```ts
@@ -210,6 +210,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to make chang
 
 | Name     |   Role   |
 |----------|----------|
+| Benson Cho    | GOAT Mentor  |
 | Eddie Wang    | Project Manager  |
 | Jeffery Ji   | Tech Lead     |
 | Seungbeom Yang   | Developer/Designer   |
