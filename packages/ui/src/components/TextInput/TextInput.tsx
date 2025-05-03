@@ -141,6 +141,10 @@ export const INPUT_TYPES = Object.values(InputType)
 export enum InputState {
   Default = "default",
   Disabled = "disabled",
+  Hovered = "hovered",
+  Focused = "focused",
+  Active = "active",
+  HasValue = "has-value",
   Error = "error",
 }
 
@@ -268,7 +272,7 @@ export const TextInput = memo(
             )}
           </InputGroup>
           {label && (
-            <Label {...labelProps} left="sm" pointerEvents="none" position="absolute" top="0">
+            <Label left="sm" pointerEvents="none" position="absolute" top="0" {...labelProps}>
               {label}
             </Label>
           )}
