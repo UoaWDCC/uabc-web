@@ -209,18 +209,18 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to make chang
 
 ### 2025 Team 😎
 
-| Name     |   Role   |
-|----------|----------|
-| Benson Cho    | GOAT Mentor  |
-| Eddie Wang    | Project Manager  |
-| Jeffery Ji   | Tech Lead     |
-| Seungbeom Yang   | Developer/Designer   |
-| Benjamin Kee   | Developer     |
-| Brandon Chan   | Developer     |
-| Derrick Trang   | Developer     |
-| Mikai Somerville   | Developer     |
-| Shintaro Jokagi   | Developer     |
-| Ann Lowe   | Designer     |
-| Yvonne Lo   | Designer     |
+| Name             | Role               |
+|------------------|--------------------|
+| Benson Cho       | GOAT Mentor        |
+| Eddie Wang       | Project Manager    |
+| Jeffery Ji       | Tech Lead          |
+| Seungbeom Yang   | Developer/Designer |
+| Benjamin Kee     | Developer          |
+| Brandon Chan     | Developer          |
+| Derrick Trang    | Developer          |
+| Mikai Somerville | Developer          |
+| Shintaro Jokagi  | Developer          |
+| Ann Lowe         | Designer           |
+| Yvonne Lo        | Designer           |
 
 Shoutout to the team responsible for the prior iteration 👍 At [UABC Portal](https://github.com/UoaWDCC/uabc-portal).

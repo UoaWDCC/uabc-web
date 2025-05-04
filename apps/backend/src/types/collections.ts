@@ -1,12 +1,16 @@
 import type { Authentication, User } from "@/payload-types"
 
 /*
- * The Authentication Data Service typings
+ * Type for creating authentication data without system-generated fields
  */
 export type CreateAuthenticationData = Omit<Authentication, "id" | "createdAt" | "updatedAt">
 
 /*
- * The User Data Service typings
+ * Type for creating user data without system-generated fields
  */
 export type CreateUserData = Omit<User, "id" | "createdAt" | "updatedAt">
+
+/*
+ * Type for partially editing user data
+ */
 export type EditUserData = Partial<CreateUserData>

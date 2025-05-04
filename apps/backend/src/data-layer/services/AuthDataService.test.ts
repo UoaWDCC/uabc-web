@@ -12,14 +12,10 @@ describe("auth service", () => {
     await userDataService.createUser(userMock)
 
     const newAuth = await authDataService.createAuth(authenticationCreateMock)
-    const fetchedAuth = await payload.find({
+    const fetchedAuth = await payload.findByID({
       collection: "authentication",
-      where: {
-        id: {
-          equals: newAuth.id,
-        },
-      },
+      id: newAuth.id,
     })
-    expect(fetchedAuth.docs[0]).toEqual(newAuth)
+    expect(fetchedAuth).toEqual(newAuth)
   })
 })
