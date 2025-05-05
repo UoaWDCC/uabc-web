@@ -59,24 +59,6 @@
       "dependsOn": ["^storybook:build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "!**/*.stories.{tsx,jsx,mdx}"],
       "outputs": ["storybook-static/**"]
-    },
-    "test": {
-      "dependsOn": ["transit"],
-      "cache": true
-    },
-    "transit": {
-      "dependsOn": ["^transit"]
-    },
-    "test:watch": {
-      "dependsOn": ["transit"],
-      "cache": false,
-      "persistent": true
-    },
-    "test:coverage": {
-      "dependsOn": ["transit"],
-      "cache": true,
-      "persistent": false,
-      "outputs": ["coverage/**"]
     }
   },
   "ui": "tui"
