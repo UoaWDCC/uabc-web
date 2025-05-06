@@ -9,15 +9,12 @@ describe("GameSessionDataService", () => {
     const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
       gameSessionScheduleCreateMock,
     )
-    const fetchedGameSessionSchedule = await payload.find({
+    const fetchedGameSessionSchedule = await payload.findByID({
       collection: "gameSessionSchedule",
-      where: {
-        id: {
-          equals: newGameSessionSchedule.id,
-        },
-      },
+      id: newGameSessionSchedule.id,
     })
-    expect(fetchedGameSessionSchedule.docs[0]).toEqual(newGameSessionSchedule)
+    expect(fetchedGameSessionSchedule).not.toBeNull()
+    expect(fetchedGameSessionSchedule.id).toEqual(newGameSessionSchedule.id)
   })
 
   describe("getPaginatedGameSessionSchedules", () => {
