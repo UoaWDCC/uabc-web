@@ -1,14 +1,10 @@
+import { payload } from "@/data-layer/adapters/Payload"
 import type { GameSessionSchedule } from "@/payload-types"
 import type {
   CreateGameSessionScheduleData,
   UpdateGameSessionScheduleData,
 } from "@/types/collections"
-import configPromise from "@payload-config"
-import { type PaginatedDocs, getPayload } from "payload"
-
-const payload = await getPayload({
-  config: configPromise,
-})
+import type { PaginatedDocs } from "payload"
 
 export default class GameSessionDataService {
   /**
