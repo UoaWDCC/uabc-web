@@ -1,7 +1,7 @@
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import type { EditBookingData } from "@/types/collections"
 import { payload } from "../adapters/Payload"
-import BookingService from "./BookingService"
+import BookingService from "./BookingDataService"
 
 const bookingService = new BookingService()
 
