@@ -30,7 +30,7 @@ function UnmemoizedSelectSessionCard({
       variant={isSelected ? "primary" : "secondary"}
     >
       <div>
-        <span className="text-lg font-medium leading-5">
+        <span className="font-medium text-lg leading-5">
           {day} {isDisabled && "(Session Full)"}
         </span>
         <br />

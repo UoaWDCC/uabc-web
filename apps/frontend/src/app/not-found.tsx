@@ -16,12 +16,12 @@ const NotFoundPage = () => {
         <div className="mb-4 flex size-72 items-center justify-center opacity-70">
           <UabcLogoNotFound className="absolute min-w-[250px]" />
           {/* doubled because of weird font stroke */}
-          <h1 className="textStroke absolute z-10 select-none text-9xl font-bold text-white">
+          <h1 className="textStroke absolute z-10 select-none font-bold text-9xl text-white">
             404
           </h1>
-          <h1 className="z-10 select-none text-9xl font-bold text-background">404</h1>
+          <h1 className="z-10 select-none font-bold text-9xl text-background">404</h1>
         </div>
-        <p className="w-full text-center text-2xl font-medium text-foreground/70">Page not found</p>
+        <p className="w-full text-center font-medium text-2xl text-foreground/70">Page not found</p>
       </div>
       <div className="flex w-dvw flex-col gap-4 p-4">
         <Link href="/">

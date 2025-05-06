@@ -17,7 +17,8 @@
       ".next",
       "dist",
       ".turbo",
-      ".vscode"
+      ".vscode",
+      "coverage"
     ],
     "ignoreUnknown": false
   },
@@ -54,6 +55,13 @@
       },
       "suspicious": {
         "noExplicitAny": "warn"
+      },
+      "a11y": {
+        "all": true
+      },
+      "nursery": {
+        "useSortedClasses": "info",
+        "noImgElement": "info"
       }
     }
   },

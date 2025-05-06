@@ -13,7 +13,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         variant="card"
       >
         <div className="relative hidden lg:block">
-          <UabcHeaderText className="absolute -top-24 left-[50%] -translate-x-[50%]" />
+          <UabcHeaderText className="-top-24 -translate-x-[50%] absolute left-[50%]" />
           <UabcLogo className="flex justify-center" />
         </div>
 

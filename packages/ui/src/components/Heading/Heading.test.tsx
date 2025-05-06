@@ -1,4 +1,4 @@
-import { render } from "@/tests"
+import { render } from "@/test-utils"
 import { Heading } from "./Heading"
 import { DEFAULT_FONT_SIZES, DEFAULT_FONT_WEIGHTS } from "./Heading"
 import { Heading as HeadingModule } from "./index"
