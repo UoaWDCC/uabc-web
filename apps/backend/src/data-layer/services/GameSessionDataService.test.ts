@@ -103,13 +103,8 @@ describe("GameSessionDataService", () => {
     })
 
     it("should throw a NotFound error if game session schedule does not exist when updating", async () => {
-      const updatedData = {
-        capacity: 100,
-        casualCapacity: 10,
-      }
-
       await expect(
-        gameSessionDataService.updateGameSessionSchedule("fakeid", updatedData),
+        gameSessionDataService.updateGameSessionSchedule("fakeid", { capacity: 1 }),
       ).rejects.toThrowError("Not Found")
     })
   })
