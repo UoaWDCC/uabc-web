@@ -1,6 +1,5 @@
-import { cn } from "@/lib/utils"
 import type { PlayLevel } from "@/types/types"
-
+import { Button } from "@yamada-ui/react"
 interface LevelSelectorButtonProps {
   name?: PlayLevel
   selected: boolean
@@ -8,16 +7,15 @@ interface LevelSelectorButtonProps {
 }
 
 export const LevelSelectorButton = ({ name, selected, handleClick }: LevelSelectorButtonProps) => (
-  <button
-    className={cn(
-      "h-12 break-words rounded p-1 font-medium text-sm capitalize",
-      selected
-        ? "bg-primary text-primary-foreground"
-        : "bg-white text-tertiary hover:bg-tertiary/10 hover:text-tertiary",
-    )}
+  <Button
+    colorScheme="primary"
+    fontSize="sm"
+    fontWeight="medium"
+    height={12}
     onClick={handleClick}
-    type="button"
+    variant={selected ? "solid" : "ghost"}
+    wordBreak="break-word"
   >
     {name}
-  </button>
+  </Button>
 )
