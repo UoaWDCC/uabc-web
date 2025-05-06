@@ -44,9 +44,6 @@ async function SelectSessionPage({ currentUser }: CurrentUserProps) {
         {user.member && <PrepaidSessionsCounter prepaidSessions={user.prepaidSessions} />}
       </div>
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between">
-          {user.member && <PrepaidSessionsCounter prepaidSessions={user.prepaidSessions} />}
-        </div>
         <ClientSessionPage isMember={!!user.member} prepaidSessions={user.prepaidSessions} />
       </div>
     </div>

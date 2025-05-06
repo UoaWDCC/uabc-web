@@ -35,4 +35,6 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
   unobserve: vi.fn(),
 }))
 
-vi.spyOn(window.HTMLCanvasElement.prototype, "getContext").mockImplementation(() => null)
+// Only add this back when required
+// window.HTMLCanvasElement.prototype.getContext = vi.fn().mockImplementation(() => null)
+// vi.spyOn(window.HTMLCanvasElement.prototype, "getContext").mockImplementation(() => null)
