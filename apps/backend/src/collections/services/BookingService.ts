@@ -23,7 +23,7 @@ export default class BookingService {
    * @param id The ID of the Booking to find
    * @returns the Booking document if found, null otherwise.
    */
-  public async getBookingById(id: string): Promise<Booking | null> {
+  public async getBookingById(id: string): Promise<Booking> {
     return await payload.findByID({
       collection: "booking",
       id,
@@ -48,10 +48,7 @@ export default class BookingService {
    * @param data Data to update the Booking with
    * @returns The updated Booking if successful, null otherwise
    */
-  public async updateBooking(id: string, data: EditBookingData): Promise<Booking | null> {
-    const booking = await this.getBookingById(id)
-    if (!booking) return null
-
+  public async updateBooking(id: string, data: EditBookingData): Promise<Booking> {
     return await payload.update({
       collection: "booking",
       id,
@@ -65,7 +62,7 @@ export default class BookingService {
    * @param id The ID of the Booking to delete.
    * @returns The deleted Booking if successful, null otherwise.
    */
-  public async deleteBooking(id: string): Promise<Booking | null> {
+  public async deleteBooking(id: string): Promise<Booking> {
     return await payload.delete({
       collection: "booking",
       id,
