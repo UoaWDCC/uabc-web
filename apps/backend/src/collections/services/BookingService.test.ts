@@ -1,18 +1,11 @@
 import type { Booking } from "@/payload-types"
-import { clearCollection, testPayloadObject } from "@/test-config/backend-utils"
+import { testPayloadObject } from "@/test-config/backend-utils"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
-import dotenv from "dotenv"
 import BookingService from "./BookingService"
-
-dotenv.config()
 
 const bookingService = new BookingService()
 
 describe("booking service", () => {
-  afterEach(async () => {
-    await clearCollection(testPayloadObject, "booking")
-  })
-
   it("should create a booking document", async () => {
     const createdBooking = await bookingService.createBooking(bookingCreateMock)
 
