@@ -95,17 +95,18 @@ like [WebStorm](https://www.jetbrains.com/webstorm/) and [Zed](https://zed.dev/)
 
 #### Documentation
 
-We recommend usage of the [`JSDoc`](https://jsdoc.app/) syntax to document code. This will help other developers understand the function of code more easily, as names can be misleading. 
+We recommend usage of the [`JSDoc`](https://jsdoc.app/) syntax to document code. This will help other developers understand the function of code more easily, as names can be misleading.
 
 For example:
 ```ts
 /**
  * Adds two numbers together
- * @param {number} a - The first number
- * @param {number} b - The second number
- * @returns {number} The sum of the two numbers
+ *
+ * @param a The first number
+ * @param b The second number
+ * @returns The sum of the two numbers
  */
-export const add = (a: number, b: number) => a + b
+export const add = (a: number, b: number): number => a + b
 ```
 
 ### Environment Variables
@@ -208,17 +209,18 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to make chang
 
 ### 2025 Team 😎
 
-| Name     |   Role   |
-|----------|----------|
-| Eddie Wang    | Project Manager  |
-| Jeffery Ji   | Tech Lead     |
-| Seungbeom Yang   | Developer/Designer   |
-| Benjamin Kee   | Developer     |
-| Brandon Chan   | Developer     |
-| Derrick Trang   | Developer     |
-| Mikai Somerville   | Developer     |
-| Shintaro Jokagi   | Developer     |
-| Ann Lowe   | Designer     |
-| Yvonne Lo   | Designer     |
+| Name             | Role               |
+|------------------|--------------------|
+| Benson Cho       | GOAT Mentor        |
+| Eddie Wang       | Project Manager    |
+| Jeffery Ji       | Tech Lead          |
+| Seungbeom Yang   | Developer/Designer |
+| Benjamin Kee     | Developer          |
+| Brandon Chan     | Developer          |
+| Derrick Trang    | Developer          |
+| Mikai Somerville | Developer          |
+| Shintaro Jokagi  | Developer          |
+| Ann Lowe         | Designer           |
+| Yvonne Lo        | Designer           |
 
 Shoutout to the team responsible for the prior iteration 👍 At [UABC Portal](https://github.com/UoaWDCC/uabc-portal).
