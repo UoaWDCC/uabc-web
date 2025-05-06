@@ -17,3 +17,8 @@ export type CreateGameSessionData = Omit<GameSession, "id" | "createdAt" | "upda
  */
 export type CreateSemesterData = Omit<Semester, "id" | "createdAt" | "updatedAt">
 export type CreateUserData = Omit<User, "id" | "createdAt" | "updatedAt">
+
+/**
+ * Type for partially editing booking data
+ */
+export type EditBookingData = Partial<CreateBookingData>

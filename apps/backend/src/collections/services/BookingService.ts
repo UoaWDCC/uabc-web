@@ -1,6 +1,6 @@
 import { payload } from "@/data-layer/adapters/Payload"
 import type { Booking } from "@/payload-types"
-import type { CreateBookingData } from "@/types/collections"
+import type { CreateBookingData, EditBookingData } from "@/types/collections"
 import type { PaginatedDocs } from "payload"
 
 export default class BookingService {
@@ -48,10 +48,7 @@ export default class BookingService {
    * @param data Data to update the Booking with
    * @returns The updated Booking if successful, null otherwise
    */
-  public async updateBooking(
-    id: string,
-    data: Partial<Omit<Booking, "id" | "createdAt" | "updatedAt">>,
-  ): Promise<Booking | null> {
+  public async updateBooking(id: string, data: EditBookingData): Promise<Booking | null> {
     const booking = await this.getBookingById(id)
     if (!booking) return null
 
