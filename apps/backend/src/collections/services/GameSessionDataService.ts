@@ -8,9 +8,10 @@ import type { PaginatedDocs } from "payload"
 
 export default class GameSessionDataService {
   /**
-   * Creates a new game session schedule document
-   * @param newGameSessionScheduleData the game session schedule data
-   * @returns the created game session schedule document
+   * Creates a new {@link GameSessionSchedule} document
+   *
+   * @param {CreateGameSessionScheduleData} newGameSessionScheduleData the game session schedule data
+   * @returns the new {@link GameSessionSchedule} document
    */
   public async createGameSessionSchedule(
     newGameSessionScheduleData: CreateGameSessionScheduleData,
@@ -22,11 +23,11 @@ export default class GameSessionDataService {
   }
 
   /**
-   * Gets all game session schedules
+   * Gets paginated {@link GameSessionSchedule} documents
    *
    * @param {number} [page=1] the page number to fetch
    * @param {number} [limit=100] the number of documents per page
-   * @returns all game session schedules or null if there is an error
+   * @returns a {@link PaginatedDocs} object containing {@link GameSessionSchedule} documents
    */
   public async getPaginatedGameSessionSchedules(
     page = 1,
@@ -40,9 +41,10 @@ export default class GameSessionDataService {
   }
 
   /**
-   * Gets a game session schedule by ID
-   * @param id the ID of the game session schedule to fetch
-   * @returns the game session schedule document if it exists, otherwise null
+   * Gets a {@link GameSessionSchedule} by it's ID
+   *
+   * @param {string} id the ID of the {@link GameSessionSchedule} to fetch
+   * @returns the {@link GameSessionSchedule} document if it exists, otherwise throws a {@link NotFound} error
    */
   public async getGameSessionScheduleById(id: string): Promise<GameSessionSchedule> {
     return await payload.findByID({
@@ -52,10 +54,11 @@ export default class GameSessionDataService {
   }
 
   /**
-   * Updates a game session schedule by ID
-   * @param id the ID of the game session schedule to update
-   * @param data the new data for the game session schedule
-   * @returns the updated game session schedule document if it exists, otherwise null
+   * Updates a {@link GameSessionSchedule} by it's ID
+   *
+   * @param {string} id the ID of the {@link GameSessionSchedule} to update
+   * @param {UpdateGameSessionScheduleData} data the new data for the {@link GameSessionSchedule}
+   * @returns the updated {@link GameSessionSchedule} document if it exists, otherwise throws a {@link NotFound} error
    */
   public async updateGameSessionSchedule(
     id: string,
@@ -69,9 +72,10 @@ export default class GameSessionDataService {
   }
 
   /**
-   * Deletes a game session schedule given its ID
-   * @param id the ID of the game session schedule to delete
-   * @returns the deleted game session schedule document if it exists, otherwise null
+   * Deletes a {@link GameSessionSchedule} given its ID
+   *
+   * @param {string} id the ID of the {@link GameSessionSchedule} to delete
+   * @returns the deleted {@link GameSessionSchedule} document if it exists, otherwise throws a {@link NotFound} error
    */
   public async deleteGameSessionSchedule(id: string): Promise<GameSessionSchedule> {
     return await payload.delete({

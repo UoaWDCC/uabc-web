@@ -2,6 +2,10 @@ import type { Authentication, GameSessionSchedule, User } from "@/payload-types"
 
 export type CreateAuthenticationData = Omit<Authentication, "id" | "createdAt" | "updatedAt">
 export type CreateUserData = Omit<User, "id" | "createdAt" | "updatedAt">
+
+/**
+ * Type for creating a new {@link GameSessionSchedule} document
+ */
 export type CreateGameSessionScheduleData = Omit<
   GameSessionSchedule,
   "id" | "createdAt" | "updatedAt"
