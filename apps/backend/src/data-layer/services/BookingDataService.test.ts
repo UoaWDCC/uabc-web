@@ -1,14 +1,14 @@
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import type { EditBookingData } from "@/types/collections"
 import { payload } from "../adapters/Payload"
-import BookingService from "./BookingDataService"
+import BookingDataService from "./BookingDataService"
 
-const bookingService = new BookingService()
+const bookingDataService = new BookingDataService()
 
-describe("BookingService", () => {
+describe("bookingDataService", () => {
   describe("createBooking", () => {
     it("should create a booking document", async () => {
-      const createdBooking = await bookingService.createBooking(bookingCreateMock)
+      const createdBooking = await bookingDataService.createBooking(bookingCreateMock)
 
       const fetchedBooking = await payload.findByID({
         collection: "booking",
@@ -20,34 +20,34 @@ describe("BookingService", () => {
 
   describe("getBookingById", () => {
     it("should find a booking by ID", async () => {
-      const createdBooking = await bookingService.createBooking(bookingCreateMock)
+      const createdBooking = await bookingDataService.createBooking(bookingCreateMock)
 
-      const fetchedBooking = await bookingService.getBookingById(createdBooking.id)
+      const fetchedBooking = await bookingDataService.getBookingById(createdBooking.id)
       expect(fetchedBooking).toEqual(createdBooking)
     })
 
     it("should throw a Not Found error when a booking is not found by ID", async () => {
-      await expect(() => bookingService.getBookingById("Not a Booking ID")).rejects.toThrowError(
-        "Not Found",
-      )
+      await expect(() =>
+        bookingDataService.getBookingById("Not a Booking ID"),
+      ).rejects.toThrowError("Not Found")
     })
   })
 
   describe("getAllBookings", () => {
     it("should find all bookings", async () => {
-      const createdBooking = await bookingService.createBooking(bookingCreateMock)
-      const createdBooking2 = await bookingService.createBooking(bookingCreateMock2)
+      const createdBooking = await bookingDataService.createBooking(bookingCreateMock)
+      const createdBooking2 = await bookingDataService.createBooking(bookingCreateMock2)
 
       const limit = 1
 
       // Test getting 1st page.
-      const fetchedBooking2 = await bookingService.getAllBookings(limit, 1)
+      const fetchedBooking2 = await bookingDataService.getAllBookings(limit, 1)
       expect(fetchedBooking2.docs).toEqual(expect.arrayContaining([createdBooking2]))
 
       // Test getting next page.
       expect(fetchedBooking2.hasNextPage).true
       if (fetchedBooking2.hasNextPage && fetchedBooking2.nextPage) {
-        const fetchedBooking2Next = await bookingService.getAllBookings(
+        const fetchedBooking2Next = await bookingDataService.getAllBookings(
           limit,
           fetchedBooking2.nextPage,
         )
@@ -58,12 +58,12 @@ describe("BookingService", () => {
 
   describe("updateBooking", () => {
     it("should update a booking with the correct data", async () => {
-      const createdBooking = await bookingService.createBooking(bookingCreateMock)
+      const createdBooking = await bookingDataService.createBooking(bookingCreateMock)
       const updateData: EditBookingData = {
         playerLevel: "intermediate",
       }
 
-      const updatedBooking = await bookingService.updateBooking(createdBooking.id, updateData)
+      const updatedBooking = await bookingDataService.updateBooking(createdBooking.id, updateData)
       expect(updatedBooking).toEqual({
         ...createdBooking,
         playerLevel: updateData.playerLevel,
@@ -77,15 +77,15 @@ describe("BookingService", () => {
       }
 
       await expect(() =>
-        bookingService.updateBooking("Not a booking ID", updateData),
+        bookingDataService.updateBooking("Not a booking ID", updateData),
       ).rejects.toThrowError("Not Found")
     })
   })
 
   describe("deleteBooking", () => {
     it("should delete a booking successfully", async () => {
-      const createdBooking = await bookingService.createBooking(bookingCreateMock)
-      const deletedBooking = await bookingService.deleteBooking(createdBooking.id)
+      const createdBooking = await bookingDataService.createBooking(bookingCreateMock)
+      const deletedBooking = await bookingDataService.deleteBooking(createdBooking.id)
       expect(deletedBooking).toEqual(createdBooking)
 
       await expect(() =>
@@ -97,7 +97,7 @@ describe("BookingService", () => {
     })
 
     it("should throw a Not Found error when no booking is found to delete", async () => {
-      await expect(() => bookingService.deleteBooking("Not a booking ID")).rejects.toThrowError(
+      await expect(() => bookingDataService.deleteBooking("Not a booking ID")).rejects.toThrowError(
         "Not Found",
       )
     })

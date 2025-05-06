@@ -5,7 +5,7 @@ import type { PaginatedDocs } from "payload"
 // biome-ignore lint/correctness/noUnusedImports: NotFound is used in JSDoc comments
 import { NotFound } from "payload"
 
-export default class BookingService {
+export default class BookingDataService {
   /**
    * Creates a {@link Booking} document.
    *
