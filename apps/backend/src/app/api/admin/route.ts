@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 
-import SemesterService from "@/collections/services/SemesterDataService"
+import SemesterService from "@/data-layer/services/SemesterDataService"
 import type { CreateSemesterData } from "@/types/collections"
 import { CreateSemesterRequestBody } from "@/types/request-models.ts/SemesterRequests"
 import { ZodError } from "zod"

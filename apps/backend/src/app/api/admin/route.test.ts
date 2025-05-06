@@ -1,13 +1,12 @@
 import { StatusCodes } from "http-status-codes"
 
-import SemesterService from "@/collections/services/SemesterDataService"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { createMockNextPostRequest } from "@/test-config/backend-utils"
 import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
-import { describe, expect, it } from "vitest"
 import { POST } from "./route"
 
 describe("tests /api/admin/semesters", () => {
-  const semesterService = new SemesterService()
+  const semesterDataService = new SemesterDataService()
 
   describe("POST /api/admin/semesters", () => {
     it("should create a semester", async () => {
@@ -15,7 +14,7 @@ describe("tests /api/admin/semesters", () => {
       expect(res.status).toBe(StatusCodes.CREATED)
 
       const json = await res.json()
-      const fetchedSemester = await semesterService.getSemester(json.id)
+      const fetchedSemester = await semesterDataService.getSemesterById(json.id)
       expect(json).toEqual(fetchedSemester)
     })
 

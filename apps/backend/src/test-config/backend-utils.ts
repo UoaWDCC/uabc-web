@@ -51,7 +51,8 @@ export const paramsToPromise = <T extends Record<string, unknown>>(params: T): P
 
 /**
  * Send a Post Request Mock to URL
- * @param url
+ *
+ * @param url The url of the endpoint
  * @param body Post Request body
  * @returns
  */
