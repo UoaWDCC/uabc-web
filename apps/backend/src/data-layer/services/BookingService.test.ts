@@ -1,6 +1,6 @@
-import { testPayloadObject } from "@/test-config/backend-utils"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import type { EditBookingData } from "@/types/collections"
+import { payload } from "../adapters/Payload"
 import BookingService from "./BookingService"
 
 const bookingService = new BookingService()
@@ -10,7 +10,7 @@ describe("BookingService", () => {
     it("should create a booking document", async () => {
       const createdBooking = await bookingService.createBooking(bookingCreateMock)
 
-      const fetchedBooking = await testPayloadObject.findByID({
+      const fetchedBooking = await payload.findByID({
         collection: "booking",
         id: createdBooking.id,
       })
@@ -82,7 +82,7 @@ describe("BookingService", () => {
       expect(deletedBooking).toEqual(createdBooking)
 
       await expect(() =>
-        testPayloadObject.findByID({
+        payload.findByID({
           collection: "booking",
           id: createdBooking.id,
         }),
