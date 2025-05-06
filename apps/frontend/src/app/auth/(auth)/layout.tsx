@@ -1,27 +1,27 @@
 "use client"
-
-import { Card } from "@/components/Composite/Card"
 import { UabcHeaderText } from "@/components/Composite/UabcHeaderText"
 import { UabcLogo } from "@/components/Composite/UabcLogo"
-import { Container } from "@yamada-ui/react"
+import { Card, Center, Container, VStack } from "@yamada-ui/react"
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid min-h-dvh w-dvw place-items-center sm:p-8">
-      <Card
-        className="flex h-full w-full flex-col justify-between border-0 bg-transparent py-8 sm:max-h-[780px] sm:max-w-[440px] sm:border sm:bg-card lg:grid lg:max-h-[600px] lg:max-w-[900px] lg:grid-cols-2 lg:place-items-center"
-        variant="card"
+    <Center minH="100dvh">
+      <Container
+        as={Card}
+        flexDirection={{ base: "column", lg: "row" }}
+        maxW={{
+          base: "none",
+          sm: "450px",
+          lg: "900px",
+        }}
       >
-        <div className="relative hidden lg:block">
-          <UabcHeaderText className="-top-24 -translate-x-[50%] absolute left-[50%]" />
-          <UabcLogo className="flex justify-center" />
-        </div>
-
-        <UabcHeaderText className="mb-4 lg:hidden" />
-        <UabcLogo className="flex justify-center lg:hidden" />
+        <Center as={VStack} p={4}>
+          <UabcHeaderText />
+          <UabcLogo />
+        </Center>
 
         <Container>{children}</Container>
-      </Card>
-    </div>
+      </Container>
+    </Center>
   )
 }
