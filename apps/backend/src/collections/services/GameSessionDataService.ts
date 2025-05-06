@@ -15,11 +15,10 @@ export default class GameSessionDataService {
   public async createGameSessionSchedule(
     newGameSessionScheduleData: CreateGameSessionScheduleData,
   ): Promise<GameSessionSchedule> {
-    const newGameSessionSchedule = await payload.create({
+    return await payload.create({
       collection: "gameSessionSchedule",
       data: newGameSessionScheduleData,
     })
-    return newGameSessionSchedule
   }
 
   /**
@@ -45,12 +44,11 @@ export default class GameSessionDataService {
    * @param id the ID of the game session schedule to fetch
    * @returns the game session schedule document if it exists, otherwise null
    */
-  public async getGameSessionScheduleById(id: string): Promise<GameSessionSchedule | null> {
-    const gameSessionSchedule = await payload.findByID({
+  public async getGameSessionScheduleById(id: string): Promise<GameSessionSchedule> {
+    return await payload.findByID({
       collection: "gameSessionSchedule",
       id,
     })
-    return gameSessionSchedule
   }
 
   /**
@@ -62,18 +60,12 @@ export default class GameSessionDataService {
   public async updateGameSessionSchedule(
     id: string,
     data: UpdateGameSessionScheduleData,
-  ): Promise<GameSessionSchedule | null> {
-    try {
-      const updatedGameSessionSchedule = await payload.update({
-        collection: "gameSessionSchedule",
-        id,
-        data,
-      })
-      return updatedGameSessionSchedule
-    } catch (error) {
-      console.error(`Error updating game session schedule with ID ${id}:`, (error as Error).message)
-      return null
-    }
+  ): Promise<GameSessionSchedule> {
+    return await payload.update({
+      collection: "gameSessionSchedule",
+      id,
+      data,
+    })
   }
 
   /**
@@ -81,11 +73,10 @@ export default class GameSessionDataService {
    * @param id the ID of the game session schedule to delete
    * @returns the deleted game session schedule document if it exists, otherwise null
    */
-  public async deleteGameSessionSchedule(id: string): Promise<GameSessionSchedule | null> {
-    const deletedGameSessionSchedule = await payload.delete({
+  public async deleteGameSessionSchedule(id: string): Promise<GameSessionSchedule> {
+    return await payload.delete({
       collection: "gameSessionSchedule",
       id,
     })
-    return deletedGameSessionSchedule
   }
 }
