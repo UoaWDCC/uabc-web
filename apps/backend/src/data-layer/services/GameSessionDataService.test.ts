@@ -1,15 +1,10 @@
 import { payload } from "@/data-layer/adapters/Payload"
-import { clearCollection } from "@/test-config/backend-utils"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import GameSessionDataService from "./GameSessionDataService"
 
 const gameSessionDataService = new GameSessionDataService()
 
 describe("GameSessionDataService", () => {
-  afterEach(async () => {
-    await clearCollection(payload, "gameSessionSchedule")
-  })
-
   it("should create a game session schedule document", async () => {
     const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
       gameSessionScheduleCreateMock,
