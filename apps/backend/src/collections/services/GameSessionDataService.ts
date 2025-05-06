@@ -1,5 +1,8 @@
 import type { GameSessionSchedule } from "@/payload-types"
-import type { CreateGameSessionScheduleData } from "@/types/collections"
+import type {
+  CreateGameSessionScheduleData,
+  UpdateGameSessionScheduleData,
+} from "@/types/collections"
 import configPromise from "@payload-config"
 import { type PaginatedDocs, getPayload } from "payload"
 
@@ -68,7 +71,7 @@ export default class GameSessionDataService {
    */
   public async updateGameSessionSchedule(
     id: string,
-    data: Partial<CreateGameSessionScheduleData>,
+    data: UpdateGameSessionScheduleData,
   ): Promise<GameSessionSchedule | null> {
     try {
       const updatedGameSessionSchedule = await payload.update({
