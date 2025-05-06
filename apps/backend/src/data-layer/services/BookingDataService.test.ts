@@ -38,14 +38,21 @@ describe("BookingService", () => {
       const createdBooking = await bookingService.createBooking(bookingCreateMock)
       const createdBooking2 = await bookingService.createBooking(bookingCreateMock2)
 
-      // Test getting pages (with 1 Booking per page).
       const limit = 1
-      expect((await bookingService.getAllBookings(limit, 1)).docs).toEqual(
-        expect.arrayContaining([createdBooking2]),
-      )
-      expect((await bookingService.getAllBookings(limit, 2)).docs).toEqual(
-        expect.arrayContaining([createdBooking]),
-      )
+
+      // Test getting 1st page.
+      const fetchedBooking2 = await bookingService.getAllBookings(limit, 1)
+      expect(fetchedBooking2.docs).toEqual(expect.arrayContaining([createdBooking2]))
+
+      // Test getting next page.
+      expect(fetchedBooking2.hasNextPage).true
+      if (fetchedBooking2.hasNextPage && fetchedBooking2.nextPage) {
+        const fetchedBooking2Next = await bookingService.getAllBookings(
+          limit,
+          fetchedBooking2.nextPage,
+        )
+        expect(fetchedBooking2Next.docs).toEqual(expect.arrayContaining([createdBooking]))
+      }
     })
   })
 
