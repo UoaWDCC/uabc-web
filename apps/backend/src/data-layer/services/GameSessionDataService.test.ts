@@ -120,6 +120,11 @@ describe("GameSessionDataService", () => {
       )
       expect(deletedGameSessionSchedule).not.toBeNull()
       expect(deletedGameSessionSchedule).toEqual(newGameSessionSchedule)
+
+      // check that the document is deleted
+      await expect(
+        gameSessionDataService.getGameSessionScheduleById(deletedGameSessionSchedule.id),
+      ).rejects.toThrowError("Not Found")
     })
 
     it("should throw a NotFound error if game session schedule does not exist when deleting", async () => {
