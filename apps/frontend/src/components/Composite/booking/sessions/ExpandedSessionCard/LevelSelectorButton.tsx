@@ -13,6 +13,7 @@ export const LevelSelectorButton = ({ name, selected, handleClick }: LevelSelect
     fontWeight="medium"
     height={12}
     onClick={handleClick}
+    textTransform="capitalize"
     variant={selected ? "solid" : "ghost"}
     wordBreak="break-word"
   >
