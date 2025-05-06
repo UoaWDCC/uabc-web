@@ -24,26 +24,20 @@ export default class GameSessionDataService {
 
   /**
    * Gets all game session schedules
+   *
+   * @param {number} [page=1] the page number to fetch
+   * @param {number} [limit=100] the number of documents per page
    * @returns all game session schedules or null if there is an error
    */
-  public async getPaginatedGameSessionSchedules({
+  public async getPaginatedGameSessionSchedules(
     page = 1,
-    limit = 10,
-  }: {
-    page?: number
-    limit?: number
-  } = {}): Promise<PaginatedDocs<GameSessionSchedule> | null> {
-    try {
-      const gameSessionSchedules = await payload.find({
-        collection: "gameSessionSchedule",
-        page,
-        limit,
-      })
-      return gameSessionSchedules
-    } catch (error) {
-      console.error("Error fetching game session schedules:", error)
-      return null
-    }
+    limit = 100,
+  ): Promise<PaginatedDocs<GameSessionSchedule>> {
+    return await payload.find({
+      collection: "gameSessionSchedule",
+      page,
+      limit,
+    })
   }
 
   /**

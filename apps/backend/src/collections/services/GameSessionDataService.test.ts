@@ -25,7 +25,7 @@ describe("game session schedule service", () => {
     expect(fetchedGameSessionSchedule.docs[0]).toEqual(newGameSessionSchedule)
   })
 
-  describe("getGameSessionSchedules", () => {
+  describe("getPaginatedGameSessionSchedules", () => {
     it("should get all game session schedules when not using page and limit", async () => {
       await gameSessionDataService.createGameSessionSchedule(gameSessionScheduleCreateMock)
       const fetchedGameSessionSchedules =
@@ -35,7 +35,7 @@ describe("game session schedule service", () => {
 
       // check that pagination format is correct
       expect(fetchedGameSessionSchedules?.page).toBe(1)
-      expect(fetchedGameSessionSchedules?.limit).toBe(10)
+      expect(fetchedGameSessionSchedules?.limit).toBe(100)
 
       expect(fetchedGameSessionSchedules?.hasPrevPage).toBe(false)
       expect(fetchedGameSessionSchedules?.prevPage).toBe(null)
@@ -53,10 +53,7 @@ describe("game session schedule service", () => {
 
       // test for getting page 2, where each page has a limit of 5 docs
       const fetchedGameSessionSchedules =
-        await gameSessionDataService.getPaginatedGameSessionSchedules({
-          page: 2,
-          limit: 5,
-        })
+        await gameSessionDataService.getPaginatedGameSessionSchedules(2, 5)
       expect(fetchedGameSessionSchedules).not.toBeNull()
 
       expect(fetchedGameSessionSchedules?.docs).toHaveLength(5)
