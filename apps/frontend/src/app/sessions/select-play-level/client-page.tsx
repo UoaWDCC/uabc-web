@@ -14,7 +14,10 @@ export default function ClientSelectPlayLevelPage() {
   const router = useRouter()
 
   const cart = useCartStore((state) => state.cart)
-  const notice = useNotice()
+  const notice = useNotice({
+    placement: "bottom-right",
+    isClosable: true,
+  })
 
   const { mutate, isPending } = useBookingMutation()
 
@@ -55,24 +58,18 @@ export default function ClientSelectPlayLevelPage() {
             description:
               "Unfortunately, one of the sessions you selected is now full. Please choose another session.",
             status: "error",
-            placement: "bottom-right",
-            isClosable: true,
           })
         } else if (code === "ALREADY_BOOKED") {
           notice({
             title: "Session Already Booked",
             description: "You have already booked this session. Please select a different session.",
             status: "error",
-            placement: "bottom-right",
-            isClosable: true,
           })
         } else if (code === "LIMIT_REACHED") {
           notice({
             title: "Maximum booking limit reached.",
             description: "You have already reached the session booking limit for this week.",
             status: "error",
-            placement: "bottom-right",
-            isClosable: true,
           })
         } else if (code === "TOO_MANY_REQUESTS") {
           notice({
@@ -80,16 +77,12 @@ export default function ClientSelectPlayLevelPage() {
             description:
               "You have made too many booking requests in a short period. Please wait a moment and try again.",
             status: "error",
-            placement: "bottom-right",
-            isClosable: true,
           })
         } else {
           notice({
             title: "Something went wrong.",
             description: "An error occurred while confirming your booking. Please try again.",
             status: "error",
-            placement: "bottom-right",
-            isClosable: true,
           })
         }
 
