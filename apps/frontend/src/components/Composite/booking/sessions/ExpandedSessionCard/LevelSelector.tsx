@@ -5,7 +5,7 @@ import {
   Drawer,
   DrawerBody,
   DrawerHeader,
-  SimpleGrid,
+  SegmentedControl,
   Text,
   useDisclosure,
 } from "@yamada-ui/react"
@@ -40,16 +40,15 @@ export const LevelSelector = ({ id, selectedLevel }: LevelSelectorProps) => {
           </Text>
         </DrawerHeader>
         <DrawerBody>
-          <SimpleGrid columns={3} width="full">
+          <SegmentedControl colorScheme="primary" width="full">
             {Object.values(PlayLevel).map((playLevel) => (
               <LevelSelectorButton
                 handleClick={() => updatePlayLevelById(id, playLevel)}
                 key={playLevel}
                 name={playLevel}
-                selected={selectedLevel === playLevel}
               />
             ))}
-          </SimpleGrid>
+          </SegmentedControl>
         </DrawerBody>
       </Drawer>
     </>

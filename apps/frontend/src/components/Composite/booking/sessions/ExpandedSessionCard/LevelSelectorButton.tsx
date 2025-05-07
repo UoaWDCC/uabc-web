@@ -1,22 +1,20 @@
 import type { PlayLevel } from "@/types/types"
-import { Button } from "@yamada-ui/react"
+import { SegmentedControlButton } from "@yamada-ui/react"
 interface LevelSelectorButtonProps {
   name?: PlayLevel
-  selected: boolean
   handleClick: () => void
 }
 
-export const LevelSelectorButton = ({ name, selected, handleClick }: LevelSelectorButtonProps) => (
-  <Button
-    colorScheme="primary"
+export const LevelSelectorButton = ({ name, handleClick }: LevelSelectorButtonProps) => (
+  <SegmentedControlButton
     fontSize="sm"
     fontWeight="medium"
     height={12}
     onClick={handleClick}
     textTransform="capitalize"
-    variant={selected ? "solid" : "ghost"}
+    value={name ?? ""}
     wordBreak="break-word"
   >
     {name}
-  </Button>
+  </SegmentedControlButton>
 )
