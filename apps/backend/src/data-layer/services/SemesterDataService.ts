@@ -1,7 +1,6 @@
 import { payload } from "@/data-layer/adapters/Payload"
 import type { Semester } from "@/payload-types"
 import type { CreateSemesterData, EditSemesterData } from "@/types/collections"
-import type { PaginatedDocs } from "payload"
 
 export default class SemesterDataService {
   /**
@@ -22,11 +21,12 @@ export default class SemesterDataService {
    *
    * @returns Retrieved all {@link Semester} documents
    */
-  public async getAllSemesters(): Promise<PaginatedDocs<Semester>> {
-    return await payload.find({
+  public async getAllSemesters(): Promise<Semester[]> {
+    const { docs } = await payload.find({
       collection: "semester",
       pagination: false,
     })
+    return docs
   }
 
   /**

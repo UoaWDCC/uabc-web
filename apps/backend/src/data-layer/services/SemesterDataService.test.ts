@@ -33,9 +33,9 @@ describe("SemesterDataService", () => {
     it("should get all semesters", async () => {
       const semester1 = await semesterDataService.createSemester(semesterCreateMock)
       const semester2 = await semesterDataService.createSemester(semesterCreateMock)
-      const fetchedSemester = await semesterDataService.getAllSemesters()
-      expect(fetchedSemester.docs.length).toEqual(2)
-      expect(fetchedSemester.docs).toStrictEqual(expect.arrayContaining([semester1, semester2]))
+      const fetchedSemesters = await semesterDataService.getAllSemesters()
+      expect(fetchedSemesters.length).toStrictEqual(2)
+      expect(fetchedSemesters).toStrictEqual(expect.arrayContaining([semester2, semester1]))
     })
   })
 
