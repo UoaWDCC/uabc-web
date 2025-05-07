@@ -26,7 +26,8 @@
     "test:watch": "cross-env NODE_ENV=test vitest",
     "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
     "theme": "yamada-cli tokens ./packages/theme/src",
-    "postinstall": "pnpm theme"
+    "postinstall": "pnpm theme",
+    "commitlint": "commitlint --edit"
   },
   "dependencies": {
     "@repo/test-config": "workspace:*",
@@ -34,6 +35,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
