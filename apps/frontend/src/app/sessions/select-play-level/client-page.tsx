@@ -5,17 +5,16 @@ import { useMemo } from "react"
 
 import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
 import { ExpandedSessionCard } from "@/components/Composite/booking/sessions/ExpandedSessionCard"
-import { Button } from "@/components/Generic/ui/button"
-import { useToast } from "@/components/Generic/ui/use-toast"
 import { useBookingMutation } from "@/hooks/mutations/booking"
 import { useCartStore } from "@/stores/useCartStore"
 import { PlayLevel } from "@/types/types"
+import { Box, Button, Container, Flex, For, VStack, useNotice } from "@yamada-ui/react"
 
 export default function ClientSelectPlayLevelPage() {
   const router = useRouter()
 
   const cart = useCartStore((state) => state.cart)
-  const { toast } = useToast()
+  const notice = useNotice()
 
   const { mutate, isPending } = useBookingMutation()
 
@@ -51,36 +50,46 @@ export default function ClientSelectPlayLevelPage() {
         const code = e.message
 
         if (code === "SESSION_FULL") {
-          toast({
+          notice({
             title: "Session Full",
             description:
               "Unfortunately, one of the sessions you selected is now full. Please choose another session.",
-            variant: "destructive",
+            status: "error",
+            placement: "bottom-right",
+            isClosable: true,
           })
         } else if (code === "ALREADY_BOOKED") {
-          toast({
+          notice({
             title: "Session Already Booked",
             description: "You have already booked this session. Please select a different session.",
-            variant: "destructive",
+            status: "error",
+            placement: "bottom-right",
+            isClosable: true,
           })
         } else if (code === "LIMIT_REACHED") {
-          toast({
+          notice({
             title: "Maximum booking limit reached.",
             description: "You have already reached the session booking limit for this week.",
-            variant: "destructive",
+            status: "error",
+            placement: "bottom-right",
+            isClosable: true,
           })
         } else if (code === "TOO_MANY_REQUESTS") {
-          toast({
+          notice({
             title: "Too Many Requests",
             description:
               "You have made too many booking requests in a short period. Please wait a moment and try again.",
-            variant: "destructive",
+            status: "error",
+            placement: "bottom-right",
+            isClosable: true,
           })
         } else {
-          toast({
+          notice({
             title: "Something went wrong.",
             description: "An error occurred while confirming your booking. Please try again.",
-            variant: "destructive",
+            status: "error",
+            placement: "bottom-right",
+            isClosable: true,
           })
         }
 
@@ -94,24 +103,30 @@ export default function ClientSelectPlayLevelPage() {
   }
 
   return (
-    <div className="mx-4 flex h-dvh flex-col gap-y-4">
-      <BackNavigationBar pathName="/sessions" title="Select your level of play" />
+    <Container h="100dvh">
+      <VStack h="100%">
+        <BackNavigationBar pathName="/sessions" title="Select your level of play" />
 
-      {sortedSessions.map((session) => (
-        <div className="mb-4" key={session.id}>
-          <ExpandedSessionCard gameSession={session} />
-        </div>
-      ))}
+        <For each={sortedSessions}>
+          {(session) => (
+            <Box key={session.id} marginBottom="md">
+              <ExpandedSessionCard gameSession={session} />
+            </Box>
+          )}
+        </For>
 
-      <div className="mb-10 flex flex-grow">
-        <Button
-          className="w-full self-end"
-          disabled={!isPlayLevelSelected || isPending}
-          onClick={handleConfirmButtonClick}
-        >
-          Confirm
-        </Button>
-      </div>
-    </div>
+        <Flex flexGrow={1} marginBottom={10}>
+          <Button
+            alignSelf="end"
+            colorScheme="primary"
+            disabled={!isPlayLevelSelected || isPending}
+            onClick={handleConfirmButtonClick}
+            width="full"
+          >
+            Confirm
+          </Button>
+        </Flex>
+      </VStack>
+    </Container>
   )
 }
