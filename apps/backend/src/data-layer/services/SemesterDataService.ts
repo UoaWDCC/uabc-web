@@ -17,9 +17,9 @@ export default class SemesterDataService {
   }
 
   /**
-   * Retrives all {@link Semester} documents from the database
+   * Finds all {@link Semester} documents
    *
-   * @returns Retrieved all {@link Semester} documents
+   * @returns  An array containing all {@link Semester} documents
    */
   public async getAllSemesters(): Promise<Semester[]> {
     const { docs } = await payload.find({
