@@ -39,8 +39,8 @@ async function ConfirmationPage(
           // @ts-ignore
           <ConfirmationMessage email={await props.currentUser.email} member={false} />
         }
-        <Button variant="ghost">
-          <Link href="/sessions">Return Home</Link>
+        <Button as={Link} href="/sessions">
+          Return Home
         </Button>
       </VStack>
 
