@@ -150,3 +150,6 @@ dist
 .turbo
 
 storybook-static
+
+# Zed code editor
+.zed
