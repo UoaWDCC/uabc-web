@@ -4,9 +4,9 @@ import type { CreateSemesterData, EditSemesterData } from "@/types/collections"
 
 export default class SemesterDataService {
   /**
-   * Creates a new {@link Semester} Document in the database
+   * Creates a new {@link Semester} document in the database
    *
-   * @param {createSemesterData} newSemesterData - The {@link CreateSemesterData} to create a new Semester
+   * @param {createSemesterData} newSemesterData The {@link CreateSemesterData} to create a new Semester
    * @returns The created {@link Semester} document
    */
   public async createSemester(createSemesterData: CreateSemesterData): Promise<Semester> {
@@ -19,7 +19,7 @@ export default class SemesterDataService {
   /**
    * Finds all {@link Semester} documents
    *
-   * @returns  An array containing all {@link Semester} documents
+   * @returns An array containing all {@link Semester} documents
    */
   public async getAllSemesters(): Promise<Semester[]> {
     const { docs } = await payload.find({
@@ -30,9 +30,9 @@ export default class SemesterDataService {
   }
 
   /**
-   * Finds a {@link Semester} Document from the database based on ID
+   * Finds a {@link Semester} document from the database based on ID
    *
-   * @param semesterId The ID of {@link Semester} to find
+   * @param id The ID of {@link Semester} to find
    * @returns The {@link Semester} document if exists, otherwise throws a {@link NotFound} error
    */
   public async getSemesterById(id: string): Promise<Semester> {
@@ -45,7 +45,7 @@ export default class SemesterDataService {
   /**
    * Updates {@link Semester} document
    *
-   * @param semesterId The ID of {@link Semester} to update
+   * @param id The ID of {@link Semester} to update
    * @param updateSemesterData The partial {@link EditSemesterData} to update the {@link Semester} with
    * @returns The updated {@link Semester} document if successful, otherwise throws a {@link NotFound} error
    */
@@ -60,7 +60,7 @@ export default class SemesterDataService {
   /**
    * Deletes a {@link Semester} document
    *
-   * @param semesterId The ID of the {@link Semester} to delete
+   * @param id The ID of the {@link Semester} to delete
    * @returns The deleted {@link Semester} document if successful, otherwise throws a {@link NotFound} error
    */
   public async deleteSemester(id: string): Promise<Semester> {
