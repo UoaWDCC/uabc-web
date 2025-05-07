@@ -27,7 +27,7 @@ async function ConfirmationPage(
         />
 
         <Link href="/">
-          <UabcHeaderText className="mt-4" />
+          <UabcHeaderText />
         </Link>
       </Center>
 
