@@ -15,7 +15,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           lg: "900px",
         }}
       >
-        <Center as={VStack} p={4}>
+        <Center as={VStack}>
           <UabcHeaderText />
           <UabcLogo />
         </Center>

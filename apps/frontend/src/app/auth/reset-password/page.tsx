@@ -18,8 +18,11 @@ export default async function ResetPasswordPage(props: {
 }) {
   const parseResult = searchParamsSchema.safeParse(await props.searchParams)
 
-  // Get token search param, or redirect to login page if not defined.
-  const { token } = parseResult.success ? parseResult.data : redirect("/auth/login")
+  if (!parseResult.success) {
+    return redirect("/auth/login")
+  }
+
+  const { token } = parseResult.data
 
   // TODO: Check if token is expired
   const tokenExpired = !token
