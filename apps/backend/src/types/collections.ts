@@ -1,4 +1,11 @@
-import type { Authentication, Semester, User } from "@/payload-types"
+import type {
+  Authentication,
+  Booking,
+  GameSession,
+  GameSessionSchedule,
+  Semester,
+  User,
+} from "@/payload-types"
 
 /*
  * Type for creating authentication data without system-generated fields
@@ -6,14 +13,41 @@ import type { Authentication, Semester, User } from "@/payload-types"
 export type CreateAuthenticationData = Omit<Authentication, "id" | "createdAt" | "updatedAt">
 
 /*
- * Type for creating user data without system-generated fields
+ * Type for creating booking data without system-generated fields
  */
-export type CreateUserData = Omit<User, "id" | "createdAt" | "updatedAt">
+export type CreateBookingData = Omit<Booking, "id" | "createdAt" | "updatedAt">
+
+/*
+ * Type for creating game session data without system-generated fields
+ */
+export type CreateGameSessionData = Omit<GameSession, "id" | "createdAt" | "updatedAt">
 
 /*
  * Type for creating semester data without system-generated fields
  */
 export type CreateSemesterData = Omit<Semester, "id" | "createdAt" | "updatedAt">
+
+/*
+ * Type for creating user data without system-generated fields
+ */
+export type CreateUserData = Omit<User, "id" | "createdAt" | "updatedAt">
+
+/**
+ * Type for creating a new {@link GameSessionSchedule} document
+ */
+export type CreateGameSessionScheduleData = Omit<
+  GameSessionSchedule,
+  "id" | "createdAt" | "updatedAt"
+>
+
+/**
+ * Type for updating a {@link GameSessionSchedule} document
+ */
+export type UpdateGameSessionScheduleData = Partial<CreateGameSessionScheduleData>
+/*
+ * Type for partially editing booking data
+ */
+export type EditBookingData = Partial<CreateBookingData>
 
 /*
  * Type for partially editing semester data

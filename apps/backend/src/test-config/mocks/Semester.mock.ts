@@ -12,13 +12,13 @@ export const semesterCreateMock: CreateSemesterData = {
 }
 
 export const semesterMock: Semester = {
-  id: "carrotsaregudforeyesight",
+  id: "e0b2e0db3b65d10f864aeedb",
   name: "Semester 1 2025",
   startDate: "2025-03-03T00:00:00.000+13:00",
   endDate: "2025-06-30T00:00:00.000+12:00",
   breakStart: "2025-04-14T00:00:00.000+12:00",
   breakEnd: "2025-04-25T00:00:00.000+12:00",
-  bookingOpenDay: "tuesday",
+  bookingOpenDay: "monday",
   bookingOpenTime: "1970-01-01T00:00:00.000+00:00",
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),
