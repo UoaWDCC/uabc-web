@@ -31,7 +31,7 @@ async function ConfirmationPage(
         </Link>
       </Center>
 
-      <VStack alignItems="center" flexGrow={1} justifyContent="center" paddingY={10}>
+      <Center as={VStack} flexGrow={1}>
         {
           /**
            * // TODO
@@ -42,7 +42,7 @@ async function ConfirmationPage(
         <Button as={Link} href="/sessions">
           Return Home
         </Button>
-      </VStack>
+      </Center>
       <Bleed block="md" inline="md">
         <VStack backgroundColor="primary" padding="md">
           <Text color="white" fontSize="xl" fontWeight="semibold">
