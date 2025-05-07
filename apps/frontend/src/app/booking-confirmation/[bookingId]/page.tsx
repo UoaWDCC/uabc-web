@@ -5,7 +5,7 @@ import { CartClearer } from "@/components/Composite/booking/confirmation/CartCle
 import ConfirmationMessage from "@/components/Composite/booking/confirmation/ConfirmationMessage"
 import type { CurrentUserProps } from "@/lib/hoc/withCurrentUser"
 import withCurrentUser from "@/lib/hoc/withCurrentUser"
-import { Box, Button, Center, Text, VStack } from "@yamada-ui/react"
+import { Bleed, Box, Button, Center, Container, Text, VStack } from "@yamada-ui/react"
 
 export const metadata = {
   title: "Booking Confirmation - UABC Booking Portal",
@@ -15,8 +15,8 @@ async function ConfirmationPage(
   props: CurrentUserProps & { params: Promise<{ bookingId: string }> },
 ) {
   return (
-    <VStack minHeight="100dvh">
-      <Center height={32} position="relative">
+    <Container height="100dvh">
+      <Center as={Bleed} block="md" height={32} inline="md" position="relative">
         <Box
           backgroundColor="gray.50"
           height="full"
@@ -43,14 +43,14 @@ async function ConfirmationPage(
           Return Home
         </Button>
       </VStack>
-
-      <VStack backgroundColor="primary" padding="md">
-        <Text color="white" fontSize="xl" fontWeight="semibold">
-          Rackets at the ready!
-        </Text>
-        {
-          // TODO: fetch actual data
-          /**
+      <Bleed block="md" inline="md">
+        <VStack backgroundColor="primary" padding="md">
+          <Text color="white" fontSize="xl" fontWeight="semibold">
+            Rackets at the ready!
+          </Text>
+          {
+            // TODO: fetch actual data
+            /**
            sessions.map((session) => (
            <ConfirmedSessionCard
            key={session.id}
@@ -61,11 +61,12 @@ async function ConfirmationPage(
            endTime={convertTo12HourFormat(session.endTime)}
            />
            ))*/
-        }
-        {/* TODO: Replace with actual session data */}
-      </VStack>
+          }
+          {/* TODO: Replace with actual session data */}
+        </VStack>
+      </Bleed>
       <CartClearer />
-    </VStack>
+    </Container>
   )
 }
 
