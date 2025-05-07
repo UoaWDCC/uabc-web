@@ -1,5 +1,5 @@
 import { CircleCheckIcon, ClockIcon } from "@yamada-ui/lucide"
-import { Box, Center, Container, Text } from "@yamada-ui/react"
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Text } from "@yamada-ui/react"
 
 interface ConfirmationMessageProps {
   member: boolean
@@ -8,28 +8,34 @@ interface ConfirmationMessageProps {
 
 export default function ConfirmationMessage({ member, email }: ConfirmationMessageProps) {
   return (
-    <Container maxWidth={96} textWrap="pretty" width="full">
-      <Center>
+    <Alert
+      alignItems="center"
+      border="none"
+      flexDirection="column"
+      gap="md"
+      justifyContent="center"
+      status={member ? "success" : "warning"}
+      textAlign="center"
+    >
+      <AlertIcon boxSize="120px" mr={0}>
         {member ? (
-          <CircleCheckIcon color="success" fontSize="120px" />
+          <CircleCheckIcon boxSize="120px" color="success" />
         ) : (
-          <ClockIcon color="yellow.500" fontSize="120px" />
+          <ClockIcon boxSize="120px" color="yellow.500" />
         )}
-      </Center>
-      <Box marginTop="medium" textAlign="center">
-        <Text fontSize="large" fontWeight="medium">
-          {member ? "Confirmed" : "Awaiting Payment"}
+      </AlertIcon>
+      <AlertTitle fontSize="lg" fontWeight="medium" mr={0}>
+        {member ? "Booking Confirmed" : "Booking Pending"}
+      </AlertTitle>
+      <AlertDescription color="tertiary" fontSize="sm" fontWeight="medium">
+        {member
+          ? "Booking successful! A confirmation email has been sent to "
+          : "Your booking is pending payment. Payment instructions have been sent to "}
+        <Text as="span" fontWeight="bold" textDecoration="underline">
+          {email}
         </Text>
-        <Text color="tertiary" fontSize="small" fontWeight="medium">
-          {member
-            ? "Booking successful! A confirmation email has been sent to "
-            : "Your booking is pending payment. Payment instructions have been sent to "}
-          <Text as="span" fontWeight="bold" textDecoration="underline">
-            {email}
-          </Text>
-          .
-        </Text>
-      </Box>
-    </Container>
+        .
+      </AlertDescription>
+    </Alert>
   )
 }
