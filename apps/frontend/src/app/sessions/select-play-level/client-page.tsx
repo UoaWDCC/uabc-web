@@ -8,7 +8,7 @@ import { ExpandedSessionCard } from "@/components/Composite/booking/sessions/Exp
 import { useBookingMutation } from "@/hooks/mutations/booking"
 import { useCartStore } from "@/stores/useCartStore"
 import { PlayLevel } from "@/types/types"
-import { Box, Button, Container, Flex, For, VStack, useNotice } from "@yamada-ui/react"
+import { Button, Container, For, Spacer, VStack, useNotice } from "@yamada-ui/react"
 
 export default function ClientSelectPlayLevelPage() {
   const router = useRouter()
@@ -101,24 +101,19 @@ export default function ClientSelectPlayLevelPage() {
         <BackNavigationBar pathName="/sessions" title="Select your level of play" />
 
         <For each={sortedSessions}>
-          {(session) => (
-            <Box key={session.id} marginBottom="md">
-              <ExpandedSessionCard gameSession={session} />
-            </Box>
-          )}
+          {(session) => <ExpandedSessionCard gameSession={session} key={session.id} />}
         </For>
 
-        <Flex flexGrow={1} marginBottom={10}>
-          <Button
-            alignSelf="end"
-            colorScheme="primary"
-            disabled={!isPlayLevelSelected || isPending}
-            onClick={handleConfirmButtonClick}
-            width="full"
-          >
-            Confirm
-          </Button>
-        </Flex>
+        <Spacer />
+
+        <Button
+          colorScheme="primary"
+          disabled={!isPlayLevelSelected || isPending}
+          onClick={handleConfirmButtonClick}
+          width="full"
+        >
+          Confirm
+        </Button>
       </VStack>
     </Container>
   )
