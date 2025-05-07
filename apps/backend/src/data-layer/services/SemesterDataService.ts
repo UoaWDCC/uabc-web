@@ -5,7 +5,7 @@ import type { PaginatedDocs } from "payload"
 
 export default class SemesterDataService {
   /**
-   * Creates a new Semester Document in the database
+   * Creates a new {@link Semester} Document in the database
    *
    * @param {createSemesterData} newSemesterData the {@link CreateSemesterData} to create a new Semester
    * @returns the created {@link Semester} document
@@ -16,21 +16,24 @@ export default class SemesterDataService {
       data: createSemesterData,
     })
   }
+
   /**
-   * Retrives all semester documents from the database
+   * Retrives all {@link Semester} documents from the database
    *
    * @returns Retrieved all {@link Semester} documents
    */
   public async getAllSemesters(): Promise<PaginatedDocs<Semester>> {
     return await payload.find({
       collection: "semester",
+      pagination: false,
     })
   }
+
   /**
    * Finds a {@link Semester} Document from the database based on ID
    *
-   * @param semesterId The ID of {@link semester} to find
-   * @returns The {@link semester} document if exists, otherwise throws a {@link NotFound} error
+   * @param semesterId The ID of {@link Semester} to find
+   * @returns The {@link Semester} document if exists, otherwise throws a {@link NotFound} error
    */
   public async getSemesterById(id: string): Promise<Semester> {
     return await payload.findByID({
@@ -38,10 +41,11 @@ export default class SemesterDataService {
       id,
     })
   }
+
   /**
-   * Updates {@link semester} document
+   * Updates {@link Semester} document
    *
-   * @param semesterId The ID of {@link semester} to update
+   * @param semesterId The ID of {@link Semester} to update
    * @param updateSemesterData The partial {@link EditSemesterData} to update the {@link Semester} with
    * @returns The updated {@link Semester} document if successful, otherwise throws a {@link NotFound} error
    */
@@ -52,6 +56,7 @@ export default class SemesterDataService {
       data,
     })
   }
+
   /**
    * Deletes a {@link Semester} document
    *

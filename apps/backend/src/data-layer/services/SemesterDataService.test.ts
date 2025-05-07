@@ -1,5 +1,5 @@
 import { payload } from "@/data-layer/adapters/Payload"
-import { semesterCreateMock, semesterMock } from "@/test-config/mocks/Semester.mock"
+import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import SemesterDataService from "./SemesterDataService"
 
 const semesterDataService = new SemesterDataService()
@@ -22,6 +22,7 @@ describe("SemesterDataService", () => {
       const fetchedSemester = await semesterDataService.getSemesterById(newSemester.id)
       expect(newSemester).toEqual(fetchedSemester)
     })
+
     it("should return null for non-existent ID", async () => {
       const fetchedSemester = semesterDataService.getSemesterById("nonexistentid")
       expect(fetchedSemester).rejects.toThrow("Not Found")
@@ -41,18 +42,23 @@ describe("SemesterDataService", () => {
   describe("updateSemester", () => {
     it("should update semester fields", async () => {
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
-      const updatedSemester = await semesterDataService.updateSemester(newSemester.id, semesterMock)
-      expect(updatedSemester.name).toStrictEqual("Semester 1 2025")
-      expect(updatedSemester.bookingOpenDay).toStrictEqual("tuesday")
+      const updatedSemester = await semesterDataService.updateSemester(newSemester.id, {
+        name: "test",
+        bookingOpenDay: "wednesday",
+      })
+      expect(updatedSemester.name).toStrictEqual("test")
+      expect(updatedSemester.bookingOpenDay).toStrictEqual("wednesday")
     })
+
     it("should return null when updating non-existent semester", async () => {
-      const updateNotFoundSemester = semesterDataService.updateSemester(
-        "nonexistentid",
-        semesterMock,
-      )
+      const updateNotFoundSemester = semesterDataService.updateSemester("nonexistentid", {
+        name: "test",
+        bookingOpenDay: "wednesday",
+      })
       await expect(updateNotFoundSemester).rejects.toThrow("Not Found")
     })
   })
+
   describe("deleteSemester", () => {
     it("should delete a semester", async () => {
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
@@ -61,6 +67,7 @@ describe("SemesterDataService", () => {
         "Not Found",
       )
     })
+
     it("should return null when deleting non-existent semester", async () => {
       await expect(semesterDataService.deleteSemester("nonexistentid")).rejects.toThrow("Not Found")
     })

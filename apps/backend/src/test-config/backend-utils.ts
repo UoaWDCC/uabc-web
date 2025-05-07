@@ -1,5 +1,4 @@
 import configPromise from "@payload-config"
-import { NextRequest } from "next/server"
 // setup-teardown-hook.js
 import { type CollectionSlug, type Payload, getPayload } from "payload"
 
@@ -35,33 +34,6 @@ export const clearCollection = async (payloadObject: Payload, collectionName: Co
       id: {
         exists: true,
       },
-    },
-  })
-}
-
-/**
- * Convert parameters to a promise
- *
- * @param params The parameters to convert to a promise
- * @returns A promise that resolves to the parameters
- */
-export const paramsToPromise = <T extends Record<string, unknown>>(params: T): Promise<T> => {
-  return Promise.resolve(params)
-}
-
-/**
- * Send a Post Request Mock to URL
- *
- * @param url The url of the endpoint
- * @param body Post Request body
- * @returns
- */
-export function createMockNextPostRequest(url: string, body: Record<string, unknown>) {
-  return new NextRequest(new URL(url, "http://localhost:3000"), {
-    method: "POST",
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/json",
     },
   })
 }
