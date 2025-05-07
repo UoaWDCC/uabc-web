@@ -6,8 +6,8 @@ export default class SemesterDataService {
   /**
    * Creates a new {@link Semester} Document in the database
    *
-   * @param {createSemesterData} newSemesterData the {@link CreateSemesterData} to create a new Semester
-   * @returns the created {@link Semester} document
+   * @param {createSemesterData} newSemesterData - The {@link CreateSemesterData} to create a new Semester
+   * @returns The created {@link Semester} document
    */
   public async createSemester(createSemesterData: CreateSemesterData): Promise<Semester> {
     return await payload.create({
@@ -61,7 +61,7 @@ export default class SemesterDataService {
    * Deletes a {@link Semester} document
    *
    * @param semesterId The ID of the {@link Semester} to delete
-   * @returns The deleted {@link Semester} document if succesful, otherwise throws a {@link NotFound} error
+   * @returns The deleted {@link Semester} document if successful, otherwise throws a {@link NotFound} error
    */
   public async deleteSemester(id: string): Promise<Semester> {
     return await payload.delete({
