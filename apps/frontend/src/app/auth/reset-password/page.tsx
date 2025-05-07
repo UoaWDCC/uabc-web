@@ -1,6 +1,6 @@
 import { ResetPasswordForm } from "@/components/Composite/auth/ResetPasswordForm"
 import { Heading } from "@repo/ui/components/Heading"
-import { Button, Card, Center, Text, VStack } from "@yamada-ui/react"
+import { Button, Card, Center, Text, Link as UILink, VStack } from "@yamada-ui/react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { z } from "zod"
@@ -42,9 +42,20 @@ export default async function ResetPasswordPage(props: {
             <Button as={Link} colorScheme="primary" href="/auth/forgot-password">
               Request new link
             </Button>
-            <Button as={Link} colorScheme="primary" href="/auth/login?open=true">
-              Back to Login
-            </Button>
+
+            <Center fontSize="xs">
+              <Text color="tertiary">
+                Back to&nbsp;
+                <UILink
+                  as={Link}
+                  color={["tertiary", "white"]}
+                  fontWeight="bold"
+                  href="/auth/login?open=true"
+                >
+                  Login
+                </UILink>
+              </Text>
+            </Center>
           </VStack>
         ) : (
           <ResetPasswordForm token={token} />
