@@ -1,4 +1,4 @@
-import { createTimeField } from "@/common/fields/date-time"
+import { createTimeField } from "@/data-layer/fields/date-time"
 import type { CollectionConfig } from "payload"
 
 export const GameSessionSchedule: CollectionConfig = {

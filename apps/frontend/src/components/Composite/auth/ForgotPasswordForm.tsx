@@ -1,13 +1,12 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Text, Link as UILink, VStack } from "@yamada-ui/react"
+import { Button, Text, Link as UILink, VStack, useNotice } from "@yamada-ui/react"
 import Link from "next/link"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { useToast } from "@/components/Generic/ui/use-toast"
 import { useForgotPasswordMutation } from "@/hooks/mutations/forgot-password"
 import { Heading } from "@repo/ui/components/Heading"
 import { InputType, TextInput } from "@repo/ui/components/TextInput"
@@ -18,8 +17,10 @@ const formSchema = z.object({
 
 export const ForgotPasswordForm = () => {
   console.log("rerender")
+
+  const notice = useNotice()
+
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
-  const { toast } = useToast()
 
   const {
     register,
@@ -39,16 +40,16 @@ export const ForgotPasswordForm = () => {
       },
       onError: (e) => {
         if (e.message === "TOO_MANY_REQUESTS") {
-          toast({
+          notice({
             title: "Too many requests",
             description: "You have made too many password reset requests. Please try again later.",
-            variant: "destructive",
+            status: "error",
           })
         } else {
-          toast({
+          notice({
             title: "Uh oh! Something went wrong",
             description: "An error occurred while processing your request. Please try again.",
-            variant: "destructive",
+            status: "error",
           })
         }
       },

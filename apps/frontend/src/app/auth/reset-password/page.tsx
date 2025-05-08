@@ -1,9 +1,9 @@
+import { ResetPasswordForm } from "@/components/Composite/auth/ResetPasswordForm"
+import { Heading } from "@repo/ui/components/Heading"
+import { Button, Card, Center, Text, Link as UILink, VStack } from "@yamada-ui/react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { z } from "zod"
-
-import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
-import { Card } from "@/components/Composite/Card"
 
 export const metadata = {
   title: "Reset Password - UABC Booking Portal",
@@ -26,21 +26,44 @@ export default async function ResetPasswordPage(props: {
 
   // TODO: Check if token is expired
   const tokenExpired = !token
-  if (tokenExpired) {
-    return (
-      <div className="mx-4 flex min-h-dvh flex-col">
-        <BackNavigationBar pathName="/auth/login?open=true" title="Reset Your Password" />
-        <div className="grid grow place-items-center">
-          <Card className="bg-destructive text-destructive-foreground" variant="card">
-            <h1 className="pb-1 font-semibold text-lg tracking-tight">Expired Link</h1>
-            This password reset link has expired. Please request a new one{" "}
-            <Link className="text-right font-bold underline" href="/auth/forgot-password">
-              here
-            </Link>
-            .
-          </Card>
-        </div>
-      </div>
-    )
-  }
+
+  return (
+    <Center minH="100dvh">
+      <Card
+        gap="6"
+        p={{
+          base: "3",
+          sm: "6",
+        }}
+        w={{ base: "sm", md: "md", lg: "lg" }}
+      >
+        {tokenExpired ? (
+          <VStack>
+            <Heading.h2 textAlign="center">Expired Link</Heading.h2>
+            <Text color="tertiary">This password reset link has expired.</Text>
+
+            <Button as={Link} colorScheme="primary" href="/auth/forgot-password">
+              Request new link
+            </Button>
+
+            <Center fontSize="xs">
+              <Text color="tertiary">
+                Back to&nbsp;
+                <UILink
+                  as={Link}
+                  color={["tertiary", "white"]}
+                  fontWeight="bold"
+                  href="/auth/login?open=true"
+                >
+                  Login
+                </UILink>
+              </Text>
+            </Center>
+          </VStack>
+        ) : (
+          <ResetPasswordForm token={token} />
+        )}
+      </Card>
+    </Center>
+  )
 }
