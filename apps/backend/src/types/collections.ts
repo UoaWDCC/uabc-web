@@ -50,6 +50,12 @@ export type UpdateGameSessionScheduleData = Partial<CreateGameSessionScheduleDat
 export type EditBookingData = Partial<CreateBookingData>
 
 /*
+ * Type for partially editing semester data
+ */
+
+export type EditSemesterData = Partial<CreateSemesterData>
+
+/*
  * Type for partially editing user data
  */
 export type EditUserData = Partial<CreateUserData>
