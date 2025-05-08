@@ -59,19 +59,6 @@ jobs:
           version: latest
           run_install: false
 
-      - name: Cache Turborepo
-        uses: actions/cache@v4
-        with:
-          path: |
-            .turbo
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -225,7 +212,7 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: Test
-        run: pnpm turbo run test
+        run: pnpm test
 
   codegen:
     needs: [check_changes, setup]
