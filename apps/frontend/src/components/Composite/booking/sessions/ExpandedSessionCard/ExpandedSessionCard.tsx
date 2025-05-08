@@ -1,5 +1,5 @@
 import type { CartGameSession } from "@/types/game-session"
-import { Card, CardBody, CardHeader, Text, VStack } from "@yamada-ui/react"
+import { Card, CardBody, CardFooter, CardHeader, Text, VStack } from "@yamada-ui/react"
 import { LevelSelector } from "./LevelSelector"
 interface ExpandedSessionCardProps {
   gameSession: CartGameSession
@@ -33,6 +33,8 @@ export const ExpandedSessionCard = ({ gameSession }: ExpandedSessionCardProps) =
         </Text>
       </VStack>
     </CardBody>
-    <LevelSelector id={gameSession.id} selectedLevel={gameSession.playLevel} />
+    <CardFooter px="0">
+      <LevelSelector id={gameSession.id} selectedLevel={gameSession.playLevel} />
+    </CardFooter>
   </Card>
 )

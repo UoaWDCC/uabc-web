@@ -1,15 +1,6 @@
 import { useCartStore } from "@/stores/useCartStore"
 import { PlayLevel } from "@/types/types"
-import {
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  SegmentedControl,
-  Text,
-  useDisclosure,
-} from "@yamada-ui/react"
-import { LevelSelectorButton } from "./LevelSelectorButton"
+import { Option, SegmentedControl, SegmentedControlButton, Select } from "@yamada-ui/react"
 
 interface LevelSelectorProps {
   id: number
@@ -18,39 +9,37 @@ interface LevelSelectorProps {
 
 export const LevelSelector = ({ id, selectedLevel }: LevelSelectorProps) => {
   const updatePlayLevelById = useCartStore((state) => state.updatePlayLevelById)
-  const { open, onOpen, onClose } = useDisclosure()
 
   return (
     <>
-      <Button
-        colorScheme="neutral"
-        fontSize="sm"
-        fontWeight="semibold"
-        height={12}
-        onClick={onOpen}
-        textTransform="capitalize"
-        variant="ghost"
+      <SegmentedControl
+        colorScheme="primary"
+        defaultValue={selectedLevel}
+        display={{ base: "none", md: "flex" }}
+        onChange={(value) => updatePlayLevelById(id, value as PlayLevel)}
+        roundedTop="none"
+        width="full"
       >
-        {selectedLevel ?? "Select Play Level"}
-      </Button>
-      <Drawer onClose={onClose} open={open} placement="bottom" size="2xl">
-        <DrawerHeader>
-          <Text fontWeight="medium" textAlign="center">
-            Please select a play level
-          </Text>
-        </DrawerHeader>
-        <DrawerBody>
-          <SegmentedControl colorScheme="primary" width="full">
-            {Object.values(PlayLevel).map((playLevel) => (
-              <LevelSelectorButton
-                handleClick={() => updatePlayLevelById(id, playLevel)}
-                key={playLevel}
-                name={playLevel}
-              />
-            ))}
-          </SegmentedControl>
-        </DrawerBody>
-      </Drawer>
+        {Object.values(PlayLevel).map((playLevel) => (
+          <SegmentedControlButton key={playLevel} textTransform="capitalize" value={playLevel}>
+            {playLevel}
+          </SegmentedControlButton>
+        ))}
+      </SegmentedControl>
+      <Select
+        colorScheme="primary"
+        defaultValue={selectedLevel}
+        display={{ md: "none" }}
+        onChange={(value) => updatePlayLevelById(id, value as PlayLevel)}
+        roundedTop="none"
+        textTransform="capitalize"
+      >
+        {Object.values(PlayLevel).map((playLevel) => (
+          <Option key={playLevel} textTransform="capitalize" value={playLevel}>
+            {playLevel}
+          </Option>
+        ))}
+      </Select>
     </>
   )
 }
