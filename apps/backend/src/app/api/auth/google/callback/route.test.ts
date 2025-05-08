@@ -2,8 +2,6 @@ import dotenv from "dotenv"
 import { redirect } from "next/navigation"
 
 import { authenticationMock } from "@/test-config/mocks/Authentication.mock"
-import { userMock } from "@/test-config/mocks/User.mock"
-
 import {
   CODE_MOCK,
   JWT_SECRET_MOCK,
@@ -13,6 +11,7 @@ import {
   googleUserMock,
   tokensMock,
 } from "@/test-config/mocks/GoogleAuth.mock"
+import { userMock } from "@/test-config/mocks/User.mock"
 
 dotenv.config()
 
