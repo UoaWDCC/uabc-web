@@ -4,8 +4,8 @@ export const Container: ComponentStyle<"Container"> = {
   baseStyle: {
     display: "flex",
     flexDirection: "column",
-    gap: { base: "lg", sm: "md" },
-    p: { base: "lg", sm: "md" },
+    gap: { base: "sm", sm: "md", md: "lg" },
+    p: { base: "sm", sm: "md", md: "lg" },
     w: "100%",
   },
 }

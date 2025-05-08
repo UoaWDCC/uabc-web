@@ -1,10 +1,11 @@
 "use client"
 
-import { Button, Heading, VStack } from "@yamada-ui/react"
+import { Button, VStack } from "@yamada-ui/react"
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
+import { Heading } from "@repo/ui/components/Heading"
 import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import { emailSchema } from "./formSchema"
 
@@ -61,9 +62,7 @@ export const EmailLoginForm = () => {
         display={{ base: open ? "flex" : "none", lg: "flex" }}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Heading as="h2" fontSize="2xl" textAlign="center">
-          Login to your account
-        </Heading>
+        <Heading.h2 textAlign="center">Login to your account</Heading.h2>
 
         <TextInput
           autoFocus

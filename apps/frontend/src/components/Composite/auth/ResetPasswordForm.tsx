@@ -6,11 +6,9 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { useResetPasswordMutation } from "@/hooks/mutations/reset-password"
+import { Heading } from "@repo/ui/components/Heading"
 import { InputType, TextInput } from "@repo/ui/components/TextInput"
-import { Button } from "../../Generic/ui/button"
-import { ToastAction } from "../../Generic/ui/toast"
-import { useToast } from "../../Generic/ui/use-toast"
-import { Card } from "../Card"
+import { Button, Text, VStack, useNotice } from "@yamada-ui/react"
 import { passwordSchema } from "./formSchema"
 
 const formSchema = z
@@ -29,7 +27,7 @@ interface ResetPasswordFormProps {
 
 export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   const router = useRouter()
-  const { toast } = useToast()
+  const notice = useNotice()
 
   const {
     register,
@@ -44,7 +42,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   const onSubmit = async ({ newPassword }: z.infer<typeof formSchema>) => {
     mutate(newPassword, {
       onSuccess: () => {
-        toast({
+        notice({
           title: "Success!",
           description: "Your password has been reset successfully.",
         })
@@ -54,29 +52,24 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         const code = e.message
 
         if (code === "TOO_MANY_REQUESTS") {
-          toast({
+          notice({
             title: "Too many requests",
             description: "You have made too many requests. Please try again later.",
-            variant: "destructive",
+            status: "error",
           })
         } else if (code === "INVALID_CODE") {
-          toast({
+          notice({
             title: "Invalid or expired token",
             description:
               "The reset token is invalid or has expired. Please request a new password reset.",
-            action: (
-              <ToastAction altText="Request" onClick={() => router.push("/auth/forgot-password")}>
-                Request
-              </ToastAction>
-            ),
-
-            variant: "destructive",
+            status: "error",
+            // TODO: add action button to notice (or choose alternative solution)
           })
         } else {
-          toast({
+          notice({
             title: "Uh oh! Something went wrong",
             description: "An error occurred during the password reset process.",
-            variant: "destructive",
+            status: "error",
           })
         }
       },
@@ -84,38 +77,32 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   }
 
   return (
-    <Card className="flex w-[415px] flex-col gap-4" variant="card">
-      <div className="mb-2">
-        <h1 className="pb-1 font-semibold text-foreground text-lg tracking-tight">
-          Reset your password
-        </h1>
-        <p className="text-muted-foreground text-sm">
-          Enter your new password below. Make sure it is strong and unique to keep your account
-          secure.
-        </p>
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-4">
-          <TextInput
-            autoFocus
-            errorMessage={errors.newPassword?.message}
-            isError={!!errors.newPassword}
-            label="New Password"
-            type={InputType.Password}
-            {...register("newPassword")}
-          />
-          <TextInput
-            errorMessage={errors.confirmPassword?.message}
-            isError={!!errors.confirmPassword}
-            label="Confirm Password"
-            type={InputType.Password}
-            {...register("confirmPassword")}
-          />
-          <Button disabled={isPending} type="submit">
-            Reset Password
-          </Button>
-        </div>
-      </form>
-    </Card>
+    <VStack>
+      <Heading.h2 textAlign="center">Reset Password</Heading.h2>
+      <Text>
+        Enter your new password below. Make sure it is strong and unique to keep your account
+        secure.
+      </Text>
+      <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
+        <TextInput
+          autoFocus
+          errorMessage={errors.newPassword?.message}
+          isError={!!errors.newPassword}
+          label="New Password"
+          type={InputType.Password}
+          {...register("newPassword")}
+        />
+        <TextInput
+          errorMessage={errors.confirmPassword?.message}
+          isError={!!errors.confirmPassword}
+          label="Confirm Password"
+          type={InputType.Password}
+          {...register("confirmPassword")}
+        />
+        <Button colorScheme="primary" disabled={isPending} type="submit">
+          Reset Password
+        </Button>
+      </VStack>
+    </VStack>
   )
 }
