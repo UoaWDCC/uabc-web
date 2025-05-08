@@ -1,5 +1,5 @@
 import dotenv from "dotenv"
-import jwt from "jsonwebtoken"
+import { redirect } from "next/navigation"
 
 import { authenticationMock } from "@/test-config/mocks/Authentication.mock"
 import { userMock } from "@/test-config/mocks/User.mock"
@@ -48,16 +48,20 @@ vi.mock("@/collections/services/AuthService", () => {
   }
 })
 
-import { GET as callback } from "@/app/api/auth/google/callback/route"
-
-const JWT_SECRET = process.env.JWT_SECRET
-
 vi.mock("next/headers", () => ({
   cookies: () => ({
     get: (key: string) => ({ value: key === "state" ? STATE_MOCK : undefined }),
+    set: vi.fn(),
     delete: vi.fn(),
   }),
 }))
+
+vi.mock("next/navigation", () => ({
+  redirect: vi.fn(),
+}))
+
+import { GET as callback } from "@/app/api/auth/google/callback/route"
+import { cookies } from "next/headers"
 
 describe("GET /api/auth/google/callback", () => {
   beforeAll(() => {
@@ -70,28 +74,20 @@ describe("GET /api/auth/google/callback", () => {
 
   afterEach(() => vi.restoreAllMocks())
 
-  it("returns JWT token on success auth", async () => {
+  it("redirects user on success auth", async () => {
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
-    req.cookies.set("state", STATE_MOCK)
+    const cookieStore = await cookies()
+    cookieStore.set("state", STATE_MOCK)
 
-    const response = await callback(req)
-    const json = await response.json()
-
-    expect(json.token).toBeDefined()
-
-    const decoded = jwt.verify(json.token, process.env.JWT_SECRET)
-
-    expect(decoded).toMatchObject({
-      profile: userMock,
-      accessToken: tokensMock.access_token,
-    })
+    await callback(req)
+    expect(redirect).toHaveBeenCalled()
   })
 
   it("returns 400 if state does not match", async () => {
     const req = createMockNextRequest(
-      `/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}}`,
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}`,
     )
     req.cookies.set("state", STATE_MOCK)
 
@@ -113,10 +109,5 @@ describe("GET /api/auth/google/callback", () => {
 
     expect(response.status).toBe(400)
     expect(json.error).toMatch(/code/i)
-  })
-
-  afterAll(() => {
-    const originalJwtSecret = JWT_SECRET
-    process.env.JWT_SECRET = originalJwtSecret
   })
 })

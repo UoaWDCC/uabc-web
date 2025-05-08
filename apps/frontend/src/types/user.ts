@@ -25,7 +25,7 @@ export const UserSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().email(),
-  role: z.enum(Object.values(MembershipType) as [string, ...string[]]),
+  role: z.nativeEnum(MembershipType),
   remainingSessions: z.number().nullable().optional(),
   image: z.union([z.string(), MediaSchema]).nullable().optional(),
   updatedAt: z.string(),

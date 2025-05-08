@@ -6,7 +6,7 @@ export const GET = async () => {
   const state = crypto.randomUUID().toString()
   const cookieStore = await cookies()
   // Set state to prevent CSRF attacks
-  cookieStore.set("state", state)
+  cookieStore.set("state", state, { maxAge: 60 })
 
   const authorizationUrl = oauth2Client.generateAuthUrl({
     scope: googleAuthScopes,
