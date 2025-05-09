@@ -1,8 +1,8 @@
 import "server-only"
 
 import { AuthToken } from "@/lib/utils/auth-token"
+import type { User } from "@/payload-types"
 import { cookies } from "next/headers"
-import type { User } from "../../../../backend/src/payload-types"
 
 const withCurrentUser = <T,>(Component: React.ComponentType<T & CurrentUserProps>) => {
   let currentUser: User | undefined
@@ -21,6 +21,7 @@ const withCurrentUser = <T,>(Component: React.ComponentType<T & CurrentUserProps
 
     return <Component {...props} currentUser={currentUser} />
   }
+
   WrappedComponent.displayName = `withCurrentUser(${Component.displayName})`
   return WrappedComponent
 }
