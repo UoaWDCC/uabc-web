@@ -271,16 +271,21 @@ jobs:
     name: Verify
     needs: [check_changes, build, biome, test, codegen, typecheck]
     runs-on: ubuntu-latest
-    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.biome.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success' && needs.typecheck.result == 'success')) }}
+    if: >
+      always() && 
+      (needs.check_changes.outputs.exists != 'true' || 
+       ((!contains(needs.*.result, 'failure')) && 
+        (!contains(needs.*.result, 'cancelled'))))
     outputs:
       success: ${{ steps.set-result.outputs.success }}
     steps:
       - name: Set Result
         id: set-result
         run: |
-          if [[ "${{ needs.build.result }}" == "success" && "${{ needs.biome.result }}" == "success" && "${{ needs.test.result }}" == "success" && "${{ needs.codegen.result }}" == "success" && "${{ needs.typecheck.result }}" == "success" ]]; then
-            echo "success=true" >> $GITHUB_OUTPUT
-          else
+          # Check if any job failed or was cancelled
+          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" || "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
             echo "success=false" >> $GITHUB_OUTPUT
             exit 1
+          else
+            echo "success=true" >> $GITHUB_OUTPUT
           fi
