@@ -1,4 +1,4 @@
-import { LogOut } from "lucide-react"
+import { LogOutIcon } from "@yamada-ui/lucide"
 import Image from "next/image"
 
 import { LogOutButton } from "@/components/Composite/LogOutButton"
@@ -27,7 +27,7 @@ async function SelectSessionPage({ currentUser }: CurrentUserProps) {
       <div className="flex items-center justify-between p-4">
         <Heading>Sessions</Heading>
         <LogOutButton>
-          <LogOut size={24} />
+          <LogOutIcon fontSize={24} />
         </LogOutButton>
       </div>
       <div className="flex h-16 items-center justify-between bg-secondary/70 p-4">
