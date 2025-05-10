@@ -1,12 +1,16 @@
-import { Skeleton } from "@/components/Generic/ui/skeleton"
+import { Card, CardBody, CardHeader, SkeletonText } from "@yamada-ui/react"
 
 const SkeletonSessionCard = () => {
   return (
-    <Skeleton className="flex min-h-24 flex-col gap-1 rounded-sm border bg-secondary px-6 py-4 font-medium *:opacity-50">
-      <Skeleton className="h-6 w-[200px] bg-tertiary/50" />
-      <Skeleton className="h-4 w-[125px] bg-tertiary/50" />
-      <Skeleton className="h-4 w-[150px] bg-tertiary/50" />
-    </Skeleton>
+    <Card variant="subtle">
+      <CardHeader>
+        <SkeletonText lineClamp={1} textHeight={6} width="200px" />
+      </CardHeader>
+      <CardBody gap={1}>
+        <SkeletonText lineClamp={1} textHeight={4} width="125px" />
+        <SkeletonText lineClamp={1} textHeight={4} width="150px" />
+      </CardBody>
+    </Card>
   )
 }
 
