@@ -1,9 +1,7 @@
 import { memo } from "react"
-import { IoCheckmarkCircle } from "react-icons/io5"
-import { twJoin } from "tailwind-merge"
 
-import { cn } from "@/lib/utils"
-import { Card } from "../../../Card"
+import { CircleCheckIcon } from "@yamada-ui/lucide"
+import { Card, CardBody, CardHeader, HStack, Spacer, Text, VStack } from "@yamada-ui/react"
 
 type SelectSessionCardStatus = "default" | "selected" | "disabled"
 
@@ -25,29 +23,28 @@ function UnmemoizedSelectSessionCard({
   const isSelected = status === "selected"
   const isDisabled = status === "disabled"
   return (
-    <Card
-      className={cn("flex min-h-24 align-middle leading-5", isDisabled && "opacity-40")}
-      variant={isSelected ? "primary" : "secondary"}
-    >
-      <div>
-        <span className="font-medium text-lg leading-5">
+    <Card variant={isSelected ? "solid" : "subtle"}>
+      <CardHeader>
+        <Text fontSize="lg" fontWeight="medium">
           {day} {isDisabled && "(Session Full)"}
-        </span>
-        <br />
-        <span
-          className={twJoin(isSelected ? "text-primary-foreground/70" : "text-tertiary", "text-sm")}
-        >
-          {location} <br />
-          <span className="uppercase">
-            {startTime} - {endTime}
-          </span>
-        </span>
-      </div>
-      {isSelected && (
-        <div className="flex grow justify-end">
-          <IoCheckmarkCircle className="ml-1 self-center" color="white" size={30} />
-        </div>
-      )}
+        </Text>
+      </CardHeader>
+      <CardBody as={HStack}>
+        <HStack width="full">
+          <VStack gap={1}>
+            <Text>{location}</Text>
+            <Text textTransform="uppercase">
+              {startTime} - {endTime}
+            </Text>
+          </VStack>
+          {isSelected && (
+            <>
+              <Spacer />
+              <CircleCheckIcon boxSize={30} />
+            </>
+          )}
+        </HStack>
+      </CardBody>
     </Card>
   )
 }
