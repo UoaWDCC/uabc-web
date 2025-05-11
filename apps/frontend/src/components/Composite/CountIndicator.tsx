@@ -1,22 +1,23 @@
 import type { ReactNode } from "react"
 
-import { cn } from "@/lib/utils"
+import { Center } from "@yamada-ui/react"
 
 interface CountIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode
-  className?: string
 }
 
-export function CountIndicator({ children, className, ...props }: CountIndicatorProps) {
+export function CountIndicator({ children, ...props }: CountIndicatorProps) {
   return (
-    <div
-      className={cn(
-        "flex h-8 min-w-8 items-center justify-center rounded bg-neutral p-2 font-semibold",
-        className,
-      )}
+    <Center
+      backgroundColor="tertiary.100"
+      borderRadius="md"
+      fontWeight="semibold"
+      height={8}
+      minWidth={8}
+      padding={2}
       {...props}
     >
       {children}
-    </div>
+    </Center>
   )
 }
