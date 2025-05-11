@@ -5,7 +5,7 @@ import { useState } from "react"
 import { twJoin } from "tailwind-merge"
 
 import { CountIndicator } from "@/components/Composite/CountIndicator"
-import { PendingApprovalAlert } from "@/components/Composite/booking/sessions/PendingApprovalAlert"
+import { PendingApprovalCard } from "@/components/Composite/booking/sessions/PendingApprovalCard"
 import { SelectSessionList } from "@/components/Composite/booking/sessions/SelectSessionList"
 import { Button } from "@/components/Generic/ui/button"
 import { MEMBER_MAX_SESSIONS, NON_MEMBER_MAX_SESSIONS } from "@/lib/constants"
@@ -43,7 +43,7 @@ export default function ClientSessionPage({ isMember, prepaidSessions }: ClientS
       </div>
       <div className="mx-4 mb-4 text-center">
         <p>TODO fix me</p>
-        <PendingApprovalAlert />
+        <PendingApprovalCard />
       </div>
       <SelectSessionList
         className="mx-4 grow empty:grow empty:after:grid empty:after:h-full empty:after:w-full empty:after:grow empty:after:place-items-center empty:after:font-medium empty:after:text-lg empty:after:text-tertiary/70 empty:after:content-['No_more_sessions_for_this_week']"
