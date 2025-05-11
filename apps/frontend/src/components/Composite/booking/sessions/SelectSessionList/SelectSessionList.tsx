@@ -6,7 +6,8 @@ import { useCurrentGameSessions } from "@/hooks/query/game-sessions"
 import { cn, getWeekday } from "@/lib/utils"
 import { convertTo12HourFormat } from "@/lib/utils/dates"
 import { useCartStore } from "@/stores/useCartStore"
-import { SelectableCard } from "./SelectableCard"
+import { CheckboxCardGroup } from "@yamada-ui/react"
+import { SelectSessionCard } from "./SelectSessionCard"
 import SkeletonSelectSessionCard from "./SkeletonSessionCard"
 
 interface SelectSessionListProps {
@@ -89,14 +90,16 @@ export function SelectSessionList({
 
   return (
     <div className={cn("flex flex-col gap-3 overflow-y-auto overscroll-contain", className)}>
-      {sessions.map((session) => (
-        <SelectableCard
-          checked={cart.some((s) => s.id === session.id)}
-          handleSessionClick={handleSessionClick}
-          key={session.id}
-          session={session}
-        />
-      ))}
+      <CheckboxCardGroup>
+        {sessions.map((session) => (
+          <SelectSessionCard
+            checked={cart.some((s) => s.id === session.id)}
+            handleSessionClick={handleSessionClick}
+            key={session.id}
+            session={session}
+          />
+        ))}
+      </CheckboxCardGroup>
     </div>
   )
 }

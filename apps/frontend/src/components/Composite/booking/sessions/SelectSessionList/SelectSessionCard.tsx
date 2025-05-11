@@ -1,51 +1,48 @@
 import { memo } from "react"
 
-import { CircleCheckIcon } from "@yamada-ui/lucide"
-import { Card, CardBody, CardHeader, HStack, Spacer, Text, VStack } from "@yamada-ui/react"
-
-type SelectSessionCardStatus = "default" | "selected" | "disabled"
+import type { CartGameSession } from "@/types/game-session"
+import {
+  CheckboxCard,
+  CheckboxCardDescription,
+  CheckboxCardLabel,
+  Text,
+  VStack,
+} from "@yamada-ui/react"
 
 interface SelectSessionCardProps {
-  day: string
-  startTime: string
-  endTime: string
-  location: string
-  status: SelectSessionCardStatus
+  session: CartGameSession
+  checked: boolean
+  handleSessionClick: (id: number) => void
 }
 
 function UnmemoizedSelectSessionCard({
-  day,
-  startTime,
-  endTime,
-  status,
-  location,
+  session,
+  checked,
+  handleSessionClick,
 }: SelectSessionCardProps) {
-  const isSelected = status === "selected"
+  const { weekday, startTime, endTime, locationName } = session
+  const status = session.isFull ? "disabled" : checked ? "selected" : "default"
   const isDisabled = status === "disabled"
   return (
-    <Card variant={isSelected ? "solid" : "subtle"}>
-      <CardHeader>
-        <Text fontSize="lg" fontWeight="medium">
-          {day} {isDisabled && "(Session Full)"}
-        </Text>
-      </CardHeader>
-      <CardBody as={HStack}>
-        <HStack width="full">
-          <VStack gap={1}>
-            <Text>{location}</Text>
-            <Text textTransform="uppercase">
-              {startTime} - {endTime}
-            </Text>
-          </VStack>
-          {isSelected && (
-            <>
-              <Spacer />
-              <CircleCheckIcon boxSize={30} />
-            </>
-          )}
-        </HStack>
-      </CardBody>
-    </Card>
+    <CheckboxCard
+      checked={checked}
+      data-testid="session-card"
+      disabled={session.isFull}
+      onChange={() => handleSessionClick(session.id)}
+      variant="subtle"
+    >
+      <CheckboxCardLabel>
+        {weekday} {isDisabled && "(Session Full)"}
+      </CheckboxCardLabel>
+      <CheckboxCardDescription>
+        <VStack gap={1}>
+          <Text>{locationName}</Text>
+          <Text textTransform="uppercase">
+            {startTime} - {endTime}
+          </Text>
+        </VStack>
+      </CheckboxCardDescription>
+    </CheckboxCard>
   )
 }
 
