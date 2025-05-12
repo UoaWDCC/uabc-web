@@ -1,12 +1,12 @@
-import type { ReactNode } from "react"
+import type { PropsWithChildren } from "react"
 
-import { Center } from "@yamada-ui/react"
+import { Center, type CenterProps } from "@yamada-ui/react"
 
-interface CountIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: ReactNode
-}
+// interface CountIndicatorProps extends CenterProps {
+//   children: ReactNode
+// }
 
-export function CountIndicator({ children, ...props }: CountIndicatorProps) {
+export function CountIndicator({ children, ...props }: PropsWithChildren<CenterProps>) {
   return (
     <Center
       backgroundColor="tertiary.100"
