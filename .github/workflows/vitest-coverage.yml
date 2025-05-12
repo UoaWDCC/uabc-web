@@ -4,12 +4,12 @@ on:
   pull_request:
     branches: [master]
     paths-ignore:
-      - ".gitignore"
-      - ".gitattributes"
-      - ".vscode/**"
-      - ".env.example"
-      - "*.md"
-      - ".github/workflows/*[!vitest-coverage.yml]"
+      - ".gitignore" # Ignored because changes to .gitignore do not affect code or tests.  
+      - ".gitattributes" # Ignored because changes to .gitattributes are related to repository metadata, not code.  
+      - ".vscode/**" # Ignored because .vscode contains editor-specific settings that do not impact the workflow.  
+      - ".env.example" # Ignored because this is a template file for environment variables, not used in the workflow.  
+      - "*.md" # Ignored because markdown files (e.g., README, documentation) do not affect code or tests.  
+      - ".github/workflows/*[!vitest-coverage.yml]" # Ignored because changes to GitHub workflows (excluding the vitest-coverage workflow) do not directly impact the current code or tests under consideration.
 
 env:
   CI: 'true'
