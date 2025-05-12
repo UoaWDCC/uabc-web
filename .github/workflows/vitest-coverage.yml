@@ -9,6 +9,7 @@ on:
       - ".vscode/**"
       - ".env.example"
       - "*.md"
+      - ".github/workflows/*[!vitest-coverage.yml]"
 
 env:
   CI: 'true'
