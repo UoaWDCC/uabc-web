@@ -2,7 +2,7 @@ import { Card, CardBody, CardHeader, SkeletonText } from "@yamada-ui/react"
 
 const SkeletonSessionCard = () => {
   return (
-    <Card variant="subtle">
+    <Card backgroundColor="tertiary.50" variant="subtle">
       <CardHeader>
         <SkeletonText lineClamp={1} textHeight={6} width="200px" />
       </CardHeader>
