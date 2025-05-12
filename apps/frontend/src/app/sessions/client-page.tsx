@@ -46,10 +46,25 @@ export default function ClientSessionPage({ isMember, prepaidSessions }: ClientS
         <PendingApprovalCard />
       </div>
       <SelectSessionList
-        className="mx-4 grow empty:grow empty:after:grid empty:after:h-full empty:after:w-full empty:after:grow empty:after:place-items-center empty:after:font-medium empty:after:text-lg empty:after:text-tertiary/70 empty:after:content-['No_more_sessions_for_this_week']"
+        _empty={{
+          flexGrow: 1,
+          _after: {
+            display: "grid",
+            height: "full",
+            width: "full",
+            flexGrow: 1,
+            placeItems: "center",
+            fontSize: "lg",
+            fontWeight: "medium",
+            color: "tertiary.700",
+            content: "'No more sessions for this week'",
+          },
+        }}
+        flexGrow={1}
         isMember={isMember}
         maxSessions={maxSessions}
         onLimitReached={() => setShake(true)}
+        paddingX={4}
       />
 
       <div className="mx-4 mt-6 mb-10 flex justify-center">
