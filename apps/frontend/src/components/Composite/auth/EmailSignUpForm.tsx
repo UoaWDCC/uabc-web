@@ -68,9 +68,7 @@ export const EmailSignUpForm = () => {
   return (
     <>
       <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
-        <Heading as="h2" fontSize="2xl" textAlign="center">
-          Create an Account
-        </Heading>
+        <Heading.h2 textAlign="center">Create an Account</Heading.h2>
 
         <TextInput
           autoFocus

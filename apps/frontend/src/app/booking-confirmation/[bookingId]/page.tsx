@@ -3,9 +3,9 @@ import Link from "next/link"
 import { UabcHeaderText } from "@/components/Composite/UabcHeaderText"
 import { CartClearer } from "@/components/Composite/booking/confirmation/CartClearer"
 import ConfirmationMessage from "@/components/Composite/booking/confirmation/ConfirmationMessage"
-import { buttonVariants } from "@/components/Generic/ui/button"
 import type { CurrentUserProps } from "@/lib/hoc/withCurrentUser"
 import withCurrentUser from "@/lib/hoc/withCurrentUser"
+import { Bleed, Box, Button, Center, Container, Text, VStack } from "@yamada-ui/react"
 
 export const metadata = {
   title: "Booking Confirmation - UABC Booking Portal",
@@ -15,15 +15,23 @@ async function ConfirmationPage(
   props: CurrentUserProps & { params: Promise<{ bookingId: string }> },
 ) {
   return (
-    <div className="flex min-h-dvh flex-col">
-      <div className="relative flex h-32 items-center justify-center overflow-hidden">
-        <div className="-z-10 absolute h-full w-[120%] rounded-b-[50%] bg-secondary md:w-[110%]" />
-        <Link href="/">
-          <UabcHeaderText className="mt-4" />
-        </Link>
-      </div>
+    <Container height="100dvh">
+      <Center as={Bleed} block="md" height={32} inline="md" position="relative">
+        <Box
+          backgroundColor="gray.50"
+          height="full"
+          position="absolute"
+          roundedBottom="50%"
+          width={{ base: "120%", md: "110%" }}
+          zIndex={-10}
+        />
 
-      <div className="mx-4 flex grow flex-col items-center justify-center gap-6 py-10">
+        <Link href="/">
+          <UabcHeaderText />
+        </Link>
+      </Center>
+
+      <Center as={VStack} flexGrow={1}>
         {
           /**
            * // TODO
@@ -31,16 +39,18 @@ async function ConfirmationPage(
           // @ts-ignore
           <ConfirmationMessage email={await props.currentUser.email} member={false} />
         }
-        <Link className={buttonVariants({ variant: "ghost" })} href="/sessions">
+        <Button as={Link} href="/sessions">
           Return Home
-        </Link>
-      </div>
-
-      <div className="flex flex-col gap-4 bg-primary p-4 pt-5 pb-6">
-        <p className="font-semibold text-primary-foreground text-xl">Rackets at the ready!</p>
-        {
-          // TODO: fetch actual data
-          /**
+        </Button>
+      </Center>
+      <Bleed block="md" inline="md">
+        <VStack backgroundColor="primary" padding="md">
+          <Text color="white" fontSize="xl" fontWeight="semibold">
+            Rackets at the ready!
+          </Text>
+          {
+            // TODO: fetch actual data
+            /**
            sessions.map((session) => (
            <ConfirmedSessionCard
            key={session.id}
@@ -51,10 +61,12 @@ async function ConfirmationPage(
            endTime={convertTo12HourFormat(session.endTime)}
            />
            ))*/
-        }
-      </div>
+          }
+          {/* TODO: Replace with actual session data */}
+        </VStack>
+      </Bleed>
       <CartClearer />
-    </div>
+    </Container>
   )
 }
 

@@ -1,5 +1,5 @@
-import { LogOut } from "lucide-react"
 import Image from "next/image"
+import BadmintonRacketLogo from "../../public/images/BadmintonRacketLogo.png"
 
 import { LogOutButton } from "@/components/Composite/LogOutButton"
 import { PrepaidSessionsCounter } from "@/components/Composite/booking/sessions/PrepaidSessionsCounter"
@@ -9,7 +9,8 @@ import { getUserFromId } from "@/services/user"
 import { Heading } from "@repo/ui/components/Heading"
 import ClientSessionPage from "./client-page"
 
-import BadmintonRacketLogo from "../../public/images/BadmintonRacketLogo.png"
+import { LogOutIcon } from "@yamada-ui/lucide"
+import { Container, HStack, Spacer, Text, VStack } from "@yamada-ui/react"
 
 export const metadata = {
   title: "Session Booking - UABC Booking Portal",
@@ -19,34 +20,34 @@ async function SelectSessionPage({ currentUser }: CurrentUserProps) {
   const user = (await getUserFromId(currentUser.id)) ?? null
 
   if (!user) {
-    return <div>User not found</div>
+    return <Text>User not found</Text>
   }
 
   return (
-    <div className="flex h-dvh flex-col">
-      <div className="flex items-center justify-between p-4">
+    <Container as={VStack} minHeight="100dvh">
+      <HStack>
         <Heading>Sessions</Heading>
+        <Spacer />
         <LogOutButton>
-          <LogOut size={24} />
+          <LogOutIcon fontSize={24} />
         </LogOutButton>
-      </div>
-      <div className="flex h-16 items-center justify-between bg-secondary/70 p-4">
-        <div className="flex items-center">
-          <span className="pr-1 font-medium">Hey {user.firstName}!</span>
-          <Image
-            alt="Badminton Racket Logo"
-            className="pointer-events-none select-none"
-            height={20}
-            src={BadmintonRacketLogo}
-            width={20}
-          />
-        </div>
+      </HStack>
+      <HStack backgroundColor="tertiary.50" height={16} padding={4} width="full">
+        <Text as="span" fontWeight="medium" paddingRight={1}>
+          Hey {user.firstName}!
+        </Text>
+        <Image
+          alt="Badminton Racket Logo"
+          className="pointer-events-none select-none"
+          height={20}
+          src={BadmintonRacketLogo}
+          width={20}
+        />
+        <Spacer />
         {user.member && <PrepaidSessionsCounter prepaidSessions={user.prepaidSessions} />}
-      </div>
-      <div className="flex flex-col gap-4">
-        <ClientSessionPage isMember={!!user.member} prepaidSessions={user.prepaidSessions} />
-      </div>
-    </div>
+      </HStack>
+      <ClientSessionPage isMember={!!user.member} prepaidSessions={user.prepaidSessions} />
+    </Container>
   )
 }
 

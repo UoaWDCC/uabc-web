@@ -3,24 +3,24 @@
 import { useEffect, useMemo } from "react"
 
 import { useCurrentGameSessions } from "@/hooks/query/game-sessions"
-import { cn, getWeekday } from "@/lib/utils"
+import { getWeekday } from "@/lib/utils"
 import { convertTo12HourFormat } from "@/lib/utils/dates"
 import { useCartStore } from "@/stores/useCartStore"
-import { SelectableCard } from "./SelectableCard"
+import { type StackProps, VStack } from "@yamada-ui/react"
+import { SelectSessionCard } from "./SelectSessionCard"
 import SkeletonSelectSessionCard from "./SkeletonSessionCard"
 
-interface SelectSessionListProps {
+interface SelectSessionListProps extends StackProps {
   isMember: boolean
   onLimitReached: () => void
   maxSessions: number
-  className?: string
 }
 
 export function SelectSessionList({
   onLimitReached,
   isMember,
   maxSessions,
-  className,
+  ...props
 }: SelectSessionListProps) {
   const { data, isLoading } = useCurrentGameSessions()
   const cart = useCartStore((state) => state.cart)
@@ -75,28 +75,25 @@ export function SelectSessionList({
     }
   }
 
-  if (isLoading || !sessions) {
-    return (
-      <div className={cn("flex flex-col gap-3 overflow-y-auto overscroll-contain", className)}>
-        {/* arbitrary number of cards */}
-        <SkeletonSelectSessionCard />
-        <SkeletonSelectSessionCard />
-        <SkeletonSelectSessionCard />
-        <SkeletonSelectSessionCard />
-      </div>
-    )
-  }
-
   return (
-    <div className={cn("flex flex-col gap-3 overflow-y-auto overscroll-contain", className)}>
-      {sessions.map((session) => (
-        <SelectableCard
-          checked={cart.some((s) => s.id === session.id)}
-          handleSessionClick={handleSessionClick}
-          key={session.id}
-          session={session}
-        />
-      ))}
-    </div>
+    <VStack gap={3} overflowY="auto" overscrollBehavior="contain" {...props}>
+      {isLoading || !sessions ? (
+        <>
+          <SkeletonSelectSessionCard />
+          <SkeletonSelectSessionCard />
+          <SkeletonSelectSessionCard />
+          <SkeletonSelectSessionCard />
+        </>
+      ) : (
+        sessions.map((session) => (
+          <SelectSessionCard
+            checked={cart.some((s) => s.id === session.id)}
+            handleSessionClick={handleSessionClick}
+            key={session.id}
+            session={session}
+          />
+        ))
+      )}
+    </VStack>
   )
 }
