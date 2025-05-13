@@ -21,6 +21,7 @@ export default class GameSessionDataService {
       data: newGameSessionData,
     })
   }
+
   /**
    * Gets paginated {@link GameSession} documents
    *
@@ -28,7 +29,10 @@ export default class GameSessionDataService {
    * @param {number} [limit=100] the number of documents per page
    * @returns a {@link PaginatedDocs} object containing {@link GameSession} documents
    */
-  public async getPaginatedGameSession(page = 1, limit = 100): Promise<PaginatedDocs<GameSession>> {
+  public async getPaginatedGameSessions(
+    page = 1,
+    limit = 100,
+  ): Promise<PaginatedDocs<GameSession>> {
     return await payload.find({
       collection: "gameSession",
       page,
