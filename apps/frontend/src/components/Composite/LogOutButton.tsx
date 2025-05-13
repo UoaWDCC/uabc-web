@@ -2,19 +2,13 @@
 
 import type { PropsWithChildren } from "react"
 
-import type { ButtonProps } from "../Generic/ui/button"
-import { Button } from "../Generic/ui/button"
+import { Button, type ButtonProps } from "@repo/ui/components/Button"
 
-export const LogOutButton = ({
-  children,
-  size = "icon",
-  variant = "ghost",
-}: PropsWithChildren<ButtonProps>) => (
+export const LogOutButton = ({ children, variant = "ghost" }: PropsWithChildren<ButtonProps>) => (
   <Button
     onClick={() => {
       throw new Error("Log Out Button Not Implemented")
     }}
-    size={size}
     variant={variant}
   >
     {children}
