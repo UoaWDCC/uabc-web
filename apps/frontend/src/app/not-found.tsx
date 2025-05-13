@@ -1,8 +1,9 @@
-import Link from "next/link"
-
 import { UabcHeaderText } from "@/components/Composite/UabcHeaderText"
 import { UabcLogoNotFound } from "@/components/Composite/UabcLogoNotFound"
-import { Button } from "@/components/Generic/ui/button"
+import { Button } from "@repo/ui/components/Button"
+import { Heading } from "@repo/ui/components/Heading"
+import { Center, Container, Text, VStack } from "@yamada-ui/react"
+import Link from "next/link"
 
 export const metadata = {
   title: "Not Found - UABC Booking Portal",
@@ -10,25 +11,32 @@ export const metadata = {
 
 const NotFoundPage = () => {
   return (
-    <div className="flex h-dvh w-dvw flex-col items-center justify-evenly overflow-hidden bg-background">
+    <Container centerContent height={"100dvh"} justifyContent={"space-evenly"}>
       <UabcHeaderText />
-      <div>
-        <div className="mb-4 flex size-72 items-center justify-center opacity-70">
-          <UabcLogoNotFound className="absolute min-w-[250px]" />
-          {/* doubled because of weird font stroke */}
-          <h1 className="textStroke absolute z-10 select-none font-bold text-9xl text-white">
+      <VStack alignItems={"center"} width={"fit-content"}>
+        <Center height={"72"} marginBottom={"4"} opacity={"70"} width={"72"}>
+          <UabcLogoNotFound
+            color={"transparentize(var(--color-foreground), 70%)"}
+            position={"absolute"}
+            userSelect={"none"}
+          />
+          <Heading.h1 fontSize={"7xl"} userSelect={"none"}>
             404
-          </h1>
-          <h1 className="z-10 select-none font-bold text-9xl text-background">404</h1>
-        </div>
-        <p className="w-full text-center font-medium text-2xl text-foreground/70">Page not found</p>
-      </div>
-      <div className="flex w-dvw flex-col gap-4 p-4">
-        <Link href="/">
-          <Button className="w-full">Back to home</Button>
-        </Link>
-      </div>
-    </div>
+          </Heading.h1>
+        </Center>
+        <Text
+          color={"transparentize(var(--color-foreground), 70%)"}
+          fontSize={"2xl"}
+          fontWeight={"medium"}
+          textAlign={"center"}
+        >
+          Page not found
+        </Text>
+      </VStack>
+      <Button as={Link} href="/" w="fit-content">
+        Back to home
+      </Button>
+    </Container>
   )
 }
 
