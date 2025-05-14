@@ -15,67 +15,60 @@ export function nzstParse(
   referenceDate: string | number | Date,
   options: ParseOptions = {},
 ) {
-  return fromZonedTime(parse(dateStr, formatStr, referenceDate, options), "Pacific/Auckland")
+  const parsedDate = parse(dateStr, formatStr, referenceDate, options)
+
+  // Check if the date is valid
+  if (Number.isNaN(parsedDate.getTime())) {
+    throw new Error(`Invalid date string: ${dateStr}`)
+  }
+
+  return fromZonedTime(parsedDate, "Pacific/Auckland")
 }
 
 /**
  * Formats date as Tuesday 9th July 2024
  */
 export function formatFullDate(date: string | Date) {
-  try {
-    const formatted = format(new Date(date), "eeee do MMMM yyyy")
-    if (date === formatted) return date
-    return formatted
-  } catch (error) {
-    console.error("Error formatting date:", date, error)
-    return date
-  }
+  const formatted = format(new Date(date), "eeee do MMMM yyyy")
+  return formatted
 }
 
 /**
  * Converts from military Time to 12-hour format
  */
 export function convertTo12HourFormat(militaryTime: string): string {
-  try {
-    if (!militaryTime || typeof militaryTime !== "string") {
-      return militaryTime
-    }
+  // Validate time format
+  const timeRegex = /^(\d{1,2}):?(\d{2})(?::(\d{2}))?$/
+  const match = militaryTime.match(timeRegex)
 
-    // Validate time format and ranges
-    const parts = militaryTime.split(":")
-    if (militaryTime.includes(":")) {
-      const [hours, minutes, seconds] = parts
-      const numHours = Number.parseInt(hours)
-      const numMinutes = Number.parseInt(minutes)
-      const numSeconds = seconds ? Number.parseInt(seconds) : 0
-
-      if (
-        Number.isNaN(numHours) ||
-        numHours < 0 ||
-        numHours > 23 ||
-        Number.isNaN(numMinutes) ||
-        numMinutes < 0 ||
-        numMinutes > 59 ||
-        (seconds && (Number.isNaN(numSeconds) || numSeconds < 0 || numSeconds > 59))
-      ) {
-        return militaryTime
-      }
-    } else {
-      if (!/^([01]?[0-9]|2[0-3])[0-5][0-9]$/.test(militaryTime)) {
-        return militaryTime
-      }
-    }
-
-    // Handle time format without seconds
-    const timeFormat = militaryTime.includes(":")
-      ? militaryTime.split(":").length === 3
-        ? "HH:mm:ss"
-        : "HH:mm"
-      : "HHmm"
-
-    return format(parse(militaryTime, timeFormat, new Date()), "h:mma")
-  } catch (error) {
-    console.error("Error converting time:", militaryTime, error)
-    return militaryTime
+  if (!match) {
+    throw new Error(
+      `Invalid time format: ${militaryTime}. Expected format: HH:mm or HHmm or HH:mm:ss`,
+    )
   }
+
+  const [, hours, minutes, seconds] = match
+  const numHours = Number.parseInt(hours)
+  const numMinutes = Number.parseInt(minutes)
+  const numSeconds = seconds ? Number.parseInt(seconds) : 0
+
+  // Validate hours
+  if (numHours < 0 || numHours > 23) {
+    throw new Error(`Invalid hours: ${hours}. Hours must be between 0 and 23.`)
+  }
+
+  // Validate minutes
+  if (numMinutes < 0 || numMinutes > 59) {
+    throw new Error(`Invalid minutes: ${minutes}. Minutes must be between 0 and 59.`)
+  }
+
+  // Validate seconds if provided
+  if (seconds && (numSeconds < 0 || numSeconds > 59)) {
+    throw new Error(`Invalid seconds: ${seconds}. Seconds must be between 0 and 59.`)
+  }
+
+  // Determine time format based on input
+  const timeFormat = seconds ? "HH:mm:ss" : militaryTime.includes(":") ? "HH:mm" : "HHmm"
+
+  return format(parse(militaryTime, timeFormat, new Date()), "h:mma")
 }
