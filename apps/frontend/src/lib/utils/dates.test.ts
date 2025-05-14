@@ -1,4 +1,4 @@
-import { clampInterval, convertTo12HourFormat, formatFullDate, nzstParse } from "@/lib/utils/dates"
+import { clampInterval, convertTo12HourFormat, formatFullDate } from "@/lib/utils/dates"
 
 describe("convertTo12HourFormat", () => {
   // Test cases for HH:mm:ss format
@@ -118,29 +118,5 @@ describe("formatFullDate", () => {
   it("should handle error cases in date formatting", () => {
     const errorDate = { toString: () => "error object" }
     expect(() => formatFullDate(errorDate as unknown as string)).toThrow("Invalid time value")
-  })
-})
-
-describe("nzstParse", () => {
-  it("should parse a date string in New Zealand Standard Time", () => {
-    const result = nzstParse("2024-07-09", "yyyy-MM-dd", new Date(2024, 0, 1))
-    const resultDate = new Date(result)
-
-    expect(resultDate.getFullYear()).toBe(2024)
-    expect(resultDate.getMonth()).toBe(6) // 0-indexed month
-    expect(resultDate.getDate()).toBe(9)
-  })
-
-  it("should handle different parse options", () => {
-    const result = nzstParse("09/07/2024", "dd/MM/yyyy", new Date(2024, 0, 1))
-    const resultDate = new Date(result)
-
-    expect(resultDate.getFullYear()).toBe(2024)
-    expect(resultDate.getMonth()).toBe(6) // 0-indexed month
-    expect(resultDate.getDate()).toBe(9)
-  })
-
-  it("should handle invalid date strings", () => {
-    expect(() => nzstParse("invalid", "yyyy-MM-dd", new Date())).toThrow()
   })
 })

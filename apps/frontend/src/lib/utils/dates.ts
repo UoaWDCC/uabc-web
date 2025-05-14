@@ -1,6 +1,5 @@
-import type { NormalizedInterval, ParseOptions } from "date-fns"
+import type { NormalizedInterval } from "date-fns"
 import { format, interval, max, min, parse } from "date-fns"
-import { fromZonedTime } from "date-fns-tz"
 
 /**
  * Clamps the given intervals to the intersection of the two.
@@ -16,38 +15,6 @@ import { fromZonedTime } from "date-fns-tz"
  */
 export function clampInterval(interval1: NormalizedInterval, interval2: NormalizedInterval) {
   return interval(max([interval1.start, interval2.start]), min([interval1.end, interval2.end]))
-}
-
-/**
- * Parses a date string in New Zealand Standard Time (NZST)
- *
- * @param {string} dateStr The date string to parse
- * @param {string} formatStr The format of the input date string
- * @param {string | number | Date} referenceDate A reference date used for parsing
- * @param {ParseOptions} [options={}] Optional parsing options
- * @returns {Date} A parsed Date object in New Zealand Standard Time
- * @throws {Error} If the date string is invalid
- * @example
- * const date = nzstParse('2023-07-15', 'yyyy-MM-dd', new Date(), {})
- * // Returns a Date object in New Zealand Standard Time
- */
-export function nzstParse(
-  dateStr: string,
-  formatStr: string,
-  referenceDate: string | number | Date,
-  options: ParseOptions = {},
-) {
-  const parsedDate = parse(dateStr, formatStr, referenceDate, options)
-
-  // Check if the date is valid
-  if (Number.isNaN(parsedDate.getTime())) {
-    throw new Error(`Invalid date string: ${dateStr}`)
-  }
-
-  // Explicitly set the time to midnight to avoid timezone shifts
-  parsedDate.setHours(0, 0, 0, 0)
-
-  return fromZonedTime(parsedDate, "Pacific/Auckland")
 }
 
 /**
