@@ -1,5 +1,4 @@
-import { render } from "@/test-utils"
-import { screen } from "@testing-library/react"
+import { render, screen } from "@/test-utils"
 import { isValidElement } from "react"
 import { Heading } from "./Heading"
 import { DEFAULT_FONT_SIZES, DEFAULT_FONT_WEIGHTS } from "./Heading"
