@@ -1,5 +1,4 @@
-import { fireEvent, render } from "@/test-utils"
-import { screen } from "@testing-library/react"
+import { fireEvent, render, screen } from "@/test-utils"
 import { isValidElement } from "react"
 import { InputType, TextInput } from "./TextInput"
 import * as TextInputModule from "./index"
