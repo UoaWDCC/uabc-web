@@ -2,7 +2,6 @@ import { render, screen } from "@/test-utils"
 import { isValidElement } from "react"
 import { Button } from "./Button"
 import * as ButtonModule from "./index"
-import "@testing-library/jest-dom"
 
 describe("<Button />", () => {
   it("should re-export the Button component", () => {
