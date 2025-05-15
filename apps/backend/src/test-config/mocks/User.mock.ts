@@ -1,5 +1,5 @@
-import type { User } from "@/payload-types"
 import type { CreateUserData } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 
 export const userMock: User = {
   id: "60a4fa6ff8ba5b0a929c1143",

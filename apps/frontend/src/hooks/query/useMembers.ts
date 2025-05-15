@@ -1,14 +1,6 @@
-import { useQuery } from "@tanstack/react-query"
-
 import { QUERY_KEY } from "@/lib/utils/queryKeys"
-
-export type MemberResponse = {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-  prepaidSessions: number
-}
+import type { MemberResponse } from "@repo/shared"
+import { useQuery } from "@tanstack/react-query"
 
 const fetchMembers = async (): Promise<MemberResponse[]> => {
   const response = await fetch("/api/users?member=true&verified=true", {

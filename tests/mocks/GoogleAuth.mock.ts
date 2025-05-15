@@ -1,4 +1,4 @@
-import type { UserInfoResponse } from "@/types/auth"
+import type { UserInfoResponse } from "@repo/shared"
 import { NextRequest } from "next/server"
 
 // Mock Next Request

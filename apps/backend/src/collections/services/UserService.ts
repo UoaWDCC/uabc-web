@@ -1,6 +1,6 @@
-import type { User } from "@/payload-types"
 import configPromise from "@payload-config"
 import type { CreateUserData } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { getPayload } from "payload"
 
 const payload = await getPayload({

@@ -1,10 +1,10 @@
-import { type JWTResponse, JWTResponseSchema } from "@/types/middleware"
+import { type JWT, JWTSchema } from "@repo/shared"
 import jwt from "jsonwebtoken"
 
 export class AuthToken {
   private token: string
   private _decoded?: string | jwt.JwtPayload
-  private _data?: JWTResponse
+  private _data?: JWT
   private _verified = false
 
   public constructor(token: string) {
@@ -41,13 +41,13 @@ export class AuthToken {
    * @public
    * @method
    */
-  public get data(): JWTResponse | undefined {
+  public get data(): JWT | undefined {
     if (this._data !== undefined) return this._data
 
     const decoded = this.decoded
     if (!decoded) return undefined
 
-    const parsed = JWTResponseSchema.safeParse(decoded)
+    const parsed = JWTSchema.safeParse(decoded)
     if (!parsed.success) return undefined
 
     this._data = parsed.data

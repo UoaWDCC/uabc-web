@@ -1,8 +1,8 @@
 import "server-only"
 
 import { AuthToken } from "@/lib/utils/auth-token"
+import type { User } from "@repo/shared/payload-types"
 import { cookies } from "next/headers"
-import type { User } from "../../../../backend/src/payload-types"
 
 const withCurrentUser = <T,>(Component: React.ComponentType<T & CurrentUserProps>) => {
   let currentUser: User | undefined
