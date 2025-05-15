@@ -39,6 +39,7 @@ export default defineConfig({
         "**/*.{mjs,js}",
         "packages/(?!ui)/**",
         "**/*test-*/**",
+        "apps/portal/**",
         ...(fs.readFileSync(`${__dirname}/.gitignore`, "utf8") || "")
           .split(/\r?\n/)
           .filter((line: string) => !!line.trim())
