@@ -1,11 +1,9 @@
 import { googleAuthScopes, oauth2Client } from "@/business-layer/security/google"
 import AuthService from "@/collections/services/AuthService"
 import UserService from "@/collections/services/UserService"
-import { type UserInfoResponse, UserInfoResponseSchema } from "@/types/auth"
-import { MembershipType } from "@/types/types"
+import { MembershipType, type UserInfoResponse, UserInfoResponseSchema } from "@repo/shared"
 import jwt from "jsonwebtoken"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
 import { type NextRequest, NextResponse } from "next/server"
 
 export const GET = async (req: NextRequest) => {
@@ -67,7 +65,7 @@ export const GET = async (req: NextRequest) => {
   const authService = new AuthService()
   await authService.createAuth({
     user,
-    type: "oauth",
+    email: user.email,
     provider: "google",
     providerAccountId: sub,
     accessToken: tokens.access_token,
@@ -76,25 +74,21 @@ export const GET = async (req: NextRequest) => {
     idToken: tokens.id_token,
   })
 
-  /**
-   * JWT token including user info and the Google access token.
-   * Expires in 1 hour (same duration as Google access token)
-   */
-  const token = jwt.sign(
-    {
-      profile: user,
-      accessToken: tokens.access_token,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "1h" },
-  )
+  const jwtPayload = {
+    profile: user,
+    accessToken: tokens.access_token,
+  }
 
-  cookieStore.set("auth_token", token, {
+  const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, { expiresIn: "1h" })
+  const response = NextResponse.redirect(new URL("/onboarding/name", req.url))
+
+  response.cookies.set("auth_token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 60 * 60,
+    path: "/",
   })
 
-  return redirect("/onboarding/name")
+  return response
 }

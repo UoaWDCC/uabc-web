@@ -1,4 +1,10 @@
 import z from "zod"
+import { UserSchema } from "./user"
+
+export const JWTSchema = z.object({
+  user: UserSchema,
+  access_token: z.string(),
+})
 
 export const UserInfoResponseSchema = z.object({
   /**
@@ -29,7 +35,7 @@ export const UserInfoResponseSchema = z.object({
    * The user's email address
    * @example straightzhao@gmail.com
    */
-  email: z.string(),
+  email: z.string().email(),
   email_verified: z.boolean(),
   /**
    * The hosted domain that the Google account is associated with
@@ -38,4 +44,21 @@ export const UserInfoResponseSchema = z.object({
   hd: z.string(),
 })
 
-export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>
+export const LoginDetailsSchema = z.object({
+  /**
+   * The user's email address
+   * @example straightzhao@gmail.com
+   */
+  email: z.string().email(),
+  /**
+   * The user's password
+   * @example 12345678
+   */
+  password: z
+    .string()
+    .min(8)
+    .regex(/[A-Z]/) // Uppercase letters
+    .regex(/[a-z]/) // Lowercase letters
+    .regex(/[0-9]/) // Numbers
+    .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/), // Special characters
+})

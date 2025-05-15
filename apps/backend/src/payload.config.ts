@@ -7,6 +7,7 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 
+import type { Config } from "@repo/shared/payload-types"
 import { Admin } from "./collections/Admin"
 import { Authentication } from "./collections/Authentication"
 import { Booking } from "./collections/Booking"
@@ -15,6 +16,10 @@ import { GameSessionSchedule } from "./collections/GameSessionSchedule"
 import { Media } from "./collections/Media"
 import { Semester } from "./collections/Semester"
 import { User } from "./collections/User"
+
+declare module "payload" {
+  export interface GeneratedTypes extends Config {}
+}
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -46,7 +51,8 @@ export default buildConfig({
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
-    outputFile: path.resolve(dirname, "payload-types.ts"),
+    outputFile: path.resolve(dirname, "../../../packages/shared/src/payload-types.ts"),
+    declare: false,
   },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",

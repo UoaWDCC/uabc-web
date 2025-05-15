@@ -1,7 +1,7 @@
 import dotenv from "dotenv"
-import { redirect } from "next/navigation"
+dotenv.config()
 
-import { authenticationMock } from "@/test-config/mocks/Authentication.mock"
+import { googleAuthMock } from "@/test-config/mocks/Authentication.mock"
 import {
   CODE_MOCK,
   JWT_SECRET_MOCK,
@@ -13,13 +13,10 @@ import {
 } from "@/test-config/mocks/GoogleAuth.mock"
 import { userMock } from "@/test-config/mocks/User.mock"
 
-dotenv.config()
-
 vi.mock("@/business-layer/security/google", async () => {
   const actual = await vi.importActual<typeof import("@/business-layer/security/google")>(
     "@/business-layer/security/google",
   )
-
   return {
     ...actual,
     oauth2Client: {
@@ -30,37 +27,28 @@ vi.mock("@/business-layer/security/google", async () => {
   }
 })
 
-vi.mock("@/collections/services/UserService", () => {
-  return {
-    default: vi.fn().mockImplementation(() => ({
-      getUserByEmail: vi.fn().mockResolvedValue(userMock),
-      createUser: vi.fn().mockResolvedValue(userMock),
-    })),
-  }
-})
+vi.mock("@/collections/services/UserService", () => ({
+  default: vi.fn().mockImplementation(() => ({
+    getUserByEmail: vi.fn().mockResolvedValue(userMock),
+    createUser: vi.fn().mockResolvedValue(userMock),
+  })),
+}))
 
-vi.mock("@/collections/services/AuthService", () => {
-  return {
-    default: vi.fn().mockImplementation(() => ({
-      createAuth: vi.fn().mockResolvedValue(authenticationMock),
-    })),
-  }
-})
+vi.mock("@/collections/services/AuthService", () => ({
+  default: vi.fn().mockImplementation(() => ({
+    createAuth: vi.fn().mockResolvedValue(googleAuthMock),
+  })),
+}))
 
 vi.mock("next/headers", () => ({
   cookies: () => ({
-    get: (key: string) => ({ value: key === "state" ? STATE_MOCK : undefined }),
+    get: (key: string) => (key === "state" ? { value: STATE_MOCK } : undefined),
     set: vi.fn(),
     delete: vi.fn(),
   }),
 }))
 
-vi.mock("next/navigation", () => ({
-  redirect: vi.fn(),
-}))
-
 import { GET as callback } from "@/app/api/auth/google/callback/route"
-import { cookies } from "next/headers"
 
 describe("GET /api/auth/google/callback", () => {
   beforeAll(() => {
@@ -71,29 +59,34 @@ describe("GET /api/auth/google/callback", () => {
     process.env.JWT_SECRET = JWT_SECRET_MOCK
   })
 
-  afterEach(() => vi.restoreAllMocks())
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
 
-  it("redirects user on success auth", async () => {
+  it("redirects user on successful auth", async () => {
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
-    const cookieStore = await cookies()
-    cookieStore.set("state", STATE_MOCK)
 
-    await callback(req)
-    expect(redirect).toHaveBeenCalled()
+    const res = await callback(req)
+
+    expect(res.status).toBe(307) // redirect
+    expect(res.headers.get("location")).toBe("http://localhost:3000/onboarding/name")
+
+    const setCookie = res.headers.get("set-cookie")
+    expect(setCookie).toContain("auth_token=")
+    expect(setCookie).toContain("HttpOnly")
   })
 
   it("returns 400 if state does not match", async () => {
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}`,
     )
-    req.cookies.set("state", STATE_MOCK)
 
-    const response = await callback(req)
-    const json = await response.json()
+    const res = await callback(req)
+    const json = await res.json()
 
-    expect(response.status).toBe(400)
+    expect(res.status).toBe(400)
     expect(json.error).toMatch(/state/i)
   })
 
@@ -101,12 +94,11 @@ describe("GET /api/auth/google/callback", () => {
     const req = createMockNextRequest(
       `/api/auth/google/callback?state=${STATE_MOCK}&scope=${SCOPES}`,
     )
-    req.cookies.set("state", STATE_MOCK)
 
-    const response = await callback(req)
-    const json = await response.json()
+    const res = await callback(req)
+    const json = await res.json()
 
-    expect(response.status).toBe(400)
+    expect(res.status).toBe(400)
     expect(json.error).toMatch(/code/i)
   })
 })

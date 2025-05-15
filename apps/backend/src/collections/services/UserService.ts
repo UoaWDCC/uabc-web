@@ -1,6 +1,6 @@
 import type { User } from "@/payload-types"
-import type { CreateUserData } from "@/types/collections"
 import configPromise from "@payload-config"
+import type { CreateUserData } from "@repo/shared"
 import { getPayload } from "payload"
 
 const payload = await getPayload({
@@ -19,7 +19,7 @@ export default class UserService {
     role,
     email,
     remainingSessions = 0,
-    image = undefined,
+    image,
   }: CreateUserData): Promise<User> {
     const newUser = await payload.create({
       collection: "user",
@@ -27,9 +27,9 @@ export default class UserService {
         firstName,
         lastName,
         role,
+        email,
         remainingSessions,
         image,
-        email,
       },
     })
 
