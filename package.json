@@ -53,7 +53,7 @@
     "mongodb-memory-server": "^10.1.4",
     "nyc": "^17.1.0",
     "turbo": "^2.5.0",
-    "typescript": "5.7.3",
+    "typescript": "^5",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "3.1.1"
   },
