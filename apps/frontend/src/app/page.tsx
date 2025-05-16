@@ -1,105 +1,77 @@
-import { UabcLogo } from "@/components/Composite/UabcLogo"
-import { Button } from "@repo/ui/components/Button"
-import { Heading } from "@repo/ui/components/Heading"
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  Center,
-  Container,
-  Grid,
-  GridItem,
-  Text,
-  Link as UILink,
-  VStack,
-} from "@yamada-ui/react"
-import Link from "next/link"
+import Image from "next/image"
+import styles from "./page.module.css"
 
-export default function HomePage() {
+export default function Home() {
   return (
-    <Container
-      as={Grid}
-      bg={{
-        base: ["white", "black"],
-        sm: "primary",
-      }}
-      justifyContent="center"
-      minH="100dvh"
-      p={{ sm: "0" }}
-    >
-      <GridItem as={Center}>
-        <Card
-          bg={["white", "black"]}
-          color={["black", "white"]}
-          flexDir="row"
-          gap="12"
-          p={{
-            base: "6",
-            sm: "12",
-          }}
-          textAlign="center"
-          variant="solid"
-          w="fit-content"
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <Image
+          alt="Next.js logo"
+          className={styles.logo}
+          height={38}
+          priority
+          src="/next.svg"
+          width={180}
+        />
+        <ol>
+          <li>
+            Get started by editing <code>src/app/page.tsx</code>.
+          </li>
+          <li>Save and see your changes instantly.</li>
+        </ol>
+
+        <div className={styles.ctas}>
+          <a
+            className={styles.primary}
+            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <Image
+              alt="Vercel logomark"
+              className={styles.logo}
+              height={20}
+              src="/vercel.svg"
+              width={20}
+            />
+            Deploy now
+          </a>
+          <a
+            className={styles.secondary}
+            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Read our docs
+          </a>
+        </div>
+      </main>
+      <footer className={styles.footer}>
+        <a
+          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          rel="noopener noreferrer"
+          target="_blank"
         >
-          <CardBody
-            alignItems="center"
-            as={VStack}
-            gap="6"
-            justifyContent="center"
-            maxW="500px"
-            p="0"
-          >
-            <Heading.h2 lineHeight="10">UABC Booking Portal</Heading.h2>
-            <Center
-              display={{
-                base: "grid",
-                lg: "none",
-              }}
-              placeItems="center"
-            >
-              <UabcLogo size={200} />
-            </Center>
-            <Text>🏸 Welcome to the UABC Booking Portal 🏸</Text>
-            <Text>
-              Easily book your badminton sessions with the University of Auckland Badminton Club.
-            </Text>
-            <Text>
-              Enjoy quick, hassle-free reservations and get on the court in no time. Join our
-              vibrant community and play your best game today!
-            </Text>
-            <Button
-              _hover={{
-                bg: "transparentize(primary, 90%)",
-              }}
-              as={Link}
-              colorScheme="primary"
-              fontSize="sm"
-              fontWeight="normal"
-              height="2.75rem"
-              href="/sessions"
-              lineHeight="5"
-              size="lg"
-              w="full"
-            >
-              Book a session!
-            </Button>
-            <UILink as={Link} color="primary" href="/privacy" textDecoration="underline">
-              Privacy Policy
-            </UILink>
-          </CardBody>
-          <CardFooter
-            display={{
-              base: "none",
-              lg: "grid",
-            }}
-            p="0"
-          >
-            <Center>
-              <UabcLogo size={350} />
-            </Center>
-          </CardFooter>
-        </Card>
-      </GridItem>
-    </Container>
+          <Image alt="File icon" aria-hidden height={16} src="/file.svg" width={16} />
+          Learn
+        </a>
+        <a
+          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <Image alt="Window icon" aria-hidden height={16} src="/window.svg" width={16} />
+          Examples
+        </a>
+        <a
+          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <Image alt="Globe icon" aria-hidden height={16} src="/globe.svg" width={16} />
+          Go to nextjs.org →
+        </a>
+      </footer>
+    </div>
   )
 }
