@@ -1,4 +1,18 @@
-# UOA Badminton Club Website 🏸
+<div align="center">
+  <img src="apps/portal/public/images/BadmintonRacketLogo.png" alt="UOA Badminton Club Logo" width="120" />
+  
+  # UOA Badminton Club Website 🏸
+  
+  [![CI Pipeline](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/ci-pipeline.yml?branch=master&label=CI%20Pipeline&logo=githubactions&logoColor=white&style=for-the-badge&color=2684FF)](https://github.com/UoaWDCC/uabc-web/actions/workflows/ci-pipeline.yml "Continuous Integration: Lint, test, and build checks")
+  [![CD Pipeline](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/cd-pipeline.yml?branch=master&label=CD%20Pipeline&logo=vercel&logoColor=white&style=for-the-badge&color=000000)](https://github.com/UoaWDCC/uabc-web/actions/workflows/cd-pipeline.yml "Continuous Deployment: Production deployment")
+  [![Storybook](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/deploy-github-pages.yml?branch=master&label=Storybook&logo=storybook&logoColor=white&style=for-the-badge&color=FF4785)](https://github.com/UoaWDCC/uabc-web/actions/workflows/deploy-github-pages.yml "Storybook: UI documentation build")
+  [![Vitest Coverage](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/vitest-coverage.yml?label=Vitest%20Coverage&logo=vitest&logoColor=white&style=for-the-badge&color=43AA8B)](https://github.com/UoaWDCC/uabc-web/actions/workflows/vitest-coverage.yml "Vitest: Test coverage status")
+  
+  <em>CI: Lint, test, build | CD: Deploy | Storybook: UI docs | Coverage: Tests</em>
+</div>
+
+---
+
 Project initiated by WDCC in 2023.
 
 ## About ⚡
