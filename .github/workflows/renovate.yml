@@ -1,6 +1,15 @@
 name: Renovate
 on:
   workflow_dispatch:
+    inputs:
+      repoCache:
+        description: 'Cache usage: enabled, disabled, or reset'
+        type: choice
+        default: enabled
+        options:
+          - enabled
+          - disabled
+          - reset
   schedule:
     - cron: '0 0 * * *'
 
@@ -18,14 +27,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Download cache unless disabled or reset
       - name: Download renovate cache artifact
-        uses: dawidd6/action-download-artifact@v2
+        if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset' }}
+        uses: dawidd6/action-download-artifact@v9
         continue-on-error: true
         with:
           name: ${{ env.cache_key }}
           path: cache-download
 
+      # Extract cache unless disabled or reset
       - name: Extract renovate cache
+        if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset' }}
         run: |
           if [ ! -d cache-download ] ; then
             echo "No cache found."
@@ -42,15 +55,17 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           configurationFile: renovate.json
         env:
-          RENOVATE_REPOSITORY_CACHE: enabled
+          RENOVATE_REPOSITORY_CACHE: ${{ github.event.inputs.repoCache }}
 
       - name: Compress renovate cache
+        if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset' }}
         run: |
           ls $cache_dir
           tar -czvf $cache_archive -C $cache_dir .
 
       - name: Upload renovate cache artifact
-        uses: actions/upload-artifact@v3
+        if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset' }}
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.cache_key }}
           path: ${{ env.cache_archive }}
