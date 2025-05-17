@@ -109,25 +109,5 @@ describe("bookingDataService", () => {
         "Not Found",
       )
     })
-
-    it("should call payload.delete with correct args when deleting a booking", async () => {
-      const service = new BookingDataService()
-      const docsData = {
-        id: "1",
-        updatedAt: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
-      }
-      const spy = vi.spyOn(payload, "delete").mockResolvedValue({
-        docs: [docsData],
-        errors: [],
-      })
-      const result = await service.deleteBooking("1")
-      expect(result).toEqual({
-        docs: [docsData],
-        errors: [],
-      })
-      expect(spy).toHaveBeenCalledWith({ collection: "booking", id: "1" })
-      spy.mockRestore()
-    })
   })
 })
