@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="apps/portal/public/images/BadmintonRacketLogo.png" alt="UOA Badminton Club Logo" width="120" />
+  <img src="apps/frontend/src/assets/BadmintonRacketLogo.png" alt="UOA Badminton Club Logo" width="120" />
   
   # UOA Badminton Club Website 🏸
   
