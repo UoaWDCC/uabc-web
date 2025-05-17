@@ -62,3 +62,6 @@ export const LoginDetailsSchema = z.object({
     .regex(/[0-9]/) // Numbers
     .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/), // Special characters
 })
+
+export type JWT = z.infer<typeof JWTSchema>
+export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>

@@ -5,7 +5,7 @@ import type {
   GameSessionSchedule,
   Semester,
   User,
-} from "@/payload-types"
+} from "../payload-types"
 
 /*
  * Type for creating authentication data without system-generated fields

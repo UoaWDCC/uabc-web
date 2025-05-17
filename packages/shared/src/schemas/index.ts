@@ -1,2 +1,8 @@
-export { LoginDetailsSchema, UserInfoResponseSchema, JWTSchema } from "./auth"
+export {
+  LoginDetailsSchema,
+  UserInfoResponseSchema,
+  JWTSchema,
+  type JWT,
+  type UserInfoResponse,
+} from "./auth"
 export { UserSchema } from "./user"

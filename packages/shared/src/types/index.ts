@@ -11,5 +11,4 @@ export type {
 } from "./collections"
 export type { CartGameSession } from "./game-session"
 export type { Member, MemberResponse, PendingMember } from "./member"
-export type { JWT, UserInfoResponse } from "./schemas"
 export { MembershipType, PlayLevel, Weekday } from "./enums"

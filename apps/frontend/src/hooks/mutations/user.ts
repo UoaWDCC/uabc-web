@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query"
 
 import { toast } from "@/components/Generic/ui/use-toast"
 import { QUERY_KEY } from "@/lib/utils/queryKeys"
-import type { PendingMemberResponse } from "../query/usePendingMembers"
+import type { PendingMember } from "@repo/shared"
 
 export const useApproveUserMutation = (queryClient: QueryClient) => {
   const mutation = useMutation({
@@ -31,7 +31,7 @@ export const useApproveUserMutation = (queryClient: QueryClient) => {
 
       const previousMembers = queryClient.getQueryData([QUERY_KEY.PENDING_MEMBERS])
 
-      queryClient.setQueryData([QUERY_KEY.PENDING_MEMBERS], (old: PendingMemberResponse[]) =>
+      queryClient.setQueryData([QUERY_KEY.PENDING_MEMBERS], (old: PendingMember[]) =>
         old.filter((member) => member.id !== userId),
       )
 
@@ -71,7 +71,7 @@ export const useRejectUserMutation = (queryClient: QueryClient) => {
 
       const previousMembers = queryClient.getQueryData([QUERY_KEY.PENDING_MEMBERS])
 
-      queryClient.setQueryData([QUERY_KEY.PENDING_MEMBERS], (old: PendingMemberResponse[]) =>
+      queryClient.setQueryData([QUERY_KEY.PENDING_MEMBERS], (old: PendingMember[]) =>
         old.filter((member) => member.id !== userId),
       )
 
