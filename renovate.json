@@ -19,18 +19,19 @@
       "description": "Group Next.js related packages",
       "groupName": "nextjs",
       "matchPackageNames": ["next*", "@next*"],
-      "matchFileNames": ["package.json", "apps/frontend/**", "apps/backend/**"]
+      "matchFileNames": ["apps/frontend/**", "apps/backend/**"]
     },
     {
       "description": "Group Payload CMS related packages",
       "groupName": "payload-cms",
       "matchPackageNames": ["payload*", "@payloadcms*"],
-      "matchFileNames": ["package.json", "apps/backend/**"]
+      "matchFileNames": ["apps/backend/**"]
     },
     {
       "description": "Group testing libraries (Vitest, Testing Library)",
       "groupName": "testing",
-      "matchPackageNames": ["vitest*", "@vitest*", "@testing-library*"]
+      "matchPackageNames": ["vitest*", "@vitest*", "@testing-library*"],
+      "matchFileNames": ["package.json"]
     },
     {
       "description": "Group Storybook-related packages",
