@@ -15,7 +15,7 @@ type Story = StoryObj<typeof VStack>
 
 const gradients = defaultTheme.gradients as Record<string, string>
 
-export const Colors: Story = {
+export const Gradients: Story = {
   render: () => (
     <VStack width="full">
       <Heading.h1>Gradients</Heading.h1>
