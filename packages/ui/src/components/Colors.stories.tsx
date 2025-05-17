@@ -31,11 +31,9 @@ export const Colors: Story = {
       <Grid gap="md" templateColumns="repeat(3, 1fr)">
         <ColorPallet name="primary" value={colors.primary} />
         <ColorPallet name="secondary" value={colors.secondary} />
-        <ColorPallet name="info" value={colors.info} />
         <ColorPallet name="success" value={colors.success} />
         <ColorPallet name="warning" value={colors.warning} />
         <ColorPallet name="danger" value={colors.danger} />
-        <ColorPallet name="link" value={colors.link} />
       </Grid>
 
       {COLORS.map((colorName) => (
