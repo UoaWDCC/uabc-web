@@ -110,7 +110,7 @@ describe("bookingDataService", () => {
       )
     })
 
-    it("should call deleteBooking", async () => {
+    it("should call payload.delete with correct args when deleting a booking", async () => {
       const service = new BookingDataService()
       const docsData = {
         id: "1",

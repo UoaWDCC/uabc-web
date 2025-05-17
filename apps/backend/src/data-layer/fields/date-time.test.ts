@@ -40,8 +40,8 @@ describe("createTimeField", () => {
     expect(processedField.getFullYear()).toBe(1970)
     expect(processedField.getMonth()).toBe(0)
     expect(processedField.getUTCDate()).toBe(1)
-    expect(processedField.getHours()).toBe(testDate.getHours())
-    expect(processedField.getMinutes()).toBe(testDate.getMinutes())
+    expect(processedField.getUTCHours()).toBe(testDate.getUTCHours())
+    expect(processedField.getUTCMinutes()).toBe(testDate.getUTCMinutes())
   })
 
   it("should handle undefined value and return Invalid Date", () => {
