@@ -3,7 +3,7 @@ import { generate } from "@yamada-ui/theme-tools"
 
 export const colors: ThemeTokens = {
   black: "#0a0a0a",
-  white: "#fffff",
+  white: "#ffffff",
   blue: generate.tones("#5872c6"),
   secondary: generate.tones("#1b1b1b"),
 }
