@@ -3,6 +3,13 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * *'
+
+env:
+  cache_archive: renovate_cache.tar.gz
+  cache_dir: /tmp/renovate/cache/renovate/repository
+  cache_key: renovate-cache
+  RENOVATE_REPOSITORIES: ${{ github.repository }}
+
 jobs:
   renovate:
     runs-on: ubuntu-latest
@@ -10,7 +17,41 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Download renovate cache artifact
+        uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
+        with:
+          name: ${{ env.cache_key }}
+          path: cache-download
+
+      - name: Extract renovate cache
+        run: |
+          if [ ! -d cache-download ] ; then
+            echo "No cache found."
+            exit 0
+          fi
+          mkdir -p $cache_dir
+          tar -xzf cache-download/$cache_archive -C $cache_dir
+          sudo chown -R 12021:0 /tmp/renovate/
+          ls -R $cache_dir
+
       - name: Run Renovate
         uses: renovatebot/github-action@v42.0.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          configurationFile: renovate.json
+        env:
+          RENOVATE_REPOSITORY_CACHE: enabled
+
+      - name: Compress renovate cache
+        run: |
+          ls $cache_dir
+          tar -czvf $cache_archive -C $cache_dir .
+
+      - name: Upload renovate cache artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.cache_key }}
+          path: ${{ env.cache_archive }}
+          retention-days: 1
