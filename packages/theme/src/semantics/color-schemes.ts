@@ -5,11 +5,9 @@ export const colorSchemes: ThemeSemantics["colorSchemes"] = {
   info: "blue",
   link: "blue",
   primary: "blue",
-  secondary: "violet",
+  secondary: "secondary",
   success: "green",
   warning: "orange",
-  tertiary: "red",
-  destructive: "destructive",
 }
 
 export const SEMANTIC_COLOR_SCHEMES = Object.keys(colorSchemes)

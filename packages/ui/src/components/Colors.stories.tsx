@@ -36,15 +36,6 @@ export const Colors: Story = {
         <ColorPallet name="warning" value={colors.warning} />
         <ColorPallet name="danger" value={colors.danger} />
         <ColorPallet name="link" value={colors.link} />
-        <ColorPallet name="muted" value={colors.muted} />
-      </Grid>
-
-      <Heading.h2>Alphas</Heading.h2>
-      <Grid gap="md" templateColumns="repeat(3, 1fr)">
-        <ColorPallets colors={colors} name="whiteAlpha" />
-      </Grid>
-      <Grid gap="md" templateColumns="repeat(3, 1fr)">
-        <ColorPallets colors={colors} name="blackAlpha" />
       </Grid>
 
       {COLORS.map((colorName) => (
