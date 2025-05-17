@@ -22,7 +22,7 @@ export function createTimeField(name: string, description: string): DateField {
         (args) => {
           const date = new Date(args.value)
           // Ensure that the hours and minutes are retained by setting the date to 1970-01-01
-          const fixedDate = new Date(1970, 0, 1, date.getHours(), date.getMinutes())
+          const fixedDate = new Date(Date.UTC(1970, 0, 1, date.getUTCHours(), date.getUTCMinutes()))
           return fixedDate
         },
       ],
