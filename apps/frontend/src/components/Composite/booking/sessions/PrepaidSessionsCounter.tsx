@@ -1,3 +1,4 @@
+import { HStack, Text } from "@yamada-ui/react"
 import { CountIndicator } from "../../CountIndicator"
 
 interface PrepaidSessionsCounterProps {
@@ -6,12 +7,12 @@ interface PrepaidSessionsCounterProps {
 
 export function PrepaidSessionsCounter({ prepaidSessions }: PrepaidSessionsCounterProps) {
   return (
-    <div className="flex items-center">
-      <div className="px-5 text-xs font-medium">
+    <HStack>
+      <Text fontSize="xs" fontWeight="medium">
         Prepaid Sessions <br />
         Remaining
-      </div>
+      </Text>
       <CountIndicator>{prepaidSessions}</CountIndicator>
-    </div>
+    </HStack>
   )
 }

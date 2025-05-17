@@ -1,6 +1,6 @@
 import { googleAuthScopes, oauth2Client } from "@/business-layer/security/google"
-import AuthService from "@/collections/services/AuthService"
-import UserService from "@/collections/services/UserService"
+import AuthDataService from "@/data-layer/services/AuthDataService"
+import UserDataService from "@/data-layer/services/UserDataService"
 import { MembershipType, type UserInfoResponse, UserInfoResponseSchema } from "@repo/shared"
 import jwt from "jsonwebtoken"
 import { cookies } from "next/headers"
@@ -57,12 +57,12 @@ export const GET = async (req: NextRequest) => {
     given_name: firstName,
   }: UserInfoResponse = UserInfoResponseSchema.parse(await userInfoResponse.json())
 
-  const userService = new UserService()
+  const userService = new UserDataService()
   let user = await userService.getUserByEmail(email)
   if (!user)
     user = await userService.createUser({ firstName, lastName, role: MembershipType.casual, email })
 
-  const authService = new AuthService()
+  const authService = new AuthDataService()
   await authService.createAuth({
     user,
     email: user.email,

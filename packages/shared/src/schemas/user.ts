@@ -1,6 +1,6 @@
 import z from "zod"
 
-import { MembershipType } from "../types"
+import { MembershipType } from "@/types"
 
 // Payload Media Schema
 const MediaSchema = z.object({

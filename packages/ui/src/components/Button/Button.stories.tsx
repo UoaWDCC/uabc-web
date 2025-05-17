@@ -38,7 +38,7 @@ const meta: Meta<typeof Button> = {
     },
     as: {
       control: "select",
-      options: ["button", "a", "Link"],
+      options: ["button", "a"],
       description: "The component used for the root node",
       table: {
         type: { summary: "ElementType" },

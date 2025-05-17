@@ -1,7 +1,8 @@
 import dotenv from "dotenv"
-dotenv.config()
 
 import { googleAuthMock } from "@/test-config/mocks/Authentication.mock"
+import { userMock } from "@/test-config/mocks/User.mock"
+
 import {
   CODE_MOCK,
   JWT_SECRET_MOCK,
@@ -11,7 +12,8 @@ import {
   googleUserMock,
   tokensMock,
 } from "@/test-config/mocks/GoogleAuth.mock"
-import { userMock } from "@/test-config/mocks/User.mock"
+
+dotenv.config()
 
 vi.mock("@/business-layer/security/google", async () => {
   const actual = await vi.importActual<typeof import("@/business-layer/security/google")>(

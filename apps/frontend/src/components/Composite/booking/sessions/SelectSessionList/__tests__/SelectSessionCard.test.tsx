@@ -1,5 +1,5 @@
 import { render, screen, userEvent } from "@/test-config/test-utils"
-import { SelectableCard } from "../SelectableCard"
+import { SelectSessionCard } from "../SelectSessionCard"
 
 const session = {
   id: 1,
@@ -11,9 +11,9 @@ const session = {
   isFull: false,
 }
 
-describe("SelectableCard", () => {
+describe("SelectSessionCard", () => {
   it("should render the card correctly", () => {
-    render(<SelectableCard checked={false} handleSessionClick={() => {}} session={session} />)
+    render(<SelectSessionCard checked={false} handleSessionClick={() => {}} session={session} />)
     const card = screen.getByTestId("session-card")
 
     expect(card.textContent?.includes(session.weekday)).toBe(true)
@@ -24,7 +24,7 @@ describe("SelectableCard", () => {
 
   it("should render the card as disabled if the session is full", () => {
     render(
-      <SelectableCard
+      <SelectSessionCard
         checked={false}
         handleSessionClick={() => {}}
         session={{ ...session, isFull: true }}
@@ -32,7 +32,7 @@ describe("SelectableCard", () => {
     )
     const card = screen.getByTestId("session-card")
 
-    expect(card.className).toContain("pointer-events-none")
+    expect(card).toHaveAttribute("aria-disabled", "true")
     expect(card.textContent?.includes("(Session Full)")).toBe(true)
   })
 
@@ -40,7 +40,11 @@ describe("SelectableCard", () => {
     const handleSessionClick = vi.fn()
     const user = userEvent.setup()
     render(
-      <SelectableCard checked={false} handleSessionClick={handleSessionClick} session={session} />,
+      <SelectSessionCard
+        checked={false}
+        handleSessionClick={handleSessionClick}
+        session={session}
+      />,
     )
     const card = screen.getByTestId("session-card")
 

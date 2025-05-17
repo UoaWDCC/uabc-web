@@ -1,4 +1,4 @@
-import type { PlayLevel } from "./types"
+import type { PlayLevel } from "./enums"
 
 export interface CartGameSession {
   id: number

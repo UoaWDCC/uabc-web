@@ -1,4 +1,5 @@
-import { Card } from "../../Card"
+import { Heading } from "@repo/ui/components/Heading"
+import { Card, CardBody, CardHeader, Text } from "@yamada-ui/react"
 
 type ConfirmedSessionCardProps = {
   weekDay: string
@@ -16,15 +17,17 @@ export const ConfirmedSessionCard = ({
   endTime,
 }: ConfirmedSessionCardProps) => {
   return (
-    <Card className="bg-white/10 text-primary-foreground">
-      <p className="text-lg font-medium">{weekDay}</p>
-      <div className="text-sm text-primary-foreground/70">
-        <p className="mb-2">
+    <Card variant="solid">
+      <CardHeader>
+        <Heading.h3>{weekDay}</Heading.h3>
+      </CardHeader>
+      <CardBody color="whiteAlpha.800" fontSize="sm" gap="sm">
+        <Text>
           {startTime} - {endTime}
-        </p>
-        <p>{locationName}</p>
-        <p>{address}</p>
-      </div>
+        </Text>
+        <Text>{locationName}</Text>
+        <Text>{address}</Text>
+      </CardBody>
     </Card>
   )
 }
