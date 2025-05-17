@@ -54,6 +54,14 @@ describe("bookingDataService", () => {
         expect(fetchedBooking2Next.docs).toEqual(expect.arrayContaining([createdBooking]))
       }
     })
+
+    it("should use default limit and page when no arguments are provided", async () => {
+      // Should not throw and should return an object with default pagination values
+      const result = await bookingDataService.getAllBookings()
+      expect(result).toHaveProperty("docs")
+      expect(result).toHaveProperty("limit", 100)
+      expect(result).toHaveProperty("page", 1)
+    })
   })
 
   describe("updateBooking", () => {
@@ -100,6 +108,26 @@ describe("bookingDataService", () => {
       await expect(() => bookingDataService.deleteBooking("Not a booking ID")).rejects.toThrowError(
         "Not Found",
       )
+    })
+
+    it("should call deleteBooking", async () => {
+      const service = new BookingDataService()
+      const docsData = {
+        id: "1",
+        updatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+      }
+      const spy = vi.spyOn(payload, "delete").mockResolvedValue({
+        docs: [docsData],
+        errors: [],
+      })
+      const result = await service.deleteBooking("1")
+      expect(result).toEqual({
+        docs: [docsData],
+        errors: [],
+      })
+      expect(spy).toHaveBeenCalledWith({ collection: "booking", id: "1" })
+      spy.mockRestore()
     })
   })
 })

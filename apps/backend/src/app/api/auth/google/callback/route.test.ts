@@ -115,6 +115,45 @@ describe("GET /api/auth/google/callback", () => {
     expect(json.error).toMatch(/code/i)
   })
 
+  it("returns 400 if scope is missing", async () => {
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}`,
+    )
+    req.cookies.set("state", STATE_MOCK)
+
+    const response = await callback(req)
+    const json = await response.json()
+
+    expect(response.status).toBe(400)
+    expect(json.error).toMatch(/scope/i)
+  })
+
+  it("returns 400 if scope is invalid", async () => {
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=invalid_scope`,
+    )
+    req.cookies.set("state", STATE_MOCK)
+
+    const response = await callback(req)
+    const json = await response.json()
+
+    expect(response.status).toBe(400)
+    expect(json.error).toMatch(/scope/i)
+  })
+
+  it("returns 500 if user info response is invalid", async () => {
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
+    )
+    req.cookies.set("state", STATE_MOCK)
+
+    const response = await callback(req)
+    const json = await response.json()
+
+    expect(response.status).toBe(500)
+    expect(json.error).toBeDefined()
+  })
+
   afterAll(() => {
     const originalJwtSecret = JWT_SECRET
     process.env.JWT_SECRET = originalJwtSecret
