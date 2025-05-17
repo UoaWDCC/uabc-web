@@ -1,48 +1,25 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
-  "dependencyDashboard": false,
+  "extends": ["config:js-app"],
   "labels": ["dependencies", "renovate"],
-  "rebaseWhen": "conflicted",
+  "timezone": "Pacific/Auckland",
   "prConcurrentLimit": 10,
   "prHourlyLimit": 2,
-  "timezone": "Pacific/Auckland",
-  "assignees": [],
-  "reviewers": [],
+  "rebaseWhen": "conflicted",
+  "dependencyDashboard": false,
+  "ignorePaths": ["apps/portal/**"],
   "packageRules": [
     {
-      "description": "Automatically merge minor, patch, and digest updates if tests pass",
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "description": "Automatically merge minor and patch-level updates",
+      "matchUpdateTypes": ["minor", "patch", "digest"],
       "automerge": true,
-      "automergeType": "branch",
-      "platformAutomerge": true,
-      "requiredStatusChecks": ["Verify"]
+      "automergeType": "branch"
     },
     {
       "description": "Group Next.js related packages",
       "groupName": "nextjs",
       "matchPackagePatterns": ["^next$", "^@next/"],
-      "matchPaths": ["apps/frontend/**", "apps/portal/**"]
-    },
-    {
-      "description": "Group React-related packages",
-      "groupName": "react",
-      "matchPackagePatterns": ["^react$", "^react-dom$", "^@types/react$", "^@types/react-dom$"]
-    },
-    {
-      "description": "Group Storybook-related packages",
-      "groupName": "storybook",
-      "matchPackagePatterns": ["^@storybook/", "^storybook$"]
-    },
-    {
-      "description": "Group BiomeJS related packages",
-      "groupName": "biomejs",
-      "matchPackagePatterns": ["^@biomejs/"]
-    },
-    {
-      "description": "Group testing libraries (Vitest, Testing Library)",
-      "groupName": "testing",
-      "matchPackagePatterns": ["^vitest$", "^@vitest/", "^@testing-library/"]
+      "matchPaths": ["apps/frontend/**", "apps/backend/**"]
     },
     {
       "description": "Group Payload CMS related packages",
@@ -51,13 +28,28 @@
       "matchPaths": ["apps/backend/**"]
     },
     {
-      "description": "Group all @types packages separately if not matched by other groups",
-      "groupName": "type-declarations",
-      "matchPackagePatterns": ["^@types/"],
-      "groupLate": true
+      "description": "Group testing libraries (Vitest, Testing Library)",
+      "groupName": "testing",
+      "matchPackagePatterns": ["^vitest$", "^@vitest/", "^@testing-library/"]
+    },
+    {
+      "description": "Group Storybook-related packages",
+      "groupName": "storybook",
+      "matchPackagePatterns": ["^@storybook/", "^storybook$"]
+    },
+    {
+      "description": "Group devDependencies",
+      "groupName": "devDependencies",
+      "matchDepTypes": ["devDependencies"]
+    },
+    {
+      "description": "Group type definitions",
+      "groupName": "type definitions",
+      "matchPackagePatterns": ["^@types/"]
     }
   ],
-  "pnpm": {
-    "fileMatch": ["(^|/)package\\.json$", "(^|/)pnpm-lock\\.yaml$"]
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "automerge": false
   }
 }
