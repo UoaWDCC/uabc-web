@@ -65,7 +65,7 @@ jobs:
 
       - name: Upload renovate cache artifact
         if: ${{ github.event.inputs.repoCache != 'disabled' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.cache_key }}
           path: ${{ env.cache_archive }}
