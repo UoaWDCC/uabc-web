@@ -18,12 +18,14 @@
     {
       "description": "Group Next.js related packages",
       "groupName": "nextjs",
-      "matchPackageNames": ["next*", "@next*"]
+      "matchPackageNames": ["next*", "@next*"],
+      "matchFileNames": ["package.json", "apps/frontend/**", "apps/backend/**"]
     },
     {
       "description": "Group Payload CMS related packages",
       "groupName": "payload-cms",
-      "matchPackageNames": ["payload*", "@payloadcms*"]
+      "matchPackageNames": ["payload*", "@payloadcms*"],
+      "matchFileNames": ["package.json", "apps/backend/**"]
     },
     {
       "description": "Group testing libraries (Vitest, Testing Library)",
@@ -33,7 +35,8 @@
     {
       "description": "Group Storybook-related packages",
       "groupName": "storybook",
-      "matchPackageNames": ["@storybook*", "storybook*"]
+      "matchPackageNames": ["@storybook*", "storybook*"],
+      "matchFileNames": ["packages/**"]
     },
     {
       "description": "Group devDependencies",
@@ -42,7 +45,7 @@
     },
     {
       "description": "Group type definitions",
-      "groupName": "type definitions",
+      "groupName": "type-definitions",
       "matchPackageNames": ["@types*"]
     }
   ],
