@@ -1,10 +1,124 @@
 import { payload } from "@/data-layer/adapters/Payload"
+import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import GameSessionDataService from "./GameSessionDataService"
 
 const gameSessionDataService = new GameSessionDataService()
 
 describe("GameSessionDataService", () => {
+  describe("createGameSession", () => {
+    it("should create a game session document", async () => {
+      const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+      const fetchedGameSession = await payload.findByID({
+        collection: "gameSession",
+        id: newGameSession.id,
+      })
+      expect(fetchedGameSession).toStrictEqual(newGameSession)
+    })
+  })
+
+  describe("getPaginatedGameSessions", () => {
+    it("should get all game sessions when not using page and limit", async () => {
+      await gameSessionDataService.createGameSession(gameSessionCreateMock)
+      const fetchedGameSessions = await gameSessionDataService.getPaginatedGameSessions()
+      expect(fetchedGameSessions).not.toBeNull()
+      expect(fetchedGameSessions?.totalDocs).toBeGreaterThan(0)
+
+      // check that pagination format is correct
+      expect(fetchedGameSessions?.page).toBe(1)
+      expect(fetchedGameSessions?.limit).toBe(100)
+
+      expect(fetchedGameSessions?.hasPrevPage).toBe(false)
+      expect(fetchedGameSessions?.prevPage).toBe(null)
+      expect(fetchedGameSessions?.hasNextPage).toBe(false)
+      expect(fetchedGameSessions?.nextPage).toBe(null)
+    })
+
+    it("should use pagination to get first page of game sessions when using page and limit", async () => {
+      const totalToSeed = 15
+      await Promise.all(
+        Array.from({ length: totalToSeed }).map(() =>
+          gameSessionDataService.createGameSession(gameSessionCreateMock),
+        ),
+      )
+
+      // test for getting page 2, where each page has a limit of 5 docs
+      const fetchedGameSessions = await gameSessionDataService.getPaginatedGameSessions(2, 5)
+      expect(fetchedGameSessions).not.toBeNull()
+
+      expect(fetchedGameSessions?.docs).toHaveLength(5)
+      expect(fetchedGameSessions?.totalDocs).toBe(15)
+
+      expect(fetchedGameSessions?.page).toBe(2)
+      expect(fetchedGameSessions?.limit).toBe(5)
+      expect(fetchedGameSessions?.totalPages).toBe(3)
+
+      expect(fetchedGameSessions?.hasPrevPage).toBe(true)
+      expect(fetchedGameSessions?.prevPage).toBe(1)
+      expect(fetchedGameSessions?.hasNextPage).toBe(true)
+      expect(fetchedGameSessions?.nextPage).toBe(3)
+    })
+  })
+
+  describe("getGameSessionById", () => {
+    it("should get a game session by ID", async () => {
+      const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+      const fetchedGameSession = await gameSessionDataService.getGameSessionById(newGameSession.id)
+      expect(fetchedGameSession).toEqual(newGameSession)
+    })
+
+    it("should throw a NotFound error if game session does not exist when searching by ID", async () => {
+      await expect(
+        gameSessionDataService.getGameSessionById("Not a Game Session ID"),
+      ).rejects.toThrowError("Not Found")
+    })
+  })
+
+  describe("updateGameSession", () => {
+    it("should update a game session", async () => {
+      const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+      const updatedData = {
+        capacity: 100,
+        casualCapacity: 10,
+      }
+
+      const updatedGameSession = await gameSessionDataService.updateGameSession(
+        newGameSession.id,
+        updatedData,
+      )
+      expect(updatedGameSession).not.toBeNull()
+      expect(updatedGameSession?.capacity).toEqual(100)
+      expect(updatedGameSession?.casualCapacity).toEqual(10)
+    })
+
+    it("should throw a NotFound error if game session does not exist when updating", async () => {
+      await expect(
+        gameSessionDataService.updateGameSession("Not a Game Session Id", { capacity: 1 }),
+      ).rejects.toThrowError("Not Found")
+    })
+  })
+
+  describe("deleteGameSession", () => {
+    it("should delete a game session", async () => {
+      const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+
+      const deletedGameSession = await gameSessionDataService.deleteGameSession(newGameSession.id)
+      expect(deletedGameSession).not.toBeNull()
+      expect(deletedGameSession).toEqual(newGameSession)
+
+      // check that the document is deleted
+      await expect(
+        gameSessionDataService.getGameSessionById(deletedGameSession.id),
+      ).rejects.toThrowError("Not Found")
+    })
+
+    it("should throw a NotFound error if game session does not exist when deleting", async () => {
+      await expect(
+        gameSessionDataService.deleteGameSession("Not a game Session ID"),
+      ).rejects.toThrowError("Not Found")
+    })
+  })
+
   it("should create a game session schedule document", async () => {
     const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
       gameSessionScheduleCreateMock,

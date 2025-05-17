@@ -41,6 +41,11 @@ export type CreateGameSessionScheduleData = Omit<
 >
 
 /**
+ * Type for updating {@link GameSession} document
+ */
+export type UpdateGameSessionData = Partial<CreateGameSessionData>
+
+/**
  * Type for updating a {@link GameSessionSchedule} document
  */
 export type UpdateGameSessionScheduleData = Partial<CreateGameSessionScheduleData>
