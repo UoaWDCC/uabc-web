@@ -10,6 +10,12 @@
   "ignorePaths": ["apps/portal/**"],
   "packageRules": [
     {
+      "description": "Automatically merge minor and patch-level updates",
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
       "description": "Group Next.js related packages",
       "groupName": "nextjs",
       "matchPackagePatterns": ["^next$", "^@next/"],
@@ -20,6 +26,16 @@
       "groupName": "payload-cms",
       "matchPackagePatterns": ["^payload$", "^@payloadcms/"],
       "matchPaths": ["apps/backend/**"]
+    },
+    {
+      "description": "Group testing libraries (Vitest, Testing Library)",
+      "groupName": "testing",
+      "matchPackagePatterns": ["^vitest$", "^@vitest/", "^@testing-library/"]
+    },
+    {
+      "description": "Group Storybook-related packages",
+      "groupName": "storybook",
+      "matchPackagePatterns": ["^@storybook/", "^storybook$"]
     },
     {
       "description": "Group devDependencies",
