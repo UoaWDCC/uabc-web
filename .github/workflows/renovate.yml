@@ -55,16 +55,16 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           configurationFile: renovate.json
         env:
-          RENOVATE_REPOSITORY_CACHE: ${{ github.event.inputs.repoCache || 'enabled' }}
+          RENOVATE_REPOSITORY_CACHE: ${{ github.event.inputs.repoCache }}
 
       - name: Compress renovate cache
-        if: ${{ github.event.inputs.repoCache != 'disabled' }}
+        if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset' }}
         run: |
           ls $cache_dir
           tar -czvf $cache_archive -C $cache_dir .
 
       - name: Upload renovate cache artifact
-        if: ${{ github.event.inputs.repoCache != 'disabled' }}
+        if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset' }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.cache_key }}
