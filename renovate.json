@@ -18,24 +18,22 @@
     {
       "description": "Group Next.js related packages",
       "groupName": "nextjs",
-      "matchPackagePatterns": ["^next$", "^@next/"],
-      "matchPaths": ["apps/frontend/**", "apps/backend/**"]
+      "matchPackageNames": ["next*", "@next*"]
     },
     {
       "description": "Group Payload CMS related packages",
       "groupName": "payload-cms",
-      "matchPackagePatterns": ["^payload$", "^@payloadcms/"],
-      "matchPaths": ["apps/backend/**"]
+      "matchPackageNames": ["payload*", "@payloadcms*"]
     },
     {
       "description": "Group testing libraries (Vitest, Testing Library)",
       "groupName": "testing",
-      "matchPackagePatterns": ["^vitest$", "^@vitest/", "^@testing-library/"]
+      "matchPackageNames": ["vitest*", "@vitest*", "@testing-library*"]
     },
     {
       "description": "Group Storybook-related packages",
       "groupName": "storybook",
-      "matchPackagePatterns": ["^@storybook/", "^storybook$"]
+      "matchPackageNames": ["@storybook*", "storybook*"]
     },
     {
       "description": "Group devDependencies",
@@ -44,12 +42,9 @@
     },
     {
       "description": "Group type definitions",
-      "groupName": "type definitions",
-      "matchPackagePatterns": ["^@types/"]
+      "groupName": "type-definitions",
+      "matchPackageNames": ["@types*"]
     }
   ],
-  "vulnerabilityAlerts": {
-    "labels": ["security"],
-    "automerge": false
-  }
+  "vulnerabilityAlerts": { "labels": ["security"], "automerge": false }
 }
