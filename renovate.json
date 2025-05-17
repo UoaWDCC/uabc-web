@@ -6,6 +6,8 @@
   "prConcurrentLimit": 10,
   "prHourlyLimit": 2,
   "rebaseWhen": "conflicted",
+  "dependencyDashboard": false,
+  "ignorePaths": ["apps/portal/**"],
   "packageRules": [
     {
       "description": "Group Next.js related packages",
@@ -33,7 +35,5 @@
   "vulnerabilityAlerts": {
     "labels": ["security"],
     "automerge": false
-  },
-  "dependencyDashboard": false,
-  "ignorePaths": ["apps/portal/**"]
+  }
 }
