@@ -24,6 +24,7 @@ runs:
     
     - name: Enable Corepack
       run: corepack enable
+      shell: bash
 
     - name: Setup pnpm
       uses: pnpm/action-setup@v2
