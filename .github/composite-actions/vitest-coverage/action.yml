@@ -73,5 +73,5 @@ runs:
     - name: Checkout PR branch
       uses: actions/checkout@v4
       with:
-        ref: ${{ inputs.pr-number }}
+        ref: refs/pull/${{ inputs.pr-number }}/merge
         fetch-depth: 2
