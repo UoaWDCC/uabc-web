@@ -62,7 +62,7 @@
       "nursery": {
         "useSortedClasses": "info",
         "noImgElement": "info"
-      }, 
+      },
       "complexity": {
         "noStaticOnlyClass": "off"
       }
