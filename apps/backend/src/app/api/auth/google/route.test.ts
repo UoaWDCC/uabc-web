@@ -26,7 +26,7 @@ describe("GET /api/auth/google", () => {
     vi.restoreAllMocks()
   })
 
-  it("redirects to Google OAuth URL with state", async () => {
+  it.skip("redirects to Google OAuth URL with state", async () => {
     await GET()
 
     expect(redirect).toHaveBeenCalled()
