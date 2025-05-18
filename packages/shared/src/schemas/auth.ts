@@ -1,11 +1,43 @@
+import { MembershipType } from "@/types"
 import z from "zod"
-import { UserSchema } from "./user"
 
-export const JWTSchema = z.object({
+// Payload Media Schema
+const MediaSchema = z.object({
+  id: z.string(),
+  alt: z.string(),
+  updatedAt: z.string(),
+  createdAt: z.string(),
+  url: z.string().nullable().optional(),
+  thumbnailURL: z.string().nullable().optional(),
+  filename: z.string().nullable().optional(),
+  mimeType: z.string().nullable().optional(),
+  filesize: z.number().nullable().optional(),
+  width: z.number().nullable().optional(),
+  height: z.number().nullable().optional(),
+  focalX: z.number().nullable().optional(),
+  focalY: z.number().nullable().optional(),
+})
+
+// Payload User Schema
+const UserSchema = z.object({
+  id: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string().email(),
+  role: z.nativeEnum(MembershipType),
+  remainingSessions: z.number().nullable().optional(),
+  image: z.union([z.string(), MediaSchema]).nullable().optional(),
+  updatedAt: z.string(),
+  createdAt: z.string(),
+})
+
+// Google Authentication Payload JWT Schema
+export const GoogleJWTSchema = z.object({
   user: UserSchema,
   access_token: z.string(),
 })
 
+// Google User Info Schema
 export const UserInfoResponseSchema = z.object({
   /**
    * The unique ID of a Google user
@@ -63,5 +95,5 @@ export const LoginDetailsSchema = z.object({
     .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/), // Special characters
 })
 
-export type JWT = z.infer<typeof JWTSchema>
+export type GoogleJWT = z.infer<typeof GoogleJWTSchema>
 export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>

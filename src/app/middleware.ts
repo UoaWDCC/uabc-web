@@ -1,20 +1,19 @@
-import { AuthToken } from "@/lib/utils/auth-token"
+import { GoogleJWTSchema, MembershipType } from "@repo/shared"
 import { StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
+import { JWT } from "../../apps/backend/src/business-layer/security/jwt"
 
 export function middleware(req: NextRequest) {
-  const token = req.cookies.get("access_token")?.value
+  const token = req.cookies.get("auth_token")?.value
+
   if (!token) {
     return NextResponse.redirect(new URL("/auth/google", req.url))
   }
 
-  const auth = new AuthToken(token)
+  const jwt = new JWT(token)
+  const data = jwt.getData<typeof GoogleJWTSchema>(GoogleJWTSchema)
 
-  if (!auth.isValid()) {
-    return new NextResponse(null, { status: StatusCodes.UNAUTHORIZED })
-  }
-
-  if (req.nextUrl.pathname.startsWith("/api/admin") && !auth.isAdmin()) {
+  if (req.nextUrl.pathname.startsWith("/api/admin") && data.role !== MembershipType.admin) {
     return new NextResponse(null, { status: StatusCodes.FORBIDDEN })
   }
 

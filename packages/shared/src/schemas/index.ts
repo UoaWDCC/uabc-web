@@ -1,8 +1,7 @@
 export {
   LoginDetailsSchema,
   UserInfoResponseSchema,
-  JWTSchema,
-  type JWT,
+  GoogleJWTSchema,
+  type GoogleJWT,
   type UserInfoResponse,
 } from "./auth"
-export { UserSchema } from "./user"

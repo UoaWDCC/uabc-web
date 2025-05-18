@@ -29,14 +29,14 @@ vi.mock("@/business-layer/security/google", async () => {
   }
 })
 
-vi.mock("@/collections/services/UserService", () => ({
+vi.mock("@/data-layer/services/userDataService", () => ({
   default: vi.fn().mockImplementation(() => ({
     getUserByEmail: vi.fn().mockResolvedValue(userMock),
     createUser: vi.fn().mockResolvedValue(userMock),
   })),
 }))
 
-vi.mock("@/collections/services/AuthService", () => ({
+vi.mock("@/data-layer/services/AuthDataService", () => ({
   default: vi.fn().mockImplementation(() => ({
     createAuth: vi.fn().mockResolvedValue(googleAuthMock),
   })),
