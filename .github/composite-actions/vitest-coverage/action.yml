@@ -12,10 +12,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 2
+    - name: Fetch latest from origin
+      run: git fetch origin
+      shell: bash
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -56,6 +55,10 @@ runs:
       with:
         ref: master
         fetch-depth: 2
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      shell: bash
 
     - name: Run Coverage (master)
       run: |
