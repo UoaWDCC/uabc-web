@@ -328,7 +328,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build, biome, test, codegen, typecheck]
+    needs: [check_changes, build, biome, test, vitest-coverage, codegen, typecheck]
     runs-on: ubuntu-latest
     if: >
       always() && 
