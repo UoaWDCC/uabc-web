@@ -183,6 +183,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -211,8 +213,65 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
-      - name: Test
-        run: pnpm test
+      - name: Test with Coverage
+        run: |
+          mkdir -p coverage
+          pnpm test:coverage
+
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-coverage
+          path: coverage/
+
+  vitest-coverage:
+    name: Vitest Coverage
+    needs: [test]
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+
+      - name: Restore Turborepo cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .turbo
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-turbo-coverage-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-coverage-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download Local Coverage Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: local-coverage
+          path: coverage
+
+      - name: Run Vitest Coverage Composite Action
+        uses: ./.github/composite-actions/vitest-coverage
+        with:
+          pr-number: ${{ github.event.pull_request.number }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   codegen:
     needs: [check_changes, setup]
