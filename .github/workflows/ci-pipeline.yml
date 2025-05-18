@@ -230,6 +230,7 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Run Vitest Coverage Composite Action
         uses: ./.github/composite-actions/vitest-coverage
         with:
