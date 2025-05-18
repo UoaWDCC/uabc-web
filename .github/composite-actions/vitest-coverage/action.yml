@@ -108,4 +108,4 @@ runs:
 
           To view detailed coverage locally, run `pnpm test:coverage`.
         edit-mode: replace
-        token: ${{ inputs.github-token }} 
+        token: ${{ inputs.github-token }}
