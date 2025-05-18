@@ -35,7 +35,7 @@ export const customThemes = {
     barBg: colors.white,
     barTextColor: colors.secondary[500],
     textColor: colors.black,
-    textInverseColor: colors.black,
+    textInverseColor: colors.white,
   },
   dark: {
     ...themes.dark,
@@ -46,6 +46,6 @@ export const customThemes = {
     barBg: colors.black,
     barTextColor: colors.secondary[500],
     textColor: colors.white,
-    textInverseColor: colors.white,
+    textInverseColor: colors.black,
   },
 }
