@@ -55,16 +55,23 @@ runs:
         mkdir -p coverage
         # make this pnpm test:coverage after merge
         pnpm vitest run --coverage --coverage.enabled --coverage.reporter=json-summary --coverage.reporter=json
+        # copy coverage to master-coverage
+        cp -r coverage master-coverage
       shell: bash
 
     - name: Download Local Coverage
       uses: actions/download-artifact@v4
       with:
         name: local-coverage
-        path: local-coverage
+        path: coverage
+
+    - name: Run Coverage (PR)
+      run: |
+        mkdir -p coverage
+        pnpm vitest run --coverage --coverage.enabled --coverage.reporter=json-summary --coverage.reporter=json
+      shell: bash
 
     - name: Report Coverage
       uses: davelosert/vitest-coverage-report-action@v2
       with:
-        json-summary-path: local-coverage/coverage-summary.json
-        json-summary-compare-path: coverage/coverage-summary.json
+        json-summary-compare-path: master-coverage/coverage-summary.json
