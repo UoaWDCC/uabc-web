@@ -12,9 +12,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Fetch latest from origin
-      run: git fetch origin
-      shell: bash
+    - name: Checkout master branch
+      uses: actions/checkout@v4
+      with:
+        ref: master
+        fetch-depth: 2
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -49,12 +51,6 @@ runs:
       with:
         name: local-coverage
         path: coverage
-
-    - name: Checkout master branch
-      uses: actions/checkout@v4
-      with:
-        ref: master
-        fetch-depth: 2
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
@@ -142,3 +138,9 @@ runs:
           To view detailed coverage locally, run `pnpm test:coverage`.
         edit-mode: replace
         token: ${{ inputs.github-token }}
+
+    - name: Checkout PR branch
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+        fetch-depth: 2
