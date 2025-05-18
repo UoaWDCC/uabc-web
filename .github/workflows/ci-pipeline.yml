@@ -215,7 +215,7 @@ jobs:
 
       - name: Test with Coverage
         run: |
-          mkdir -p coverage
+          mkdir -p local-coverage
           pnpm test:coverage
 
       - name: Upload Coverage Artifact
