@@ -78,8 +78,22 @@ runs:
     - name: Compare PR and Master Coverage
       id: pr-line-coverage
       run: |
-        master_total=$(pnpm nyc report --temp-dir .master-coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+' )
-        pr_total=$(pnpm nyc report --temp-dir coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+' )
+        # Check if master coverage directory exists and is not empty
+        if [ ! -d ".master-coverage" ] || [ -z "$(ls -A .master-coverage)" ]; then
+          echo "Error: Master coverage artifact is missing or empty."
+          exit 1
+        fi
+
+        # Extract master and PR coverage
+        master_total=$(pnpm nyc report --temp-dir .master-coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+')
+        pr_total=$(pnpm nyc report --temp-dir coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+')
+
+        # Validate extracted values
+        if [ -z "$master_total" ] || [ -z "$pr_total" ]; then
+          echo "Error: Failed to extract coverage data. master_total='$master_total', pr_total='$pr_total'"
+          exit 1
+        fi
+
         diff=$(echo "scale=2; $pr_total - $master_total" | bc)
         if (( $(echo "$diff >= 0" | bc -l) )); then
           coverage_status="+$diff%"
