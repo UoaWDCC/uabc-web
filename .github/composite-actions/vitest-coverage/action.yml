@@ -53,7 +53,8 @@ runs:
     - name: Run Coverage (master)
       run: |
         mkdir -p coverage
-        pnpm test:coverage
+        # make this pnpm test:coverage after merge
+        pnpm vitest run --coverage --coverage.enabled --coverage.reporter=json-summary --coverage.reporter=json
       shell: bash
 
     - name: Download Local Coverage
