@@ -55,9 +55,19 @@ runs:
         mkdir -p coverage
         # make this pnpm test:coverage after merge
         pnpm vitest run --coverage --coverage.enabled --coverage.reporter=json-summary --coverage.reporter=json
-        # copy coverage to master-coverage
-        cp -r coverage master-coverage
       shell: bash
+
+    - name: Upload Coverage (master)
+      uses: actions/upload-artifact@v4
+      with:
+        name: master-coverage
+        path: coverage
+
+    - name: Checkout PR branch
+      uses: actions/checkout@v4
+      with:
+        ref: refs/pull/${{ inputs.pr-number }}/merge
+        fetch-depth: 2
 
     - name: Download Local Coverage
       uses: actions/download-artifact@v4
@@ -65,13 +75,13 @@ runs:
         name: local-coverage
         path: coverage
 
+    - name: Download Master Coverage
+      uses: actions/download-artifact@v4
+      with:
+        name: master-coverage
+        path: master-coverage
+
     - name: Report Coverage
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         json-summary-compare-path: master-coverage/coverage-summary.json
-
-    - name: Checkout PR branch
-      uses: actions/checkout@v4
-      with:
-        ref: refs/pull/${{ inputs.pr-number }}/merge
-        fetch-depth: 2
