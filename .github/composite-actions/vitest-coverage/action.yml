@@ -65,12 +65,6 @@ runs:
         name: local-coverage
         path: coverage
 
-    - name: Run Coverage (PR)
-      run: |
-        mkdir -p coverage
-        pnpm vitest run --coverage --coverage.enabled --coverage.reporter=json-summary --coverage.reporter=json
-      shell: bash
-
     - name: Report Coverage
       uses: davelosert/vitest-coverage-report-action@v2
       with:
