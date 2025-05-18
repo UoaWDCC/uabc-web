@@ -16,14 +16,14 @@
   "dependencies": {
     "@repo/theme": "workspace:*",
     "@storybook/blocks": "8.6.12",
-    "@storybook/react-vite": "^8.6.12",
-    "@storybook/theming": "^8.6.12",
-    "@yamada-ui/lucide": "^1.10.5",
-    "@yamada-ui/react": "^1.7.6",
+    "@storybook/react-vite": "8.6.12",
+    "@storybook/theming": "8.6.12",
+    "@yamada-ui/lucide": "1.10.5",
+    "@yamada-ui/react": "1.7.6",
     "next": "15.2.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "storybook": "^8.6.12"
+    "storybook": "8.6.12"
   },
   "devDependencies": {
     "@mdx-js/react": "3.1.0",
