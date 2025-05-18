@@ -15,8 +15,7 @@ const sharedTheme = {
   // brandImage:
   //   "https://raw.githubusercontent.com/UoaWDCC/uabc-web/refs/heads/master/public/svgs/logo.svg",
   colorPrimary: colors.blue[500],
-  // TODO: Implement colorSecondary
-  colorSecondary: colors.blue[500],
+  colorSecondary: colors.secondary[500],
   fontBase: fonts.body,
   fontCode: fonts.mono,
 }
