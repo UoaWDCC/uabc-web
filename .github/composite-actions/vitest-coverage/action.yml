@@ -24,6 +24,14 @@ runs:
         ref: master
         fetch-depth: 2
 
+    - name: Restore pnpm cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.pnpm-store
+        key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          pnpm-store-${{ runner.os }}-
+
     - name: Install dependencies (master)
       run: pnpm install --frozen-lockfile
       shell: bash
