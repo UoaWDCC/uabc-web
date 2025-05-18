@@ -1,8 +1,8 @@
 import type { ThemeSemantics } from "@yamada-ui/core"
 
 export const colorSchemes: ThemeSemantics["colorSchemes"] = {
-  primary: "blue",
-  secondary: "secondary",
+  primary: "blue.50",
+  secondary: "secondary.16",
   success: "green",
   warning: "orange",
   danger: "red",
