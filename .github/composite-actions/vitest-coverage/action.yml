@@ -69,9 +69,3 @@ runs:
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         json-summary-compare-path: master-coverage/coverage-summary.json
-
-    - name: Checkout PR branch
-      uses: actions/checkout@v4
-      with:
-        ref: refs/pull/${{ inputs.pr-number }}/merge
-        fetch-depth: 2
