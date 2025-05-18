@@ -6,12 +6,21 @@
   [![CI Pipeline](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/ci-pipeline.yml?branch=master&label=CI%20Pipeline&logo=githubactions&logoColor=white&style=for-the-badge&color=2684FF)](https://github.com/UoaWDCC/uabc-web/actions/workflows/ci-pipeline.yml "Continuous Integration: Lint, test, and build checks")
   [![CD Pipeline](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/cd-pipeline.yml?branch=master&label=CD%20Pipeline&logo=vercel&logoColor=white&style=for-the-badge&color=000000)](https://github.com/UoaWDCC/uabc-web/actions/workflows/cd-pipeline.yml "Continuous Deployment: Production deployment")
   [![Storybook](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/deploy-github-pages.yml?branch=master&label=Storybook&logo=storybook&logoColor=white&style=for-the-badge&color=FF4785)](https://github.com/UoaWDCC/uabc-web/actions/workflows/deploy-github-pages.yml "Storybook: UI documentation build")
-  [![Vitest Coverage](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/vitest-coverage.yml?label=Vitest%20Coverage&logo=vitest&logoColor=white&style=for-the-badge&color=43AA8B)](https://github.com/UoaWDCC/uabc-web/actions/workflows/vitest-coverage.yml "Vitest: Test coverage status")
+  [![Renovate](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/renovate.yml?branch=master&label=Renovate&logo=renovate&logoColor=white&style=for-the-badge&color=29B6F6)](https://github.com/UoaWDCC/uabc-web/actions/workflows/renovate.yml "Renovate: Dependency updates")
+  [![PR Notifications](https://img.shields.io/badge/PR%20Notifications-Discord%20Alerts-7289DA?logo=discord&logoColor=white&style=for-the-badge)](https://github.com/UoaWDCC/uabc-web/actions/workflows/notifcation.yml "Pull Request Notifications: Discord alerts")
   
-  <em>CI: Lint, test, build | CD: Deploy | Storybook: UI docs | Coverage: Tests</em>
+  <em>CI: Lint, test, build | CD: Deploy | Storybook: UI docs | Renovate: Dependency updates | PR Notifications: Discord alerts</em>
 </div>
 
 ---
+
+## GitHub Workflows
+
+- **CI Pipeline:** Lint, test, typecheck, build, and codegen for all apps and packages. Ensures code quality and correctness on every push/PR. ([workflow](https://github.com/UoaWDCC/uabc-web/actions/workflows/ci-pipeline.yml))
+- **CD Pipeline:** Deploys backend and frontend to staging/production environments using Fly.io. ([workflow](https://github.com/UoaWDCC/uabc-web/actions/workflows/cd-pipeline.yml))
+- **Storybook (GitHub Pages):** Builds and publishes Storybook UI documentation to GitHub Pages. ([workflow](https://github.com/UoaWDCC/uabc-web/actions/workflows/deploy-github-pages.yml))
+- **Renovate:** Automated dependency update PRs and grouping. ([workflow](https://github.com/UoaWDCC/uabc-web/actions/workflows/renovate.yml))
+- **Pull Request Notifications:** Sends Discord notifications for PR opened/merged events. ([workflow](https://github.com/UoaWDCC/uabc-web/actions/workflows/notifcation.yml))
 
 Project initiated by WDCC in 2023.
 
