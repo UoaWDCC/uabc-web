@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack --port=3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run --config vitest.config.ts",
+    "test:watch": "cross-env NODE_ENV=test vitest --config vitest.config.ts",
+    "test:coverage": "cross-env NODE_ENV=test vitest run --config vitest.config.ts --coverage",
+    "test:coverage:watch": "cross-env NODE_ENV=test vitest --config vitest.config.ts --coverage --watch"
   },
   "dependencies": {
     "react": "19.0.0",

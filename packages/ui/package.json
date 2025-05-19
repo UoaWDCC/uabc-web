@@ -11,7 +11,11 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006 -c .storybook",
-    "storybook:build": "storybook build -c .storybook"
+    "storybook:build": "storybook build -c .storybook",
+    "test": "vitest run --config vitest.config.ts",
+    "test:watch": "cross-env NODE_ENV=test vitest --config vitest.config.ts",
+    "test:coverage": "cross-env NODE_ENV=test vitest run --config vitest.config.ts --coverage",
+    "test:coverage:watch": "cross-env NODE_ENV=test vitest --config vitest.config.ts --coverage --watch"
   },
   "dependencies": {
     "@repo/theme": "workspace:*",
