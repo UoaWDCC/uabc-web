@@ -11,7 +11,7 @@ export const GradientPallet: FC<GradientPalletProps> = ({ name, gradient }) => {
 
   return (
     <HStack key={gradient}>
-      <Box bgImage={gradient} minH="12" minW="12" rounded="md" />
+      <Box bgGradient={gradient} minH="12" minW="12" rounded="md" />
       <VStack gap="1">
         <Text fontWeight="semibold" lineClamp={1} m="0">
           {name.charAt(0).toUpperCase() + name.slice(1)}
