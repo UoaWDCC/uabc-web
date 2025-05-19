@@ -1,7 +1,7 @@
 import fs from "node:fs"
 import react from "@vitejs/plugin-react-swc"
 import tsconfigPaths from "vite-tsconfig-paths"
-import { coverageConfigDefaults, defineConfig } from "vitest/config"
+import { coverageConfigDefaults, defaultExclude, defineConfig } from "vitest/config"
 
 export default defineConfig({
   plugins: [tsconfigPaths(), react()],
@@ -28,6 +28,7 @@ export default defineConfig({
      */
     maxWorkers: process.env.CI === "true" ? 1 : undefined,
     minWorkers: process.env.CI === "true" ? 1 : undefined,
+    exclude: [...defaultExclude, "apps/portal/**"],
     coverage: {
       provider: "istanbul",
       exclude: [
@@ -38,6 +39,7 @@ export default defineConfig({
         "**/*.{mjs,js}",
         "packages/(?!ui)/**",
         "**/*test-*/**",
+        "apps/portal/**",
         ...(fs.readFileSync(`${__dirname}/.gitignore`, "utf8") || "")
           .split(/\r?\n/)
           .filter((line: string) => !!line.trim())

@@ -183,6 +183,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -211,8 +213,29 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
-      - name: Test
-        run: pnpm test
+      - name: Test with Coverage
+        run: |
+          mkdir -p coverage
+          pnpm test:coverage
+
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-coverage
+          path: coverage/
+
+  vitest-coverage:
+    name: Vitest Coverage
+    needs: [test]
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Vitest Coverage Composite Action
+        uses: ./.github/composite-actions/vitest-coverage
+        with:
+          pr-number: ${{ github.event.pull_request.number }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   codegen:
     needs: [check_changes, setup]
@@ -269,7 +292,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build, biome, test, codegen, typecheck]
+    needs: [check_changes, build, biome, test, vitest-coverage, codegen, typecheck]
     runs-on: ubuntu-latest
     if: >
       always() && 
