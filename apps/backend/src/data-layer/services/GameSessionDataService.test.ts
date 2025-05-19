@@ -43,7 +43,7 @@ describe("GameSessionDataService", () => {
       )
 
       // test for getting page 2, where each page has a limit of 5 docs
-      const fetchedGameSessions = await gameSessionDataService.getPaginatedGameSessions(2, 5)
+      const fetchedGameSessions = await gameSessionDataService.getPaginatedGameSessions(5, 2)
       expect(fetchedGameSessions).not.toBeNull()
 
       expect(fetchedGameSessions?.docs).toHaveLength(5)
@@ -159,7 +159,7 @@ describe("GameSessionDataService", () => {
 
       // test for getting page 2, where each page has a limit of 5 docs
       const fetchedGameSessionSchedules =
-        await gameSessionDataService.getPaginatedGameSessionSchedules(2, 5)
+        await gameSessionDataService.getPaginatedGameSessionSchedules(5, 2)
       expect(fetchedGameSessionSchedules).not.toBeNull()
 
       expect(fetchedGameSessionSchedules?.docs).toHaveLength(5)
