@@ -21,9 +21,9 @@ export const Gradients: Story = {
       <Heading.h1>Gradients</Heading.h1>
 
       <Grid gap="md" templateColumns="repeat(3, 1fr)">
-        <GradientPallet gradient={gradients.primaryGradient} name="Primary Gradient" />
-        <GradientPallet gradient={gradients.secondaryGradient} name="Secondary Gradient" />
-        <GradientPallet gradient={gradients.lightGradient} name="Light Gradient" />
+        {Object.entries(gradients).map(([name, gradient]) => (
+          <GradientPallet gradient={gradient} key={name} name={name} />
+        ))}
       </Grid>
     </VStack>
   ),
