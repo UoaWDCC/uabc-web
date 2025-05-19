@@ -1,4 +1,5 @@
 import dotenv from "dotenv"
+import { StatusCodes } from "http-status-codes"
 import jwt from "jsonwebtoken"
 
 import { authenticationMock } from "@/test-config/mocks/Authentication.mock"
@@ -98,7 +99,7 @@ describe("GET /api/auth/google/callback", () => {
     const response = await callback(req)
     const json = await response.json()
 
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST)
     expect(json.error).toMatch(/state/i)
   })
 
@@ -111,8 +112,47 @@ describe("GET /api/auth/google/callback", () => {
     const response = await callback(req)
     const json = await response.json()
 
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST)
     expect(json.error).toMatch(/code/i)
+  })
+
+  it("returns 400 if scope is missing", async () => {
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}`,
+    )
+    req.cookies.set("state", STATE_MOCK)
+
+    const response = await callback(req)
+    const json = await response.json()
+
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+    expect(json.error).toMatch(/scope/i)
+  })
+
+  it("returns 400 if scope is invalid", async () => {
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=invalid_scope`,
+    )
+    req.cookies.set("state", STATE_MOCK)
+
+    const response = await callback(req)
+    const json = await response.json()
+
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+    expect(json.error).toMatch(/scope/i)
+  })
+
+  it("returns 500 if user info response is invalid", async () => {
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
+    )
+    req.cookies.set("state", STATE_MOCK)
+
+    const response = await callback(req)
+    const json = await response.json()
+
+    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    expect(json.error).toBeDefined()
   })
 
   afterAll(() => {

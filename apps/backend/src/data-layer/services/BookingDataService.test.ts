@@ -54,6 +54,14 @@ describe("bookingDataService", () => {
         expect(fetchedBooking2Next.docs).toEqual(expect.arrayContaining([createdBooking]))
       }
     })
+
+    it("should use default limit and page when no arguments are provided", async () => {
+      // Should not throw and should return an object with default pagination values
+      const result = await bookingDataService.getAllBookings()
+      expect(result).toHaveProperty("docs")
+      expect(result).toHaveProperty("limit", 100)
+      expect(result).toHaveProperty("page", 1)
+    })
   })
 
   describe("updateBooking", () => {
