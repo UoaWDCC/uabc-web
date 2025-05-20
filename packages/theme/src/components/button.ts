@@ -116,7 +116,11 @@ export const Button: ComponentStyle<"Button"> = {
     solid: ({ colorScheme: c = "gray", errorBorderColor = ["danger.500", "danger.400"] }) => ({
       bg: isGray(c)
         ? [`${c}.50`, `${c}.700`]
-        : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
+        : c === "primary"
+          ? [isAccessible(c) ? `${c}.300` : `${c}.400`, `${c}.500`]
+          : c === "secondary"
+            ? [isAccessible(c) ? `${c}.50` : `${c}.100`, `${c}.200`]
+            : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
       color: [isGray(c) || isAccessible(c) ? "black" : "white", "white"],
       vars: [
         {
@@ -132,11 +136,19 @@ export const Button: ComponentStyle<"Button"> = {
       _hover: {
         bg: isGray(c)
           ? [`${c}.100`, `${c}.800`]
-          : [isAccessible(c) ? `${c}.500` : `${c}.600`, `${c}.700`],
+          : c === "primary"
+            ? [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`]
+            : c === "secondary"
+              ? [isAccessible(c) ? `${c}.100` : `${c}.200`, `${c}.300`]
+              : [isAccessible(c) ? `${c}.500` : `${c}.600`, `${c}.700`],
         _disabled: {
           bg: isGray(c)
             ? [`${c}.50`, `${c}.700`]
-            : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
+            : c === "primary"
+              ? [isAccessible(c) ? `${c}.300` : `${c}.400`, `${c}.500`]
+              : c === "secondary"
+                ? [isAccessible(c) ? `${c}.50` : `${c}.100`, `${c}.200`]
+                : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
         },
       },
       _invalid: {
