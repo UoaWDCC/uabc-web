@@ -1,25 +1,24 @@
-import { fireEvent, render } from "@/test-utils"
+import { fireEvent, render, screen } from "@/test-utils"
+import { isValidElement } from "react"
 import { InputType, TextInput } from "./TextInput"
 import * as TextInputModule from "./index"
 
 describe("<TextInput />", () => {
-  it("should re-export the TextInput component", () => {
-    expect(TextInputModule.TextInput).toBeDefined() // Check if TextInput exists
+  it("should re-export the TextInput component and check if TextInput exists", () => {
+    expect(TextInputModule.TextInput).toBeDefined()
 
-    expect(typeof TextInputModule.TextInput).toBe("object")
+    expect(isValidElement(<TextInputModule.TextInput />)).toBeTruthy()
   })
 
-  test("renders with label", () => {
-    const { getByText } = render(<TextInput label="Username" type={InputType.Text} />)
-    expect(getByText("Username")).toBeInTheDocument()
+  it("renders with label", () => {
+    render(<TextInput label="Username" type={InputType.Text} />)
+    expect(screen.getByText("Username")).toBeInTheDocument()
   })
 
-  test("handles password visibility toggle", () => {
-    const { getByRole, getByPlaceholderText } = render(
-      <TextInput placeholder="Enter password" type={InputType.Password} />,
-    )
-    const input = getByPlaceholderText("Enter password") as HTMLInputElement
-    const toggleButton = getByRole("button")
+  it("handles password visibility toggle", () => {
+    render(<TextInput placeholder="Enter password" type={InputType.Password} />)
+    const input = screen.getByPlaceholderText("Enter password") as HTMLInputElement
+    const toggleButton = screen.getByRole("button")
 
     expect(input.type).toBe("password")
     fireEvent.click(toggleButton)
@@ -28,8 +27,8 @@ describe("<TextInput />", () => {
     expect(input.type).toBe("password")
   })
 
-  test("displays error message when invalid", () => {
-    const { getByText } = render(
+  it("displays error message when invalid", () => {
+    render(
       <TextInput
         errorMessage="Invalid email format"
         isError={true}
@@ -37,25 +36,22 @@ describe("<TextInput />", () => {
         type={InputType.Text}
       />,
     )
-    expect(getByText("Invalid email format")).toBeInTheDocument()
+    expect(screen.getByText("Invalid email format")).toBeInTheDocument()
   })
 
-  test("handles disabled state", () => {
-    const { getByPlaceholderText } = render(
-      <TextInput disabled placeholder="Disabled input" type={InputType.Text} />,
-    )
-    const input = getByPlaceholderText("Disabled input")
-    expect(input).toBeDisabled()
+  it("handles disabled state", () => {
+    render(<TextInput disabled placeholder="Disabled input" type={InputType.Text} />)
+    expect(screen.getByPlaceholderText("Disabled input")).toBeDisabled()
   })
 
-  test("forwards ref correctly", () => {
+  it("forwards ref correctly", () => {
     const ref = { current: null }
     render(<TextInput ref={ref} type={InputType.Text} />)
     expect(ref.current).toBeInstanceOf(HTMLInputElement)
   })
 
-  test("applies custom styles and props", () => {
-    const { getByTestId } = render(
+  it("applies custom styles and props", () => {
+    render(
       <TextInput
         data-testid="custom-input"
         placeholder="Custom input"
@@ -63,22 +59,18 @@ describe("<TextInput />", () => {
         width="300px"
       />,
     )
-    const input = getByTestId("custom-input")
-    expect(input).toHaveStyle({ width: "300px" })
+    expect(screen.getByTestId("custom-input")).toHaveStyle({ width: "300px" })
   })
 
-  test("handles input value changes", () => {
-    const { getByPlaceholderText } = render(
-      <TextInput placeholder="Enter text" type={InputType.Text} />,
-    )
-    const input = getByPlaceholderText("Enter text")
+  it("handles input value changes", () => {
+    render(<TextInput placeholder="Enter text" type={InputType.Text} />)
+    const input = screen.getByPlaceholderText("Enter text")
     fireEvent.change(input, { target: { value: "Test value" } })
     expect(input).toHaveValue("Test value")
   })
 
-  test("handles default text input type", () => {
-    const { getByTestId } = render(<TextInput data-testid="default-input" label="Default Input" />)
-    const input = getByTestId("default-input") as HTMLInputElement
-    expect(input.type).toBe("text")
+  it("handles default text input type", () => {
+    render(<TextInput data-testid="default-input" label="Default Input" />)
+    expect(screen.getByTestId("default-input")).toHaveAttribute("type", "text")
   })
 })
