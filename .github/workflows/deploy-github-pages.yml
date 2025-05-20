@@ -1,13 +1,15 @@
-# Workflow name
 name: Build and Publish Storybook to GitHub Pages
 
 on:
   push:
     branches:
       - master
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
+    paths:
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/deploy-github-pages.yml'
 
 permissions:
   contents: read

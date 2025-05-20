@@ -29,22 +29,11 @@ export const Colors: Story = {
 
       <Heading.h2>Semantics</Heading.h2>
       <Grid gap="md" templateColumns="repeat(3, 1fr)">
-        <ColorPallet name="primary" value={colors.primary} />
-        <ColorPallet name="secondary" value={colors.secondary} />
-        <ColorPallet name="info" value={colors.info} />
+        <ColorPallet name="primary" value={colors.blue[50]} />
+        <ColorPallet name="secondary" value={colors.secondary[16]} />
         <ColorPallet name="success" value={colors.success} />
         <ColorPallet name="warning" value={colors.warning} />
         <ColorPallet name="danger" value={colors.danger} />
-        <ColorPallet name="link" value={colors.link} />
-        <ColorPallet name="muted" value={colors.muted} />
-      </Grid>
-
-      <Heading.h2>Alphas</Heading.h2>
-      <Grid gap="md" templateColumns="repeat(3, 1fr)">
-        <ColorPallets colors={colors} name="whiteAlpha" />
-      </Grid>
-      <Grid gap="md" templateColumns="repeat(3, 1fr)">
-        <ColorPallets colors={colors} name="blackAlpha" />
       </Grid>
 
       {COLORS.map((colorName) => (
