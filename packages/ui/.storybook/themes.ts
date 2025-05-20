@@ -20,7 +20,7 @@ const sharedTheme = {
   // brandImage:
   //   "https://raw.githubusercontent.com/UoaWDCC/uabc-web/refs/heads/master/public/svgs/logo.svg",
   colorPrimary: colors.blue[500],
-  colorSecondary: colors.secondary[500],
+  colorSecondary: colors.gray[200],
   fontBase: fonts.body,
   fontCode: fonts.mono,
 }
@@ -33,7 +33,7 @@ export const customThemes = {
     appBg: colors.white,
     appContentBg: colors.white,
     barBg: colors.white,
-    barTextColor: colors.secondary[500],
+    barTextColor: colors.gray[200],
     textColor: colors.black,
     textInverseColor: colors.white,
   },
@@ -44,7 +44,7 @@ export const customThemes = {
     appBg: colors.black,
     appContentBg: colors.black,
     barBg: colors.black,
-    barTextColor: colors.secondary[500],
+    barTextColor: colors.gray[200],
     textColor: colors.white,
     textInverseColor: colors.black,
   },
