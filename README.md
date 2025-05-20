@@ -7,9 +7,8 @@
   [![CD Pipeline](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/cd-pipeline.yml?branch=master&label=CD%20Pipeline&logo=vercel&logoColor=white&style=for-the-badge&color=000000)](https://github.com/UoaWDCC/uabc-web/actions/workflows/cd-pipeline.yml "Continuous Deployment: Production deployment")
   [![Storybook](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/deploy-github-pages.yml?branch=master&label=Storybook&logo=storybook&logoColor=white&style=for-the-badge&color=FF4785)](https://github.com/UoaWDCC/uabc-web/actions/workflows/deploy-github-pages.yml "Storybook: UI documentation build")
   [![Renovate](https://img.shields.io/github/actions/workflow/status/UoaWDCC/uabc-web/renovate.yml?branch=master&label=Renovate&logo=renovate&logoColor=white&style=for-the-badge&color=29B6F6)](https://github.com/UoaWDCC/uabc-web/actions/workflows/renovate.yml "Renovate: Dependency updates")
-  [![PR Notifications](https://img.shields.io/badge/PR%20Notification-Discord%20Alerts-7289DA?logo=discord&logoColor=white&style=for-the-badge)](https://github.com/UoaWDCC/uabc-web/actions/workflows/notification.yml "Pull Request Notifications: Discord alerts")
   
-  <em>CI: Lint, test, build | CD: Deploy | Storybook: UI docs | Renovate: Dependency updates | PR Notifications: Discord alerts</em>
+  <em>CI: Lint, test, build | CD: Deploy | Storybook: UI docs | Renovate: Dependency updates</em>
 </div>
 
 ---
