@@ -7,8 +7,8 @@ import { Heading as HeadingModule } from "./index"
 const headingLevels = Object.keys(DEFAULT_FONT_SIZES)
 
 describe("<Heading />", () => {
-  it("should re-export the Heading component with namespace", () => {
-    expect(HeadingModule).toBeDefined() // Check if Heading exists
+  it("should re-export the Heading component with namespace and check if Heading exists", () => {
+    expect(HeadingModule).toBeDefined()
 
     expect(isValidElement(<HeadingModule.h1>Heading</HeadingModule.h1>)).toBeTruthy()
     expect(isValidElement(<HeadingModule.h2>Heading</HeadingModule.h2>)).toBeTruthy()
@@ -18,7 +18,7 @@ describe("<Heading />", () => {
     expect(isValidElement(<HeadingModule.h6>Heading</HeadingModule.h6>)).toBeTruthy()
   })
 
-  test.each(headingLevels)("renders %s variant correctly", (level) => {
+  it.each(headingLevels)("renders %s variant correctly", (level) => {
     const HeadingComponent = HeadingModule[level as keyof typeof HeadingModule]
     render(HeadingComponent({ children: `Heading ${level}` }))
     const headingElement = screen.getByRole("heading", {
@@ -28,14 +28,14 @@ describe("<Heading />", () => {
     expect(headingElement).toBeInTheDocument()
   })
 
-  test("renders with default props", () => {
+  it("renders with default props", () => {
     render(<Heading>Hello World</Heading>)
     const heading = screen.getByText("Hello World")
     expect(heading).toBeInTheDocument()
     expect(heading.tagName.toLowerCase()).toBe("h1")
   })
 
-  test("applies correct font weights for different heading levels", () => {
+  it("applies correct font weights for different heading levels", () => {
     for (const [level, weight] of Object.entries(DEFAULT_FONT_WEIGHTS)) {
       render(<Heading as={level}>Test Heading {level}</Heading>, {
         withProvider: false,
@@ -45,7 +45,7 @@ describe("<Heading />", () => {
     }
   })
 
-  test("forwards additional props to UIHeading", () => {
+  it("forwards additional props to UIHeading", () => {
     render(
       <Heading color="blue" data-testid="custom-heading">
         Custom Heading
@@ -55,7 +55,7 @@ describe("<Heading />", () => {
     expect(heading).toHaveStyle({ color: "rgb(0, 0, 255)" })
   })
 
-  test("uses fallback values for invalid heading level", () => {
+  it("uses fallback values for invalid heading level", () => {
     const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
     render(<Heading as="invalid">Invalid Heading</Heading>, {
       withProvider: false,

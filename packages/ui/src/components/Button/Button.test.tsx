@@ -4,24 +4,24 @@ import { Button } from "./Button"
 import * as ButtonModule from "./index"
 
 describe("<Button />", () => {
-  it("should re-export the Button component", () => {
-    expect(ButtonModule.Button).toBeDefined() // Check if Button exists
+  it("should re-export the Button component and check if Button exists", () => {
+    expect(ButtonModule.Button).toBeDefined()
     expect(isValidElement(<ButtonModule.Button />)).toBeTruthy()
   })
 
-  test("renders with start icon", () => {
+  it("renders with start icon", () => {
     render(<Button startIcon={<>start icon</>} />)
 
     expect(screen.getByText("start icon")).toBeInTheDocument()
   })
 
-  test("renders with end icon", () => {
+  it("renders with end icon", () => {
     render(<Button endIcon={<>end icon</>} />)
 
     expect(screen.getByText("end icon")).toBeInTheDocument()
   })
 
-  test("shows loading text if loading, loadingText and loadingIcon", () => {
+  it("shows loading text if loading, loadingText and loadingIcon", () => {
     const { rerender } = render(
       <Button loading loadingIcon={<>loading start</>} loadingText="Submitting">
         Submit
@@ -51,7 +51,7 @@ describe("<Button />", () => {
     expect(screen.getByText("loading end")).toHaveClass("ui-button__loading--end")
   })
 
-  test("has the proper aria attributes", () => {
+  it("has the proper aria attributes", () => {
     const { rerender } = render(<Button>Hello</Button>)
 
     const button = screen.getByText("Hello")
@@ -68,7 +68,7 @@ describe("<Button />", () => {
     expect(button).toHaveAttribute("data-active", "")
   })
 
-  test("has the proper type attribute", () => {
+  it("has the proper type attribute", () => {
     const { rerender } = render(<Button>Submit</Button>)
     expect(screen.getByText("Submit")).toHaveAttribute("type", "button")
 
@@ -79,12 +79,12 @@ describe("<Button />", () => {
     expect(screen.getByText("Submit")).toHaveAttribute("type")
   })
 
-  test("has no type when not a button", () => {
+  it("has no type when not a button", () => {
     render(<Button as="span">Submit</Button>)
     expect(screen.getByText("Submit")).not.toHaveAttribute("type")
   })
 
-  test("should be disabled", () => {
+  it("should be disabled", () => {
     const { rerender } = render(<Button disabled>Invalid Button</Button>)
     expect(screen.getByText("Invalid Button")).toBeDisabled()
 

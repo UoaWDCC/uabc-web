@@ -4,18 +4,18 @@ import { InputType, TextInput } from "./TextInput"
 import * as TextInputModule from "./index"
 
 describe("<TextInput />", () => {
-  it("should re-export the TextInput component", () => {
-    expect(TextInputModule.TextInput).toBeDefined() // Check if TextInput exists
+  it("should re-export the TextInput component and check if TextInput exists", () => {
+    expect(TextInputModule.TextInput).toBeDefined()
 
     expect(isValidElement(<TextInputModule.TextInput />)).toBeTruthy()
   })
 
-  test("renders with label", () => {
+  it("renders with label", () => {
     render(<TextInput label="Username" type={InputType.Text} />)
     expect(screen.getByText("Username")).toBeInTheDocument()
   })
 
-  test("handles password visibility toggle", () => {
+  it("handles password visibility toggle", () => {
     render(<TextInput placeholder="Enter password" type={InputType.Password} />)
     const input = screen.getByPlaceholderText("Enter password") as HTMLInputElement
     const toggleButton = screen.getByRole("button")
@@ -27,7 +27,7 @@ describe("<TextInput />", () => {
     expect(input.type).toBe("password")
   })
 
-  test("displays error message when invalid", () => {
+  it("displays error message when invalid", () => {
     render(
       <TextInput
         errorMessage="Invalid email format"
@@ -39,18 +39,18 @@ describe("<TextInput />", () => {
     expect(screen.getByText("Invalid email format")).toBeInTheDocument()
   })
 
-  test("handles disabled state", () => {
+  it("handles disabled state", () => {
     render(<TextInput disabled placeholder="Disabled input" type={InputType.Text} />)
     expect(screen.getByPlaceholderText("Disabled input")).toBeDisabled()
   })
 
-  test("forwards ref correctly", () => {
+  it("forwards ref correctly", () => {
     const ref = { current: null }
     render(<TextInput ref={ref} type={InputType.Text} />)
     expect(ref.current).toBeInstanceOf(HTMLInputElement)
   })
 
-  test("applies custom styles and props", () => {
+  it("applies custom styles and props", () => {
     render(
       <TextInput
         data-testid="custom-input"
@@ -62,14 +62,14 @@ describe("<TextInput />", () => {
     expect(screen.getByTestId("custom-input")).toHaveStyle({ width: "300px" })
   })
 
-  test("handles input value changes", () => {
+  it("handles input value changes", () => {
     render(<TextInput placeholder="Enter text" type={InputType.Text} />)
     const input = screen.getByPlaceholderText("Enter text")
     fireEvent.change(input, { target: { value: "Test value" } })
     expect(input).toHaveValue("Test value")
   })
 
-  test("handles default text input type", () => {
+  it("handles default text input type", () => {
     render(<TextInput data-testid="default-input" label="Default Input" />)
     expect(screen.getByTestId("default-input")).toHaveAttribute("type", "text")
   })
