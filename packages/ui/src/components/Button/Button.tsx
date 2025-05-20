@@ -36,7 +36,7 @@ export type ButtonProps = UIButtonProps & ButtonOptions
  *
  * @example
  * // Navigation button
- * <Button href="/home">Go to Home</Button>
+ * <Button as="a" href="/home">Go to Home</Button>
  */
 export const Button: FC<ButtonProps> = memo(
   forwardRef(({ ...props }, ref) => {

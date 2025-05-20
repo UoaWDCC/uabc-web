@@ -1,38 +1,35 @@
 import type { ThemeTokens } from "@yamada-ui/core"
-import { generate } from "@yamada-ui/theme-tools"
 
 export const colors: ThemeTokens = {
-  black: "#141414",
-  white: "#fbfbfb",
-  blue: generate.tones("#3769ae"),
-  tertiary: generate.tones("#556377"),
-  destructive: generate.tones("#ad3838"),
-  blackAlpha: {
-    50: "rgba(0, 0, 0, 0.04)",
-    100: "rgba(0, 0, 0, 0.06)",
-    200: "rgba(0, 0, 0, 0.08)",
-    300: "rgba(0, 0, 0, 0.16)",
-    400: "rgba(0, 0, 0, 0.24)",
-    500: "rgba(0, 0, 0, 0.36)",
-    600: "rgba(0, 0, 0, 0.48)",
-    700: "rgba(0, 0, 0, 0.64)",
-    800: "rgba(0, 0, 0, 0.80)",
-    900: "rgba(0, 0, 0, 0.92)",
-    950: "rgba(0, 0, 0, 0.96)",
+  black: "#0a0a0a",
+  white: "#ffffff",
+  blue: {
+    10: "#101423",
+    20: "#202846",
+    30: "#303c69",
+    40: "#40508c",
+    45: "#485a9e",
+    50: "#5064af",
+    60: "#7383bf",
+    70: "#96a2cf",
+    80: "#b9c1df",
+    90: "#dce0ef",
+    100: "#ffffff",
   },
-  whiteAlpha: {
-    50: "rgba(255, 255, 255, 0.04)",
-    100: "rgba(255, 255, 255, 0.06)",
-    200: "rgba(255, 255, 255, 0.08)",
-    300: "rgba(255, 255, 255, 0.16)",
-    400: "rgba(255, 255, 255, 0.24)",
-    500: "rgba(255, 255, 255, 0.36)",
-    600: "rgba(255, 255, 255, 0.48)",
-    700: "rgba(255, 255, 255, 0.64)",
-    800: "rgba(255, 255, 255, 0.80)",
-    900: "rgba(255, 255, 255, 0.92)",
-    950: "rgba(255, 255, 255, 0.96)",
+  secondary: {
+    5: "#0d0d0d",
+    10: "#1a1a1a",
+    16: "#292929",
+    20: "#333333",
+    30: "#4d4d4d",
+    40: "#666666",
+    50: "#808080",
+    60: "#999999",
+    70: "#b3b3b3",
+    80: "#cccccc",
+    90: "#e6e6e6",
+    100: "#ffffff",
   },
 }
 
-export const COLORS = ["blue", "tertiary", "destructive"]
+export const COLORS = ["blue", "secondary"]
