@@ -1,7 +1,7 @@
-import baseConfig from "@repo/test-config/vitest.config.base"
+import { uiConfig } from "@repo/test-config/ui"
 import { mergeConfig } from "vitest/config"
 
-export default mergeConfig(baseConfig, {
+export default mergeConfig(uiConfig, {
   test: {
     coverage: {
       thresholds: {

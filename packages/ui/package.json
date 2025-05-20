@@ -12,10 +12,10 @@
     "check-types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006 -c .storybook",
     "storybook:build": "storybook build -c .storybook",
-    "test": "vitest run --config vitest.config.ts",
-    "test:watch": "cross-env NODE_ENV=test vitest --config vitest.config.ts",
-    "test:coverage": "cross-env NODE_ENV=test vitest run --config vitest.config.ts --coverage",
-    "test:coverage:watch": "cross-env NODE_ENV=test vitest --config vitest.config.ts --coverage --watch"
+    "test": "vitest run",
+    "test:watch": "cross-env NODE_ENV=test vitest",
+    "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
+    "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage --watch"
   },
   "dependencies": {
     "@repo/theme": "workspace:*",
@@ -32,6 +32,7 @@
   "devDependencies": {
     "@mdx-js/react": "3.1.0",
     "@repo/typescript-config": "workspace:*",
+    "@repo/test-config": "workspace:*",
     "@storybook/addon-a11y": "8.6.12",
     "@storybook/addon-backgrounds": "8.6.12",
     "@storybook/addon-docs": "8.6.12",

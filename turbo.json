@@ -62,24 +62,24 @@
     },
     "test": {
       "cache": true,
-      "dependsOn": ["^test"],
+      "dependsOn": ["^test", "@repo/test-config#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "test:watch": {
       "cache": false,
-      "dependsOn": ["^test:watch"],
+      "dependsOn": ["^test:watch", "@repo/test-config#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "persistent": true
     },
     "test:coverage": {
       "cache": true,
-      "dependsOn": ["^test:coverage"],
+      "dependsOn": ["^test:coverage", "@repo/test-config#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["coverage/**"]
     },
     "test:coverage:watch": {
       "cache": false,
-      "dependsOn": ["^test:coverage:watch"],
+      "dependsOn": ["^test:coverage:watch", "@repo/test-config#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["coverage/**"],
       "persistent": true

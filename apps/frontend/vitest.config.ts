@@ -1,8 +1,3 @@
-import baseConfig from "@repo/test-config/vitest.config.base"
-import { mergeConfig } from "vitest/config"
+import { frontendConfig } from "@repo/test-config/frontend"
 
-export default mergeConfig(baseConfig, {
-  test: {
-    // add any frontend-specific overrides here
-  },
-})
+export default frontendConfig

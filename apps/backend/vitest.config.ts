@@ -1,9 +1,9 @@
-import baseConfig from "@repo/test-config/vitest.config.base"
+import { backendConfig } from "@repo/test-config/backend"
 import { mergeConfig } from "vitest/config"
 
-export default mergeConfig(baseConfig, {
+export default mergeConfig(backendConfig, {
   test: {
     // You can add backend-specific overrides here
-    setupFiles: ["@repo/test-config/src/mongodb-setup.ts", "./src/test-config/vitest.setup.ts"],
+    setupFiles: ["./src/test-config/vitest.setup.ts"],
   },
 })
