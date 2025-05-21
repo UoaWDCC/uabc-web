@@ -17,10 +17,10 @@ export const UserInfoResponseSchema = z.object({
    */
   given_name: z.string(),
   /**
-   * The user's first name
+   * The user's family name
    * @example Zhao
    */
-  family_name: z.string(),
+  family_name: z.string().optional(),
   /**
    * The user's profile picture URL
    */
@@ -35,7 +35,7 @@ export const UserInfoResponseSchema = z.object({
    * The hosted domain that the Google account is associated with
    * @example aucklanduni.ac.nz
    */
-  hd: z.string(),
+  hd: z.string().optional(),
 })
 
 export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>
