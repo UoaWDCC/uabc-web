@@ -247,10 +247,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: local-coverage
-          path: |
-            apps/frontend/coverage
-            apps/backend/coverage
-            packages/ui/coverage
+          path: coverage-artifacts
 
   vitest-coverage:
     name: Vitest Coverage

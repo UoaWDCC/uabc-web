@@ -73,10 +73,14 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: local-coverage
-        path:
-          - apps/frontend/coverage
-          - apps/backend/coverage
-          - packages/ui/coverage
+        path: coverage-temp
+
+    - name: Move coverage to correct locations
+      run: |
+        mv coverage-temp/apps/frontend/coverage coverage/frontend
+        mv coverage-temp/apps/backend/coverage coverage/backend
+        mv coverage-temp/packages/ui/coverage coverage/ui
+      shell: bash
 
     # - name: Download Master Coverage
     #   uses: actions/download-artifact@v4
@@ -89,21 +93,21 @@ runs:
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         name: 'Frontend'
-        json-summary-path: './apps/frontend/coverage/coverage-summary-frontend.json'
-        json-final-path: './apps/frontend/coverage/coverage-final-frontend.json
+        json-summary-path: './coverage/frontend/coverage-summary.json'
+        json-final-path: './coverage/frontend/coverage-final.json
 
     - name: 'Report Backend Coverage'
       if: always() # Also generate the report if tests are failing
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         name: 'Backend'
-        json-summary-path: './apps/backend/coverage/coverage-summary-backend.json'
-        json-final-path: './apps/backend/coverage/coverage-final-backend.json'
+        json-summary-path: './coverage/backend/coverage-summary.json'
+        json-final-path: './coverage/backend/coverage-final.json'
 
     - name: 'Report UI Coverage'
       if: always() # Also generate the report if tests are failing
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         name: 'UI'
-        json-summary-path: './packages/ui/coverage/coverage-summary-ui.json'
-        json-final-path: './packages/ui/coverage/coverage-final-ui.json'
+        json-summary-path: './coverage/ui/coverage-summary.json'
+        json-final-path: './coverage/ui/coverage-final.json'
