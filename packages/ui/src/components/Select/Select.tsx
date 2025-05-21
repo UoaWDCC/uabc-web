@@ -1,7 +1,68 @@
-import { type FC, type SelectProps, Select as UISelect, memo } from "@yamada-ui/react"
+import {
+  Center,
+  type FC,
+  FormControl,
+  HStack,
+  Label,
+  Select as UISelect,
+  type SelectProps as UISelectProps,
+  memo,
+} from "@yamada-ui/react"
+import type { ReactNode } from "react"
 
-export const Select: FC<SelectProps> = memo(({ children, ...props }) => {
-  return <UISelect {...props}>{children}</UISelect>
-})
+export interface SelectProps extends UISelectProps {
+  label: string
+  icon: ReactNode
+}
+
+export const Select: FC<SelectProps> = memo(
+  ({ children, label = "Select option", icon, ...props }) => {
+    return (
+      <FormControl
+        position="relative"
+        sx={{
+          "&:not(:has(div[data-placeholder]))": {
+            label: {
+              opacity: 0,
+            },
+          },
+        }}
+      >
+        <UISelect
+          fieldProps={{ px: "calc(lg + xl)" }}
+          iconProps={{ mr: "calc(lg - sm)", right: 0 }}
+          portalProps={{ disabled: false }}
+          size="lg"
+          {...props}
+        >
+          {children}
+        </UISelect>
+        <HStack
+          align="center"
+          mx="calc(lg - xs)"
+          pointerEvents="none"
+          position="absolute"
+          top="50%"
+          transform="translateY(-50%)"
+        >
+          <Center
+            borderColor="white"
+            borderRadius="full"
+            borderWidth={1}
+            h="fit-content"
+            p={1}
+            w="fit-content"
+          >
+            {icon}
+            {/* <CalendarClockIcon fontSize="24" /> */}
+          </Center>
+
+          {/* <Text>Text comp</Text> */}
+          <Label mb={0}>{label}</Label>
+        </HStack>
+      </FormControl>
+    )
+  },
+)
 
 Select.displayName = "Select"
