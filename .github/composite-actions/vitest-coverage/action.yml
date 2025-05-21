@@ -83,5 +83,5 @@ runs:
 
     - name: Report Coverage
       uses: davelosert/vitest-coverage-report-action@v2
-      with:
-        # json-summary-compare-path: master-coverage/coverage-summary.json
+      # with:
+      #   json-summary-compare-path: master-coverage/coverage-summary.json
