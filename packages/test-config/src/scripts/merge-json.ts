@@ -84,20 +84,37 @@ function mergeFinalCoverage(files: IstanbulCoverageFinal[]): IstanbulCoverageFin
  * @param {Record<string, any>[]} files - Array of summary coverage objects to merge.
  * @returns {Record<string, any>} Merged summary coverage object.
  */
-// biome-ignore lint/suspicious/noExplicitAny: json can have any keys
 function mergeSummaryCoverage(files: Record<string, any>[]): Record<string, any> {
-  // biome-ignore lint/suspicious/noExplicitAny: json can have any keys
   const merged: Record<string, any> = {}
-  // Merge per-file and total
+  const keys = ["lines", "statements", "functions", "branches"]
+  const subkeys = ["total", "covered", "skipped"]
   for (const file of files) {
     for (const [filename, data] of Object.entries(file)) {
       if (!merged[filename]) {
         merged[filename] = JSON.parse(JSON.stringify(data))
+        // Ensure all keys and subkeys exist
+        for (const key of keys) {
+          if (!merged[filename][key]) {
+            merged[filename][key] = { total: 0, covered: 0, skipped: 0, pct: 100 }
+          } else {
+            for (const sub of subkeys) {
+              if (typeof merged[filename][key][sub] !== "number") {
+                merged[filename][key][sub] = 0
+              }
+            }
+            if (typeof merged[filename][key].pct !== "number") {
+              merged[filename][key].pct = 100
+            }
+          }
+        }
       } else {
         // Merge counters for total and per-file
-        for (const key of ["lines", "statements", "functions", "branches"]) {
+        for (const key of keys) {
+          if (!merged[filename][key]) {
+            merged[filename][key] = { total: 0, covered: 0, skipped: 0, pct: 100 }
+          }
           if (data[key]) {
-            for (const sub of ["total", "covered", "skipped"]) {
+            for (const sub of subkeys) {
               merged[filename][key][sub] = (merged[filename][key][sub] || 0) + (data[key][sub] || 0)
             }
           }
@@ -106,8 +123,8 @@ function mergeSummaryCoverage(files: Record<string, any>[]): Record<string, any>
     }
   }
   // Recalculate pct fields
-  for (const [_, data] of Object.entries(merged)) {
-    for (const key of ["lines", "statements", "functions", "branches"]) {
+  for (const data of Object.values(merged)) {
+    for (const key of keys) {
       if (data[key]) {
         data[key].pct = data[key].total > 0 ? (data[key].covered / data[key].total) * 100 : 100
         if (typeof data[key].pct === "number") {
