@@ -14,10 +14,6 @@ on:
         type: environment
         required: true
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   deploy-backend:
     name: Deploy Backend
@@ -28,6 +24,9 @@ jobs:
       name: staging
       url: https://wdcc-uabc-backend-staging.fly.dev/
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy-backend
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
@@ -74,6 +73,9 @@ jobs:
       name: staging
       url: https://wdcc-uabc-frontend-staging.fly.dev/
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy-frontend
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
@@ -111,6 +113,9 @@ jobs:
       name: production
       url: https://uabc.wdcc.co.nz/
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy-production
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
       - run: echo "To be implemented"
