@@ -65,11 +65,11 @@ describe("GET /api/auth/google/callback", async () => {
   })
 
   it("returns JWT token on success auth", async () => {
+    cookieStore.set("state", STATE_MOCK)
+
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
-    cookieStore.set("state", STATE_MOCK)
-
     const response = await callback(req)
     const json = await response.json()
 
@@ -84,11 +84,11 @@ describe("GET /api/auth/google/callback", async () => {
   })
 
   it("returns 400 if state does not match", async () => {
+    cookieStore.set("state", STATE_MOCK)
+
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}`,
     )
-    cookieStore.set("state", STATE_MOCK)
-
     const response = await callback(req)
     const json = await response.json()
 
@@ -97,11 +97,11 @@ describe("GET /api/auth/google/callback", async () => {
   })
 
   it("returns 400 if code is missing", async () => {
+    cookieStore.set("state", STATE_MOCK)
+
     const req = createMockNextRequest(
       `/api/auth/google/callback?state=${STATE_MOCK}&scope=${SCOPES}`,
     )
-    cookieStore.set("state", STATE_MOCK)
-
     const response = await callback(req)
     const json = await response.json()
 
@@ -110,11 +110,11 @@ describe("GET /api/auth/google/callback", async () => {
   })
 
   it("returns 400 if scope is missing", async () => {
+    cookieStore.set("state", STATE_MOCK)
+
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}`,
     )
-    cookieStore.set("state", STATE_MOCK)
-
     const response = await callback(req)
     const json = await response.json()
 
@@ -123,11 +123,11 @@ describe("GET /api/auth/google/callback", async () => {
   })
 
   it("returns 400 if scope is invalid", async () => {
+    cookieStore.set("state", STATE_MOCK)
+
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=invalid_scope`,
     )
-    cookieStore.set("state", STATE_MOCK)
-
     const response = await callback(req)
     const json = await response.json()
 
@@ -136,11 +136,11 @@ describe("GET /api/auth/google/callback", async () => {
   })
 
   it("returns 500 if token response is invalid", async () => {
+    cookieStore.set("state", STATE_MOCK)
+
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${INVALID_CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
-    cookieStore.set("state", STATE_MOCK)
-
     const response = await callback(req)
     const json = await response.json()
 
@@ -149,11 +149,11 @@ describe("GET /api/auth/google/callback", async () => {
   })
 
   it("returns 500 if google user info response is invalid", async () => {
+    cookieStore.set("state", STATE_MOCK)
+
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${INVALID_USER_CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
-    cookieStore.set("state", STATE_MOCK)
-
     const response = await callback(req)
     const json = await response.json()
 
