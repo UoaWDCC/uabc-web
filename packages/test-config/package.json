@@ -13,9 +13,6 @@
     "build": "tsc",
     "test:coverage:merge": "node dist/scripts/merge-json.js"
   },
-  "dependencies": {
-    "glob": "^11.0.2"
-  },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@testing-library/jest-dom": "6.6.3",

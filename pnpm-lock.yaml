@@ -54,6 +54,9 @@ importers:
       dotenv:
         specifier: 16.5.0
         version: 16.5.0
+      glob:
+        specifier: ^11.0.2
+        version: 11.0.2
       husky:
         specifier: 9.1.7
         version: 9.1.7
@@ -208,10 +211,6 @@ importers:
         version: 1.0.7(tailwindcss@4.1.4)
 
   packages/test-config:
-    dependencies:
-      glob:
-        specifier: ^11.0.2
-        version: 11.0.2
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
