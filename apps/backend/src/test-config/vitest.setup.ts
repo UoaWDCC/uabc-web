@@ -14,7 +14,6 @@ beforeEach(() => {
     cookies: vi.fn(() => ({
       set: vi.fn().mockImplementation((key: string, value: string, _cookie) => {
         cookies[key] = value
-        console.log(cookies)
       }),
       get: vi.fn().mockImplementation((key: string) => {
         return { value: cookies[key] }
