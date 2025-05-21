@@ -55,8 +55,6 @@ jobs:
             */node_modules
             packages/*/node_modules
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

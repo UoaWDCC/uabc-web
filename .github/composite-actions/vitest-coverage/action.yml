@@ -43,8 +43,6 @@ runs:
           packages/*/node_modules
           apps/*/node_modules
         key: ${{ runner.os }}-turbo-coverage-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-turbo-coverage-
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
