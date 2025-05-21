@@ -16,8 +16,8 @@ import {
 dotenv.config()
 
 vi.mock("@/business-layer/security/google", async () => {
-  const actual = await vi.importActual<typeof import("@/business-layer/security/google")>(
-    "@/business-layer/security/google",
+  const actual = await vi.importActual<typeof import("@/business-layer/provider/google")>(
+    "@/business-layer/provider/google",
   )
   return {
     ...actual,
@@ -51,6 +51,7 @@ vi.mock("next/headers", () => ({
 }))
 
 import { GET as callback } from "@/app/api/auth/google/callback/route"
+import { AUTH_COOKIE_NAME } from "@repo/shared"
 
 describe("GET /api/auth/google/callback", () => {
   beforeAll(() => {
@@ -76,7 +77,7 @@ describe("GET /api/auth/google/callback", () => {
     expect(res.headers.get("location")).toBe("http://localhost:3000/onboarding/name")
 
     const setCookie = res.headers.get("set-cookie")
-    expect(setCookie).toContain("auth_token=")
+    expect(setCookie).toContain(`${AUTH_COOKIE_NAME}=`)
     expect(setCookie).toContain("HttpOnly")
   })
 

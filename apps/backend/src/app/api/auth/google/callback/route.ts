@@ -1,7 +1,12 @@
-import { googleAuthScopes, oauth2Client } from "@/business-layer/security/google"
+import { googleAuthScopes, oauth2Client } from "@/business-layer/provider/google"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
-import { MembershipType, type UserInfoResponse, UserInfoResponseSchema } from "@repo/shared"
+import {
+  AUTH_COOKIE_NAME,
+  MembershipType,
+  type UserInfoResponse,
+  UserInfoResponseSchema,
+} from "@repo/shared"
 import { StatusCodes } from "http-status-codes"
 import jwt from "jsonwebtoken"
 import { cookies } from "next/headers"
@@ -93,7 +98,7 @@ export const GET = async (req: NextRequest) => {
   const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, { expiresIn: "1h" })
   const response = NextResponse.redirect(new URL("/onboarding/name", req.url))
 
-  response.cookies.set("auth_token", token, {
+  response.cookies.set(AUTH_COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",

@@ -32,9 +32,9 @@ const UserSchema = z.object({
 })
 
 // Google Authentication Payload JWT Schema
-export const GoogleJWTSchema = z.object({
+export const JWTEncryptedUserSchema = z.object({
   user: UserSchema,
-  access_token: z.string(),
+  access_token: z.string().optional(),
 })
 
 // Google User Info Schema
@@ -95,5 +95,5 @@ export const LoginDetailsSchema = z.object({
     .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/), // Special characters
 })
 
-export type GoogleJWT = z.infer<typeof GoogleJWTSchema>
+export type JWTEncryptedUser = z.infer<typeof JWTEncryptedUserSchema>
 export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>

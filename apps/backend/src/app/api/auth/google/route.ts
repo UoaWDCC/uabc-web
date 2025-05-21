@@ -1,4 +1,4 @@
-import { googleAuthScopes, oauth2Client } from "@/business-layer/security/google"
+import { googleAuthScopes, oauth2Client } from "@/business-layer/provider/google"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
