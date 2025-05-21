@@ -85,7 +85,7 @@ describe("GET /api/auth/google/callback", async () => {
 
   it("returns 400 if state does not match", async () => {
     const req = createMockNextRequest(
-      `/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}}`,
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}`,
     )
     cookieStore.set("state", STATE_MOCK)
 

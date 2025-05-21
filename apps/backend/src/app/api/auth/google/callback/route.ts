@@ -55,7 +55,7 @@ export const GET = async (req: NextRequest) => {
     )
   }
 
-  if (!tokens?.access_token || !tokens?.expiry_date || !tokens?.id_token) {
+  if (!tokens || !tokens.access_token || !tokens.expiry_date || !tokens.id_token) {
     return NextResponse.json(
       { error: "Error invalid google auth" },
       { status: StatusCodes.INTERNAL_SERVER_ERROR },
