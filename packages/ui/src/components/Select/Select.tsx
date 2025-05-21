@@ -1,5 +1,4 @@
 import {
-  Center,
   type FC,
   FormControl,
   HStack,
@@ -23,12 +22,13 @@ export const Select: FC<SelectProps> = memo(
         sx={{
           "&:not(:has(div[data-placeholder]))": {
             label: {
-              opacity: 0,
+              visibility: "hidden",
             },
           },
         }}
       >
         <UISelect
+          // backgroundColor="secondary"
           fieldProps={{ px: "calc(lg + xl)" }}
           iconProps={{ mr: "calc(lg - sm)", right: 0 }}
           portalProps={{ disabled: false }}
@@ -45,19 +45,7 @@ export const Select: FC<SelectProps> = memo(
           top="50%"
           transform="translateY(-50%)"
         >
-          <Center
-            borderColor="white"
-            borderRadius="full"
-            borderWidth={1}
-            h="fit-content"
-            p={1}
-            w="fit-content"
-          >
-            {icon}
-            {/* <CalendarClockIcon fontSize="24" /> */}
-          </Center>
-
-          {/* <Text>Text comp</Text> */}
+          {icon}
           <Label mb={0}>{label}</Label>
         </HStack>
       </FormControl>

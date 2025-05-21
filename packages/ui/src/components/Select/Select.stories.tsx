@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { CalendarClockIcon } from "@yamada-ui/lucide"
-import { Option } from "@yamada-ui/react"
+import { Center, Option } from "@yamada-ui/react"
 import { Select } from "./Select"
 
 const meta: Meta<typeof Select> = {
@@ -23,7 +23,22 @@ type Story = StoryObj<typeof Select>
 
 export const Basic: Story = {
   render: (args) => (
-    <Select {...args} icon={<CalendarClockIcon fontSize={24} />} label="Skill Level">
+    <Select
+      {...args}
+      icon={
+        <Center
+          borderColor="white"
+          borderRadius="full"
+          borderWidth={1}
+          h="fit-content"
+          p={1}
+          w="fit-content"
+        >
+          <CalendarClockIcon fontSize={24} />
+        </Center>
+      }
+      label="Skill Level"
+    >
       <Option value="Beginner">Beginner</Option>
       <Option value="Intermediate">Intermediate</Option>
       <Option value="Advanced">Advanced</Option>
