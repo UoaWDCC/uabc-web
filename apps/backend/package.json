@@ -21,6 +21,7 @@
     "@payloadcms/next": "3.35.1",
     "@payloadcms/payload-cloud": "latest",
     "@payloadcms/richtext-lexical": "latest",
+    "bcryptjs": "^3.0.2",
     "date-fns": "4.1.0",
     "date-fns-tz": "3.2.0",
     "googleapis": "148.0.0",
@@ -37,8 +38,8 @@
     "zustand": "5.0.3"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
     "@repo/shared": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@types/jsonwebtoken": "9.0.9",
     "@types/node": "22.14.1",
     "@types/react": "19.1.4",
