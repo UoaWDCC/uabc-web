@@ -2,6 +2,13 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { glob } from "glob"
 
+import { fileURLToPath } from "node:url"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const root = path.join(__dirname, "..", "..", "..", "..")
+
 // Type for Istanbul coverage-final.json
 export type IstanbulCoverageFinal = Record<
   string,
@@ -117,7 +124,7 @@ function mergeSummaryCoverage(files: Record<string, any>[]): Record<string, any>
  * @returns {Promise<void>} A promise that resolves when the merge is complete.
  */
 export async function mergeCoverageFiles() {
-  const cwd = process.cwd()
+  const _cwd = process.cwd()
   // Find all coverage-final.json and coverage-summary.json files in apps and packages
   const finalFiles = await glob([
     "../../apps/frontend/coverage/coverage-final.json",
@@ -141,7 +148,7 @@ export async function mergeCoverageFiles() {
     }
   }
   const mergedFinal = mergeFinalCoverage(finalData)
-  const finalOut = path.join(cwd, "..", "..", "coverage", "coverage-final.json")
+  const finalOut = path.resolve(root, "coverage/coverage-final.json")
   await fs.mkdir(path.dirname(finalOut), { recursive: true })
   await fs.writeFile(finalOut, JSON.stringify(mergedFinal, null, 2))
   console.log(`Merged ${finalFiles.length} coverage-final.json files into ${finalOut}`)
@@ -158,7 +165,7 @@ export async function mergeCoverageFiles() {
     }
   }
   const mergedSummary = mergeSummaryCoverage(summaryData)
-  const summaryOut = path.join(cwd, "..", "..", "coverage", "coverage-summary.json")
+  const summaryOut = path.resolve(root, "coverage/coverage-summary.json")
   await fs.mkdir(path.dirname(summaryOut), { recursive: true })
   await fs.writeFile(summaryOut, JSON.stringify(mergedSummary, null, 2))
   console.log(`Merged ${summaryFiles.length} coverage-summary.json files into ${summaryOut}`)
