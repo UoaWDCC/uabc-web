@@ -216,7 +216,7 @@ jobs:
       - name: Test with Coverage
         run: |
           mkdir -p coverage
-          pnpm test:coverage
+          pnpm test:coverage:merge
 
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4

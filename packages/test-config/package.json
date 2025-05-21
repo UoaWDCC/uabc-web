@@ -10,14 +10,16 @@
   },
   "scripts": {
     "check-types": "tsc --noEmit",
-    "build": "tsc"
+    "build": "tsc",
+    "test:coverage:merge": "node dist/scripts/merge-json.js"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "typescript": "5.8.3",
     "@testing-library/jest-dom": "6.6.3",
     "@yamada-ui/react": "1.7.6",
+    "glob": "^11.0.2",
     "mongodb-memory-server": "10.1.4",
+    "typescript": "5.8.3",
     "vitest": "3.1.1"
   }
 }

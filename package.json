@@ -26,6 +26,8 @@
     "test:watch": "cross-env NODE_ENV=test turbo run test:watch",
     "test:coverage": "cross-env NODE_ENV=test turbo run test:coverage",
     "test:coverage:watch": "cross-env NODE_ENV=test turbo run test:coverage:watch",
+    "test:coverage:collect": "turbo run test:coverage:collect",
+    "test:coverage:merge": "turbo run test:coverage:merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
     "postinstall": "pnpm theme",
     "commitlint": "commitlint --edit"

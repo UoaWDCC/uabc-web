@@ -22,7 +22,7 @@ export const baseConfig = defineConfig({
         "**/*test-*/**",
         "apps/portal/**",
       ],
-      reporter: ["json", "text", "lcov", "html", "text-summary"],
+      reporter: ["json", "text", "lcov", "html", "text-summary", "json-summary"],
     },
   },
 })
