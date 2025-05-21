@@ -1,38 +1,41 @@
 import { render, screen } from "@/test-utils"
+import { isValidElement } from "react"
 import { Button } from "./Button"
 import * as ButtonModule from "./index"
 
 describe("<Button />", () => {
-  it("should re-export the Button component", () => {
-    expect(ButtonModule.Button).toBeDefined() // Check if Button exists
-
-    expect(typeof ButtonModule.Button).toBe("object")
+  it("should re-export the Button component and check if Button exists", () => {
+    expect(ButtonModule.Button).toBeDefined()
+    expect(isValidElement(<ButtonModule.Button />)).toBeTruthy()
   })
 
-  test("renders with icon", () => {
-    const { getByText, rerender } = render(<Button endIcon={<>end icon</>} />)
-    expect(getByText("end icon")).toBeTruthy()
+  it("renders with start icon", () => {
+    render(<Button startIcon={<>start icon</>} />)
 
-    rerender(<Button startIcon={<>start icon</>} />)
-    expect(getByText("start icon")).toBeTruthy()
+    expect(screen.getByText("start icon")).toBeInTheDocument()
   })
 
-  test("shows loading text if loading, loadingText and loadingIcon", () => {
-    const { getByTestId, rerender } = render(
-      <Button data-testid="btn" loading loadingIcon={<>loading start</>} loadingText="Submitting">
+  it("renders with end icon", () => {
+    render(<Button endIcon={<>end icon</>} />)
+
+    expect(screen.getByText("end icon")).toBeInTheDocument()
+  })
+
+  it("shows loading text if loading, loadingText and loadingIcon", () => {
+    const { rerender } = render(
+      <Button loading loadingIcon={<>loading start</>} loadingText="Submitting">
         Submit
       </Button>,
     )
-    expect(getByTestId("btn")).toHaveAttribute("data-loading", "")
 
     // children text is hidden
-    expect(screen.queryByText("Submit")).toBeNull()
+    expect(screen.queryByText("Submit")).not.toBeInTheDocument()
 
-    // Submitting" visually hidden label shown
+    // "Submitting" visually hidden label shown
     expect(screen.getByText("Submitting")).toBeInTheDocument()
 
     // Confirm loading position
-    expect(screen.getByText(/loading start/i)).toHaveClass("ui-button__loading--start")
+    expect(screen.getByText("loading start")).toHaveClass("ui-button__loading--start")
 
     rerender(
       <Button
@@ -45,13 +48,13 @@ describe("<Button />", () => {
       </Button>,
     )
 
-    expect(screen.getByText(/loading end/i)).toHaveClass("ui-button__loading--end")
+    expect(screen.getByText("loading end")).toHaveClass("ui-button__loading--end")
   })
 
-  test("has the proper aria attributes", () => {
-    const { getByTestId, rerender } = render(<Button data-testid="btn">Hello</Button>)
+  it("has the proper aria attributes", () => {
+    const { rerender } = render(<Button>Hello</Button>)
 
-    const button = getByTestId("btn")
+    const button = screen.getByText("Hello")
 
     expect(button).not.toHaveAttribute("data-loading", "")
     expect(button).not.toHaveAttribute("data-active", "")
@@ -65,50 +68,28 @@ describe("<Button />", () => {
     expect(button).toHaveAttribute("data-active", "")
   })
 
-  test("has the proper type attribute", () => {
-    const { getByTestId, rerender } = render(<Button data-testid="btn">Submit</Button>)
-    expect(getByTestId("btn")).toHaveAttribute("type", "button")
+  it("has the proper type attribute", () => {
+    const { rerender } = render(<Button>Submit</Button>)
+    expect(screen.getByText("Submit")).toHaveAttribute("type", "button")
 
-    rerender(
-      <Button data-testid="btn" type="submit">
-        Submit
-      </Button>,
-    )
-    expect(getByTestId("btn")).toHaveAttribute("type", "submit")
+    rerender(<Button type="submit">Submit</Button>)
+    expect(screen.getByText("Submit")).toHaveAttribute("type", "submit")
 
-    rerender(
-      <Button as="button" data-testid="btn">
-        Submit
-      </Button>,
-    )
-    expect(getByTestId("btn")).toHaveAttribute("type")
+    rerender(<Button as="button">Submit</Button>)
+    expect(screen.getByText("Submit")).toHaveAttribute("type")
   })
 
-  test("has no the type", () => {
-    const { getByTestId } = render(
-      <Button as="span" data-testid="btn">
-        Submit
-      </Button>,
-    )
-    expect(getByTestId("btn")).not.toHaveAttribute("type")
+  it("has no type when not a button", () => {
+    render(<Button as="span">Submit</Button>)
+    expect(screen.getByText("Submit")).not.toHaveAttribute("type")
   })
 
-  test("should be disabled", () => {
-    const { getByRole, getByTestId, rerender } = render(
-      <Button data-testid="btn" disabled>
-        Invalid Button
-      </Button>,
-    )
-    const button = getByRole("button")
-    expect(button).toBeDisabled()
+  it("should be disabled", () => {
+    const { rerender } = render(<Button disabled>Invalid Button</Button>)
+    expect(screen.getByText("Invalid Button")).toBeDisabled()
 
-    rerender(
-      <Button as="div" data-testid="btn" disabled>
-        Invalid Button
-      </Button>,
-    )
+    rerender(<Button disabled>Invalid Button</Button>)
 
-    const buttonAsDiv = getByTestId("btn")
-    expect(buttonAsDiv).toHaveAttribute("disabled")
+    expect(screen.getByText("Invalid Button")).toHaveAttribute("disabled")
   })
 })

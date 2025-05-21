@@ -1,0 +1,87 @@
+name: "Vitest Coverage"
+description: "Run Vitest coverage, compare with master, and comment on PR"
+
+inputs:
+  pr-number:
+    description: "Pull request number"
+    required: true
+  github-token:
+    description: "GitHub token"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout master branch
+      uses: actions/checkout@v4
+      with:
+        ref: master
+        fetch-depth: 2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+    
+    - name: Enable Corepack
+      run: corepack enable
+      shell: bash
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        run_install: false
+
+    - name: Restore Turborepo cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          .turbo
+          node_modules
+          */node_modules
+          packages/*/node_modules
+          apps/*/node_modules
+        key: ${{ runner.os }}-turbo-coverage-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-coverage-
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      shell: bash
+
+    - name: Run Coverage (master)
+      run: |
+        mkdir -p coverage
+        # make this pnpm test:coverage after merge
+        pnpm vitest run --coverage --coverage.enabled --coverage.reporter=json-summary --coverage.reporter=json
+      shell: bash
+
+    - name: Upload Coverage (master)
+      uses: actions/upload-artifact@v4
+      with:
+        name: master-coverage
+        path: coverage
+
+    - name: Checkout PR branch
+      uses: actions/checkout@v4
+      with:
+        ref: refs/pull/${{ inputs.pr-number }}/merge
+        fetch-depth: 2
+
+    - name: Download Local Coverage
+      uses: actions/download-artifact@v4
+      with:
+        name: local-coverage
+        path: coverage
+
+    - name: Download Master Coverage
+      uses: actions/download-artifact@v4
+      with:
+        name: master-coverage
+        path: master-coverage
+
+    - name: Report Coverage
+      uses: davelosert/vitest-coverage-report-action@v2
+      with:
+        json-summary-compare-path: master-coverage/coverage-summary.json

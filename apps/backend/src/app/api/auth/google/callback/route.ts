@@ -2,6 +2,7 @@ import { googleAuthScopes, oauth2Client } from "@/business-layer/security/google
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { MembershipType, type UserInfoResponse, UserInfoResponseSchema } from "@repo/shared"
+import { StatusCodes } from "http-status-codes"
 import jwt from "jsonwebtoken"
 import { cookies } from "next/headers"
 import { type NextRequest, NextResponse } from "next/server"
@@ -16,18 +17,22 @@ export const GET = async (req: NextRequest) => {
     return NextResponse.json(
       { error: "State missing, or state doesn't match browser state. " },
       {
-        status: 400,
+        status: StatusCodes.BAD_REQUEST,
       },
     )
   }
   cookieStore.delete("state")
 
   const code = params.get("code")
-  if (!code) return NextResponse.json({ error: "No code provided" }, { status: 400 })
+  if (!code)
+    return NextResponse.json({ error: "No code provided" }, { status: StatusCodes.BAD_REQUEST })
 
   const scopes = params.get("scope")?.split(" ")
   if (!scopes || googleAuthScopes.some((requiredScope) => !scopes.includes(requiredScope)))
-    return NextResponse.json({ error: "No scope or invalid scopes provided" }, { status: 400 })
+    return NextResponse.json(
+      { error: "No scope or invalid scopes provided" },
+      { status: StatusCodes.BAD_REQUEST },
+    )
 
   let tokens: {
     access_token?: string | null
@@ -40,10 +45,16 @@ export const GET = async (req: NextRequest) => {
     tokens = tokenFetchResponse.tokens
   } catch (error: unknown) {
     console.error(error)
-    return NextResponse.json({ error: "Error invalid google auth" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Error invalid google auth" },
+      { status: StatusCodes.INTERNAL_SERVER_ERROR },
+    )
   }
   if (!tokens.access_token || !tokens.expiry_date || !tokens.id_token) {
-    return NextResponse.json({ error: "Error invalid google auth" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Error invalid google auth" },
+      { status: StatusCodes.INTERNAL_SERVER_ERROR },
+    )
   }
 
   const userInfoResponse = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
