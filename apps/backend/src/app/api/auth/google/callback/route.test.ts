@@ -142,9 +142,10 @@ describe("GET /api/auth/google/callback", async () => {
     cookieStore.set("state", STATE_MOCK)
 
     const response = await callback(req)
-    // const json = await response.json()
+    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    expect(json.error).toBe("Error invalid google auth")
   })
 
   it("returns 500 if google user info response is invalid", async () => {
