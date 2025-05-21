@@ -87,7 +87,7 @@ runs:
       with:
         name: 'Frontend'
         json-summary-path: './coverage/frontend/coverage-summary.json'
-        json-final-path: './coverage/frontend/coverage-final.json
+        json-final-path: './coverage/frontend/coverage-final.json'
 
     - name: 'Report Backend Coverage'
       if: always() # Also generate the report if tests are failing
