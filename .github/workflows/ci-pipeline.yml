@@ -245,9 +245,9 @@ jobs:
 
       - name: Move Coverage to Correct Locations
         run: |
-          mv coverage-temp/apps/frontend/coverage coverage/frontend
-          mv coverage-temp/apps/backend/coverage coverage/backend
-          mv coverage-temp/packages/ui/coverage coverage/ui
+          mv coverage/apps/frontend/coverage coverage/frontend
+          mv coverage/apps/backend/coverage coverage/backend
+          mv coverage/packages/ui/coverage coverage/ui
 
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4
