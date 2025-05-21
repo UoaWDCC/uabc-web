@@ -115,7 +115,10 @@ function mergeSummaryCoverage(files: Record<string, any>[]): Record<string, any>
           }
           if (data[key]) {
             for (const sub of subkeys) {
-              merged[filename][key][sub] = (merged[filename][key][sub] || 0) + (data[key][sub] || 0)
+              // Only merge if data[key][sub] is a number
+              if (data[key] && typeof data[key][sub] === "number") {
+                merged[filename][key][sub] = (merged[filename][key][sub] || 0) + data[key][sub]
+              }
             }
           }
         }
@@ -141,7 +144,6 @@ function mergeSummaryCoverage(files: Record<string, any>[]): Record<string, any>
  * @returns {Promise<void>} A promise that resolves when the merge is complete.
  */
 export async function mergeCoverageFiles() {
-  const _cwd = process.cwd()
   // Find all coverage-final.json and coverage-summary.json files in apps and packages
   const finalFiles = await glob([
     "../../apps/frontend/coverage/coverage-final.json",

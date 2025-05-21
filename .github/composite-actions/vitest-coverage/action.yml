@@ -73,7 +73,10 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: local-coverage
-        path: coverage/
+        path:
+          - apps/frontend/coverage
+          - apps/backend/coverage
+          - packages/ui/coverage
 
     # - name: Download Master Coverage
     #   uses: actions/download-artifact@v4
@@ -81,7 +84,26 @@ runs:
     #     name: master-coverage
     #     path: master-coverage
 
-    - name: Report Coverage
+    - name: 'Report Frontend Coverage'
+      if: always() # Also generate the report if tests are failing
       uses: davelosert/vitest-coverage-report-action@v2
-      # with:
-      #   json-summary-compare-path: master-coverage/coverage-summary.json
+      with:
+        name: 'Frontend'
+        json-summary-path: './apps/frontend/coverage/coverage-summary-frontend.json'
+        json-final-path: './apps/frontend/coverage/coverage-final-frontend.json
+
+    - name: 'Report Backend Coverage'
+      if: always() # Also generate the report if tests are failing
+      uses: davelosert/vitest-coverage-report-action@v2
+      with:
+        name: 'Backend'
+        json-summary-path: './apps/backend/coverage/coverage-summary-backend.json'
+        json-final-path: './apps/backend/coverage/coverage-final-backend.json'
+
+    - name: 'Report UI Coverage'
+      if: always() # Also generate the report if tests are failing
+      uses: davelosert/vitest-coverage-report-action@v2
+      with:
+        name: 'UI'
+        json-summary-path: './packages/ui/coverage/coverage-summary-ui.json'
+        json-final-path: './packages/ui/coverage/coverage-final-ui.json'

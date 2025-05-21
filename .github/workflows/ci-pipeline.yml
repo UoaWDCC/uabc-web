@@ -241,13 +241,16 @@ jobs:
       - name: Test with Coverage
         run: |
           mkdir -p coverage
-          pnpm test:coverage:merge
+          pnpm test:coverage
 
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4
         with:
           name: local-coverage
-          path: coverage/
+          path: |
+            apps/frontend/coverage
+            apps/backend/coverage
+            packages/ui/coverage
 
   vitest-coverage:
     name: Vitest Coverage
