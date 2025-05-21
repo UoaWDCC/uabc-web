@@ -13,6 +13,7 @@ env:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check_changes:
@@ -61,6 +62,17 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      
+      - name: Upload cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .turbo
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
 
   biome:
     needs: [check_changes, setup]
@@ -231,6 +243,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
       - name: Run Vitest Coverage Composite Action
         uses: ./.github/composite-actions/vitest-coverage
         with:
@@ -292,7 +307,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build, biome, test, vitest-coverage, codegen, typecheck]
+    needs: [check_changes, build, biome, test, codegen, typecheck]
     runs-on: ubuntu-latest
     if: >
       always() && 

@@ -31,6 +31,12 @@ export default defineConfig({
     exclude: [...defaultExclude, "apps/portal/**"],
     coverage: {
       provider: "istanbul",
+      thresholds: {
+        statements: 70,
+        branches: 70,
+        functions: 70,
+        lines: 70,
+      },
       exclude: [
         ...coverageConfigDefaults.exclude,
         "**/.storybook/**",
@@ -45,7 +51,8 @@ export default defineConfig({
           .filter((line: string) => !!line.trim())
           .map((line: string) => `**/${line.trim()}**`),
       ],
-      reporter: ["json", "text", "lcov", "html", "text-summary"],
+      reporter: ["json", "text", "lcov", "html", "text-summary", "json-summary"],
+      reportOnFailure: true,
     },
   },
 })

@@ -46,12 +46,6 @@ runs:
         restore-keys: |
           ${{ runner.os }}-turbo-coverage-
 
-    - name: Download Local Coverage
-      uses: actions/download-artifact@v4
-      with:
-        name: local-coverage
-        path: coverage
-
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
       shell: bash
@@ -59,88 +53,35 @@ runs:
     - name: Run Coverage (master)
       run: |
         mkdir -p coverage
-        pnpm test:coverage
+        # make this pnpm test:coverage after merge
+        pnpm vitest run --coverage --coverage.enabled --coverage.reporter=json-summary --coverage.reporter=json
       shell: bash
 
-    - name: Upload Master Coverage Artifact
+    - name: Upload Coverage (master)
       uses: actions/upload-artifact@v4
       with:
         name: master-coverage
-        path: coverage/
+        path: coverage
+
+    - name: Checkout PR branch
+      uses: actions/checkout@v4
+      with:
+        ref: refs/pull/${{ inputs.pr-number }}/merge
+        fetch-depth: 2
+
+    - name: Download Local Coverage
+      uses: actions/download-artifact@v4
+      with:
+        name: local-coverage
+        path: coverage
 
     - name: Download Master Coverage
       uses: actions/download-artifact@v4
       with:
         name: master-coverage
-        path: .master-coverage
+        path: master-coverage
 
-    - name: Compare PR and Master Coverage
-      id: pr-line-coverage
-      run: |
-        # Check if master coverage directory exists and is not empty
-        if [ ! -d ".master-coverage" ] || [ -z "$(ls -A .master-coverage)" ]; then
-          echo "Error: Master coverage artifact is missing or empty."
-          exit 1
-        fi
-
-        # Extract master and PR coverage
-        master_total=$(pnpm nyc report --temp-dir .master-coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+')
-        pr_total=$(pnpm nyc report --temp-dir coverage --reporter=text-summary | grep -oP 'Lines\s+:\s+\K[\d.]+')
-
-        # Validate extracted values
-        if [ -z "$master_total" ] || [ -z "$pr_total" ]; then
-          echo "Error: Failed to extract coverage data. master_total='$master_total', pr_total='$pr_total'"
-          exit 1
-        fi
-
-        diff=$(echo "scale=2; $pr_total - $master_total" | bc)
-        if (( $(echo "$diff >= 0" | bc -l) )); then
-          coverage_status="+$diff%"
-        else
-          coverage_status="$diff%"
-        fi
-        echo "PR_LINE_COVERAGE=$coverage_status" >> $GITHUB_OUTPUT
-      shell: bash
-
-    - name: Generate Overall Coverage Summary
-      id: overall-coverage-summary
-      run: |
-        echo "OVERALL_COVERAGE_SUMMARY<<EOF" >> $GITHUB_OUTPUT
-        pnpm nyc report --temp-dir coverage --reporter=text-summary | sed -n '/^=======/,/^$/p' >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
-      shell: bash
-
-    - name: Find Previous Coverage Comment
-      uses: peter-evans/find-comment@v3
-      id: find-comment
+    - name: Report Coverage
+      uses: davelosert/vitest-coverage-report-action@v2
       with:
-        issue-number: ${{ inputs.pr-number }}
-        comment-author: 'github-actions[bot]'
-        body-includes: '## Vitest Coverage Report'
-
-    - name: Update Coverage Comment
-      uses: peter-evans/create-or-update-comment@v4
-      with:
-        comment-id: ${{ steps.find-comment.outputs.comment-id }}
-        issue-number: ${{ inputs.pr-number }}
-        body: |
-          ## Vitest Coverage Report
-
-          ### Overall Repository Coverage
-          ```
-          ${{ steps.overall-coverage-summary.outputs.OVERALL_COVERAGE_SUMMARY }}
-          ```
-
-          **PR Coverage: ${{ steps.pr-line-coverage.outputs.PR_LINE_COVERAGE }}** comparing to master branch coverage.
-
-          [View detailed coverage report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-          To view detailed coverage locally, run `pnpm test:coverage`.
-        edit-mode: replace
-        token: ${{ inputs.github-token }}
-
-    - name: Checkout PR branch
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ github.event.pull_request.head.ref }}
-        fetch-depth: 2
+        json-summary-compare-path: master-coverage/coverage-summary.json
