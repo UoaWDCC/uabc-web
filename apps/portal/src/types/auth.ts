@@ -17,7 +17,7 @@ export const UserInfoResponseSchema = z.object({
    */
   given_name: z.string(),
   /**
-   * The user's first name
+   * The user's family name
    * @example Zhao
    */
   family_name: z.string().optional(),
