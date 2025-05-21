@@ -11,7 +11,7 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "build": "tsc",
-    "test:coverage:merge": "node dist/scripts/collect-json.js && nyc merge coverage/raw/final ../../coverage"
+    "test:coverage:merge": "node dist/scripts/collect-json.js && nyc merge coverage/raw/final ../../coverage/coverage-final.json"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

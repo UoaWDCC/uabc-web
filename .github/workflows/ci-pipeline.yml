@@ -243,17 +243,23 @@ jobs:
           mkdir -p coverage
           pnpm test:coverage
 
-      - name: Move Coverage to Correct Locations
-        run: |
-          mv apps/frontend/coverage coverage/frontend
-          mv apps/backend/coverage coverage/backend
-          mv packages/ui/coverage coverage/ui
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: apps/frontend/coverage
 
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: local-coverage
-          path: coverage
+          name: backend-coverage
+          path: apps/backend/coverage
+
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-coverage
+          path: packages/ui/coverage
 
   vitest-coverage:
     name: Vitest Coverage
