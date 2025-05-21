@@ -287,7 +287,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
-
       - name: Generate typing
         run: pnpm turbo run generate:types
 
