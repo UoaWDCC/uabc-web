@@ -9,7 +9,6 @@ export const baseConfig = defineConfig({
     globals: true,
     maxWorkers: process.env.CI === "true" ? 1 : undefined,
     minWorkers: process.env.CI === "true" ? 1 : undefined,
-    exclude: [...defaultExclude, "apps/portal/**"],
     coverage: {
       provider: "istanbul",
       exclude: [
@@ -20,7 +19,6 @@ export const baseConfig = defineConfig({
         "**/*.{mjs,js}",
         "packages/(?!ui)/**",
         "**/*test-*/**",
-        "apps/portal/**",
       ],
       reporter: ["json", "text", "lcov", "html", "text-summary", "json-summary"],
     },
