@@ -243,23 +243,18 @@ jobs:
           mkdir -p coverage
           pnpm test:coverage
 
-      - name: Upload Coverage Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-coverage
-          path: apps/frontend/coverage
+      - name: Move Coverage Folders
+        run: |
+          mkdir -p coverage/frontend coverage/backend coverage/ui
+          mv apps/frontend/coverage coverage/frontend
+          mv apps/backend/coverage coverage/backend
+          mv packages/ui/coverage coverage/ui
 
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: backend-coverage
-          path: apps/backend/coverage
-
-      - name: Upload Coverage Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ui-coverage
-          path: packages/ui/coverage
+          name: all-coverage
+          path: coverage
 
   vitest-coverage:
     name: Vitest Coverage

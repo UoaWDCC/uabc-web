@@ -69,29 +69,19 @@ runs:
         ref: refs/pull/${{ inputs.pr-number }}/merge
         fetch-depth: 2
 
-    - name: Download Local Coverage
+    - name: Download All Coverage
       uses: actions/download-artifact@v4
       with:
-        name: local-coverage
-        path: coverage
+        name: all-coverage
+        path: all-coverage
 
-    - name: Download Frontend Coverage
-      uses: actions/download-artifact@v4
-      with:
-        name: frontend-coverage
-        path: apps/frontend/coverage
-
-    - name: Download Backend Coverage
-      uses: actions/download-artifact@v4
-      with:
-        name: backend-coverage
-        path: apps/backend/coverage
-
-    - name: Download UI Coverage
-      uses: actions/download-artifact@v4
-      with:
-        name: ui-coverage
-        path: packages/ui/coverage
+    - name: Move Coverage Folders
+      run: |
+        mkdir -p apps/frontend/coverage apps/backend/coverage packages/ui/coverage
+        if [ -d "all-coverage/apps/frontend/coverage" ]; then mv all-coverage/apps/frontend/coverage apps/frontend/; fi
+        if [ -d "all-coverage/apps/backend/coverage" ]; then mv all-coverage/apps/backend/coverage apps/backend/; fi
+        if [ -d "all-coverage/packages/ui/coverage" ]; then mv all-coverage/packages/ui/coverage packages/ui/; fi
+      shell: bash
 
     # - name: Download Master Coverage
     #   uses: actions/download-artifact@v4
