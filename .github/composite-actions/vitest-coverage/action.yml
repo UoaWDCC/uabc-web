@@ -121,5 +121,5 @@ runs:
       with:
         name: 'Merged Coverage'
         vite-config-path: './packages/test-config/src/configs/base-config.ts'
-        json-summary-path: './coverage/coverage-summary.json'
-        json-final-path: './coverage/coverage-final.json'
+        json-summary-path: './coverage-summary.json'
+        json-final-path: './coverage-final.json'
