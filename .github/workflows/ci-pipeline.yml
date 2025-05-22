@@ -245,10 +245,10 @@ jobs:
 
       - name: Move Coverage Folders
         run: |
-          mkdir -p coverage/frontend coverage/backend coverage/ui
-          mv apps/frontend/coverage coverage/frontend/coverage
-          mv apps/backend/coverage coverage/backend/coverage
-          mv packages/ui/coverage coverage/ui/coverage
+          mkdir -p coverage/apps/frontend coverage/apps/backend coverage/packages/ui
+          mv apps/frontend/coverage coverage/apps/frontend/coverage
+          mv apps/backend/coverage coverage/apps/backend/coverage
+          mv packages/ui/coverage coverage/packages/ui/coverage
 
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4
