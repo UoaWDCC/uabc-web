@@ -72,21 +72,15 @@ runs:
     - name: Download All Coverage
       uses: actions/download-artifact@v4
       with:
-        name: all-coverage
-        path: all-coverage
-
-    - name: Inspect Downloaded Artifact
-      run: |
-        echo "Contents of the downloaded artifact directory:"
-        find all-coverage -type f
-      shell: bash
+        name: local-coverage
+        path: local-coverage
 
     - name: Move Coverage Folders
       run: |
         mkdir -p apps/frontend/coverage apps/backend/coverage packages/ui/coverage
-        mv all-coverage/apps/frontend/coverage/* apps/frontend/coverage/
-        mv all-coverage/apps/backend/coverage/* apps/backend/coverage/
-        mv all-coverage/packages/ui/coverage/* packages/ui/coverage/
+        mv local-coverage/apps/frontend/coverage/* apps/frontend/coverage/
+        mv local-coverage/apps/backend/coverage/* apps/backend/coverage/
+        mv local-coverage/packages/ui/coverage/* packages/ui/coverage/
       shell: bash
 
     # - name: Download Master Coverage
@@ -100,18 +94,24 @@ runs:
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         name: 'Frontend'
-        working-directory: './apps/frontend'
+        vite-config-path: './apps/frontend/vite.config.ts'
+        json-summary-path: './apps/frontend/coverage/coverage-summary.json'
+        json-final-path: './apps/frontend/coverage/coverage-final.json'
 
     - name: 'Report Backend Coverage'
       if: always() # Also generate the report if tests are failing
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         name: 'Backend'
-        working-directory: './apps/backend'
+        vite-config-path: './apps/backend/vite.config.ts'
+        json-summary-path: './apps/backend/coverage/coverage-summary.json'
+        json-final-path: './apps/backend/coverage/coverage-final.json'
 
     - name: 'Report UI Coverage'
       if: always() # Also generate the report if tests are failing
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         name: 'UI'
-        working-directory: './packages/ui'
+        vite-config-path: './packages/ui/vite.config.ts'
+        json-summary-path: './packages/ui/coverage/coverage-summary.json'
+        json-final-path: './packages/ui/coverage/coverage-final.json'
