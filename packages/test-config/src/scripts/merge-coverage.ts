@@ -25,7 +25,42 @@ function mergeCoverageFinal(files: any[]): any {
 }
 
 function mergeCoverageSummary(files: any[]): any {
-  return Object.assign({}, ...files)
+  // Aggregate totals
+  const totalKeys = ["lines", "statements", "functions", "branches", "branchesTrue"]
+  const overallTotal: any = {}
+  for (const key of totalKeys) {
+    overallTotal[key] = { total: 0, covered: 0, skipped: 0 }
+  }
+
+  // Sum up totals from each file
+  for (const file of files) {
+    if (!file.total) continue
+    for (const key of totalKeys) {
+      const t = file.total[key]
+      if (!t) continue
+      overallTotal[key].total += t.total || 0
+      overallTotal[key].covered += t.covered || 0
+      overallTotal[key].skipped += t.skipped || 0
+    }
+  }
+
+  // Calculate percentages
+  for (const key of totalKeys) {
+    const t = overallTotal[key]
+    t.pct = t.total === 0 ? 100 : Math.round((t.covered / t.total) * 10000) / 100
+  }
+
+  // Merge all per-file objects (excluding 'total')
+  const merged = Object.assign(
+    {},
+    ...files.map((f) => {
+      const { total, ...rest } = f
+      return rest
+    }),
+  )
+
+  // Insert the aggregated total
+  return { total: overallTotal, ...merged }
 }
 
 function main() {
