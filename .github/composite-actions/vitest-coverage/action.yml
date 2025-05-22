@@ -75,52 +75,15 @@ runs:
         name: local-coverage
         path: coverage
 
-    - name: Move Coverage Folders
-      run: |
-        mkdir -p apps/frontend/coverage apps/backend/coverage packages/ui/coverage
-        mv coverage/apps/frontend/coverage/* apps/frontend/coverage/
-        mv coverage/apps/backend/coverage/* apps/backend/coverage/
-        mv coverage/packages/ui/coverage/* packages/ui/coverage/
-        ls coverage
-      shell: bash
-
     # - name: Download Master Coverage
     #   uses: actions/download-artifact@v4
     #   with:
     #     name: master-coverage
     #     path: master-coverage
 
-    - name: 'Report Frontend Coverage'
-      if: always() # Also generate the report if tests are failing
+    - name: 'Coverage Report'
       uses: davelosert/vitest-coverage-report-action@v2
       with:
-        name: 'Frontend'
-        vite-config-path: './apps/frontend/vitest.config.ts'
-        json-summary-path: './apps/frontend/coverage/coverage-summary.json'
-        json-final-path: './apps/frontend/coverage/coverage-final.json'
-
-    - name: 'Report Backend Coverage'
-      if: always() # Also generate the report if tests are failing
-      uses: davelosert/vitest-coverage-report-action@v2
-      with:
-        name: 'Backend'
-        vite-config-path: './apps/backend/vitest.config.ts'
-        json-summary-path: './apps/backend/coverage/coverage-summary.json'
-        json-final-path: './apps/backend/coverage/coverage-final.json'
-
-    - name: 'Report UI Coverage'
-      if: always() # Also generate the report if tests are failing
-      uses: davelosert/vitest-coverage-report-action@v2
-      with:
-        name: 'UI'
-        vite-config-path: './packages/ui/vitest.config.ts'
-        json-summary-path: './packages/ui/coverage/coverage-summary.json'
-        json-final-path: './packages/ui/coverage/coverage-final.json'
-
-    - name: 'Merged Coverage Report'
-      uses: davelosert/vitest-coverage-report-action@v2
-      with:
-        name: 'Merged Coverage'
         vite-config-path: './packages/test-config/src/configs/base-config.ts'
         json-summary-path: './coverage/coverage-summary.json'
         json-final-path: './coverage/coverage-final.json'
