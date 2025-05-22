@@ -78,9 +78,9 @@ runs:
     - name: Move Coverage Folders
       run: |
         mkdir -p apps/frontend/coverage apps/backend/coverage packages/ui/coverage
-        if [ -d "all-coverage/apps/frontend" ]; then mv all-coverage/apps/frontend apps/frontend/coverage; fi
-        if [ -d "all-coverage/apps/backend" ]; then mv all-coverage/apps/backend apps/backend/coverage; fi
-        if [ -d "all-coverage/packages/ui" ]; then mv all-coverage/packages/ui packages/ui/coverage; fi
+        if [ -d "all-coverage/apps/frontend/coverage" ]; then mv all-coverage/apps/frontend/coverage apps/frontend/coverage; fi
+        if [ -d "all-coverage/apps/backend/coverage" ]; then mv all-coverage/apps/backend/coverage apps/backend/coverage; fi
+        if [ -d "all-coverage/packages/ui/coverage" ]; then mv all-coverage/packages/ui/coverage packages/ui/coverage; fi
       shell: bash
 
     # - name: Download Master Coverage
