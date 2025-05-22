@@ -21,12 +21,10 @@ function readJsonIfExists(filePath: string) {
 }
 
 function mergeCoverageFinal(files: any[]): any {
-  // Simply append all file contents into a single array
   return Object.assign({}, ...files)
 }
 
 function mergeCoverageSummary(files: any[]): any {
-  // Simply append all file contents into a single array
   return Object.assign({}, ...files)
 }
 
