@@ -73,14 +73,14 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: local-coverage
-        path: local-coverage
+        path: coverage
 
     - name: Move Coverage Folders
       run: |
         mkdir -p apps/frontend/coverage apps/backend/coverage packages/ui/coverage
-        mv local-coverage/apps/frontend/coverage/* apps/frontend/coverage/
-        mv local-coverage/apps/backend/coverage/* apps/backend/coverage/
-        mv local-coverage/packages/ui/coverage/* packages/ui/coverage/
+        mv coverage/apps/frontend/coverage/* apps/frontend/coverage/
+        mv coverage/apps/backend/coverage/* apps/backend/coverage/
+        mv coverage/packages/ui/coverage/* packages/ui/coverage/
       shell: bash
 
     # - name: Download Master Coverage
@@ -115,11 +115,6 @@ runs:
         vite-config-path: './packages/ui/vitest.config.ts'
         json-summary-path: './packages/ui/coverage/coverage-summary.json'
         json-final-path: './packages/ui/coverage/coverage-final.json'
-
-    - name: Merge Coverage
-      run: |
-        pnpm test:coverage:merge
-      shell: bash
 
     - name: 'Merged Coverage Report'
       uses: davelosert/vitest-coverage-report-action@v2
