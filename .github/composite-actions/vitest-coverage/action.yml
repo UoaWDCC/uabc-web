@@ -78,7 +78,7 @@ runs:
     - name: Inspect Downloaded Artifact
       run: |
         echo "Contents of the downloaded artifact directory:"
-        ls -a all-coverage
+        find all-coverage -type f
       shell: bash
 
     - name: Move Coverage Folders
