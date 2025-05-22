@@ -245,6 +245,7 @@ jobs:
         run: |
           mkdir -p coverage
           pnpm test:coverage && pnpm test:coverage:merge
+          ls coverage
 
       - name: Move Coverage Folders
         run: |
