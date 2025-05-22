@@ -155,7 +155,7 @@ export interface User {
   /**
    * The last name of the user
    */
-  lastName: string;
+  lastName?: string | null;
   email: string;
   /**
    * The role of the user

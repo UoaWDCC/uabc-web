@@ -20,7 +20,7 @@ export const UserInfoResponseSchema = z.object({
    * The user's first name
    * @example Zhao
    */
-  family_name: z.string(),
+  family_name: z.string().optional(),
   /**
    * The user's profile picture URL
    */
