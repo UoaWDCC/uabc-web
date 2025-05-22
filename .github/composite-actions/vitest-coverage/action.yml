@@ -115,3 +115,14 @@ runs:
         vite-config-path: './packages/ui/vitest.config.ts'
         json-summary-path: './packages/ui/coverage/coverage-summary.json'
         json-final-path: './packages/ui/coverage/coverage-final.json'
+
+    - name: Merge Coverage
+      run: |
+        pnpm test:coverage:merge
+      shell: bash
+
+    - name: 'Merged Coverage Report'
+      uses: davelosert/vitest-coverage-report-action@v2
+      with:
+        name: 'Merged Coverage'
+        vite-config-path: './packages/test-config/configs/base-config.ts'
