@@ -81,6 +81,7 @@ runs:
         mv coverage/apps/frontend/coverage/* apps/frontend/coverage/
         mv coverage/apps/backend/coverage/* apps/backend/coverage/
         mv coverage/packages/ui/coverage/* packages/ui/coverage/
+        ls coverage
       shell: bash
 
     # - name: Download Master Coverage
@@ -121,5 +122,5 @@ runs:
       with:
         name: 'Merged Coverage'
         vite-config-path: './packages/test-config/src/configs/base-config.ts'
-        json-summary-path: './coverage-summary.json'
-        json-final-path: './coverage-final.json'
+        json-summary-path: './coverage/coverage-summary.json'
+        json-final-path: './coverage/coverage-final.json'
