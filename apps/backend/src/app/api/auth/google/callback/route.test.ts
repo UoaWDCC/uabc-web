@@ -10,7 +10,6 @@ import {
   STATE_MOCK,
   createMockNextRequest,
   googleUserMock,
-  invalidUserTokenMock,
   tokensMock,
 } from "@/test-config/mocks/GoogleAuth.mock"
 
@@ -25,18 +24,19 @@ vi.mock("@/business-layer/security/google", async () => {
     ...actual,
     oauth2Client: {
       getToken: vi.fn().mockImplementation((code: string) => {
-        if (code === CODE_MOCK) {
-          return {
-            tokens: tokensMock,
-          }
-        }
-        if (code === INVALID_USER_CODE_MOCK) {
-          return {
-            tokens: invalidUserTokenMock,
-          }
-        }
-        return {
-          tokens: null,
+        switch (code) {
+          case CODE_MOCK:
+            return {
+              tokens: tokensMock,
+            }
+          case INVALID_CODE_MOCK:
+            return {
+              tokens: null,
+            }
+          default:
+            return {
+              tokens: null,
+            }
         }
       }),
     },
