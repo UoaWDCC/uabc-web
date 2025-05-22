@@ -25,7 +25,7 @@ async function collectCoverageFiles() {
       // Normalize path separators
       const normalized = dirPath.replace(/\\/g, "/")
       // Try to match apps/frontend/coverage, apps/backend/coverage, packages/ui/coverage, etc.
-      const match = normalized.match(/(?:apps|packages)\/(\w+)\/coverage/)
+      const match = normalized.match(/(?:apps|packages)\/([^/]+)\/coverage/)
       if (match?.[1]) return match[1]
       // Fallback: use last directory name before 'coverage'
       const parts = normalized.split("/")

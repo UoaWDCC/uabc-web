@@ -4,6 +4,7 @@ import { baseConfig } from "./base-config.js"
 export const uiConfig = mergeConfig(baseConfig, {
   test: {
     environment: "jsdom",
+    setupFiles: ["@repo/test-config/setups/dom"],
   },
   coverage: {
     thresholds: {
