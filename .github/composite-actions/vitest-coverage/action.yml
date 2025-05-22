@@ -79,19 +79,19 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: frontend-coverage
-        path: coverage/frontend
+        path: apps/frontend/coverage
 
     - name: Download Backend Coverage
       uses: actions/download-artifact@v4
       with:
         name: backend-coverage
-        path: coverage/backend
+        path: apps/backend/coverage
 
     - name: Download UI Coverage
       uses: actions/download-artifact@v4
       with:
         name: ui-coverage
-        path: coverage/ui
+        path: packages/ui/coverage
 
     # - name: Download Master Coverage
     #   uses: actions/download-artifact@v4
