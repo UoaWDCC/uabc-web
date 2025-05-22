@@ -94,7 +94,7 @@ runs:
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         name: 'Frontend'
-        vite-config-path: './apps/frontend/vite.config.ts'
+        vite-config-path: './apps/frontend/vitest.config.ts'
         json-summary-path: './apps/frontend/coverage/coverage-summary.json'
         json-final-path: './apps/frontend/coverage/coverage-final.json'
 
@@ -103,7 +103,7 @@ runs:
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         name: 'Backend'
-        vite-config-path: './apps/backend/vite.config.ts'
+        vite-config-path: './apps/backend/vitest.config.ts'
         json-summary-path: './apps/backend/coverage/coverage-summary.json'
         json-final-path: './apps/backend/coverage/coverage-final.json'
 
@@ -112,6 +112,6 @@ runs:
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         name: 'UI'
-        vite-config-path: './packages/ui/vite.config.ts'
+        vite-config-path: './packages/ui/vitest.config.ts'
         json-summary-path: './packages/ui/coverage/coverage-summary.json'
         json-final-path: './packages/ui/coverage/coverage-final.json'
