@@ -29,8 +29,16 @@ export const tokensMock = {
   id_token: "mock_id_token",
 }
 
+export const invalidUserTokenMock = {
+  access_token: "mock_invalid_user_access_token",
+  expiry_date: Date.now() + 3600 * 1000, // 1 hour
+  id_token: "mock_id_token2",
+}
+
 // URL param mocks
 export const CODE_MOCK = "mock_code"
+export const INVALID_USER_CODE_MOCK = "mock_that_returns_invalid_user"
+export const INVALID_CODE_MOCK = "invalid_mock_code"
 export const STATE_MOCK = "mock_state"
 export const SCOPES = encodeURIComponent(googleAuthScopes.join(" "))
 

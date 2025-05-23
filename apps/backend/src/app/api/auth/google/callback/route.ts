@@ -1,16 +1,14 @@
 import { googleAuthScopes, oauth2Client } from "@/business-layer/provider/google"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
-import {
-  AUTH_COOKIE_NAME,
-  MembershipType,
-  type UserInfoResponse,
-  UserInfoResponseSchema,
-} from "@repo/shared"
+import { AUTH_COOKIE_NAME, MembershipType, UserInfoResponseSchema } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import jwt from "jsonwebtoken"
 import { cookies } from "next/headers"
 import { type NextRequest, NextResponse } from "next/server"
+import { NotFound } from "payload"
+import { ZodError } from "zod"
 
 export const GET = async (req: NextRequest) => {
   const params = req.nextUrl.searchParams
@@ -55,7 +53,8 @@ export const GET = async (req: NextRequest) => {
       { status: StatusCodes.INTERNAL_SERVER_ERROR },
     )
   }
-  if (!tokens.access_token || !tokens.expiry_date || !tokens.id_token) {
+
+  if (!tokens || !tokens.access_token || !tokens.expiry_date || !tokens.id_token) {
     return NextResponse.json(
       { error: "Error invalid google auth" },
       { status: StatusCodes.INTERNAL_SERVER_ERROR },
@@ -66,17 +65,42 @@ export const GET = async (req: NextRequest) => {
     headers: { Authorization: `Bearer ${tokens.access_token}` },
   })
 
-  const {
-    sub,
-    email,
-    family_name: lastName,
-    given_name: firstName,
-  }: UserInfoResponse = UserInfoResponseSchema.parse(await userInfoResponse.json())
+  let sub: string
+  let email: string
+  let given_name: string
+  let family_name: string | undefined
+
+  try {
+    ;({ sub, email, family_name, given_name } = UserInfoResponseSchema.parse(
+      await userInfoResponse.json(),
+    ))
+  } catch (error) {
+    if (error instanceof ZodError) {
+      console.error("Error parsing user info response", error)
+      return NextResponse.json(
+        { error: "Error parsing user info response" },
+        { status: StatusCodes.INTERNAL_SERVER_ERROR },
+      )
+    }
+    throw error
+  }
 
   const userService = new UserDataService()
-  let user = await userService.getUserByEmail(email)
-  if (!user)
-    user = await userService.createUser({ firstName, lastName, role: MembershipType.casual, email })
+  let user: User
+  try {
+    user = await userService.getUserByEmail(email)
+  } catch (error) {
+    if (error instanceof NotFound) {
+      user = await userService.createUser({
+        firstName: given_name,
+        lastName: family_name,
+        role: MembershipType.casual,
+        email,
+      })
+    } else {
+      throw error
+    }
+  }
 
   const authService = new AuthDataService()
   await authService.createAuth({
