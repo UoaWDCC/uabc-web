@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@/test-utils"
 import type { StaticImageData } from "next/image"
 import { isValidElement } from "react"
-import { Image, shouldShowFallbackImage } from "./Image"
+import { Image, shouldShowFallbackImage } from "."
 import * as ImageModule from "./index"
 
 // Mock NextImage to a simple img for test environment
