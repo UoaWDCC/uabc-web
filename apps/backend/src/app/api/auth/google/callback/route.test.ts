@@ -15,7 +15,7 @@ import {
 
 dotenv.config()
 
-vi.mock("@/business-layer/security/google", async () => {
+vi.mock("@/business-layer/provider/google", async () => {
   const actual = await vi.importActual<typeof import("@/business-layer/provider/google")>(
     "@/business-layer/provider/google",
   )
@@ -44,6 +44,7 @@ vi.mock("@/business-layer/security/google", async () => {
 
 import { GET as callback } from "@/app/api/auth/google/callback/route"
 import UserDataService from "@/data-layer/services/UserDataService"
+import { AUTH_COOKIE_NAME } from "@repo/shared"
 import { cookies } from "next/headers"
 
 describe("GET /api/auth/google/callback", async () => {
@@ -63,19 +64,21 @@ describe("GET /api/auth/google/callback", async () => {
     )
   })
 
-  it("redirects uer and sets JWT token to cookies on success auth", async () => {
+  it("redirects user and sets JWT token to cookies on success auth", async () => {
     cookieStore.set("state", STATE_MOCK)
 
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.TEMPORARY_REDIRECT)
     expect(response.headers.get("location")).toBe("http://localhost:3000/onboarding/name")
 
-    const decoded = jwt.verify(json.token, process.env.JWT_SECRET)
+    const token = response.cookies.get(AUTH_COOKIE_NAME)?.value
+    expect(token).toBeDefined()
+
+    const decoded = jwt.verify(token as string, process.env.JWT_SECRET)
     const userMock = await userDataService.getUserByEmail(googleUserMock.email)
     expect(decoded).toMatchObject({
       profile: userMock,
