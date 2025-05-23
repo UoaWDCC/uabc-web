@@ -27,8 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geist.variable} ${geistMono.variable}`} suppressHydrationWarning>
+        <ColorModeScript initialColorMode="dark" />
         <UIProvider>
-          <ColorModeScript initialColorMode="dark" suppressHydrationWarning />
           {children}
           <Footer />
         </UIProvider>
