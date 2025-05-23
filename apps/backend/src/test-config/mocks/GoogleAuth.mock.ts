@@ -39,7 +39,7 @@ export const invalidUserTokenMock = {
 export const CODE_MOCK = "mock_code"
 export const INVALID_USER_CODE_MOCK = "mock_that_returns_invalid_user"
 export const INVALID_CODE_MOCK = "invalid_mock_code"
-export const STATE_MOCK = "mock_state"
+export const STATE_MOCK = crypto.randomUUID().toString()
 export const SCOPES = encodeURIComponent(googleAuthScopes.join(" "))
 
 // JWT token secret mock

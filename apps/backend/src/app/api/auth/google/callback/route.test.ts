@@ -63,7 +63,7 @@ describe("GET /api/auth/google/callback", async () => {
     )
   })
 
-  it("returns JWT token on success auth", async () => {
+  it("redirects uer and sets JWT token to cookies on success auth", async () => {
     cookieStore.set("state", STATE_MOCK)
 
     const req = createMockNextRequest(
