@@ -72,7 +72,7 @@ describe("GET /api/auth/google/callback", async () => {
     const response = await callback(req)
     const json = await response.json()
 
-    expect(response.status).toBe(307) // redirect
+    expect(response.status).toBe(StatusCodes.TEMPORARY_REDIRECT)
     expect(response.headers.get("location")).toBe("http://localhost:3000/onboarding/name")
 
     const decoded = jwt.verify(json.token, process.env.JWT_SECRET)
