@@ -1,3 +1,4 @@
+import "@testing-library/jest-dom"
 import { render, screen } from "@/test-config/test-utils"
 import { Footer } from "./Footer"
 

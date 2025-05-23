@@ -12,7 +12,7 @@ import {
 import type { StaticImageData } from "next/image"
 import type { ImageProps as NextImageProps } from "next/image"
 import NextImage from "next/image"
-import { type FC, forwardRef, useCallback } from "react"
+import { forwardRef, useCallback } from "react"
 
 interface CustomNextImageProps
   extends Merge<HTMLUIProps<"img">, NextImageProps>,
@@ -22,7 +22,7 @@ const Component = ui<typeof NextImage, CustomNextImageProps>(NextImage, {
   disableStyleProp: (prop) => ["fill", "height", "width"].includes(prop),
 })
 
-const CustomNextImage = forwardRef<CustomNextImageProps, "img">((props, ref) => {
+const CustomNextImage = forwardRef<HTMLImageElement, CustomNextImageProps>((props, ref) => {
   const [css, mergedProps] = useComponentStyle("Image", props)
   const { className, ...rest } = omitThemeProps(mergedProps)
 
@@ -88,7 +88,7 @@ export const shouldShowFallbackImage = (
  * // Image with fallback only on error
  * <Image src="/broken.png" fallback="/fallback.png" fallbackStrategy="onError" alt="With fallback on error" />
  */
-export const Image: FC<ImageProps> = forwardRef(
+export const Image = forwardRef<HTMLImageElement, ImageProps>(
   ({ src, fallback, fallbackStrategy = "beforeLoadOrError", ...rest }, ref) => {
     const [loading, { off: offLoading }] = useBoolean(
       Boolean(fallback && fallbackStrategy === "beforeLoadOrError"),
