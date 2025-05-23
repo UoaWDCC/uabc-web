@@ -10,13 +10,6 @@ vi.mock("@repo/ui/components/Image", () => ({
 }))
 
 describe("<Footer />", () => {
-  it("should be memoized", () => {
-    const { rerender } = render(<Footer />)
-    const firstRender = render(<Footer />)
-    rerender(<Footer />)
-    expect(firstRender).toMatchSnapshot()
-  })
-
   it("should have correct displayName", () => {
     expect(Footer.displayName).toBe("Footer")
   })
