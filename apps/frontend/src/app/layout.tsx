@@ -1,15 +1,17 @@
+import { Footer } from "@/components/Footer"
+import { UIProvider } from "@repo/ui/providers"
+import { ColorModeScript } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const geist = Geist({
   subsets: ["latin"],
+  variable: "--font-geist",
 })
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
+  variable: "--font-geist-mono",
 })
 
 export const metadata: Metadata = {
@@ -23,8 +25,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geist.variable} ${geistMono.variable}`} suppressHydrationWarning>
+        <UIProvider>
+          <ColorModeScript initialColorMode="dark" suppressHydrationWarning />
+          {children}
+          <Footer />
+        </UIProvider>
+      </body>
     </html>
   )
 }

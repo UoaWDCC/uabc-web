@@ -153,3 +153,5 @@ storybook-static
 
 # Zed code editor
 .zed
+
+__snapshots__/

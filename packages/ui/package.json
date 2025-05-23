@@ -6,6 +6,7 @@
     "./components/Button": "./src/components/Button/index.ts",
     "./components/Heading": "./src/components/Heading/index.ts",
     "./components/TextInput": "./src/components/TextInput/index.ts",
+    "./components/Image": "./src/components/Image/index.ts",
     "./providers": "./src/providers/index.ts"
   },
   "scripts": {
@@ -16,8 +17,8 @@
   "dependencies": {
     "@repo/theme": "workspace:*",
     "@storybook/blocks": "8.6.14",
-    "@storybook/react-vite": "8.6.14",
     "@storybook/theming": "8.6.14",
+    "@storybook/nextjs": "^8.6.14",
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.6",
     "next": "15.2.3",

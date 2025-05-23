@@ -15,7 +15,8 @@
   "dependencies": {
     "@yamada-ui/core": "1.17.3",
     "@yamada-ui/theme-tools": "1.1.18",
-    "@yamada-ui/utils": "1.7.2"
+    "@yamada-ui/utils": "1.7.2",
+    "next": "15.3.2"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
