@@ -13,7 +13,8 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "test": "cross-env NODE_ENV=test vitest run",
     "test:watch": "cross-env NODE_ENV=test vitest",
-    "test:coverage": "cross-env NODE_ENV=test vitest run --coverage"
+    "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
+    "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage --watch"
   },
   "dependencies": {
     "@hookform/resolvers": "4.1.3",
@@ -42,6 +43,7 @@
     "@types/node": "22.14.1",
     "@types/react": "19.1.4",
     "@types/react-dom": "19.1.5",
-    "typescript": "5.8.3"
+    "typescript": "5.8.3",
+    "@repo/test-config": "workspace:*"
   }
 }
