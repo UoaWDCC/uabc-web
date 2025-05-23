@@ -1,21 +1,24 @@
 {
   "name": "@repo/test-config",
-  "version": "0.1.0",
-  "private": true,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
-  "scripts": {
-    "check-types": "tsc --noEmit"
+  "exports": {
+    "./ui": "./dist/configs/ui-config.js",
+    "./backend": "./dist/configs/backend-config.js",
+    "./frontend": "./dist/configs/frontend-config.js",
+    "./setups/dom": "./dist/setups/dom-setup.js",
+    "./setups/mongodb": "./dist/setups/mongodb-setup.js"
   },
-  "dependencies": {
-    "@testing-library/jest-dom": "6.6.3",
-    "@yamada-ui/react": "1.7.6",
-    "mongodb-memory-server": "10.1.4",
-    "vitest": "3.1.1"
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "build": "tsc",
+    "merge": "node dist/scripts/merge-coverage.js"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "typescript": "5.8.3"
+    "@testing-library/jest-dom": "6.6.3",
+    "@yamada-ui/react": "1.7.6",
+    "mongodb-memory-server": "10.1.4",
+    "typescript": "5.8.3",
+    "vitest": "3.1.1"
   }
 }

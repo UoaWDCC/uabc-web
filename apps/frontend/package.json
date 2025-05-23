@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack --port=3001",
     "build": "next build",
     "start": "next start --port=3001",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "cross-env NODE_ENV=test vitest run",
+    "test:watch": "cross-env NODE_ENV=test vitest",
+    "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
+    "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage --watch"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
@@ -21,6 +25,6 @@
     "@types/node": "22.14.1",
     "@types/react": "19.1.4",
     "@types/react-dom": "19.1.5",
-    "typescript": "5.8.3"
+    "@repo/test-config": "workspace:*"
   }
 }
