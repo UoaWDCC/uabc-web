@@ -29,8 +29,8 @@ export const Colors: Story = {
 
       <Heading.h2>Semantics</Heading.h2>
       <Grid gap="md" templateColumns="repeat(3, 1fr)">
-        <ColorPallet name="primary" value={colors.blue[500]} />
-        <ColorPallet name="gray" value={colors.gray[200]} />
+        <ColorPallet name="primary" value={colors.primary} />
+        <ColorPallet name="gray" value={colors.secondary} />
         <ColorPallet name="success" value={colors.success} />
         <ColorPallet name="warning" value={colors.warning} />
         <ColorPallet name="danger" value={colors.danger} />
