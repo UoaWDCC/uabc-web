@@ -24,7 +24,7 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
     },
     "check-types": {
-      "dependsOn": ["^check-types"],
+      "dependsOn": ["^check-types", "@repo/test-config#build"],
       "cache": true
     },
     "dev": {
@@ -59,6 +59,30 @@
       "dependsOn": ["^storybook:build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "!**/*.stories.{tsx,jsx,mdx}"],
       "outputs": ["storybook-static/**"]
+    },
+    "test": {
+      "cache": true,
+      "dependsOn": ["^test", "@repo/test-config#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "test:watch": {
+      "cache": false,
+      "dependsOn": ["^test:watch", "@repo/test-config#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "persistent": true
+    },
+    "test:coverage": {
+      "cache": true,
+      "dependsOn": ["^test:coverage", "@repo/test-config#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["coverage/**"]
+    },
+    "test:coverage:watch": {
+      "cache": false,
+      "dependsOn": ["^test:coverage:watch", "@repo/test-config#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["coverage/**"],
+      "persistent": true
     }
   },
   "ui": "tui"
