@@ -70,6 +70,6 @@
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["biome check --write ."]
   },
   "volta": {
-    "node": "22.15.1"
+    "node": "22.16.0"
   }
 }
