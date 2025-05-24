@@ -1,23 +1,10 @@
+import { IMAGE_FALLBACK_SRC, IMAGE_TEST_CONSTANTS } from "@/test-config/mocks/constants"
+import { useBooleanMock, useImageMock } from "@/test-config/mocks/hooks.mock"
 import { fireEvent, render, screen } from "@/test-utils"
-import type { StaticImageData } from "next/image"
 import { isValidElement } from "react"
 import { Image, shouldShowFallbackImage } from "."
 import * as ImageModule from "./index"
 
-// Mock NextImage to a simple img for test environment
-vi.mock("next/image", () => ({
-  // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-  default: (props: Record<string, any> = {}) => {
-    let { alt = "", src, ...rest } = props || {}
-    if (src && typeof src === "object" && "src" in src) {
-      src = src.src
-    }
-    // biome-ignore lint/nursery/noImgElement: this is for a test
-    return <img {...rest} alt={alt} data-testid="next-image" src={src} />
-  },
-}))
-
-// Mock useBoolean and useImage to control loading, error, and status state
 vi.mock("@yamada-ui/react", async (importOriginal) => {
   const mod = await importOriginal()
   return {
@@ -29,13 +16,6 @@ vi.mock("@yamada-ui/react", async (importOriginal) => {
   }
 })
 
-const useBooleanMock = vi.fn()
-const useImageMock = vi.fn()
-
-const fallbackUrl = "https://placehold.co/128x128?text=Fallback"
-const srcUrl = "https://placehold.co/300x200/png"
-const altText = "Test image"
-
 describe("<Image />", () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -43,7 +23,7 @@ describe("<Image />", () => {
 
   it("should re-export the Image component and check if Image exists", () => {
     expect(ImageModule.Image).toBeDefined()
-    expect(isValidElement(<ImageModule.Image alt={altText} src={srcUrl} />)).toBeTruthy()
+    expect(isValidElement(<ImageModule.Image {...IMAGE_TEST_CONSTANTS} />)).toBeTruthy()
   })
 
   it("renders the image with given src and alt", () => {
@@ -51,12 +31,12 @@ describe("<Image />", () => {
     useBooleanMock.mockReturnValueOnce([false, { on: vi.fn(), off: vi.fn() }]) // error
     useImageMock.mockReturnValueOnce("loaded")
 
-    render(<Image alt={altText} data-testid="next-image" height={100} src={srcUrl} width={100} />)
+    render(<Image {...IMAGE_TEST_CONSTANTS} />)
     const img = screen.getByTestId("next-image")
-    expect(img).toHaveAttribute("src", srcUrl)
-    expect(img).toHaveAttribute("alt", altText)
-    expect(img).toHaveAttribute("width", "100")
-    expect(img).toHaveAttribute("height", "100")
+    expect(img).toHaveAttribute("src", IMAGE_TEST_CONSTANTS.src)
+    expect(img).toHaveAttribute("alt", IMAGE_TEST_CONSTANTS.alt)
+    expect(img).toHaveAttribute("width", IMAGE_TEST_CONSTANTS.width.toString())
+    expect(img).toHaveAttribute("height", IMAGE_TEST_CONSTANTS.height.toString())
   })
 
   it("renders fallback image when status is not loaded and fallbackStrategy is beforeLoadOrError", () => {
@@ -66,16 +46,13 @@ describe("<Image />", () => {
 
     render(
       <Image
-        alt={altText}
-        fallback={fallbackUrl}
+        {...IMAGE_TEST_CONSTANTS}
+        fallback={IMAGE_FALLBACK_SRC}
         fallbackStrategy="beforeLoadOrError"
-        height={100}
-        src={srcUrl}
-        width={100}
       />,
     )
     const img = screen.getByTestId("next-image")
-    expect(img).toHaveAttribute("src", fallbackUrl)
+    expect(img).toHaveAttribute("src", IMAGE_FALLBACK_SRC)
   })
 
   it("renders fallback image when status is failed and fallbackStrategy is onError", () => {
@@ -84,17 +61,10 @@ describe("<Image />", () => {
     useImageMock.mockReturnValueOnce("failed")
 
     render(
-      <Image
-        alt={altText}
-        fallback={fallbackUrl}
-        fallbackStrategy="onError"
-        height={100}
-        src={srcUrl}
-        width={100}
-      />,
+      <Image {...IMAGE_TEST_CONSTANTS} fallback={IMAGE_FALLBACK_SRC} fallbackStrategy="onError" />,
     )
     const img = screen.getByTestId("next-image")
-    expect(img).toHaveAttribute("src", fallbackUrl)
+    expect(img).toHaveAttribute("src", IMAGE_FALLBACK_SRC)
   })
 
   it("calls onError and onLoad handlers appropriately", () => {
@@ -105,7 +75,7 @@ describe("<Image />", () => {
     useBooleanMock.mockReturnValueOnce([false, { on: onError, off: offError }]) // error
     useImageMock.mockReturnValueOnce("loaded")
 
-    render(<Image alt={altText} data-testid="next-image" height={100} src={srcUrl} width={100} />)
+    render(<Image {...IMAGE_TEST_CONSTANTS} />)
     const img = screen.getByTestId("next-image")
     fireEvent.error(img)
     expect(offLoading).toHaveBeenCalled()
@@ -129,9 +99,9 @@ describe("<Image />", () => {
     useBooleanMock.mockReturnValueOnce([true, { on: vi.fn(), off: vi.fn() }]) // error true
     useImageMock.mockReturnValueOnce("failed")
 
-    render(<Image alt={altText} fallbackStrategy="onError" height={100} src={srcUrl} width={100} />)
+    render(<Image {...IMAGE_TEST_CONSTANTS} fallbackStrategy="onError" />)
     const img = screen.getByTestId("next-image")
-    expect(img).toHaveAttribute("src", srcUrl)
+    expect(img).toHaveAttribute("src", IMAGE_TEST_CONSTANTS.src)
   })
 
   it("renders the image when src is a StaticImageData object", () => {
@@ -139,12 +109,11 @@ describe("<Image />", () => {
     useBooleanMock.mockReturnValueOnce([false, { on: vi.fn(), off: vi.fn() }]) // error
     useImageMock.mockReturnValueOnce("loaded")
 
-    const staticImageMock = { src: srcUrl, height: 100, width: 100 } as StaticImageData
-    render(<Image alt={altText} height={100} src={staticImageMock} width={100} />)
+    render(<Image {...IMAGE_TEST_CONSTANTS} src={IMAGE_TEST_CONSTANTS} />)
     const img = screen.getByTestId("next-image")
-    expect(img).toHaveAttribute("src", srcUrl)
-    expect(img).toHaveAttribute("alt", altText)
-    expect(img).toHaveAttribute("width", "100")
-    expect(img).toHaveAttribute("height", "100")
+    expect(img).toHaveAttribute("src", IMAGE_TEST_CONSTANTS.src)
+    expect(img).toHaveAttribute("alt", IMAGE_TEST_CONSTANTS.alt)
+    expect(img).toHaveAttribute("width", IMAGE_TEST_CONSTANTS.width.toString())
+    expect(img).toHaveAttribute("height", IMAGE_TEST_CONSTANTS.height.toString())
   })
 })

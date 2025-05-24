@@ -6,7 +6,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 
 const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-geist-sans",
 })
 
 const geistMono = Geist_Mono({

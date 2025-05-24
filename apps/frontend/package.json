@@ -10,7 +10,7 @@
     "test": "cross-env NODE_ENV=test vitest run",
     "test:watch": "cross-env NODE_ENV=test vitest",
     "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
-    "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage --watch"
+    "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
