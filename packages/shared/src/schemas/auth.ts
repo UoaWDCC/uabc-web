@@ -34,7 +34,7 @@ const UserSchema = z.object({
 // Google Authentication Payload JWT Schema
 export const JWTEncryptedUserSchema = z.object({
   user: UserSchema,
-  access_token: z.string().optional(),
+  accessToken: z.string().optional(),
 })
 
 // Google User Info Schema

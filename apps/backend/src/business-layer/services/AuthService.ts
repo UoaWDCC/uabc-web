@@ -8,7 +8,7 @@ export default class AuthService {
    * @param token The JWT token to decode
    * @returns The decoded JWT payload
    */
-  public decodeJWT(token: string): JwtPayload | string {
+  private decodeJWT(token: string): JwtPayload | string {
     return jwt.verify(token, process.env.JWT_SECRET)
   }
 

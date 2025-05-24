@@ -115,10 +115,14 @@ export const GET = async (req: NextRequest) => {
   })
 
   const jwtPayload = {
-    profile: user,
+    user,
     accessToken: tokens.access_token,
   }
 
+  /**
+   * JWT token including user info and the Google access token.
+   * Expires in 1 hour (same duration as Google access token)
+   */
   const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, { expiresIn: "1h" })
   const response = NextResponse.redirect(new URL("/onboarding/name", req.url))
 

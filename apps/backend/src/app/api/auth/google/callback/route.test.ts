@@ -1,6 +1,6 @@
+import AuthService from "@/business-layer/services/AuthService"
 import dotenv from "dotenv"
 import { StatusCodes } from "http-status-codes"
-import jwt from "jsonwebtoken"
 
 import {
   CODE_MOCK,
@@ -44,7 +44,7 @@ vi.mock("@/business-layer/provider/google", async () => {
 
 import { GET as callback } from "@/app/api/auth/google/callback/route"
 import UserDataService from "@/data-layer/services/UserDataService"
-import { AUTH_COOKIE_NAME } from "@repo/shared"
+import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
 import { cookies } from "next/headers"
 
 describe("GET /api/auth/google/callback", async () => {
@@ -78,10 +78,11 @@ describe("GET /api/auth/google/callback", async () => {
     const token = response.cookies.get(AUTH_COOKIE_NAME)?.value
     expect(token).toBeDefined()
 
-    const decoded = jwt.verify(token as string, process.env.JWT_SECRET)
+    const authService = new AuthService()
+    const data = authService.getData(token as string, JWTEncryptedUserSchema)
     const userMock = await userDataService.getUserByEmail(googleUserMock.email)
-    expect(decoded).toMatchObject({
-      profile: userMock,
+    expect(data).toMatchObject({
+      user: userMock,
       accessToken: tokensMock.access_token,
     })
   })
