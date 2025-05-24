@@ -15,6 +15,15 @@ vi.mock("jsonwebtoken", () => {
           }
         }
       }),
+      sign: vi.fn((payload: Record<string, unknown>, secret: string, _options: object) => {
+        if (
+          payload.user === userMock &&
+          payload.accessToken === tokensMock.access_token &&
+          secret === JWT_SECRET_MOCK
+        ) {
+          return JWT_TOKEN_MOCK
+        }
+      }),
     },
   }
 })
@@ -22,6 +31,18 @@ vi.mock("jsonwebtoken", () => {
 import AuthService from "./AuthService"
 
 describe("AuthService", () => {
+  describe("signJWT", () => {
+    it("should sign a JWT token and return it", () => {
+      const authService = new AuthService()
+      const payload = { user: userMock, accessToken: tokensMock.access_token }
+      const options = { expiresIn: "1h" } as const
+
+      const token = authService.signJWT(payload, options)
+      expect(jwt.sign).toHaveBeenCalledWith(payload, JWT_SECRET_MOCK, options)
+      expect(token).toBe(JWT_TOKEN_MOCK)
+    })
+  })
+
   describe("getData", () => {
     it("should return validated data with the correct token", () => {
       const authService = new AuthService()

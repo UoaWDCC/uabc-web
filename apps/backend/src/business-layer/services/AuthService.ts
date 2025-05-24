@@ -3,6 +3,16 @@ import type z from "zod"
 
 export default class AuthService {
   /**
+   * Signs a JWT token with the provided payload and options and returns it.
+   * @param payload The payload to sign
+   * @param options JWT options
+   * @returns The signed JWT token
+   */
+  public signJWT(payload: string | object | Buffer<ArrayBufferLike>, options?: jwt.SignOptions) {
+    return jwt.sign(payload, process.env.JWT_SECRET, options)
+  }
+
+  /**
    * Decodes a JWT token and returns the payload.
    *
    * @param token The JWT token to decode
