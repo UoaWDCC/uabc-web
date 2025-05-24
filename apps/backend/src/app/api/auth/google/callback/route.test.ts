@@ -1,6 +1,6 @@
+import AuthService from "@/business-layer/services/AuthService"
 import dotenv from "dotenv"
 import { StatusCodes } from "http-status-codes"
-import jwt from "jsonwebtoken"
 
 import {
   CODE_MOCK,
@@ -15,11 +15,10 @@ import {
 
 dotenv.config()
 
-vi.mock("@/business-layer/security/google", async () => {
-  const actual = await vi.importActual<typeof import("@/business-layer/security/google")>(
-    "@/business-layer/security/google",
+vi.mock("@/business-layer/provider/google", async () => {
+  const actual = await vi.importActual<typeof import("@/business-layer/provider/google")>(
+    "@/business-layer/provider/google",
   )
-
   return {
     ...actual,
     oauth2Client: {
@@ -45,6 +44,7 @@ vi.mock("@/business-layer/security/google", async () => {
 
 import { GET as callback } from "@/app/api/auth/google/callback/route"
 import UserDataService from "@/data-layer/services/UserDataService"
+import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
 import { cookies } from "next/headers"
 
 describe("GET /api/auth/google/callback", async () => {
@@ -64,21 +64,25 @@ describe("GET /api/auth/google/callback", async () => {
     )
   })
 
-  it("returns JWT token on success auth", async () => {
+  it("redirects user and sets JWT token to cookies on success auth", async () => {
     cookieStore.set("state", STATE_MOCK)
 
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
-    expect(json.token).toBeDefined()
+    expect(response.status).toBe(StatusCodes.TEMPORARY_REDIRECT)
+    expect(response.headers.get("location")).toBe("http://localhost:3000/onboarding/name")
 
-    const decoded = jwt.verify(json.token, process.env.JWT_SECRET)
+    const token = response.cookies.get(AUTH_COOKIE_NAME)?.value
+    expect(token).toBeDefined()
+
+    const authService = new AuthService()
+    const data = authService.getData(token as string, JWTEncryptedUserSchema)
     const userMock = await userDataService.getUserByEmail(googleUserMock.email)
-    expect(decoded).toMatchObject({
-      profile: userMock,
+    expect(data).toMatchObject({
+      user: userMock,
       accessToken: tokensMock.access_token,
     })
   })

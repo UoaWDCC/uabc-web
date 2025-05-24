@@ -1,5 +1,5 @@
 import { createTimeField } from "@/data-layer/fields/date-time"
-import { Weekday } from "@/types/types"
+import { Weekday } from "@repo/shared"
 import type { CollectionConfig } from "payload"
 
 export const Semester: CollectionConfig = {

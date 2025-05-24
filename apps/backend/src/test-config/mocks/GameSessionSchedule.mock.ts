@@ -1,5 +1,5 @@
-import type { GameSessionSchedule } from "@/payload-types"
-import type { CreateGameSessionScheduleData } from "@/types/collections"
+import type { CreateGameSessionScheduleData } from "@repo/shared"
+import type { GameSessionSchedule } from "@repo/shared/payload-types"
 
 export const gameSessionScheduleMock: GameSessionSchedule = {
   id: "8f3a2b1c4d5e6f7a8b9c0d1e",

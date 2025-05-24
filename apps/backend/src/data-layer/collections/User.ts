@@ -1,4 +1,4 @@
-import { MembershipType } from "@/types/types"
+import { MembershipType } from "@repo/shared"
 import type { CollectionConfig } from "payload"
 
 export const User: CollectionConfig = {
