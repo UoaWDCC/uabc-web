@@ -32,8 +32,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "../../packages/shared/src/types/game-session.ts",
-    "src/types/types.ts"
+    ".next/types/**/*.ts"
   ]
 }
