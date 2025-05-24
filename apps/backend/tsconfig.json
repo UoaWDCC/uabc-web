@@ -28,10 +28,5 @@
   },
   "exclude": ["node_modules"],
   "extends": "@repo/typescript-config/nextjs.json",
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]
 }

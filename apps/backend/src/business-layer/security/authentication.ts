@@ -53,11 +53,11 @@ export default async function authenticate(securityName: "jwt", scopes?: string[
       throw new UnauthorizedAuthError("No scope")
     } catch (error) {
       if (process.env.NODE_ENV !== "production") {
-        console.error("Authentication error:", error);
+        console.error("Authentication error:", error)
       } else {
-        console.error("Authentication error occurred.");
+        console.error("Authentication error occurred.")
       }
-      throw new UnauthorizedAuthError("Authentication failed. Please try again.");
+      throw new UnauthorizedAuthError("Authentication failed. Please try again.")
     }
   }
   throw new Error("Unsupported security name")
