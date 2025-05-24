@@ -1,16 +1,6 @@
-export interface MemberResponse {
+export interface Member {
   id: string
-  firstName: string
-  lastName: string
+  name: string
   email: string
   prepaidSessions: number
 }
-
-export interface Member {
-  id: MemberResponse["id"]
-  name: string
-  email: MemberResponse["email"]
-  prepaidSessions: MemberResponse["prepaidSessions"]
-}
-
-export type PendingMember = Omit<Member, "prepaidSessions">
