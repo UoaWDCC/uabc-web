@@ -55,13 +55,3 @@ export const RemoteImage: Story = {
     height: 400,
   },
 }
-
-export const Fallback: Story = {
-  args: {
-    src: "https://not-a-real-image-url.com/404.png",
-    fallback: "https://placehold.co/128x128?text=Fallback",
-    alt: "Fallback image",
-    width: 128,
-    height: 128,
-  },
-}
