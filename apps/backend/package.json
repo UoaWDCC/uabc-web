@@ -22,7 +22,7 @@
     "@payloadcms/next": "3.38.0",
     "@payloadcms/payload-cloud": "3.38.0",
     "@payloadcms/richtext-lexical": "3.38.0",
-    "bcryptjs": "^3.0.2",
+    "bcryptjs": "3.0.2",
     "date-fns": "4.1.0",
     "date-fns-tz": "3.2.0",
     "googleapis": "148.0.0",
