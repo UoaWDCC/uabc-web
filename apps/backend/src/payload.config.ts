@@ -2,7 +2,6 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 // storage-adapter-import-placeholder
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
-import { payloadCloudPlugin } from "@payloadcms/payload-cloud"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { buildConfig } from "payload"
 import sharp from "sharp"
@@ -28,8 +27,6 @@ export default buildConfig({
   routes: {
     admin: "/payload/admin",
     api: "/payload/api",
-    graphQL: "/payload/graphql",
-    graphQLPlayground: "/payload/graphql-playground",
   },
   admin: {
     user: Admin.slug,
@@ -54,12 +51,14 @@ export default buildConfig({
     outputFile: path.resolve(dirname, "../../../packages/shared/src/payload-types.ts"),
     declare: false,
   },
+  graphQL: {
+    disable: true,
+  },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
   }),
   sharp,
   plugins: [
-    payloadCloudPlugin(),
     // storage-adapter-placeholder
   ],
 })
