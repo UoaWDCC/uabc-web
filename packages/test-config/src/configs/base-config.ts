@@ -10,6 +10,7 @@ export const baseConfig = defineConfig({
     maxWorkers: process.env.CI === "true" ? 1 : undefined,
     minWorkers: process.env.CI === "true" ? 1 : undefined,
     coverage: {
+      reportOnFailure: true,
       provider: "istanbul",
       exclude: [
         ...coverageConfigDefaults.exclude,
