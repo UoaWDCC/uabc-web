@@ -1,3 +1,4 @@
+"use client"
 import { Image, ui } from "@yamada-ui/react"
 import type { ImageProps } from "./Image.types"
 

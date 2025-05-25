@@ -169,10 +169,8 @@ export const Footer = memo(() => {
         <Image
           alt="Shuttle"
           h="full"
-          src={Shuttle}
-          sx={{
-            objectFit: { base: "cover", lg: "contain" },
-          }}
+          objectFit={{ base: "cover", lg: "contain" }}
+          src={Shuttle} // TODO: Better image that's not rotated
           w="full"
         />
       </Slide>
