@@ -7,11 +7,11 @@ const OUTPUT_DIR = path.resolve(PROJECT_ROOT, "coverage")
 const FINAL_FILE = "coverage-final.json"
 const SUMMARY_FILE = "coverage-summary.json"
 
-function readJsonIfExists(filePath: string) {
+function readJsonIfExists<T>(filePath: string): T | null {
   try {
     if (fs.existsSync(filePath)) {
       console.log(`Found: ${filePath}`)
-      return JSON.parse(fs.readFileSync(filePath, "utf-8"))
+      return JSON.parse(fs.readFileSync(filePath, "utf-8")) as T
     }
     console.warn(`Not found: ${filePath}`)
   } catch (e) {
@@ -20,16 +20,19 @@ function readJsonIfExists(filePath: string) {
   return null
 }
 
-function mergeCoverageFinal(files: any[]): any {
+function mergeCoverageFinal(files: CoverageFinal[]): CoverageFinal {
   return Object.assign({}, ...files)
 }
 
-function mergeCoverageSummary(files: any[]): any {
+function mergeCoverageSummary(files: CoverageSummary[]): CoverageSummary {
   // Aggregate totals
-  const totalKeys = ["lines", "statements", "functions", "branches", "branchesTrue"]
-  const overallTotal: any = {}
-  for (const key of totalKeys) {
-    overallTotal[key] = { total: 0, covered: 0, skipped: 0 }
+  const totalKeys: CoverageKey[] = ["lines", "statements", "functions", "branches", "branchesTrue"]
+  const overallTotal: Record<CoverageKey, CoverageMetric> = {
+    lines: { total: 0, covered: 0, skipped: 0 },
+    statements: { total: 0, covered: 0, skipped: 0 },
+    functions: { total: 0, covered: 0, skipped: 0 },
+    branches: { total: 0, covered: 0, skipped: 0 },
+    branchesTrue: { total: 0, covered: 0, skipped: 0 },
   }
 
   // Sum up totals from each file
@@ -51,13 +54,7 @@ function mergeCoverageSummary(files: any[]): any {
   }
 
   // Merge all per-file objects (excluding 'total')
-  const merged = Object.assign(
-    {},
-    ...files.map((f) => {
-      const { total, ...rest } = f
-      return rest
-    }),
-  )
+  const merged = Object.assign({}, ...files.map(({ total, ...rest }) => rest))
 
   // Insert the aggregated total
   return { total: overallTotal, ...merged }
@@ -70,21 +67,46 @@ function main() {
 
   // Merge coverage-final.json
   const finals = COVERAGE_DIRS.map((dir) =>
-    readJsonIfExists(path.resolve(PROJECT_ROOT, dir, FINAL_FILE)),
-  ).filter(Boolean)
+    readJsonIfExists<CoverageFinal>(path.resolve(PROJECT_ROOT, dir, FINAL_FILE)),
+  ).filter(Boolean) as CoverageFinal[]
   const mergedFinal = mergeCoverageFinal(finals)
-  console.log("Writing merged coverage-final.json")
   fs.writeFileSync(path.join(OUTPUT_DIR, FINAL_FILE), JSON.stringify(mergedFinal, null, 2))
 
   // Merge coverage-summary.json
   const summaries = COVERAGE_DIRS.map((dir) =>
-    readJsonIfExists(path.resolve(PROJECT_ROOT, dir, SUMMARY_FILE)),
-  ).filter(Boolean)
+    readJsonIfExists<CoverageSummary>(path.resolve(PROJECT_ROOT, dir, SUMMARY_FILE)),
+  ).filter(Boolean) as CoverageSummary[]
   const mergedSummary = mergeCoverageSummary(summaries)
-  console.log("Writing merged coverage-summary.json")
   fs.writeFileSync(path.join(OUTPUT_DIR, SUMMARY_FILE), JSON.stringify(mergedSummary, null, 2))
 
   console.log("Merged coverage written to", OUTPUT_DIR)
 }
 
 main()
+
+type CoverageMetric = {
+  total: number
+  covered: number
+  skipped: number
+  pct?: number
+}
+
+type CoverageSummary = {
+  total: Record<CoverageKey, CoverageMetric>
+} & Record<string, Record<CoverageKey, CoverageMetric>>
+
+type CoverageKey = "lines" | "statements" | "functions" | "branches" | "branchesTrue"
+
+type CoverageFinal = Record<string, FileCoverageData>
+
+type FileCoverageData = {
+  path: string
+  statementMap: Record<string, unknown>
+  fnMap: Record<string, unknown>
+  branchMap: Record<string, unknown>
+  s: Record<string, number>
+  f: Record<string, number>
+  b: Record<string, number[]>
+  inputSourceMap?: object
+  hash?: string
+}

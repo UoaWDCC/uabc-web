@@ -322,13 +322,17 @@ export interface Authentication {
    */
   user: string | User;
   /**
-   * The type of authentication
+   * The user email that's related to this auth
    */
-  type: string;
+  email: string;
+  /**
+   * The hashed password
+   */
+  password?: string | null;
   /**
    * The type of authentication
    */
-  provider: 'google';
+  provider?: 'google' | null;
   /**
    * The provider account id of the user authentication
    */
@@ -340,11 +344,11 @@ export interface Authentication {
   /**
    * The access token of the user authentication
    */
-  accessToken: string;
+  accessToken?: string | null;
   /**
    * The expiration time of the access token
    */
-  expiresAt: number;
+  expiresAt?: number | null;
   /**
    * The type of token
    */
@@ -547,7 +551,8 @@ export interface BookingSelect<T extends boolean = true> {
  */
 export interface AuthenticationSelect<T extends boolean = true> {
   user?: T;
-  type?: T;
+  email?: T;
+  password?: T;
   provider?: T;
   providerAccountId?: T;
   refreshToken?: T;
@@ -597,9 +602,4 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Auth {
   [k: string]: unknown;
-}
-
-
-declare module 'payload' {
-  export interface GeneratedTypes extends Config {}
 }

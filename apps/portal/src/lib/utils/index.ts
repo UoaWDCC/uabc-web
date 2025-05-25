@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-import type { Weekday } from "@/types/types"
+import type { Weekday } from "@repo/shared"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

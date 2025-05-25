@@ -1,4 +1,4 @@
-import { PlayLevel } from "@/types/types"
+import { PlayLevel } from "@repo/shared"
 
 /**
  * TODO: Delete this file and implement your own user service
