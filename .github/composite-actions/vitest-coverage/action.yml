@@ -16,6 +16,7 @@ runs:
         path: coverage
 
     - name: Download Master Coverage Artifact
+      id: download_master_coverage
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
@@ -43,14 +44,26 @@ runs:
             break
           fi
         done
-        if [ "$found_artifact" = false ]; then
+        if [ "$found_artifact" = true ]; then
+          echo "found_artifact=true" >> $GITHUB_ENV
+        else
+          echo "found_artifact=false" >> $GITHUB_ENV
           echo "Warning: No local-coverage artifact found in the last 10 successful master runs. Skipping coverage comparison."
         fi
 
-    - name: 'Coverage Report'
+    - name: 'Coverage Report (with compare)'
+      if: env.found_artifact == 'true'
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         vite-config-path: './packages/test-config/src/configs/base-config.ts'
         json-summary-path: './coverage/coverage-summary.json'
         json-final-path: './coverage/coverage-final.json'
         json-summary-compare-path: './master-coverage/coverage-summary.json'
+
+    - name: 'Coverage Report (no compare)'
+      if: env.found_artifact != 'true'
+      uses: davelosert/vitest-coverage-report-action@v2
+      with:
+        vite-config-path: './packages/test-config/src/configs/base-config.ts'
+        json-summary-path: './coverage/coverage-summary.json'
+        json-final-path: './coverage/coverage-final.json'
