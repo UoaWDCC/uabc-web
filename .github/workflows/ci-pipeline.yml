@@ -35,7 +35,7 @@ jobs:
               !**.md
               !.gitignore
               !.gitattributes
-              # !.github/**
+              !.github/**
               !.vscode/**
               !.env.example
 
