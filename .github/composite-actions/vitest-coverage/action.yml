@@ -21,6 +21,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
       run: |
+        set -e
         # Install jq if not present (for parsing JSON)
         if ! command -v jq &> /dev/null; then
           sudo apt-get update && sudo apt-get install -y jq
