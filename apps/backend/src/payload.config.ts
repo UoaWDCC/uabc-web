@@ -53,6 +53,9 @@ export default buildConfig({
     outputFile: path.resolve(dirname, "../../../packages/shared/src/payload-types.ts"),
     declare: false,
   },
+  graphQL: {
+    disable: true,
+  },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
   }),
