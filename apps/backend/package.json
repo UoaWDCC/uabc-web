@@ -20,7 +20,6 @@
     "@hookform/resolvers": "4.1.3",
     "@payloadcms/db-mongodb": "3.38.0",
     "@payloadcms/next": "3.38.0",
-    "@payloadcms/payload-cloud": "3.38.0",
     "@payloadcms/richtext-lexical": "3.38.0",
     "bcryptjs": "^3.0.2",
     "googleapis": "148.0.0",
