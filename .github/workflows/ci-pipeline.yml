@@ -35,7 +35,6 @@ jobs:
               !**.md
               !.gitignore
               !.gitattributes
-              !.github/**
               !.vscode/**
               !.env.example
 
@@ -256,7 +255,6 @@ jobs:
   vitest-coverage:
     name: Vitest Coverage
     needs: [test]
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -266,7 +264,6 @@ jobs:
       - name: Run Vitest Coverage Composite Action
         uses: ./.github/composite-actions/vitest-coverage
         with:
-          pr-number: ${{ github.event.pull_request.number }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   codegen:
