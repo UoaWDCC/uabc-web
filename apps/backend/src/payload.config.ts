@@ -17,6 +17,8 @@ import { Media } from "./data-layer/collections/Media"
 import { Semester } from "./data-layer/collections/Semester"
 import { User } from "./data-layer/collections/User"
 
+import { Footer } from "./data-layer/globals/Footer"
+
 declare module "payload" {
   export interface GeneratedTypes extends Config {}
 }
@@ -48,6 +50,7 @@ export default buildConfig({
     Booking,
     Authentication,
   ],
+  globals: [Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
