@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom"
 
 export const useBooleanMock = vi.fn()
+export const useBreakpointMock = vi.fn(() => "base")
 
 vi.mock("@yamada-ui/react", async (importOriginal) => {
   const mod = await importOriginal()
@@ -8,6 +9,7 @@ vi.mock("@yamada-ui/react", async (importOriginal) => {
     ...(typeof mod === "object" && mod !== null ? mod : {}),
     // biome-ignore lint/suspicious/noExplicitAny: this is for a test
     useBoolean: (...args: any) => useBooleanMock(...args),
+    useBreakpoint: () => useBreakpointMock(),
   }
 })
 
