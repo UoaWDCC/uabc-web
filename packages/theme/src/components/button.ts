@@ -4,7 +4,23 @@ import { isAccessible, isGray, transparentizeColor } from "@yamada-ui/utils"
 export const Button: ComponentStyle<"Button"> = {
   baseStyle: {
     cursor: "pointer",
+    fontSize: {
+      base: "1rem",
+      sm: "1.125rem",
+    },
     fontWeight: "semibold",
+    height: {
+      base: "3rem",
+      sm: "3.625rem",
+    },
+    width: {
+      base: "10.4375rem",
+      sm: "100%",
+    },
+    padding: {
+      base: "1rem",
+      sm: "0.375rem 1.25rem",
+    },
     transitionDuration: "slower",
     transitionProperty: "common",
     _disabled: {
@@ -228,6 +244,8 @@ export const Button: ComponentStyle<"Button"> = {
       lineHeight: "inherit",
       m: 0,
       p: 0,
+      height: "initial",
+      width: "initial",
       _ripple: {
         display: "none",
       },
