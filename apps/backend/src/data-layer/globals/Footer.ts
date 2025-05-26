@@ -34,7 +34,7 @@ export const Footer: GlobalConfig = {
       name: "instagram",
       type: "text",
       required: true,
-      defaultValue: "https://www.instagram.com/uoa.badminton/?hl=en",
+      defaultValue: "https://www.instagram.com/uoa.badminton/",
       admin: {
         description: "The URL to the club's Instagram page.",
       },
