@@ -1,5 +1,5 @@
 import type { ComponentStyle } from "@yamada-ui/core"
-import { isAccessible, isGray, shadeColor, transparentizeColor } from "@yamada-ui/utils"
+import { isAccessible, isGray, transparentizeColor } from "@yamada-ui/utils"
 
 export const Button: ComponentStyle<"Button"> = {
   baseStyle: {
@@ -119,7 +119,7 @@ export const Button: ComponentStyle<"Button"> = {
         : c === "primary"
           ? [isAccessible(c) ? `${c}.300` : `${c}.400`, `${c}.500`]
           : c === "secondary"
-            ? [isAccessible(c) ? `${c}.50` : `${c}.100`, `${c}.200`]
+            ? [isAccessible(c) ? `${c}.600` : `${c}.700`, `${c}.800`]
             : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
       color: [isGray(c) || isAccessible(c) ? "black" : "white", "white"],
       vars: [
@@ -139,7 +139,7 @@ export const Button: ComponentStyle<"Button"> = {
           : c === "primary"
             ? [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`]
             : c === "secondary"
-              ? [isAccessible(c) ? `${c}.100` : `${c}.200`, `${c}.300`]
+              ? [isAccessible(c) ? `${c}.700` : `${c}.800`, `${c}.900`]
               : [isAccessible(c) ? `${c}.500` : `${c}.600`, `${c}.700`],
         _disabled: {
           bg: isGray(c)
@@ -147,7 +147,7 @@ export const Button: ComponentStyle<"Button"> = {
             : c === "primary"
               ? [isAccessible(c) ? `${c}.300` : `${c}.400`, `${c}.500`]
               : c === "secondary"
-                ? [isAccessible(c) ? `${c}.50` : `${c}.100`, `${c}.200`]
+                ? [isAccessible(c) ? `${c}.600` : `${c}.700`, `${c}.800`]
                 : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
         },
       },
