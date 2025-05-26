@@ -190,68 +190,30 @@ export const Button: ComponentStyle<"Button"> = {
         boxShadow: "0 0 0 1px $errorBorderColor",
       },
     }),
-    subtle: ({
-      colorScheme: c = "gray",
-      colorMode: m,
-      errorBorderColor = ["danger.500", "danger.400"],
-      theme: t,
-    }) => ({
-      bg: [`${c}.50`, shadeColor(`${c}.300`, 68)(t, m)],
-      color: [`${c}.800`, isGray(c) ? `${c}.50` : `${c}.200`],
-      vars: [
-        {
-          name: "errorBorderColor",
-          token: "colors",
-          value: errorBorderColor,
-        },
-      ],
-      _focusVisible: {
-        borderColor: "transparent",
-        boxShadow: "outline",
+    gradient: ({ colorScheme: c = "primary" }) => ({
+      backdropFilter: "blur(15px)",
+      bgGradient: `${c}Gradient`,
+      bgSize: "100% 100%",
+      borderRadius: "12px",
+      boxShadow:
+        "0px 1.5px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.10)",
+      color: "white",
+      transition: "all 0.5s ease-in-out",
+      _before: {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        borderRadius: "inherit",
+        border: "1.5px solid",
+        borderColor: "rgba(255, 255, 255, 0.5)",
+        mixBlendMode: "overlay",
+        pointerEvents: "none",
       },
       _hover: {
-        bg: [`${c}.100`, shadeColor(`${c}.300`, 56)(t, m)],
-        _disabled: {
-          bg: [`${c}.50`, shadeColor(`${c}.300`, 68)(t, m)],
-        },
-      },
-      _invalid: {
-        border: "1px solid",
-        borderColor: "$errorBorderColor",
-        boxShadow: "0 0 0 1px $errorBorderColor",
-      },
-    }),
-    surface: ({
-      colorScheme: c = "gray",
-      colorMode: m,
-      errorBorderColor = ["danger.500", "danger.400"],
-      theme: t,
-    }) => ({
-      bg: [`${c}.50`, shadeColor(`${c}.300`, 68)(t, m)],
-      border: "1px solid",
-      borderColor: [`${c}.100`, shadeColor(`${c}.300`, 56)(t, m)],
-      color: [`${c}.800`, isGray(c) ? `${c}.50` : `${c}.200`],
-      vars: [
-        {
-          name: "errorBorderColor",
-          token: "colors",
-          value: errorBorderColor,
-        },
-      ],
-      _focusVisible: {
-        borderColor: "transparent",
-        boxShadow: "outline",
-      },
-      _hover: {
-        bg: [`${c}.100`, shadeColor(`${c}.300`, 56)(t, m)],
-        _disabled: {
-          bg: [`${c}.50`, shadeColor(`${c}.300`, 68)(t, m)],
-        },
-      },
-      _invalid: {
-        border: "1px solid",
-        borderColor: "$errorBorderColor",
-        boxShadow: "0 0 0 1px $errorBorderColor",
+        bgSize: "250% 100%",
       },
     }),
     unstyled: {
