@@ -11,6 +11,5 @@ export default mergeConfig(uiConfig, {
         lines: 100,
       },
     },
-    setupFiles: ["./src/test-config/vitest.setup.tsx"],
   },
 })
