@@ -1,5 +1,5 @@
-import type { GameSession } from "@/payload-types"
-import type { CreateGameSessionData } from "@/types/collections"
+import type { CreateGameSessionData } from "@repo/shared"
+import type { GameSession } from "@repo/shared/payload-types"
 import { semesterMock } from "./Semester.mock"
 
 export const gameSessionCreateMock: CreateGameSessionData = {

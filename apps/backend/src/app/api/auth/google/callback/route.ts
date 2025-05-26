@@ -1,12 +1,14 @@
-import { googleAuthScopes, oauth2Client } from "@/business-layer/security/google"
+import { googleAuthScopes, oauth2Client } from "@/business-layer/provider/google"
+import AuthService from "@/business-layer/services/AuthService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
-import { type UserInfoResponse, UserInfoResponseSchema } from "@/types/auth"
-import { MembershipType } from "@/types/types"
+import { AUTH_COOKIE_NAME, MembershipType, UserInfoResponseSchema } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
-import jwt from "jsonwebtoken"
 import { cookies } from "next/headers"
 import { type NextRequest, NextResponse } from "next/server"
+import { NotFound } from "payload"
+import { ZodError } from "zod"
 
 export const GET = async (req: NextRequest) => {
   const params = req.nextUrl.searchParams
@@ -51,7 +53,8 @@ export const GET = async (req: NextRequest) => {
       { status: StatusCodes.INTERNAL_SERVER_ERROR },
     )
   }
-  if (!tokens.access_token || !tokens.expiry_date || !tokens.id_token) {
+
+  if (!tokens || !tokens.access_token || !tokens.expiry_date || !tokens.id_token) {
     return NextResponse.json(
       { error: "Error invalid google auth" },
       { status: StatusCodes.INTERNAL_SERVER_ERROR },
@@ -62,22 +65,47 @@ export const GET = async (req: NextRequest) => {
     headers: { Authorization: `Bearer ${tokens.access_token}` },
   })
 
-  const {
-    sub,
-    email,
-    family_name: lastName,
-    given_name: firstName,
-  }: UserInfoResponse = UserInfoResponseSchema.parse(await userInfoResponse.json())
+  let sub: string
+  let email: string
+  let given_name: string
+  let family_name: string | undefined
+
+  try {
+    ;({ sub, email, family_name, given_name } = UserInfoResponseSchema.parse(
+      await userInfoResponse.json(),
+    ))
+  } catch (error) {
+    if (error instanceof ZodError) {
+      console.error("Error parsing user info response", error)
+      return NextResponse.json(
+        { error: "Error parsing user info response" },
+        { status: StatusCodes.INTERNAL_SERVER_ERROR },
+      )
+    }
+    throw error
+  }
 
   const userService = new UserDataService()
-  let user = await userService.getUserByEmail(email)
-  if (!user)
-    user = await userService.createUser({ firstName, lastName, role: MembershipType.casual, email })
+  let user: User
+  try {
+    user = await userService.getUserByEmail(email)
+  } catch (error) {
+    if (error instanceof NotFound) {
+      user = await userService.createUser({
+        firstName: given_name,
+        lastName: family_name,
+        role: MembershipType.casual,
+        email,
+      })
+    } else {
+      throw error
+    }
+  }
 
-  const authService = new AuthDataService()
-  await authService.createAuth({
+  const authDataService = new AuthDataService()
+  await authDataService.createAuth({
     user,
-    type: "oauth",
+    email: user.email,
     provider: "google",
     providerAccountId: sub,
     accessToken: tokens.access_token,
@@ -86,26 +114,27 @@ export const GET = async (req: NextRequest) => {
     idToken: tokens.id_token,
   })
 
+  const authService = new AuthService()
+
   /**
    * JWT token including user info and the Google access token.
    * Expires in 1 hour (same duration as Google access token)
    */
-  const token = jwt.sign(
+  const token = authService.signJWT(
     {
-      profile: user,
+      user,
       accessToken: tokens.access_token,
     },
-    process.env.JWT_SECRET,
     { expiresIn: "1h" },
   )
+  const response = NextResponse.redirect(new URL("/onboarding/name", req.url))
 
-  const response = NextResponse.json({ token })
-
-  response.cookies.set("auth_token", token, {
+  response.cookies.set(AUTH_COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 60 * 60,
+    path: "/",
   })
 
   return response

@@ -2,11 +2,11 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 // storage-adapter-import-placeholder
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
-import { payloadCloudPlugin } from "@payloadcms/payload-cloud"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 
+import type { Config } from "@repo/shared/payload-types"
 import { Admin } from "./data-layer/collections/Admin"
 import { Authentication } from "./data-layer/collections/Authentication"
 import { Booking } from "./data-layer/collections/Booking"
@@ -16,6 +16,10 @@ import { Media } from "./data-layer/collections/Media"
 import { Semester } from "./data-layer/collections/Semester"
 import { User } from "./data-layer/collections/User"
 
+declare module "payload" {
+  export interface GeneratedTypes extends Config {}
+}
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -23,8 +27,6 @@ export default buildConfig({
   routes: {
     admin: "/payload/admin",
     api: "/payload/api",
-    graphQL: "/payload/graphql",
-    graphQLPlayground: "/payload/graphql-playground",
   },
   admin: {
     user: Admin.slug,
@@ -46,14 +48,17 @@ export default buildConfig({
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
-    outputFile: path.resolve(dirname, "payload-types.ts"),
+    outputFile: path.resolve(dirname, "../../../packages/shared/src/payload-types.ts"),
+    declare: false,
+  },
+  graphQL: {
+    disable: true,
   },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
   }),
   sharp,
   plugins: [
-    payloadCloudPlugin(),
     // storage-adapter-placeholder
   ],
 })

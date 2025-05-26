@@ -1,8 +1,6 @@
 import { create } from "zustand"
 
-import type { CartGameSession } from "@/types/game-session"
-import type { PlayLevel } from "@/types/types"
-
+import type { CartGameSession, PlayLevel } from "@repo/shared"
 interface CartState {
   cart: CartGameSession[]
 }
