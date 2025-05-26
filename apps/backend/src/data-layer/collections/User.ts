@@ -1,4 +1,4 @@
-import { MembershipType } from "@/types/types"
+import { MembershipType } from "@repo/shared"
 import type { CollectionConfig } from "payload"
 
 export const User: CollectionConfig = {
@@ -15,7 +15,7 @@ export const User: CollectionConfig = {
     {
       name: "lastName",
       type: "text",
-      required: true,
+      required: false,
       admin: {
         description: "The last name of the user",
       },

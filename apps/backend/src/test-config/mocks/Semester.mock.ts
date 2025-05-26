@@ -1,5 +1,5 @@
-import type { Semester } from "@/payload-types"
-import type { CreateSemesterData } from "@/types/collections"
+import type { CreateSemesterData } from "@repo/shared"
+import type { Semester } from "@repo/shared/payload-types"
 
 export const semesterCreateMock: CreateSemesterData = {
   name: "Semester 1 2025",
