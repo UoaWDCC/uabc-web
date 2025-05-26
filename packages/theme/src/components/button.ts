@@ -13,10 +13,6 @@ export const Button: ComponentStyle<"Button"> = {
       base: "3rem",
       sm: "3.625rem",
     },
-    width: {
-      base: "10.4375rem",
-      sm: "100%",
-    },
     padding: {
       base: "1rem",
       sm: "0.375rem 1.25rem",
