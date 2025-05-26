@@ -11,7 +11,7 @@ describe("globals/footer", () => {
           title: "UABC",
           description: "The largest university badminton club in New Zealand!",
           facebook: "https://www.facebook.com/groups/uoabadminton/",
-          instagram: "https://www.instagram.com/uoa.badminton/?hl=en",
+          instagram: "https://www.instagram.com/uoa.badminton/",
           linkGroup1: {
             title: "Quick Links",
             links: [],
