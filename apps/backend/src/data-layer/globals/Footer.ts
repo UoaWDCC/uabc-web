@@ -102,7 +102,7 @@ export const Footer: GlobalConfig = {
           required: true,
           defaultValue: "UABC",
           admin: {
-            description: "The title for the first group of links.",
+            description: "The title for the second group of links.",
           },
         },
         {
