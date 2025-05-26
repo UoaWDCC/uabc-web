@@ -1,0 +1,14 @@
+{
+  "name": "@repo/shared",
+  "exports": {
+    ".": "./src/index.ts",
+    "./payload-types": "./src/payload-types.ts"
+  },
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "zod": "3.24.3"
+  }
+}

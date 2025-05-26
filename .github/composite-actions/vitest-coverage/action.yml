@@ -2,9 +2,6 @@ name: "Vitest Coverage"
 description: "Run Vitest coverage, compare with master, and comment on PR"
 
 inputs:
-  pr-number:
-    description: "Pull request number"
-    required: true
   github-token:
     description: "GitHub token"
     required: true
@@ -12,76 +9,62 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout master branch
-      uses: actions/checkout@v4
-      with:
-        ref: master
-        fetch-depth: 2
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version-file: '.nvmrc'
-    
-    - name: Enable Corepack
-      run: corepack enable
-      shell: bash
-
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: latest
-        run_install: false
-
-    - name: Restore Turborepo cache
-      uses: actions/cache@v4
-      with:
-        path: |
-          .turbo
-          node_modules
-          */node_modules
-          packages/*/node_modules
-          apps/*/node_modules
-        key: ${{ runner.os }}-turbo-coverage-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-turbo-coverage-
-
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
-      shell: bash
-
-    - name: Run Coverage (master)
-      run: |
-        mkdir -p coverage
-        # make this pnpm test:coverage after merge
-        pnpm vitest run --coverage --coverage.enabled --coverage.reporter=json-summary --coverage.reporter=json
-      shell: bash
-
-    - name: Upload Coverage (master)
-      uses: actions/upload-artifact@v4
-      with:
-        name: master-coverage
-        path: coverage
-
-    - name: Checkout PR branch
-      uses: actions/checkout@v4
-      with:
-        ref: refs/pull/${{ inputs.pr-number }}/merge
-        fetch-depth: 2
-
-    - name: Download Local Coverage
+    - name: Download All Coverage
       uses: actions/download-artifact@v4
       with:
         name: local-coverage
         path: coverage
 
-    - name: Download Master Coverage
-      uses: actions/download-artifact@v4
-      with:
-        name: master-coverage
-        path: master-coverage
+    - name: Download Master Coverage Artifact
+      id: download_master_coverage
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: |
+        set -e
+        # Install jq if not present (for parsing JSON)
+        if ! command -v jq &> /dev/null; then
+          sudo apt-get update && sudo apt-get install -y jq
+        fi
 
-    - name: Report Coverage
+        # Search up to the last 10 successful workflow runs on master for local-coverage artifact
+        found_artifact=false
+        for run_id in $(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs?branch=master&status=success&per_page=10" \
+          | jq -r '.workflow_runs[].id'); do
+          artifact_id=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/$run_id/artifacts" \
+            | jq -r '.artifacts[] | select(.name=="local-coverage") | .id')
+          if [ -n "$artifact_id" ]; then
+            echo "Found local-coverage artifact in run $run_id (artifact id $artifact_id)"
+            curl -L -H "Authorization: token $GITHUB_TOKEN" \
+              -o master-coverage.zip \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/$artifact_id/zip"
+            unzip -o master-coverage.zip -d master-coverage
+            found_artifact=true
+            break
+          fi
+        done
+        if [ "$found_artifact" = true ]; then
+          echo "found_artifact=true" >> $GITHUB_ENV
+        else
+          echo "found_artifact=false" >> $GITHUB_ENV
+          echo "Warning: No local-coverage artifact found in the last 10 successful master runs. Skipping coverage comparison."
+        fi
+
+    - name: 'Coverage Report (with compare)'
+      if: env.found_artifact == 'true'
       uses: davelosert/vitest-coverage-report-action@v2
       with:
-        json-summary-compare-path: master-coverage/coverage-summary.json
+        vite-config-path: './packages/test-config/src/configs/base-config.ts'
+        json-summary-path: './coverage/coverage-summary.json'
+        json-final-path: './coverage/coverage-final.json'
+        json-summary-compare-path: './master-coverage/coverage-summary.json'
+
+    - name: 'Coverage Report (no compare)'
+      if: env.found_artifact != 'true'
+      uses: davelosert/vitest-coverage-report-action@v2
+      with:
+        vite-config-path: './packages/test-config/src/configs/base-config.ts'
+        json-summary-path: './coverage/coverage-summary.json'
+        json-final-path: './coverage/coverage-final.json'

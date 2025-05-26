@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack --port=3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "cross-env NODE_ENV=test vitest run",
+    "test:watch": "cross-env NODE_ENV=test vitest",
+    "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
+    "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage --watch"
   },
   "dependencies": {
     "react": "19.0.0",
@@ -15,9 +19,10 @@
   },
   "devDependencies": {
     "typescript": "5.8.3",
-    "@types/node": "22.14.1",
-    "@types/react": "19.1.4",
+    "@types/node": "22.15.21",
+    "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5",
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "@repo/test-config": "workspace:*"
   }
 }

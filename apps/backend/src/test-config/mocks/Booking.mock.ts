@@ -1,5 +1,5 @@
-import type { Booking } from "@/payload-types"
-import type { CreateBookingData } from "@/types/collections"
+import type { CreateBookingData } from "@repo/shared"
+import type { Booking } from "@repo/shared/payload-types"
 import { gameSessionMock } from "./GameSession.mock"
 import { userMock } from "./User.mock"
 

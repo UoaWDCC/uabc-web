@@ -1,6 +1,6 @@
 import { payload } from "@/data-layer/adapters/Payload"
-import type { Authentication } from "@/payload-types"
-import type { CreateAuthenticationData } from "@/types/collections"
+import type { CreateAuthenticationData } from "@repo/shared"
+import type { Authentication } from "@repo/shared/payload-types"
 
 export default class AuthDataService {
   /**

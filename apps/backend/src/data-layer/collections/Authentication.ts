@@ -14,18 +14,27 @@ export const Authentication: CollectionConfig = {
       },
     },
     {
-      name: "type",
-      type: "text",
+      name: "email",
+      type: "email",
       required: true,
+      unique: true,
       admin: {
-        description: "The type of authentication",
+        description: "The user email that's related to this auth",
+      },
+    },
+    {
+      name: "password",
+      type: "text",
+      required: false,
+      admin: {
+        description: "The hashed password",
       },
     },
     {
       name: "provider",
       type: "select",
       options: [{ label: "Google", value: "google" }],
-      required: true,
+      required: false,
       admin: {
         description: "The type of authentication",
       },
@@ -49,7 +58,7 @@ export const Authentication: CollectionConfig = {
     {
       name: "accessToken",
       type: "text",
-      required: true,
+      required: false,
       admin: {
         description: "The access token of the user authentication",
       },
@@ -57,7 +66,7 @@ export const Authentication: CollectionConfig = {
     {
       name: "expiresAt",
       type: "number",
-      required: true,
+      required: false,
       admin: {
         description: "The expiration time of the access token",
       },
