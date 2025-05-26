@@ -660,7 +660,7 @@ export interface Footer {
  */
 export interface LinkGroup {
   /**
-   * The title for the first group of links.
+   * The title for the second group of links.
    */
   title: string;
   links: Link;
