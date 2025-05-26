@@ -103,7 +103,7 @@ importers:
         specifier: 3.39.1
         version: 3.39.1(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@payloadcms/next@3.39.1(@types/react@19.1.4)(graphql@16.10.0)(monaco-editor@0.52.2)(next@15.2.3(@babel/core@7.26.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(payload@3.39.1(graphql@16.10.0)(typescript@5.8.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.3))(@types/react@19.1.4)(monaco-editor@0.52.2)(next@15.2.3(@babel/core@7.26.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(payload@3.39.1(graphql@16.10.0)(typescript@5.8.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.3)(yjs@13.6.26)
       bcryptjs:
-        specifier: ^3.0.2
+        specifier: 3.0.2
         version: 3.0.2
       googleapis:
         specifier: 148.0.0
