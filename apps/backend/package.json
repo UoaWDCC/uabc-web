@@ -17,7 +17,7 @@
     "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage --watch"
   },
   "dependencies": {
-    "@hookform/resolvers": "4.1.3",
+    "@hookform/resolvers": "5.0.1",
     "@payloadcms/db-mongodb": "3.39.1",
     "@payloadcms/next": "3.39.1",
     "@payloadcms/richtext-lexical": "3.39.1",
