@@ -2,13 +2,6 @@ import "@testing-library/jest-dom"
 import { render, screen } from "@/test-config/test-utils"
 import { Footer } from "./Footer"
 
-vi.mock("@repo/ui/components/Image", () => ({
-  // biome-ignore lint/nursery/noImgElement: this is for a test
-  // biome-ignore lint/a11y/useAltText: this is for a test
-  // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-  Image: (props: any) => <img {...props} data-testid="custom-image" />,
-}))
-
 describe("<Footer />", () => {
   it("should have correct displayName", () => {
     expect(Footer.displayName).toBe("Footer")

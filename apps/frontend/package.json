@@ -24,8 +24,8 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "typescript": "5.8.3",
-    "@types/node": "22.14.1",
-    "@types/react": "19.1.4",
+    "@types/node": "22.15.21",
+    "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5",
     "@repo/test-config": "workspace:*"
   }
