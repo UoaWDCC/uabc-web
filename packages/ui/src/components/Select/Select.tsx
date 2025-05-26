@@ -10,8 +10,8 @@ import {
 import type { ReactNode } from "react"
 
 export interface SelectProps extends UISelectProps {
-  label: string
-  icon: ReactNode
+  label?: string
+  icon?: ReactNode
 }
 
 export const Select: FC<SelectProps> = memo(
@@ -28,7 +28,6 @@ export const Select: FC<SelectProps> = memo(
         }}
       >
         <UISelect
-          // backgroundColor="secondary"
           fieldProps={{ px: "calc(lg + xl)" }}
           iconProps={{ mr: "calc(lg - sm)", right: 0 }}
           portalProps={{ disabled: false }}
