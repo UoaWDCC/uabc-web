@@ -7,7 +7,8 @@
     "./components/Heading": "./src/components/Heading/index.ts",
     "./components/TextInput": "./src/components/TextInput/index.ts",
     "./components/Image": "./src/components/Image/index.ts",
-    "./providers": "./src/providers/index.ts"
+    "./providers": "./src/providers/index.ts",
+    "./test-utils": "./src/test-utils/index.ts"
   },
   "scripts": {
     "check-types": "tsc --noEmit",
