@@ -137,6 +137,23 @@ export const Button: ComponentStyle<"Button"> = {
           : c === "secondary"
             ? [isAccessible(c) ? `${c}.600` : `${c}.700`, `${c}.800`]
             : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
+      backdropFilter: "blur(15px)",
+      _before: {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        borderRadius: "inherit",
+        border: "1.5px solid",
+        borderColor: "rgba(255, 255, 255, 0.5)",
+        mixBlendMode: "overlay",
+        pointerEvents: "none",
+      },
+      borderRadius: "12px",
+      boxShadow:
+        "0px 1.5px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.10)",
       color: [isGray(c) || isAccessible(c) ? "black" : "white", "white"],
       vars: [
         {
