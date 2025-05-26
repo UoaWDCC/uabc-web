@@ -10,10 +10,40 @@ import {
 import type { ReactNode } from "react"
 
 export interface SelectProps extends UISelectProps {
+  /**
+   * Label text of the Select component.
+   *
+   * @remarks
+   *
+   * @defaultValue "Select option"
+   */
   label?: string
+
+  /**
+   * Icon rendered inline to the left of the label.
+   *
+   * @warn This prop takes in any React Node but icons are expected.
+   * @see {@link https://yamada-ui.com/components/media-and-icons/icon Yamada UI Icon}
+   * @see {@link https://yamada-ui.com/components/media-and-icons/lucide Yamda UI Lucide Icon}
+   */
   icon?: ReactNode
 }
 
+/**
+ * Select component for mobile screens with left icon and label support.
+ *
+ * @param props - Select component properties
+ * @returns A select component
+ *
+ * @example
+ * <Select icon={<>A React Node</>} label="A label">
+ *   <Option value="1">Option 1</Option>
+ *   <Option value="2">Option 2</Option>
+ *   <Option value="3">Option 3</Option>
+ * </Select>
+ *
+ * @see {@link https://yamada-ui.com/components/forms/select Yamada UI Select Docs}
+ */
 export const Select: FC<SelectProps> = memo(
   ({ children, label = "Select option", icon, ...props }) => {
     return (
