@@ -7,6 +7,21 @@
  */
 
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Link".
+ */
+export type Link = {
+  /**
+   * The text displayed for the link.
+   */
+  label: string;
+  /**
+   * The URL the link points to.
+   */
+  url: string;
+  id?: string | null;
+}[];
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -607,26 +622,83 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface Footer {
   id: string;
   /**
+   * The logo of the club, displayed in the footer.
+   */
+  logo: string | Media;
+  /**
    * The main title of the footer, usually the name of the club.
    */
   title: string;
   /**
+   * The URL to the club's Facebook page.
+   */
+  facebook: string;
+  /**
+   * The URL to the club's Instagram page.
+   */
+  instagram: string;
+  /**
    * A brief description of the club.
    */
-  description?: string | null;
+  description: string;
+  linkGroup1: LinkGroup;
+  linkGroup2: LinkGroup;
+  /**
+   * Copyright notice for the club.
+   */
+  copyright: string;
+  /**
+   * Credits or acknowledgments for the site.
+   */
+  credits?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkGroup".
+ */
+export interface LinkGroup {
+  /**
+   * The title for the first group of links.
+   */
+  title: string;
+  links: Link;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  logo?: T;
   title?: T;
+  facebook?: T;
+  instagram?: T;
   description?: T;
+  linkGroup1?: T | LinkGroupSelect<T>;
+  linkGroup2?: T | LinkGroupSelect<T>;
+  copyright?: T;
+  credits?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkGroup_select".
+ */
+export interface LinkGroupSelect<T extends boolean = true> {
+  title?: T;
+  links?: T | LinkSelect<T>;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Link_select".
+ */
+export interface LinkSelect<T extends boolean = true> {
+  label?: T;
+  url?: T;
+  id?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
