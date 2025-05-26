@@ -6,7 +6,7 @@
   "exports": "./tailwind.config.ts",
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "tailwindcss": "4.1.4",
+    "tailwindcss": "4.1.7",
     "tailwindcss-animate": "1.0.7"
   }
 }

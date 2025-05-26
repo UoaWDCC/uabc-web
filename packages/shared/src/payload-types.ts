@@ -7,6 +7,21 @@
  */
 
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Link".
+ */
+export type Link = {
+  /**
+   * The text displayed for the link.
+   */
+  label: string;
+  /**
+   * The URL the link points to.
+   */
+  url: string;
+  id?: string | null;
+}[];
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -96,8 +111,12 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    footer: Footer;
+  };
+  globalsSelect: {
+    footer: FooterSelect<false> | FooterSelect<true>;
+  };
   locale: null;
   user: Admin & {
     collection: 'admin';
@@ -155,7 +174,7 @@ export interface User {
   /**
    * The last name of the user
    */
-  lastName: string;
+  lastName?: string | null;
   email: string;
   /**
    * The role of the user
@@ -322,13 +341,17 @@ export interface Authentication {
    */
   user: string | User;
   /**
-   * The type of authentication
+   * The user email that's related to this auth
    */
-  type: string;
+  email: string;
+  /**
+   * The hashed password
+   */
+  password?: string | null;
   /**
    * The type of authentication
    */
-  provider: 'google';
+  provider?: 'google' | null;
   /**
    * The provider account id of the user authentication
    */
@@ -340,11 +363,11 @@ export interface Authentication {
   /**
    * The access token of the user authentication
    */
-  accessToken: string;
+  accessToken?: string | null;
   /**
    * The expiration time of the access token
    */
-  expiresAt: number;
+  expiresAt?: number | null;
   /**
    * The type of token
    */
@@ -547,7 +570,8 @@ export interface BookingSelect<T extends boolean = true> {
  */
 export interface AuthenticationSelect<T extends boolean = true> {
   user?: T;
-  type?: T;
+  email?: T;
+  password?: T;
   provider?: T;
   providerAccountId?: T;
   refreshToken?: T;
@@ -593,13 +617,93 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: string;
+  /**
+   * The logo of the club, displayed in the footer.
+   */
+  logo: string | Media;
+  /**
+   * The main title of the footer, usually the name of the club.
+   */
+  title: string;
+  /**
+   * The URL to the club's Facebook page.
+   */
+  facebook: string;
+  /**
+   * The URL to the club's Instagram page.
+   */
+  instagram: string;
+  /**
+   * A brief description of the club.
+   */
+  description: string;
+  linkGroup1: LinkGroup;
+  linkGroup2: LinkGroup;
+  /**
+   * Copyright notice for the club.
+   */
+  copyright: string;
+  /**
+   * Credits or acknowledgments for the site.
+   */
+  credits?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkGroup".
+ */
+export interface LinkGroup {
+  /**
+   * The title for the second group of links.
+   */
+  title: string;
+  links: Link;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  logo?: T;
+  title?: T;
+  facebook?: T;
+  instagram?: T;
+  description?: T;
+  linkGroup1?: T | LinkGroupSelect<T>;
+  linkGroup2?: T | LinkGroupSelect<T>;
+  copyright?: T;
+  credits?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkGroup_select".
+ */
+export interface LinkGroupSelect<T extends boolean = true> {
+  title?: T;
+  links?: T | LinkSelect<T>;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Link_select".
+ */
+export interface LinkSelect<T extends boolean = true> {
+  label?: T;
+  url?: T;
+  id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
   [k: string]: unknown;
-}
-
-
-declare module 'payload' {
-  export interface GeneratedTypes extends Config {}
 }

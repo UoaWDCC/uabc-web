@@ -11,7 +11,11 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006 -c .storybook",
-    "storybook:build": "storybook build -c .storybook"
+    "storybook:build": "storybook build -c .storybook",
+    "test": "cross-env NODE_ENV=test vitest run",
+    "test:watch": "cross-env NODE_ENV=test vitest",
+    "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
+    "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage --watch"
   },
   "dependencies": {
     "@repo/theme": "workspace:*",
@@ -28,6 +32,7 @@
   "devDependencies": {
     "@mdx-js/react": "3.1.0",
     "@repo/typescript-config": "workspace:*",
+    "@repo/test-config": "workspace:*",
     "@storybook/addon-a11y": "8.6.14",
     "@storybook/addon-backgrounds": "8.6.14",
     "@storybook/addon-docs": "8.6.14",
@@ -37,9 +42,9 @@
     "@storybook/addon-viewport": "8.6.14",
     "@storybook/preview-api": "8.6.14",
     "@storybook/react": "8.6.14",
-    "@turbo/gen": "2.5.1",
-    "@types/node": "22.14.1",
-    "@types/react": "19.1.4",
+    "@turbo/gen": "2.5.3",
+    "@types/node": "22.15.21",
+    "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5",
     "storybook-dark-mode": "4.0.2",
     "typescript": "5.8.3"

@@ -1,4 +1,4 @@
-import { PlayLevel } from "@/types/types"
+import { PlayLevel } from "@repo/shared"
 import type { CollectionConfig } from "payload"
 
 export const Booking: CollectionConfig = {

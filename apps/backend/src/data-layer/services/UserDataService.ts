@@ -1,6 +1,6 @@
 import { payload } from "@/data-layer/adapters/Payload"
-import type { User } from "@/payload-types"
-import type { CreateUserData, EditUserData } from "@/types/collections"
+import type { CreateUserData, EditUserData } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { NotFound } from "payload"
 
 export default class UserDataService {
