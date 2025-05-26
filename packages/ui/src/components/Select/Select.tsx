@@ -46,7 +46,9 @@ export const Select: FC<SelectProps> = memo(
           transform="translateY(-50%)"
         >
           {icon}
-          <Label mb={0}>{label}</Label>
+          <Label fontSize={18} mb={0}>
+            {label}
+          </Label>
         </HStack>
       </FormControl>
     )

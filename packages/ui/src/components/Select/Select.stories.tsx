@@ -1,15 +1,17 @@
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryFn } from "@storybook/react"
 import { CalendarClockIcon } from "@yamada-ui/lucide"
 import { Center, Option } from "@yamada-ui/react"
 import { Select } from "./Select"
 
+type Story = StoryFn<typeof Select>
+
 const meta: Meta<typeof Select> = {
   component: Select,
-  title: "Components  / Select",
+  title: "Components / Select",
   argTypes: {
-    placeholder: {
+    label: {
       control: { type: "text" },
-      description: "The placeholder content of the Select component",
+      description: "The label text of the Select component",
       table: {
         type: { summary: "string" },
       },
@@ -19,10 +21,8 @@ const meta: Meta<typeof Select> = {
 
 export default meta
 
-type Story = StoryObj<typeof Select>
-
-export const Basic: Story = {
-  render: (args) => (
+export const Basic: Story = (args) => {
+  return (
     <Select
       {...args}
       icon={
@@ -37,11 +37,10 @@ export const Basic: Story = {
           <CalendarClockIcon fontSize={24} />
         </Center>
       }
-      label="Skill Level"
     >
-      <Option value="Beginner">Beginner</Option>
-      <Option value="Intermediate">Intermediate</Option>
-      <Option value="Advanced">Advanced</Option>
+      <Option value="1">Option 1</Option>
+      <Option value="2">Option 2</Option>
+      <Option value="3">Option 3</Option>
     </Select>
-  ),
+  )
 }
