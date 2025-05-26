@@ -82,7 +82,7 @@
     },
     "test:ui": {
       "cache": false,
-      "dependsOn": ["^test:ui", "@repo/test-config#build"],
+      "dependsOn": ["@repo/test-config#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["coverage/**"],
       "persistent": true
