@@ -12,7 +12,7 @@ export const baseConfig = defineConfig({
     coverage: {
       provider: "istanbul",
       thresholds: {
-        branches: 80,
+        branches: 80, // this is for overall vitest coverage report
         functions: 80,
         lines: 80,
         statements: 80,
