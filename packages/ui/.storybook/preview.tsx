@@ -11,6 +11,8 @@ import { DARK_MODE_EVENT_NAME } from "storybook-dark-mode"
 import { customThemes } from "./themes"
 import "./styles.css"
 
+import "./styles.css"
+
 const channel = addons.getChannel()
 
 const useDarkMode = (callback?: (darkMode: boolean) => void) => {

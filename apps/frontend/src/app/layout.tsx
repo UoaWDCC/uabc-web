@@ -4,7 +4,7 @@ import { ColorModeScript } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 
-const geist = Geist({
+const geistSans = Geist({
   subsets: ["latin"],
   variable: "--font-geist-sans",
 })
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geist.variable} ${geistMono.variable}`} suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
         <ColorModeScript initialColorMode="dark" />
         <UIProvider>
           {children}
