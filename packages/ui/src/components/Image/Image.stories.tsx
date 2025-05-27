@@ -55,3 +55,13 @@ export const RemoteImage: Story = {
     height: 400,
   },
 }
+
+export const StyledImage: Story = {
+  args: {
+    src: "https://placehold.co/300x200/png",
+    alt: "Styled placeholder image",
+    width: 300,
+    height: 200,
+    rounded: "md",
+  },
+}
