@@ -157,6 +157,15 @@ importers:
 
   apps/frontend:
     dependencies:
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@yamada-ui/lucide':
+        specifier: 1.10.5
+        version: 1.10.5(@types/react@19.1.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@yamada-ui/react':
+        specifier: ^1.7.6
+        version: 1.7.6(@emotion/is-prop-valid@1.3.1)(@emotion/react@11.14.0(@types/react@19.1.5)(react@19.0.0))(@emotion/styled@11.11.0(@emotion/react@11.14.0(@types/react@19.1.5)(react@19.0.0))(@types/react@19.1.5)(react@19.0.0))(@types/react@19.1.5)(motion@12.5.0(@emotion/is-prop-valid@1.3.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       next:
         specifier: 15.3.2
         version: 15.3.2(@babel/core@7.26.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)
