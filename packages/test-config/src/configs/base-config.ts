@@ -11,6 +11,12 @@ export const baseConfig = defineConfig({
     minWorkers: process.env.CI === "true" ? 1 : undefined,
     coverage: {
       provider: "istanbul",
+      thresholds: {
+        branches: 80,
+        functions: 80,
+        lines: 80,
+        statements: 80,
+      },
       exclude: [
         ...coverageConfigDefaults.exclude,
         "**/.storybook/**",
