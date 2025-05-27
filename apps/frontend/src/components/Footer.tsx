@@ -7,8 +7,6 @@ import { FacebookIcon, InstagramIcon } from "@yamada-ui/lucide"
 import {
   ButtonGroup,
   Center,
-  Grid,
-  GridItem,
   HStack,
   IconButton,
   List,
@@ -84,65 +82,68 @@ export const Footer = memo(() => {
     <VStack
       as="footer"
       bg={["blackAlpha.50", "whiteAlpha.50"]}
+      display="grid"
       gap="xl"
       overflow="clip"
+      placeItems="center"
       position="relative"
       px={{ base: "lg", lg: "24" }}
       py={{ base: "xl", md: "24" }}
     >
-      <Grid gap={{ base: "xl", lg: "0" }} templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }}>
-        <GridItem display={{ base: "none", md: "block" }}>
-          <VStack gap="lg">
-            <VStack gap="xs">
-              <HStack>
-                <Image alt="UABC Logo" src={UABCLogo} />
-                <Heading.h2 fontSize="6xl" fontWeight="semibold">
-                  UABC
-                </Heading.h2>
-              </HStack>
-              <Text color="muted" maxW="md">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore
-              </Text>
-            </VStack>
-            <ButtonGroup display={{ base: "none", lg: "flex" }} gap="xs">
-              {SOCIAL_LINKS.map(({ icon: Icon, ...link }) => (
-                <IconButton
-                  aria-label={link.label}
-                  as={Link}
-                  href={link.href}
-                  key={link.label}
-                  variant="ghost"
-                >
-                  <Icon color="muted" fontSize="2xl" />
-                </IconButton>
-              ))}
-            </ButtonGroup>
+      <HStack justifyContent="space-between" maxW="9xl" w="full">
+        <VStack display={{ base: "none", md: "flex" }} gap="lg">
+          <VStack gap="xs">
+            <HStack>
+              <Image alt="UABC Logo" src={UABCLogo} />
+              <Heading.h2 fontSize="6xl" fontWeight="semibold">
+                UABC
+              </Heading.h2>
+            </HStack>
+            <Text color="muted" maxW="md">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore
+            </Text>
           </VStack>
-        </GridItem>
-        <GridItem>
-          <Stack flexDir={{ base: "column", lg: "row" }} justifyContent="space-between" maxW="lg">
-            {Object.entries(LINKS).map(([key, value]) => (
-              <List key={key}>
-                <ListItem>
-                  <Heading.h3 fontWeight="semibold">{value.title}</Heading.h3>
-                </ListItem>
-                <List color="muted" fontWeight="semibold">
-                  {value.links.map((link) => (
-                    <ListItem key={link.label}>
-                      <UILink as={Link} color="muted" href={link.href}>
-                        {link.label}
-                      </UILink>
-                    </ListItem>
-                  ))}
-                </List>
-              </List>
+          <ButtonGroup display={{ base: "none", lg: "flex" }} gap="xs">
+            {SOCIAL_LINKS.map(({ icon: Icon, ...link }) => (
+              <IconButton
+                aria-label={link.label}
+                as={Link}
+                href={link.href}
+                key={link.label}
+                variant="ghost"
+              >
+                <Icon color="muted" fontSize="2xl" />
+              </IconButton>
             ))}
-          </Stack>
-        </GridItem>
-      </Grid>
+          </ButtonGroup>
+        </VStack>
+        <Stack
+          flexDir={{ base: "column", lg: "row" }}
+          justifyContent="space-between"
+          maxW="lg"
+          w="full"
+        >
+          {Object.entries(LINKS).map(([key, value]) => (
+            <List key={key}>
+              <ListItem>
+                <Heading.h3 fontWeight="semibold">{value.title}</Heading.h3>
+              </ListItem>
+              <List color="muted" fontWeight="semibold">
+                {value.links.map((link) => (
+                  <ListItem key={link.label}>
+                    <UILink as={Link} color="muted" href={link.href}>
+                      {link.label}
+                    </UILink>
+                  </ListItem>
+                ))}
+              </List>
+            </List>
+          ))}
+        </Stack>
+      </HStack>
       <Separator />
-      <Stack as={Center} flexDir={{ base: "column", lg: "row" }} fontSize="md">
+      <Stack as={Center} flexDir={{ base: "column", lg: "row" }} fontSize="md" maxW="9xl" w="full">
         <ButtonGroup display={{ base: "flex", lg: "none" }} gap="xs">
           {SOCIAL_LINKS.map(({ icon: Icon, ...link }) => (
             <IconButton as={Link} href={link.href} key={link.label} variant="ghost">
