@@ -1,7 +1,7 @@
 import NextImage from "next/image"
 import { forwardRef } from "react"
-import type { ImageProps } from "./Image.types"
-import { ImageBase } from "./ImageBase"
+import { ImageBase } from "./base"
+import type { ImageProps } from "./types"
 
 /**
  * Generic Image component that combines Next.js Image and Yamada UI Image features.

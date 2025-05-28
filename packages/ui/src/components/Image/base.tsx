@@ -1,6 +1,6 @@
 "use client"
 import { Image, ui } from "@yamada-ui/react"
-import type { ImageProps } from "./Image.types"
+import type { ImageProps } from "./types"
 
 /**
  * Base image component using Yamada UI's `ui` utility for style prop management.
