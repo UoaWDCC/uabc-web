@@ -13,16 +13,19 @@
     "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage --watch"
   },
   "dependencies": {
+    "@repo/ui": "workspace:*",
+    "@yamada-ui/lucide": "1.10.5",
+    "@yamada-ui/react": "^1.7.6",
+    "next": "15.3.2",
     "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "next": "15.3.2"
+    "react-dom": "19.0.0"
   },
   "devDependencies": {
-    "typescript": "5.8.3",
-    "@types/node": "22.14.1",
-    "@types/react": "19.1.4",
-    "@types/react-dom": "19.1.5",
+    "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/test-config": "workspace:*"
+    "@types/node": "22.15.21",
+    "@types/react": "19.1.5",
+    "@types/react-dom": "19.1.5",
+    "typescript": "5.8.3"
   }
 }

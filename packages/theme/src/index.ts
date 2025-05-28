@@ -1,12 +1,12 @@
 import type { ThemeConfig, UsageTheme } from "@yamada-ui/core"
 import { extendConfig, extendTheme } from "@yamada-ui/theme-tools"
 import { components } from "./components"
-import { breakpoint } from "./config"
+import { breakpoint, initialColorMode } from "./config"
 import { semantics } from "./semantics"
 import { styles } from "./styles"
 import { tokens } from "./tokens"
 
-export const defaultConfig: ThemeConfig = { breakpoint }
+export const defaultConfig: ThemeConfig = { breakpoint, initialColorMode }
 
 export const config = extendConfig(defaultConfig)
 

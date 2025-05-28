@@ -1,5 +1,4 @@
 import { noop } from "@yamada-ui/react"
-import { vi } from "vitest"
 import "@testing-library/jest-dom"
 import { TextEncoder } from "node:util"
 
