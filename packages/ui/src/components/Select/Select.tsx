@@ -58,8 +58,7 @@ export const Select: FC<SelectProps> = memo(
         }}
       >
         <UISelect
-          fieldProps={{ px: "calc(lg + xl)" }}
-          iconProps={{ mr: "calc(lg - sm)", right: 0 }}
+          fieldProps={{ px: "calc(md - xs + xl)" }}
           portalProps={{ disabled: false }}
           size="lg"
           {...props}
@@ -68,14 +67,14 @@ export const Select: FC<SelectProps> = memo(
         </UISelect>
         <HStack
           align="center"
-          mx="calc(lg - xs)"
+          mx="calc(md - xs)"
           pointerEvents="none"
           position="absolute"
           top="50%"
           transform="translateY(-50%)"
         >
           {icon}
-          <Label fontSize={18} mb={0}>
+          <Label fontSize={18} fontWeight="normal" mb={0}>
             {label}
           </Label>
         </HStack>
