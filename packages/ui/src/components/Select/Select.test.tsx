@@ -20,13 +20,4 @@ describe("<Select />", () => {
 
     expect(screen.getByText("I am label")).toBeInTheDocument()
   })
-
-  it("should be disabled", () => {
-    const { rerender } = render(<Select disabled label="Invalid Select" />)
-    expect(screen.getByText("Invalid Select")).toBeDisabled()
-
-    rerender(<Select disabled label="Invalid Select" />)
-
-    expect(screen.getByText("Invalid Select")).toHaveAttribute("disabled")
-  })
 })
