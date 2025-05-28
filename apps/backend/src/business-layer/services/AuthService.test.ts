@@ -1,6 +1,6 @@
 import { JWT_INVALID_TOKEN_MOCK, JWT_TOKEN_MOCK } from "@/test-config/mocks/AuthService.mock"
 import { JWT_SECRET_MOCK, tokensMock } from "@/test-config/mocks/GoogleAuth.mock"
-import { userMock } from "@/test-config/mocks/User.mock"
+import { casualUserMock } from "@/test-config/mocks/User.mock"
 import { JWTEncryptedUserSchema } from "@repo/shared"
 import jwt from "jsonwebtoken"
 
@@ -10,14 +10,14 @@ vi.mock("jsonwebtoken", () => {
       verify: vi.fn((token: string, secret: string) => {
         if (token === JWT_TOKEN_MOCK && secret === JWT_SECRET_MOCK) {
           return {
-            user: userMock,
+            user: casualUserMock,
             accessToken: tokensMock.access_token,
           }
         }
       }),
       sign: vi.fn((payload: Record<string, unknown>, secret: string, _options: object) => {
         if (
-          payload.user === userMock &&
+          payload.user === casualUserMock &&
           payload.accessToken === tokensMock.access_token &&
           secret === JWT_SECRET_MOCK
         ) {
@@ -34,7 +34,7 @@ describe("AuthService", () => {
   describe("signJWT", () => {
     it("should sign a JWT token and return it", () => {
       const authService = new AuthService()
-      const payload = { user: userMock, accessToken: tokensMock.access_token }
+      const payload = { user: casualUserMock, accessToken: tokensMock.access_token }
       const options = { expiresIn: "1h" } as const
 
       const token = authService.signJWT(payload, options)
@@ -50,7 +50,7 @@ describe("AuthService", () => {
 
       expect(jwt.verify).toHaveBeenCalledWith(JWT_TOKEN_MOCK, JWT_SECRET_MOCK)
       expect(data).toEqual({
-        user: userMock,
+        user: casualUserMock,
         accessToken: tokensMock.access_token,
       })
     })
