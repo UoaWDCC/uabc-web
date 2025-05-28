@@ -24,6 +24,7 @@ export default meta
 export const Basic: Story = (args) => {
   return (
     <Select
+      disabled
       {...args}
       icon={
         <Center
