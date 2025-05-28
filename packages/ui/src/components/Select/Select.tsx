@@ -72,6 +72,7 @@ export const Select: FC<SelectProps> = memo(
           position="absolute"
           top="50%"
           transform="translateY(-50%)"
+          z={100}
         >
           {icon}
           <Label fontSize={18} fontWeight="normal" mb={0}>
