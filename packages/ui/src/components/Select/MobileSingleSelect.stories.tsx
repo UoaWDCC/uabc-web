@@ -1,12 +1,12 @@
 import type { Meta, StoryFn } from "@storybook/react"
 import { CalendarClockIcon } from "@yamada-ui/lucide"
 import { Center, Option } from "@yamada-ui/react"
-import { Select } from "./MobileSelect"
+import { MobileSingleSelect } from "./MobileSingleSelect"
 
-type Story = StoryFn<typeof Select>
+type Story = StoryFn<typeof MobileSingleSelect>
 
-const meta: Meta<typeof Select> = {
-  component: Select,
+const meta: Meta<typeof MobileSingleSelect> = {
+  component: MobileSingleSelect,
   title: "Components / Select",
   argTypes: {
     label: {
@@ -23,7 +23,7 @@ export default meta
 
 export const Basic: Story = (args) => {
   return (
-    <Select
+    <MobileSingleSelect
       {...args}
       icon={
         <Center
@@ -41,6 +41,6 @@ export const Basic: Story = (args) => {
       <Option value="1">Option 1</Option>
       <Option value="2">Option 2</Option>
       <Option value="3">Option 3</Option>
-    </Select>
+    </MobileSingleSelect>
   )
 }
