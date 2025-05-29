@@ -58,4 +58,16 @@ afterEach(async () => {
   headers = {}
 })
 
+/**
+ * Exported tokens are used for tests that require authentication.
+ *
+ * @example
+ * describe("Some test", () => {
+ *   const cookieStore = await cookies()
+ *   it("should do something with casual user", async () => {
+ *     cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+ *     const response = await GET()
+ *   })
+ * })
+ */
 export { casualToken, memberToken, adminToken }
