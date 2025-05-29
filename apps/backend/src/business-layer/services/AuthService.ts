@@ -1,14 +1,16 @@
+import type { JWTEncryptedUser } from "@repo/shared"
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import type z from "zod"
 
 export default class AuthService {
   /**
    * Signs a JWT token with the provided payload and options and returns it.
-   * @param payload The payload to sign
+   *
+   * @param payload The {@link JWTEncryptedUser} payload to sign
    * @param options JWT options
    * @returns The signed JWT token
    */
-  public signJWT(payload: string | object | Buffer<ArrayBufferLike>, options?: jwt.SignOptions) {
+  public signJWT(payload: JWTEncryptedUser, options?: jwt.SignOptions) {
     return jwt.sign(payload, process.env.JWT_SECRET, options)
   }
 

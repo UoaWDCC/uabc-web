@@ -1,3 +1,4 @@
+import type { User } from "@/payload-types"
 import z from "zod"
 import { MembershipType } from "../types"
 
@@ -22,14 +23,14 @@ const MediaSchema = z.object({
 const UserSchema = z.object({
   id: z.string(),
   firstName: z.string(),
-  lastName: z.string(),
+  lastName: z.string().nullable().optional(),
   email: z.string().email(),
   role: z.nativeEnum(MembershipType),
   remainingSessions: z.number().nullable().optional(),
   image: z.union([z.string(), MediaSchema]).nullable().optional(),
   updatedAt: z.string(),
   createdAt: z.string(),
-})
+}) satisfies z.ZodType<User>
 
 // Google Authentication Payload JWT Schema
 export const JWTEncryptedUserSchema = z.object({
