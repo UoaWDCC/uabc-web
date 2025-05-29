@@ -5,7 +5,6 @@ export const CASUAL_USER_UID = "000000000000000000000001"
 export const MEMBER_USER_UID = "000000000000000000000002"
 export const ADMIN_USER_UID = "000000000000000000000003"
 
-// NOTE: these mocks are here and not in User.mock.ts because they result in circular dependencies for the UID mocks
 export const casualUserMock: User = {
   id: CASUAL_USER_UID,
   firstName: "straight",
