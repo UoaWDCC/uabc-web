@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@storybook/react"
 import { CalendarClockIcon } from "@yamada-ui/lucide"
 import { Center, Option } from "@yamada-ui/react"
-import { Select } from "./Select"
+import { Select } from "./MobileSelect"
 
 type Story = StoryFn<typeof Select>
 

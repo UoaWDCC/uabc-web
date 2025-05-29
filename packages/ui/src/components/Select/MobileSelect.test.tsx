@@ -1,6 +1,6 @@
 import { render, screen } from "@/test-utils"
 import { isValidElement } from "react"
-import { Select } from "./Select"
+import { Select } from "./MobileSelect"
 import * as SelectModule from "./index"
 
 describe("<Select />", () => {
