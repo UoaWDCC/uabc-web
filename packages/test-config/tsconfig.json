@@ -4,7 +4,8 @@
     "outDir": "./dist",
     "noEmit": false,
     "declaration": true,
-    "declarationDir": "./dist/types"
+    "declarationDir": "./dist/types",
+    "types": ["vitest/globals"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

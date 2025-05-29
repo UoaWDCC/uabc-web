@@ -11,6 +11,12 @@ export const baseConfig = defineConfig({
     minWorkers: process.env.CI === "true" ? 1 : undefined,
     coverage: {
       provider: "istanbul",
+      thresholds: {
+        branches: 60, // this is for overall vitest coverage report
+        functions: 80,
+        lines: 70,
+        statements: 70,
+      },
       exclude: [
         ...coverageConfigDefaults.exclude,
         "**/.storybook/**",
