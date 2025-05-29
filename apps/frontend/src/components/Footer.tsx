@@ -147,7 +147,15 @@ export const Footer = memo(() => {
       <Stack as={Center} flexDir={{ base: "column", lg: "row" }} fontSize="md" maxW="9xl" w="full">
         <ButtonGroup display={{ base: "flex", lg: "none" }} gap="xs">
           {SOCIAL_LINKS.map(({ icon: Icon, ...link }) => (
-            <IconButton as={Link} href={link.href} key={link.label} variant="ghost">
+            <IconButton
+              aria-label={link.label}
+              as={Link}
+              href={link.href}
+              key={link.label}
+              rel="noopener noreferrer"
+              target="_blank"
+              variant="ghost"
+            >
               <Icon color="muted" fontSize="4xl" />
             </IconButton>
           ))}
@@ -191,7 +199,7 @@ export const Footer = memo(() => {
         z="-1"
       >
         <Image
-          alt="Shuttle"
+          alt=""
           aria-hidden
           h="2xl"
           objectFit={{ base: "cover", lg: "contain" }}
