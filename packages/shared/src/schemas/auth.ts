@@ -1,6 +1,5 @@
 import type { User } from "@/payload-types"
 import z from "zod"
-import { MembershipType } from "../types"
 
 // Payload Media Schema
 const MediaSchema = z.object({
@@ -25,7 +24,8 @@ const UserSchema = z.object({
   firstName: z.string(),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
-  role: z.nativeEnum(MembershipType),
+  // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
+  role: z.enum(["admin", "member", "casual"]),
   remainingSessions: z.number().nullable().optional(),
   image: z.union([z.string(), MediaSchema]).nullable().optional(),
   updatedAt: z.string(),
