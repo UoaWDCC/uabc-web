@@ -62,6 +62,9 @@ export const StyledImage: Story = {
     alt: "Styled placeholder image",
     width: 300,
     height: 200,
-    rounded: "md",
+    h: "md",
+    w: "md",
+    rounded: "xl",
+    objectFit: "cover",
   },
 }

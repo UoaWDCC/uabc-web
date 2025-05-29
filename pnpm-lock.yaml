@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@repo/test-config':
-        specifier: workspace:*
-        version: link:packages/test-config
       cross-env:
         specifier: 7.0.3
         version: 7.0.3
