@@ -11,8 +11,8 @@ import {
   IconButton,
   List,
   ListItem,
+  Motion,
   Separator,
-  Slide,
   Spacer,
   Stack,
   Text,
@@ -90,7 +90,7 @@ export const Footer = memo(() => {
       px={{ base: "lg", lg: "24" }}
       py={{ base: "xl", md: "24" }}
     >
-      <HStack justifyContent="space-between" maxW="9xl" w="full">
+      <HStack maxW="9xl" w="full">
         <VStack display={{ base: "none", md: "flex" }} gap="lg">
           <VStack gap="xs">
             <HStack>
@@ -119,9 +119,10 @@ export const Footer = memo(() => {
           </ButtonGroup>
         </VStack>
         <Stack
-          flexDir={{ base: "column", lg: "row" }}
-          justifyContent="space-between"
-          maxW="lg"
+          flexDir={{ base: "column", md: "row" }}
+          gap="lg"
+          justifyContent={{ base: "center", lg: "space-between" }}
+          maxW="md"
           w="full"
         >
           {Object.entries(LINKS).map(([key, value]) => (
@@ -162,20 +163,43 @@ export const Footer = memo(() => {
           <Text color="muted">All rights reserved.</Text>
         </VStack>
         <Spacer />
-        <Text color="muted" display={{ base: "none", lg: "block" }} textWrap="nowrap">
+        <Text color="muted" display={{ base: "none", lg: "block" }} fontSize="sm" textWrap="nowrap">
           Developed by the 2025 WDCC UABC Team
         </Text>
       </Stack>
-      <Slide duration={1} h="full" open position="absolute" right="0" top="0" w="full" z="-1">
+      <Motion
+        animate={{
+          y: 40,
+          x: -50,
+          scale: 1,
+          rotate: 45,
+          opacity: 1,
+        }}
+        h="fit-content"
+        initial={{ y: -500, x: 500, scale: 0.8, rotate: 45, opacity: 0 }}
+        position="absolute"
+        transition={{
+          duration: 1.5,
+          type: "spring",
+          stiffness: 60,
+          damping: 8,
+          mass: 1,
+          restDelta: 0.01,
+          restSpeed: 0.01,
+          delay: 0.3,
+        }}
+        z="-1"
+      >
         <Image
           alt="Shuttle"
-          aria-hidden // TODO: Better image that's not rotated
-          h="full"
+          aria-hidden
+          h="2xl"
           objectFit={{ base: "cover", lg: "contain" }}
+          opacity="0.07"
           src={Shuttle}
-          w="full"
+          w="2xl"
         />
-      </Slide>
+      </Motion>
     </VStack>
   )
 })
