@@ -1,5 +1,5 @@
-import type { User } from "@/payload-types"
 import z from "zod"
+import type { User } from "../payload-types"
 
 // Payload Media Schema
 const MediaSchema = z.object({
