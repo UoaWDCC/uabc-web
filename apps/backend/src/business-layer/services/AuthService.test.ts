@@ -1,66 +1,58 @@
-import { JWT_INVALID_TOKEN_MOCK, JWT_TOKEN_MOCK } from "@/test-config/mocks/AuthService.mock"
+import { JWT_INVALID_TOKEN_MOCK } from "@/test-config/mocks/AuthService.mock"
 import { JWT_SECRET_MOCK, tokensMock } from "@/test-config/mocks/GoogleAuth.mock"
-import { userMock } from "@/test-config/mocks/User.mock"
+import { casualUserMock } from "@/test-config/mocks/User.mock"
 import { JWTEncryptedUserSchema } from "@repo/shared"
 import jwt from "jsonwebtoken"
-
-vi.mock("jsonwebtoken", () => {
-  return {
-    default: {
-      verify: vi.fn((token: string, secret: string) => {
-        if (token === JWT_TOKEN_MOCK && secret === JWT_SECRET_MOCK) {
-          return {
-            user: userMock,
-            accessToken: tokensMock.access_token,
-          }
-        }
-      }),
-      sign: vi.fn((payload: Record<string, unknown>, secret: string, _options: object) => {
-        if (
-          payload.user === userMock &&
-          payload.accessToken === tokensMock.access_token &&
-          secret === JWT_SECRET_MOCK
-        ) {
-          return JWT_TOKEN_MOCK
-        }
-      }),
-    },
-  }
-})
 
 import AuthService from "./AuthService"
 
 describe("AuthService", () => {
+  const authService = new AuthService()
+
   describe("signJWT", () => {
     it("should sign a JWT token and return it", () => {
-      const authService = new AuthService()
-      const payload = { user: userMock, accessToken: tokensMock.access_token }
+      const payload = { user: casualUserMock, accessToken: tokensMock.access_token }
       const options = { expiresIn: "1h" } as const
 
       const token = authService.signJWT(payload, options)
-      expect(jwt.sign).toHaveBeenCalledWith(payload, JWT_SECRET_MOCK, options)
-      expect(token).toBe(JWT_TOKEN_MOCK)
+      expect(token).not.toBe(payload)
+    })
+
+    it("should generate a JWT token that matches the encrypted data", () => {
+      const payload = { user: casualUserMock, accessToken: tokensMock.access_token }
+      const options = { expiresIn: "1h" } as const
+
+      const token = authService.signJWT(payload, options)
+
+      const decoded = jwt.verify(token, JWT_SECRET_MOCK)
+      expect(decoded).toEqual({
+        user: casualUserMock,
+        accessToken: tokensMock.access_token,
+        iat: expect.any(Number),
+        exp: expect.any(Number),
+      })
     })
   })
 
   describe("getData", () => {
     it("should return validated data with the correct token", () => {
-      const authService = new AuthService()
-      const data = authService.getData(JWT_TOKEN_MOCK, JWTEncryptedUserSchema)
+      const payload = { user: casualUserMock, accessToken: tokensMock.access_token }
+      const options = { expiresIn: "1h" } as const
 
-      expect(jwt.verify).toHaveBeenCalledWith(JWT_TOKEN_MOCK, JWT_SECRET_MOCK)
+      const token = authService.signJWT(payload, options)
+
+      const data = authService.getData(token, JWTEncryptedUserSchema)
+
       expect(data).toEqual({
-        user: userMock,
+        user: casualUserMock,
         accessToken: tokensMock.access_token,
       })
     })
 
     it("should return undefined with data not matching the schema", () => {
-      const authService = new AuthService()
       const data = authService.getData(JWT_INVALID_TOKEN_MOCK, JWTEncryptedUserSchema)
       // Token is invalid, so `undefined` will be checked against the schema hence returning `undefined`
 
-      expect(jwt.verify).toHaveBeenCalledWith(JWT_INVALID_TOKEN_MOCK, JWT_SECRET_MOCK)
       expect(data).toBeUndefined()
     })
   })
