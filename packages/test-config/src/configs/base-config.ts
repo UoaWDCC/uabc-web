@@ -10,6 +10,7 @@ export const baseConfig = defineConfig({
     maxWorkers: process.env.CI === "true" ? 1 : undefined,
     minWorkers: process.env.CI === "true" ? 1 : undefined,
     coverage: {
+      reportOnFailure: true,
       provider: "istanbul",
       thresholds: {
         branches: 60, // this is for overall vitest coverage report
