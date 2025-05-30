@@ -59,6 +59,7 @@ export default buildConfig({
   },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
+    allowIDOnCreate: process.env.NODE_ENV === "test",
   }),
   sharp,
   plugins: [
