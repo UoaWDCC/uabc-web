@@ -11,7 +11,8 @@ describe("<Footer />", () => {
     render(<Footer />)
     const socialLinks = ["LinkTree", "Facebook", "Instagram"]
     for (const link of socialLinks) {
-      expect(screen.getByLabelText(link)).toBeInTheDocument()
+      const elements = screen.getAllByLabelText(link)
+      expect(elements.length).toBe(2)
     }
   })
 
