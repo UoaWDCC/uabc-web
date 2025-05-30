@@ -33,7 +33,6 @@
     "commitlint": "commitlint --edit"
   },
   "dependencies": {
-    "@repo/test-config": "workspace:*",
     "cross-env": "7.0.3"
   },
   "devDependencies": {
