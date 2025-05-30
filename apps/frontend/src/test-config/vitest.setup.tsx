@@ -1,4 +1,3 @@
-import "@testing-library/jest-dom"
 import type { ImgHTMLAttributes } from "react"
 
 vi.mock("@repo/ui/components/Image", () => ({
