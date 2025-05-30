@@ -88,7 +88,7 @@ export const Footer = memo(() => {
       placeItems="center"
       position="relative"
       px={{ base: "lg", lg: "24" }}
-      py={{ base: "xl", md: "24" }}
+      py={{ base: "3xl", md: "24" }}
     >
       <HStack maxW="9xl" w="full">
         <VStack display={{ base: "none", md: "flex" }} gap="lg">
@@ -170,7 +170,7 @@ export const Footer = memo(() => {
           </Text>
           <Text color="muted">All rights reserved.</Text>
         </VStack>
-        <Spacer />
+        <Spacer display={{ base: "none", lg: "flex" }} />
         <Text color="muted" display={{ base: "none", lg: "block" }} fontSize="sm" textWrap="nowrap">
           Developed by the 2025 WDCC UABC Team
         </Text>
