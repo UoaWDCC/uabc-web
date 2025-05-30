@@ -5,7 +5,7 @@ import { FooterSocialLinks } from "./FooterSocialLinks"
 export const FooterBottom = memo(() => {
   return (
     <Stack as={Center} flexDir={{ base: "column", lg: "row" }} fontSize="md" maxW="9xl" w="full">
-      <FooterSocialLinks display={{ base: "flex", lg: "none" }} iconSize="4xl" />
+      <FooterSocialLinks display={{ base: "flex", lg: "none" }} iconProps={{ fontSize: "4xl" }} />
       <VStack
         fontSize="sm"
         gap={{ base: "xs", lg: "sm" }}

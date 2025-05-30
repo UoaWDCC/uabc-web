@@ -1,19 +1,23 @@
-import { ButtonGroup, IconButton, type ResponsiveObject } from "@yamada-ui/react"
+import {
+  ButtonGroup,
+  type ButtonGroupProps,
+  IconButton,
+  type IconButtonProps,
+  type IconProps,
+} from "@yamada-ui/react"
 import Link from "next/link"
 import { memo } from "react"
 import { SOCIAL_LINKS } from "./constants"
 
-interface FooterSocialLinksProps {
-  display?: ResponsiveObject<string>
-  gap?: string
-  iconSize?: string
-  variant?: string
+interface FooterSocialLinksProps extends ButtonGroupProps {
+  iconButtonProps?: IconButtonProps
+  iconProps?: IconProps
 }
 
 export const FooterSocialLinks = memo<FooterSocialLinksProps>(
-  ({ display, gap = "xs", iconSize = "2xl", variant = "ghost" }) => {
+  ({ iconButtonProps, iconProps, ...props }) => {
     return (
-      <ButtonGroup display={display} gap={gap}>
+      <ButtonGroup variant="ghost" {...props}>
         {SOCIAL_LINKS.map(({ icon: Icon, ...link }) => (
           <IconButton
             aria-label={link.label}
@@ -22,9 +26,9 @@ export const FooterSocialLinks = memo<FooterSocialLinksProps>(
             key={link.label}
             rel="noopener noreferrer"
             target="_blank"
-            variant={variant}
+            {...iconButtonProps}
           >
-            <Icon color="muted" fontSize={iconSize} />
+            <Icon color="muted" fontSize="2xl" {...iconProps} />
           </IconButton>
         ))}
       </ButtonGroup>
