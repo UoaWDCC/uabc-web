@@ -18,7 +18,7 @@ export const Footer = memo(() => {
       px={{ base: "lg", lg: "24" }}
       py={{ base: "3xl", md: "24" }}
     >
-      <HStack maxW="9xl" w="full">
+      <HStack justifyContent="center" maxW="9xl" w="full">
         <FooterBrand />
         <FooterLinks />
       </HStack>
@@ -31,5 +31,4 @@ export const Footer = memo(() => {
 
 Footer.displayName = "Footer"
 
-// Re-export constants for backwards compatibility
 export { LINKS, SOCIAL_LINKS } from "./constants"

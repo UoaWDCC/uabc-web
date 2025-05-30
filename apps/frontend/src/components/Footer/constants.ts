@@ -1,6 +1,8 @@
 import { LinkTreeIcon } from "@/icons/LinkTreeIcon"
 import { FacebookIcon, InstagramIcon } from "@yamada-ui/lucide"
 
+// TODO: THESE WILL BE REPLACED WITH PAYLOAD
+
 export const LINKS = {
   quick: {
     title: "Quick Links",
