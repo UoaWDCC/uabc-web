@@ -63,6 +63,20 @@ export const Basic: Story = (args) => {
   return <Button {...args}>Button</Button>
 }
 
+export const Sizes: Story = (args) => {
+  return (
+    <PropsTable columns={BUTTON_VARIANTS} rows={["sm", "md", "lg", "xl"]}>
+      {(column, row, key) => {
+        return (
+          <Button key={key} size={row} variant={column} {...args}>
+            Button
+          </Button>
+        )
+      }}
+    </PropsTable>
+  )
+}
+
 export const Variant: Story = (args) => {
   return (
     <PropsTable columns={BUTTON_VARIANTS} rows={SEMANTIC_COLOR_SCHEMES}>
