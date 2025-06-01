@@ -124,8 +124,8 @@ importers:
         specifier: 0.34.2
         version: 0.34.2
       zod:
-        specifier: 3.24.3
-        version: 3.24.3
+        specifier: 3.25.44
+        version: 3.25.44
     devDependencies:
       '@repo/shared':
         specifier: workspace:*
@@ -7983,6 +7983,9 @@ packages:
   zod@3.24.3:
     resolution: {integrity: sha512-HhY1oqzWCQWuUqvBFnsyrtZRhyPeR7SUGv+C4+MsisMuVfSPx8HpwWqH8tRahSlt6M3PiFAcoeFhZAqIXTxoSg==}
 
+  zod@3.25.44:
+    resolution: {integrity: sha512-BVwH2PnqCwxUN+SNjzRL6kcGvvz1JuojtB+uZB1Hg8DA56Zqn0pjpIwMrb1IhUsF75DjpEe4fhxPKO6+AErqzw==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -14912,9 +14915,9 @@ snapshots:
   langbase@1.1.55(react@19.0.0)(ws@8.18.1):
     dependencies:
       dotenv: 16.5.0
-      openai: 4.96.0(ws@8.18.1)(zod@3.24.3)
-      zod: 3.24.3
-      zod-validation-error: 3.4.0(zod@3.24.3)
+      openai: 4.96.0(ws@8.18.1)(zod@3.25.44)
+      zod: 3.25.44
+      zod-validation-error: 3.4.0(zod@3.25.44)
     optionalDependencies:
       react: 19.0.0
     transitivePeerDependencies:
@@ -15779,7 +15782,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@4.96.0(ws@8.18.1)(zod@3.24.3):
+  openai@4.96.0(ws@8.18.1)(zod@3.25.44):
     dependencies:
       '@types/node': 18.19.86
       '@types/node-fetch': 2.6.12
@@ -15790,7 +15793,7 @@ snapshots:
       node-fetch: 2.7.0
     optionalDependencies:
       ws: 8.18.1
-      zod: 3.24.3
+      zod: 3.25.44
     transitivePeerDependencies:
       - encoding
 
@@ -17687,10 +17690,12 @@ snapshots:
 
   yocto-queue@1.2.1: {}
 
-  zod-validation-error@3.4.0(zod@3.24.3):
+  zod-validation-error@3.4.0(zod@3.25.44):
     dependencies:
-      zod: 3.24.3
+      zod: 3.25.44
 
   zod@3.24.3: {}
+
+  zod@3.25.44: {}
 
   zwitch@2.0.4: {}
