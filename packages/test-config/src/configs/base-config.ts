@@ -3,7 +3,7 @@ import tsconfigPaths from "vite-tsconfig-paths"
 import { coverageConfigDefaults, defineConfig } from "vitest/config"
 
 export const baseConfig = defineConfig({
-  plugins: [tsconfigPaths(), react()],
+  plugins: [tsconfigPaths(), react({ tsDecorators: true })],
   test: {
     setupFiles: ["dotenv/config"],
     globals: true,

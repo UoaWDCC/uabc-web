@@ -7,11 +7,13 @@ import SemesterDataService from "@/data-layer/services/SemesterDataService"
 
 class SemesterRouteWrapper {
   /**
-DELETE method to delete a semester.*,
-@param req The request object containing the request body,
-@returns No content status code*/
+   *DELETE method to delete a semester.
+   *
+   *@param req The request object containing the request body
+   *@returns No content status code
+   */
   @Security("jwt", ["admin"])
-  public static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
       const semesterDataService = new SemesterDataService()
