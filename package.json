@@ -20,7 +20,7 @@
     "precommit": "lint-staged",
     "prepare": "husky",
     "start": "turbo run start",
-    "storybook": "turbo run storybook",
+    "storybook": "pnpm --prefix=packages/ui storybook",
     "storybook:build": "turbo run storybook:build",
     "test": "cross-env NODE_ENV=test turbo run test",
     "test:watch": "cross-env NODE_ENV=test turbo run test:watch",
@@ -33,7 +33,6 @@
     "commitlint": "commitlint --edit"
   },
   "dependencies": {
-    "@repo/test-config": "workspace:*",
     "cross-env": "7.0.3"
   },
   "devDependencies": {

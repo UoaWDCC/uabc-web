@@ -50,10 +50,6 @@
     "start": {
       "dependsOn": ["^start"]
     },
-    "storybook": {
-      "cache": false,
-      "persistent": true
-    },
     "storybook:build": {
       "cache": true,
       "dependsOn": ["^storybook:build"],
