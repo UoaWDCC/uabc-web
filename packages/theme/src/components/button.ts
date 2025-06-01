@@ -282,7 +282,7 @@ export const Button: ComponentStyle<"Button"> = {
     },
   },
   defaultProps: {
-    colorScheme: "gray",
+    colorScheme: "secondary",
     size: "md",
     variant: "solid",
   },
