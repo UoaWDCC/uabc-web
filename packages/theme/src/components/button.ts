@@ -283,7 +283,7 @@ export const Button: ComponentStyle<"Button"> = {
   },
   defaultProps: {
     colorScheme: "gray",
-    size: "xl",
+    size: "md",
     variant: "solid",
   },
 }
