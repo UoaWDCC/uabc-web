@@ -9,7 +9,7 @@ export const FooterLinks = memo(() => {
     <Stack
       flexDir={{ base: "column", sm: "row" }}
       gap="lg"
-      justifyContent={{ base: "center", lg: "space-between" }}
+      justifyContent={{ base: "center", sm: "space-between" }}
       maxW="md"
       w="full"
     >

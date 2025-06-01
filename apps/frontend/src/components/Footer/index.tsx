@@ -14,17 +14,16 @@ export const Footer = memo(() => {
       gap="xl"
       overflow="clip"
       placeItems="center"
-      position="relative"
       px={{ base: "lg", lg: "24" }}
       py={{ base: "3xl", md: "24" }}
     >
-      <HStack justifyContent="center" maxW="9xl" w="full">
+      <HStack justifyContent="center" maxW="9xl" position="relative" w="full">
         <FooterBrand />
         <FooterLinks />
+        <FooterDecoration />
       </HStack>
       <Separator />
       <FooterBottom />
-      <FooterDecoration />
     </VStack>
   )
 })
