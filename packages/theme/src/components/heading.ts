@@ -4,6 +4,7 @@ export const Heading: ComponentStyle<"Heading"> = {
   baseStyle: {
     fontFamily: "heading",
     fontWeight: "bold",
+    lineHeight: "1.1",
   },
 
   sizes: {
