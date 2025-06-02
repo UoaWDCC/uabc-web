@@ -15,7 +15,7 @@ export const FAQ: GlobalConfig = {
     {
       name: "questions",
       type: "array",
-      interfaceName: "FAQQuestion",
+      interfaceName: "FaqQuestion",
       required: true,
       fields: [
         {

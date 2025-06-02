@@ -8,9 +8,9 @@
 
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FAQQuestion".
+ * via the `definition` "FaqQuestion".
  */
-export type FAQQuestion = {
+export type FaqQuestion = {
   /**
    * The title for this FAQ section, usually the question itself.
    */
@@ -642,7 +642,7 @@ export interface Faq {
    * The title for the FAQ section.
    */
   title: string;
-  questions: FAQQuestion;
+  questions: FaqQuestion;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -702,16 +702,16 @@ export interface LinkGroup {
  */
 export interface FaqSelect<T extends boolean = true> {
   title?: T;
-  questions?: T | FAQQuestionSelect<T>;
+  questions?: T | FaqQuestionSelect<T>;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FAQQuestion_select".
+ * via the `definition` "FaqQuestion_select".
  */
-export interface FAQQuestionSelect<T extends boolean = true> {
+export interface FaqQuestionSelect<T extends boolean = true> {
   questionTitle?: T;
   description?: T;
   id?: T;
