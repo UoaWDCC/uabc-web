@@ -8,6 +8,21 @@
 
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQQuestion".
+ */
+export type FAQQuestion = {
+  /**
+   * The title for this FAQ section, usually the question itself.
+   */
+  questionTitle: string;
+  /**
+   * A detailed answer to this FAQ question.
+   */
+  description: string;
+  id?: string | null;
+}[];
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "Link".
  */
 export type Link = {
@@ -112,9 +127,11 @@ export interface Config {
     defaultIDType: string;
   };
   globals: {
+    faq: Faq;
     footer: Footer;
   };
   globalsSelect: {
+    faq: FaqSelect<false> | FaqSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
   locale: null;
@@ -617,6 +634,20 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq".
+ */
+export interface Faq {
+  id: string;
+  /**
+   * The title for the FAQ section.
+   */
+  title: string;
+  questions: FAQQuestion;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
 export interface Footer {
@@ -664,6 +695,26 @@ export interface LinkGroup {
    */
   title: string;
   links: Link;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq_select".
+ */
+export interface FaqSelect<T extends boolean = true> {
+  title?: T;
+  questions?: T | FAQQuestionSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQQuestion_select".
+ */
+export interface FAQQuestionSelect<T extends boolean = true> {
+  questionTitle?: T;
+  description?: T;
+  id?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
