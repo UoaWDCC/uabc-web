@@ -1,7 +1,7 @@
-import type { As, CSSUIObject, HeadingProps as UIHeadingProps } from "@yamada-ui/react"
+import type { As, HeadingProps as UIHeadingProps } from "@yamada-ui/react"
 import { Heading as UIHeading } from "@yamada-ui/react"
 import type { FC } from "react"
-import { memo, useMemo } from "react"
+import { memo } from "react"
 
 /**
  * Default font sizes for different heading levels
@@ -104,16 +104,8 @@ export const Heading: FC<HeadingProps> = memo(({ children, as = "h1", ...props }
     as = "h1"
   }
 
-  const css: CSSUIObject = useMemo(
-    () => ({
-      fontSize,
-      fontWeight,
-    }),
-    [fontSize, fontWeight],
-  )
-
   return (
-    <UIHeading __css={css} as={as as As} {...props}>
+    <UIHeading as={as as As} fontSize={fontSize} fontWeight={fontWeight} {...props}>
       {children}
     </UIHeading>
   )

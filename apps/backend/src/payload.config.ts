@@ -16,6 +16,7 @@ import { Media } from "./data-layer/collections/Media"
 import { Semester } from "./data-layer/collections/Semester"
 import { User } from "./data-layer/collections/User"
 
+import { FAQ } from "./data-layer/globals/Faq"
 import { Footer } from "./data-layer/globals/Footer"
 
 declare module "payload" {
@@ -47,7 +48,7 @@ export default buildConfig({
     Booking,
     Authentication,
   ],
-  globals: [Footer],
+  globals: [FAQ, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

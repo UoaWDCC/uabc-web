@@ -26,7 +26,7 @@
     "test:watch": "cross-env NODE_ENV=test turbo run test:watch",
     "test:coverage": "cross-env NODE_ENV=test turbo run test:coverage",
     "test:coverage:watch": "cross-env NODE_ENV=test turbo run test:coverage:watch",
-    "test:coverage:collect": "turbo run test:coverage:collect",
+    "test:ui": "cross-env NODE_ENV=test turbo run test:ui",
     "merge": "pnpm --filter=@repo/test-config build && pnpm --prefix=packages/test-config run merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
     "postinstall": "pnpm theme",
