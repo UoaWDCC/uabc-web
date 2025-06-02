@@ -6,7 +6,9 @@
     "./components/Button": "./src/components/Button/index.ts",
     "./components/Heading": "./src/components/Heading/index.ts",
     "./components/TextInput": "./src/components/TextInput/index.ts",
-    "./providers": "./src/providers/index.ts"
+    "./components/Image": "./src/components/Image/index.ts",
+    "./providers": "./src/providers/index.ts",
+    "./test-utils": "./src/test-utils/index.ts"
   },
   "scripts": {
     "check-types": "tsc --noEmit",
@@ -15,7 +17,8 @@
     "test": "cross-env NODE_ENV=test vitest run",
     "test:watch": "cross-env NODE_ENV=test vitest",
     "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
-    "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage --watch"
+    "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage",
+    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
   },
   "dependencies": {
     "@repo/theme": "workspace:*",
