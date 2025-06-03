@@ -1,5 +1,6 @@
 import { BUTTON_VARIANTS } from "@repo/theme/components"
 import { SEMANTIC_COLOR_SCHEMES } from "@repo/theme/semantics"
+import { SIZE_TOKENS } from "@repo/theme/tokens"
 import type { Meta, StoryFn } from "@storybook/react"
 import { PropsTable } from "../../../.storybook/components"
 import { Button } from "./Button"
@@ -65,7 +66,7 @@ export const Basic: Story = (args) => {
 
 export const Sizes: Story = (args) => {
   return (
-    <PropsTable columns={BUTTON_VARIANTS} rows={["sm", "md", "lg", "xl"]}>
+    <PropsTable columns={BUTTON_VARIANTS} rows={SIZE_TOKENS}>
       {(column, row, key) => {
         return (
           <Button key={key} size={row} variant={column} {...args}>
