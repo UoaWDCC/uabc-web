@@ -30,3 +30,5 @@ export const sizes: ThemeTokens = {
   "8xl": "80rem",
   "9xl": "90rem",
 }
+
+export const SIZE_TOKENS = ["sm", "md", "lg", "xl"]

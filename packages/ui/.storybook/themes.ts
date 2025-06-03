@@ -7,7 +7,7 @@ const colors = defaultTheme.colors as Record<string, Record<string, string>>
 
 const sharedTheme = {
   appBorderRadius: 0,
-  barSelectedColor: colors.blue[500],
+  barSelectedColor: colors.primary,
   // TODO: Change link to frontend folder once
   brandTitle: `
     <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -19,8 +19,8 @@ const sharedTheme = {
   // If prefer image over title
   // brandImage:
   //   "https://raw.githubusercontent.com/UoaWDCC/uabc-web/refs/heads/master/public/svgs/logo.svg",
-  colorPrimary: colors.blue[500],
-  colorSecondary: colors.secondary[500],
+  colorPrimary: colors.primary,
+  colorSecondary: colors.secondary,
   fontBase: fonts.body,
   fontCode: fonts.mono,
 }
@@ -33,7 +33,7 @@ export const customThemes = {
     appBg: colors.white,
     appContentBg: colors.white,
     barBg: colors.white,
-    barTextColor: colors.secondary[500],
+    barTextColor: colors.secondary,
     textColor: colors.black,
     textInverseColor: colors.white,
   },
@@ -44,7 +44,7 @@ export const customThemes = {
     appBg: colors.black,
     appContentBg: colors.black,
     barBg: colors.black,
-    barTextColor: colors.secondary[500],
+    barTextColor: colors.secondary,
     textColor: colors.white,
     textInverseColor: colors.black,
   },
