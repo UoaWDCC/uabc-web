@@ -1,5 +1,5 @@
 import { config, theme } from "@repo/theme"
-import type { DocsContainerProps } from "@storybook/blocks"
+import type { DocsContainerProps } from "@storybook/addon-docs/blocks"
 import { DocsContainer } from "@storybook/blocks"
 import { addons } from "@storybook/preview-api"
 import type { Preview } from "@storybook/react"
