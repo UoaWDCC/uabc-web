@@ -3,8 +3,10 @@ import AuthService from "@/business-layer/services/AuthService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
+import type { Authentication, User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
+import { NotFound } from "payload"
 
 export const POST = async (req: NextRequest) => {
   const authDataService = new AuthDataService()
@@ -16,7 +18,21 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ status: StatusCodes.BAD_REQUEST })
   }
 
-  const auth = await authDataService.getAuthByEmail(email)
+  let auth: Authentication
+  let user: User
+  try {
+    auth = await authDataService.getAuthByEmail(email)
+    user = await userDataService.getUserByEmail(email)
+  } catch (error) {
+    if (error instanceof NotFound) {
+      return NextResponse.json({
+        error: "Invalid email or password",
+        status: StatusCodes.UNAUTHORIZED,
+      })
+    }
+    throw error
+  }
+
   const passwordVerified = StandardSecurity.verifyPassword(password, auth.password as string)
   if (!passwordVerified) {
     return NextResponse.json({
@@ -24,8 +40,6 @@ export const POST = async (req: NextRequest) => {
       status: StatusCodes.UNAUTHORIZED,
     })
   }
-
-  const user = await userDataService.getUserByEmail(email)
 
   const token = authService.signJWT({ user }, { expiresIn: "1h" })
   const response = NextResponse.redirect(new URL("/onboarding/name", req.url))

@@ -38,7 +38,7 @@ describe("POST api/auth/login", () => {
   })
 
   it("returns 401 if email is invalid", async () => {
-    const req = createMockNextRequest("/api/auth/login", EMAIL_MOCK, PASSWORD_MOCK)
+    const req = createMockNextRequest("/api/auth/login", "invalid-email@wdcc.com", PASSWORD_MOCK)
     const response = await login(req)
     const json = await response.json()
 
@@ -50,7 +50,7 @@ describe("POST api/auth/login", () => {
     const authDataService = new AuthDataService()
     const _newAuth = await authDataService.createAuth(standardAuthCreateMock)
 
-    const req = createMockNextRequest("/api/auth/login", EMAIL_MOCK, PASSWORD_MOCK)
+    const req = createMockNextRequest("/api/auth/login", EMAIL_MOCK, "invalid-passw0rd")
     const response = await login(req)
     const json = await response.json()
 
