@@ -1,7 +1,6 @@
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import { StatusCodes, getReasonPhrase } from "http-status-codes"
-import { vi } from "vitest"
 import { GET } from "./route"
 
 describe("/api/semesters", () => {
