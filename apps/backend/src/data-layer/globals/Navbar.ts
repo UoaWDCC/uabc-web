@@ -15,6 +15,7 @@ export const Navbar: GlobalConfig = {
     {
       name: "navItems",
       type: "array",
+      interfaceName: "Link",
       required: true,
       maxRows: 5,
       defaultValue: [
@@ -64,6 +65,7 @@ export const Navbar: GlobalConfig = {
     {
       name: "rightSideSingleButton",
       type: "group",
+      interfaceName: "Link",
       required: true,
       fields: [
         {
