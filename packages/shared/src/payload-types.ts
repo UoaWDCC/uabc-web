@@ -129,10 +129,12 @@ export interface Config {
   globals: {
     faq: Faq;
     footer: Footer;
+    navbar: Navbar;
   };
   globalsSelect: {
     faq: FaqSelect<false> | FaqSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    navbar: NavbarSelect<false> | NavbarSelect<true>;
   };
   locale: null;
   user: Admin & {
@@ -698,6 +700,46 @@ export interface LinkGroup {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navbar".
+ */
+export interface Navbar {
+  id: string;
+  /**
+   * The logo displayed in the navbar.
+   */
+  logo: string | Media;
+  /**
+   * Navigation items (max 5).
+   */
+  navItems: {
+    /**
+     * The text displayed for the navigation item.
+     */
+    label: string;
+    /**
+     * The URL the navigation item points to.
+     */
+    url: string;
+    id?: string | null;
+  }[];
+  /**
+   * Sign in button displayed on the right side of the navbar.
+   */
+  signInButton: {
+    /**
+     * The text displayed for the sign in button.
+     */
+    label: string;
+    /**
+     * The URL the sign in button points to.
+     */
+    url: string;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faq_select".
  */
 export interface FaqSelect<T extends boolean = true> {
@@ -750,6 +792,29 @@ export interface LinkSelect<T extends boolean = true> {
   label?: T;
   url?: T;
   id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navbar_select".
+ */
+export interface NavbarSelect<T extends boolean = true> {
+  logo?: T;
+  navItems?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  signInButton?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
