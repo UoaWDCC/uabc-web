@@ -3,13 +3,13 @@ import type { StorybookConfig } from "@storybook/nextjs"
 const config: StorybookConfig = {
   stories: ["../../../packages/ui/src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: [
-    {
-      name: "@storybook/addon-essentials",
-      options: {
-        docs: false,
-      },
-    },
+    /**
+     * Note for reviewer: `@storybook/addon-essentials` has been removed and it's functionality
+     * is now provided by individual addons like `@storybook/addon-actions`, `@storybook/addon-links`, etc.
+     */
     "@storybook/addon-viewport",
+    "@storybook/addon-controls",
+    "@storybook/addon-interactions",
     "@storybook/addon-docs",
     "@storybook/addon-a11y",
     "@storybook/addon-backgrounds",
