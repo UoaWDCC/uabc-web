@@ -14,7 +14,6 @@ const config: StorybookConfig = {
     "@storybook/addon-a11y",
     "@storybook/addon-backgrounds",
     "@storybook/addon-measure",
-    "@storybook/addon-storysource",
     "storybook-dark-mode",
   ],
   core: { disableTelemetry: true },

@@ -80,6 +80,7 @@ const preview: Preview = {
         order: ["Theme", "Components"],
       },
     },
+    codePanel: true,
   },
 
   decorators: [
