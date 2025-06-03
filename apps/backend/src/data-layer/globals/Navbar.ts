@@ -17,6 +17,28 @@ export const Navbar: GlobalConfig = {
       type: "array",
       required: true,
       maxRows: 5,
+      defaultValue: [
+        {
+          label: "Book",
+          url: "/book",
+        },
+        {
+          label: "Events",
+          url: "/events",
+        },
+        {
+          label: "About",
+          url: "/about",
+        },
+        {
+          label: "Contact",
+          url: "/contact",
+        },
+        {
+          label: "FAQ",
+          url: "/faq",
+        },
+      ],
       fields: [
         {
           name: "label",
@@ -40,7 +62,7 @@ export const Navbar: GlobalConfig = {
       },
     },
     {
-      name: "signInButton",
+      name: "rightSideSingleButton",
       type: "group",
       required: true,
       fields: [
@@ -64,7 +86,7 @@ export const Navbar: GlobalConfig = {
         },
       ],
       admin: {
-        description: "Sign in button displayed on the right side of the navbar.",
+        description: "Single button displayed on the right side of the navbar.",
       },
     },
   ],

@@ -723,9 +723,9 @@ export interface Navbar {
     id?: string | null;
   }[];
   /**
-   * Sign in button displayed on the right side of the navbar.
+   * Single button displayed on the right side of the navbar.
    */
-  signInButton: {
+  rightSideSingleButton: {
     /**
      * The text displayed for the sign in button.
      */
@@ -806,7 +806,7 @@ export interface NavbarSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
-  signInButton?:
+  rightSideSingleButton?:
     | T
     | {
         label?: T;
