@@ -11,7 +11,7 @@ import type { UIProviderProps } from "@yamada-ui/react"
 import type { ReactElement } from "react"
 import type * as ReactDOMClient from "react-dom/client"
 import "@testing-library/jest-dom/vitest"
-import { UIProvider } from "@/providers"
+import { UIProvider } from "../providers"
 
 export type RenderOptions = {
   withProvider?: boolean
