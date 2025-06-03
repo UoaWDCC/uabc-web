@@ -37,9 +37,9 @@ class SemesterRouteWrapper {
   static async POST(req: NextRequest) {
     try {
       const parsedBody = CreateSemesterRequestBody.parse(await req.json())
-
       const semesterDataService = new SemesterDataService()
       const newSemester = await semesterDataService.createSemester(parsedBody as CreateSemesterData)
+
       return NextResponse.json({ data: newSemester }, { status: StatusCodes.CREATED })
     } catch (error) {
       if (error instanceof ZodError) {
@@ -48,6 +48,7 @@ class SemesterRouteWrapper {
           { status: StatusCodes.BAD_REQUEST },
         )
       }
+      console.error(error)
       return NextResponse.json(
         { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
         { status: StatusCodes.INTERNAL_SERVER_ERROR },
