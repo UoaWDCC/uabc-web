@@ -3,9 +3,9 @@ import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import { StatusCodes, getReasonPhrase } from "http-status-codes"
 import { GET } from "./route"
 
-describe("/api/semesters", () => {
-  const semesterDataService = new SemesterDataService()
+const semesterDataService = new SemesterDataService()
 
+describe("/api/semesters", () => {
   describe("GET", () => {
     it("should return all semesters", async () => {
       const semester1 = await semesterDataService.createSemester(semesterCreateMock)
