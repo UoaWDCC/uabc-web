@@ -35,7 +35,7 @@ export default class AuthDataService {
     })
 
     if (!docs[0]) {
-      throw new NotFound(() => "Not Found")
+      throw new NotFound(() => `Authentication with the email: ${email} was not found.`)
     }
 
     return docs[0]
