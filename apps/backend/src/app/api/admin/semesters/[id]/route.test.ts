@@ -12,7 +12,7 @@ describe("/api/admin/semesters/[id]", async () => {
   const semesterDataService = new SemesterDataService()
   const cookieStore = await cookies()
 
-  describe("DELETE /api/admin/semesters/[id]", () => {
+  describe("DELETE", () => {
     it("should return 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
