@@ -46,7 +46,9 @@ describe("authDataService", () => {
     it("should return null if user does not exist when searching by email", async () => {
       await expect(() =>
         authDataService.getAuthByEmail("nonexistent@example.com"),
-      ).rejects.toThrowError("Not Found")
+      ).rejects.toThrowError(
+        "Authentication with the email: nonexistent@example.com was not found.",
+      )
     })
   })
 })

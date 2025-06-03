@@ -7,26 +7,18 @@ import {
   PASSWORD_MOCK,
   standardAuthCreateMock,
 } from "@/test-config/mocks/Authentication.mock"
-import { tokensMock } from "@/test-config/mocks/GoogleAuth.mock"
 import { createMockNextRequest } from "@/test-config/mocks/StandardAuth.mock"
+import { userCreateMock } from "@/test-config/mocks/User.mock"
 import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
 import { StatusCodes } from "http-status-codes"
 
 describe("POST api/auth/login", () => {
   it("redirects user and sets JWT token to cookies on success auth", async () => {
-    const userDataService = new UserDataService()
     const authDataService = new AuthDataService()
+    const userDataService = new UserDataService()
 
-    const newAuth = authDataService.createAuth(standardAuthCreateMock)
-    const fetchedUser = await authDataService.getAuthByEmail(standardAuthCreateMock.email)
-    expect(fetchedUser).toStrictEqual(newAuth)
-
-    // const newAuth = await authDataService.createAuth({
-    //   ...standardAuthCreateMock,
-    //   email: casualUserMock.email,
-    // })
-    // const fetchedAuth = await authDataService.getAuthByEmail(casualUserMock.email)
-    // expect(fetchedAuth).toStrictEqual(newAuth)
+    const _newAuth = await authDataService.createAuth(standardAuthCreateMock)
+    const _newUser = await userDataService.createUser(userCreateMock)
 
     const req = createMockNextRequest("/api/auth/login", EMAIL_MOCK, PASSWORD_MOCK)
     const response = await login(req)
@@ -42,7 +34,27 @@ describe("POST api/auth/login", () => {
     const userMock = await userDataService.getUserByEmail(EMAIL_MOCK)
     expect(data).toMatchObject({
       user: userMock,
-      accessToken: tokensMock.access_token, // TODO: must remove/replace, tokensMock is from GoogleAuth.mock
     })
+  })
+
+  it("returns 401 if email is invalid", async () => {
+    const req = createMockNextRequest("/api/auth/login", EMAIL_MOCK, PASSWORD_MOCK)
+    const response = await login(req)
+    const json = await response.json()
+
+    expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
+    expect(json.error).toBe("Invalid email or password")
+  })
+
+  it("returns 401 if password is invalid", async () => {
+    const authDataService = new AuthDataService()
+    const _newAuth = await authDataService.createAuth(standardAuthCreateMock)
+
+    const req = createMockNextRequest("/api/auth/login", EMAIL_MOCK, PASSWORD_MOCK)
+    const response = await login(req)
+    const json = await response.json()
+
+    expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
+    expect(json.error).toBe("Invalid email or password")
   })
 })
