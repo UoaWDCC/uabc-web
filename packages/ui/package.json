@@ -39,7 +39,6 @@
     "@storybook/addon-docs": "9.0.4",
     "@storybook/addon-measure": "9.0.4",
     "@storybook/addon-viewport": "9.0.4",
-    "@storybook/preview-api": "8.6.14",
     "@storybook/react": "9.0.4",
     "@turbo/gen": "2.5.3",
     "@types/node": "22.15.21",
