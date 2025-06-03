@@ -1,9 +1,20 @@
+import { POST as login } from "@/app/api/auth/login/route"
+import AuthService from "@/business-layer/services/AuthService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
-import { standardAuthCreateMock } from "@/test-config/mocks/Authentication.mock"
+import UserDataService from "@/data-layer/services/UserDataService"
+import {
+  EMAIL_MOCK,
+  PASSWORD_MOCK,
+  standardAuthCreateMock,
+} from "@/test-config/mocks/Authentication.mock"
+import { tokensMock } from "@/test-config/mocks/GoogleAuth.mock"
+import { createMockNextRequest } from "@/test-config/mocks/StandardAuth.mock"
+import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
+import { StatusCodes } from "http-status-codes"
 
 describe("POST api/auth/login", () => {
   it("redirects user and sets JWT token to cookies on success auth", async () => {
-    // const userDataService = new UserDataService()
+    const userDataService = new UserDataService()
     const authDataService = new AuthDataService()
 
     const newAuth = authDataService.createAuth(standardAuthCreateMock)
@@ -31,7 +42,7 @@ describe("POST api/auth/login", () => {
     const userMock = await userDataService.getUserByEmail(EMAIL_MOCK)
     expect(data).toMatchObject({
       user: userMock,
-      accessToken: tokensMock.access_token,
+      accessToken: tokensMock.access_token, // TODO: must remove/replace, tokensMock is from GoogleAuth.mock
     })
   })
 })
