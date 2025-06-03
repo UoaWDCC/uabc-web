@@ -37,3 +37,4 @@ export const tokens = {
 }
 
 export { COLORS } from "./colors"
+export { SIZE_TOKENS } from "./sizes"
