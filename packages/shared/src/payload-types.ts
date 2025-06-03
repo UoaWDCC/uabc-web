@@ -22,21 +22,6 @@ export type FaqQuestion = {
   id?: string | null;
 }[];
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Link".
- */
-export type Link = {
-  /**
-   * The text displayed for the link.
-   */
-  label: string;
-  /**
-   * The URL the link points to.
-   */
-  url: string;
-  id?: string | null;
-}[];
-/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -699,6 +684,22 @@ export interface LinkGroup {
   links: Link;
 }
 /**
+ * Single button displayed on the right side of the navbar.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Link".
+ */
+export interface Link {
+  /**
+   * The text displayed for the sign in button.
+   */
+  label: string;
+  /**
+   * The URL the sign in button points to.
+   */
+  url: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navbar".
  */
@@ -708,33 +709,8 @@ export interface Navbar {
    * The logo displayed in the navbar.
    */
   logo: string | Media;
-  /**
-   * Navigation items (max 5).
-   */
-  navItems: {
-    /**
-     * The text displayed for the navigation item.
-     */
-    label: string;
-    /**
-     * The URL the navigation item points to.
-     */
-    url: string;
-    id?: string | null;
-  }[];
-  /**
-   * Single button displayed on the right side of the navbar.
-   */
-  rightSideSingleButton: {
-    /**
-     * The text displayed for the sign in button.
-     */
-    label: string;
-    /**
-     * The URL the sign in button points to.
-     */
-    url: string;
-  };
+  navItems: Link;
+  rightSideSingleButton: Link;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -791,7 +767,6 @@ export interface LinkGroupSelect<T extends boolean = true> {
 export interface LinkSelect<T extends boolean = true> {
   label?: T;
   url?: T;
-  id?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -799,19 +774,8 @@ export interface LinkSelect<T extends boolean = true> {
  */
 export interface NavbarSelect<T extends boolean = true> {
   logo?: T;
-  navItems?:
-    | T
-    | {
-        label?: T;
-        url?: T;
-        id?: T;
-      };
-  rightSideSingleButton?:
-    | T
-    | {
-        label?: T;
-        url?: T;
-      };
+  navItems?: T | LinkSelect<T>;
+  rightSideSingleButton?: T | LinkSelect<T>;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
