@@ -1,30 +1,11 @@
 import { Security } from "@/business-layer/middleware/Security"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
+import { CreateSemesterRequestBody } from "@/test-config/mocks/Semester.mock"
 import type { CreateSemesterData } from "@repo/shared"
 import { StatusCodes, getReasonPhrase } from "http-status-codes"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { ZodError, z } from "zod"
-
-export const CreateSemesterRequestBody = z.object({
-  name: z.string(),
-  startDate: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  endDate: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  breakStart: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  breakEnd: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  bookingOpenDay: z.enum([
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ]),
-  bookingOpenTime: z
-    .string()
-    .datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-})
+import { ZodError } from "zod"
 
 class SemesterRouteWrapper {
   /**
