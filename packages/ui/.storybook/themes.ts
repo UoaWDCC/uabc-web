@@ -1,6 +1,6 @@
 import { defaultTheme } from "@repo/theme"
-import { themes } from "@storybook/theming"
 import type { BaseTheme } from "@yamada-ui/react"
+import { themes } from "storybook/theming"
 
 const fonts = defaultTheme.fonts as BaseTheme["fonts"]
 const colors = defaultTheme.colors as Record<string, Record<string, string>>
