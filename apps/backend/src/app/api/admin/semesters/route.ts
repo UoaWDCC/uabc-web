@@ -1,7 +1,7 @@
 import { Security } from "@/business-layer/middleware/Security"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
-import { CreateSemesterRequestBody } from "@/test-config/mocks/Semester.mock"
 import type { CreateSemesterData } from "@repo/shared"
+import { CreateSemesterRequestBody } from "@repo/shared"
 import { StatusCodes, getReasonPhrase } from "http-status-codes"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"

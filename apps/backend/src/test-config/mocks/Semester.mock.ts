@@ -1,6 +1,5 @@
 import type { CreateSemesterData } from "@repo/shared"
 import type { Semester } from "@repo/shared/payload-types"
-import { z } from "zod"
 
 export const semesterCreateMock: CreateSemesterData = {
   name: "Semester 1 2025",
@@ -24,23 +23,3 @@ export const semesterMock: Semester = {
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),
 }
-
-export const CreateSemesterRequestBody = z.object({
-  name: z.string(),
-  startDate: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  endDate: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  breakStart: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  breakEnd: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  bookingOpenDay: z.enum([
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ]),
-  bookingOpenTime: z
-    .string()
-    .datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-})
