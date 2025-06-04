@@ -63,7 +63,10 @@
   },
   "packageManager": "pnpm@10.11.0",
   "pnpm": {
-    "onlyBuiltDependencies": ["sharp"]
+    "onlyBuiltDependencies": ["sharp"],
+    "patchedDependencies": {
+      "storybook-dark-mode": "patches/storybook-dark-mode.patch"
+    }
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["biome check --write ."]
