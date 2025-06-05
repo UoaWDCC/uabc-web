@@ -93,7 +93,7 @@ jobs:
     name: ${{ matrix.job }}
     strategy:
       matrix:
-        job: [biome, build, typecheck, test, codegen]
+        job: [Biome, Build, Typecheck, Test, Codegen]
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
@@ -131,11 +131,11 @@ jobs:
           run_install: false
 
       - name: Run Biome
-        if: matrix.job == 'biome'
+        if: matrix.job == 'Biome'
         run: pnpm biome check .
 
       - name: Restore Next.js cache
-        if: matrix.job == 'build' && steps.node-modules-cache.outputs.cache-hit != 'true'
+        if: matrix.job == 'Build' && steps.node-modules-cache.outputs.cache-hit != 'true'
         uses: actions/cache@v4
         with:
           path: apps/*/.next/cache
@@ -144,36 +144,36 @@ jobs:
             ${{ runner.os }}-next-
 
       - name: Build
-        if: matrix.job == 'build'
+        if: matrix.job == 'Build'
         env:
           PAYLOAD_SECRET: ${{secrets.PAYLOAD_SECRET}}
           DATABASE_URI: ${{secrets.DATABASE_URI}}
         run: pnpm build
 
       - name: Type Check
-        if: matrix.job == 'typecheck'
+        if: matrix.job == 'Typecheck'
         run: pnpm check-types
 
       - name: Test with Coverage
-        if: matrix.job == 'test'
+        if: matrix.job == 'Test'
         run: |
           mkdir -p coverage
           pnpm test:coverage
           pnpm merge
 
       - name: Upload Coverage Artifact
-        if: matrix.job == 'test'
+        if: matrix.job == 'Test'
         uses: actions/upload-artifact@v4
         with:
           name: local-coverage
           path: coverage
 
       - name: Generate typing
-        if: matrix.job == 'codegen'
+        if: matrix.job == 'Codegen'
         run: pnpm generate:types
 
       - name: Write git diff
-        if: matrix.job == 'codegen'
+        if: matrix.job == 'Codegen'
         run: |
           if git diff --quiet; then
             echo "TYPE_GEN_DIFF=0" >> $GITHUB_ENV
@@ -182,7 +182,7 @@ jobs:
           fi
 
       - name: Check for differences in typing
-        if: matrix.job == 'codegen' && env.TYPE_GEN_DIFF != '0'
+        if: matrix.job == 'Codegen' && env.TYPE_GEN_DIFF != '0'
         uses: actions/github-script@v3
         with:
           script: |
