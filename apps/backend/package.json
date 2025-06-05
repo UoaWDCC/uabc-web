@@ -25,10 +25,10 @@
     "googleapis": "149.0.0",
     "http-status-codes": "2.3.0",
     "jsonwebtoken": "9.0.2",
-    "next": "15.2.3",
+    "next": "15.3.3",
     "payload": "3.40.0",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "sharp": "0.34.2",
     "zod": "3.24.3"
   },
