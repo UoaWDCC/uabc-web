@@ -90,6 +90,7 @@ jobs:
   parallel-jobs:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: ${{ matrix.job }}
     strategy:
       matrix:
         job: [biome, build, typecheck, test, codegen]
