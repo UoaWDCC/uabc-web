@@ -21,7 +21,7 @@
         "TURBO_TOKEN"
       ],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
+      "outputs": ["dist/**", ".next/**", "public/dist/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types", "@repo/test-config#build"],
