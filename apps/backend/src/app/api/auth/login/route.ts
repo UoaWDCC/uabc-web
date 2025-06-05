@@ -25,20 +25,20 @@ export const POST = async (req: NextRequest) => {
     user = await userDataService.getUserByEmail(email)
   } catch (error) {
     if (error instanceof NotFound) {
-      return NextResponse.json({
-        error: "Invalid email or password",
-        status: StatusCodes.UNAUTHORIZED,
-      })
+      return NextResponse.json(
+        { error: "Invalid email or password" },
+        { status: StatusCodes.UNAUTHORIZED },
+      )
     }
     throw error
   }
 
-  const passwordVerified = StandardSecurity.verifyPassword(password, auth.password as string)
+  const passwordVerified = await StandardSecurity.verifyPassword(password, auth.password as string)
   if (!passwordVerified) {
-    return NextResponse.json({
-      error: "Invalid email or password",
-      status: StatusCodes.UNAUTHORIZED,
-    })
+    return NextResponse.json(
+      { error: "Invalid email or password" },
+      { status: StatusCodes.UNAUTHORIZED },
+    )
   }
 
   const token = authService.signJWT({ user }, { expiresIn: "1h" })

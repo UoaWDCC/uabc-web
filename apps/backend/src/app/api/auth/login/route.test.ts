@@ -48,7 +48,10 @@ describe("POST api/auth/login", () => {
 
   it("returns 401 if password is invalid", async () => {
     const authDataService = new AuthDataService()
+    const userDataService = new UserDataService()
+
     const _newAuth = await authDataService.createAuth(standardAuthCreateMock)
+    const _newUser = await userDataService.createUser(userCreateMock)
 
     const req = createMockNextRequest("/api/auth/login", EMAIL_MOCK, "invalid-passw0rd")
     const response = await login(req)
