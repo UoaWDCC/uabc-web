@@ -70,18 +70,18 @@ jobs:
             ${{ runner.os }}-node-modules-
           lookup-only: true
 
+      - name: Setup Node.js
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
       - name: Setup pnpm
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         uses: pnpm/action-setup@v2
         with:
           version: latest
           run_install: false
-
-      - name: Setup Node.js
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
 
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
@@ -118,16 +118,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-modules-
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: latest
           run_install: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
 
       - name: Run Biome
         if: matrix.job == 'biome'
