@@ -168,6 +168,12 @@ jobs:
           name: local-coverage
           path: coverage
 
+      - name: Run Vitest Coverage Composite Action
+        if: matrix.job == 'Test'
+        uses: ./.github/composite-actions/vitest-coverage
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Generate typing
         if: matrix.job == 'Codegen'
         run: pnpm generate:types
@@ -187,19 +193,6 @@ jobs:
         with:
           script: |
             core.setFailed('Your code generation for typings are not up to date. Run pnpm generate:types')
-
-  vitest-coverage:
-    name: Vitest Coverage
-    needs: [parallel-jobs]
-    if: ${{ needs.parallel-jobs.result == 'success' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run Vitest Coverage Composite Action
-        uses: ./.github/composite-actions/vitest-coverage
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   verify:
     name: Verify
