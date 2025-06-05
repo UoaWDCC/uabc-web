@@ -25,6 +25,8 @@ jobs:
       exists: ${{ steps.filter.outputs.exists }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Filter changes
         uses: yumemi-inc/path-filter@v2
@@ -46,12 +48,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'pnpm'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -59,48 +62,81 @@ jobs:
           version: latest
           run_install: false
 
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Restore Turborepo cache
-        id: cache
+        id: turbo-cache
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Restore node_modules cache
+        id: node-modules-cache
         uses: actions/cache@v4
         with:
           path: |
-            .turbo
             node_modules
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-turbo-
+            ${{ runner.os }}-node-modules-
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
       
-      - name: Upload cache
-        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Upload node_modules cache
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
         uses: actions/cache@v4
         with:
           path: |
-            .turbo
             node_modules
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-  biome:
+      - name: Upload Turborepo cache
+        if: steps.turbo-cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+
+  parallel-jobs:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Biome
+    strategy:
+      matrix:
+        job: [biome, build, typecheck, test, codegen]
+      fail-fast: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
+          cache: 'pnpm'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -108,203 +144,74 @@ jobs:
           version: latest
           run_install: false
 
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Restore Turborepo cache
         uses: actions/cache@v4
         with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v4
+        with:
           path: |
-            .turbo
             node_modules
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-turbo-
+            ${{ runner.os }}-node-modules-
 
-      - name: Check formatting
+      - name: Run Biome
+        if: matrix.job == 'biome'
         run: pnpm biome check .
 
-  build:
-    env:
-      PAYLOAD_SECRET: ${{secrets.PAYLOAD_SECRET}}
-      DATABASE_URI: ${{secrets.DATABASE_URI}}
-    needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-          run_install: false
-
-      - name: Restore Turborepo cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .turbo
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-
       - name: Build
-        run: pnpm turbo run build
-
-  typecheck:
-    needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: TypeScript
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-          run_install: false
-
-      - name: Restore Turborepo cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .turbo
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
+        if: matrix.job == 'build'
+        env:
+          PAYLOAD_SECRET: ${{secrets.PAYLOAD_SECRET}}
+          DATABASE_URI: ${{secrets.DATABASE_URI}}
+        run: pnpm build
 
       - name: Type Check
-        run: pnpm turbo run check-types
-
-  test:
-    needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-          run_install: false
-
-      - name: Restore Turborepo cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .turbo
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
+        if: matrix.job == 'typecheck'
+        run: pnpm check-types
 
       - name: Test with Coverage
+        if: matrix.job == 'test'
         run: |
           mkdir -p coverage
           pnpm test:coverage
           pnpm merge
 
       - name: Upload Coverage Artifact
+        if: matrix.job == 'test'
         uses: actions/upload-artifact@v4
         with:
           name: local-coverage
           path: coverage
 
-  vitest-coverage:
-    name: Vitest Coverage
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-
-      - name: Run Vitest Coverage Composite Action
-        uses: ./.github/composite-actions/vitest-coverage
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-  codegen:
-    needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Codegen
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-          run_install: false
-
-      - name: Restore Turborepo cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .turbo
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-
       - name: Generate typing
-        run: pnpm turbo run generate:types
+        if: matrix.job == 'codegen'
+        run: pnpm generate:types
 
       - name: Write git diff
+        if: matrix.job == 'codegen'
         run: |
           if git diff --quiet; then
             echo "TYPE_GEN_DIFF=0" >> $GITHUB_ENV
@@ -313,15 +220,30 @@ jobs:
           fi
 
       - name: Check for differences in typing
-        if: ${{ env.TYPE_GEN_DIFF != '0'}}
+        if: matrix.job == 'codegen' && env.TYPE_GEN_DIFF != '0'
         uses: actions/github-script@v3
         with:
           script: |
             core.setFailed('Your code generation for typings are not up to date. Run pnpm generate:types')
 
+  vitest-coverage:
+    name: Vitest Coverage
+    needs: [parallel-jobs]
+    if: ${{ needs.parallel-jobs.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Vitest Coverage Composite Action
+        uses: ./.github/composite-actions/vitest-coverage
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
   verify:
     name: Verify
-    needs: [check_changes, build, biome, test, codegen, typecheck]
+    needs: [check_changes, parallel-jobs]
     runs-on: ubuntu-latest
     if: >
       always() && 
