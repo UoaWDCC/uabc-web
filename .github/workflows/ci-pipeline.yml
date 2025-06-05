@@ -47,8 +47,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
 
       - name: Restore Turborepo cache
         id: turbo-cache
@@ -101,8 +99,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
 
       - name: Restore Turborepo cache
         uses: actions/cache@v4
@@ -191,8 +187,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
 
       - name: Run Vitest Coverage Composite Action
         uses: ./.github/composite-actions/vitest-coverage
