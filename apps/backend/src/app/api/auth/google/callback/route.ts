@@ -1,4 +1,4 @@
-import { googleAuthScopes, oauth2Client } from "@/business-layer/provider/google"
+import { GoogleProvider, googleAuthScopes } from "@/business-layer/provider/google"
 import AuthService from "@/business-layer/services/AuthService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
@@ -37,24 +37,9 @@ export const GET = async (req: NextRequest) => {
       { status: StatusCodes.BAD_REQUEST },
     )
 
-  let tokens: {
-    access_token?: string | null
-    expiry_date?: number | null
-    id_token?: string | null
-  } = {}
+  const tokens = await GoogleProvider.fetchTokens(code)
 
-  try {
-    const tokenFetchResponse = await oauth2Client.getToken(code)
-    tokens = tokenFetchResponse.tokens
-  } catch (error: unknown) {
-    console.error(error)
-    return NextResponse.json(
-      { error: "Error invalid google auth" },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR },
-    )
-  }
-
-  if (!tokens || !tokens.access_token || !tokens.expiry_date || !tokens.id_token) {
+  if (!tokens) {
     return NextResponse.json(
       { error: "Error invalid google auth" },
       { status: StatusCodes.INTERNAL_SERVER_ERROR },
