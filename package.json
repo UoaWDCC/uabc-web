@@ -26,7 +26,7 @@
     "test:watch": "cross-env NODE_ENV=test turbo run test:watch",
     "test:coverage": "cross-env NODE_ENV=test turbo run test:coverage",
     "test:coverage:watch": "cross-env NODE_ENV=test turbo run test:coverage:watch",
-    "test:coverage:collect": "turbo run test:coverage:collect",
+    "test:ui": "cross-env NODE_ENV=test turbo run test:ui",
     "merge": "pnpm --filter=@repo/test-config build && pnpm --prefix=packages/test-config run merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
     "postinstall": "pnpm theme",
@@ -61,9 +61,12 @@
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.1.4"
   },
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.11.1",
   "pnpm": {
-    "onlyBuiltDependencies": ["sharp"]
+    "onlyBuiltDependencies": ["sharp"],
+    "patchedDependencies": {
+      "storybook-dark-mode": "patches/storybook-dark-mode.patch"
+    }
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["biome check --write ."]
