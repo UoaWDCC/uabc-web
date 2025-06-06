@@ -2,6 +2,7 @@ import type { CollectionSlug } from "payload"
 
 import AuthService from "@/business-layer/services/AuthService"
 import { payload } from "@/data-layer/adapters/Payload"
+import UserDataService from "@/data-layer/services/UserDataService"
 import { clearCollection } from "./backend-utils"
 import { JWT_SECRET_MOCK } from "./mocks/GoogleAuth.mock"
 import { adminUserMock, casualUserMock, memberUserMock } from "./mocks/User.mock"
@@ -38,14 +39,7 @@ beforeEach(async () => {
   }))
 
   const usersToCreate = [casualUserMock, memberUserMock, adminUserMock]
-  await Promise.all(
-    usersToCreate.map((user) =>
-      payload.create({
-        collection: "user",
-        data: user,
-      }),
-    ),
-  )
+  await Promise.all(usersToCreate.map(new UserDataService().createUser))
   casualToken = authService.signJWT({ user: casualUserMock })
   memberToken = authService.signJWT({ user: memberUserMock })
   adminToken = authService.signJWT({ user: adminUserMock })
