@@ -5,6 +5,7 @@ import {
 } from "@/test-config/mocks/Authentication.mock"
 import { userMock } from "@/test-config/mocks/User.mock"
 import "dotenv/config"
+import type { Authentication } from "@repo/shared/payload-types"
 import AuthDataService from "./AuthDataService"
 import UserDataService from "./UserDataService"
 
@@ -16,9 +17,11 @@ describe("auth service", () => {
     await userDataService.createUser(userMock)
 
     const newAuth = await authDataService.createAuth(googleAuthCreateMock)
+    expect(newAuth).toBeDefined()
+
     const fetchedAuth = await payload.findByID({
       collection: "authentication",
-      id: newAuth.id,
+      id: (newAuth as Authentication).id,
     })
     expect(fetchedAuth).toEqual(newAuth)
   })
@@ -27,9 +30,11 @@ describe("auth service", () => {
     await userDataService.createUser(userMock)
 
     const newAuth = await authDataService.createAuth(standardAuthCreateMock)
+    expect(newAuth).toBeDefined()
+
     const fetchedAuth = await payload.findByID({
       collection: "authentication",
-      id: newAuth.id,
+      id: (newAuth as Authentication).id,
     })
     expect(fetchedAuth).toEqual(newAuth)
   })
