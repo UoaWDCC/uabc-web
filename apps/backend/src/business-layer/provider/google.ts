@@ -32,7 +32,10 @@ export class GoogleProvider {
 
       if (!hasMissingToken) return tokens as Credentials
     } catch (error) {
-      console.error(error)
+      console.error(
+        "[Google Provider] Something went wrong when attempting to fetch tokens. Further details below:\n",
+        error,
+      )
     }
   }
 
@@ -47,7 +50,10 @@ export class GoogleProvider {
 
     oauth2Client.revokeToken(token, (error) => {
       if (error) {
-        console.error("Failed to revoke token:", error)
+        console.error(
+          "[Google Provider] Something went wrong when attempting to revoke tokens. Further details below:\n",
+          error,
+        )
         success = false
       }
     })

@@ -18,7 +18,7 @@ export const GET = async (req: NextRequest) => {
   const cookieState = cookieStore.get("state")
   if (!state || !cookieState?.value || state.toString() !== cookieState.value.toString()) {
     return NextResponse.json(
-      { error: "State missing, or state doesn't match browser state. " },
+      { error: "State missing, or state doesn't match browser state." },
       {
         status: StatusCodes.BAD_REQUEST,
       },
