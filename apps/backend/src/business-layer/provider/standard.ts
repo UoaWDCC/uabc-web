@@ -1,7 +1,7 @@
 import { LoginDetailsSchema } from "@repo/shared"
 import bcrypt from "bcryptjs"
 
-export default class StandardSecurity {
+export default class StandardProvider {
   /**
    * Hashes a password using bcrypt.
    *
