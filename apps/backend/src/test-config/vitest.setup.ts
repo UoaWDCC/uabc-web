@@ -1,13 +1,21 @@
 import type { CollectionSlug } from "payload"
 
+import AuthService from "@/business-layer/services/AuthService"
 import { payload } from "@/data-layer/adapters/Payload"
 import { clearCollection } from "./backend-utils"
 import { JWT_SECRET_MOCK } from "./mocks/GoogleAuth.mock"
+import { adminUserMock, casualUserMock, memberUserMock } from "./mocks/User.mock"
 
 let cookies: Record<string, string> = {}
 let headers: Record<string, string> = {}
 
-beforeEach(() => {
+let casualToken: string
+let memberToken: string
+let adminToken: string
+
+const authService = new AuthService()
+
+beforeEach(async () => {
   process.env.JWT_SECRET = JWT_SECRET_MOCK
 
   vi.mock("next/headers", () => ({
@@ -28,6 +36,19 @@ beforeEach(() => {
       }),
     })),
   }))
+
+  const usersToCreate = [casualUserMock, memberUserMock, adminUserMock]
+  await Promise.all(
+    usersToCreate.map((user) =>
+      payload.create({
+        collection: "user",
+        data: user,
+      }),
+    ),
+  )
+  casualToken = authService.signJWT({ user: casualUserMock })
+  memberToken = authService.signJWT({ user: memberUserMock })
+  adminToken = authService.signJWT({ user: adminUserMock })
 })
 
 afterEach(async () => {
@@ -37,3 +58,17 @@ afterEach(async () => {
   cookies = {}
   headers = {}
 })
+
+/**
+ * Exported tokens are used for tests that require authentication.
+ *
+ * @example
+ * describe("Some test", () => {
+ *   const cookieStore = await cookies()
+ *   it("should do something with casual user", async () => {
+ *     cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+ *     const response = await GET()
+ *   })
+ * })
+ */
+export { casualToken, memberToken, adminToken }

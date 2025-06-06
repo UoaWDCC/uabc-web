@@ -1,15 +1,14 @@
 import { config, theme } from "@repo/theme"
-import type { DocsContainerProps } from "@storybook/blocks"
-import { DocsContainer } from "@storybook/blocks"
-import { addons } from "@storybook/preview-api"
+import type { DocsContainerProps } from "@storybook/addon-docs/blocks"
+import { DocsContainer } from "@storybook/addon-docs/blocks"
 import type { Preview } from "@storybook/react"
-import { themes } from "@storybook/theming"
 import { UIProvider, VStack, useColorMode } from "@yamada-ui/react"
 import type { FC, PropsWithChildren } from "react"
 import { useEffect, useState } from "react"
 import { DARK_MODE_EVENT_NAME } from "storybook-dark-mode"
+import { addons } from "storybook/preview-api"
+import { themes } from "storybook/theming"
 import { customThemes } from "./themes"
-
 import "./styles.css"
 
 const channel = addons.getChannel()
@@ -81,6 +80,7 @@ const preview: Preview = {
         order: ["Theme", "Components"],
       },
     },
+    codePanel: true,
   },
 
   decorators: [
