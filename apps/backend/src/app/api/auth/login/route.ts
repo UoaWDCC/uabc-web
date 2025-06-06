@@ -25,14 +25,14 @@ export const POST = async (req: NextRequest) => {
     user = await userDataService.getUserByEmail(email)
   } catch (error) {
     if (error instanceof NotFound) {
-      return NextResponse.json({ status: StatusCodes.UNAUTHORIZED })
+      return NextResponse.json({}, { status: StatusCodes.UNAUTHORIZED })
     }
     throw error
   }
 
   const passwordVerified = await StandardSecurity.verifyPassword(password, auth.password as string)
   if (!passwordVerified) {
-    return NextResponse.json({ status: StatusCodes.UNAUTHORIZED })
+    return NextResponse.json({}, { status: StatusCodes.UNAUTHORIZED })
   }
 
   const token = authService.signJWT({ user }, { expiresIn: "1h" })
