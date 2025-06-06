@@ -10,6 +10,7 @@ on:
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
       - '.github/workflows/deploy-github-pages.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read

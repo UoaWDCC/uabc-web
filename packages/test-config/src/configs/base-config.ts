@@ -3,13 +3,14 @@ import tsconfigPaths from "vite-tsconfig-paths"
 import { coverageConfigDefaults, defineConfig } from "vitest/config"
 
 export const baseConfig = defineConfig({
-  plugins: [tsconfigPaths(), react()],
+  plugins: [tsconfigPaths(), react({ tsDecorators: true })],
   test: {
     setupFiles: ["dotenv/config"],
     globals: true,
     maxWorkers: process.env.CI === "true" ? 1 : undefined,
     minWorkers: process.env.CI === "true" ? 1 : undefined,
     coverage: {
+      reportOnFailure: true,
       provider: "istanbul",
       thresholds: {
         branches: 60, // this is for overall vitest coverage report
