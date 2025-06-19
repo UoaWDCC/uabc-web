@@ -78,7 +78,7 @@ jobs:
       
       - name: Upload cache
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
