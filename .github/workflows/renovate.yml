@@ -58,7 +58,7 @@ jobs:
           RENOVATE_REPOSITORY_CACHE: ${{ github.event.inputs.repoCache }}
 
       - name: Compress renovate cache
-        if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset' }}
+        if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset' && hashFiles(env.cache_dir)  }}
         run: |
           ls $cache_dir
           tar -czvf $cache_archive -C $cache_dir .
@@ -69,4 +69,4 @@ jobs:
         with:
           name: ${{ env.cache_key }}
           path: ${{ env.cache_archive }}
-          retention-days: 1
+          retention-days: 5
