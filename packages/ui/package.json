@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@repo/theme": "workspace:*",
-    "@storybook/nextjs": "9.0.4",
+    "@storybook/nextjs": "9.0.12",
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.6",
     "next": "15.3.3",
