@@ -110,6 +110,7 @@ jobs:
 
       - name: Restore Turborepo cache
         uses: actions/cache@v4
+        id: cache
         with:
           path: |
             .turbo
@@ -120,6 +121,10 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
+
+      - name: Install dependencies if cache is not hit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
 
       - name: Check formatting
         run: pnpm biome check .
@@ -151,6 +156,7 @@ jobs:
 
       - name: Restore Turborepo cache
         uses: actions/cache@v4
+        id: cache
         with:
           path: |
             .turbo
@@ -161,6 +167,10 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
+
+      - name: Install dependencies if cache is not hit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm turbo run build
@@ -189,6 +199,7 @@ jobs:
 
       - name: Restore Turborepo cache
         uses: actions/cache@v4
+        id: cache
         with:
           path: |
             .turbo
@@ -199,6 +210,10 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
+
+      - name: Install dependencies if cache is not hit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
 
       - name: Type Check
         run: pnpm turbo run check-types
@@ -229,6 +244,7 @@ jobs:
 
       - name: Restore Turborepo cache
         uses: actions/cache@v4
+        id: cache
         with:
           path: |
             .turbo
@@ -239,6 +255,10 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
+
+      - name: Install dependencies if cache is not hit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
 
       - name: Test with Coverage
         run: |
@@ -290,6 +310,7 @@ jobs:
 
       - name: Restore Turborepo cache
         uses: actions/cache@v4
+        id: cache
         with:
           path: |
             .turbo
@@ -300,6 +321,10 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
+
+      - name: Install dependencies if cache is not hit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
 
       - name: Generate typing
         run: pnpm turbo run generate:types
