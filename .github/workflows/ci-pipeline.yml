@@ -10,6 +10,12 @@ env:
   CI: 'true'
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  CI_IGNORE: |
+    *.md
+    .gitignore
+    .gitattributes
+    .vscode/**
+    .env.example
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -25,18 +31,34 @@ jobs:
       exists: ${{ steps.filter.outputs.exists }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Filter changes
-        uses: yumemi-inc/path-filter@v2
-        id: filter
         with:
-          patterns: |
-              **
-              !**.md
-              !.gitignore
-              !.gitattributes
-              !.vscode/**
-              !.env.example
+          fetch-depth: 2
+
+      - id: filter
+        shell: bash
+        run: |
+          # Determine the commit to diff against (push vs PR)
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE_SHA="${{ github.event.before }}"
+          fi
+
+          # List changed files between BASE_SHA and current HEAD
+          CHANGED=$(git diff --name-only "$BASE_SHA" "$GITHUB_SHA")
+
+          # Identify ignored files based on CI_IGNORE patterns
+          IGNORED=$(echo "$CHANGED" | git check-ignore --stdin --exclude-from=<(printf '%s\n' "$CI_IGNORE") || true)
+
+          # Remove ignored files from the changed list
+          FILTERED=$(comm -23 <(echo "$CHANGED" | sort) <(echo "$IGNORED" | sort))
+
+          # Output result for downstream jobs
+          if [[ -z "$FILTERED" ]]; then
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          fi
 
   # setup:
   #   name: Setup
