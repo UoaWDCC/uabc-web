@@ -59,19 +59,18 @@ jobs:
           version: latest
           run_install: false
 
-      - name: Restore Turborepo cache
+      - name: Restore node_modules cache
         id: cache
         uses: actions/cache@v4
         with:
           path: |
-            .turbo
             node_modules
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-turbo-
+            ${{ runner.os }}-node_modules-
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -82,12 +81,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            .turbo
             node_modules
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
   biome:
     needs: [check_changes, setup]
@@ -108,19 +106,18 @@ jobs:
           version: latest
           run_install: false
 
-      - name: Restore Turborepo cache
-        uses: actions/cache@v4
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v4
         id: cache
         with:
           path: |
-            .turbo
             node_modules
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-turbo-
+            ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
@@ -154,19 +151,18 @@ jobs:
           version: latest
           run_install: false
 
-      - name: Restore Turborepo cache
-        uses: actions/cache@v4
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v4
         id: cache
         with:
           path: |
-            .turbo
             node_modules
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-turbo-
+            ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
@@ -197,19 +193,18 @@ jobs:
           version: latest
           run_install: false
 
-      - name: Restore Turborepo cache
-        uses: actions/cache@v4
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v4
         id: cache
         with:
           path: |
-            .turbo
             node_modules
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-turbo-
+            ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
@@ -242,19 +237,18 @@ jobs:
           version: latest
           run_install: false
 
-      - name: Restore Turborepo cache
-        uses: actions/cache@v4
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v4
         id: cache
         with:
           path: |
-            .turbo
             node_modules
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-turbo-
+            ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
@@ -308,19 +302,18 @@ jobs:
           version: latest
           run_install: false
 
-      - name: Restore Turborepo cache
-        uses: actions/cache@v4
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v4
         id: cache
         with:
           path: |
-            .turbo
             node_modules
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-turbo-
+            ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
