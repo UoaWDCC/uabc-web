@@ -1,10 +1,9 @@
-import { Heading } from "@repo/ui/components/Heading"
-import { Container } from "@yamada-ui/react"
+import { Container, Heading } from "@yamada-ui/react"
 
 export default function Home() {
   return (
     <Container as="main">
-      <Heading.h1>UABC</Heading.h1>
+      <Heading as="h1">UABC</Heading>
     </Container>
   )
 }

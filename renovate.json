@@ -16,6 +16,11 @@
       "automergeType": "branch"
     },
     {
+      "description": "Group Yamada UI related packages",
+      "groupName": "yamada-ui",
+      "matchPackageNames": ["@yamada-ui*"]
+    },
+    {
       "description": "Group Next.js related packages",
       "groupName": "nextjs",
       "matchPackageNames": ["next*", "@next*"]
