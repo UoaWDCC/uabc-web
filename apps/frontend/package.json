@@ -7,7 +7,6 @@
     "build": "next build",
     "clean": "rm -rf dist .turbo *.log coverage node_modules .next",
     "start": "next start --port=3001",
-    "lint": "next lint",
     "test": "cross-env NODE_ENV=test vitest run",
     "test:watch": "cross-env NODE_ENV=test vitest",
     "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
