@@ -10,6 +10,12 @@ env:
   CI: 'true'
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  CI_IGNORE: |
+    *.md
+    .gitignore
+    .gitattributes
+    .vscode/**
+    .env.example
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -25,196 +31,202 @@ jobs:
       exists: ${{ steps.filter.outputs.exists }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Filter changes
-        uses: yumemi-inc/path-filter@v2
-        id: filter
-        with:
-          patterns: |
-              **
-              !**.md
-              !.gitignore
-              !.gitattributes
-              !.vscode/**
-              !.env.example
-
-  setup:
-    name: Setup
-    needs: check_changes
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
+      - id: filter
+        shell: bash
+        run: |
+          # Determine the commit to diff against (push vs PR)
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE_SHA="${{ github.event.before }}"
+          fi
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-          run_install: false
+          # List changed files between BASE_SHA and current HEAD
+          CHANGED=$(git diff --name-only "$BASE_SHA" "$GITHUB_SHA")
 
-      - name: Restore node_modules cache
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+          # Identify ignored files based on CI_IGNORE patterns
+          IGNORED=$(echo "$CHANGED" | git check-ignore --stdin --exclude-from=<(printf '%s\n' "$CI_IGNORE") || true)
 
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+          # Remove ignored files from the changed list
+          FILTERED=$(comm -23 <(echo "$CHANGED" | sort) <(echo "$IGNORED" | sort))
+
+          # Output result for downstream jobs
+          if [[ -z "$FILTERED" ]]; then
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # setup:
+  #   name: Setup
+  #   needs: check_changes
+  #   if: ${{ needs.check_changes.outputs.exists == 'true' }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 2
+
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version-file: '.nvmrc'
+
+  #     - name: Setup bun
+  #       uses: oven-sh/setup-bun@v2
+  #       with:
+  #         bun-version: latest
+
+  #     - name: Restore node_modules cache
+  #       id: cache
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: |
+  #           node_modules
+  #           */node_modules
+  #           packages/*/node_modules
+  #           apps/*/node_modules
+  #         key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-node_modules-
+
+  #     - name: Install dependencies
+  #       if: steps.cache.outputs.cache-hit != 'true'
+  #       run: bun install --frozen-lockfile
       
-      - name: Upload cache
-        if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+  #     - name: Upload cache
+  #       if: steps.cache.outputs.cache-hit != 'true'
+  #       uses: actions/cache/save@v4
+  #       with:
+  #         path: |
+  #           node_modules
+  #           */node_modules
+  #           packages/*/node_modules
+  #           apps/*/node_modules
+  #         key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
 
   biome:
-    needs: [check_changes, setup]
+    needs: [check_changes]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Biome
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version-file: '.nvmrc'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
-      - name: Restore node_modules cache
-        uses: actions/cache/restore@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+      # - name: Restore node_modules cache
+      #   uses: actions/cache/restore@v4
+      #   id: cache
+      #   with:
+      #     path: |
+      #       node_modules
+      #       */node_modules
+      #       packages/*/node_modules
+      #       apps/*/node_modules
+      #     key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        # if: steps.cache.outputs.cache-hit != 'true'
+        run: bun install --frozen-lockfile
 
       - name: Check formatting
-        run: pnpm biome check .
+        run: bun biome check .
 
   build:
     env:
       PAYLOAD_SECRET: ${{secrets.PAYLOAD_SECRET}}
       DATABASE_URI: ${{secrets.DATABASE_URI}}
-    needs: [check_changes, setup]
+    needs: [check_changes]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version-file: '.nvmrc'
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
-      - name: Restore node_modules cache
-        uses: actions/cache/restore@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+      # - name: Restore node_modules cache
+      #   uses: actions/cache/restore@v4
+      #   id: cache
+      #   with:
+      #     path: |
+      #       node_modules
+      #       */node_modules
+      #       packages/*/node_modules
+      #       apps/*/node_modules
+      #     key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        # if: steps.cache.outputs.cache-hit != 'true'
+        run: bun install --frozen-lockfile
 
       - name: Build
-        run: pnpm turbo run build
+        run: bun turbo run build
 
   typecheck:
-    needs: [check_changes, setup]
+    needs: [check_changes]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: TypeScript
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version-file: '.nvmrc'
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
-      - name: Restore node_modules cache
-        uses: actions/cache/restore@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+      # - name: Restore node_modules cache
+      #   uses: actions/cache/restore@v4
+      #   id: cache
+      #   with:
+      #     path: |
+      #       node_modules
+      #       */node_modules
+      #       packages/*/node_modules
+      #       apps/*/node_modules
+      #     key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        # if: steps.cache.outputs.cache-hit != 'true'
+        run: bun install --frozen-lockfile
 
       - name: Type Check
-        run: pnpm turbo run check-types
+        run: bun turbo run check-types
 
   test:
-    needs: [check_changes, setup]
+    needs: [check_changes]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Test
     runs-on: ubuntu-latest
@@ -223,42 +235,38 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version-file: '.nvmrc'
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
-      - name: Restore node_modules cache
-        uses: actions/cache/restore@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+      # - name: Restore node_modules cache
+      #   uses: actions/cache/restore@v4
+      #   id: cache
+      #   with:
+      #     path: |
+      #       node_modules
+      #       */node_modules
+      #       packages/*/node_modules
+      #       apps/*/node_modules
+      #     key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        # if: steps.cache.outputs.cache-hit != 'true'
+        run: bun install --frozen-lockfile
 
       - name: Test with Coverage
         run: |
           mkdir -p coverage
-          pnpm test:coverage
-          pnpm merge
+          bun test:coverage
+          bun merge
 
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4
@@ -281,46 +289,42 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   codegen:
-    needs: [check_changes, setup]
+    needs: [check_changes]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Codegen
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version-file: '.nvmrc'
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
-      - name: Restore node_modules cache
-        uses: actions/cache/restore@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+      # - name: Restore node_modules cache
+      #   uses: actions/cache/restore@v4
+      #   id: cache
+      #   with:
+      #     path: |
+      #       node_modules
+      #       */node_modules
+      #       packages/*/node_modules
+      #       apps/*/node_modules
+      #     key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        # if: steps.cache.outputs.cache-hit != 'true'
+        run: bun install --frozen-lockfile
 
       - name: Generate typing
-        run: pnpm turbo run generate:types
+        run: bun turbo run generate:types
 
       - name: Write git diff
         run: |
@@ -335,7 +339,7 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            core.setFailed('Your code generation for typings are not up to date. Run pnpm generate:types')
+            core.setFailed('Your code generation for typings are not up to date. Run bun generate:types')
 
   verify:
     name: Verify

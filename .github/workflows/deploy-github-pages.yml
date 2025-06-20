@@ -7,8 +7,8 @@ on:
     paths:
       - 'packages/**'
       - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
+      - 'bun.lock'
+      - 'bunfig.toml'
       - '.github/workflows/deploy-github-pages.yml'
   workflow_dispatch:
 
@@ -41,11 +41,10 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
       - name: Cache node_modules
         uses: actions/cache/restore@v4
@@ -55,16 +54,16 @@ jobs:
             node_modules
             */node_modules
             packages/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Build Storybook
-        run: pnpm turbo run storybook:build
+        run: bun turbo run storybook:build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

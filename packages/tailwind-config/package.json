@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "exports": "./tailwind.config.ts",
+  "scripts": {
+    "clean": "rm -rf dist .turbo *.log coverage node_modules"
+  },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "tailwindcss": "4.1.7",

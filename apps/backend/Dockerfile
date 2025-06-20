@@ -1,70 +1,72 @@
-# To use this Dockerfile, you have to set `output: 'standalone'` in your next.config.mjs file.
-# From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
+# syntax=docker/dockerfile:1
 
-FROM node:22.16.0-alpine AS base
+# Build stage
+FROM node:22-alpine AS builder
+ENV BUN_INSTALL="/usr/local"
+RUN apk add --no-cache curl unzip
+RUN curl -fsSL https://bun.sh/install | bash && ln -s /root/.bun/bin/bun /usr/local/bin/bun
+RUN bun install -g turbo
 
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-
-RUN corepack enable pnpm && pnpm install -g turbo
-
-# Stage 1: Setup build environment
-FROM base AS builder
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk update
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
+
+# Copy entire workspace
 COPY . .
-RUN turbo prune backend --docker
 
-# Stage 2: Install dependencies
-FROM base AS installer
-RUN apk update
-RUN apk add --no-cache libc6-compat
+# Run the build for the specific app
+RUN turbo prune --scope=backend --docker
+ 
+# Add lockfile and package.json's of isolated subworkspace
+FROM node:22-alpine AS installer
+ENV BUN_INSTALL="/usr/local"
+RUN apk add --no-cache curl unzip
+RUN curl -fsSL https://bun.sh/install | bash && ln -s /root/.bun/bin/bun /usr/local/bin/bun
+
 WORKDIR /app
+
+# First install the dependencies (this is done before copying the source code to leverage Docker layer caching)
 COPY .gitignore .gitignore
-COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-COPY --from=builder /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/bun.lockb ./bun.lockb
+COPY --from=builder /app/out/bunfig.toml ./bunfig.toml
 
-RUN pnpm install --frozen-lockfile
+# Install dependencies
+RUN bun install --frozen-lockfile
 
+# Build the project
 COPY --from=builder /app/out/full/ .
+COPY .env.example .env.local
 COPY turbo.json turbo.json
 
-ARG DATABASE_URI
-ARG JWT_SECRET
-ARG PAYLOAD_SECRET
-ARG GOOGLE_CLIENT_ID
-ARG GOOGLE_CLIENT_SECRET
-ARG NEXT_PUBLIC_URL
-ARG NEXT_PUBLIC_API_URL
-ARG TURBO_TEAM
-ARG TURBO_TOKEN
+# Build the project
+RUN bun build --filter backend
 
-ENV DATABASE_URI=${DATABASE_URI}
-ENV JWT_SECRET=${JWT_SECRET}
-ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
-ENV GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-ENV GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-ENV NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+# Production stage
+FROM node:22-alpine AS runner
+ENV BUN_INSTALL="/usr/local"
+RUN apk add --no-cache curl unzip
+RUN curl -fsSL https://bun.sh/install | bash && ln -s /root/.bun/bin/bun /usr/local/bin/bun
 
-# Now run the build
-RUN pnpm build --filter backend
-
-# Stage 3: Production server
-FROM base AS runner
 WORKDIR /app
-ENV NODE_ENV=production
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=installer /app/apps/backend/.next/standalone ./
-COPY --from=installer /app/apps/backend/.next/static ./apps/backend/.next/static
+# Copy the built application
+COPY --from=installer /app/apps/backend/dist ./dist
+COPY --from=installer /app/apps/backend/package.json .
+COPY --from=installer /app/node_modules ./node_modules
 
-ENV PORT=3000
+# Copy media assets
+RUN mkdir -p media
+COPY --from=installer /app/apps/backend/media ./media
+
+# Set the correct permission for built application
+RUN addgroup --system --gid 1001 payload
+RUN adduser --system --uid 1001 payload
+
+# Switch to the non-root user
+USER payload
 
 EXPOSE 3000
 
-CMD ["node", "apps/backend/server.js"]
+ENV PORT 3000
+ENV HOSTNAME 0.0.0.0
+
+CMD ["bun", "start"]

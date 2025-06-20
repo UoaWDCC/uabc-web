@@ -6,8 +6,9 @@
   "type": "module",
   "engines": {
     "node": ">=22",
-    "pnpm": "^10.0.0"
+    "bun": "^1.0.0"
   },
+  "workspaces": ["packages/*", "apps/*"],
   "scripts": {
     "build": "turbo run build",
     "check-types": "turbo run check-types",
@@ -20,17 +21,18 @@
     "precommit": "lint-staged",
     "prepare": "husky",
     "start": "turbo run start",
-    "storybook": "pnpm --prefix=packages/ui storybook",
+    "storybook": "bun --cwd=packages/ui storybook",
     "storybook:build": "turbo run storybook:build",
     "test": "cross-env NODE_ENV=test turbo run test",
     "test:watch": "cross-env NODE_ENV=test turbo run test:watch",
     "test:coverage": "cross-env NODE_ENV=test turbo run test:coverage",
     "test:coverage:watch": "cross-env NODE_ENV=test turbo run test:coverage:watch",
     "test:ui": "cross-env NODE_ENV=test turbo run test:ui",
-    "merge": "pnpm --filter=@repo/test-config build && pnpm --prefix=packages/test-config run merge",
+    "merge": "bun --cwd=packages/test-config run merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
-    "postinstall": "pnpm theme",
-    "commitlint": "commitlint --edit"
+    "postinstall": "bun theme",
+    "commitlint": "commitlint --edit",
+    "clean": "rm -rf dist .turbo *.log coverage node_modules && turbo clean"
   },
   "dependencies": {
     "cross-env": "7.0.3"
@@ -61,13 +63,8 @@
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.1.4"
   },
-  "packageManager": "pnpm@10.12.1",
-  "pnpm": {
-    "onlyBuiltDependencies": ["sharp"],
-    "patchedDependencies": {
-      "storybook-dark-mode": "patches/storybook-dark-mode.patch"
-    }
-  },
+  "packageManager": "bun@1.1.29",
+  "trustedDependencies": ["sharp"],
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["biome check --write ."]
   },

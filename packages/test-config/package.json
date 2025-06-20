@@ -11,12 +11,13 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "build": "tsc",
-    "merge": "node dist/scripts/merge-coverage.js"
+    "clean": "rm -rf dist .turbo *.log coverage node_modules",
+    "merge": "bun ./src/scripts/merge-coverage.ts"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@testing-library/jest-dom": "6.6.3",
-    "@yamada-ui/react": "1.7.6",
+    "@yamada-ui/react": "1.7.7",
     "mongodb-memory-server": "10.1.4",
     "typescript": "5.8.3"
   }

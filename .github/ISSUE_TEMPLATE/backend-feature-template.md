@@ -22,7 +22,7 @@ assignees: ''
 **BEFORE MERGING**
 - [ ] Integration test written for services
 - [ ] [Schemas annotated](https://payloadcms.com/docs/configuration/collections) if adding new models
-- [ ] Code generation run (*hint*: `pnpm generate:types`)
+- [ ] Code generation run (*hint*: `bun generate:types`)
 - [ ] Appropriate mocks created where possible
 - [ ] PR Reviewed (For non-trivial changes)
 - [ ] Changes tested after rebasing on master or merging in master (*hint*: `git fetch origin master:master`, then `git rebase master` or `git merge master`)

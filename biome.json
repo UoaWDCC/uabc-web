@@ -10,7 +10,7 @@
   "files": {
     "ignore": [
       "src/payload-types.ts",
-      "pnpm-lock.yaml",
+      "bun.lock",
       "*.md",
       ".github/",
       ".lintstagedrc",

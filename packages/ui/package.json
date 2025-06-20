@@ -12,6 +12,7 @@
   },
   "scripts": {
     "check-types": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo *.log coverage node_modules storybook-static",
     "storybook": "storybook dev -p 6006 -c .storybook",
     "storybook:build": "storybook build -c .storybook",
     "test": "cross-env NODE_ENV=test vitest run",
@@ -44,7 +45,7 @@
     "@types/node": "22.15.21",
     "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5",
-    "storybook-dark-mode": "4.0.2",
+    "@vueless/storybook-dark-mode": "9.0.4",
     "typescript": "5.8.3"
   }
 }
