@@ -34,7 +34,7 @@ Each application has its own deployment pipeline and can be developed independen
 
 #### Node.js installation
 
-You will first need to install `Node.js` in order to access the `pnpm` package manager.
+You will first need to install `Node.js` in order to access the `bun` package manager.
 
 **Volta (Recommended)**
 
@@ -59,29 +59,28 @@ nvm use
 
 ### Running the project
 
-#### Using pnpm
+#### Using bun
 
 If you complete one of the above steps, you can then install the project dependencies by running:
 
 ```bash
-corepack enable
-pnpm install
+bun install
 ```
 
 To start all applications in development mode:
 
 ```bash
-pnpm dev
+bun dev
 ```
 
 To run specific applications:
 
 ```bash
 # Run only the frontend
-pnpm dev --filter=frontend
+bun dev --filter=frontend
 
 # Run only the backend
-pnpm dev --filter=backend
+bun dev --filter=backend
 ```
 
 The development servers will be running at:
@@ -94,9 +93,9 @@ We rely on [Biome](http://biomejs.dev/) to keep the codebase clean and consisten
 
 If you want to manually run Biome commands yourself:
 ```bash
-pnpm biome format . # Check formatting
-pnpm biome lint .   # Check linting
-pnpm biome check .  # Check both
+bun biome format . # Check formatting
+bun biome lint .   # Check linting
+bun biome check .  # Check both
 ```
 You can also add the `--write` flag to these commands to apply fixes to the code.
 
@@ -155,7 +154,7 @@ Then edit each `.env` file with the appropriate values.
 We use Payload's built in code generation to generate types for our project. To do this, you can run the following command:
 
 ```bash
-pnpm generate:types
+bun generate:types
 ```
 
 ### Update Type Definitions
@@ -163,7 +162,7 @@ pnpm generate:types
 To ensure proper type completions for Yamada UI theme tokens in Style Props, we use the Yamada CLI to update type definitions. This process helps maintain accurate TypeScript completions for our customized theme. The script is configured in our package.json to point to our custom theme location.
 
 ```bash
-pnpm theme
+bun theme
 ```
 
 This command will process the theme tokens defined in `./src/theme` and generate the necessary theme files.
@@ -181,7 +180,7 @@ Tests should be prefixed with the extension `*.test.ts|x`. For example, `adder.t
 To run all tests, the following command can be used:
 
 ```bash
-pnpm test
+bun test
 ```
 
 To run a single test, you can use the following command:
@@ -189,7 +188,7 @@ To run a single test, you can use the following command:
 ```bash
 # src/app/example-double-admin-count/route.ts can be any file path that points to a test.
 # Or you can replace the file path with a pattern (like a file name)
-pnpm test src/app/example-double-admin-count/route.test.ts
+bun test src/app/example-double-admin-count/route.test.ts
 ```
 
 ## Tech Stack ⚙

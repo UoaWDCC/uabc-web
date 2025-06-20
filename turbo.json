@@ -23,6 +23,9 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
     },
+    "clean": {
+      "cache": false
+    },
     "check-types": {
       "dependsOn": ["^check-types", "@repo/test-config#build"],
       "cache": true

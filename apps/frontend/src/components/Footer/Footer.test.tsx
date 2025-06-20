@@ -36,7 +36,7 @@ describe("<Footer />", () => {
     render(<Footer />)
     const currentYear = new Date().getFullYear()
     expect(
-      screen.getByText(`© ${currentYear} University of Auckland Badminton Club.`),
+      screen.getByText(`&copy; ${currentYear} University of Auckland Badminton Club.`),
     ).toBeInTheDocument()
     expect(screen.getByText("All rights reserved.")).toBeInTheDocument()
   })

@@ -53,11 +53,10 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
       - name: Restore node_modules cache
         id: cache
@@ -68,13 +67,13 @@ jobs:
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
       
       - name: Upload cache
         if: steps.cache.outputs.cache-hit != 'true'
@@ -85,7 +84,7 @@ jobs:
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
 
   biome:
     needs: [check_changes, setup]
@@ -100,11 +99,10 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
       - name: Restore node_modules cache
         uses: actions/cache/restore@v4
@@ -115,16 +113,16 @@ jobs:
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Check formatting
-        run: pnpm biome check .
+        run: bun biome check .
 
   build:
     env:
@@ -142,14 +140,10 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
       - name: Restore node_modules cache
         uses: actions/cache/restore@v4
@@ -160,16 +154,16 @@ jobs:
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Build
-        run: pnpm turbo run build
+        run: bun turbo run build
 
   typecheck:
     needs: [check_changes, setup]
@@ -184,14 +178,10 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
       - name: Restore node_modules cache
         uses: actions/cache/restore@v4
@@ -202,16 +192,16 @@ jobs:
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Type Check
-        run: pnpm turbo run check-types
+        run: bun turbo run check-types
 
   test:
     needs: [check_changes, setup]
@@ -228,14 +218,10 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
       - name: Restore node_modules cache
         uses: actions/cache/restore@v4
@@ -246,19 +232,19 @@ jobs:
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Test with Coverage
         run: |
           mkdir -p coverage
-          pnpm test:coverage
-          pnpm merge
+          bun test:coverage
+          bun merge
 
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4
@@ -293,14 +279,10 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
+          bun-version: latest
 
       - name: Restore node_modules cache
         uses: actions/cache/restore@v4
@@ -311,16 +293,16 @@ jobs:
             */node_modules
             packages/*/node_modules
             apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Generate typing
-        run: pnpm turbo run generate:types
+        run: bun turbo run generate:types
 
       - name: Write git diff
         run: |
@@ -335,7 +317,7 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            core.setFailed('Your code generation for typings are not up to date. Run pnpm generate:types')
+            core.setFailed('Your code generation for typings are not up to date. Run bun generate:types')
 
   verify:
     name: Verify

@@ -6,6 +6,7 @@
   "scripts": {
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
     "check-types": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo *.log coverage node_modules",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --port 3000",
     "start": "next start --port 3000",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",

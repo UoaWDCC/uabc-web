@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack --port=3001",
     "build": "next build",
+    "clean": "rm -rf dist .turbo *.log coverage node_modules",
     "start": "next start --port=3001",
     "lint": "next lint",
     "test": "cross-env NODE_ENV=test vitest run",

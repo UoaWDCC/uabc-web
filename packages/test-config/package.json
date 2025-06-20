@@ -11,7 +11,8 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "build": "tsc",
-    "merge": "node dist/scripts/merge-coverage.js"
+    "clean": "rm -rf dist .turbo *.log coverage node_modules",
+    "merge": "bun ./src/scripts/merge-coverage.ts"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
