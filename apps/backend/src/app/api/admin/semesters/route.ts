@@ -1,7 +1,7 @@
 import { Security } from "@/business-layer/middleware/Security"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import type { CreateSemesterData } from "@repo/shared"
-import { CreateSemesterRequestBody } from "@repo/shared"
+import { CreateSemesterRequestSchema } from "@repo/shared"
 import { StatusCodes, getReasonPhrase } from "http-status-codes"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
@@ -12,12 +12,12 @@ class SemesterRouteWrapper {
    * POST Method to create a new semester.
    *
    * @param req The request object containing the request body
-   * @returns The created semester.
+   * @returns The created {@link Semester} document.
    */
   @Security("jwt", ["admin"])
   static async POST(req: NextRequest) {
     try {
-      const parsedBody = CreateSemesterRequestBody.parse(await req.json())
+      const parsedBody = CreateSemesterRequestSchema.parse(await req.json())
       const semesterDataService = new SemesterDataService()
       const newSemester = await semesterDataService.createSemester(parsedBody as CreateSemesterData)
 

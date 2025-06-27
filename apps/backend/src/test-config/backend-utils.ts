@@ -1,6 +1,5 @@
 import configPromise from "@payload-config"
 import { NextRequest } from "next/server"
-// setup-teardown-hook.js
 import { type CollectionSlug, type Payload, getPayload } from "payload"
 
 /**
@@ -39,10 +38,10 @@ export const clearCollection = async (payloadObject: Payload, collectionName: Co
   })
 }
 
-export function createMockNextPostRequest(url: string, body: Record<string, unknown>) {
+export function createMockNextRequest(url: string, method = "GET", body?: Record<string, unknown>) {
   return new NextRequest(new URL(url, "http://localhost:3000"), {
-    method: "POST",
-    body: JSON.stringify(body),
+    method: method,
+    ...(body && { body: JSON.stringify(body) }),
     headers: {
       "Content-Type": "application/json",
     },
