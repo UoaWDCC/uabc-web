@@ -21,7 +21,7 @@ export const extractTextFromNodes = (nodes: SerializedLexicalNode[]): string => 
  */
 export const createAnchor = (text: string): string => {
   return text
-    .trim() // Remove leading/trailing whitespace first
+    .trim()
     .toLowerCase()
     .replace(/[^\w\s-]/g, "") // Remove special characters
     .replace(/\s+/g, "-") // Replace spaces with hyphens

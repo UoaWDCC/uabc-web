@@ -17,10 +17,6 @@ export const RichText: React.FC<RichTextProps> = React.memo(
     mediaBaseUrl,
     customComponents,
   }) => {
-    // Use singleton renderer directly for better performance
-    const renderer = richTextRenderer
-
-    // Memoize the options object to prevent unnecessary re-renders
     const options = React.useMemo(
       (): RichTextRendererOptions => ({
         textProps,
@@ -38,8 +34,8 @@ export const RichText: React.FC<RichTextProps> = React.memo(
       if (!data) {
         return null
       }
-      return renderer.render(data, options)
-    }, [data, options, renderer.render])
+      return richTextRenderer.render(data, options)
+    }, [data, options])
 
     if (!data) {
       return <>{fallback}</>

@@ -189,7 +189,6 @@ describe("Type Guards", () => {
       const invalidNode: Partial<SerializedTextNode> = {
         type: NodeType.TEXT,
         version: 1,
-        // Missing text property
       }
 
       expect(isTextNode(invalidNode as unknown as SerializedTextNode)).toBe(false)
@@ -210,7 +209,6 @@ describe("Type Guards", () => {
         type: NodeType.HEADING,
         children: [],
         version: 1,
-        // Missing tag
       }
 
       expect(isHeadingNode(invalidNode as unknown as SerializedHeadingNode)).toBe(false)
@@ -221,7 +219,6 @@ describe("Type Guards", () => {
         type: NodeType.HEADING,
         tag: "h1",
         version: 1,
-        // Missing children
       }
 
       expect(isHeadingNode(invalidNode as unknown as SerializedHeadingNode)).toBe(false)
@@ -258,7 +255,6 @@ describe("Type Guards", () => {
         type: NodeType.LINK,
         children: [],
         version: 1,
-        // Missing fields
       }
 
       expect(isLinkNode(invalidNode as unknown as SerializedLinkNode)).toBe(false)
@@ -292,7 +288,6 @@ describe("Type Guards", () => {
         type: NodeType.UPLOAD,
         value: { url: "/test.jpg" },
         version: 1,
-        // Missing relationTo
       }
 
       expect(isUploadNode(invalidNode as unknown as SerializedUploadNode)).toBe(false)
@@ -348,7 +343,6 @@ describe("Type Guards", () => {
         type: NodeType.LIST,
         children: [],
         version: 1,
-        // Missing tag
       }
 
       expect(isListNode(invalidNode as unknown as SerializedListNode)).toBe(false)

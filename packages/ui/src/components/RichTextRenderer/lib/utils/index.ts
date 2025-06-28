@@ -1,7 +1,5 @@
-// Core utilities
 export { extractTextFromNodes, createAnchor, createNodeKey } from "./core"
 
-// Type guards and validation
 export {
   isMediaDocument,
   isDocumentWithSlug,

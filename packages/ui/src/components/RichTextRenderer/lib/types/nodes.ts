@@ -1,12 +1,10 @@
 import type { LinkType, ListType, NodeType } from "../constants"
 
-// Basic Lexical node interface
 export interface SerializedLexicalNode {
   type: string
   version: number
 }
 
-// Extended Lexical node types
 export interface SerializedTextNode extends SerializedLexicalNode {
   type: NodeType.TEXT
   text: string
@@ -81,7 +79,6 @@ export interface SerializedMediaDocument extends SerializedLexicalNode {
   alt: string
 }
 
-// Editor state
 export interface SerializedEditorState {
   root: {
     children: SerializedLexicalNode[]

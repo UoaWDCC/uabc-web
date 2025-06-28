@@ -30,7 +30,6 @@ export const LinkFieldsSchema = z.object({
   doc: LinkDocumentSchema.optional(),
 })
 
-// Type exports
 export type MediaDocument = z.infer<typeof MediaDocumentSchema>
 export type DocumentWithSlug = z.infer<typeof DocumentWithSlugSchema>
 export type LinkDocument = z.infer<typeof LinkDocumentSchema>
