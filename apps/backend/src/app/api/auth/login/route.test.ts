@@ -8,15 +8,20 @@ import {
   PASSWORD_MOCK,
   standardAuthCreateMock,
 } from "@/test-config/mocks/Authentication.mock"
+import { STATE_MOCK } from "@/test-config/mocks/GoogleAuth.mock"
 import { createMockNextRequest } from "@/test-config/mocks/StandardAuth.mock"
 import { userCreateMock } from "@/test-config/mocks/User.mock"
 import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
 import bcrypt from "bcryptjs"
 import { StatusCodes } from "http-status-codes"
+import { cookies } from "next/headers"
 
 describe("api/auth/login", () => {
-  describe("POST", () => {
+  describe("POST", async () => {
+    const cookieStore = await cookies()
+
     it("redirects user and sets JWT token to cookies on success auth", async () => {
+      cookieStore.set("state", STATE_MOCK)
       const authDataService = new AuthDataService()
       const userDataService = new UserDataService()
 
@@ -24,7 +29,11 @@ describe("api/auth/login", () => {
       const _newUser = await userDataService.createUser(userCreateMock)
 
       const compareSpy = vi.spyOn(bcrypt, "compare").mockImplementationOnce(async () => true)
-      const req = createMockNextRequest("/api/auth/login", EMAIL_MOCK, PASSWORD_MOCK)
+      const req = createMockNextRequest(
+        `/api/auth/login?state=${STATE_MOCK}`,
+        EMAIL_MOCK,
+        PASSWORD_MOCK,
+      )
       const response = await login(req)
 
       expect(compareSpy).toHaveBeenCalledWith(PASSWORD_MOCK, HASHED_PASSWORD_MOCK)
@@ -42,21 +51,45 @@ describe("api/auth/login", () => {
       })
     })
 
+    it("returns 400 if state does not match", async () => {
+      cookieStore.set("state", STATE_MOCK)
+
+      const req = createMockNextRequest(
+        "/api/auth/login?state=wrong_state",
+        EMAIL_MOCK,
+        PASSWORD_MOCK,
+      )
+      const response = await login(req)
+
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+    })
+
     it("returns 401 if email is invalid", async () => {
-      const req = createMockNextRequest("/api/auth/login", "invalid-email@wdcc.com", PASSWORD_MOCK)
+      cookieStore.set("state", STATE_MOCK)
+
+      const req = createMockNextRequest(
+        `/api/auth/login?state=${STATE_MOCK}`,
+        "invalid-email@wdcc.com",
+        PASSWORD_MOCK,
+      )
       const response = await login(req)
 
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
     })
 
     it("returns 401 if password is invalid", async () => {
+      cookieStore.set("state", STATE_MOCK)
       const authDataService = new AuthDataService()
       const userDataService = new UserDataService()
 
       const _newAuth = await authDataService.createAuth(standardAuthCreateMock)
       const _newUser = await userDataService.createUser(userCreateMock)
 
-      const req = createMockNextRequest("/api/auth/login", EMAIL_MOCK, "invalid-passw0rd")
+      const req = createMockNextRequest(
+        `/api/auth/login?state=${STATE_MOCK}`,
+        EMAIL_MOCK,
+        "invalid-passw0rd",
+      )
       const response = await login(req)
 
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)

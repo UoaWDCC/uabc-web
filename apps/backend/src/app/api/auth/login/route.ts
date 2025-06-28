@@ -5,13 +5,23 @@ import UserDataService from "@/data-layer/services/UserDataService"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { Authentication, User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
+import { cookies } from "next/headers"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 
 export const POST = async (req: NextRequest) => {
+  const params = req.nextUrl.searchParams
+  const cookieStore = await cookies()
   const authDataService = new AuthDataService()
   const userDataService = new UserDataService()
   const authService = new AuthService()
+
+  const state = params.get("state")
+  const cookieState = cookieStore.get("state")
+  if (!state || !cookieState?.value || state.toString() !== cookieState.value.toString()) {
+    return NextResponse.json({}, { status: StatusCodes.BAD_REQUEST })
+  }
+  cookieStore.delete("state")
 
   const { email, password }: { email: string; password: string } = await req.json()
   if (!StandardSecurity.validateDetails(email, password)) {
