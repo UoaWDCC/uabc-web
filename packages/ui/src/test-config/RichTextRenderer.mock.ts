@@ -1,4 +1,9 @@
-import { TextFormat } from "@/components/RichTextRenderer/lib/constants"
+import {
+  LinkType,
+  ListType,
+  NodeType,
+  TextFormat,
+} from "@/components/RichTextRenderer/lib/constants"
 import type {
   SerializedCodeNode,
   SerializedEditorState,
@@ -12,679 +17,384 @@ import type {
   SerializedUploadNode,
 } from "@/components/RichTextRenderer/lib/types"
 
-// Basic Text Node Mocks
-export const plainTextNode: SerializedTextNode = {
-  type: "text",
-  text: "Plain text",
+export const createTextNode = (text = "Sample text", format?: TextFormat): SerializedTextNode => ({
+  type: NodeType.TEXT,
+  text,
+  format,
   version: 1,
-}
+})
 
-export const boldTextNode: SerializedTextNode = {
-  type: "text",
-  text: "Bold text",
-  format: TextFormat.BOLD,
+export const createHeadingNode = (
+  tag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = "h1",
+  text = "Sample Heading",
+): SerializedHeadingNode => ({
+  type: NodeType.HEADING,
+  tag,
   version: 1,
-}
+  children: [createTextNode(text)],
+})
 
-export const italicTextNode: SerializedTextNode = {
-  type: "text",
-  text: "Italic text",
-  format: TextFormat.ITALIC,
+export const createParagraphNode = (
+  children: (SerializedTextNode | SerializedLinkNode)[],
+): SerializedParagraphNode => ({
+  type: NodeType.PARAGRAPH,
   version: 1,
-}
+  children,
+})
 
-export const strikethroughTextNode: SerializedTextNode = {
-  type: "text",
-  text: "Strikethrough text",
-  format: TextFormat.STRIKETHROUGH,
-  version: 1,
-}
-
-export const underlineTextNode: SerializedTextNode = {
-  type: "text",
-  text: "Underlined text",
-  format: TextFormat.UNDERLINE,
-  version: 1,
-}
-
-export const codeTextNode: SerializedTextNode = {
-  type: "text",
-  text: "Code text",
-  format: TextFormat.CODE,
-  version: 1,
-}
-
-// Combined Formatting Text Nodes
-export const boldItalicTextNode: SerializedTextNode = {
-  type: "text",
-  text: "Bold and italic",
-  format: TextFormat.BOLD | TextFormat.ITALIC,
-  version: 1,
-}
-
-export const multipleFormatsTextNode: SerializedTextNode = {
-  type: "text",
-  text: "Multiple formats",
-  format: TextFormat.BOLD | TextFormat.ITALIC | TextFormat.STRIKETHROUGH | TextFormat.UNDERLINE,
-  version: 1,
-}
-
-export const strikeUnderlineTextNode: SerializedTextNode = {
-  type: "text",
-  text: "Strike and underline",
-  format: TextFormat.STRIKETHROUGH | TextFormat.UNDERLINE,
-  version: 1,
-}
-
-export const emptyTextNode: SerializedTextNode = {
-  type: "text",
-  text: "",
-  version: 1,
-}
-
-// Heading Node Mocks
-export const h1HeadingNode: SerializedHeadingNode = {
-  type: "heading",
-  tag: "h1",
-  version: 1,
-  children: [
-    {
-      type: "text",
-      text: "Main Heading",
-      version: 1,
-    } as SerializedTextNode,
-  ],
-}
-
-export const h2HeadingNode: SerializedHeadingNode = {
-  type: "heading",
-  tag: "h2",
-  version: 1,
-  children: [
-    {
-      type: "text",
-      text: "Sub Heading",
-      version: 1,
-    } as SerializedTextNode,
-  ],
-}
-
-export const h6HeadingNode: SerializedHeadingNode = {
-  type: "heading",
-  tag: "h6",
-  version: 1,
-  children: [
-    {
-      type: "text",
-      text: "Small Heading",
-      version: 1,
-    } as SerializedTextNode,
-  ],
-}
-
-// Paragraph Node Mocks
-export const simpleParagraphNode: SerializedParagraphNode = {
-  type: "paragraph",
-  version: 1,
-  children: [plainTextNode],
-}
-
-export const mixedFormattingParagraphNode: SerializedParagraphNode = {
-  type: "paragraph",
-  version: 1,
-  children: [
-    {
-      type: "text",
-      text: "This is ",
-      version: 1,
-    },
-    boldTextNode,
-    {
-      type: "text",
-      text: " and ",
-      version: 1,
-    },
-    italicTextNode,
-  ] as SerializedTextNode[],
-}
-
-export const emptyParagraphNode: SerializedParagraphNode = {
-  type: "paragraph",
-  version: 1,
-  children: [],
-}
-
-// Link Node Mocks
-export const externalLinkNode: SerializedLinkNode = {
-  type: "link",
+export const createLinkNode = (
+  url = "https://example.com",
+  text = "Link",
+  options: {
+    linkType?: LinkType.CUSTOM | LinkType.INTERNAL
+    newTab?: boolean
+    doc?: { id: string; slug: string; title: string }
+  } = {},
+): SerializedLinkNode => ({
+  type: NodeType.LINK,
   fields: {
-    linkType: "custom",
-    url: "https://example.com",
-    newTab: true,
+    linkType: options.linkType || LinkType.CUSTOM,
+    ...(options.linkType === LinkType.INTERNAL && options.doc ? { doc: options.doc } : { url }),
+    newTab: options.newTab || false,
   },
   version: 1,
-  children: [
-    {
-      type: "text",
-      text: "External Link",
-      version: 1,
-    } as SerializedTextNode,
-  ],
-}
+  children: [createTextNode(text)],
+})
 
-export const internalLinkNode: SerializedLinkNode = {
-  type: "link",
+export const createInvalidLinkNode = (
+  text = "Invalid Link",
+  fields: Partial<SerializedLinkNode["fields"]> = {},
+): SerializedLinkNode => ({
+  type: NodeType.LINK,
+  fields: fields as SerializedLinkNode["fields"],
+  version: 1,
+  children: [createTextNode(text)],
+})
+
+export const createLinkNodeNoUrl = (text = "No URL Link"): SerializedLinkNode => ({
+  type: NodeType.LINK,
   fields: {
-    linkType: "internal",
-    doc: {
-      id: "123",
-      slug: "test-page",
-      title: "Test Page",
-    },
+    linkType: LinkType.CUSTOM,
+  },
+  version: 1,
+  children: [createTextNode(text)],
+})
+
+export const createInternalLinkWithInvalidDoc = (
+  text = "Invalid Internal Link",
+  doc: unknown = { id: "123", title: "Invalid Document" },
+): SerializedLinkNode => ({
+  type: NodeType.LINK,
+  fields: {
+    linkType: LinkType.INTERNAL,
+    doc,
     newTab: false,
   },
   version: 1,
-  children: [
-    {
-      type: "text",
-      text: "Internal Link",
-      version: 1,
-    } as SerializedTextNode,
-  ],
-}
+  children: [createTextNode(text)],
+})
 
-export const invalidLinkNode: SerializedLinkNode = {
-  type: "link",
-  fields: {} as SerializedLinkNode["fields"],
+export const createInternalLinkNoDoc = (text = "No Document Link"): SerializedLinkNode => ({
+  type: NodeType.LINK,
+  fields: {
+    linkType: LinkType.INTERNAL,
+    newTab: false,
+  },
   version: 1,
-  children: [
-    {
-      type: "text",
-      text: "Invalid Link",
-      version: 1,
-    } as SerializedTextNode,
-  ],
-}
+  children: [createTextNode(text)],
+})
 
-// Upload/Image Node Mocks
-export const imageUploadNode: SerializedUploadNode = {
-  type: "upload",
+export const createInternalLinkStringDoc = (
+  text = "String Document Link",
+  doc = "some-document-id",
+): SerializedLinkNode => ({
+  type: NodeType.LINK,
+  fields: {
+    linkType: LinkType.INTERNAL,
+    doc,
+    newTab: false,
+  },
+  version: 1,
+  children: [createTextNode(text)],
+})
+
+export const createUploadNode = (
+  url = "/test-image.jpg",
+  alt = "Test Image",
+  width = 300,
+  height = 200,
+): SerializedUploadNode => ({
+  type: NodeType.UPLOAD,
   relationTo: "media",
   value: {
     id: "1",
-    url: "/test-image.jpg",
-    alt: "Test Image",
-    width: 300,
-    height: 200,
+    url,
+    alt,
+    width,
+    height,
   },
   version: 1,
-}
+})
 
-export const relativeImageUploadNode: SerializedUploadNode = {
-  type: "upload",
+export const createUploadNodeWithRelation = (
+  relationTo = "documents",
+  value: unknown = { id: "1", url: "/document.pdf" },
+): SerializedUploadNode => ({
+  type: NodeType.UPLOAD,
+  relationTo,
+  value,
+  version: 1,
+})
+
+export const createInvalidUploadNode = (value: unknown = "invalid"): SerializedUploadNode => ({
+  type: NodeType.UPLOAD,
   relationTo: "media",
-  value: {
-    id: "1",
-    url: "/relative-image.jpg",
-    alt: "Relative Image",
-    width: 300,
-    height: 200,
-  },
+  value,
   version: 1,
-}
+})
 
-export const absoluteImageUploadNode: SerializedUploadNode = {
-  type: "upload",
+export const createUploadNodeNoUrl = (id = "1", alt = "No URL Image"): SerializedUploadNode => ({
+  type: NodeType.UPLOAD,
   relationTo: "media",
-  value: {
-    id: "1",
-    url: "https://example.com/absolute-image.jpg",
-    alt: "Absolute Image",
-    width: 300,
-    height: 200,
-  },
+  value: { id, alt },
   version: 1,
-}
+})
 
-export const invalidUploadNode: SerializedUploadNode = {
-  type: "upload",
-  relationTo: "media",
-  value: "invalid",
+export const createQuoteNode = (text = "Sample quote"): SerializedQuoteNode => ({
+  type: NodeType.QUOTE,
   version: 1,
-}
+  children: [createTextNode(text)],
+})
 
-export const noUrlUploadNode: SerializedUploadNode = {
-  type: "upload",
-  relationTo: "media",
-  value: {
-    id: "1",
-    alt: "No URL Image",
-  },
+export const createQuoteNodeCustom = (
+  children?: SerializedTextNode[] | undefined,
+): SerializedQuoteNode => ({
+  type: NodeType.QUOTE,
   version: 1,
-}
+  children,
+})
 
-// Quote Node Mocks
-export const simpleQuoteNode: SerializedQuoteNode = {
-  type: "quote",
+export const createListNode = (
+  tag: ListType = ListType.UNORDERED,
+  items: string[] = ["Item 1", "Item 2"],
+): SerializedListNode => ({
+  type: NodeType.LIST,
+  tag,
   version: 1,
-  children: [
-    {
-      type: "text",
-      text: "This is a quote",
+  children: items.map(
+    (item): SerializedListItemNode => ({
+      type: NodeType.LIST_ITEM,
       version: 1,
-    } as SerializedTextNode,
-  ],
-}
+      children: [createTextNode(item)],
+    }),
+  ),
+})
 
-export const emptyQuoteNode: SerializedQuoteNode = {
-  type: "quote",
+export const createListNodeCustom = (
+  tag: ListType = ListType.UNORDERED,
+  children?: SerializedListItemNode[] | undefined,
+): SerializedListNode => ({
+  type: NodeType.LIST,
+  tag,
   version: 1,
-  children: [],
-}
+  children,
+})
 
-// List Node Mocks
-export const unorderedListNode: SerializedListNode = {
-  type: "list",
-  tag: "ul",
+export const createListItemNode = (
+  children?: SerializedTextNode[] | undefined,
+): SerializedListItemNode => ({
+  type: NodeType.LIST_ITEM,
   version: 1,
-  children: [
-    {
-      type: "listitem",
-      version: 1,
-      children: [
-        {
-          type: "text",
-          text: "List item 1",
-          version: 1,
-        } as SerializedTextNode,
-      ],
-    } as SerializedListItemNode,
-    {
-      type: "listitem",
-      version: 1,
-      children: [
-        {
-          type: "text",
-          text: "List item 2",
-          version: 1,
-        } as SerializedTextNode,
-      ],
-    } as SerializedListItemNode,
-  ],
-}
+  children,
+})
 
-export const orderedListNode: SerializedListNode = {
-  type: "list",
-  tag: "ol",
+export const createCodeNode = (
+  code = "console.log('Hello World')",
+  language?: string,
+): SerializedCodeNode => ({
+  type: NodeType.CODE,
+  language,
   version: 1,
-  children: [
-    {
-      type: "listitem",
-      version: 1,
-      children: [
-        {
-          type: "text",
-          text: "First item",
-          version: 1,
-        } as SerializedTextNode,
-      ],
-    } as SerializedListItemNode,
-    {
-      type: "listitem",
-      version: 1,
-      children: [
-        {
-          type: "text",
-          text: "Second item",
-          version: 1,
-        } as SerializedTextNode,
-      ],
-    } as SerializedListItemNode,
-  ],
-}
+  children: [createTextNode(code)],
+})
 
-export const emptyListNode: SerializedListNode = {
-  type: "list",
-  tag: "ul",
+export const createCodeNodeCustom = (
+  children?: SerializedTextNode[] | undefined,
+  language?: string,
+): SerializedCodeNode => ({
+  type: NodeType.CODE,
+  language,
   version: 1,
-  children: [],
-}
+  children,
+})
 
-// Code Node Mocks
-export const javascriptCodeNode: SerializedCodeNode = {
-  type: "code",
-  language: "javascript",
+export const createParagraphNodeCustom = (
+  children?: SerializedTextNode[] | undefined,
+): SerializedParagraphNode => ({
+  type: NodeType.PARAGRAPH,
   version: 1,
-  children: [
-    {
-      type: "text",
-      text: "console.log('Hello World')",
-      version: 1,
-    } as SerializedTextNode,
-  ],
-}
+  children,
+})
 
-export const noLanguageCodeNode: SerializedCodeNode = {
-  type: "code",
-  version: 1,
-  children: [
-    {
-      type: "text",
-      text: "some code",
-      version: 1,
-    } as SerializedTextNode,
-  ],
-}
+export const createSimpleTextEditorState = (text: string) =>
+  createEditorState([createParagraphNode([createTextNode(text)])])
 
-export const emptyCodeNode: SerializedCodeNode = {
-  type: "code",
-  language: "python",
-  version: 1,
-  children: [],
-}
-
-// Special Nodes
-export const lineBreakNode = {
-  type: "linebreak",
-  version: 1,
-}
-
-export const horizontalRuleNode = {
-  type: "horizontalrule",
-  version: 1,
-}
-
-// Complete Editor State Mocks
-export const basicEditorState: SerializedEditorState = {
+export const createEmptyRootEditorState = (): SerializedEditorState => ({
   root: {
-    children: [simpleParagraphNode],
+    children: null as unknown as [],
     direction: "ltr",
     format: "",
     indent: 0,
-    type: "root",
+    type: NodeType.ROOT,
     version: 1,
   },
-}
+})
 
-export const complexEditorState: SerializedEditorState = {
+export const plainTextNode = createTextNode("Plain text")
+export const boldTextNode = createTextNode("Bold text", TextFormat.BOLD)
+export const italicTextNode = createTextNode("Italic text", TextFormat.ITALIC)
+export const strikethroughTextNode = createTextNode("Strikethrough text", TextFormat.STRIKETHROUGH)
+export const underlineTextNode = createTextNode("Underlined text", TextFormat.UNDERLINE)
+export const codeTextNode = createTextNode("Code text", TextFormat.CODE)
+export const boldItalicTextNode = createTextNode(
+  "Bold and italic",
+  TextFormat.BOLD | TextFormat.ITALIC,
+)
+export const multipleFormatsTextNode = createTextNode(
+  "Multiple formats",
+  TextFormat.BOLD | TextFormat.ITALIC | TextFormat.STRIKETHROUGH | TextFormat.UNDERLINE,
+)
+export const strikeUnderlineTextNode = createTextNode(
+  "Strike and underline",
+  TextFormat.STRIKETHROUGH | TextFormat.UNDERLINE,
+)
+export const emptyTextNode = createTextNode("")
+
+export const h1HeadingNode = createHeadingNode("h1", "Main Heading")
+export const h2HeadingNode = createHeadingNode("h2", "Sub Heading")
+export const h6HeadingNode = createHeadingNode("h6", "Small Heading")
+
+export const simpleParagraphNode = createParagraphNode([plainTextNode])
+export const mixedFormattingParagraphNode = createParagraphNode([
+  createTextNode("This is "),
+  boldTextNode,
+  createTextNode(" and "),
+  italicTextNode,
+])
+export const emptyParagraphNode = createParagraphNode([])
+
+export const externalLinkNode = createLinkNode("https://example.com", "External Link", {
+  newTab: true,
+})
+export const internalLinkNode = createLinkNode("", "Internal Link", {
+  linkType: LinkType.INTERNAL,
+  doc: { id: "123", slug: "test-page", title: "Test Page" },
+})
+export const invalidLinkNode: SerializedLinkNode = createInvalidLinkNode()
+
+export const imageUploadNode = createUploadNode()
+export const relativeImageUploadNode = createUploadNode("/relative-image.jpg", "Relative Image")
+export const absoluteImageUploadNode = createUploadNode(
+  "https://example.com/absolute-image.jpg",
+  "Absolute Image",
+)
+export const invalidUploadNode: SerializedUploadNode = createInvalidUploadNode()
+export const noUrlUploadNode: SerializedUploadNode = createUploadNodeNoUrl()
+
+export const simpleQuoteNode = createQuoteNode("This is a quote")
+export const emptyQuoteNode = createQuoteNode("")
+
+export const unorderedListNode = createListNode(ListType.UNORDERED, ["List item 1", "List item 2"])
+export const orderedListNode = createListNode(ListType.ORDERED, ["First item", "Second item"])
+export const emptyListNode = createListNode(ListType.UNORDERED, [])
+
+export const javascriptCodeNode = createCodeNode("console.log('Hello World')", "javascript")
+export const noLanguageCodeNode = createCodeNode("some code")
+export const emptyCodeNode = createCodeNode("", "python")
+
+export const lineBreakNode = { type: NodeType.LINE_BREAK as const, version: 1 }
+export const horizontalRuleNode = { type: NodeType.HORIZONTAL_RULE as const, version: 1 }
+
+export const createEditorState = (
+  children: (
+    | SerializedHeadingNode
+    | SerializedParagraphNode
+    | SerializedTextNode
+    | SerializedLinkNode
+    | SerializedUploadNode
+    | SerializedListNode
+    | SerializedListItemNode
+    | SerializedQuoteNode
+    | SerializedCodeNode
+    | { type: NodeType.LINE_BREAK | NodeType.HORIZONTAL_RULE; version: number }
+  )[],
+): SerializedEditorState => ({
   root: {
-    children: [
-      h1HeadingNode,
-      mixedFormattingParagraphNode,
-      externalLinkNode,
-      imageUploadNode,
-      unorderedListNode,
-      simpleQuoteNode,
-      horizontalRuleNode,
-      javascriptCodeNode,
-    ],
+    children,
     direction: "ltr",
     format: "",
     indent: 0,
-    type: "root",
+    type: NodeType.ROOT,
     version: 1,
   },
-}
+})
 
-export const emptyEditorState: SerializedEditorState = {
-  root: {
-    children: [],
-    direction: "ltr",
-    format: "",
-    indent: 0,
-    type: "root",
-    version: 1,
-  },
-}
+export const basicEditorState = createEditorState([simpleParagraphNode])
 
-export const allFormattingEditorState: SerializedEditorState = {
-  root: {
-    children: [
-      {
-        type: "heading",
-        tag: "h1",
-        version: 1,
-        children: [
-          { type: "text", text: "All Formatting Types", version: 1 } as SerializedTextNode,
-        ],
-      } as SerializedHeadingNode,
-      {
-        type: "paragraph",
-        version: 1,
-        children: [
-          { type: "text", text: "Normal text, ", version: 1 } as SerializedTextNode,
-          {
-            type: "text",
-            text: "bold text",
-            format: TextFormat.BOLD,
-            version: 1,
-          } as SerializedTextNode,
-          { type: "text", text: ", ", version: 1 } as SerializedTextNode,
-          {
-            type: "text",
-            text: "italic text",
-            format: TextFormat.ITALIC,
-            version: 1,
-          } as SerializedTextNode,
-          { type: "text", text: ", ", version: 1 } as SerializedTextNode,
-          {
-            type: "text",
-            text: "strikethrough",
-            format: TextFormat.STRIKETHROUGH,
-            version: 1,
-          } as SerializedTextNode,
-          { type: "text", text: ", ", version: 1 } as SerializedTextNode,
-          {
-            type: "text",
-            text: "underlined",
-            format: TextFormat.UNDERLINE,
-            version: 1,
-          } as SerializedTextNode,
-          { type: "text", text: ", and ", version: 1 } as SerializedTextNode,
-          {
-            type: "text",
-            text: "code text",
-            format: TextFormat.CODE,
-            version: 1,
-          } as SerializedTextNode,
-          { type: "text", text: ".", version: 1 } as SerializedTextNode,
-        ],
-      } as SerializedParagraphNode,
-      orderedListNode,
-    ],
-    direction: "ltr",
-    format: "",
-    indent: 0,
-    type: "root",
-    version: 1,
-  },
-}
+export const complexEditorState = createEditorState([
+  h1HeadingNode,
+  mixedFormattingParagraphNode,
+  externalLinkNode,
+  imageUploadNode,
+  unorderedListNode,
+  simpleQuoteNode,
+  horizontalRuleNode,
+  javascriptCodeNode,
+])
 
-// Story-specific mocks for Storybook
-export const storyBasicData: SerializedEditorState = {
-  root: {
-    children: [
-      {
-        type: "heading",
-        tag: "h1",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "Welcome to UABC",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      } as SerializedHeadingNode,
-      {
-        type: "paragraph",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "This is a ",
-            version: 1,
-          } as SerializedTextNode,
-          {
-            type: "text",
-            text: "sample paragraph",
-            format: TextFormat.BOLD,
-            version: 1,
-          } as SerializedTextNode,
-          {
-            type: "text",
-            text: " with some formatted text.",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      } as SerializedParagraphNode,
-    ],
-    direction: "ltr",
-    format: "",
-    indent: 0,
-    type: "root",
-    version: 1,
-  },
-}
+export const emptyEditorState = createEditorState([])
 
-export const storyComplexData: SerializedEditorState = {
-  root: {
-    children: [
-      {
-        type: "heading",
-        tag: "h2",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "FAQ Section",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      } as SerializedHeadingNode,
-      {
-        type: "paragraph",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "Here's some content with a ",
-            version: 1,
-          } as SerializedTextNode,
-          {
-            type: "link",
-            fields: {
-              linkType: "custom",
-              url: "https://example.com",
-              newTab: true,
-            },
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "custom link",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedLinkNode,
-          {
-            type: "text",
-            text: " and some ",
-            version: 1,
-          } as SerializedTextNode,
-          {
-            type: "text",
-            text: "italic text",
-            format: TextFormat.ITALIC,
-            version: 1,
-          } as SerializedTextNode,
-          {
-            type: "text",
-            text: ".",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      } as SerializedParagraphNode,
-      {
-        type: "list",
-        tag: "ul",
-        version: 1,
-        children: [
-          {
-            type: "listitem",
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "First list item",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedListItemNode,
-          {
-            type: "listitem",
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "Second list item with ",
-                version: 1,
-              } as SerializedTextNode,
-              {
-                type: "text",
-                text: "code",
-                format: TextFormat.CODE,
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedListItemNode,
-        ],
-      } as SerializedListNode,
-      {
-        type: "quote",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "This is a blockquote with some inspirational text.",
-            format: TextFormat.ITALIC,
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      } as SerializedQuoteNode,
-      horizontalRuleNode,
-      {
-        type: "paragraph",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "Contact us at ",
-            version: 1,
-          } as SerializedTextNode,
-          {
-            type: "link",
-            fields: {
-              linkType: "custom",
-              url: "mailto:info@uabc.co.nz",
-            },
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "info@uabc.co.nz",
-                format: TextFormat.CODE,
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedLinkNode,
-        ],
-      } as SerializedParagraphNode,
-    ],
-    direction: "ltr",
-    format: "",
-    indent: 0,
-    type: "root",
-    version: 1,
-  },
-}
+export const allFormattingEditorState = createEditorState([
+  createHeadingNode("h1", "All Formatting Types"),
+  createParagraphNode([
+    createTextNode("Normal text, "),
+    createTextNode("bold text", TextFormat.BOLD),
+    createTextNode(", "),
+    createTextNode("italic text", TextFormat.ITALIC),
+    createTextNode(", "),
+    createTextNode("strikethrough", TextFormat.STRIKETHROUGH),
+    createTextNode(", "),
+    createTextNode("underlined", TextFormat.UNDERLINE),
+    createTextNode(", and "),
+    createTextNode("code text", TextFormat.CODE),
+    createTextNode("."),
+  ]),
+  orderedListNode,
+])
+
+export const storyBasicData = createEditorState([
+  createHeadingNode("h1", "Welcome to UABC"),
+  createParagraphNode([
+    createTextNode("This is a "),
+    createTextNode("sample paragraph", TextFormat.BOLD),
+    createTextNode(" with some formatted text."),
+  ]),
+])
+
+export const storyComplexData = createEditorState([
+  createHeadingNode("h2", "FAQ Section"),
+  createParagraphNode([
+    createTextNode("Here's some content with a "),
+    createLinkNode("https://example.com", "custom link", { newTab: true }),
+    createTextNode(" and some "),
+    createTextNode("italic text", TextFormat.ITALIC),
+    createTextNode("."),
+  ]),
+  createListNode(ListType.UNORDERED, ["First list item", "Second list item with code"]),
+  createQuoteNode("This is a blockquote with some inspirational text."),
+  horizontalRuleNode,
+  createParagraphNode([
+    createTextNode("Contact us at "),
+    createLinkNode("mailto:info@uabc.co.nz", "info@uabc.co.nz"),
+  ]),
+])

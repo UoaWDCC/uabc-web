@@ -2,6 +2,7 @@ import {
   boldItalicTextNode,
   boldTextNode,
   codeTextNode,
+  createTextNode,
   emptyTextNode,
   italicTextNode,
   multipleFormatsTextNode,
@@ -11,7 +12,7 @@ import {
   underlineTextNode,
 } from "@/test-config/RichTextRenderer.mock"
 import { render, screen } from "@/test-utils"
-import { TextFormat } from "../constants"
+import { NodeType, TextFormat } from "../constants"
 import type { RichTextRendererOptions, SerializedTextNode } from "../types"
 import { renderTextNode } from "./text"
 
@@ -106,12 +107,10 @@ describe("renderTextNode", () => {
   })
 
   it("renders text with bold and strikethrough", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Bold and strikethrough",
-      format: TextFormat.BOLD | TextFormat.STRIKETHROUGH,
-      version: 1,
-    }
+    const node = createTextNode(
+      "Bold and strikethrough",
+      TextFormat.BOLD | TextFormat.STRIKETHROUGH,
+    )
 
     const result = renderTextNode(node, "test-key", mockOptions)
     render(<span>{result}</span>)
@@ -123,12 +122,10 @@ describe("renderTextNode", () => {
   })
 
   it("renders text with italic and strikethrough", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Italic and strikethrough",
-      format: TextFormat.ITALIC | TextFormat.STRIKETHROUGH,
-      version: 1,
-    }
+    const node = createTextNode(
+      "Italic and strikethrough",
+      TextFormat.ITALIC | TextFormat.STRIKETHROUGH,
+    )
 
     const result = renderTextNode(node, "test-key", mockOptions)
     render(<span>{result}</span>)
@@ -141,7 +138,7 @@ describe("renderTextNode", () => {
 
   it("handles text with format 0", () => {
     const node: SerializedTextNode = {
-      type: "text",
+      type: NodeType.TEXT,
       text: "Format zero",
       format: 0,
       version: 1,
@@ -171,12 +168,7 @@ describe("renderTextNode", () => {
       },
     }
 
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Custom props",
-      format: TextFormat.BOLD,
-      version: 1,
-    }
+    const node = createTextNode("Custom props", TextFormat.BOLD)
 
     const result = renderTextNode(node, "test-key", customOptions)
     render(<div>{result}</div>)
@@ -194,12 +186,7 @@ describe("renderTextNode", () => {
       },
     }
 
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Code with props",
-      format: TextFormat.CODE,
-      version: 1,
-    }
+    const node = createTextNode("Code with props", TextFormat.CODE)
 
     const result = renderTextNode(node, "test-key", customOptions)
     render(<div>{result}</div>)
@@ -210,12 +197,7 @@ describe("renderTextNode", () => {
   })
 
   it("code format takes precedence over other formats", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Bold code",
-      format: TextFormat.CODE | TextFormat.BOLD,
-      version: 1,
-    }
+    const node = createTextNode("Bold code", TextFormat.CODE | TextFormat.BOLD)
 
     const result = renderTextNode(node, "test-key", mockOptions)
     render(<span>{result}</span>)
@@ -226,11 +208,7 @@ describe("renderTextNode", () => {
   })
 
   it("uses provided key", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Test key",
-      version: 1,
-    }
+    const node = createTextNode("Test key")
 
     const result = renderTextNode(node, "custom-key", mockOptions)
 

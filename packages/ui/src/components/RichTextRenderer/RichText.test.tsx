@@ -1,21 +1,24 @@
 import {
   basicEditorState,
   complexEditorState,
+  createEditorState,
+  createHeadingNode,
+  createInternalLinkNoDoc,
+  createInternalLinkStringDoc,
+  createInternalLinkWithInvalidDoc,
+  createLinkNode,
+  createParagraphNode,
+  createSimpleTextEditorState,
+  createTextNode,
+  createUploadNode,
   emptyEditorState,
 } from "@/test-config/RichTextRenderer.mock"
 import { render, screen } from "@/test-utils"
 import { isValidElement } from "react"
 import { RichText } from "./RichText"
 import * as RichTextModule from "./index"
-import type {
-  SerializedEditorState,
-  SerializedHeadingNode,
-  SerializedLexicalNode,
-  SerializedLinkNode,
-  SerializedParagraphNode,
-  SerializedTextNode,
-  SerializedUploadNode,
-} from "./lib/types"
+import { LinkType, NodeType, TextFormat } from "./lib/constants"
+import type { SerializedEditorState, SerializedLexicalNode } from "./lib/types"
 
 describe("<RichText />", () => {
   it("should re-export the RichText component and check if RichText exists", () => {
@@ -83,29 +86,7 @@ describe("<RichText />", () => {
   })
 
   it("renders with custom heading props", () => {
-    const headingData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "heading",
-            tag: "h2",
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "Custom Heading",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedHeadingNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const headingData = createEditorState([createHeadingNode("h2", "Custom Heading")])
 
     render(<RichText data={headingData} headingProps={{ color: "blue.500", fontWeight: "bold" }} />)
 
@@ -114,32 +95,9 @@ describe("<RichText />", () => {
   })
 
   it("renders with custom link props", () => {
-    const linkData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "link",
-            fields: {
-              linkType: "custom",
-              url: "https://test.com",
-            },
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "Test Link",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedLinkNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const linkData = createEditorState([
+      createLinkNode("https://test.com", "Test Link", { linkType: LinkType.CUSTOM }),
+    ])
 
     render(
       <RichText data={linkData} linkProps={{ color: "purple.500", textDecoration: "underline" }} />,
@@ -150,37 +108,16 @@ describe("<RichText />", () => {
   })
 
   it("renders internal link with document slug", () => {
-    const internalLinkData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "link",
-            fields: {
-              linkType: "internal",
-              doc: {
-                id: "document-123",
-                slug: "example-page",
-                title: "Example Page",
-              },
-              newTab: false,
-            },
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "Internal Link",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedLinkNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const internalLinkData = createEditorState([
+      createLinkNode("", "Internal Link", {
+        linkType: LinkType.INTERNAL,
+        doc: {
+          id: "document-123",
+          slug: "example-page",
+          title: "Example Page",
+        },
+      }),
+    ])
 
     render(<RichText data={internalLinkData} />)
 
@@ -190,37 +127,17 @@ describe("<RichText />", () => {
   })
 
   it("renders internal link with document slug and newTab true", () => {
-    const internalLinkWithNewTabData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "link",
-            fields: {
-              linkType: "internal",
-              doc: {
-                id: "document-456",
-                slug: "new-tab-page",
-                title: "New Tab Page",
-              },
-              newTab: true,
-            },
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "Internal Link New Tab",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedLinkNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const internalLinkWithNewTabData = createEditorState([
+      createLinkNode("", "Internal Link New Tab", {
+        linkType: LinkType.INTERNAL,
+        doc: {
+          id: "document-456",
+          slug: "new-tab-page",
+          title: "New Tab Page",
+        },
+        newTab: true,
+      }),
+    ])
 
     render(<RichText data={internalLinkWithNewTabData} />)
 
@@ -230,34 +147,16 @@ describe("<RichText />", () => {
   })
 
   it("renders internal link with minimal valid document", () => {
-    const minimalValidDocData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "link",
-            fields: {
-              linkType: "internal",
-              doc: {
-                slug: "minimal-page",
-              },
-            },
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "Minimal Valid Link",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedLinkNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const minimalValidDocData = createEditorState([
+      createLinkNode("", "Minimal Valid Link", {
+        linkType: LinkType.INTERNAL,
+        doc: {
+          id: "minimal-123",
+          slug: "minimal-page",
+          title: "Minimal Page",
+        },
+      }),
+    ])
 
     render(<RichText data={minimalValidDocData} />)
 
@@ -267,144 +166,48 @@ describe("<RichText />", () => {
   })
 
   it("renders internal link with invalid document as span", () => {
-    const internalLinkWithInvalidDocData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "link",
-            fields: {
-              linkType: "internal",
-              doc: {
-                id: "document-789",
-                // Missing slug property - makes it invalid per DocumentWithSlugSchema
-                title: "Invalid Document",
-              },
-              newTab: false,
-            },
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "Invalid Internal Link",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedLinkNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const internalLinkWithInvalidDocData = createEditorState([
+      createInternalLinkWithInvalidDoc("Invalid Internal Link", {
+        id: "document-789",
+        title: "Invalid Document",
+      }),
+    ])
 
     render(<RichText data={internalLinkWithInvalidDocData} />)
 
-    // Should render as span, not a link since document doesn't have slug
     const textElement = screen.getByText("Invalid Internal Link")
     expect(textElement.tagName.toLowerCase()).toBe("span")
     expect(textElement).not.toHaveAttribute("href")
   })
 
   it("renders internal link with no document as span", () => {
-    const internalLinkWithNoDocData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "link",
-            fields: {
-              linkType: "internal",
-              // No doc property at all
-              newTab: false,
-            },
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "No Document Link",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedLinkNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const internalLinkWithNoDocData = createEditorState([
+      createInternalLinkNoDoc("No Document Link"),
+    ])
 
     render(<RichText data={internalLinkWithNoDocData} />)
 
-    // Should render as span, not a link since no document provided
     const textElement = screen.getByText("No Document Link")
     expect(textElement.tagName.toLowerCase()).toBe("span")
     expect(textElement).not.toHaveAttribute("href")
   })
 
   it("renders internal link with string document as span", () => {
-    const internalLinkWithStringDocData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "link",
-            fields: {
-              linkType: "internal",
-              doc: "some-document-id", // String instead of object - valid per schema but fails isDocumentWithSlug
-              newTab: false,
-            },
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "String Document Link",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedLinkNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const internalLinkWithStringDocData = createEditorState([
+      createInternalLinkStringDoc("String Document Link", "some-document-id"),
+    ])
 
     render(<RichText data={internalLinkWithStringDocData} />)
 
-    // Should render as span, not a link since document is string not object with slug
     const textElement = screen.getByText("String Document Link")
     expect(textElement.tagName.toLowerCase()).toBe("span")
     expect(textElement).not.toHaveAttribute("href")
   })
 
   it("renders with custom image props", () => {
-    const imageData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "upload",
-            relationTo: "media",
-            value: {
-              id: "1",
-              url: "/custom-image.jpg",
-              alt: "Custom Image",
-              width: 400,
-              height: 300,
-            },
-            version: 1,
-          } as SerializedUploadNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const imageData = createEditorState([
+      createUploadNode("/custom-image.jpg", "Custom Image", 400, 300),
+    ])
 
     render(<RichText data={imageData} imageProps={{ borderRadius: "md", boxShadow: "lg" }} />)
 
@@ -413,29 +216,9 @@ describe("<RichText />", () => {
   })
 
   it("renders with custom code props", () => {
-    const codeData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "paragraph",
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "inline code",
-                format: 16, // Code format
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedParagraphNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const codeData = createEditorState([
+      createParagraphNode([createTextNode("inline code", TextFormat.CODE)]),
+    ])
 
     render(<RichText codeProps={{ bg: "gray.100", color: "red.500" }} data={codeData} />)
 
@@ -445,29 +228,9 @@ describe("<RichText />", () => {
   })
 
   it("resolves media URLs with mediaBaseUrl", () => {
-    const imageData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "upload",
-            relationTo: "media",
-            value: {
-              id: "1",
-              url: "/relative-image.jpg",
-              alt: "Relative Image",
-              width: 300,
-              height: 200,
-            },
-            version: 1,
-          } as SerializedUploadNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const imageData = createEditorState([
+      createUploadNode("/relative-image.jpg", "Relative Image", 300, 200),
+    ])
 
     render(<RichText data={imageData} mediaBaseUrl="https://api.example.com" />)
 
@@ -508,28 +271,7 @@ describe("<RichText />", () => {
   })
 
   it("updates content when data changes", () => {
-    const newData: SerializedEditorState = {
-      root: {
-        children: [
-          {
-            type: "paragraph",
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "Updated Content",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedParagraphNode,
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
+    const newData = createSimpleTextEditorState("Updated Content")
 
     const { rerender } = render(<RichText data={basicEditorState} />)
     expect(screen.getByText("Plain text")).toBeInTheDocument()
@@ -556,7 +298,7 @@ describe("<RichText />", () => {
         direction: "ltr",
         format: "",
         indent: 0,
-        type: "root",
+        type: NodeType.ROOT,
         version: 1,
       },
     }

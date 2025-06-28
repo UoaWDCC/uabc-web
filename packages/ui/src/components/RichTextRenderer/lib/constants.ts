@@ -18,4 +18,17 @@ export enum NodeType {
   LINE_BREAK = "linebreak",
   HORIZONTAL_RULE = "horizontalrule",
   CODE = "code",
+  MEDIA = "media",
+  ROOT = "root",
+  CUSTOM = "custom",
+}
+
+export enum LinkType {
+  CUSTOM = "custom",
+  INTERNAL = "internal",
+}
+
+export enum ListType {
+  ORDERED = "ol",
+  UNORDERED = "ul",
 }

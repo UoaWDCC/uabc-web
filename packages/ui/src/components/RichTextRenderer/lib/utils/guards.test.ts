@@ -1,16 +1,26 @@
+import {
+  boldTextNode,
+  createTextNode,
+  emptyParagraphNode,
+  h1HeadingNode,
+  horizontalRuleNode,
+  javascriptCodeNode,
+  lineBreakNode,
+  plainTextNode,
+  simpleParagraphNode,
+  simpleQuoteNode,
+  unorderedListNode,
+} from "@/test-config/RichTextRenderer.mock"
+import { LinkType, ListType, NodeType } from "../constants"
 import { DocumentWithSlugSchema, LinkFieldsSchema, MediaDocumentSchema } from "../schemas"
 import type {
   SerializedCodeNode,
   SerializedHeadingNode,
-  SerializedHorizontalRuleNode,
   SerializedLexicalNode,
-  SerializedLineBreakNode,
   SerializedLinkNode,
   SerializedListItemNode,
   SerializedListNode,
   SerializedNodeWithChildren,
-  SerializedParagraphNode,
-  SerializedQuoteNode,
   SerializedTextNode,
   SerializedUploadNode,
 } from "../types"
@@ -164,40 +174,20 @@ describe("Type Guards", () => {
 
   describe("isTextNode", () => {
     it("returns true for valid text node", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Hello world",
-        version: 1,
-      }
-
-      expect(isTextNode(textNode)).toBe(true)
+      expect(isTextNode(plainTextNode)).toBe(true)
     })
 
     it("returns true for text node with format", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Bold text",
-        format: 1,
-        version: 1,
-      }
-
-      expect(isTextNode(textNode)).toBe(true)
+      expect(isTextNode(boldTextNode)).toBe(true)
     })
 
     it("returns false for non-text node", () => {
-      const headingNode: SerializedHeadingNode = {
-        type: "heading",
-        tag: "h1",
-        children: [],
-        version: 1,
-      }
-
-      expect(isTextNode(headingNode)).toBe(false)
+      expect(isTextNode(h1HeadingNode)).toBe(false)
     })
 
     it("returns false for invalid node", () => {
       const invalidNode: Partial<SerializedTextNode> = {
-        type: "text",
+        type: NodeType.TEXT,
         version: 1,
         // Missing text property
       }
@@ -208,29 +198,16 @@ describe("Type Guards", () => {
 
   describe("isHeadingNode", () => {
     it("returns true for valid heading node", () => {
-      const headingNode: SerializedHeadingNode = {
-        type: "heading",
-        tag: "h1",
-        children: [],
-        version: 1,
-      }
-
-      expect(isHeadingNode(headingNode)).toBe(true)
+      expect(isHeadingNode(h1HeadingNode)).toBe(true)
     })
 
     it("returns false for non-heading node", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Hello",
-        version: 1,
-      }
-
-      expect(isHeadingNode(textNode)).toBe(false)
+      expect(isHeadingNode(plainTextNode)).toBe(false)
     })
 
     it("returns false for heading node missing tag", () => {
       const invalidNode: Partial<SerializedHeadingNode> = {
-        type: "heading",
+        type: NodeType.HEADING,
         children: [],
         version: 1,
         // Missing tag
@@ -241,7 +218,7 @@ describe("Type Guards", () => {
 
     it("returns false for heading node missing children", () => {
       const invalidNode: Partial<SerializedHeadingNode> = {
-        type: "heading",
+        type: NodeType.HEADING,
         tag: "h1",
         version: 1,
         // Missing children
@@ -254,9 +231,9 @@ describe("Type Guards", () => {
   describe("isLinkNode", () => {
     it("returns true for valid link node", () => {
       const linkNode: SerializedLinkNode = {
-        type: "link",
+        type: NodeType.LINK,
         fields: {
-          linkType: "custom",
+          linkType: LinkType.CUSTOM,
           url: "https://example.com",
         },
         children: [],
@@ -268,7 +245,7 @@ describe("Type Guards", () => {
 
     it("returns false for non-link node", () => {
       const textNode: SerializedTextNode = {
-        type: "text",
+        type: NodeType.TEXT,
         text: "Hello",
         version: 1,
       }
@@ -278,7 +255,7 @@ describe("Type Guards", () => {
 
     it("returns false for link node missing fields", () => {
       const invalidNode: Partial<SerializedLinkNode> = {
-        type: "link",
+        type: NodeType.LINK,
         children: [],
         version: 1,
         // Missing fields
@@ -291,7 +268,7 @@ describe("Type Guards", () => {
   describe("isUploadNode", () => {
     it("returns true for valid upload node", () => {
       const uploadNode: SerializedUploadNode = {
-        type: "upload",
+        type: NodeType.UPLOAD,
         relationTo: "media",
         value: { url: "/test.jpg" },
         version: 1,
@@ -302,7 +279,7 @@ describe("Type Guards", () => {
 
     it("returns false for non-upload node", () => {
       const textNode: SerializedTextNode = {
-        type: "text",
+        type: NodeType.TEXT,
         text: "Hello",
         version: 1,
       }
@@ -312,7 +289,7 @@ describe("Type Guards", () => {
 
     it("returns false for upload node missing relationTo", () => {
       const invalidNode: Partial<SerializedUploadNode> = {
-        type: "upload",
+        type: NodeType.UPLOAD,
         value: { url: "/test.jpg" },
         version: 1,
         // Missing relationTo
@@ -324,73 +301,37 @@ describe("Type Guards", () => {
 
   describe("isParagraphNode", () => {
     it("returns true for valid paragraph node", () => {
-      const paragraphNode: SerializedParagraphNode = {
-        type: "paragraph",
-        children: [],
-        version: 1,
-      }
-
-      expect(isParagraphNode(paragraphNode)).toBe(true)
+      expect(isParagraphNode(simpleParagraphNode)).toBe(true)
     })
 
     it("returns true for paragraph node without children", () => {
-      const paragraphNode: SerializedParagraphNode = {
-        type: "paragraph",
-        version: 1,
-      }
-
-      expect(isParagraphNode(paragraphNode)).toBe(true)
+      expect(isParagraphNode(emptyParagraphNode)).toBe(true)
     })
 
     it("returns false for non-paragraph node", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Hello",
-        version: 1,
-      }
-
-      expect(isParagraphNode(textNode)).toBe(false)
+      expect(isParagraphNode(plainTextNode)).toBe(false)
     })
   })
 
   describe("isQuoteNode", () => {
     it("returns true for valid quote node", () => {
-      const quoteNode: SerializedQuoteNode = {
-        type: "quote",
-        children: [],
-        version: 1,
-      }
-
-      expect(isQuoteNode(quoteNode)).toBe(true)
+      expect(isQuoteNode(simpleQuoteNode)).toBe(true)
     })
 
     it("returns false for non-quote node", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Hello",
-        version: 1,
-      }
-
-      expect(isQuoteNode(textNode)).toBe(false)
+      expect(isQuoteNode(plainTextNode)).toBe(false)
     })
   })
 
   describe("isListNode", () => {
     it("returns true for valid unordered list node", () => {
-      const listNode: SerializedListNode = {
-        type: "list",
-        tag: "ul",
-        children: [],
-        version: 1,
-      }
-
-      expect(isListNode(listNode)).toBe(true)
+      expect(isListNode(unorderedListNode)).toBe(true)
     })
 
     it("returns true for valid ordered list node", () => {
       const listNode: SerializedListNode = {
-        type: "list",
-        tag: "ol",
+        type: NodeType.LIST,
+        tag: ListType.ORDERED,
         children: [],
         version: 1,
       }
@@ -399,18 +340,12 @@ describe("Type Guards", () => {
     })
 
     it("returns false for non-list node", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Hello",
-        version: 1,
-      }
-
-      expect(isListNode(textNode)).toBe(false)
+      expect(isListNode(plainTextNode)).toBe(false)
     })
 
     it("returns false for list node missing tag", () => {
       const invalidNode: Partial<SerializedListNode> = {
-        type: "list",
+        type: NodeType.LIST,
         children: [],
         version: 1,
         // Missing tag
@@ -423,7 +358,7 @@ describe("Type Guards", () => {
   describe("isListItemNode", () => {
     it("returns true for valid list item node", () => {
       const listItemNode: SerializedListItemNode = {
-        type: "listitem",
+        type: NodeType.LIST_ITEM,
         children: [],
         version: 1,
       }
@@ -433,7 +368,7 @@ describe("Type Guards", () => {
 
     it("returns false for non-list item node", () => {
       const textNode: SerializedTextNode = {
-        type: "text",
+        type: NodeType.TEXT,
         text: "Hello",
         version: 1,
       }
@@ -444,61 +379,32 @@ describe("Type Guards", () => {
 
   describe("isLineBreakNode", () => {
     it("returns true for valid line break node", () => {
-      const lineBreakNode: SerializedLineBreakNode = {
-        type: "linebreak",
-        version: 1,
-      }
-
       expect(isLineBreakNode(lineBreakNode)).toBe(true)
     })
 
     it("returns false for non-line break node", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Hello",
-        version: 1,
-      }
-
-      expect(isLineBreakNode(textNode)).toBe(false)
+      expect(isLineBreakNode(plainTextNode)).toBe(false)
     })
   })
 
   describe("isHorizontalRuleNode", () => {
     it("returns true for valid horizontal rule node", () => {
-      const hrNode: SerializedHorizontalRuleNode = {
-        type: "horizontalrule",
-        version: 1,
-      }
-
-      expect(isHorizontalRuleNode(hrNode)).toBe(true)
+      expect(isHorizontalRuleNode(horizontalRuleNode)).toBe(true)
     })
 
     it("returns false for non-horizontal rule node", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Hello",
-        version: 1,
-      }
-
-      expect(isHorizontalRuleNode(textNode)).toBe(false)
+      expect(isHorizontalRuleNode(plainTextNode)).toBe(false)
     })
   })
 
   describe("isCodeNode", () => {
     it("returns true for valid code node", () => {
-      const codeNode: SerializedCodeNode = {
-        type: "code",
-        language: "javascript",
-        children: [],
-        version: 1,
-      }
-
-      expect(isCodeNode(codeNode)).toBe(true)
+      expect(isCodeNode(javascriptCodeNode)).toBe(true)
     })
 
     it("returns true for code node without language", () => {
       const codeNode: SerializedCodeNode = {
-        type: "code",
+        type: NodeType.CODE,
         children: [],
         version: 1,
       }
@@ -507,27 +413,15 @@ describe("Type Guards", () => {
     })
 
     it("returns false for non-code node", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Hello",
-        version: 1,
-      }
-
-      expect(isCodeNode(textNode)).toBe(false)
+      expect(isCodeNode(plainTextNode)).toBe(false)
     })
   })
 
   describe("hasChildren", () => {
     it("returns true for node with children array", () => {
       const nodeWithChildren: SerializedNodeWithChildren = {
-        type: "paragraph",
-        children: [
-          {
-            type: "text",
-            text: "Hello",
-            version: 1,
-          } as SerializedTextNode,
-        ],
+        type: NodeType.PARAGRAPH,
+        children: [createTextNode("Hello")],
         version: 1,
       }
 
@@ -535,27 +429,16 @@ describe("Type Guards", () => {
     })
 
     it("returns true for node with empty children array", () => {
-      const nodeWithEmptyChildren: SerializedNodeWithChildren = {
-        type: "paragraph",
-        children: [],
-        version: 1,
-      }
-
-      expect(hasChildren(nodeWithEmptyChildren)).toBe(true)
+      expect(hasChildren(emptyParagraphNode)).toBe(true)
     })
 
     it("returns false for node without children", () => {
-      const nodeWithoutChildren: SerializedLexicalNode = {
-        type: "linebreak",
-        version: 1,
-      }
-
-      expect(hasChildren(nodeWithoutChildren)).toBe(false)
+      expect(hasChildren(lineBreakNode)).toBe(false)
     })
 
     it("returns false for node with non-array children", () => {
       const nodeWithInvalidChildren: Partial<SerializedNodeWithChildren> = {
-        type: "paragraph",
+        type: NodeType.PARAGRAPH,
         children: "not an array" as unknown as SerializedLexicalNode[],
         version: 1,
       }
@@ -567,7 +450,7 @@ describe("Type Guards", () => {
 
     it("returns false for node with null children", () => {
       const nodeWithNullChildren: Partial<SerializedNodeWithChildren> = {
-        type: "paragraph",
+        type: NodeType.PARAGRAPH,
         children: null as unknown as SerializedLexicalNode[],
         version: 1,
       }
@@ -577,7 +460,7 @@ describe("Type Guards", () => {
 
     it("returns false for node with undefined children", () => {
       const nodeWithUndefinedChildren: Partial<SerializedNodeWithChildren> = {
-        type: "paragraph",
+        type: NodeType.PARAGRAPH,
         children: undefined,
         version: 1,
       }
@@ -611,7 +494,7 @@ describe("Type Guards", () => {
 
     it("LinkFieldsSchema validates correctly", () => {
       const validLink = {
-        linkType: "custom",
+        linkType: LinkType.CUSTOM,
         url: "https://example.com",
       }
 

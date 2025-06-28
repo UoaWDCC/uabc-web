@@ -1,16 +1,47 @@
+import {
+  basicEditorState,
+  boldItalicTextNode,
+  boldTextNode,
+  codeTextNode,
+  createCodeNodeCustom,
+  createEditorState,
+  createInternalLinkNoDoc,
+  createLinkNode,
+  createLinkNodeNoUrl,
+  createListItemNode,
+  createListNodeCustom,
+  createParagraphNodeCustom,
+  createQuoteNodeCustom,
+  createTextNode,
+  createUploadNode,
+  createUploadNodeNoUrl,
+  createUploadNodeWithRelation,
+  externalLinkNode,
+  h1HeadingNode,
+  h6HeadingNode,
+  horizontalRuleNode,
+  internalLinkNode,
+  invalidLinkNode,
+  italicTextNode,
+  javascriptCodeNode,
+  lineBreakNode,
+  orderedListNode,
+  plainTextNode,
+  simpleParagraphNode,
+  simpleQuoteNode,
+  strikethroughTextNode,
+  underlineTextNode,
+  unorderedListNode,
+} from "@/test-config/RichTextRenderer.mock"
 import { render, screen } from "@/test-utils"
 import { RichTextRenderer, richTextRenderer } from "./RichTextRenderer"
+import { LinkType, ListType, NodeType, TextFormat } from "./constants"
 import type {
-  SerializedCodeNode,
   SerializedEditorState,
-  SerializedHeadingNode,
   SerializedLexicalNode,
   SerializedLinkNode,
-  SerializedListItemNode,
-  SerializedListNode,
   SerializedMediaDocument,
   SerializedParagraphNode,
-  SerializedQuoteNode,
   SerializedTextNode,
   SerializedUploadNode,
 } from "./types"
@@ -29,7 +60,7 @@ describe("RichTextRenderer", () => {
 
     it("provides a singleton instance", () => {
       expect(richTextRenderer).toBeInstanceOf(RichTextRenderer)
-      expect(richTextRenderer).toBe(richTextRenderer) // Same instance
+      expect(richTextRenderer).toBe(richTextRenderer)
     })
   })
 
@@ -45,68 +76,21 @@ describe("RichTextRenderer", () => {
     })
 
     it("returns null for empty children array", () => {
-      const emptyData: SerializedEditorState = {
-        root: {
-          children: [],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const emptyData = createEditorState([])
 
       expect(renderer.render(emptyData)).toBeNull()
     })
 
     it("renders basic text content", () => {
-      const data: SerializedEditorState = {
-        root: {
-          children: [
-            {
-              type: "paragraph",
-              version: 1,
-              children: [
-                {
-                  type: "text",
-                  text: "Test content",
-                  version: 1,
-                } as SerializedTextNode,
-              ],
-            } as SerializedParagraphNode,
-          ],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
-      const result = renderer.render(data)
+      const result = renderer.render(basicEditorState)
       render(<span>{result}</span>)
-      expect(screen.getByText("Test content")).toBeInTheDocument()
+      expect(screen.getByText("Plain text")).toBeInTheDocument()
     })
   })
 
   describe("text node rendering", () => {
     it("renders plain text", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Plain text",
-        version: 1,
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [textNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([plainTextNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -114,23 +98,7 @@ describe("RichTextRenderer", () => {
     })
 
     it("renders bold text", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Bold text",
-        format: 1, // Bold
-        version: 1,
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [textNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([boldTextNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -139,23 +107,7 @@ describe("RichTextRenderer", () => {
     })
 
     it("renders italic text", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Italic text",
-        format: 2, // Italic
-        version: 1,
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [textNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([italicTextNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -164,23 +116,7 @@ describe("RichTextRenderer", () => {
     })
 
     it("renders strikethrough text", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Strikethrough text",
-        format: 4, // Strikethrough
-        version: 1,
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [textNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([strikethroughTextNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -189,23 +125,7 @@ describe("RichTextRenderer", () => {
     })
 
     it("renders underlined text", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Underlined text",
-        format: 8, // Underline
-        version: 1,
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [textNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([underlineTextNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -214,23 +134,7 @@ describe("RichTextRenderer", () => {
     })
 
     it("renders code text", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Code text",
-        format: 16, // Code
-        version: 1,
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [textNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([codeTextNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -238,23 +142,7 @@ describe("RichTextRenderer", () => {
     })
 
     it("renders combined formatting", () => {
-      const textNode: SerializedTextNode = {
-        type: "text",
-        text: "Bold and italic",
-        format: 3, // Bold (1) + Italic (2)
-        version: 1,
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [textNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([boldItalicTextNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -266,171 +154,56 @@ describe("RichTextRenderer", () => {
 
   describe("heading node rendering", () => {
     it("renders h1 heading", () => {
-      const headingNode: SerializedHeadingNode = {
-        type: "heading",
-        tag: "h1",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "Main Heading",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [headingNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([h1HeadingNode])
       const result = renderer.render(data)
       render(<span>{result}</span>)
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Main Heading")
     })
 
     it("renders h6 heading", () => {
-      const headingNode: SerializedHeadingNode = {
-        type: "heading",
-        tag: "h6",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "Sub Heading",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [headingNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([h6HeadingNode])
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      expect(screen.getByRole("heading", { level: 6 })).toHaveTextContent("Sub Heading")
+      expect(screen.getByRole("heading", { level: 6 })).toHaveTextContent("Small Heading")
     })
   })
 
   describe("paragraph node rendering", () => {
     it("renders paragraph with children", () => {
-      const paragraphNode: SerializedParagraphNode = {
-        type: "paragraph",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "Paragraph content",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [paragraphNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([simpleParagraphNode])
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      expect(screen.getByText("Paragraph content")).toBeInTheDocument()
+      expect(screen.getByText("Plain text")).toBeInTheDocument()
     })
 
     it("returns null for paragraph without children", () => {
       const paragraphNode: SerializedParagraphNode = {
-        type: "paragraph",
+        type: NodeType.PARAGRAPH,
         version: 1,
         children: undefined,
       }
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [paragraphNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([paragraphNode])
       const result = renderer.render(data)
-      expect(result).not.toBeNull() // VStack is still rendered but empty
+      expect(result).not.toBeNull()
     })
 
     it("returns null for paragraph with empty children", () => {
       const paragraphNode: SerializedParagraphNode = {
-        type: "paragraph",
+        type: NodeType.PARAGRAPH,
         version: 1,
         children: [],
       }
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [paragraphNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([paragraphNode])
       const result = renderer.render(data)
-      expect(result).not.toBeNull() // VStack is still rendered but empty
+      expect(result).not.toBeNull()
     })
   })
 
   describe("link node rendering", () => {
     it("renders custom external link", () => {
-      const linkNode: SerializedLinkNode = {
-        type: "link",
-        fields: {
-          linkType: "custom",
-          url: "https://example.com",
-          newTab: true,
-        },
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "External Link",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [linkNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([externalLinkNode])
       const result = renderer.render(data)
       render(<span>{result}</span>)
       const link = screen.getByRole("link", { name: "External Link" })
@@ -438,34 +211,29 @@ describe("RichTextRenderer", () => {
       expect(link).toHaveAttribute("target", "_blank")
     })
 
-    it("renders custom internal link", () => {
-      const linkNode: SerializedLinkNode = {
-        type: "link",
-        fields: {
-          linkType: "custom",
-          url: "/internal-page",
-          newTab: false,
-        },
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "Internal Link",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
+    it("renders internal document link", () => {
+      const data = createEditorState([internalLinkNode])
+      const result = renderer.render(data)
+      render(<span>{result}</span>)
+      const link = screen.getByRole("link", { name: "Internal Link" })
+      expect(link).toHaveAttribute("href", "/test-page")
+    })
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [linkNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+    it("renders as span for invalid link fields", () => {
+      const data = createEditorState([invalidLinkNode])
+      const result = renderer.render(data)
+      render(<span>{result}</span>)
+      expect(screen.getByText("Invalid Link")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+    })
+
+    it("renders custom internal link", () => {
+      const linkNode = createLinkNode("/internal-page", "Internal Link", {
+        linkType: LinkType.CUSTOM,
+        newTab: false,
+      })
+
+      const data = createEditorState([linkNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -474,102 +242,10 @@ describe("RichTextRenderer", () => {
       expect(link).not.toHaveAttribute("target", "_blank")
     })
 
-    it("renders internal document link", () => {
-      const linkNode: SerializedLinkNode = {
-        type: "link",
-        fields: {
-          linkType: "internal",
-          doc: {
-            id: "123",
-            slug: "test-page",
-            title: "Test Page",
-          },
-          newTab: false,
-        },
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "Document Link",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [linkNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
-      const result = renderer.render(data)
-      render(<span>{result}</span>)
-      const link = screen.getByRole("link", { name: "Document Link" })
-      expect(link).toHaveAttribute("href", "/test-page")
-    })
-
-    it("renders as span for invalid link fields", () => {
-      const linkNode: SerializedLinkNode = {
-        type: "link",
-        fields: {} as unknown as SerializedLinkNode["fields"],
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "Invalid Link",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [linkNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
-      const result = renderer.render(data)
-      render(<span>{result}</span>)
-      expect(screen.getByText("Invalid Link")).toBeInTheDocument()
-      expect(screen.queryByRole("link")).not.toBeInTheDocument()
-    })
-
     it("renders as span when no URL is provided", () => {
-      const linkNode: SerializedLinkNode = {
-        type: "link",
-        fields: {
-          linkType: "custom",
-        },
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "No URL Link",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
+      const linkNode = createLinkNodeNoUrl("No URL Link")
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [linkNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([linkNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -578,32 +254,9 @@ describe("RichTextRenderer", () => {
     })
 
     it("renders as span for internal link without valid doc", () => {
-      const linkNode: SerializedLinkNode = {
-        type: "link",
-        fields: {
-          linkType: "internal",
-          doc: null,
-        },
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "Invalid Doc Link",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
+      const linkNode = createInternalLinkNoDoc("Invalid Doc Link")
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [linkNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([linkNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -614,156 +267,68 @@ describe("RichTextRenderer", () => {
 
   describe("upload/image node rendering", () => {
     it("renders image from upload node", () => {
-      const uploadNode: SerializedUploadNode = {
-        type: "upload",
-        relationTo: "media",
-        value: {
-          id: "1",
-          url: "/test-image.jpg",
-          alt: "Test Image",
-          width: 300,
-          height: 200,
-        },
-        version: 1,
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [uploadNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const imageUploadNode = createUploadNode("/test-image.jpg", "Test Image", 300, 200)
+      const data = createEditorState([imageUploadNode])
       const result = renderer.render(data)
       render(<span>{result}</span>)
       const image = screen.getByRole("img", { name: "Test Image" })
-      // Next.js Image component transforms URLs, so check it contains the expected parts
       expect(image.getAttribute("src")).toContain("test-image.jpg")
       expect(image).toHaveAttribute("alt", "Test Image")
     })
 
     it("resolves relative image URLs with mediaBaseUrl", () => {
-      const uploadNode: SerializedUploadNode = {
-        type: "upload",
-        relationTo: "media",
-        value: {
-          id: "1",
-          url: "/relative-image.jpg",
-          alt: "Relative Image",
-          width: 300,
-          height: 200,
-        },
-        version: 1,
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [uploadNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const relativeImageUploadNode = createUploadNode(
+        "/relative-image.jpg",
+        "Relative Image",
+        300,
+        200,
+      )
+      const data = createEditorState([relativeImageUploadNode])
       const result = renderer.render(data, { mediaBaseUrl: "https://api.example.com" })
       render(<span>{result}</span>)
       const image = screen.getByRole("img", { name: "Relative Image" })
-      // Next.js Image component transforms URLs, so check it contains the expected parts
       expect(image.getAttribute("src")).toContain("api.example.com")
       expect(image.getAttribute("src")).toContain("relative-image.jpg")
       expect(image).toHaveAttribute("alt", "Relative Image")
     })
 
     it("returns null for non-media upload", () => {
-      const uploadNode: SerializedUploadNode = {
-        type: "upload",
-        relationTo: "documents",
-        value: {
-          id: "1",
-          url: "/document.pdf",
-        },
-        version: 1,
-      }
+      const uploadNode = createUploadNodeWithRelation("documents", {
+        id: "1",
+        url: "/document.pdf",
+      })
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [uploadNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([uploadNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      // Non-media uploads return null, so no content should be rendered
       expect(screen.queryByRole("img")).not.toBeInTheDocument()
     })
 
     it("returns null for invalid media document", () => {
-      const uploadNode: SerializedUploadNode = {
-        type: "upload",
-        relationTo: "media",
-        value: "invalid",
-        version: 1,
-      }
+      const uploadNode = createUploadNode("/test-image.jpg")
+      uploadNode.value = "invalid"
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [uploadNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([uploadNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      // Invalid media documents return null, so no content should be rendered
       expect(screen.queryByRole("img")).not.toBeInTheDocument()
     })
 
     it("returns null for media document without URL", () => {
-      const uploadNode: SerializedUploadNode = {
-        type: "upload",
-        relationTo: "media",
-        value: {
-          id: "1",
-          alt: "No URL Image",
-        },
-        version: 1,
-      }
+      const uploadNode = createUploadNodeNoUrl("1", "No URL Image")
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [uploadNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([uploadNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      // Media documents without URL return null, so no content should be rendered
       expect(screen.queryByRole("img")).not.toBeInTheDocument()
     })
 
     it("handles absolute URLs correctly", () => {
       const uploadNode: SerializedUploadNode = {
-        type: "upload",
+        type: NodeType.UPLOAD,
         relationTo: "media",
         value: {
           id: "1",
@@ -781,7 +346,7 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -789,7 +354,6 @@ describe("RichTextRenderer", () => {
       const result = renderer.render(data, { mediaBaseUrl: "https://api.example.com" })
       render(<span>{result}</span>)
       const image = screen.getByRole("img", { name: "Absolute Image" })
-      // Next.js Image component transforms URLs, so check it contains the expected parts
       expect(image.getAttribute("src")).toContain("example.com")
       expect(image.getAttribute("src")).toContain("absolute-image.jpg")
       expect(image).toHaveAttribute("alt", "Absolute Image")
@@ -797,7 +361,7 @@ describe("RichTextRenderer", () => {
 
     it("handles standalone URLs without base URL correctly", () => {
       const uploadNode: SerializedUploadNode = {
-        type: "upload",
+        type: NodeType.UPLOAD,
         relationTo: "media",
         value: {
           id: "1",
@@ -815,7 +379,7 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -823,7 +387,6 @@ describe("RichTextRenderer", () => {
       const result = renderer.render(data, { mediaBaseUrl: "https://api.example.com" })
       render(<span>{result}</span>)
       const image = screen.getByRole("img", { name: "Standalone Image" })
-      // Next.js Image component transforms URLs, so check it contains the expected parts
       expect(image.getAttribute("src")).toContain("cdn.example.com")
       expect(image.getAttribute("src")).toContain("standalone-image.jpg")
       expect(image).toHaveAttribute("alt", "Standalone Image")
@@ -832,197 +395,53 @@ describe("RichTextRenderer", () => {
 
   describe("quote node rendering", () => {
     it("renders quote with children", () => {
-      const quoteNode: SerializedQuoteNode = {
-        type: "quote",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "This is a quote",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [quoteNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([simpleQuoteNode])
       const result = renderer.render(data)
       render(<span>{result}</span>)
       expect(screen.getByText("This is a quote")).toBeInTheDocument()
     })
 
     it("returns null for quote without children", () => {
-      const quoteNode: SerializedQuoteNode = {
-        type: "quote",
-        version: 1,
-        children: undefined,
-      }
+      const quoteNode = createQuoteNodeCustom(undefined)
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [quoteNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([quoteNode])
       const result = renderer.render(data)
-      expect(result).not.toBeNull() // VStack is still rendered but empty
+      expect(result).not.toBeNull()
     })
   })
 
   describe("list node rendering", () => {
     it("renders unordered list", () => {
-      const listNode: SerializedListNode = {
-        type: "list",
-        tag: "ul",
-        version: 1,
-        children: [
-          {
-            type: "listitem",
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "Item 1",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedListItemNode,
-          {
-            type: "listitem",
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "Item 2",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedListItemNode,
-        ],
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [listNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([unorderedListNode])
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      expect(screen.getByText("Item 1")).toBeInTheDocument()
-      expect(screen.getByText("Item 2")).toBeInTheDocument()
+      expect(screen.getByText("List item 1")).toBeInTheDocument()
+      expect(screen.getByText("List item 2")).toBeInTheDocument()
     })
 
     it("renders ordered list", () => {
-      const listNode: SerializedListNode = {
-        type: "list",
-        tag: "ol",
-        version: 1,
-        children: [
-          {
-            type: "listitem",
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "First item",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedListItemNode,
-        ],
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [listNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([orderedListNode])
       const result = renderer.render(data)
       render(<span>{result}</span>)
       expect(screen.getByText("First item")).toBeInTheDocument()
     })
 
     it("returns null for list without children", () => {
-      const listNode: SerializedListNode = {
-        type: "list",
-        tag: "ul",
-        version: 1,
-        children: undefined,
-      }
+      const listNode = createListNodeCustom(ListType.UNORDERED, undefined)
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [listNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([listNode])
       const result = renderer.render(data)
-      expect(result).not.toBeNull() // VStack is still rendered but empty
+      expect(result).not.toBeNull()
     })
   })
 
   describe("list item node rendering", () => {
     it("renders list item with children", () => {
-      const listNode: SerializedListNode = {
-        type: "list",
-        tag: "ul",
-        version: 1,
-        children: [
-          {
-            type: "listitem",
-            version: 1,
-            children: [
-              {
-                type: "text",
-                text: "List item content",
-                version: 1,
-              } as SerializedTextNode,
-            ],
-          } as SerializedListItemNode,
-        ],
-      }
+      const listNode = createListNodeCustom(ListType.UNORDERED, [
+        createListItemNode([createTextNode("List item content")]),
+      ])
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [listNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([listNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -1030,45 +449,18 @@ describe("RichTextRenderer", () => {
     })
 
     it("renders list item without children", () => {
-      const listItemNode: SerializedListItemNode = {
-        type: "listitem",
-        version: 1,
-        children: undefined,
-      }
+      const listItemNode = createListItemNode(undefined)
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [listItemNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([listItemNode])
 
       const result = renderer.render(data)
-      expect(result).not.toBeNull() // VStack is still rendered
+      expect(result).not.toBeNull()
     })
   })
 
   describe("line break node rendering", () => {
     it("renders line break", () => {
-      const data: SerializedEditorState = {
-        root: {
-          children: [
-            {
-              type: "linebreak",
-              version: 1,
-            },
-          ],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([lineBreakNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
@@ -1078,55 +470,17 @@ describe("RichTextRenderer", () => {
 
   describe("horizontal rule node rendering", () => {
     it("renders horizontal rule", () => {
-      const data: SerializedEditorState = {
-        root: {
-          children: [
-            {
-              type: "horizontalrule",
-              version: 1,
-            },
-          ],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([horizontalRuleNode])
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      // Check that horizontal rule renders some content (Separator component)
       expect(result).not.toBeNull()
     })
   })
 
   describe("code node rendering", () => {
     it("renders code block with language", () => {
-      const codeNode: SerializedCodeNode = {
-        type: "code",
-        language: "javascript",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "console.log('Hello World')",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
-
-      const data: SerializedEditorState = {
-        root: {
-          children: [codeNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([javascriptCodeNode])
       const result = renderer.render(data)
       render(<span>{result}</span>)
       const codeElement = screen.getByText("console.log('Hello World')")
@@ -1135,53 +489,18 @@ describe("RichTextRenderer", () => {
     })
 
     it("renders code block without language", () => {
-      const codeNode: SerializedCodeNode = {
-        type: "code",
-        version: 1,
-        children: [
-          {
-            type: "text",
-            text: "some code",
-            version: 1,
-          } as SerializedTextNode,
-        ],
-      }
+      const codeNode = createCodeNodeCustom([createTextNode("some code")])
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [codeNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([codeNode])
       const result = renderer.render(data)
       render(<span>{result}</span>)
       expect(screen.getByText("some code")).toBeInTheDocument()
     })
 
     it("renders code block without children", () => {
-      const codeNode: SerializedCodeNode = {
-        type: "code",
-        language: "python",
-        version: 1,
-        children: undefined,
-      }
+      const codeNode = createCodeNodeCustom(undefined, "python")
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [codeNode],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
-
+      const data = createEditorState([codeNode])
       const result = renderer.render(data)
       render(<div data-testid="code-container">{result}</div>)
       const container = screen.getByTestId("code-container")
@@ -1199,28 +518,9 @@ describe("RichTextRenderer", () => {
         <div data-testid="custom-paragraph">{children}</div>
       )
 
-      const data: SerializedEditorState = {
-        root: {
-          children: [
-            {
-              type: "paragraph",
-              version: 1,
-              children: [
-                {
-                  type: "text",
-                  text: "Custom content",
-                  version: 1,
-                } as SerializedTextNode,
-              ],
-            } as SerializedParagraphNode,
-          ],
-          direction: "ltr",
-          format: "",
-          indent: 0,
-          type: "root",
-          version: 1,
-        },
-      }
+      const data = createEditorState([
+        createParagraphNodeCustom([createTextNode("Custom content")]),
+      ])
 
       const result = renderer.render(data, {
         customComponents: {
@@ -1239,14 +539,14 @@ describe("RichTextRenderer", () => {
         root: {
           children: [
             {
-              type: "custom",
+              type: NodeType.CUSTOM,
               version: 1,
             },
           ],
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -1271,7 +571,7 @@ describe("RichTextRenderer", () => {
               version: 1,
               children: [
                 {
-                  type: "text",
+                  type: NodeType.TEXT,
                   text: "Unknown node content",
                   version: 1,
                 },
@@ -1281,7 +581,7 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -1303,13 +603,13 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
 
       const result = renderer.render(data)
-      expect(result).not.toBeNull() // VStack is still rendered but empty
+      expect(result).not.toBeNull()
     })
   })
 
@@ -1319,41 +619,41 @@ describe("RichTextRenderer", () => {
         root: {
           children: [
             {
-              type: "paragraph",
+              type: NodeType.PARAGRAPH,
               version: 1,
               children: [
                 {
-                  type: "text",
+                  type: NodeType.TEXT,
                   text: "Text with ",
                   version: 1,
                 },
                 {
-                  type: "link",
+                  type: NodeType.LINK,
                   fields: {
-                    linkType: "custom",
+                    linkType: LinkType.CUSTOM,
                     url: "https://example.com",
                   },
                   version: 1,
                   children: [
                     {
-                      type: "text",
+                      type: NodeType.TEXT,
                       text: "a link",
-                      format: 1, // Bold
+                      format: TextFormat.BOLD,
                       version: 1,
                     },
                   ],
                 },
                 {
-                  type: "text",
+                  type: NodeType.TEXT,
                   text: " and ",
                   version: 1,
                 },
                 {
-                  type: "linebreak",
+                  type: NodeType.LINE_BREAK,
                   version: 1,
                 },
                 {
-                  type: "text",
+                  type: NodeType.TEXT,
                   text: "line break",
                   version: 1,
                 },
@@ -1363,7 +663,7 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -1382,7 +682,7 @@ describe("RichTextRenderer", () => {
         root: {
           children: [
             {
-              type: "paragraph",
+              type: NodeType.PARAGRAPH,
               version: 1,
               children: [
                 {
@@ -1390,7 +690,7 @@ describe("RichTextRenderer", () => {
                   version: 1,
                   children: [
                     {
-                      type: "text",
+                      type: NodeType.TEXT,
                       text: "Nested unknown content",
                       version: 1,
                     },
@@ -1402,7 +702,7 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -1416,7 +716,7 @@ describe("RichTextRenderer", () => {
   describe("edge cases for coverage", () => {
     it("handles paragraph with null children in inline rendering", () => {
       const paragraphNode: SerializedParagraphNode = {
-        type: "paragraph",
+        type: NodeType.PARAGRAPH,
         version: 1,
         children: null as unknown as SerializedLexicalNode[],
       }
@@ -1427,24 +727,23 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
 
       const result = renderer.render(data)
-      expect(result).not.toBeNull() // VStack is still rendered
+      expect(result).not.toBeNull()
     })
 
     it("handles unknown node without children in inline rendering", () => {
       const paragraphNode: SerializedParagraphNode = {
-        type: "paragraph",
+        type: NodeType.PARAGRAPH,
         version: 1,
         children: [
           {
             type: "unknown-inline",
             version: 1,
-            // No children property
           } as SerializedLexicalNode,
         ],
       }
@@ -1455,25 +754,23 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      // Should render the paragraph but unknown inline node returns null
       expect(result).not.toBeNull()
     })
 
     it("returns null for upload node with media document without URL", () => {
       const uploadNode: SerializedUploadNode = {
-        type: "upload",
+        type: NodeType.UPLOAD,
         relationTo: "media",
         value: {
           id: "1",
           alt: "Image without URL",
-          // No url property
         } as unknown as SerializedMediaDocument,
         version: 1,
       }
@@ -1484,19 +781,18 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
 
       const result = renderer.render(data)
-      expect(result).not.toBeNull() // VStack is still rendered but empty
+      expect(result).not.toBeNull()
     })
 
     it("handles renderInlineNodes with null nodes", () => {
-      // This test specifically targets line 217 - the null check in renderInlineNodes
       const paragraphNode: SerializedParagraphNode = {
-        type: "paragraph",
+        type: NodeType.PARAGRAPH,
         version: 1,
         children: null as unknown as SerializedLexicalNode[],
       }
@@ -1507,7 +803,7 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -1517,9 +813,8 @@ describe("RichTextRenderer", () => {
     })
 
     it("handles renderInlineNodes with empty array", () => {
-      // This test specifically targets line 217 - the empty array check in renderInlineNodes
       const paragraphNode: SerializedParagraphNode = {
-        type: "paragraph",
+        type: NodeType.PARAGRAPH,
         version: 1,
         children: [],
       }
@@ -1530,7 +825,7 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -1540,15 +835,14 @@ describe("RichTextRenderer", () => {
     })
 
     it("covers renderInlineNodes null return with link containing empty children", () => {
-      // This should trigger the renderInlineNodes method with empty/null children
       const linkNode: SerializedLinkNode = {
-        type: "link",
+        type: NodeType.LINK,
         fields: {
-          linkType: "custom",
+          linkType: LinkType.CUSTOM,
           url: "https://example.com",
         },
         version: 1,
-        children: [], // Empty children array should trigger line 217
+        children: [],
       }
 
       const data: SerializedEditorState = {
@@ -1557,26 +851,24 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      // Should render link but with no content
       expect(screen.getByRole("link")).toBeInTheDocument()
     })
 
     it("covers upload node null return when media has no URL", () => {
-      // This should specifically target line 336 in renderUploadNode
       const uploadNode: SerializedUploadNode = {
-        type: "upload",
+        type: NodeType.UPLOAD,
         relationTo: "media",
         value: {
           id: "test-id",
           alt: "Test alt",
-          url: "", // Empty URL string to trigger line 336: if (!url)
+          url: "",
         },
         version: 1,
       }
@@ -1587,21 +879,20 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
 
       const result = renderer.render(data)
-      expect(result).not.toBeNull() // Should render VStack but no image
+      expect(result).not.toBeNull()
       render(<span>{result}</span>)
       expect(screen.queryByRole("img")).not.toBeInTheDocument()
     })
 
     it("covers upload node null return when media URL is undefined", () => {
-      // Alternative test for line 336 with undefined URL
       const uploadNode: SerializedUploadNode = {
-        type: "upload",
+        type: NodeType.UPLOAD,
         relationTo: "media",
         value: {
           id: "test-id",
@@ -1617,7 +908,7 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -1628,18 +919,17 @@ describe("RichTextRenderer", () => {
       expect(screen.queryByRole("img")).not.toBeInTheDocument()
     })
 
-    it("covers internal link with invalid document (line 294 false branch)", () => {
-      // Test the false branch of isDocumentWithSlug(doc) on line 294
+    it("covers internal link with invalid document", () => {
       const linkNode: SerializedLinkNode = {
-        type: "link",
+        type: NodeType.LINK,
         fields: {
-          linkType: "internal",
+          linkType: LinkType.INTERNAL,
           doc: { id: "123" } as unknown,
         },
         version: 1,
         children: [
           {
-            type: "text",
+            type: NodeType.TEXT,
             text: "Invalid doc link",
             version: 1,
           } as SerializedTextNode,
@@ -1652,34 +942,32 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      // Should render as span, not link
       expect(screen.getByText("Invalid doc link")).toBeInTheDocument()
       expect(screen.queryByRole("link")).not.toBeInTheDocument()
     })
 
-    it("covers internal link with valid document (line 294 true branch)", () => {
-      // Test the true branch of isDocumentWithSlug(doc) on line 294
+    it("covers internal link with valid document", () => {
       const linkNode: SerializedLinkNode = {
-        type: "link",
+        type: NodeType.LINK,
         fields: {
-          linkType: "internal",
+          linkType: LinkType.INTERNAL,
           doc: {
             id: "123",
             slug: "test-document",
-          }, // Valid doc with slug
+          },
           newTab: true,
         },
         version: 1,
         children: [
           {
-            type: "text",
+            type: NodeType.TEXT,
             text: "Valid doc link",
             version: 1,
           } as SerializedTextNode,
@@ -1692,31 +980,29 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      // Should render as proper link
       const link = screen.getByRole("link", { name: "Valid doc link" })
       expect(link).toHaveAttribute("href", "/test-document")
       expect(link).toHaveAttribute("target", "_blank")
     })
 
     it("covers internal link with null doc (no fields.doc)", () => {
-      // Test case where fields.doc is null, which should trigger the "no href" path
       const linkNode: SerializedLinkNode = {
-        type: "link",
+        type: NodeType.LINK,
         fields: {
-          linkType: "internal",
+          linkType: LinkType.INTERNAL,
           doc: null,
         },
         version: 1,
         children: [
           {
-            type: "text",
+            type: NodeType.TEXT,
             text: "Null doc link",
             version: 1,
           } as SerializedTextNode,
@@ -1729,25 +1015,23 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
 
       const result = renderer.render(data)
       render(<span>{result}</span>)
-      // Should render as span, not link
       expect(screen.getByText("Null doc link")).toBeInTheDocument()
       expect(screen.queryByRole("link")).not.toBeInTheDocument()
     })
 
     it("covers image default values", () => {
       const uploadNode: SerializedUploadNode = {
-        type: "upload",
+        type: NodeType.UPLOAD,
         relationTo: "media",
         value: {
           id: "test-id",
-          // No alt, height, or width to trigger default values
           url: "/test-image.jpg",
         },
         version: 1,
@@ -1759,7 +1043,7 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -1777,7 +1061,7 @@ describe("RichTextRenderer", () => {
   describe("URL resolution", () => {
     it("handles trailing slash in base URL", () => {
       const uploadNode: SerializedUploadNode = {
-        type: "upload",
+        type: NodeType.UPLOAD,
         relationTo: "media",
         value: {
           id: "1",
@@ -1795,7 +1079,7 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -1803,7 +1087,6 @@ describe("RichTextRenderer", () => {
       const result = renderer.render(data, { mediaBaseUrl: "https://api.example.com/" })
       render(<span>{result}</span>)
       const image = screen.getByRole("img", { name: "Test Image" })
-      // Next.js Image component transforms URLs, so check it contains the expected URL
       expect(image.getAttribute("src")).toContain("api.example.com")
       expect(image.getAttribute("src")).toContain("image.jpg")
       expect(image).toHaveAttribute("alt", "Test Image")
@@ -1811,7 +1094,7 @@ describe("RichTextRenderer", () => {
 
     it("handles URL without leading slash", () => {
       const uploadNode: SerializedUploadNode = {
-        type: "upload",
+        type: NodeType.UPLOAD,
         relationTo: "media",
         value: {
           id: "1",
@@ -1829,7 +1112,7 @@ describe("RichTextRenderer", () => {
           direction: "ltr",
           format: "",
           indent: 0,
-          type: "root",
+          type: NodeType.ROOT,
           version: 1,
         },
       }
@@ -1837,7 +1120,6 @@ describe("RichTextRenderer", () => {
       const result = renderer.render(data, { mediaBaseUrl: "https://api.example.com" })
       render(<span>{result}</span>)
       const image = screen.getByRole("img", { name: "Test Image" })
-      // Next.js Image component transforms URLs, so check it contains the expected URL
       expect(image.getAttribute("src")).toContain("api.example.com")
       expect(image.getAttribute("src")).toContain("image.jpg")
       expect(image).toHaveAttribute("alt", "Test Image")

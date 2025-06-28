@@ -1,3 +1,5 @@
+import type { LinkType, ListType, NodeType } from "../constants"
+
 // Basic Lexical node interface
 export interface SerializedLexicalNode {
   type: string
@@ -6,21 +8,21 @@ export interface SerializedLexicalNode {
 
 // Extended Lexical node types
 export interface SerializedTextNode extends SerializedLexicalNode {
-  type: "text"
+  type: NodeType.TEXT
   text: string
   format?: number
 }
 
 export interface SerializedHeadingNode extends SerializedLexicalNode {
-  type: "heading"
+  type: NodeType.HEADING
   tag: string
   children: SerializedLexicalNode[]
 }
 
 export interface SerializedLinkNode extends SerializedLexicalNode {
-  type: "link"
+  type: NodeType.LINK
   fields: {
-    linkType: "custom" | "internal"
+    linkType: LinkType.CUSTOM | LinkType.INTERNAL
     url?: string
     newTab?: boolean
     doc?: unknown
@@ -29,42 +31,42 @@ export interface SerializedLinkNode extends SerializedLexicalNode {
 }
 
 export interface SerializedUploadNode extends SerializedLexicalNode {
-  type: "upload"
+  type: NodeType.UPLOAD
   relationTo: string
   value: unknown
 }
 
 export interface SerializedParagraphNode extends SerializedLexicalNode {
-  type: "paragraph"
+  type: NodeType.PARAGRAPH
   children?: SerializedLexicalNode[]
 }
 
 export interface SerializedQuoteNode extends SerializedLexicalNode {
-  type: "quote"
+  type: NodeType.QUOTE
   children?: SerializedLexicalNode[]
 }
 
 export interface SerializedListNode extends SerializedLexicalNode {
-  type: "list"
-  tag: "ol" | "ul"
+  type: NodeType.LIST
+  tag: ListType
   children?: SerializedLexicalNode[]
 }
 
 export interface SerializedListItemNode extends SerializedLexicalNode {
-  type: "listitem"
+  type: NodeType.LIST_ITEM
   children?: SerializedLexicalNode[]
 }
 
 export interface SerializedLineBreakNode extends SerializedLexicalNode {
-  type: "linebreak"
+  type: NodeType.LINE_BREAK
 }
 
 export interface SerializedHorizontalRuleNode extends SerializedLexicalNode {
-  type: "horizontalrule"
+  type: NodeType.HORIZONTAL_RULE
 }
 
 export interface SerializedCodeNode extends SerializedLexicalNode {
-  type: "code"
+  type: NodeType.CODE
   language?: string
   children?: SerializedLexicalNode[]
 }
@@ -74,7 +76,7 @@ export interface SerializedNodeWithChildren extends SerializedLexicalNode {
 }
 
 export interface SerializedMediaDocument extends SerializedLexicalNode {
-  type: "media"
+  type: NodeType.MEDIA
   url: string
   alt: string
 }

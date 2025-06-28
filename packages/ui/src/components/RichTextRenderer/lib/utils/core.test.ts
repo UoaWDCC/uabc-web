@@ -1,62 +1,32 @@
-import type {
-  SerializedHeadingNode,
-  SerializedLexicalNode,
-  SerializedListItemNode,
-  SerializedListNode,
-  SerializedParagraphNode,
-  SerializedTextNode,
-} from "../types"
+import {
+  createHeadingNode,
+  createListNode,
+  createParagraphNode,
+  createTextNode,
+  emptyTextNode,
+} from "@/test-config/RichTextRenderer.mock"
+import { ListType } from "../constants"
+import { NodeType } from "../constants"
+import type { SerializedLexicalNode, SerializedTextNode } from "../types"
 import { createAnchor, createNodeKey, extractTextFromNodes } from "./core"
 
 describe("Core Utilities", () => {
   describe("extractTextFromNodes", () => {
     it("extracts text from a single text node", () => {
-      const nodes: SerializedLexicalNode[] = [
-        {
-          type: "text",
-          text: "Hello world",
-          version: 1,
-        } as SerializedTextNode,
-      ]
+      const nodes: SerializedLexicalNode[] = [createTextNode("Hello world")]
 
       expect(extractTextFromNodes(nodes)).toBe("Hello world")
     })
 
     it("extracts text from multiple text nodes", () => {
-      const nodes: SerializedLexicalNode[] = [
-        {
-          type: "text",
-          text: "Hello ",
-          version: 1,
-        } as SerializedTextNode,
-        {
-          type: "text",
-          text: "world",
-          version: 1,
-        } as SerializedTextNode,
-      ]
+      const nodes: SerializedLexicalNode[] = [createTextNode("Hello "), createTextNode("world")]
 
       expect(extractTextFromNodes(nodes)).toBe("Hello world")
     })
 
     it("extracts text from nested nodes with children", () => {
       const nodes: SerializedLexicalNode[] = [
-        {
-          type: "paragraph",
-          children: [
-            {
-              type: "text",
-              text: "Nested ",
-              version: 1,
-            } as SerializedTextNode,
-            {
-              type: "text",
-              text: "text",
-              version: 1,
-            } as SerializedTextNode,
-          ],
-          version: 1,
-        } as SerializedParagraphNode,
+        createParagraphNode([createTextNode("Nested "), createTextNode("text")]),
       ]
 
       expect(extractTextFromNodes(nodes)).toBe("Nested text")
@@ -64,47 +34,14 @@ describe("Core Utilities", () => {
 
     it("extracts text from deeply nested nodes", () => {
       const nodes: SerializedLexicalNode[] = [
-        {
-          type: "list",
-          children: [
-            {
-              type: "listitem",
-              children: [
-                {
-                  type: "text",
-                  text: "Item 1",
-                  version: 1,
-                } as SerializedTextNode,
-              ],
-              version: 1,
-            } as SerializedListItemNode,
-            {
-              type: "listitem",
-              children: [
-                {
-                  type: "text",
-                  text: "Item 2",
-                  version: 1,
-                } as SerializedTextNode,
-              ],
-              version: 1,
-            } as SerializedListItemNode,
-          ],
-          version: 1,
-        } as SerializedListNode,
+        createListNode(ListType.UNORDERED, ["Item 1", "Item 2"]),
       ]
 
       expect(extractTextFromNodes(nodes)).toBe("Item 1Item 2")
     })
 
     it("handles empty text nodes", () => {
-      const nodes: SerializedLexicalNode[] = [
-        {
-          type: "text",
-          text: "",
-          version: 1,
-        } as SerializedTextNode,
-      ]
+      const nodes: SerializedLexicalNode[] = [emptyTextNode]
 
       expect(extractTextFromNodes(nodes)).toBe("")
     })
@@ -112,14 +49,10 @@ describe("Core Utilities", () => {
     it("handles nodes without text property", () => {
       const nodes: SerializedLexicalNode[] = [
         {
-          type: "linebreak",
+          type: NodeType.LINE_BREAK,
           version: 1,
         },
-        {
-          type: "text",
-          text: "Hello",
-          version: 1,
-        } as SerializedTextNode,
+        createTextNode("Hello"),
       ]
 
       expect(extractTextFromNodes(nodes)).toBe("Hello")
@@ -131,31 +64,13 @@ describe("Core Utilities", () => {
 
     it("handles mixed node types", () => {
       const nodes: SerializedLexicalNode[] = [
+        createTextNode("Start"),
         {
-          type: "text",
-          text: "Start",
-          version: 1,
-        } as SerializedTextNode,
-        {
-          type: "linebreak",
+          type: NodeType.LINE_BREAK,
           version: 1,
         },
-        {
-          type: "paragraph",
-          children: [
-            {
-              type: "text",
-              text: "Middle",
-              version: 1,
-            } as SerializedTextNode,
-          ],
-          version: 1,
-        } as SerializedParagraphNode,
-        {
-          type: "text",
-          text: "End",
-          version: 1,
-        } as SerializedTextNode,
+        createParagraphNode([createTextNode("Middle")]),
+        createTextNode("End"),
       ]
 
       expect(extractTextFromNodes(nodes)).toBe("StartMiddleEnd")
@@ -164,20 +79,16 @@ describe("Core Utilities", () => {
     it("handles nodes with undefined or null text", () => {
       const nodes: SerializedLexicalNode[] = [
         {
-          type: "text",
+          type: NodeType.TEXT,
           text: undefined,
           version: 1,
         } as unknown as SerializedTextNode,
         {
-          type: "text",
+          type: NodeType.TEXT,
           text: null,
           version: 1,
         } as unknown as SerializedTextNode,
-        {
-          type: "text",
-          text: "Valid text",
-          version: 1,
-        } as SerializedTextNode,
+        createTextNode("Valid text"),
       ]
 
       expect(extractTextFromNodes(nodes)).toBe("Valid text")
@@ -279,9 +190,6 @@ describe("Core Utilities", () => {
     })
 
     it("starts from 1", () => {
-      // Create a fresh instance by importing again if needed
-      // This test assumes we're starting fresh, but in practice
-      // the counter continues from previous calls
       const key = createNodeKey()
       expect(key).toMatch(/^node-\d+$/)
       const num = Number.parseInt(key.replace("node-", ""), 10)
@@ -292,16 +200,8 @@ describe("Core Utilities", () => {
   describe("integration tests", () => {
     it("works together to extract text and create anchor", () => {
       const nodes: SerializedLexicalNode[] = [
-        {
-          type: "text",
-          text: "Getting Started: ",
-          version: 1,
-        } as SerializedTextNode,
-        {
-          type: "text",
-          text: "A Complete Guide",
-          version: 1,
-        } as SerializedTextNode,
+        createTextNode("Getting Started: "),
+        createTextNode("A Complete Guide"),
       ]
 
       const extractedText = extractTextFromNodes(nodes)
@@ -312,26 +212,7 @@ describe("Core Utilities", () => {
     })
 
     it("handles nested content for anchor generation", () => {
-      const nodes: SerializedLexicalNode[] = [
-        {
-          type: "heading",
-          tag: "h1",
-          children: [
-            {
-              type: "text",
-              text: "Chapter 1: ",
-              version: 1,
-            } as SerializedTextNode,
-            {
-              type: "text",
-              text: "Introduction",
-              format: 1, // bold
-              version: 1,
-            } as SerializedTextNode,
-          ],
-          version: 1,
-        } as SerializedHeadingNode,
-      ]
+      const nodes: SerializedLexicalNode[] = [createHeadingNode("h1", "Chapter 1: Introduction")]
 
       const extractedText = extractTextFromNodes(nodes)
       const anchor = createAnchor(extractedText)

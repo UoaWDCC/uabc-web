@@ -6,7 +6,6 @@ import {
 import type { Meta, StoryObj } from "@storybook/react"
 import { Container } from "@yamada-ui/react"
 import { RichText } from "./RichText"
-import type { SerializedEditorState } from "./lib/types"
 
 const meta: Meta<typeof RichText> = {
   title: "Components / RichTextRenderer",
@@ -44,7 +43,7 @@ type Story = StoryObj<typeof RichText>
 
 export const Basic: Story = {
   args: {
-    data: storyBasicData as SerializedEditorState,
+    data: storyBasicData,
   },
   render: (args) => (
     <Container maxW="4xl" py="xl">
@@ -92,7 +91,7 @@ export const WithFallback: Story = {
 
 export const AllFormattingTypes: Story = {
   args: {
-    data: allFormattingEditorState as SerializedEditorState,
+    data: allFormattingEditorState,
   },
   render: (args) => (
     <Container maxW="4xl" py="xl">
