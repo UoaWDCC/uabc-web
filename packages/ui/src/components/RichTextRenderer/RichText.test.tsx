@@ -1,201 +1,43 @@
+import {
+  basicEditorState,
+  complexEditorState,
+  emptyEditorState,
+} from "@/test-config/RichTextRenderer.mock"
 import { render, screen } from "@/test-utils"
 import { isValidElement } from "react"
 import { RichText } from "./RichText"
 import * as RichTextModule from "./index"
 import type {
-  SerializedCodeNode,
   SerializedEditorState,
   SerializedHeadingNode,
   SerializedLexicalNode,
   SerializedLinkNode,
-  SerializedListItemNode,
-  SerializedListNode,
   SerializedParagraphNode,
-  SerializedQuoteNode,
   SerializedTextNode,
   SerializedUploadNode,
 } from "./lib/types"
 
 describe("<RichText />", () => {
-  const mockBasicData: SerializedEditorState = {
-    root: {
-      children: [
-        {
-          type: "paragraph",
-          version: 1,
-          children: [
-            {
-              type: "text",
-              text: "Hello World",
-              version: 1,
-            } as SerializedTextNode,
-          ],
-        } as SerializedParagraphNode,
-      ],
-      direction: "ltr",
-      format: "",
-      indent: 0,
-      type: "root",
-      version: 1,
-    },
-  }
-
-  const mockComplexData: SerializedEditorState = {
-    root: {
-      children: [
-        {
-          type: "heading",
-          tag: "h1",
-          version: 1,
-          children: [
-            {
-              type: "text",
-              text: "Test Heading",
-              version: 1,
-            } as SerializedTextNode,
-          ],
-        } as SerializedHeadingNode,
-        {
-          type: "paragraph",
-          version: 1,
-          children: [
-            {
-              type: "text",
-              text: "This is ",
-              version: 1,
-            },
-            {
-              type: "text",
-              text: "bold text",
-              format: 1, // Bold
-              version: 1,
-            },
-            {
-              type: "text",
-              text: " and ",
-              version: 1,
-            },
-            {
-              type: "text",
-              text: "italic text",
-              format: 2, // Italic
-              version: 1,
-            },
-          ] as SerializedTextNode[],
-        } as SerializedParagraphNode,
-        {
-          type: "link",
-          fields: {
-            linkType: "custom",
-            url: "https://example.com",
-            newTab: true,
-          } as SerializedLinkNode["fields"],
-          version: 1,
-          children: [
-            {
-              type: "text",
-              text: "External Link",
-              version: 1,
-            } as SerializedTextNode,
-          ],
-        } as SerializedLinkNode,
-        {
-          type: "upload",
-          relationTo: "media",
-          value: {
-            id: "1",
-            url: "/test-image.jpg",
-            alt: "Test Image",
-            width: 300,
-            height: 200,
-          },
-          version: 1,
-        } as SerializedUploadNode,
-        {
-          type: "list",
-          tag: "ul",
-          version: 1,
-          children: [
-            {
-              type: "listitem",
-              version: 1,
-              children: [
-                {
-                  type: "text",
-                  text: "List item 1",
-                  version: 1,
-                } as SerializedTextNode,
-              ],
-            } as SerializedListItemNode,
-            {
-              type: "listitem",
-              version: 1,
-              children: [
-                {
-                  type: "text",
-                  text: "List item 2",
-                  version: 1,
-                },
-              ] as SerializedTextNode[],
-            },
-          ],
-        } as SerializedListNode,
-        {
-          type: "quote",
-          version: 1,
-          children: [
-            {
-              type: "text",
-              text: "This is a quote",
-              version: 1,
-            } as SerializedTextNode,
-          ],
-        } as SerializedQuoteNode,
-        {
-          type: "code",
-          language: "javascript",
-          version: 1,
-          children: [
-            {
-              type: "text",
-              text: "console.log('Hello World')",
-              version: 1,
-            } as SerializedTextNode,
-          ],
-        } as SerializedCodeNode,
-        {
-          type: "horizontalrule",
-          version: 1,
-        },
-      ],
-      direction: "ltr",
-      format: "",
-      indent: 0,
-      type: "root",
-      version: 1,
-    },
-  }
-
   it("should re-export the RichText component and check if RichText exists", () => {
     expect(RichTextModule.RichText).toBeDefined()
     expect(RichTextModule.default).toBeDefined()
-    expect(isValidElement(<RichTextModule.RichText data={mockBasicData} />)).toBeTruthy()
+    expect(isValidElement(<RichTextModule.RichText data={basicEditorState} />)).toBeTruthy()
   })
 
   it("renders basic rich text content", () => {
-    render(<RichText data={mockBasicData} />)
-    expect(screen.getByText("Hello World")).toBeInTheDocument()
+    render(<RichText data={basicEditorState} />)
+    expect(screen.getByText("Plain text")).toBeInTheDocument()
   })
 
   it("renders complex rich text content with all node types", () => {
-    render(<RichText data={mockComplexData} />)
+    render(<RichText data={complexEditorState} />)
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Test Heading")
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Main Heading")
 
     expect(screen.getByText("This is")).toBeInTheDocument()
-    expect(screen.getByText("bold text")).toBeInTheDocument()
+    expect(screen.getByText("Bold text")).toBeInTheDocument()
     expect(screen.getByText("and")).toBeInTheDocument()
-    expect(screen.getByText("italic text")).toBeInTheDocument()
+    expect(screen.getByText("Italic text")).toBeInTheDocument()
 
     const link = screen.getByRole("link", { name: "External Link" })
     expect(link).toHaveAttribute("href", "https://example.com")
@@ -229,25 +71,14 @@ describe("<RichText />", () => {
   })
 
   it("returns fallback when data has no children", () => {
-    const emptyData: SerializedEditorState = {
-      root: {
-        children: [],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "root",
-        version: 1,
-      },
-    }
-
-    render(<RichText data={emptyData} fallback="Empty content" />)
+    render(<RichText data={emptyEditorState} fallback="Empty content" />)
     expect(screen.getByText("Empty content")).toBeInTheDocument()
   })
 
   it("renders with custom text props", () => {
-    render(<RichText data={mockBasicData} textProps={{ color: "red.500", fontSize: "lg" }} />)
+    render(<RichText data={basicEditorState} textProps={{ color: "red.500", fontSize: "lg" }} />)
 
-    const textElement = screen.getByText("Hello World")
+    const textElement = screen.getByText("Plain text")
     expect(textElement).toHaveStyle({ color: "var(--ui-colors-red-500)" })
   })
 
@@ -657,22 +488,22 @@ describe("<RichText />", () => {
         customComponents={{
           paragraph: CustomParagraph,
         }}
-        data={mockBasicData}
+        data={basicEditorState}
       />,
     )
 
     expect(screen.getByTestId("custom-paragraph")).toBeInTheDocument()
-    expect(screen.getByText("Hello World")).toBeInTheDocument()
+    expect(screen.getByText("Plain text")).toBeInTheDocument()
   })
 
   it("memoizes content properly", () => {
-    const { rerender } = render(<RichText data={mockBasicData} />)
+    const { rerender } = render(<RichText data={basicEditorState} />)
 
-    const firstRender = screen.getByText("Hello World")
+    const firstRender = screen.getByText("Plain text")
 
-    rerender(<RichText data={mockBasicData} />)
+    rerender(<RichText data={basicEditorState} />)
 
-    const secondRender = screen.getByText("Hello World")
+    const secondRender = screen.getByText("Plain text")
     expect(firstRender).toBe(secondRender)
   })
 
@@ -700,12 +531,12 @@ describe("<RichText />", () => {
       },
     }
 
-    const { rerender } = render(<RichText data={mockBasicData} />)
-    expect(screen.getByText("Hello World")).toBeInTheDocument()
+    const { rerender } = render(<RichText data={basicEditorState} />)
+    expect(screen.getByText("Plain text")).toBeInTheDocument()
 
     rerender(<RichText data={newData} />)
     expect(screen.getByText("Updated Content")).toBeInTheDocument()
-    expect(screen.queryByText("Hello World")).not.toBeInTheDocument()
+    expect(screen.queryByText("Plain text")).not.toBeInTheDocument()
   })
 
   it("has correct display name", () => {

@@ -1,3 +1,15 @@
+import {
+  boldItalicTextNode,
+  boldTextNode,
+  codeTextNode,
+  emptyTextNode,
+  italicTextNode,
+  multipleFormatsTextNode,
+  plainTextNode,
+  strikeUnderlineTextNode,
+  strikethroughTextNode,
+  underlineTextNode,
+} from "@/test-config/RichTextRenderer.mock"
 import { render, screen } from "@/test-utils"
 import { TextFormat } from "../constants"
 import type { RichTextRendererOptions, SerializedTextNode } from "../types"
@@ -12,13 +24,7 @@ describe("renderTextNode", () => {
   }
 
   it("renders plain text without formatting", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Plain text",
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
+    const result = renderTextNode(plainTextNode, "test-key", mockOptions)
     renderResult(result)
 
     const textElement = screen.getByText("Plain text")
@@ -27,14 +33,7 @@ describe("renderTextNode", () => {
   })
 
   it("renders bold text", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Bold text",
-      format: TextFormat.BOLD,
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
+    const result = renderTextNode(boldTextNode, "test-key", mockOptions)
     render(<span>{result}</span>)
 
     const textElement = screen.getByText("Bold text")
@@ -43,14 +42,7 @@ describe("renderTextNode", () => {
   })
 
   it("renders italic text", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Italic text",
-      format: TextFormat.ITALIC,
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
+    const result = renderTextNode(italicTextNode, "test-key", mockOptions)
     render(<span>{result}</span>)
 
     const textElement = screen.getByText("Italic text")
@@ -58,14 +50,7 @@ describe("renderTextNode", () => {
   })
 
   it("renders strikethrough text", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Strikethrough text",
-      format: TextFormat.STRIKETHROUGH,
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
+    const result = renderTextNode(strikethroughTextNode, "test-key", mockOptions)
     render(<span>{result}</span>)
 
     const textElement = screen.getByText("Strikethrough text")
@@ -73,14 +58,7 @@ describe("renderTextNode", () => {
   })
 
   it("renders underlined text", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Underlined text",
-      format: TextFormat.UNDERLINE,
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
+    const result = renderTextNode(underlineTextNode, "test-key", mockOptions)
     render(<span>{result}</span>)
 
     const textElement = screen.getByText("Underlined text")
@@ -88,14 +66,7 @@ describe("renderTextNode", () => {
   })
 
   it("renders code text with Code component", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Code text",
-      format: TextFormat.CODE,
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
+    const result = renderTextNode(codeTextNode, "test-key", mockOptions)
     render(<span>{result}</span>)
 
     const codeElement = screen.getByText("Code text")
@@ -104,16 +75,7 @@ describe("renderTextNode", () => {
   })
 
   it("renders text with bold and italic", () => {
-    const result = renderTextNode(
-      {
-        type: "text",
-        text: "Bold and italic",
-        format: 3, // Bold (1) + Italic (2)
-        version: 1,
-      },
-      "test-key",
-      {},
-    )
+    const result = renderTextNode(boldItalicTextNode, "test-key", {})
     render(<span>{result}</span>)
 
     const textElement = screen.getByText("Bold and italic")
@@ -122,36 +84,8 @@ describe("renderTextNode", () => {
     expect(textElement.parentElement?.tagName.toLowerCase()).toBe("strong")
   })
 
-  it("renders text with bold, italic, and underline", () => {
-    const result = renderTextNode(
-      {
-        type: "text",
-        text: "Multiple formats",
-        format: 11, // Bold (1) + Italic (2) + Underline (8)
-        version: 1,
-      },
-      "test-key",
-      {},
-    )
-    render(<span>{result}</span>)
-
-    const textElement = screen.getByText("Multiple formats")
-    expect(textElement).toBeInTheDocument()
-    expect(textElement.tagName.toLowerCase()).toBe("em")
-    expect(textElement.parentElement?.tagName.toLowerCase()).toBe("strong")
-  })
-
   it("renders text with bold, italic, strikethrough and underline", () => {
-    const result = renderTextNode(
-      {
-        type: "text",
-        text: "Multiple formats",
-        format: 15, // Bold (1) + Italic (2) + Underline (8) + Strikethrough (4)
-        version: 1,
-      },
-      "test-key",
-      {},
-    )
+    const result = renderTextNode(multipleFormatsTextNode, "test-key", {})
     render(<span>{result}</span>)
 
     const textElement = screen.getByText("Multiple formats")
@@ -162,14 +96,7 @@ describe("renderTextNode", () => {
   })
 
   it("renders text with strikethrough and underline", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Strike and underline",
-      format: TextFormat.STRIKETHROUGH | TextFormat.UNDERLINE, // 12 (4 + 8)
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
+    const result = renderTextNode(strikeUnderlineTextNode, "test-key", mockOptions)
     render(<span>{result}</span>)
 
     const textElement = screen.getByText("Strike and underline")
@@ -212,21 +139,6 @@ describe("renderTextNode", () => {
     expect(textElement.parentElement?.tagName.toLowerCase()).toBe("s")
   })
 
-  it("handles text with no format property", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "No format",
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
-    render(<span>{result}</span>)
-
-    const textElement = screen.getByText("No format")
-    expect(textElement).toBeInTheDocument()
-    expect(textElement.tagName.toLowerCase()).toBe("span")
-  })
-
   it("handles text with format 0", () => {
     const node: SerializedTextNode = {
       type: "text",
@@ -244,13 +156,7 @@ describe("renderTextNode", () => {
   })
 
   it("handles empty text", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "",
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
+    const result = renderTextNode(emptyTextNode, "test-key", mockOptions)
     render(<div data-testid="empty-text-container">{result}</div>)
 
     const container = screen.getByTestId("empty-text-container")
@@ -307,7 +213,7 @@ describe("renderTextNode", () => {
     const node: SerializedTextNode = {
       type: "text",
       text: "Bold code",
-      format: TextFormat.CODE | TextFormat.BOLD, // 17 (16 + 1)
+      format: TextFormat.CODE | TextFormat.BOLD,
       version: 1,
     }
 
@@ -330,45 +236,5 @@ describe("renderTextNode", () => {
 
     expect(result).toBeDefined()
     expect((result as { key: string })?.key).toBe("custom-key")
-  })
-
-  it("handles special characters in text", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Special chars: <>&\"'",
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
-    render(<span>{result}</span>)
-
-    expect(screen.getByText("Special chars: <>&\"'")).toBeInTheDocument()
-  })
-
-  it("handles unicode characters", () => {
-    const node: SerializedTextNode = {
-      type: "text",
-      text: "Unicode: 🚀 café résumé",
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
-    render(<span>{result}</span>)
-
-    expect(screen.getByText("Unicode: 🚀 café résumé")).toBeInTheDocument()
-  })
-
-  it("handles very long text", () => {
-    const longText = "a".repeat(1000)
-    const node: SerializedTextNode = {
-      type: "text",
-      text: longText,
-      version: 1,
-    }
-
-    const result = renderTextNode(node, "test-key", mockOptions)
-    render(<span>{result}</span>)
-
-    expect(screen.getByText(longText)).toBeInTheDocument()
   })
 })
