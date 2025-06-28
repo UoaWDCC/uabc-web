@@ -46,7 +46,7 @@ export const POST = async (req: NextRequest) => {
   }
 
   const token = authService.signJWT({ user }, { expiresIn: "1h" })
-  const response = NextResponse.redirect(new URL("/onboarding/name", req.url))
+  const response = NextResponse.json({}, { status: StatusCodes.CREATED })
 
   response.cookies.set(AUTH_COOKIE_NAME, token, {
     httpOnly: true,

@@ -37,8 +37,7 @@ describe("api/auth/login", () => {
       const response = await login(req)
 
       expect(compareSpy).toHaveBeenCalledWith(PASSWORD_MOCK, HASHED_PASSWORD_MOCK)
-      expect(response.status).toBe(StatusCodes.TEMPORARY_REDIRECT)
-      expect(response.headers.get("location")).toBe("http://localhost:3000/onboarding/name")
+      expect(response.status).toBe(StatusCodes.CREATED)
 
       const token = response.cookies.get(AUTH_COOKIE_NAME)?.value
       expect(token).toBeDefined()
