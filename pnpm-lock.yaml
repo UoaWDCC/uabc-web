@@ -281,10 +281,10 @@ importers:
         specifier: 9.0.12
         version: 9.0.12(@swc/core@1.11.22)(esbuild@0.25.3)(next@15.3.3(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)(storybook@9.0.12(@testing-library/dom@10.4.0)(prettier@3.5.3))(type-fest@2.19.0)(typescript@5.8.3)(webpack-hot-middleware@2.26.1)(webpack@5.99.9(@swc/core@1.11.22)(esbuild@0.25.3))
       '@tanstack/react-query':
-        specifier: ^5.81.2
+        specifier: 5.81.2
         version: 5.81.2(react@19.1.0)
       '@tanstack/react-query-devtools':
-        specifier: ^5.81.2
+        specifier: 5.81.2
         version: 5.81.2(@tanstack/react-query@5.81.2(react@19.1.0))(react@19.1.0)
       '@yamada-ui/lucide':
         specifier: 1.10.5
@@ -305,8 +305,8 @@ importers:
         specifier: 9.0.12
         version: 9.0.12(@testing-library/dom@10.4.0)(prettier@3.5.3)
       zod:
-        specifier: ^3.22.4
-        version: 3.24.3
+        specifier: 3.22.4
+        version: 3.22.4
     devDependencies:
       '@mdx-js/react':
         specifier: 3.1.0
@@ -7810,6 +7810,9 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       zod: ^3.18.0
+
+  zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
 
   zod@3.24.3:
     resolution: {integrity: sha512-HhY1oqzWCQWuUqvBFnsyrtZRhyPeR7SUGv+C4+MsisMuVfSPx8HpwWqH8tRahSlt6M3PiFAcoeFhZAqIXTxoSg==}
@@ -17734,6 +17737,8 @@ snapshots:
   zod-validation-error@3.4.0(zod@3.24.3):
     dependencies:
       zod: 3.24.3
+
+  zod@3.22.4: {}
 
   zod@3.24.3: {}
 

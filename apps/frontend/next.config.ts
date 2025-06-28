@@ -5,10 +5,12 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        // TODO: PROPERLY IMPLEMENT THIS LATER
         protocol: "http",
         hostname: "localhost",
       },
       {
+        // TODO: PROPERLY IMPLEMENT THIS LATER
         protocol: process.env.NEXT_PUBLIC_API_URL?.startsWith("https://") ? "https" : "http",
         hostname: process.env.NEXT_PUBLIC_API_URL?.replace(/^https?:\/\//, ""),
       },
@@ -17,6 +19,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        // TODO: PROPERLY IMPLEMENT THIS LATER
         source: "/api/:path*",
         destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
       },

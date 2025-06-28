@@ -6,7 +6,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // matching all API routes
+        // TODO: PROPERLY IMPLEMENT THIS LATER FOR CORS
         source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
@@ -20,7 +20,7 @@ const nextConfig = {
         ],
       },
       {
-        // matching all payload API routes
+        // TODO: PROPERLY IMPLEMENT THIS LATER FOR CORS
         source: "/payload/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
