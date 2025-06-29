@@ -1,4 +1,2 @@
-export { RichText } from "./RichText"
-export { default } from "./RichText"
-
 export * from "./lib"
+export { default, RichText } from "./RichText"

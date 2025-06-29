@@ -1,10 +1,10 @@
+import { render, screen } from "@testing-library/react"
 import {
   createCodeNodeCustom,
   emptyCodeNode,
   javascriptCodeNode,
   noLanguageCodeNode,
 } from "@/test-config/mocks/RichText.mock"
-import { render, screen } from "@testing-library/react"
 import { renderCodeNode } from "./code"
 
 describe("renderCodeNode", () => {

@@ -1,8 +1,8 @@
-import { basicEditorState, complexEditorState } from "@/test-config/mocks/RichText.mock"
 import { render, screen } from "@testing-library/react"
 import type React from "react"
-import { RichText } from "./RichText"
+import { basicEditorState, complexEditorState } from "@/test-config/mocks/RichText.mock"
 import { NodeType } from "./lib/constants"
+import { RichText } from "./RichText"
 
 describe("RichText", () => {
   it("should render fallback for null or empty data", () => {

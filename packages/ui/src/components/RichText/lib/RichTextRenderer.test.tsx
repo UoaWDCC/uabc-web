@@ -1,3 +1,6 @@
+import { render, screen } from "@testing-library/react"
+import { List } from "@yamada-ui/react"
+import type React from "react"
 import {
   basicEditorState,
   complexEditorState,
@@ -23,11 +26,8 @@ import {
   lineBreakNode,
   simpleParagraphNode,
 } from "@/test-config/mocks/RichText.mock"
-import { render, screen } from "@testing-library/react"
-import { List } from "@yamada-ui/react"
-import type React from "react"
-import { RichTextRenderer, richTextRenderer } from "./RichTextRenderer"
 import { ListType, NodeType } from "./constants"
+import { RichTextRenderer, richTextRenderer } from "./RichTextRenderer"
 import type { SerializedEditorState, SerializedLexicalNode } from "./types"
 
 describe("RichTextRenderer", () => {

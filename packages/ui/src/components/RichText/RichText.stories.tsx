@@ -1,10 +1,10 @@
+import type { Meta, StoryObj } from "@storybook/react"
+import { Container } from "@yamada-ui/react"
 import {
   allFormattingEditorState,
   storyBasicData,
   storyComplexData,
 } from "@/test-config/mocks/RichText.mock"
-import type { Meta, StoryObj } from "@storybook/react"
-import { Container } from "@yamada-ui/react"
 import { RichText } from "./RichText"
 
 const meta: Meta<typeof RichText> = {

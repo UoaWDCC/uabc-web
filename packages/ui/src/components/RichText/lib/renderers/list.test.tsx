@@ -1,9 +1,9 @@
+import { render, screen } from "@testing-library/react"
 import {
   emptyListNode,
   orderedListNode,
   unorderedListNode,
 } from "@/test-config/mocks/RichText.mock"
-import { render, screen } from "@testing-library/react"
 import { renderListNode } from "./list"
 
 describe("renderListNode", () => {

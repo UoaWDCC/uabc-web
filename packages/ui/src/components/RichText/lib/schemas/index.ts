@@ -1,7 +1,7 @@
 import type { z } from "zod"
 
-export * from "./payload"
 export * from "./nodes"
+export * from "./payload"
 
 import type {
   DocumentWithSlugSchema,

@@ -1,22 +1,22 @@
-export { extractTextFromNodes, createAnchor, createNodeKey } from "./core"
+export { createAnchor, createNodeKey, extractTextFromNodes } from "./core"
 
 export {
-  isMediaDocument,
+  hasChildren,
+  isCodeNode,
   isDocumentWithSlug,
-  isLinkDocument,
-  isValidLinkFields,
-  isTextNode,
   isHeadingNode,
+  isHorizontalRuleNode,
+  isLineBreakNode,
+  isLinkDocument,
   isLinkNode,
-  isUploadNode,
+  isListItemNode,
+  isListNode,
+  isMediaDocument,
   isParagraphNode,
   isQuoteNode,
-  isListNode,
-  isListItemNode,
-  isLineBreakNode,
-  isHorizontalRuleNode,
-  isCodeNode,
-  hasChildren,
+  isTextNode,
+  isUploadNode,
+  isValidLinkFields,
 } from "./guards"
 
 export { resolveUrl } from "./url"

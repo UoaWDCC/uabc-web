@@ -1,5 +1,4 @@
-import { Text } from "@yamada-ui/react"
-import { Link } from "@yamada-ui/react"
+import { Link, Text } from "@yamada-ui/react"
 import NextLink from "next/link"
 import type React from "react"
 import { LinkType } from "../constants"

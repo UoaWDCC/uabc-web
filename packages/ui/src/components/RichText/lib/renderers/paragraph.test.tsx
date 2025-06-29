@@ -1,6 +1,6 @@
-import { emptyParagraphNode, simpleParagraphNode } from "@/test-config/mocks/RichText.mock"
 import { render, screen } from "@testing-library/react"
 import type { TextProps } from "@yamada-ui/react"
+import { emptyParagraphNode, simpleParagraphNode } from "@/test-config/mocks/RichText.mock"
 import { renderParagraphNode } from "./paragraph"
 
 describe("renderParagraphNode", () => {

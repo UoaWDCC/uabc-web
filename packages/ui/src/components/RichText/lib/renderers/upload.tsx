@@ -1,8 +1,7 @@
 import { Image } from "@repo/ui/components/Image"
 import type React from "react"
 import type { RichTextRendererOptions, SerializedUploadNode } from "../types"
-import { resolveUrl } from "../utils"
-import { isMediaDocument } from "../utils"
+import { isMediaDocument, resolveUrl } from "../utils"
 
 export const renderUploadNode = (
   node: SerializedUploadNode,

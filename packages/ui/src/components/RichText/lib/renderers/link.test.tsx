@@ -1,3 +1,5 @@
+import { render, screen } from "@testing-library/react"
+import type { LinkProps } from "@yamada-ui/react"
 import {
   createInternalLinkWithInvalidDoc,
   createLinkNodeNoUrl,
@@ -6,8 +8,6 @@ import {
   internalLinkWithLinkDocNode,
   invalidLinkNode,
 } from "@/test-config/mocks/RichText.mock"
-import { render, screen } from "@testing-library/react"
-import type { LinkProps } from "@yamada-ui/react"
 import { renderLinkNode } from "./link"
 
 describe("renderLinkNode", () => {

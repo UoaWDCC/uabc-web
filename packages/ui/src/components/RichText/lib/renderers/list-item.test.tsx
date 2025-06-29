@@ -1,6 +1,6 @@
-import { createListItemNode } from "@/test-config/mocks/RichText.mock"
 import { render, screen } from "@testing-library/react"
 import { DiscList } from "@yamada-ui/react"
+import { createListItemNode } from "@/test-config/mocks/RichText.mock"
 import { NodeType } from "../constants"
 import { renderListItemNode } from "./list-item"
 

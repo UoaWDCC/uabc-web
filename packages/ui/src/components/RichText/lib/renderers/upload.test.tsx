@@ -1,11 +1,11 @@
+import { render, screen } from "@testing-library/react"
+import type { ImageProps } from "@yamada-ui/react"
 import {
   createUploadNodeWithFilenameOnly,
   createUploadNodeWithRelation,
   imageUploadNode,
   invalidUploadNode,
 } from "@/test-config/mocks/RichText.mock"
-import { render, screen } from "@testing-library/react"
-import type { ImageProps } from "@yamada-ui/react"
 import { renderUploadNode } from "./upload"
 
 describe("renderUploadNode", () => {

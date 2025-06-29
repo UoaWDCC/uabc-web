@@ -1,5 +1,6 @@
 import type { z } from "zod"
 import type {
+  lexicalNodeSchema,
   SerializedCodeNodeSchema,
   SerializedHeadingNodeSchema,
   SerializedHorizontalRuleNodeSchema,
@@ -12,7 +13,6 @@ import type {
   SerializedQuoteNodeSchema,
   SerializedTextNodeSchema,
   SerializedUploadNodeSchema,
-  lexicalNodeSchema,
 } from "../schemas"
 
 export type SerializedLexicalNode = z.infer<typeof lexicalNodeSchema>
