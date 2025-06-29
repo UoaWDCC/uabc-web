@@ -88,7 +88,7 @@ export const GET = async (req: NextRequest) => {
   }
 
   const authDataService = new AuthDataService()
-  await authDataService.createAuth({
+  await authDataService.createAuthIfNotExist({
     user,
     email: user.email,
     provider: "google",

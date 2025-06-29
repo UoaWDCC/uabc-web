@@ -10,7 +10,9 @@ export default class AuthDataService {
    * @param newAuth The {@link CreateAuthenticationData} to create an {@link Authentication} with
    * @returns The {@link Authentication} document
    */
-  public async createAuth(newAuth: CreateAuthenticationData): Promise<Authentication | undefined> {
+  public async createAuthIfNotExist(
+    newAuth: CreateAuthenticationData,
+  ): Promise<Authentication | undefined> {
     const findExistingAuth = await payload.find({
       collection: "authentication",
       limit: 1,
