@@ -14,7 +14,7 @@ import type {
   SerializedUploadNode,
 } from "@/components/RichText/lib/types"
 
-export const createTextNode = (text = "Sample text", format?: TextFormat): SerializedTextNode => ({
+export const createTextNode = (text: string, format?: TextFormat): SerializedTextNode => ({
   type: NodeType.TEXT,
   text,
   format,

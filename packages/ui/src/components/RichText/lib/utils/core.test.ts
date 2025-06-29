@@ -1,3 +1,8 @@
+import {
+  createLinkNode,
+  createParagraphNode,
+  createTextNode,
+} from "@/test-config/mocks/RichText.mock"
 import type { SerializedLexicalNode } from "../types"
 import { createAnchor, createNodeKey, extractTextFromNodes } from "./core"
 
@@ -7,41 +12,25 @@ describe("extractTextFromNodes", () => {
   })
 
   it("should extract text from simple text nodes", () => {
-    const nodes: SerializedLexicalNode[] = [
-      { type: "text", text: "Hello, ", version: 1 } as SerializedLexicalNode,
-      { type: "text", text: "world!", version: 1 } as SerializedLexicalNode,
-    ]
+    const nodes: SerializedLexicalNode[] = [createTextNode("Hello, "), createTextNode("world!")]
     expect(extractTextFromNodes(nodes)).toBe("Hello, world!")
   })
 
   it("should extract text from nested nodes", () => {
     const nodes: SerializedLexicalNode[] = [
-      {
-        type: "paragraph",
-        version: 1,
-        children: [
-          { type: "text", text: "This is a ", version: 1 } as SerializedLexicalNode,
-          {
-            type: "link",
-            version: 1,
-            children: [{ type: "text", text: "nested link", version: 1 } as SerializedLexicalNode],
-          } as SerializedLexicalNode,
-          { type: "text", text: ".", version: 1 } as SerializedLexicalNode,
-        ],
-      } as SerializedLexicalNode,
-      {
-        type: "paragraph",
-        version: 1,
-        children: [
-          { type: "text", text: " Another paragraph.", version: 1 } as SerializedLexicalNode,
-        ],
-      } as SerializedLexicalNode,
+      createParagraphNode([
+        createTextNode("This is a "),
+        createLinkNode("https://example.com", "nested link"),
+        createTextNode("."),
+      ]),
+      createParagraphNode([createTextNode(" Another paragraph.")]),
     ]
     expect(extractTextFromNodes(nodes)).toBe("This is a nested link. Another paragraph.")
   })
 
   it("should handle nodes with no text property", () => {
-    const nodes: SerializedLexicalNode[] = [{ type: "text", version: 1 } as SerializedLexicalNode]
+    // biome-ignore lint/suspicious/noExplicitAny: for testing
+    const nodes: SerializedLexicalNode[] = [createTextNode(undefined as any)]
     expect(extractTextFromNodes(nodes)).toBe("")
   })
 })

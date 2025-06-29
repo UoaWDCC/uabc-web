@@ -1,5 +1,6 @@
 import { DecimalList, DiscList, For } from "@yamada-ui/react"
 import type React from "react"
+import { ListType } from "../constants"
 import type { RichTextRendererOptions, SerializedLexicalNode, SerializedListNode } from "../types"
 
 type RenderNode = (node: SerializedLexicalNode, options: RichTextRendererOptions) => React.ReactNode
@@ -16,7 +17,7 @@ export const renderListNode = (
     return null
   }
 
-  if (tag === "ul") {
+  if (tag === ListType.UNORDERED) {
     return (
       <DiscList key={key}>
         <For each={children}>{(child) => renderNode(child, options)}</For>

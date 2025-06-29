@@ -40,7 +40,7 @@ export const LinkFieldsSchema = z
     newTab: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.linkType === "internal") {
+    if (data.linkType === LinkType.INTERNAL) {
       if (!data.doc) {
         ctx.addIssue({
           code: "custom",
@@ -48,7 +48,7 @@ export const LinkFieldsSchema = z
           message: "doc is required when linkType is internal",
         })
       }
-    } else if (data.linkType === "custom") {
+    } else if (data.linkType === LinkType.CUSTOM) {
       if (!data.url) {
         ctx.addIssue({
           code: "custom",

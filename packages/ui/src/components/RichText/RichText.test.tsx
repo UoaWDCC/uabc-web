@@ -1,6 +1,6 @@
+import { basicEditorState, complexEditorState } from "@/test-config/mocks/RichText.mock"
 import { render, screen } from "@testing-library/react"
 import type React from "react"
-import { basicEditorState, complexEditorState } from "../../test-config/mocks/RichText.mock"
 import { RichText } from "./RichText"
 import { NodeType } from "./lib/constants"
 
