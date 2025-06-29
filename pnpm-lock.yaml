@@ -169,10 +169,10 @@ importers:
         specifier: workspace:*
         version: link:../../packages/ui
       '@tanstack/react-query':
-        specifier: ^5.81.2
+        specifier: 5.81.2
         version: 5.81.2(react@19.1.0)
       '@tanstack/react-query-devtools':
-        specifier: ^5.81.2
+        specifier: 5.81.2
         version: 5.81.2(@tanstack/react-query@5.81.2(react@19.1.0))(react@19.1.0)
       '@yamada-ui/lucide':
         specifier: 1.10.5
