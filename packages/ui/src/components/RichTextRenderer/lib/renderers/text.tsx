@@ -1,5 +1,5 @@
-import { Code, Em, Text } from "@yamada-ui/react"
-import type React from "react"
+import { Code, Em, Text, type TextProps } from "@yamada-ui/react"
+import React from "react"
 import { TextFormat } from "../constants"
 import type { RichTextRendererOptions, SerializedTextNode } from "../types"
 
@@ -21,76 +21,37 @@ export const renderTextNode = (
     )
   }
 
-  const textProps = {
-    ...(format & TextFormat.UNDERLINE && { textDecoration: "underline" }),
-    ...options.textProps,
+  const textProps: Partial<TextProps> = { ...options.textProps }
+  let content: React.ReactNode = text
+
+  if (format & TextFormat.ITALIC) {
+    content = <Em>{content}</Em>
   }
-
-  const isBold = !!(format & TextFormat.BOLD)
-  const isItalic = !!(format & TextFormat.ITALIC)
-  const isStrikethrough = !!(format & TextFormat.STRIKETHROUGH)
-
-  if (isBold && isItalic && isStrikethrough) {
-    return (
-      <Text as="s" key={key} {...textProps}>
-        <Text as="strong">
-          <Em>{text}</Em>
-        </Text>
+  if (format & TextFormat.BOLD) {
+    content = <Text as="strong">{content}</Text>
+  }
+  if (format & TextFormat.STRIKETHROUGH) {
+    content = <Text as="s">{content}</Text>
+  }
+  if (format & TextFormat.UNDERLINE) {
+    content = (
+      <Text as="span" textDecoration="underline">
+        {content}
       </Text>
     )
   }
 
-  if (isBold && isItalic) {
+  if (typeof content === "string") {
     return (
-      <Text as="strong" key={key} {...textProps}>
-        <Em>{text}</Em>
+      <Text as="span" key={key} {...textProps}>
+        {content}
       </Text>
     )
   }
 
-  if (isBold && isStrikethrough) {
-    return (
-      <Text as="s" key={key} {...textProps}>
-        <Text as="strong">{text}</Text>
-      </Text>
-    )
+  if (React.isValidElement(content)) {
+    return React.cloneElement(content as React.ReactElement, { key, ...textProps })
   }
 
-  if (isItalic && isStrikethrough) {
-    return (
-      <Text as="s" key={key} {...textProps}>
-        <Em>{text}</Em>
-      </Text>
-    )
-  }
-
-  if (isBold) {
-    return (
-      <Text as="strong" key={key} {...textProps}>
-        {text}
-      </Text>
-    )
-  }
-
-  if (isItalic) {
-    return (
-      <Em key={key} {...textProps}>
-        {text}
-      </Em>
-    )
-  }
-
-  if (isStrikethrough) {
-    return (
-      <Text as="s" key={key} {...textProps}>
-        {text}
-      </Text>
-    )
-  }
-
-  return (
-    <Text as="span" key={key} {...textProps}>
-      {text}
-    </Text>
-  )
+  return content
 }

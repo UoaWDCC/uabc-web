@@ -1,4 +1,5 @@
-import type { LinkType, ListType, NodeType } from "../constants"
+import type { ListType, NodeType } from "../constants"
+import type { LinkFields } from "../schemas"
 
 export interface SerializedLexicalNode {
   type: string
@@ -19,12 +20,7 @@ export interface SerializedHeadingNode extends SerializedLexicalNode {
 
 export interface SerializedLinkNode extends SerializedLexicalNode {
   type: NodeType.LINK
-  fields: {
-    linkType: LinkType.CUSTOM | LinkType.INTERNAL
-    url?: string
-    newTab?: boolean
-    doc?: unknown
-  }
+  fields: LinkFields
   children: SerializedLexicalNode[]
 }
 

@@ -1,67 +1,34 @@
-import { Image } from "@repo/ui/components/Image"
-import {
-  Blockquote,
-  Box,
-  Code,
-  DecimalList,
-  DiscList,
-  For,
-  Link,
-  ListItem,
-  Separator,
-  Text,
-  VStack,
-} from "@yamada-ui/react"
-import NextLink from "next/link"
+import { Box, Text, VStack } from "@yamada-ui/react"
 import type React from "react"
-import { renderHeadingNode, renderTextNode } from "./renderers"
-import type {
-  RichTextRendererOptions,
-  SerializedCodeNode,
-  SerializedEditorState,
-  SerializedLexicalNode,
-  SerializedLinkNode,
-  SerializedListItemNode,
-  SerializedListNode,
-  SerializedParagraphNode,
-  SerializedQuoteNode,
-  SerializedUploadNode,
-} from "./types"
+import {
+  renderCodeNode,
+  renderHeadingNode,
+  renderHorizontalRuleNode,
+  renderLineBreakNode,
+  renderLinkNode,
+  renderListItemNode,
+  renderListNode,
+  renderParagraphNode,
+  renderQuoteNode,
+  renderTextNode,
+  renderUploadNode,
+} from "./renderers"
+import type { RichTextRendererOptions, SerializedEditorState, SerializedLexicalNode } from "./types"
 import {
   createNodeKey,
-  extractTextFromNodes,
   hasChildren,
   isCodeNode,
-  isDocumentWithSlug,
   isHeadingNode,
   isHorizontalRuleNode,
   isLineBreakNode,
   isLinkNode,
   isListItemNode,
   isListNode,
-  isMediaDocument,
   isParagraphNode,
   isQuoteNode,
   isTextNode,
   isUploadNode,
-  isValidLinkFields,
 } from "./utils"
-
-/**
- * Utility function to resolve relative URLs with a base URL
- */
-const resolveUrl = (url: string, baseUrl?: string): string => {
-  // If no base URL provided or URL is already absolute, return as is
-  if (!baseUrl || url.startsWith("http://") || url.startsWith("https://") || url.startsWith("//")) {
-    return url
-  }
-
-  // Remove trailing slash from base URL and leading slash from path if present
-  const cleanBaseUrl = baseUrl.replace(/\/$/, "")
-  const cleanPath = url.startsWith("/") ? url : `/${url}`
-
-  return `${cleanBaseUrl}${cleanPath}`
-}
 
 /**
  * Frontend Rich Text Renderer for Yamada UI
@@ -99,7 +66,7 @@ export class RichTextRenderer {
    * Render rich text content as Yamada UI components
    */
   render(data: SerializedEditorState, options: RichTextRendererOptions = {}): React.ReactNode {
-    if (!data || !data.root || !data.root.children) {
+    if (!data?.root?.children) {
       return null
     }
 
@@ -127,13 +94,12 @@ export class RichTextRenderer {
   /**
    * Render a single node
    */
-  private renderNode(
+  public renderNode(
     node: SerializedLexicalNode,
     options: RichTextRendererOptions,
   ): React.ReactNode {
     const key = createNodeKey()
 
-    // Check for custom components first
     if (options.customComponents?.[node.type]) {
       const CustomComponent = options.customComponents[node.type]
       return (
@@ -143,74 +109,34 @@ export class RichTextRenderer {
       )
     }
 
-    // Text nodes
-    if (isTextNode(node)) {
-      return renderTextNode(node, key, options)
-    }
-
-    // Heading nodes
-    if (isHeadingNode(node)) {
+    if (isTextNode(node)) return renderTextNode(node, key, options)
+    if (isHeadingNode(node))
       return renderHeadingNode(node, key, options, this.renderInlineNodes.bind(this))
-    }
+    if (isParagraphNode(node))
+      return renderParagraphNode(node, key, options, this.renderInlineNodes.bind(this))
+    if (isLinkNode(node))
+      return renderLinkNode(node, key, options, this.renderInlineNodes.bind(this))
+    if (isUploadNode(node)) return renderUploadNode(node, key, options)
+    if (isQuoteNode(node))
+      return renderQuoteNode(node, key, options, this.renderInlineNodes.bind(this))
+    if (isListNode(node)) return renderListNode(node, key, options, this.renderNode.bind(this))
+    if (isListItemNode(node))
+      return renderListItemNode(node, key, options, this.renderInlineNodes.bind(this))
+    if (isLineBreakNode(node)) return renderLineBreakNode(key)
+    if (isHorizontalRuleNode(node)) return renderHorizontalRuleNode(key)
+    if (isCodeNode(node)) return renderCodeNode(node, key, options)
 
-    // Paragraph nodes
-    if (isParagraphNode(node)) {
-      return this.renderParagraphNode(node, key, options)
-    }
-
-    // Link nodes
-    if (isLinkNode(node)) {
-      return this.renderLinkNode(node, key, options)
-    }
-
-    // Upload/Image nodes
-    if (isUploadNode(node)) {
-      return this.renderUploadNode(node, key, options)
-    }
-
-    // Quote nodes
-    if (isQuoteNode(node)) {
-      return this.renderQuoteNode(node, key, options)
-    }
-
-    // List nodes
-    if (isListNode(node)) {
-      return this.renderListNode(node, key, options)
-    }
-
-    // List item nodes
-    if (isListItemNode(node)) {
-      return this.renderListItemNode(node, key, options)
-    }
-
-    // Line break nodes
-    if (isLineBreakNode(node)) {
-      return <br key={key} />
-    }
-
-    // Horizontal rule nodes
-    if (isHorizontalRuleNode(node)) {
-      return <Separator key={key} />
-    }
-
-    // Code nodes
-    if (isCodeNode(node)) {
-      return this.renderCodeNode(node, key, options)
-    }
-
-    // Generic fallback for unknown nodes with children
     if (hasChildren(node)) {
       return <Box key={key}>{this.renderInlineNodes(node.children, options)}</Box>
     }
 
-    // Unknown node without children
     return null
   }
 
   /**
    * Render inline nodes (for use within other components)
    */
-  private renderInlineNodes(
+  public renderInlineNodes(
     nodes: SerializedLexicalNode[],
     options: RichTextRendererOptions,
   ): React.ReactNode {
@@ -226,11 +152,11 @@ export class RichTextRenderer {
       }
 
       if (isLinkNode(node)) {
-        return this.renderLinkNode(node, key, options)
+        return renderLinkNode(node, key, options, this.renderInlineNodes.bind(this))
       }
 
       if (isLineBreakNode(node)) {
-        return <br key={key} />
+        return renderLineBreakNode(key)
       }
 
       if (hasChildren(node)) {
@@ -243,201 +169,6 @@ export class RichTextRenderer {
 
       return null
     })
-  }
-
-  /**
-   * Render paragraph node
-   */
-  private renderParagraphNode(
-    node: SerializedParagraphNode,
-    key: string,
-    options: RichTextRendererOptions,
-  ): React.ReactNode {
-    const { children } = node
-
-    if (!children || children.length === 0) {
-      return null
-    }
-
-    return (
-      <Text key={key} {...options.textProps}>
-        {this.renderInlineNodes(children, options)}
-      </Text>
-    )
-  }
-
-  /**
-   * Render link node
-   */
-  private renderLinkNode(
-    node: SerializedLinkNode,
-    key: string,
-    options: RichTextRendererOptions,
-  ): React.ReactNode {
-    const { fields, children } = node
-
-    if (!isValidLinkFields(fields)) {
-      return (
-        <Text as="span" key={key}>
-          {this.renderInlineNodes(children, options)}
-        </Text>
-      )
-    }
-
-    let href: string | undefined
-    let external = false
-
-    if (fields.linkType === "custom" && fields.url) {
-      href = fields.url
-      external = fields.newTab || false
-    } else if (fields.linkType === "internal" && fields.doc) {
-      const doc = fields.doc
-      if (isDocumentWithSlug(doc)) {
-        href = `/${doc.slug}`
-        external = fields.newTab || false
-      }
-    }
-
-    if (!href) {
-      return (
-        <Text as="span" key={key}>
-          {this.renderInlineNodes(children, options)}
-        </Text>
-      )
-    }
-
-    return (
-      <Link as={NextLink} external={external} href={href} key={key} {...options.linkProps}>
-        {this.renderInlineNodes(children, options)}
-      </Link>
-    )
-  }
-
-  /**
-   * Render upload/image node
-   */
-  private renderUploadNode(
-    node: SerializedUploadNode,
-    key: string,
-    options: RichTextRendererOptions,
-  ): React.ReactNode {
-    if (node.relationTo !== "media") {
-      return null
-    }
-
-    const uploadDoc = node.value
-
-    if (!isMediaDocument(uploadDoc)) {
-      return null
-    }
-
-    const { alt, url, width, height } = uploadDoc
-
-    if (!url) {
-      return null
-    }
-
-    // Resolve relative URLs with the media base URL
-    const resolvedUrl = resolveUrl(url, options.mediaBaseUrl)
-
-    return (
-      <Image
-        alt={alt || ""}
-        height={height || 200}
-        key={key}
-        maxW="100%"
-        src={resolvedUrl}
-        width={width || 300}
-        {...options.imageProps}
-      />
-    )
-  }
-
-  /**
-   * Render quote node
-   */
-  private renderQuoteNode(
-    node: SerializedQuoteNode,
-    key: string,
-    options: RichTextRendererOptions,
-  ): React.ReactNode {
-    const { children } = node
-
-    if (!children || children.length === 0) {
-      return null
-    }
-
-    return <Blockquote key={key}>{this.renderInlineNodes(children, options)}</Blockquote>
-  }
-
-  /**
-   * Render list node
-   */
-  private renderListNode(
-    node: SerializedListNode,
-    key: string,
-    options: RichTextRendererOptions,
-  ): React.ReactNode {
-    const { tag, children } = node
-
-    if (!children || children.length === 0) {
-      return null
-    }
-
-    if (tag === "ul") {
-      return (
-        <DiscList key={key}>
-          <For each={children}>{(child) => this.renderNode(child, options)}</For>
-        </DiscList>
-      )
-    }
-
-    return (
-      <DecimalList key={key}>
-        <For each={children}>{(child) => this.renderNode(child, options)}</For>
-      </DecimalList>
-    )
-  }
-
-  /**
-   * Render list item node
-   */
-  private renderListItemNode(
-    node: SerializedListItemNode,
-    key: string,
-    options: RichTextRendererOptions,
-  ): React.ReactNode {
-    const { children } = node
-
-    return (
-      <ListItem key={key}>{children ? this.renderInlineNodes(children, options) : null}</ListItem>
-    )
-  }
-
-  /**
-   * Render code node
-   */
-  private renderCodeNode(
-    node: SerializedCodeNode,
-    key: string,
-    _options: RichTextRendererOptions,
-  ): React.ReactNode {
-    const { children, language } = node
-
-    const codeContent = children ? extractTextFromNodes(children) : ""
-
-    return (
-      <Code
-        data-language={language}
-        display="block"
-        fontFamily="mono"
-        fontSize="sm"
-        key={key}
-        whiteSpace="pre"
-      >
-        {codeContent}
-      </Code>
-    )
   }
 }
 

@@ -17,3 +17,5 @@ export {
   isCodeNode,
   hasChildren,
 } from "./guards"
+
+export { resolveUrl } from "./url"

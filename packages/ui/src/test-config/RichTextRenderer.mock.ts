@@ -82,7 +82,8 @@ export const createLinkNodeNoUrl = (text = "No URL Link"): SerializedLinkNode =>
 
 export const createInternalLinkWithInvalidDoc = (
   text = "Invalid Internal Link",
-  doc: unknown = { id: "123", title: "Invalid Document" },
+  // biome-ignore lint/suspicious/noExplicitAny: doc is unknown
+  doc: any = { id: "123", title: "Invalid Document" },
 ): SerializedLinkNode => ({
   type: NodeType.LINK,
   fields: {
@@ -365,6 +366,11 @@ export const allFormattingEditorState = createEditorState([
     createTextNode("strikethrough", TextFormat.STRIKETHROUGH),
     createTextNode(", "),
     createTextNode("underlined", TextFormat.UNDERLINE),
+    createTextNode(", "),
+    createTextNode(
+      "bold, strikethrough, underlined, and italic",
+      TextFormat.BOLD | TextFormat.STRIKETHROUGH | TextFormat.UNDERLINE | TextFormat.ITALIC,
+    ),
     createTextNode(", and "),
     createTextNode("code text", TextFormat.CODE),
     createTextNode("."),
