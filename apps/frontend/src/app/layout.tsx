@@ -1,3 +1,4 @@
+import { Footer } from "@repo/ui/components/Generic"
 import { UIProvider } from "@repo/ui/providers"
 import { ColorModeScript } from "@yamada-ui/react"
 import type { Metadata } from "next"
