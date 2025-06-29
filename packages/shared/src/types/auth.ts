@@ -1,3 +1,5 @@
+export const AUTH_COOKIE_NAME = "auth_token"
+
 export interface Credentials {
   /**
    * This field is only present if the access_type parameter was set to offline in the authentication request. For details, see Refresh tokens.

@@ -98,5 +98,3 @@ export const LoginDetailsSchema = z.object({
 
 export type JWTEncryptedUser = z.infer<typeof JWTEncryptedUserSchema>
 export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>
-
-export const AUTH_COOKIE_NAME = "auth_token"
