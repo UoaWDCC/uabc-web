@@ -36,7 +36,7 @@
     "cross-env": "7.0.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.0.6",
     "@commitlint/cli": "19.8.1",
     "@commitlint/config-conventional": "19.8.1",
     "@testing-library/dom": "10.4.0",
@@ -61,17 +61,21 @@
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.1.4"
   },
-  "packageManager": "pnpm@10.11.1",
+  "packageManager": "pnpm@10.12.4",
   "pnpm": {
-    "onlyBuiltDependencies": ["sharp"],
+    "onlyBuiltDependencies": [
+      "sharp"
+    ],
     "patchedDependencies": {
       "storybook-dark-mode": "patches/storybook-dark-mode.patch"
     }
   },
   "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["biome check --write ."]
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+      "biome check --write ."
+    ]
   },
   "volta": {
-    "node": "22.16.0"
+    "node": "22.17.0"
   }
 }

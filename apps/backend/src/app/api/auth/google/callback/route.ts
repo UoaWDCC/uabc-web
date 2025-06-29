@@ -14,6 +14,10 @@ import { cookies } from "next/headers"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import { ZodError } from "zod"
+import { googleAuthScopes, oauth2Client } from "@/business-layer/provider/google"
+import AuthService from "@/business-layer/services/AuthService"
+import AuthDataService from "@/data-layer/services/AuthDataService"
+import UserDataService from "@/data-layer/services/UserDataService"
 
 export const GET = async (req: NextRequest) => {
   const params = req.nextUrl.searchParams

@@ -1,3 +1,5 @@
+import { JWTEncryptedUserSchema } from "@repo/shared"
+import jwt from "jsonwebtoken"
 import { JWT_INVALID_TOKEN_MOCK } from "@/test-config/mocks/AuthService.mock"
 import { JWT_SECRET_MOCK, tokensMock } from "@/test-config/mocks/GoogleAuth.mock"
 import { casualUserMock } from "@/test-config/mocks/User.mock"

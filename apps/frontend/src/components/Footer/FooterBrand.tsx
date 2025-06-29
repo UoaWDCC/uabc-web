@@ -1,8 +1,8 @@
-import UABCLogo from "@/assets/uabc-logo.svg"
 import { Heading } from "@repo/ui/components/Heading"
 import { Image } from "@repo/ui/components/Image"
 import { HStack, Text, VStack } from "@yamada-ui/react"
 import { memo } from "react"
+import UABCLogo from "@/assets/uabc-logo.svg"
 import { FooterSocialLinks } from "./FooterSocialLinks"
 
 export const FooterBrand = memo(() => {

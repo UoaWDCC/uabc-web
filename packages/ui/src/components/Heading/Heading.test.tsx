@@ -1,7 +1,6 @@
-import { render, screen } from "@/test-utils"
 import { isValidElement } from "react"
-import { Heading } from "./Heading"
-import { DEFAULT_FONT_SIZES, DEFAULT_FONT_WEIGHTS } from "./Heading"
+import { render, screen } from "@/test-utils"
+import { DEFAULT_FONT_SIZES, DEFAULT_FONT_WEIGHTS, Heading } from "./Heading"
 import { Heading as HeadingModule } from "./index"
 
 const headingLevels = Object.keys(DEFAULT_FONT_SIZES)

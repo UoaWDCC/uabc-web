@@ -1,8 +1,8 @@
-import SemesterDataService from "@/data-layer/services/SemesterDataService"
-import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
-import { StatusCodes, getReasonPhrase } from "http-status-codes"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import type { NextRequest } from "next/server"
 import { describe, expect, it, vi } from "vitest"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
+import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import { GET } from "./route"
 
 const semesterDataService = new SemesterDataService()

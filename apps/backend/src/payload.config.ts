@@ -3,10 +3,9 @@ import { fileURLToPath } from "node:url"
 // storage-adapter-import-placeholder
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
+import type { Config } from "@repo/shared/payload-types"
 import { buildConfig } from "payload"
 import sharp from "sharp"
-
-import type { Config } from "@repo/shared/payload-types"
 import { Admin } from "./data-layer/collections/Admin"
 import { Authentication } from "./data-layer/collections/Authentication"
 import { Booking } from "./data-layer/collections/Booking"

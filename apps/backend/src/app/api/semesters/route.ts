@@ -1,6 +1,6 @@
-import SemesterDataService from "@/data-layer/services/SemesterDataService"
-import { StatusCodes, getReasonPhrase } from "http-status-codes"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { NextResponse } from "next/server"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
 
 export const GET = async () => {
   try {

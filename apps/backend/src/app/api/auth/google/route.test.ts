@@ -1,9 +1,7 @@
+import { redirect } from "next/navigation"
 import type { Mock } from "vitest"
-
 import { SCOPES, STATE_MOCK } from "@/test-config/mocks/GoogleAuth.mock"
 import { GET } from "./route"
-
-import { redirect } from "next/navigation"
 
 // Mock cookies
 vi.mock("next/headers", () => ({
