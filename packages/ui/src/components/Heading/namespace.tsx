@@ -1,6 +1,6 @@
 import type { FC } from "react"
-import { Heading } from "./Heading"
 import type { HeadingProps } from "./Heading"
+import { Heading } from "./Heading"
 
 /**
  * Extended Heading component interface that provides static methods for each heading level

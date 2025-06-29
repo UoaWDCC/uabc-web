@@ -15,6 +15,7 @@ import {
 } from "./renderers"
 import type { RichTextRendererOptions, SerializedEditorState, SerializedLexicalNode } from "./types"
 import {
+  createNodeKey,
   hasChildren,
   isCodeNode,
   isHeadingNode,
@@ -178,7 +179,12 @@ export class RichTextRenderer {
       }
 
       if (hasChildren(node)) {
-        return <Text as="span">{this.renderInlineNodes(node.children, options)}</Text>
+        const key = createNodeKey()
+        return (
+          <Text as="span" key={key}>
+            {this.renderInlineNodes(node.children, options)}
+          </Text>
+        )
       }
 
       return null

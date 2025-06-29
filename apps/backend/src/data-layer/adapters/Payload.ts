@@ -1,6 +1,6 @@
-import { testPayloadObject } from "@/test-config/backend-utils"
 import configPromise from "@payload-config"
-import { type Payload, getPayload } from "payload"
+import { getPayload, type Payload } from "payload"
+import { testPayloadObject } from "@/test-config/backend-utils"
 
 let payloadConfig = await getPayload({
   config: configPromise,

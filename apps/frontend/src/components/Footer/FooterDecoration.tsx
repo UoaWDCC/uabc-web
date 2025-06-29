@@ -1,7 +1,7 @@
-import Shuttle from "@/assets/shuttle.png"
 import { Image } from "@repo/ui/components/Image"
 import { Motion } from "@yamada-ui/react"
 import { memo } from "react"
+import Shuttle from "@/assets/shuttle.png"
 
 export const FooterDecoration = memo(() => {
   return (

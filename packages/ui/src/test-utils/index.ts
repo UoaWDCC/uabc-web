@@ -1,6 +1,3 @@
-export * from "./drag"
-export * from "./icon"
-export * from "./render"
 export {
   act,
   fireEvent,
@@ -8,3 +5,6 @@ export {
   waitFor,
   waitForElementToBeRemoved,
 } from "@testing-library/react"
+export * from "./drag"
+export * from "./icon"
+export * from "./render"

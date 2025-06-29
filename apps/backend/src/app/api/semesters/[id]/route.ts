@@ -1,7 +1,7 @@
-import SemesterDataService from "@/data-layer/services/SemesterDataService"
-import { StatusCodes, getReasonPhrase } from "http-status-codes"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
 
 export const GET = async (_req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   try {

@@ -1,5 +1,5 @@
-import { createTimeField } from "@/data-layer/fields/date-time"
 import type { CollectionConfig } from "payload"
+import { createTimeField } from "@/data-layer/fields/date-time"
 
 export const GameSessionSchedule: CollectionConfig = {
   slug: "gameSessionSchedule",

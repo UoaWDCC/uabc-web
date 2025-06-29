@@ -1,6 +1,5 @@
-import { cookies, headers } from "next/headers"
-
 import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
+import { cookies, headers } from "next/headers"
 import AuthService from "../services/AuthService"
 import { UnauthorizedAuthError } from "./errors"
 

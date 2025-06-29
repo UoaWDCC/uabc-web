@@ -1,4 +1,4 @@
-import { Box, HStack, Text, VStack, isArray, useColorMode } from "@yamada-ui/react"
+import { Box, HStack, isArray, Text, useColorMode, VStack } from "@yamada-ui/react"
 import type { FC } from "react"
 
 interface ColorPalletsProps {
