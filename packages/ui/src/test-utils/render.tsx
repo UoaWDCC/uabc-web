@@ -1,9 +1,9 @@
 import { config, theme } from "@repo/theme"
 import type {
   Queries,
+  queries,
   RenderHookOptions as ReactRenderHookOptions,
   RenderOptions as ReactRenderOptions,
-  queries,
 } from "@testing-library/react"
 import { render as reactRender, renderHook as reactRenderHook } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"

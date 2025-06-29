@@ -1,6 +1,6 @@
-import { payload } from "@/data-layer/adapters/Payload"
 import type { CreateSemesterData, EditSemesterData } from "@repo/shared"
 import type { Semester } from "@repo/shared/payload-types"
+import { payload } from "@/data-layer/adapters/Payload"
 
 export default class SemesterDataService {
   /**

@@ -1,9 +1,9 @@
+import bcrypt from "bcryptjs"
 import {
   EMAIL_MOCK,
   HASHED_PASSWORD_MOCK,
   PASSWORD_MOCK,
 } from "@/test-config/mocks/Authentication.mock"
-import bcrypt from "bcryptjs"
 import StandardSecurity from "./standard"
 
 describe("StandardSecurity", () => {

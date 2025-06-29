@@ -1,6 +1,6 @@
-import { googleAuthScopes, oauth2Client } from "@/business-layer/provider/google"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import { googleAuthScopes, oauth2Client } from "@/business-layer/provider/google"
 
 export const GET = async () => {
   const state = crypto.randomUUID().toString()
