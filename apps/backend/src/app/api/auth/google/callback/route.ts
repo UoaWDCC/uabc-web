@@ -1,7 +1,3 @@
-import { googleAuthScopes, oauth2Client } from "@/business-layer/provider/google"
-import AuthService from "@/business-layer/services/AuthService"
-import AuthDataService from "@/data-layer/services/AuthDataService"
-import UserDataService from "@/data-layer/services/UserDataService"
 import {
   AUTH_COOKIE_NAME,
   MembershipType,
