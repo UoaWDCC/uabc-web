@@ -1,9 +1,16 @@
 import type { CollectionSlug } from "payload"
 
+import { GoogleSecurityProvider } from "@/business-layer/provider/google"
 import AuthService from "@/business-layer/services/AuthService"
 import { payload } from "@/data-layer/adapters/Payload"
 import { clearCollection } from "./backend-utils"
-import { JWT_SECRET_MOCK } from "./mocks/GoogleAuth.mock"
+import {
+  INVALID_CODE_MOCK,
+  INVALID_USER_CODE_MOCK,
+  JWT_SECRET_MOCK,
+  credentialsMock,
+  invalidUserTokenMock,
+} from "./mocks/GoogleAuth.mock"
 import { adminUserMock, casualUserMock, memberUserMock } from "./mocks/User.mock"
 
 let cookies: Record<string, string> = {}
@@ -17,6 +24,22 @@ const authService = new AuthService()
 
 beforeEach(async () => {
   process.env.JWT_SECRET = JWT_SECRET_MOCK
+
+  vi.spyOn(GoogleSecurityProvider, "fetchTokens").mockImplementation(async (code: string) => {
+    if (code === INVALID_CODE_MOCK) {
+      return invalidUserTokenMock
+    }
+    if (code === INVALID_USER_CODE_MOCK) {
+      return undefined
+    }
+    return credentialsMock
+  })
+
+  // Also mock the revokeToken method for complete testing
+  vi.spyOn(GoogleSecurityProvider, "revokeToken").mockImplementation(async (token: string) => {
+    // Simulate token revocation failure only for specific test tokens
+    return token !== "failed-revocation-token"
+  })
 
   vi.mock("next/headers", () => ({
     cookies: vi.fn(() => ({
@@ -72,3 +95,8 @@ afterEach(async () => {
  * })
  */
 export { casualToken, memberToken, adminToken }
+
+// Reset all mocks after all tests
+afterAll(() => {
+  vi.restoreAllMocks()
+})

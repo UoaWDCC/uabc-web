@@ -139,7 +139,7 @@ describe("GET /api/auth/google/callback", async () => {
     expect(json.error).toMatch(/scope/i)
   })
 
-  it("returns 500 if token response is invalid", async () => {
+  it("returns 500 and invalid schema error if google user info response is invalid", async () => {
     cookieStore.set("state", STATE_MOCK)
 
     const req = createMockNextRequest(
@@ -149,19 +149,20 @@ describe("GET /api/auth/google/callback", async () => {
     const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
-    expect(json.error).toBe("Error invalid google auth")
+    expect(json.error).toBe("Error parsing user info response")
   })
 
-  it("returns 500 if google user info response is invalid", async () => {
+  it("returns 500 if token response is invalid", async () => {
     cookieStore.set("state", STATE_MOCK)
 
     const req = createMockNextRequest(
       `/api/auth/google/callback?code=${INVALID_USER_CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
     const response = await callback(req)
+    console.log(response.status)
     const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
-    expect(json.error).toBeDefined()
+    expect(json.error).toBe("Error invalid google auth")
   })
 })
