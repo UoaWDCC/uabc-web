@@ -2,7 +2,7 @@ import { UIProvider } from "@repo/ui/providers"
 import { ColorModeScript } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import { Footer } from "@/components/Footer"
+import { Footer } from "@/components/Generic/Footer"
 
 const geistSans = Geist({
   subsets: ["latin"],
