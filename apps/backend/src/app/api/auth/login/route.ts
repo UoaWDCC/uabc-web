@@ -16,9 +16,9 @@ export const POST = async (req: NextRequest) => {
   const userDataService = new UserDataService()
   const authService = new AuthService()
 
-  const state = params.get("state")
+  const stateParam = params.get("state")
   const cookieState = cookieStore.get(STATE_COOKIE_NAME)
-  if (!state || !cookieState?.value || state.toString() !== cookieState.value.toString()) {
+  if (String(stateParam) !== String(cookieState?.value)) {
     return NextResponse.json({}, { status: StatusCodes.BAD_REQUEST })
   }
   cookieStore.delete(STATE_COOKIE_NAME)

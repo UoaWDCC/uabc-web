@@ -20,7 +20,7 @@ describe("api/auth/login", () => {
   describe("POST", async () => {
     const cookieStore = await cookies()
 
-    it("redirects user and sets JWT token to cookies on success auth", async () => {
+    it("sets JWT token to cookies on success auth", async () => {
       cookieStore.set(STATE_COOKIE_NAME, STATE_MOCK)
       const authDataService = new AuthDataService()
       const userDataService = new UserDataService()

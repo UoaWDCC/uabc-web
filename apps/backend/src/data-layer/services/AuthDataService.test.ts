@@ -9,7 +9,7 @@ import AuthDataService from "./AuthDataService"
 
 const authDataService = new AuthDataService()
 
-describe("authDataService", () => {
+describe("AuthDataService", () => {
   describe("createAuth", () => {
     it("should create an authentication document for google auth", async () => {
       const newAuth = await authDataService.createAuth(googleAuthCreateMock)
@@ -43,7 +43,7 @@ describe("authDataService", () => {
       expect(fetchedAuth).toStrictEqual(newAuth)
     })
 
-    it("should return null if user does not exist when searching by email", async () => {
+    it("should throw an error if authentication document does not exist when searching by email", async () => {
       await expect(() =>
         authDataService.getAuthByEmail("nonexistent@example.com"),
       ).rejects.toThrowError(
