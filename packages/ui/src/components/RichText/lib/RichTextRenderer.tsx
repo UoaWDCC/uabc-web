@@ -94,6 +94,8 @@ export class RichTextRenderer {
     node: SerializedLexicalNode,
     options: RichTextRendererOptions,
   ): React.ReactNode {
+    const key = createNodeKey()
+
     if (options.customComponents?.[node.type]) {
       const CustomComponent = options.customComponents[node.type]
       return (
@@ -104,47 +106,47 @@ export class RichTextRenderer {
     }
 
     if (isLineBreakNode(node)) {
-      return renderLineBreakNode()
+      return renderLineBreakNode(key)
     }
 
     if (isTextNode(node)) {
-      return renderTextNode(node, options)
+      return renderTextNode(node, key, options)
     }
 
     if (isHeadingNode(node)) {
-      return renderHeadingNode(node, options, this.renderInlineNodes.bind(this))
+      return renderHeadingNode(node, key, options, this.renderInlineNodes.bind(this))
     }
 
     if (isParagraphNode(node)) {
-      return renderParagraphNode(node, options, this.renderInlineNodes.bind(this))
+      return renderParagraphNode(node, key, options, this.renderInlineNodes.bind(this))
     }
 
     if (isLinkNode(node)) {
-      return renderLinkNode(node, options, this.renderInlineNodes.bind(this))
+      return renderLinkNode(node, key, options, this.renderInlineNodes.bind(this))
     }
 
     if (isUploadNode(node)) {
-      return renderUploadNode(node, options)
+      return renderUploadNode(node, key, options)
     }
 
     if (isQuoteNode(node)) {
-      return renderQuoteNode(node, options, this.renderInlineNodes.bind(this))
+      return renderQuoteNode(node, key, options, this.renderInlineNodes.bind(this))
     }
 
     if (isListNode(node)) {
-      return renderListNode(node, options, this.renderNode.bind(this))
+      return renderListNode(node, key, options, this.renderNode.bind(this))
     }
 
     if (isListItemNode(node)) {
-      return renderListItemNode(node, options, this.renderInlineNodes.bind(this))
+      return renderListItemNode(node, key, options, this.renderInlineNodes.bind(this))
     }
 
     if (isHorizontalRuleNode(node)) {
-      return renderHorizontalRuleNode()
+      return renderHorizontalRuleNode(key)
     }
 
     if (isCodeNode(node)) {
-      return renderCodeNode(node, options)
+      return renderCodeNode(node, key, options)
     }
 
     if (hasChildren(node)) {
@@ -161,25 +163,26 @@ export class RichTextRenderer {
     nodes: SerializedLexicalNode[],
     options: RichTextRendererOptions,
   ): React.ReactNode {
+    const key = createNodeKey()
+
     if (!nodes || nodes.length === 0) {
       return null
     }
 
     return nodes.map((node) => {
       if (isTextNode(node)) {
-        return renderTextNode(node, options)
+        return renderTextNode(node, key, options)
       }
 
       if (isLinkNode(node)) {
-        return renderLinkNode(node, options, this.renderInlineNodes.bind(this))
+        return renderLinkNode(node, key, options, this.renderInlineNodes.bind(this))
       }
 
       if (isLineBreakNode(node)) {
-        return renderLineBreakNode()
+        return renderLineBreakNode(key)
       }
 
       if (hasChildren(node)) {
-        const key = createNodeKey()
         return (
           <Text as="span" key={key}>
             {this.renderInlineNodes(node.children, options)}

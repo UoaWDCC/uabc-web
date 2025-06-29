@@ -24,7 +24,7 @@ describe("renderLinkNode", () => {
 
   it("should render an external link", () => {
     const options = {}
-    render(renderLinkNode(externalLinkNode, options, renderInlineNodes))
+    render(renderLinkNode(externalLinkNode, "test-key", options, renderInlineNodes))
 
     const link = screen.getByRole("link", { name: "External Link" })
     expect(link).toBeInTheDocument()
@@ -35,7 +35,7 @@ describe("renderLinkNode", () => {
 
   it("should render an internal link", () => {
     const options = {}
-    render(renderLinkNode(internalLinkNode, options, renderInlineNodes))
+    render(renderLinkNode(internalLinkNode, "test-key", options, renderInlineNodes))
 
     const link = screen.getByRole("link", { name: "Internal Link" })
     expect(link).toBeInTheDocument()
@@ -45,7 +45,7 @@ describe("renderLinkNode", () => {
 
   it("should render an internal link with a LinkDoc", () => {
     const options = {}
-    render(renderLinkNode(internalLinkWithLinkDocNode, options, renderInlineNodes))
+    render(renderLinkNode(internalLinkWithLinkDocNode, "test-key", options, renderInlineNodes))
 
     const link = screen.getByRole("link", { name: "Internal Link with LinkDoc" })
     expect(link).toBeInTheDocument()
@@ -59,7 +59,7 @@ describe("renderLinkNode", () => {
       ...externalLinkNode,
       fields: { ...externalLinkNode.fields, newTab: false },
     }
-    render(renderLinkNode(externalLinkNodeNoNewTab, options, renderInlineNodes))
+    render(renderLinkNode(externalLinkNodeNoNewTab, "test-key", options, renderInlineNodes))
 
     const link = screen.getByRole("link", { name: "External Link" })
     expect(link).toBeInTheDocument()
@@ -72,7 +72,7 @@ describe("renderLinkNode", () => {
       ...internalLinkNode,
       fields: { ...internalLinkNode.fields, newTab: true },
     }
-    render(renderLinkNode(internalLinkNodeNewTab, options, renderInlineNodes))
+    render(renderLinkNode(internalLinkNodeNewTab, "test-key", options, renderInlineNodes))
 
     const link = screen.getByRole("link", { name: "Internal Link" })
     expect(link).toBeInTheDocument()
@@ -82,7 +82,7 @@ describe("renderLinkNode", () => {
 
   it("should render plain text for an invalid link", () => {
     const options = {}
-    render(renderLinkNode(invalidLinkNode, options, renderInlineNodes))
+    render(renderLinkNode(invalidLinkNode, "test-key", options, renderInlineNodes))
 
     const text = screen.getByText("Invalid Link")
     expect(text).toBeInTheDocument()
@@ -93,7 +93,7 @@ describe("renderLinkNode", () => {
   it("should render plain text for an internal link with an invalid doc", () => {
     const options = {}
     const internalLinkInvalidDocNode = createInternalLinkWithInvalidDoc()
-    render(renderLinkNode(internalLinkInvalidDocNode, options, renderInlineNodes))
+    render(renderLinkNode(internalLinkInvalidDocNode, "test-key", options, renderInlineNodes))
 
     const text = screen.getByText("Invalid Internal Link")
     expect(text).toBeInTheDocument()
@@ -104,7 +104,7 @@ describe("renderLinkNode", () => {
   it("should render plain text for a custom link with no URL", () => {
     const options = {}
     const linkNoUrlNode = createLinkNodeNoUrl()
-    render(renderLinkNode(linkNoUrlNode, options, renderInlineNodes))
+    render(renderLinkNode(linkNoUrlNode, "test-key", options, renderInlineNodes))
 
     const text = screen.getByText("No URL Link")
     expect(text).toBeInTheDocument()
@@ -114,7 +114,7 @@ describe("renderLinkNode", () => {
 
   it("should pass linkProps to the Link component", () => {
     const options = { linkProps: { "data-testid": "custom-link" } as LinkProps }
-    render(renderLinkNode(externalLinkNode, options, renderInlineNodes))
+    render(renderLinkNode(externalLinkNode, "test-key", options, renderInlineNodes))
 
     const link = screen.getByTestId("custom-link")
     expect(link).toBeInTheDocument()

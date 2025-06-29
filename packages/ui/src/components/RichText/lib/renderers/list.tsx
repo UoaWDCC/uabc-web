@@ -7,6 +7,7 @@ type RenderNode = (node: SerializedLexicalNode, options: RichTextRendererOptions
 
 export const renderListNode = (
   node: SerializedListNode,
+  key: string,
   options: RichTextRendererOptions,
   renderNode: RenderNode,
 ): React.ReactNode => {
@@ -18,14 +19,14 @@ export const renderListNode = (
 
   if (tag === ListType.UNORDERED) {
     return (
-      <DiscList>
+      <DiscList key={key}>
         <For each={children}>{(child) => renderNode(child, options)}</For>
       </DiscList>
     )
   }
 
   return (
-    <DecimalList>
+    <DecimalList key={key}>
       <For each={children}>{(child) => renderNode(child, options)}</For>
     </DecimalList>
   )

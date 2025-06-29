@@ -5,6 +5,7 @@ import { extractTextFromNodes } from "../utils"
 
 export const renderCodeNode = (
   node: SerializedCodeNode,
+  key: string,
   options: RichTextRendererOptions,
 ): React.ReactNode => {
   const { children, language } = node
@@ -16,6 +17,7 @@ export const renderCodeNode = (
       data-language={language}
       fontFamily="mono"
       fontSize="sm"
+      key={key}
       whiteSpace="pre"
       {...options.codeProps}
     >

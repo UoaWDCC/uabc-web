@@ -11,7 +11,7 @@ describe("renderListNode", () => {
     const renderNode = vi.fn((node) => <li key={node.children[0].text}>{node.children[0].text}</li>)
     const options = {}
 
-    render(renderListNode(unorderedListNode, options, renderNode))
+    render(renderListNode(unorderedListNode, "test-key", options, renderNode))
 
     const list = screen.getByRole("list")
     expect(list.tagName).toBe("UL")
@@ -28,7 +28,7 @@ describe("renderListNode", () => {
     const renderNode = vi.fn((node) => <li key={node.children[0].text}>{node.children[0].text}</li>)
     const options = {}
 
-    render(renderListNode(orderedListNode, options, renderNode))
+    render(renderListNode(orderedListNode, "test-key", options, renderNode))
 
     const list = screen.getByRole("list")
     expect(list.tagName).toBe("OL")
@@ -45,7 +45,7 @@ describe("renderListNode", () => {
     const renderNode = vi.fn()
     const options = {}
 
-    const { container } = render(renderListNode(emptyListNode, options, renderNode))
+    const { container } = render(renderListNode(emptyListNode, "test-key", options, renderNode))
 
     expect(container).toBeEmptyDOMElement()
     expect(renderNode).not.toHaveBeenCalled()

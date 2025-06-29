@@ -13,6 +13,7 @@ type RenderInlineNodes = (
 
 export const renderParagraphNode = (
   node: SerializedParagraphNode,
+  key: string,
   options: RichTextRendererOptions,
   renderInlineNodes: RenderInlineNodes,
 ): React.ReactNode => {
@@ -22,5 +23,9 @@ export const renderParagraphNode = (
     return null
   }
 
-  return <Text {...options.textProps}>{renderInlineNodes(children, options)}</Text>
+  return (
+    <Text key={key} {...options.textProps}>
+      {renderInlineNodes(children, options)}
+    </Text>
+  )
 }

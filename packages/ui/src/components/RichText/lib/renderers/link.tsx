@@ -12,13 +12,18 @@ type RenderInlineNodes = (
 
 export const renderLinkNode = (
   node: SerializedLinkNode,
+  key: string,
   options: RichTextRendererOptions,
   renderInlineNodes: RenderInlineNodes,
 ): React.ReactNode => {
   const { fields, children } = node
 
   if (!isValidLinkFields(fields)) {
-    return <Text as="span">{renderInlineNodes(children, options)}</Text>
+    return (
+      <Text as="span" key={key}>
+        {renderInlineNodes(children, options)}
+      </Text>
+    )
   }
 
   let href: string | undefined
@@ -39,7 +44,11 @@ export const renderLinkNode = (
   }
 
   if (!href) {
-    return <Text as="span">{renderInlineNodes(children, options)}</Text>
+    return (
+      <Text as="span" key={key}>
+        {renderInlineNodes(children, options)}
+      </Text>
+    )
   }
 
   return (
@@ -47,6 +56,7 @@ export const renderLinkNode = (
       as={NextLink}
       external={external}
       href={href}
+      key={key}
       rel={external ? "noopener noreferrer" : undefined}
       {...options.linkProps}
     >
