@@ -1,4 +1,4 @@
-import type { UserInfoResponse } from "@repo/shared"
+import type { Credentials, UserInfoResponse } from "@repo/shared"
 import { NextRequest } from "next/server"
 
 // Mock Next Request
@@ -29,10 +29,13 @@ export const tokensMock = {
   id_token: "mock_id_token",
 }
 
-export const invalidUserTokenMock = {
+export const invalidUserTokenMock: Credentials = {
   access_token: "mock_invalid_user_access_token",
+  refresh_token: "mock_invalid_user_refresh_token",
   expiry_date: Date.now() + 3600 * 1000, // 1 hour
   id_token: "mock_id_token2",
+  token_type: "Bearer",
+  scope: "email profile",
 }
 
 // URL param mocks
@@ -44,3 +47,12 @@ export const SCOPES = encodeURIComponent(googleAuthScopes.join(" "))
 
 // JWT token secret mock
 export const JWT_SECRET_MOCK = "mock_jwt_secret"
+
+export const credentialsMock: Credentials = {
+  access_token: "mock_access_token",
+  refresh_token: "mock_refresh_token",
+  expiry_date: Date.now() + 3600000, // expires in 1 hour
+  id_token: "mock_id_token",
+  token_type: "Bearer",
+  scope: "email profile",
+}

@@ -1,7 +1,7 @@
-import { LoginDetailsSchema } from "@repo/shared"
+import { LoginDetailsSchema, SALT_ROUNDS } from "@repo/shared"
 import bcrypt from "bcryptjs"
 
-export default class StandardSecurity {
+export default class StandardSecurityProvider {
   /**
    * Hashes a password using bcrypt.
    *
@@ -10,7 +10,7 @@ export default class StandardSecurity {
    * @returns The hashed password
    */
   static async hashPassword(password: string): Promise<string> {
-    return await bcrypt.hash(password, 10)
+    return await bcrypt.hash(password, SALT_ROUNDS)
   }
 
   /**
