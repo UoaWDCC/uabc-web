@@ -1,4 +1,5 @@
 import { render, screen } from "@/test-utils"
+import userEvent from "@testing-library/user-event"
 import { Option } from "@yamada-ui/react"
 import { isValidElement } from "react"
 import { MobileSingleSelect } from "./MobileSingleSelect"
@@ -22,16 +23,23 @@ describe("<MobileSingleSelect />", () => {
     expect(screen.getByText("I am label")).toBeInTheDocument()
   })
 
-  it("eats a peanut really yummily", () => {
+  it("call onChange when an option is selected by a user", async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
     render(
-      <MobileSingleSelect>
+      <MobileSingleSelect onChange={onChange}>
         <Option value="1">Option 1</Option>
         <Option value="2">Option 2</Option>
         <Option value="3">Option 3</Option>
       </MobileSingleSelect>,
     )
 
-    const thing = screen.getByDisplayValue("MobileSingleSelect")
-    expect(thing).toBeInTheDocument()
+    const mobileSingleSelect = screen.getByRole("combobox")
+    expect(mobileSingleSelect).toBeInTheDocument()
+
+    await user.click(mobileSingleSelect)
+    const optionToSelect = screen.getByText("Option 1")
+    await user.click(optionToSelect)
+    expect(onChange).toBeCalledWith("1")
   })
 })
