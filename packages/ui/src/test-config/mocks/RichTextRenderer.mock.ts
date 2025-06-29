@@ -139,7 +139,7 @@ export const createUploadNode = (
 
 export const createUploadNodeWithRelation = (
   relationTo = "documents",
-  value: unknown = { id: "1", url: "/document.pdf" },
+  value: SerializedUploadNode["value"] = { id: "1", url: "/document.pdf" },
 ): SerializedUploadNode => ({
   type: NodeType.UPLOAD,
   relationTo,
@@ -147,7 +147,9 @@ export const createUploadNodeWithRelation = (
   version: 1,
 })
 
-export const createInvalidUploadNode = (value: unknown = "invalid"): SerializedUploadNode => ({
+export const createInvalidUploadNode = (
+  value: SerializedUploadNode["value"] = "invalid",
+): SerializedUploadNode => ({
   type: NodeType.UPLOAD,
   relationTo: "media",
   value,
@@ -157,7 +159,7 @@ export const createInvalidUploadNode = (value: unknown = "invalid"): SerializedU
 export const createUploadNodeNoUrl = (id = "1", alt = "No URL Image"): SerializedUploadNode => ({
   type: NodeType.UPLOAD,
   relationTo: "media",
-  value: { id, alt },
+  value: { id, alt, url: "" },
   version: 1,
 })
 

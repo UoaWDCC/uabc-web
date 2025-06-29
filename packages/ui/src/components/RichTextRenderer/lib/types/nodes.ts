@@ -1,79 +1,33 @@
-import type { ListType, NodeType } from "../constants"
-import type { LinkFields } from "../schemas"
+import type { z } from "zod"
+import type {
+  SerializedCodeNodeSchema,
+  SerializedHeadingNodeSchema,
+  SerializedHorizontalRuleNodeSchema,
+  SerializedLineBreakNodeSchema,
+  SerializedLinkNodeSchema,
+  SerializedListItemNodeSchema,
+  SerializedListNodeSchema,
+  SerializedNodeWithChildrenSchema,
+  SerializedParagraphNodeSchema,
+  SerializedQuoteNodeSchema,
+  SerializedTextNodeSchema,
+  SerializedUploadNodeSchema,
+  lexicalNodeSchema,
+} from "../schemas"
 
-export interface SerializedLexicalNode {
-  type: string
-  version: number
-}
-
-export interface SerializedTextNode extends SerializedLexicalNode {
-  type: NodeType.TEXT
-  text: string
-  format?: number
-}
-
-export interface SerializedHeadingNode extends SerializedLexicalNode {
-  type: NodeType.HEADING
-  tag: string
-  children: SerializedLexicalNode[]
-}
-
-export interface SerializedLinkNode extends SerializedLexicalNode {
-  type: NodeType.LINK
-  fields: LinkFields
-  children: SerializedLexicalNode[]
-}
-
-export interface SerializedUploadNode extends SerializedLexicalNode {
-  type: NodeType.UPLOAD
-  relationTo: string
-  value: unknown
-}
-
-export interface SerializedParagraphNode extends SerializedLexicalNode {
-  type: NodeType.PARAGRAPH
-  children?: SerializedLexicalNode[]
-}
-
-export interface SerializedQuoteNode extends SerializedLexicalNode {
-  type: NodeType.QUOTE
-  children?: SerializedLexicalNode[]
-}
-
-export interface SerializedListNode extends SerializedLexicalNode {
-  type: NodeType.LIST
-  tag: ListType
-  children?: SerializedLexicalNode[]
-}
-
-export interface SerializedListItemNode extends SerializedLexicalNode {
-  type: NodeType.LIST_ITEM
-  children?: SerializedLexicalNode[]
-}
-
-export interface SerializedLineBreakNode extends SerializedLexicalNode {
-  type: NodeType.LINE_BREAK
-}
-
-export interface SerializedHorizontalRuleNode extends SerializedLexicalNode {
-  type: NodeType.HORIZONTAL_RULE
-}
-
-export interface SerializedCodeNode extends SerializedLexicalNode {
-  type: NodeType.CODE
-  language?: string
-  children?: SerializedLexicalNode[]
-}
-
-export interface SerializedNodeWithChildren extends SerializedLexicalNode {
-  children: SerializedLexicalNode[]
-}
-
-export interface SerializedMediaDocument extends SerializedLexicalNode {
-  type: NodeType.MEDIA
-  url: string
-  alt: string
-}
+export type SerializedLexicalNode = z.infer<typeof lexicalNodeSchema>
+export type SerializedTextNode = z.infer<typeof SerializedTextNodeSchema>
+export type SerializedHeadingNode = z.infer<typeof SerializedHeadingNodeSchema>
+export type SerializedLinkNode = z.infer<typeof SerializedLinkNodeSchema>
+export type SerializedUploadNode = z.infer<typeof SerializedUploadNodeSchema>
+export type SerializedParagraphNode = z.infer<typeof SerializedParagraphNodeSchema>
+export type SerializedQuoteNode = z.infer<typeof SerializedQuoteNodeSchema>
+export type SerializedListNode = z.infer<typeof SerializedListNodeSchema>
+export type SerializedListItemNode = z.infer<typeof SerializedListItemNodeSchema>
+export type SerializedLineBreakNode = z.infer<typeof SerializedLineBreakNodeSchema>
+export type SerializedHorizontalRuleNode = z.infer<typeof SerializedHorizontalRuleNodeSchema>
+export type SerializedCodeNode = z.infer<typeof SerializedCodeNodeSchema>
+export type SerializedNodeWithChildren = z.infer<typeof SerializedNodeWithChildrenSchema>
 
 export interface SerializedEditorState {
   root: {

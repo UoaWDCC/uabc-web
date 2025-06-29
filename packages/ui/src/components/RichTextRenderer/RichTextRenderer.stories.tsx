@@ -2,7 +2,7 @@ import {
   allFormattingEditorState,
   storyBasicData,
   storyComplexData,
-} from "@/test-config/RichTextRenderer.mock"
+} from "@/test-config/mocks/RichTextRenderer.mock"
 import type { Meta, StoryObj } from "@storybook/react"
 import { Container } from "@yamada-ui/react"
 import { RichText } from "./RichText"

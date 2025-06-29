@@ -1,4 +1,3 @@
-import { NodeType } from "../constants"
 import {
   type DocumentWithSlug,
   DocumentWithSlugSchema,
@@ -6,6 +5,18 @@ import {
   LinkFieldsSchema,
   type MediaDocument,
   MediaDocumentSchema,
+  SerializedCodeNodeSchema,
+  SerializedHeadingNodeSchema,
+  SerializedHorizontalRuleNodeSchema,
+  SerializedLineBreakNodeSchema,
+  SerializedLinkNodeSchema,
+  SerializedListItemNodeSchema,
+  SerializedListNodeSchema,
+  SerializedNodeWithChildrenSchema,
+  SerializedParagraphNodeSchema,
+  SerializedQuoteNodeSchema,
+  SerializedTextNodeSchema,
+  SerializedUploadNodeSchema,
 } from "../schemas"
 import type {
   SerializedCodeNode,
@@ -36,51 +47,51 @@ export const isValidLinkFields = (fields: unknown): fields is LinkFields => {
 }
 
 export const isTextNode = (node: SerializedLexicalNode): node is SerializedTextNode => {
-  return node.type === NodeType.TEXT && "text" in node
+  return SerializedTextNodeSchema.safeParse(node).success
 }
 
 export const isHeadingNode = (node: SerializedLexicalNode): node is SerializedHeadingNode => {
-  return node.type === NodeType.HEADING && "tag" in node && "children" in node
+  return SerializedHeadingNodeSchema.safeParse(node).success
 }
 
 export const isLinkNode = (node: SerializedLexicalNode): node is SerializedLinkNode => {
-  return node.type === NodeType.LINK && "fields" in node && "children" in node
+  return SerializedLinkNodeSchema.safeParse(node).success
 }
 
 export const isUploadNode = (node: SerializedLexicalNode): node is SerializedUploadNode => {
-  return node.type === NodeType.UPLOAD && "relationTo" in node && "value" in node
+  return SerializedUploadNodeSchema.safeParse(node).success
 }
 
 export const isParagraphNode = (node: SerializedLexicalNode): node is SerializedParagraphNode => {
-  return node.type === NodeType.PARAGRAPH
+  return SerializedParagraphNodeSchema.safeParse(node).success
 }
 
 export const isQuoteNode = (node: SerializedLexicalNode): node is SerializedQuoteNode => {
-  return node.type === NodeType.QUOTE
+  return SerializedQuoteNodeSchema.safeParse(node).success
 }
 
 export const isListNode = (node: SerializedLexicalNode): node is SerializedListNode => {
-  return node.type === NodeType.LIST && "tag" in node
+  return SerializedListNodeSchema.safeParse(node).success
 }
 
 export const isListItemNode = (node: SerializedLexicalNode): node is SerializedListItemNode => {
-  return node.type === NodeType.LIST_ITEM
+  return SerializedListItemNodeSchema.safeParse(node).success
 }
 
 export const isLineBreakNode = (node: SerializedLexicalNode): node is SerializedLineBreakNode => {
-  return node.type === NodeType.LINE_BREAK
+  return SerializedLineBreakNodeSchema.safeParse(node).success
 }
 
 export const isHorizontalRuleNode = (
   node: SerializedLexicalNode,
 ): node is SerializedHorizontalRuleNode => {
-  return node.type === NodeType.HORIZONTAL_RULE
+  return SerializedHorizontalRuleNodeSchema.safeParse(node).success
 }
 
 export const isCodeNode = (node: SerializedLexicalNode): node is SerializedCodeNode => {
-  return node.type === NodeType.CODE
+  return SerializedCodeNodeSchema.safeParse(node).success
 }
 
 export const hasChildren = (node: SerializedLexicalNode): node is SerializedNodeWithChildren => {
-  return "children" in node && Array.isArray((node as SerializedNodeWithChildren).children)
+  return SerializedNodeWithChildrenSchema.safeParse(node).success
 }
