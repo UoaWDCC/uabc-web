@@ -2,7 +2,12 @@ import { googleAuthScopes, oauth2Client } from "@/business-layer/provider/google
 import AuthService from "@/business-layer/services/AuthService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
-import { AUTH_COOKIE_NAME, MembershipType, UserInfoResponseSchema } from "@repo/shared"
+import {
+  AUTH_COOKIE_NAME,
+  MembershipType,
+  TOKEN_EXPIRY_TIME,
+  UserInfoResponseSchema,
+} from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
@@ -125,7 +130,7 @@ export const GET = async (req: NextRequest) => {
       user,
       accessToken: tokens.access_token,
     },
-    { expiresIn: "1h" },
+    { expiresIn: TOKEN_EXPIRY_TIME },
   )
   const response = NextResponse.redirect(new URL("/onboarding/name", req.url))
 

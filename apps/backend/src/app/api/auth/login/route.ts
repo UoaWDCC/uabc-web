@@ -2,7 +2,7 @@ import StandardSecurity from "@/business-layer/provider/standard"
 import AuthService from "@/business-layer/services/AuthService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
-import { AUTH_COOKIE_NAME, STATE_COOKIE_NAME } from "@repo/shared"
+import { AUTH_COOKIE_NAME, STATE_COOKIE_NAME, TOKEN_EXPIRY_TIME } from "@repo/shared"
 import type { Authentication, User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
@@ -51,7 +51,7 @@ export const POST = async (req: NextRequest) => {
     )
   }
 
-  const token = authService.signJWT({ user }, { expiresIn: "1h" })
+  const token = authService.signJWT({ user }, { expiresIn: TOKEN_EXPIRY_TIME })
   const response = NextResponse.json({}, { status: StatusCodes.CREATED })
 
   response.cookies.set(AUTH_COOKIE_NAME, token, {

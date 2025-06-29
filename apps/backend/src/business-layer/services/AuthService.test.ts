@@ -1,7 +1,7 @@
 import { JWT_INVALID_TOKEN_MOCK } from "@/test-config/mocks/AuthService.mock"
 import { JWT_SECRET_MOCK, tokensMock } from "@/test-config/mocks/GoogleAuth.mock"
 import { casualUserMock } from "@/test-config/mocks/User.mock"
-import { JWTEncryptedUserSchema } from "@repo/shared"
+import { JWTEncryptedUserSchema, TOKEN_EXPIRY_TIME } from "@repo/shared"
 import jwt from "jsonwebtoken"
 
 import AuthService from "./AuthService"
@@ -12,7 +12,7 @@ describe("AuthService", () => {
   describe("signJWT", () => {
     it("should sign a JWT token and return it", () => {
       const payload = { user: casualUserMock, accessToken: tokensMock.access_token }
-      const options = { expiresIn: "1h" } as const
+      const options = { expiresIn: TOKEN_EXPIRY_TIME } as const
 
       const token = authService.signJWT(payload, options)
       expect(token).not.toBe(payload)
@@ -20,7 +20,7 @@ describe("AuthService", () => {
 
     it("should generate a JWT token that matches the encrypted data", () => {
       const payload = { user: casualUserMock, accessToken: tokensMock.access_token }
-      const options = { expiresIn: "1h" } as const
+      const options = { expiresIn: TOKEN_EXPIRY_TIME } as const
 
       const token = authService.signJWT(payload, options)
 
@@ -37,7 +37,7 @@ describe("AuthService", () => {
   describe("getData", () => {
     it("should return validated data with the correct token", () => {
       const payload = { user: casualUserMock, accessToken: tokensMock.access_token }
-      const options = { expiresIn: "1h" } as const
+      const options = { expiresIn: TOKEN_EXPIRY_TIME } as const
 
       const token = authService.signJWT(payload, options)
 
