@@ -2,8 +2,9 @@ import { Text } from "@yamada-ui/react"
 import { Link } from "@yamada-ui/react"
 import NextLink from "next/link"
 import type React from "react"
+import { LinkType } from "../constants"
 import type { RichTextRendererOptions, SerializedLexicalNode, SerializedLinkNode } from "../types"
-import { isDocumentWithSlug, isValidLinkFields } from "../utils"
+import { isDocumentWithSlug, isLinkDocument, isValidLinkFields } from "../utils"
 
 type RenderInlineNodes = (
   nodes: SerializedLexicalNode[],
@@ -29,13 +30,16 @@ export const renderLinkNode = (
   let href: string | undefined
   let external = false
 
-  if (fields.linkType === "custom" && fields.url) {
+  if (fields.linkType === LinkType.CUSTOM && fields.url) {
     href = fields.url
     external = fields.newTab || false
-  } else if (fields.linkType === "internal" && fields.doc) {
+  } else if (fields.linkType === LinkType.INTERNAL && fields.doc) {
     const doc = fields.doc
     if (isDocumentWithSlug(doc)) {
       href = `/${doc.slug}`
+      external = fields.newTab || false
+    } else if (isLinkDocument(doc)) {
+      href = `/${doc.value.slug}`
       external = fields.newTab || false
     }
   }
@@ -49,7 +53,14 @@ export const renderLinkNode = (
   }
 
   return (
-    <Link as={NextLink} external={external} href={href} key={key} {...options.linkProps}>
+    <Link
+      as={NextLink}
+      external={external}
+      href={href}
+      key={key}
+      rel={external ? "noopener noreferrer" : undefined}
+      {...options.linkProps}
+    >
       {renderInlineNodes(children, options)}
     </Link>
   )

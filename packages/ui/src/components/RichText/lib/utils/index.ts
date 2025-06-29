@@ -3,6 +3,7 @@ export { extractTextFromNodes, createAnchor, createNodeKey } from "./core"
 export {
   isMediaDocument,
   isDocumentWithSlug,
+  isLinkDocument,
   isValidLinkFields,
   isTextNode,
   isHeadingNode,

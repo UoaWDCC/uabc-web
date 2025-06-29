@@ -1,13 +1,10 @@
-import {
-  LinkType,
-  ListType,
-  NodeType,
-  TextFormat,
-} from "@/components/RichTextRenderer/lib/constants"
+import { LinkType, ListType, NodeType, TextFormat } from "@/components/RichText/lib/constants"
 import type {
   SerializedCodeNode,
   SerializedEditorState,
   SerializedHeadingNode,
+  SerializedHorizontalRuleNode,
+  SerializedLineBreakNode,
   SerializedLinkNode,
   SerializedListItemNode,
   SerializedListNode,
@@ -15,7 +12,7 @@ import type {
   SerializedQuoteNode,
   SerializedTextNode,
   SerializedUploadNode,
-} from "@/components/RichTextRenderer/lib/types"
+} from "@/components/RichText/lib/types"
 
 export const createTextNode = (text = "Sample text", format?: TextFormat): SerializedTextNode => ({
   type: NodeType.TEXT,
@@ -119,6 +116,22 @@ export const createInternalLinkStringDoc = (
   children: [createTextNode(text)],
 })
 
+export const createInternalLinkWithLinkDoc = (
+  text = "Internal Link with LinkDoc",
+  doc = {
+    value: { id: "456", slug: "test-page-link-doc" },
+  },
+): SerializedLinkNode => ({
+  type: NodeType.LINK,
+  fields: {
+    linkType: LinkType.INTERNAL,
+    doc,
+    newTab: false,
+  },
+  version: 1,
+  children: [createTextNode(text)],
+})
+
 export const createUploadNode = (
   url = "/test-image.jpg",
   alt = "Test Image",
@@ -156,10 +169,13 @@ export const createInvalidUploadNode = (
   version: 1,
 })
 
-export const createUploadNodeNoUrl = (id = "1", alt = "No URL Image"): SerializedUploadNode => ({
+export const createUploadNodeWithFilenameOnly = (
+  id = "1",
+  alt = "No URL Image",
+): SerializedUploadNode => ({
   type: NodeType.UPLOAD,
   relationTo: "media",
-  value: { id, alt, url: "" },
+  value: { id, alt, url: undefined, filename: "test.jpg" },
   version: 1,
 })
 
@@ -293,19 +309,20 @@ export const internalLinkNode = createLinkNode("", "Internal Link", {
   linkType: LinkType.INTERNAL,
   doc: { id: "123", slug: "test-page", title: "Test Page" },
 })
+export const internalLinkWithLinkDocNode = createInternalLinkWithLinkDoc()
 export const invalidLinkNode: SerializedLinkNode = createInvalidLinkNode()
 
-export const imageUploadNode = createUploadNode()
+export const imageUploadNode: SerializedUploadNode = createUploadNode()
 export const relativeImageUploadNode = createUploadNode("/relative-image.jpg", "Relative Image")
 export const absoluteImageUploadNode = createUploadNode(
   "https://example.com/absolute-image.jpg",
   "Absolute Image",
 )
 export const invalidUploadNode: SerializedUploadNode = createInvalidUploadNode()
-export const noUrlUploadNode: SerializedUploadNode = createUploadNodeNoUrl()
+export const noUrlUploadNode: SerializedUploadNode = createUploadNodeWithFilenameOnly()
 
 export const simpleQuoteNode = createQuoteNode("This is a quote")
-export const emptyQuoteNode = createQuoteNode("")
+export const emptyQuoteNode = createQuoteNodeCustom([])
 
 export const unorderedListNode = createListNode(ListType.UNORDERED, ["List item 1", "List item 2"])
 export const orderedListNode = createListNode(ListType.ORDERED, ["First item", "Second item"])
@@ -328,8 +345,9 @@ export const createEditorState = (
     | SerializedListNode
     | SerializedListItemNode
     | SerializedQuoteNode
+    | SerializedLineBreakNode
     | SerializedCodeNode
-    | { type: NodeType.LINE_BREAK | NodeType.HORIZONTAL_RULE; version: number }
+    | SerializedHorizontalRuleNode
   )[],
 ): SerializedEditorState => ({
   root: {

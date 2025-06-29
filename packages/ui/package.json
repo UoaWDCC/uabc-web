@@ -7,7 +7,7 @@
     "./components/Heading": "./src/components/Heading/index.ts",
     "./components/TextInput": "./src/components/TextInput/index.ts",
     "./components/Image": "./src/components/Image/index.ts",
-    "./components/RichTextRenderer": "./src/components/RichTextRenderer/index.ts",
+    "./components/RichText": "./src/components/RichText/index.ts",
     "./providers": "./src/providers/index.ts",
     "./test-utils": "./src/test-utils/index.ts"
   },

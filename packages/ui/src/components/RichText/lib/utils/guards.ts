@@ -1,6 +1,7 @@
 import {
   type DocumentWithSlug,
   DocumentWithSlugSchema,
+  LinkDocumentSchema,
   type LinkFields,
   LinkFieldsSchema,
   type MediaDocument,
@@ -19,6 +20,7 @@ import {
   SerializedUploadNodeSchema,
 } from "../schemas"
 import type {
+  LinkDocument,
   SerializedCodeNode,
   SerializedHeadingNode,
   SerializedHorizontalRuleNode,
@@ -40,6 +42,10 @@ export const isMediaDocument = (value: unknown): value is MediaDocument => {
 
 export const isDocumentWithSlug = (value: unknown): value is DocumentWithSlug => {
   return DocumentWithSlugSchema.safeParse(value).success
+}
+
+export const isLinkDocument = (value: unknown): value is LinkDocument => {
+  return LinkDocumentSchema.safeParse(value).success
 }
 
 export const isValidLinkFields = (fields: unknown): fields is LinkFields => {

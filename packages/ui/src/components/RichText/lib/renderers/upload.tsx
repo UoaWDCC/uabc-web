@@ -32,7 +32,7 @@ export const renderUploadNode = (
       alt={alt || ""}
       height={height || 200}
       key={key}
-      maxW="100%"
+      maxW="full"
       src={resolvedUrl}
       width={width || 300}
       {...options.imageProps}

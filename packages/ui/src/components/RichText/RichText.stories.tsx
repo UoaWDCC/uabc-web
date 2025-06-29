@@ -2,13 +2,13 @@ import {
   allFormattingEditorState,
   storyBasicData,
   storyComplexData,
-} from "@/test-config/mocks/RichTextRenderer.mock"
+} from "@/test-config/mocks/RichText.mock"
 import type { Meta, StoryObj } from "@storybook/react"
 import { Container } from "@yamada-ui/react"
 import { RichText } from "./RichText"
 
 const meta: Meta<typeof RichText> = {
-  title: "Components / RichTextRenderer",
+  title: "Components / RichText",
   component: RichText,
   argTypes: {
     data: {

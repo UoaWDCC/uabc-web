@@ -84,11 +84,7 @@ export class RichTextRenderer {
       return null
     }
 
-    return (
-      <VStack align="stretch" gap="md">
-        {nodes.map((node) => this.renderNode(node, options))}
-      </VStack>
-    )
+    return <VStack>{nodes.map((node) => this.renderNode(node, options))}</VStack>
   }
 
   /**
@@ -109,22 +105,49 @@ export class RichTextRenderer {
       )
     }
 
-    if (isTextNode(node)) return renderTextNode(node, key, options)
-    if (isHeadingNode(node))
+    if (isLineBreakNode(node)) {
+      return renderLineBreakNode(key)
+    }
+
+    if (isTextNode(node)) {
+      return renderTextNode(node, key, options)
+    }
+
+    if (isHeadingNode(node)) {
       return renderHeadingNode(node, key, options, this.renderInlineNodes.bind(this))
-    if (isParagraphNode(node))
+    }
+
+    if (isParagraphNode(node)) {
       return renderParagraphNode(node, key, options, this.renderInlineNodes.bind(this))
-    if (isLinkNode(node))
+    }
+
+    if (isLinkNode(node)) {
       return renderLinkNode(node, key, options, this.renderInlineNodes.bind(this))
-    if (isUploadNode(node)) return renderUploadNode(node, key, options)
-    if (isQuoteNode(node))
+    }
+
+    if (isUploadNode(node)) {
+      return renderUploadNode(node, key, options)
+    }
+
+    if (isQuoteNode(node)) {
       return renderQuoteNode(node, key, options, this.renderInlineNodes.bind(this))
-    if (isListNode(node)) return renderListNode(node, key, options, this.renderNode.bind(this))
-    if (isListItemNode(node))
+    }
+
+    if (isListNode(node)) {
+      return renderListNode(node, key, options, this.renderNode.bind(this))
+    }
+
+    if (isListItemNode(node)) {
       return renderListItemNode(node, key, options, this.renderInlineNodes.bind(this))
-    if (isLineBreakNode(node)) return renderLineBreakNode(key)
-    if (isHorizontalRuleNode(node)) return renderHorizontalRuleNode(key)
-    if (isCodeNode(node)) return renderCodeNode(node, key, options)
+    }
+
+    if (isHorizontalRuleNode(node)) {
+      return renderHorizontalRuleNode(key)
+    }
+
+    if (isCodeNode(node)) {
+      return renderCodeNode(node, key, options)
+    }
 
     if (hasChildren(node)) {
       return <Box key={key}>{this.renderInlineNodes(node.children, options)}</Box>

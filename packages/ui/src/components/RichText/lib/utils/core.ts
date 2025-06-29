@@ -8,7 +8,7 @@ export const extractTextFromNodes = (nodes: SerializedLexicalNode[]): string => 
   let text = ""
   for (const node of nodes) {
     if (isTextNode(node)) {
-      text += node.text || ""
+      text += node.text
     } else if (hasChildren(node)) {
       text += extractTextFromNodes(node.children)
     }
@@ -23,7 +23,7 @@ export const createAnchor = (text: string): string => {
   return text
     .trim()
     .toLowerCase()
-    .replace(/[^\w\s-]/g, "") // Remove special characters
+    .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
     .replace(/\s+/g, "-") // Replace spaces with hyphens
     .replace(/-+/g, "-") // Replace multiple hyphens with single
     .replace(/^-+|-+$/g, "") // Remove leading and trailing hyphens

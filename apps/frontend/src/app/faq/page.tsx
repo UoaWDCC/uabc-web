@@ -3,7 +3,7 @@ import { api } from "@/lib/api"
 import type { Faq } from "@repo/shared/payload-types"
 // TODO: THIS IS FOR TESTING ONLY, REPLACE WITH ACTUAL ONE LATER
 import { Heading } from "@repo/ui/components/Heading"
-import { RichText } from "@repo/ui/components/RichTextRenderer"
+import { RichText } from "@repo/ui/components/RichText"
 import { useQuery } from "@tanstack/react-query"
 import { Container, EmptyState, Text, VStack } from "@yamada-ui/react"
 
