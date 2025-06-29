@@ -14,24 +14,19 @@
     "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
   },
   "dependencies": {
-    "@payloadcms/richtext-lexical": "3.43.0",
-    "@repo/shared": "workspace:*",
     "@repo/ui": "workspace:*",
-    "@tanstack/react-query": "5.81.2",
-    "@tanstack/react-query-devtools": "5.81.2",
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.7",
     "next": "15.3.3",
     "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "zod": "3.24.3"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "typescript": "5.8.3",
     "@types/node": "22.15.21",
     "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5",
-    "typescript": "5.8.3"
+    "@repo/test-config": "workspace:*"
   }
 }

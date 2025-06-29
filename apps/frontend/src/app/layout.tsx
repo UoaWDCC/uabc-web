@@ -1,5 +1,5 @@
 import { Footer } from "@/components/Footer"
-import { QueryProvider, UIProvider } from "@repo/ui/providers"
+import { UIProvider } from "@repo/ui/providers"
 import { ColorModeScript } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
@@ -27,13 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
-        <QueryProvider>
-          <ColorModeScript initialColorMode="dark" />
-          <UIProvider>
-            {children}
-            <Footer />
-          </UIProvider>
-        </QueryProvider>
+        <ColorModeScript initialColorMode="dark" />
+        <UIProvider>
+          {children}
+          <Footer />
+        </UIProvider>
       </body>
     </html>
   )
