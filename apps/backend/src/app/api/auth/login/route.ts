@@ -2,7 +2,7 @@ import StandardSecurity from "@/business-layer/provider/standard"
 import AuthService from "@/business-layer/services/AuthService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
-import { AUTH_COOKIE_NAME } from "@repo/shared"
+import { AUTH_COOKIE_NAME, STATE_COOKIE_NAME } from "@repo/shared"
 import type { Authentication, User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
@@ -17,11 +17,11 @@ export const POST = async (req: NextRequest) => {
   const authService = new AuthService()
 
   const state = params.get("state")
-  const cookieState = cookieStore.get("state")
+  const cookieState = cookieStore.get(STATE_COOKIE_NAME)
   if (!state || !cookieState?.value || state.toString() !== cookieState.value.toString()) {
     return NextResponse.json({}, { status: StatusCodes.BAD_REQUEST })
   }
-  cookieStore.delete("state")
+  cookieStore.delete(STATE_COOKIE_NAME)
 
   const { email, password }: { email: string; password: string } = await req.json()
   if (!StandardSecurity.validateDetails(email, password)) {

@@ -11,7 +11,7 @@ import {
 import { STATE_MOCK } from "@/test-config/mocks/GoogleAuth.mock"
 import { createMockNextRequest } from "@/test-config/mocks/StandardAuth.mock"
 import { userCreateMock } from "@/test-config/mocks/User.mock"
-import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
+import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema, STATE_COOKIE_NAME } from "@repo/shared"
 import bcrypt from "bcryptjs"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
@@ -21,7 +21,7 @@ describe("api/auth/login", () => {
     const cookieStore = await cookies()
 
     it("redirects user and sets JWT token to cookies on success auth", async () => {
-      cookieStore.set("state", STATE_MOCK)
+      cookieStore.set(STATE_COOKIE_NAME, STATE_MOCK)
       const authDataService = new AuthDataService()
       const userDataService = new UserDataService()
 
@@ -51,7 +51,7 @@ describe("api/auth/login", () => {
     })
 
     it("returns 400 if state does not match", async () => {
-      cookieStore.set("state", STATE_MOCK)
+      cookieStore.set(STATE_COOKIE_NAME, STATE_MOCK)
 
       const req = createMockNextRequest(
         "/api/auth/login?state=wrong_state",
@@ -64,7 +64,7 @@ describe("api/auth/login", () => {
     })
 
     it("returns 401 if email is invalid", async () => {
-      cookieStore.set("state", STATE_MOCK)
+      cookieStore.set(STATE_COOKIE_NAME, STATE_MOCK)
 
       const req = createMockNextRequest(
         `/api/auth/login?state=${STATE_MOCK}`,
@@ -77,7 +77,7 @@ describe("api/auth/login", () => {
     })
 
     it("returns 401 if password is invalid", async () => {
-      cookieStore.set("state", STATE_MOCK)
+      cookieStore.set(STATE_COOKIE_NAME, STATE_MOCK)
       const authDataService = new AuthDataService()
       const userDataService = new UserDataService()
 
