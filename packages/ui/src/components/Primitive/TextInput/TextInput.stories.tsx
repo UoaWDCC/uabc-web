@@ -1,12 +1,12 @@
 import type { Meta, StoryFn } from "@storybook/react"
-import { PropsTable } from "../../../.storybook/components"
+import { PropsTable } from "@/storybook-config/components"
 import { INPUT_STATES, INPUT_TYPES, InputType, TextInput } from "./TextInput"
 
 type Story = StoryFn<typeof TextInput>
 
 const meta: Meta<typeof TextInput> = {
   component: TextInput,
-  title: "Components / TextInput",
+  title: "Components / Primitive / TextInput",
   argTypes: {
     label: {
       control: "text",

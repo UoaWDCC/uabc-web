@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {
-      ".storybook/*": ["./.storybook/*"],
+      "@/storybook-config/*": ["./.storybook/*"],
       "@/*": ["./src/*"]
     },
     "rootDir": ".",

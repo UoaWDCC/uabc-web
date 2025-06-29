@@ -1,6 +1,6 @@
 import { defaultTheme } from "@repo/theme"
 import type { Meta, StoryFn } from "@storybook/react"
-import { PropsTable } from "../../../.storybook/components"
+import { PropsTable } from "@/storybook-config/components"
 import { DEFAULT_FONT_SIZES, FONT_WEIGHTS, Heading } from "./Heading"
 
 type Story = StoryFn<typeof Heading>
@@ -10,7 +10,7 @@ const fontWeights = Object.keys(defaultTheme.fontWeights ?? {})
 
 const meta: Meta<typeof Heading> = {
   component: Heading,
-  title: "Components / Heading",
+  title: "Components / Primitive / Heading",
   argTypes: {
     as: {
       control: { type: "select" },
