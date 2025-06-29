@@ -1,6 +1,6 @@
+import { isValidElement } from "react"
 import { IMAGE_TEST_CONSTANTS } from "@/test-config/constants"
 import { render } from "@/test-utils"
-import { isValidElement } from "react"
 import * as ImageModule from "./index"
 
 describe("<Image />", () => {

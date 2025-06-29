@@ -1,8 +1,8 @@
-import { Security } from "@/business-layer/middleware/Security"
-import SemesterDataService from "@/data-layer/services/SemesterDataService"
-import { StatusCodes, getReasonPhrase } from "http-status-codes"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
+import { Security } from "@/business-layer/middleware/Security"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
 
 class SemesterRouteWrapper {
   /**

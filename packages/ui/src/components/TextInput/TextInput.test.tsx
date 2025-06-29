@@ -1,7 +1,7 @@
-import { fireEvent, render, screen } from "@/test-utils"
 import { isValidElement } from "react"
-import { InputType, TextInput } from "./TextInput"
+import { fireEvent, render, screen } from "@/test-utils"
 import * as TextInputModule from "./index"
+import { InputType, TextInput } from "./TextInput"
 
 describe("<TextInput />", () => {
   it("should re-export the TextInput component and check if TextInput exists", () => {
