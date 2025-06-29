@@ -1,16 +1,6 @@
-import type { z } from "zod"
-
 export * from "./nodes"
 export * from "./payload"
 
-import type {
-  DocumentWithSlugSchema,
-  LinkDocumentSchema,
-  LinkFieldsSchema,
-  MediaDocumentSchema,
-} from "./payload"
-
-export type MediaDocument = z.infer<typeof MediaDocumentSchema>
-export type DocumentWithSlug = z.infer<typeof DocumentWithSlugSchema>
-export type LinkDocument = z.infer<typeof LinkDocumentSchema>
-export type LinkFields = z.infer<typeof LinkFieldsSchema>
+// Remove duplicate type definitions since they're already exported from payload.ts
+// The schemas are available as DocumentWithSlugSchema, LinkDocumentSchema, etc.
+// The inferred types can be created where needed using z.infer<typeof SchemaName>

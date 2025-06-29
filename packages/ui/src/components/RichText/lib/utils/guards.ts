@@ -1,10 +1,8 @@
+import type { z } from "zod"
 import {
-  type DocumentWithSlug,
   DocumentWithSlugSchema,
   LinkDocumentSchema,
-  type LinkFields,
   LinkFieldsSchema,
-  type MediaDocument,
   MediaDocumentSchema,
   SerializedCodeNodeSchema,
   SerializedHeadingNodeSchema,
@@ -19,6 +17,12 @@ import {
   SerializedTextNodeSchema,
   SerializedUploadNodeSchema,
 } from "../schemas"
+
+// Create the types that were removed from the schemas index
+type DocumentWithSlug = z.infer<typeof DocumentWithSlugSchema>
+type LinkFields = z.infer<typeof LinkFieldsSchema>
+type MediaDocument = z.infer<typeof MediaDocumentSchema>
+
 import type {
   LinkDocument,
   SerializedCodeNode,

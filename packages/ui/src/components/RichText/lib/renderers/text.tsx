@@ -8,17 +8,12 @@ import type { RichTextRendererOptions, SerializedTextNode } from "../types"
  */
 export const renderTextNode = (
   node: SerializedTextNode,
-  key: string,
   options: RichTextRendererOptions,
 ): React.ReactNode => {
   const { text, format = 0 } = node
 
   if (format & TextFormat.CODE) {
-    return (
-      <Code key={key} {...options.codeProps}>
-        {text}
-      </Code>
-    )
+    return <Code {...options.codeProps}>{text}</Code>
   }
 
   const textProps: Partial<TextProps> = { ...options.textProps }
@@ -43,14 +38,14 @@ export const renderTextNode = (
 
   if (typeof content === "string") {
     return (
-      <Text as="span" key={key} {...textProps}>
+      <Text as="span" {...textProps}>
         {content}
       </Text>
     )
   }
 
   if (React.isValidElement(content)) {
-    return React.cloneElement(content as React.ReactElement, { key, ...textProps })
+    return React.cloneElement(content as React.ReactElement, { ...textProps })
   }
 
   return content
