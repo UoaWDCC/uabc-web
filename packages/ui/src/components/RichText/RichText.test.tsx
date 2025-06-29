@@ -40,10 +40,8 @@ describe("RichText", () => {
   it("should render complex rich text content", () => {
     render(<RichText data={complexEditorState} />)
 
-    // Heading
     expect(screen.getByRole("heading", { name: "Main Heading", level: 1 })).toBeInTheDocument()
 
-    // Paragraph with mixed formatting
     expect(screen.getByText("This is")).toBeInTheDocument()
     const boldText = screen.getByText("Bold text")
     expect(boldText).toBeInTheDocument()
@@ -53,29 +51,22 @@ describe("RichText", () => {
     expect(italicText).toBeInTheDocument()
     expect(italicText.tagName).toBe("EM")
 
-    // Link
     const link = screen.getByRole("link", { name: "External Link" })
     expect(link).toBeInTheDocument()
     expect(link).toHaveAttribute("href", "https://example.com")
 
-    // Image
     const image = screen.getByAltText("Test Image")
     expect(image).toBeInTheDocument()
-    // This will be checked against the Next.js image component's src
     expect(image).toHaveAttribute("src", "/_next/image?url=%2Ftest-image.jpg&w=640&q=75")
 
-    // List
     expect(screen.getByRole("list")).toBeInTheDocument()
     expect(screen.getByText("List item 1")).toBeInTheDocument()
     expect(screen.getByText("List item 2")).toBeInTheDocument()
 
-    // Quote
     expect(screen.getByText("This is a quote")).toBeInTheDocument()
 
-    // Horizontal Rule
     expect(screen.getByRole("separator")).toBeInTheDocument()
 
-    // Code
     const codeBlock = screen.getByText("console.log('Hello World')")
     expect(codeBlock).toBeInTheDocument()
     expect(codeBlock.closest("code")).toBeInTheDocument()
