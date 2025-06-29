@@ -8,7 +8,7 @@ describe("renderParagraphNode", () => {
     const renderInlineNodes = vi.fn().mockReturnValue("Plain text")
     const options = { textProps: {} }
 
-    render(renderParagraphNode(simpleParagraphNode, "test-key", options, renderInlineNodes))
+    render(renderParagraphNode(simpleParagraphNode, options, renderInlineNodes))
 
     const paragraph = screen.getByText("Plain text")
     expect(paragraph).toBeInTheDocument()
@@ -20,7 +20,7 @@ describe("renderParagraphNode", () => {
     const options = { textProps: {} }
 
     const { container } = render(
-      renderParagraphNode(emptyParagraphNode, "test-key", options, renderInlineNodes),
+      renderParagraphNode(emptyParagraphNode, options, renderInlineNodes),
     )
 
     expect(container).toBeEmptyDOMElement()
@@ -31,7 +31,7 @@ describe("renderParagraphNode", () => {
     const renderInlineNodes = vi.fn()
     const options = { textProps: { "data-testid": "custom-paragraph" } as TextProps }
 
-    render(renderParagraphNode(simpleParagraphNode, "test-key", options, renderInlineNodes))
+    render(renderParagraphNode(simpleParagraphNode, options, renderInlineNodes))
 
     const paragraph = screen.getByTestId("custom-paragraph")
     expect(paragraph).toBeInTheDocument()

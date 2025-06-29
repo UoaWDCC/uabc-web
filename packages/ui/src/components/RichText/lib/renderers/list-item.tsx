@@ -13,11 +13,10 @@ type RenderInlineNodes = (
 
 export const renderListItemNode = (
   node: SerializedListItemNode,
-  key: string,
   options: RichTextRendererOptions,
   renderInlineNodes: RenderInlineNodes,
 ): React.ReactNode => {
   const { children } = node
 
-  return <ListItem key={key}>{children ? renderInlineNodes(children, options) : null}</ListItem>
+  return <ListItem>{children ? renderInlineNodes(children, options) : null}</ListItem>
 }

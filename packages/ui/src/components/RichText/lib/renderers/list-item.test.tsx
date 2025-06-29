@@ -12,11 +12,7 @@ describe("renderListItemNode", () => {
       { type: NodeType.TEXT, text: "List item", version: 1 },
     ])
 
-    render(
-      <DiscList>
-        {renderListItemNode(listItemNode, "test-key", options, renderInlineNodes)}
-      </DiscList>,
-    )
+    render(<DiscList>{renderListItemNode(listItemNode, options, renderInlineNodes)}</DiscList>)
 
     const listItem = screen.getByRole("listitem")
     expect(listItem).toBeInTheDocument()
@@ -29,11 +25,7 @@ describe("renderListItemNode", () => {
     const options = {}
     const emptyListItemNode = createListItemNode()
 
-    render(
-      <DiscList>
-        {renderListItemNode(emptyListItemNode, "test-key", options, renderInlineNodes)}
-      </DiscList>,
-    )
+    render(<DiscList>{renderListItemNode(emptyListItemNode, options, renderInlineNodes)}</DiscList>)
 
     const listItem = screen.getByRole("listitem")
     expect(listItem).toBeInTheDocument()

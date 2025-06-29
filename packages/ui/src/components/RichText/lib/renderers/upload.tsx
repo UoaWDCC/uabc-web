@@ -6,7 +6,6 @@ import { isMediaDocument } from "../utils"
 
 export const renderUploadNode = (
   node: SerializedUploadNode,
-  key: string,
   options: RichTextRendererOptions,
 ): React.ReactNode => {
   if (node.relationTo !== "media") {
@@ -31,7 +30,6 @@ export const renderUploadNode = (
     <Image
       alt={alt || ""}
       height={height || 200}
-      key={key}
       maxW="full"
       src={resolvedUrl}
       width={width || 300}

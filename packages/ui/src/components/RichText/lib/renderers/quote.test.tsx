@@ -7,7 +7,7 @@ describe("renderQuoteNode", () => {
     const renderInlineNodes = vi.fn().mockReturnValue("This is a quote")
     const options = {}
 
-    render(renderQuoteNode(simpleQuoteNode, "test-key", options, renderInlineNodes))
+    render(renderQuoteNode(simpleQuoteNode, options, renderInlineNodes))
 
     const quote = screen.getByText("This is a quote")
     expect(quote).toBeInTheDocument()
@@ -19,9 +19,7 @@ describe("renderQuoteNode", () => {
     const renderInlineNodes = vi.fn()
     const options = {}
 
-    const { container } = render(
-      renderQuoteNode(emptyQuoteNode, "test-key", options, renderInlineNodes),
-    )
+    const { container } = render(renderQuoteNode(emptyQuoteNode, options, renderInlineNodes))
 
     expect(container).toBeEmptyDOMElement()
     expect(renderInlineNodes).not.toHaveBeenCalled()

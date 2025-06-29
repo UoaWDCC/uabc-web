@@ -9,7 +9,6 @@ type RenderInlineNodes = (
 
 export const renderQuoteNode = (
   node: SerializedQuoteNode,
-  key: string,
   options: RichTextRendererOptions,
   renderInlineNodes: RenderInlineNodes,
 ): React.ReactNode => {
@@ -19,5 +18,5 @@ export const renderQuoteNode = (
     return null
   }
 
-  return <Blockquote key={key}>{renderInlineNodes(children, options)}</Blockquote>
+  return <Blockquote>{renderInlineNodes(children, options)}</Blockquote>
 }

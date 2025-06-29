@@ -8,7 +8,7 @@ describe("renderHeadingNode", () => {
     const renderInlineNodes = vi.fn().mockReturnValue("Main Heading")
     const options = { headingProps: {} }
 
-    render(renderHeadingNode(h1HeadingNode, "test-key", options, renderInlineNodes))
+    render(renderHeadingNode(h1HeadingNode, options, renderInlineNodes))
 
     const heading = screen.getByRole("heading", { level: 1 })
     expect(heading).toBeInTheDocument()
@@ -20,7 +20,7 @@ describe("renderHeadingNode", () => {
     const renderInlineNodes = vi.fn().mockReturnValue("Sub Heading")
     const options = { headingProps: {} }
 
-    render(renderHeadingNode(h2HeadingNode, "test-key", options, renderInlineNodes))
+    render(renderHeadingNode(h2HeadingNode, options, renderInlineNodes))
 
     const heading = screen.getByRole("heading", { level: 2 })
     expect(heading).toBeInTheDocument()
@@ -32,7 +32,7 @@ describe("renderHeadingNode", () => {
     const renderInlineNodes = vi.fn()
     const options = { headingProps: { "data-testid": "custom-heading" } as HeadingProps }
 
-    render(renderHeadingNode(h1HeadingNode, "test-key", options, renderInlineNodes))
+    render(renderHeadingNode(h1HeadingNode, options, renderInlineNodes))
 
     const heading = screen.getByTestId("custom-heading")
     expect(heading).toBeInTheDocument()
