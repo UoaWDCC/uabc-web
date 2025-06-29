@@ -1,9 +1,8 @@
-import { payload } from "@/data-layer/adapters/Payload"
 import type { CreateBookingData, EditBookingData } from "@repo/shared"
 import type { Booking } from "@repo/shared/payload-types"
 import type { PaginatedDocs } from "payload"
-// biome-ignore lint/correctness/noUnusedImports: NotFound is used in JSDoc comments
 import { NotFound } from "payload"
+import { payload } from "@/data-layer/adapters/Payload"
 
 export default class BookingDataService {
   /**

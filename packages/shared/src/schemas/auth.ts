@@ -93,7 +93,7 @@ export const LoginDetailsSchema = z.object({
     .regex(/[A-Z]/) // Uppercase letters
     .regex(/[a-z]/) // Lowercase letters
     .regex(/[0-9]/) // Numbers
-    .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/), // Special characters
+    .regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/), // Special characters
 })
 
 export type JWTEncryptedUser = z.infer<typeof JWTEncryptedUserSchema>
