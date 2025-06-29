@@ -44,19 +44,15 @@ describe("RichText", () => {
 
     expect(screen.getByText("This is")).toBeInTheDocument()
     const boldText = screen.getByText("Bold text")
-    expect(boldText).toBeInTheDocument()
     expect(boldText.tagName).toBe("STRONG")
     expect(screen.getByText("and")).toBeInTheDocument()
     const italicText = screen.getByText("Italic text")
-    expect(italicText).toBeInTheDocument()
     expect(italicText.tagName).toBe("EM")
 
     const link = screen.getByRole("link", { name: "External Link" })
-    expect(link).toBeInTheDocument()
     expect(link).toHaveAttribute("href", "https://example.com")
 
     const image = screen.getByAltText("Test Image")
-    expect(image).toBeInTheDocument()
     expect(image).toHaveAttribute("src", "/_next/image?url=%2Ftest-image.jpg&w=640&q=75")
 
     expect(screen.getByRole("list")).toBeInTheDocument()
@@ -68,7 +64,6 @@ describe("RichText", () => {
     expect(screen.getByRole("separator")).toBeInTheDocument()
 
     const codeBlock = screen.getByText("console.log('Hello World')")
-    expect(codeBlock).toBeInTheDocument()
     expect(codeBlock.closest("code")).toBeInTheDocument()
   })
 

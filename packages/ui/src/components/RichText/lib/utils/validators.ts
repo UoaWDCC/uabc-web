@@ -1,9 +1,8 @@
-import type { z } from "zod"
+import { MediaSchema } from "@repo/shared"
 import {
   DocumentWithSlugSchema,
   LinkDocumentSchema,
   LinkFieldsSchema,
-  MediaDocumentSchema,
   SerializedCodeNodeSchema,
   SerializedHeadingNodeSchema,
   SerializedHorizontalRuleNodeSchema,
@@ -18,13 +17,11 @@ import {
   SerializedUploadNodeSchema,
 } from "../schemas"
 
-// Create the types that were removed from the schemas index
-type DocumentWithSlug = z.infer<typeof DocumentWithSlugSchema>
-type LinkFields = z.infer<typeof LinkFieldsSchema>
-type MediaDocument = z.infer<typeof MediaDocumentSchema>
-
 import type {
+  DocumentWithSlug,
   LinkDocument,
+  LinkFields,
+  MediaDocument,
   SerializedCodeNode,
   SerializedHeadingNode,
   SerializedHorizontalRuleNode,
@@ -41,7 +38,7 @@ import type {
 } from "../types"
 
 export const isMediaDocument = (value: unknown): value is MediaDocument => {
-  return MediaDocumentSchema.safeParse(value).success
+  return MediaSchema.safeParse(value).success
 }
 
 export const isDocumentWithSlug = (value: unknown): value is DocumentWithSlug => {

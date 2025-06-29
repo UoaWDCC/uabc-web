@@ -10,6 +10,44 @@ type RenderInlineNodes = (
   options: RichTextRendererOptions,
 ) => React.ReactNode
 
+/**
+ * Renders a link node as either a Link component or plain text
+ *
+ * This function handles both external (custom) and internal links. For external
+ * links, it uses the provided URL. For internal links, it resolves document
+ * references to generate proper routes. If the link configuration is invalid,
+ * it falls back to rendering plain text.
+ *
+ * @param node - The link node containing fields (URL, document reference) and children
+ * @param key - Unique React key for the rendered element
+ * @param options - Rendering options including linkProps for styling customization
+ * @param renderInlineNodes - Function to render the link's child content
+ * @returns Link component for valid links, or Text component for invalid links
+ *
+ * @example
+ * ```tsx
+ * // External link
+ * const externalLinkNode = {
+ *   type: 'link',
+ *   fields: { linkType: 'custom', url: 'https://example.com', newTab: true },
+ *   children: [{ type: 'text', text: 'Visit Site' }]
+ * }
+ *
+ * // Internal link
+ * const internalLinkNode = {
+ *   type: 'link',
+ *   fields: { linkType: 'internal', doc: { id: '1', slug: 'about' } },
+ *   children: [{ type: 'text', text: 'About Us' }]
+ * }
+ *
+ * const element = renderLinkNode(
+ *   externalLinkNode,
+ *   'link-1',
+ *   { linkProps: { color: 'blue.500' } },
+ *   renderInlineNodes
+ * )
+ * ```
+ */
 export const renderLinkNode = (
   node: SerializedLinkNode,
   key: string,

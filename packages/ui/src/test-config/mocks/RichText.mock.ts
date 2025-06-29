@@ -146,13 +146,21 @@ export const createUploadNode = (
     alt,
     width,
     height,
+    updatedAt: "2021-01-01",
+    createdAt: "2021-01-01",
   },
   version: 1,
 })
 
 export const createUploadNodeWithRelation = (
   relationTo = "documents",
-  value: SerializedUploadNode["value"] = { id: "1", url: "/document.pdf" },
+  value: SerializedUploadNode["value"] = {
+    id: "1",
+    url: "/document.pdf",
+    alt: "Test",
+    updatedAt: "2021-01-01",
+    createdAt: "2021-01-01",
+  },
 ): SerializedUploadNode => ({
   type: NodeType.UPLOAD,
   relationTo,
@@ -175,7 +183,14 @@ export const createUploadNodeWithFilenameOnly = (
 ): SerializedUploadNode => ({
   type: NodeType.UPLOAD,
   relationTo: "media",
-  value: { id, alt, url: undefined, filename: "test.jpg" },
+  value: {
+    id,
+    alt,
+    url: undefined,
+    filename: "test.jpg",
+    updatedAt: "2021-01-01",
+    createdAt: "2021-01-01",
+  },
   version: 1,
 })
 

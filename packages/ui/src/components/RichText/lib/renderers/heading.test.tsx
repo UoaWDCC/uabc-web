@@ -11,7 +11,6 @@ describe("renderHeadingNode", () => {
     render(renderHeadingNode(h1HeadingNode, "test-key", options, renderInlineNodes))
 
     const heading = screen.getByRole("heading", { level: 1 })
-    expect(heading).toBeInTheDocument()
     expect(heading).toHaveTextContent("Main Heading")
     expect(renderInlineNodes).toHaveBeenCalledWith(h1HeadingNode.children, options)
   })
@@ -23,7 +22,6 @@ describe("renderHeadingNode", () => {
     render(renderHeadingNode(h2HeadingNode, "test-key", options, renderInlineNodes))
 
     const heading = screen.getByRole("heading", { level: 2 })
-    expect(heading).toBeInTheDocument()
     expect(heading).toHaveTextContent("Sub Heading")
     expect(renderInlineNodes).toHaveBeenCalledWith(h2HeadingNode.children, options)
   })

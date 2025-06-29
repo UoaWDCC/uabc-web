@@ -30,7 +30,6 @@ describe("<Heading />", () => {
   it("renders with default props", () => {
     render(<Heading>Hello World</Heading>)
     const heading = screen.getByText("Hello World")
-    expect(heading).toBeInTheDocument()
     expect(heading.tagName.toLowerCase()).toBe("h1")
   })
 

@@ -1,6 +1,7 @@
+import { MediaSchema } from "@repo/shared"
 import { z } from "zod"
 import { ListType, NodeType } from "../constants"
-import { LinkFieldsSchema, MediaDocumentSchema } from "./payload"
+import { LinkFieldsSchema } from "./payload"
 
 const baseNodeSchema = z.object({
   version: z.number(),
@@ -36,7 +37,7 @@ export const SerializedLinkNodeSchema = baseNodeSchema.extend({
 export const SerializedUploadNodeSchema = baseNodeSchema.extend({
   type: z.literal(NodeType.UPLOAD),
   relationTo: z.string(),
-  value: z.union([MediaDocumentSchema, z.string(), z.null()]),
+  value: z.union([MediaSchema, z.string(), z.null()]),
 })
 
 export const SerializedParagraphNodeSchema = baseNodeSchema.extend({

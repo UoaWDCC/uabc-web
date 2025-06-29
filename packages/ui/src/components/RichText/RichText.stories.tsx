@@ -46,7 +46,7 @@ export const Basic: Story = {
     data: storyBasicData,
   },
   render: (args) => (
-    <Container maxW="4xl" py="xl">
+    <Container gap="md" maxW="4xl" py="xl">
       <RichText {...args} />
     </Container>
   ),
@@ -57,7 +57,7 @@ export const Complex: Story = {
     data: storyComplexData,
   },
   render: (args) => (
-    <Container maxW="4xl" py="xl">
+    <Container gap="md" maxW="4xl" py="xl">
       <RichText {...args} />
     </Container>
   ),
@@ -71,7 +71,7 @@ export const WithCustomProps: Story = {
     linkProps: { color: "blue.500", _hover: { color: "blue.600" } },
   },
   render: (args) => (
-    <Container maxW="4xl" py="xl">
+    <Container gap="md" maxW="4xl" py="xl">
       <RichText {...args} />
     </Container>
   ),
@@ -94,7 +94,7 @@ export const AllFormattingTypes: Story = {
     data: allFormattingEditorState,
   },
   render: (args) => (
-    <Container maxW="4xl" py="xl">
+    <Container gap="md" maxW="4xl" py="xl">
       <RichText {...args} />
     </Container>
   ),

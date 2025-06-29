@@ -1,5 +1,5 @@
 export { createAnchor, createNodeKey, extractTextFromNodes } from "./core"
-
+export { resolveUrl } from "./url"
 export {
   hasChildren,
   isCodeNode,
@@ -17,6 +17,4 @@ export {
   isTextNode,
   isUploadNode,
   isValidLinkFields,
-} from "./guards"
-
-export { resolveUrl } from "./url"
+} from "./validators"

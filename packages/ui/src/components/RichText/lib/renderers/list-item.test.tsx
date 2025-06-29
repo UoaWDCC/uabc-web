@@ -19,7 +19,6 @@ describe("renderListItemNode", () => {
     )
 
     const listItem = screen.getByRole("listitem")
-    expect(listItem).toBeInTheDocument()
     expect(listItem).toHaveTextContent("List item")
     expect(renderInlineNodes).toHaveBeenCalledWith(listItemNode.children, options)
   })
@@ -36,7 +35,6 @@ describe("renderListItemNode", () => {
     )
 
     const listItem = screen.getByRole("listitem")
-    expect(listItem).toBeInTheDocument()
     expect(listItem).toBeEmptyDOMElement()
     expect(renderInlineNodes).not.toHaveBeenCalled()
   })

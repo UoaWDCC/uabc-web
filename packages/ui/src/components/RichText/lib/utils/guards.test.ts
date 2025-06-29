@@ -15,7 +15,7 @@ import {
   isTextNode,
   isUploadNode,
   isValidLinkFields,
-} from "./guards"
+} from "./validators"
 
 describe("guards", () => {
   describe("isQuoteNode", () => {
@@ -110,7 +110,14 @@ describe("guards", () => {
 
   describe("isMediaDocument", () => {
     it("should return true for a valid media document", () => {
-      const doc = { id: "1", filename: "image.jpg", mimeType: "image/jpeg" }
+      const doc = {
+        id: "1",
+        alt: "Test image",
+        updatedAt: "2021-01-01",
+        createdAt: "2021-01-01",
+        filename: "image.jpg",
+        mimeType: "image/jpeg",
+      }
       expect(isMediaDocument(doc)).toBe(true)
     })
 
@@ -209,7 +216,14 @@ describe("guards", () => {
         type: "upload",
         version: 1,
         relationTo: "media",
-        value: { id: "1", filename: "image.jpg", mimeType: "image/jpeg" },
+        value: {
+          id: "1",
+          alt: "Test image",
+          updatedAt: "2021-01-01",
+          createdAt: "2021-01-01",
+          filename: "image.jpg",
+          mimeType: "image/jpeg",
+        },
       }
       expect(isUploadNode(node)).toBe(true)
     })

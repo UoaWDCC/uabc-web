@@ -4,7 +4,39 @@ import { TextFormat } from "../constants"
 import type { RichTextRendererOptions, SerializedTextNode } from "../types"
 
 /**
- * Text node renderer that handles all text formatting
+ * Renders a text node with appropriate formatting based on format flags
+ *
+ * This function handles all text formatting options including bold, italic,
+ * strikethrough, underline, and code. It uses bitwise operations to check
+ * format flags and applies the appropriate Yamada UI components. Code format
+ * takes precedence and uses the Code component, while other formats are
+ * combined using nested Text components.
+ *
+ * @param node - The text node containing text content and format flags
+ * @param key - Unique React key for the rendered element
+ * @param options - Rendering options including textProps and codeProps for styling
+ * @returns Text or Code component with appropriate formatting, or null for null text
+ *
+ * @example
+ * ```tsx
+ * // Bold and italic text
+ * const textNode = {
+ *   type: 'text',
+ *   text: 'Important text',
+ *   format: TextFormat.BOLD | TextFormat.ITALIC
+ * }
+ *
+ * // Code text
+ * const codeTextNode = {
+ *   type: 'text',
+ *   text: 'console.log()',
+ *   format: TextFormat.CODE
+ * }
+ *
+ * const element = renderTextNode(textNode, 'text-1', {
+ *   textProps: { color: 'gray.700' }
+ * })
+ * ```
  */
 export const renderTextNode = (
   node: SerializedTextNode,

@@ -36,8 +36,9 @@ describe("renderTextNode", () => {
   it("should render underline text", () => {
     const node = { ...baseNode, format: TextFormat.UNDERLINE }
     render(renderTextNode(node, "test-key", {}))
-    expect(screen.getByText("Hello, world!").tagName).toBe("SPAN")
-    expect(screen.getByText("Hello, world!")).toHaveStyle("text-decoration: underline")
+    const textElement = screen.getByText("Hello, world!")
+    expect(textElement.tagName).toBe("SPAN")
+    expect(textElement).toHaveStyle("text-decoration: underline")
   })
 
   it("should render code", () => {
@@ -61,8 +62,9 @@ describe("renderTextNode", () => {
   it("should pass codeProps to the Code component", () => {
     const node = { ...baseNode, format: TextFormat.CODE }
     render(renderTextNode(node, "test-key", { codeProps: { color: "blue" } }))
-    expect(screen.getByText("Hello, world!").tagName).toBe("CODE")
-    expect(screen.getByText("Hello, world!")).toHaveStyle("color: rgb(0, 0, 255)")
+    const codeElement = screen.getByText("Hello, world!")
+    expect(codeElement.tagName).toBe("CODE")
+    expect(codeElement).toHaveStyle("color: rgb(0, 0, 255)")
   })
 
   it("should return null if text is null", () => {

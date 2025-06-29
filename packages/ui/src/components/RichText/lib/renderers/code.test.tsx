@@ -13,7 +13,6 @@ describe("renderCodeNode", () => {
     render(renderCodeNode(javascriptCodeNode, "test-key", options))
 
     const codeBlock = screen.getByText("console.log('Hello World')")
-    expect(codeBlock).toBeInTheDocument()
     expect(codeBlock).toHaveAttribute("data-language", "javascript")
   })
 
@@ -22,7 +21,6 @@ describe("renderCodeNode", () => {
     render(renderCodeNode(noLanguageCodeNode, "test-key", options))
 
     const codeBlock = screen.getByText("some code")
-    expect(codeBlock).toBeInTheDocument()
     expect(codeBlock).not.toHaveAttribute("data-language")
   })
 
@@ -31,7 +29,6 @@ describe("renderCodeNode", () => {
     render(renderCodeNode(emptyCodeNode, "test-key", options))
 
     const codeBlock = screen.getByRole("code")
-    expect(codeBlock).toBeInTheDocument()
     expect(codeBlock).toBeEmptyDOMElement()
   })
 
@@ -41,7 +38,6 @@ describe("renderCodeNode", () => {
     render(renderCodeNode(codeNodeWithNoChildren, "test-key", options))
 
     const codeBlock = screen.getByRole("code")
-    expect(codeBlock).toBeInTheDocument()
     expect(codeBlock).toBeEmptyDOMElement()
     expect(codeBlock).toHaveAttribute("data-language", "typescript")
   })

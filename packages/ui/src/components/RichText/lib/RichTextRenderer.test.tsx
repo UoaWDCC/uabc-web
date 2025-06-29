@@ -56,19 +56,15 @@ describe("RichTextRenderer", () => {
 
     expect(screen.getByText("This is")).toBeInTheDocument()
     const boldText = screen.getByText("Bold text")
-    expect(boldText).toBeInTheDocument()
     expect(boldText.tagName).toBe("STRONG")
     expect(screen.getByText("and")).toBeInTheDocument()
     const italicText = screen.getByText("Italic text")
-    expect(italicText).toBeInTheDocument()
     expect(italicText.tagName).toBe("EM")
 
     const link = screen.getByRole("link", { name: "External Link" })
-    expect(link).toBeInTheDocument()
     expect(link).toHaveAttribute("href", "https://example.com")
 
     const image = screen.getByAltText("Test Image")
-    expect(image).toBeInTheDocument()
     expect(image).toHaveAttribute("src", "/_next/image?url=%2Ftest-image.jpg&w=640&q=75")
 
     expect(screen.getByRole("list")).toBeInTheDocument()
@@ -79,7 +75,6 @@ describe("RichTextRenderer", () => {
 
     expect(screen.getByRole("separator")).toBeInTheDocument()
 
-    expect(screen.getByText("console.log('Hello World')")).toBeInTheDocument()
     expect(screen.getByText("console.log('Hello World')").closest("code")).toBeInTheDocument()
   })
 
@@ -278,7 +273,13 @@ describe("RichTextRenderer", () => {
   it("should handle invalid upload nodes", () => {
     const invalidUpload = createInvalidUploadNode()
     const noUrlUpload = createUploadNodeWithFilenameOnly()
-    const relatedUpload = createUploadNodeWithRelation("documents", { id: "1", url: "/doc.pdf" })
+    const relatedUpload = createUploadNodeWithRelation("documents", {
+      id: "1",
+      url: "/doc.pdf",
+      alt: "Test",
+      updatedAt: "2021-01-01",
+      createdAt: "2021-01-01",
+    })
 
     const editorState = createEditorState([invalidUpload, noUrlUpload, relatedUpload])
 

@@ -10,7 +10,6 @@ describe("renderQuoteNode", () => {
     render(renderQuoteNode(simpleQuoteNode, "test-key", options, renderInlineNodes))
 
     const quote = screen.getByText("This is a quote")
-    expect(quote).toBeInTheDocument()
     expect(quote.tagName).toBe("BLOCKQUOTE")
     expect(renderInlineNodes).toHaveBeenCalledWith(simpleQuoteNode.children, options)
   })
