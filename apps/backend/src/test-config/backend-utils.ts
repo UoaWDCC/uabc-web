@@ -38,12 +38,18 @@ export const clearCollection = async (payloadObject: Payload, collectionName: Co
   })
 }
 
-export function createMockNextRequest(url: string, method = "GET", body?: Record<string, unknown>) {
+export function createMockNextRequest(
+  url: string,
+  method: "GET" | "POST" | "PATCH" | "DELETE" = "GET",
+  body?: Record<string, unknown>,
+) {
   return new NextRequest(new URL(url, "http://localhost:3000"), {
     method: method,
-    ...(body && { body: JSON.stringify(body) }),
-    headers: {
-      "Content-Type": "application/json",
-    },
+    ...(body && {
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }),
   }) as NextRequest
 }
