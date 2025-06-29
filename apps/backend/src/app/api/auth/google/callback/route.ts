@@ -1,4 +1,4 @@
-import { GoogleProvider, googleAuthScopes } from "@/business-layer/provider/google"
+import { GoogleSecurityProvider, googleAuthScopes } from "@/business-layer/provider/google"
 import AuthService from "@/business-layer/services/AuthService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
@@ -37,7 +37,7 @@ export const GET = async (req: NextRequest) => {
       { status: StatusCodes.BAD_REQUEST },
     )
 
-  const tokens = await GoogleProvider.fetchTokens(code)
+  const tokens = await GoogleSecurityProvider.fetchTokens(code)
 
   if (!tokens) {
     return NextResponse.json(

@@ -1,4 +1,4 @@
-import { GoogleProvider } from "@/business-layer/provider/google"
+import { GoogleSecurityProvider } from "@/business-layer/provider/google"
 import { payload } from "@/data-layer/adapters/Payload"
 import type { CreateAuthenticationData } from "@repo/shared"
 import type { Authentication } from "@repo/shared/payload-types"
@@ -33,7 +33,7 @@ export default class AuthDataService {
         const now = Date.now()
         const accessToken = existingAuth.accessToken
 
-        if (now < expiryTime && accessToken) GoogleProvider.revokeToken(accessToken)
+        if (now < expiryTime && accessToken) GoogleSecurityProvider.revokeToken(accessToken)
       }
     } else {
       return await payload.create({

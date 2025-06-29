@@ -12,7 +12,7 @@ export const oauth2Client = new google.auth.OAuth2(
   `${process.env.NEXT_PUBLIC_URL}/api/auth/google/callback`,
 )
 
-export class GoogleProvider {
+export class GoogleSecurityProvider {
   /**
    * Attempts to fetch token credentials from Google and returns them if successful.
    * Returns `undefined` an error occurs or if the required properties are missing from the received tokens:
