@@ -1,4 +1,5 @@
 export const AUTH_COOKIE_NAME = "auth_token"
+export const SALT_ROUNDS = 10
 
 export interface Credentials {
   /**
