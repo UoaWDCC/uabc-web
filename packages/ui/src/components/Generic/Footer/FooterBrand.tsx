@@ -1,6 +1,6 @@
 import { HStack, Text, VStack } from "@yamada-ui/react"
 import { memo } from "react"
-import { UabcLogo } from "@/components/Icons/UabcLogo/UabcLogo"
+import { UabcLogo } from "@/components/Icon/UabcLogo/UabcLogo"
 import { Heading } from "@/components/Primitive"
 import { FooterSocialLinks } from "./FooterSocialLinks"
 
