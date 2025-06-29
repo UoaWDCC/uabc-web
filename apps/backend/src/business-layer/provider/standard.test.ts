@@ -4,13 +4,13 @@ import {
   PASSWORD_MOCK,
 } from "@/test-config/mocks/Authentication.mock"
 import bcrypt from "bcryptjs"
-import StandardProvider from "./standard"
+import StandardSecurityProvider from "./standard"
 
-describe("StandardProvider", () => {
+describe("StandardSecurityProvider", () => {
   describe("hashPassword", () => {
     it("returns a hashed password", async () => {
       const hashSpy = vi.spyOn(bcrypt, "hash").mockImplementation(async () => HASHED_PASSWORD_MOCK)
-      const hash = await StandardProvider.hashPassword(PASSWORD_MOCK)
+      const hash = await StandardSecurityProvider.hashPassword(PASSWORD_MOCK)
 
       expect(hashSpy).toHaveBeenCalledWith(PASSWORD_MOCK, 10)
       expect(hash).toBe(HASHED_PASSWORD_MOCK)
@@ -20,7 +20,10 @@ describe("StandardProvider", () => {
   describe("verifyPassword", () => {
     it("returns true if password matches hash", async () => {
       const compareSpy = vi.spyOn(bcrypt, "compare").mockImplementation(async () => true)
-      const result = await StandardProvider.verifyPassword(PASSWORD_MOCK, HASHED_PASSWORD_MOCK)
+      const result = await StandardSecurityProvider.verifyPassword(
+        PASSWORD_MOCK,
+        HASHED_PASSWORD_MOCK,
+      )
 
       expect(compareSpy).toHaveBeenCalledWith(PASSWORD_MOCK, HASHED_PASSWORD_MOCK)
       expect(result).toBe(true)
@@ -28,7 +31,7 @@ describe("StandardProvider", () => {
 
     it("returns false if password does not match hash", async () => {
       const compareSpy = vi.spyOn(bcrypt, "compare").mockImplementation(async () => false)
-      const result = await StandardProvider.verifyPassword(PASSWORD_MOCK, "wrongHash")
+      const result = await StandardSecurityProvider.verifyPassword(PASSWORD_MOCK, "wrongHash")
 
       expect(compareSpy).toHaveBeenCalledWith(PASSWORD_MOCK, "wrongHash")
       expect(result).toBe(false)
@@ -37,12 +40,12 @@ describe("StandardProvider", () => {
 
   describe("validateDetails", () => {
     it("returns true for valid data", async () => {
-      const result = await StandardProvider.validateDetails(EMAIL_MOCK, PASSWORD_MOCK)
+      const result = await StandardSecurityProvider.validateDetails(EMAIL_MOCK, PASSWORD_MOCK)
       expect(result).toBe(true)
     })
 
     it("returns false for invalid data", async () => {
-      const result = await StandardProvider.validateDetails("bademail", "pw")
+      const result = await StandardSecurityProvider.validateDetails("bademail", "pw")
       expect(result).toBe(false)
     })
   })

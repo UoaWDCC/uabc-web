@@ -1,7 +1,7 @@
 import { LoginDetailsSchema, SALT_ROUNDS } from "@repo/shared"
 import bcrypt from "bcryptjs"
 
-export default class StandardProvider {
+export default class StandardSecurityProvider {
   /**
    * Hashes a password using bcrypt.
    *
