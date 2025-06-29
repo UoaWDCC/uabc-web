@@ -35,9 +35,7 @@ beforeEach(async () => {
     return credentialsMock
   })
 
-  // Also mock the revokeToken method for complete testing
   vi.spyOn(GoogleSecurityProvider, "revokeToken").mockImplementation(async (token: string) => {
-    // Simulate token revocation failure only for specific test tokens
     return token !== "failed-revocation-token"
   })
 
@@ -96,7 +94,6 @@ afterEach(async () => {
  */
 export { casualToken, memberToken, adminToken }
 
-// Reset all mocks after all tests
 afterAll(() => {
   vi.restoreAllMocks()
 })
