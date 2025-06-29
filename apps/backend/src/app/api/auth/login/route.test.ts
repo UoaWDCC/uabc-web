@@ -1,3 +1,7 @@
+import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema, STATE_COOKIE_NAME } from "@repo/shared"
+import bcrypt from "bcryptjs"
+import { StatusCodes } from "http-status-codes"
+import { cookies } from "next/headers"
 import { POST as login } from "@/app/api/auth/login/route"
 import AuthService from "@/business-layer/services/AuthService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
@@ -11,10 +15,6 @@ import {
 import { STATE_MOCK } from "@/test-config/mocks/GoogleAuth.mock"
 import { createMockNextRequest } from "@/test-config/mocks/StandardAuth.mock"
 import { userCreateMock } from "@/test-config/mocks/User.mock"
-import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema, STATE_COOKIE_NAME } from "@repo/shared"
-import bcrypt from "bcryptjs"
-import { StatusCodes } from "http-status-codes"
-import { cookies } from "next/headers"
 
 describe("api/auth/login", () => {
   describe("POST", async () => {
