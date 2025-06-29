@@ -1,24 +1,19 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "assists": {
-    "actions": {
-      "source": {
-        "sortJsxProps": "on"
-      }
-    }
-  },
+  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
   "files": {
-    "ignore": [
-      "src/payload-types.ts",
-      "pnpm-lock.yaml",
-      "*.md",
-      ".github/",
-      ".lintstagedrc",
-      ".next",
-      "dist",
-      ".turbo",
-      ".vscode",
-      "coverage"
+    "includes": [
+      "**",
+      "!**/src/payload-types.ts",
+      "!**/pnpm-lock.yaml",
+      "!**/*.md",
+      "!**/.github/",
+      "!**/.lintstagedrc",
+      "!**/.next",
+      "!**/dist",
+      "!**/.turbo",
+      "!**/.vscode",
+      "!**/coverage",
+      "!apps/portal"
     ],
     "ignoreUnknown": false
   },
@@ -56,21 +51,31 @@
       "suspicious": {
         "noExplicitAny": "warn"
       },
-      "a11y": {
-        "all": true
-      },
+      "a11y": {},
       "nursery": {
-        "useSortedClasses": "info",
-        "noImgElement": "info"
+        "useSortedClasses": "info"
       },
       "complexity": {
         "noStaticOnlyClass": "off"
+      },
+      "style": {
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error"
+      },
+      "performance": {
+        "noImgElement": "info"
       }
     }
   },
-  "organizeImports": {
-    "enabled": true
-  },
+  "assist": { "actions": { "source": { "organizeImports": "on", "useSortedAttributes": "on" } } },
   "vcs": {
     "clientKind": "git",
     "enabled": true,
