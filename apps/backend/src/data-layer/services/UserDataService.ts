@@ -7,7 +7,7 @@ export default class UserDataService {
   /**
    * Creates a new {@link User} document
    *
-   * @param {CreateUserData} newUserData the {@link CreateUserData} to create a new user with
+   * @param newUserData the {@link CreateUserData} to create a new user with
    * @returns the created {@link User} document
    */
   public async createUser(newUserData: CreateUserData): Promise<User> {
