@@ -1,8 +1,7 @@
-import { Heading } from "@repo/ui/components/Heading"
-import { Image } from "@repo/ui/components/Image"
 import { HStack, Text, VStack } from "@yamada-ui/react"
 import { memo } from "react"
-import UABCLogo from "@/assets/uabc-logo.svg"
+import { UabcLogo } from "@/components/Icons/UabcLogo/UabcLogo"
+import { Heading } from "@/components/Primitive"
 import { FooterSocialLinks } from "./FooterSocialLinks"
 
 export const FooterBrand = memo(() => {
@@ -10,7 +9,7 @@ export const FooterBrand = memo(() => {
     <VStack display={{ base: "none", md: "flex" }} gap="lg">
       <VStack gap="xs">
         <HStack>
-          <Image alt="UABC Logo" src={UABCLogo} />
+          <UabcLogo />
           <Heading.h2 fontSize="6xl" fontWeight="semibold">
             UABC
           </Heading.h2>

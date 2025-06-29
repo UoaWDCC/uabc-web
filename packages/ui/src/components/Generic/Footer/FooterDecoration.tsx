@@ -1,4 +1,4 @@
-import { Image } from "@repo/ui/components/Image"
+import { Image } from "@repo/ui/components/Primitive"
 import { Motion } from "@yamada-ui/react"
 import { memo } from "react"
 import Shuttle from "@/assets/shuttle.png"

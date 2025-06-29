@@ -1,7 +1,7 @@
-import { Heading } from "@repo/ui/components/Heading"
 import { List, ListItem, Stack, Link as UILink } from "@yamada-ui/react"
 import Link from "next/link"
 import { memo } from "react"
+import { Heading } from "@/components/Primitive"
 import { LINKS } from "./constants"
 
 export const FooterLinks = memo(() => {

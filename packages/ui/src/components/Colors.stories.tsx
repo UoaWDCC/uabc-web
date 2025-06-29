@@ -3,7 +3,7 @@ import { COLORS } from "@repo/theme/tokens"
 import type { Meta, StoryObj } from "@storybook/react"
 import { Grid, VStack } from "@yamada-ui/react"
 import { ColorPallet, ColorPallets } from "../../.storybook/components"
-import { Heading } from "./Heading"
+import { Heading } from "./Primitive/Heading"
 
 const meta: Meta = {
   title: "Theme / Colors",
