@@ -1,14 +1,16 @@
-import { Heading } from "@repo/ui/components/Heading"
-import { LogOutIcon } from "@yamada-ui/lucide"
-import { Container, HStack, Spacer, Text, VStack } from "@yamada-ui/react"
 import Image from "next/image"
-import { PrepaidSessionsCounter } from "@/components/Composite/booking/sessions/PrepaidSessionsCounter"
+import BadmintonRacketLogo from "../../public/images/BadmintonRacketLogo.png"
+
 import { LogOutButton } from "@/components/Composite/LogOutButton"
+import { PrepaidSessionsCounter } from "@/components/Composite/booking/sessions/PrepaidSessionsCounter"
 import type { CurrentUserProps } from "@/lib/hoc/withCurrentUser"
 import withCurrentUser from "@/lib/hoc/withCurrentUser"
 import { getUserFromId } from "@/services/user"
-import BadmintonRacketLogo from "../../public/images/BadmintonRacketLogo.png"
+import { Heading } from "@repo/ui/components/Heading"
 import ClientSessionPage from "./client-page"
+
+import { LogOutIcon } from "@yamada-ui/lucide"
+import { Container, HStack, Spacer, Text, VStack } from "@yamada-ui/react"
 
 export const metadata = {
   title: "Session Booking - UABC Booking Portal",

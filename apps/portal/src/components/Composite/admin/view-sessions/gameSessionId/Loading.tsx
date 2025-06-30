@@ -1,5 +1,5 @@
 import { DownloadIcon } from "@yamada-ui/lucide"
-import { Button, Heading, HStack, Skeleton, Spacer, Text, VStack } from "@yamada-ui/react"
+import { Button, HStack, Heading, Skeleton, Spacer, Text, VStack } from "@yamada-ui/react"
 import { memo } from "react"
 
 export const Loading = memo(() => {

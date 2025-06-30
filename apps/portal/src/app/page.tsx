@@ -1,3 +1,4 @@
+import { UabcLogo } from "@/components/Composite/UabcLogo"
 import { Button } from "@repo/ui/components/Button"
 import { Heading } from "@repo/ui/components/Heading"
 import {
@@ -13,7 +14,6 @@ import {
   VStack,
 } from "@yamada-ui/react"
 import Link from "next/link"
-import { UabcLogo } from "@/components/Composite/UabcLogo"
 
 export default function HomePage() {
   return (

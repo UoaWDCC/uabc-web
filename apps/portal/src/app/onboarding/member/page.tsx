@@ -1,10 +1,11 @@
 "use client"
 
-import { Button } from "@repo/ui/components/Button"
-import { Container, RadioCardGroup, Spacer, VStack } from "@yamada-ui/react"
 import { redirect, useRouter } from "next/navigation"
+
 import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
 import { MembershipTypeSelector } from "@/components/Composite/MembershipTypeSelector"
+import { Button } from "@repo/ui/components/Button"
+import { Container, RadioCardGroup, Spacer, VStack } from "@yamada-ui/react"
 
 import { useOnboardingDetailsStore } from "@/stores/useOnboardingDetailsStore"
 

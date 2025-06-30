@@ -1,14 +1,15 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Heading } from "@repo/ui/components/Heading"
-import { InputType, TextInput } from "@repo/ui/components/TextInput"
-import { Button, Text, Link as UILink, useNotice, VStack } from "@yamada-ui/react"
+import { Button, Text, Link as UILink, VStack, useNotice } from "@yamada-ui/react"
 import Link from "next/link"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+
 import { useForgotPasswordMutation } from "@/hooks/mutations/forgot-password"
+import { Heading } from "@repo/ui/components/Heading"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 
 const formSchema = z.object({
   email: z.string().email(),

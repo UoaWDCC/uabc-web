@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
 import { QUERY_KEY } from "@/lib/utils/queryKeys"
+import { useQuery } from "@tanstack/react-query"
 
 export interface MemberResponse {
   id: string

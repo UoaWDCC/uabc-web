@@ -1,4 +1,4 @@
-import { extendConfig, extendTheme, type ThemeConfig, type UsageTheme } from "@yamada-ui/react"
+import { type ThemeConfig, type UsageTheme, extendConfig, extendTheme } from "@yamada-ui/react"
 import { components } from "./components"
 import { breakpoint } from "./config"
 import { semantics } from "./semantics"

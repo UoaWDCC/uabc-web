@@ -15,8 +15,8 @@ import {
   Text,
 } from "@yamada-ui/react"
 import { type FC, memo } from "react"
-import type { Member } from "./columns"
 import { MemberApprovalModal } from "./MemberApprovalModal"
+import type { Member } from "./columns"
 
 interface MemberApprovalCardProps {
   row: Row<Member>

@@ -1,10 +1,11 @@
-import { Bleed, Box, Button, Center, Container, Text, VStack } from "@yamada-ui/react"
 import Link from "next/link"
+
+import { UabcHeaderText } from "@/components/Composite/UabcHeaderText"
 import { CartClearer } from "@/components/Composite/booking/confirmation/CartClearer"
 import ConfirmationMessage from "@/components/Composite/booking/confirmation/ConfirmationMessage"
-import { UabcHeaderText } from "@/components/Composite/UabcHeaderText"
 import type { CurrentUserProps } from "@/lib/hoc/withCurrentUser"
 import withCurrentUser from "@/lib/hoc/withCurrentUser"
+import { Bleed, Box, Button, Center, Container, Text, VStack } from "@yamada-ui/react"
 
 export const metadata = {
   title: "Booking Confirmation - UABC Booking Portal",

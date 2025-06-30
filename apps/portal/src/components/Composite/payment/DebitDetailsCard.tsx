@@ -1,5 +1,5 @@
 import { CheckIcon, CopyIcon } from "@yamada-ui/lucide"
-import { Card, CardBody, HStack, IconButton, Text, useClipboard, VStack } from "@yamada-ui/react"
+import { Card, CardBody, HStack, IconButton, Text, VStack, useClipboard } from "@yamada-ui/react"
 
 interface DebitDetailsCardProps {
   title: string

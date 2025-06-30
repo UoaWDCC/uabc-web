@@ -1,9 +1,9 @@
 "use client"
 
-import { Heading } from "@repo/ui/components/Heading"
-import { Button, Container, Spacer, Text, VStack } from "@yamada-ui/react"
 import { DebitDetailsCard } from "@/components/Composite/payment/DebitDetailsCard"
 import { PaymentInfoCard } from "@/components/Composite/payment/PaymentInfoCard"
+import { Heading } from "@repo/ui/components/Heading"
+import { Button, Container, Spacer, Text, VStack } from "@yamada-ui/react"
 
 export default function DirectDebitPage() {
   const firstName = "John"

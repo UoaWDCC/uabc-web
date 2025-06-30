@@ -1,6 +1,7 @@
-import { Container } from "@yamada-ui/react"
 import { notFound } from "next/navigation"
 import { z } from "zod"
+
+import { Container } from "@yamada-ui/react"
 import ClientViewSessionsPageWithId from "./client-page"
 
 const routeContextSchema = z.object({

@@ -1,6 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import { useQueryClient } from "@tanstack/react-query"
+import { format, getMonth, getYear, parse } from "date-fns"
+import { useForm } from "react-hook-form"
+import type { z } from "zod"
+
+import { useCreateGameSessionMutation } from "@/hooks/mutations/game-sessions"
+import { formatFullDate } from "@/lib/utils/dates"
+import { QUERY_KEY } from "@/lib/utils/queryKeys"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import {
   Button,
   Dialog,
@@ -10,13 +17,7 @@ import {
   HStack,
   useNotice,
 } from "@yamada-ui/react"
-import { format, getMonth, getYear, parse } from "date-fns"
 import { type FC, memo } from "react"
-import { useForm } from "react-hook-form"
-import type { z } from "zod"
-import { useCreateGameSessionMutation } from "@/hooks/mutations/game-sessions"
-import { formatFullDate } from "@/lib/utils/dates"
-import { QUERY_KEY } from "@/lib/utils/queryKeys"
 import { useGameSessionContext } from "./GameSessionContext"
 import { gameSessionFormSchema } from "./utils"
 

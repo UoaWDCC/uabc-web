@@ -1,6 +1,6 @@
-import { Container, Heading, Text, VStack } from "@yamada-ui/react"
-import { MemberApprovalTable } from "@/components/Composite/admin/members/MemberApprovalTable"
 import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
+import { MemberApprovalTable } from "@/components/Composite/admin/members/MemberApprovalTable"
+import { Container, Heading, Text, VStack } from "@yamada-ui/react"
 
 export const metadata = {
   title: "Member Approval - UABC Booking Portal",

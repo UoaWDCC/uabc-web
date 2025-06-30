@@ -1,6 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import { useQueryClient } from "@tanstack/react-query"
+import { type SubmitHandler, useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { useEditScheduleMutation } from "@/hooks/mutations/schedules"
+import { QUERY_KEY } from "@/lib/utils/queryKeys"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import {
   Button,
   Dialog,
@@ -11,10 +16,6 @@ import {
   useNotice,
 } from "@yamada-ui/react"
 import { type FC, memo } from "react"
-import { type SubmitHandler, useForm } from "react-hook-form"
-import { z } from "zod"
-import { useEditScheduleMutation } from "@/hooks/mutations/schedules"
-import { QUERY_KEY } from "@/lib/utils/queryKeys"
 import { useScheduleContext } from "./SchedulesContext"
 
 const formSchema = z

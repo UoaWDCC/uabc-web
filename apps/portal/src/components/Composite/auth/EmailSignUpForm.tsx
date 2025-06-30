@@ -1,15 +1,16 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Heading } from "@repo/ui/components/Heading"
-import { InputType, TextInput } from "@repo/ui/components/TextInput"
-import { Button, useNotice, VStack } from "@yamada-ui/react"
+import { Button, VStack, useNotice } from "@yamada-ui/react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+
 import { useValidateEmailMutation } from "@/hooks/mutations/registration"
-import { emailSchema, passwordSchema } from "./formSchema"
+import { Heading } from "@repo/ui/components/Heading"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import { OTPFormAlertDialog } from "./OTPFormAlertDialog"
+import { emailSchema, passwordSchema } from "./formSchema"
 
 const formSchema = z.object({
   email: emailSchema,

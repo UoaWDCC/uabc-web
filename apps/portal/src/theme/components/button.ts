@@ -1,5 +1,5 @@
-import type { ComponentStyle } from "@yamada-ui/react"
 import { isAccessible, isGray, shadeColor, transparentizeColor } from "@yamada-ui/react"
+import type { ComponentStyle } from "@yamada-ui/react"
 
 export const Button: ComponentStyle<"Button"> = {
   baseStyle: {

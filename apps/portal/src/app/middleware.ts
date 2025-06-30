@@ -1,6 +1,6 @@
+import { AuthToken } from "@/lib/utils/auth-token"
 import { StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
-import { AuthToken } from "@/lib/utils/auth-token"
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("access_token")?.value

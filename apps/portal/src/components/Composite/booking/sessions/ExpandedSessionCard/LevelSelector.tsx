@@ -1,6 +1,6 @@
-import { Option, SegmentedControl, SegmentedControlButton, Select } from "@yamada-ui/react"
 import { useCartStore } from "@/stores/useCartStore"
 import { PlayLevel } from "@/types/types"
+import { Option, SegmentedControl, SegmentedControlButton, Select } from "@yamada-ui/react"
 
 interface LevelSelectorProps {
   id: number

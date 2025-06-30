@@ -1,5 +1,6 @@
-import { Center, type CenterProps } from "@yamada-ui/react"
 import type { PropsWithChildren } from "react"
+
+import { Center, type CenterProps } from "@yamada-ui/react"
 
 // interface CountIndicatorProps extends CenterProps {
 //   children: ReactNode

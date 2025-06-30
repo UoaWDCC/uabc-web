@@ -1,11 +1,12 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+
+import { UabcHeaderText } from "@/components/Composite/UabcHeaderText"
+import { useOnboardingDetailsStore } from "@/stores/useOnboardingDetailsStore"
 import { Button } from "@repo/ui/components/Button"
 import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import { Container, Spacer, Text, VStack } from "@yamada-ui/react"
-import { useRouter } from "next/navigation"
-import { UabcHeaderText } from "@/components/Composite/UabcHeaderText"
-import { useOnboardingDetailsStore } from "@/stores/useOnboardingDetailsStore"
 
 export default function NamePage() {
   const router = useRouter()

@@ -1,6 +1,6 @@
-import type { CartGameSession, PlayLevel } from "@repo/shared"
 import { create } from "zustand"
 
+import type { CartGameSession, PlayLevel } from "@repo/shared"
 interface CartState {
   cart: CartGameSession[]
 }

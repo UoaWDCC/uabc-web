@@ -1,9 +1,9 @@
 "use client"
 
-import { Heading } from "@repo/ui/components/Heading"
-import { Container, Spacer, Text, VStack } from "@yamada-ui/react"
 import { PaymentInfoCard } from "@/components/Composite/payment/PaymentInfoCard"
 import { PaymentOptionCard } from "@/components/Composite/payment/PaymentOptionCard"
+import { Heading } from "@repo/ui/components/Heading"
+import { Container, Spacer, Text, VStack } from "@yamada-ui/react"
 
 export default function PaymentOptionsPage() {
   return (

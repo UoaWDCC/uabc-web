@@ -1,8 +1,9 @@
-import type { PendingMember } from "@repo/shared"
 import type { QueryClient } from "@tanstack/react-query"
 import { useMutation } from "@tanstack/react-query"
+
 import { toast } from "@/components/Generic/ui/use-toast"
 import { QUERY_KEY } from "@/lib/utils/queryKeys"
+import type { PendingMember } from "@repo/shared"
 
 export const useApproveUserMutation = (queryClient: QueryClient) => {
   const mutation = useMutation({

@@ -1,6 +1,9 @@
 "use client"
 
 import { getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table"
+import { memo, useMemo, useState } from "react"
+
+import { usePendingMembers } from "@/hooks/query/usePendingMembers"
 import {
   Center,
   NativeTable,
@@ -12,9 +15,6 @@ import {
   Tr,
   VStack,
 } from "@yamada-ui/react"
-import { memo, useMemo, useState } from "react"
-import { usePendingMembers } from "@/hooks/query/usePendingMembers"
-import { columns } from "./columns"
 import {
   MemberApprovalCard,
   MemberApprovalCardEmpty,
@@ -22,6 +22,7 @@ import {
 } from "./MemberApprovalCard"
 import { MemberApprovalTablePagination } from "./MemberApprovalTablePagination"
 import { MemberApprovalTableRow } from "./MemberApprovalTableRow"
+import { columns } from "./columns"
 
 export const MemberApprovalTable = memo(() => {
   const { data, isLoading } = usePendingMembers()

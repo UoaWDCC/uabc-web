@@ -1,2 +1,2 @@
-export { Attendees } from "./Attendees"
 export { Loading } from "./Loading"
+export { Attendees } from "./Attendees"

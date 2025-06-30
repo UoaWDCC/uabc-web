@@ -1,3 +1,6 @@
+import { memo } from "react"
+
+import type { CartGameSession } from "@/types/game-session"
 import {
   CheckboxCard,
   CheckboxCardDescription,
@@ -5,8 +8,6 @@ import {
   Text,
   VStack,
 } from "@yamada-ui/react"
-import { memo } from "react"
-import type { CartGameSession } from "@/types/game-session"
 
 interface SelectSessionCardProps {
   session: CartGameSession

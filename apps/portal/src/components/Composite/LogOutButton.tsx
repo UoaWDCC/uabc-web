@@ -1,7 +1,8 @@
 "use client"
 
-import { Button, type ButtonProps } from "@repo/ui/components/Button"
 import type { PropsWithChildren } from "react"
+
+import { Button, type ButtonProps } from "@repo/ui/components/Button"
 
 export const LogOutButton = ({ children, variant = "ghost" }: PropsWithChildren<ButtonProps>) => (
   <Button

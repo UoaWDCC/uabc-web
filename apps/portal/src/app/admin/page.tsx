@@ -1,8 +1,9 @@
-import { Heading } from "@repo/ui/components/Heading"
 import { CalendarClockIcon, CalendarDaysIcon, UserCheckIcon, UsersIcon } from "@yamada-ui/lucide"
-import { Container, VStack } from "@yamada-ui/react"
+
 import { DashboardButton } from "@/components/Composite/admin/DashboardButton"
 import { MemberApprovalPing } from "@/components/Composite/admin/members/MemberApprovalPing"
+import { Heading } from "@repo/ui/components/Heading"
+import { Container, VStack } from "@yamada-ui/react"
 
 export const metadata = {
   title: "Admin Dashboard - UABC Booking Portal",

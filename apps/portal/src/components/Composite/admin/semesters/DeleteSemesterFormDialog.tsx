@@ -1,4 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+
+import { QUERY_KEY } from "@/lib/utils/queryKeys"
 import {
   Alert,
   AlertDescription,
@@ -11,7 +13,6 @@ import {
   Text,
   useNotice,
 } from "@yamada-ui/react"
-import { QUERY_KEY } from "@/lib/utils/queryKeys"
 import { useSemesterContext } from "./SemestersContext"
 
 interface DeleteSemesterFormDialogProps {

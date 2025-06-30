@@ -1,7 +1,7 @@
+import type { Member } from "@/types/member"
 import { Button, HStack, Text } from "@yamada-ui/react"
 import type { Column } from "@yamada-ui/table"
 import { memo, useCallback } from "react"
-import type { Member } from "@/types/member"
 
 const NameCell = memo(({ value }: { value: string }) => (
   <Text as="span" lineClamp={1}>

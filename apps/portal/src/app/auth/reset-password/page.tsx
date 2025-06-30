@@ -1,9 +1,9 @@
+import { ResetPasswordForm } from "@/components/Composite/auth/ResetPasswordForm"
 import { Heading } from "@repo/ui/components/Heading"
 import { Button, Card, Center, Text, Link as UILink, VStack } from "@yamada-ui/react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { z } from "zod"
-import { ResetPasswordForm } from "@/components/Composite/auth/ResetPasswordForm"
 
 export const metadata = {
   title: "Reset Password - UABC Booking Portal",

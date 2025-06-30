@@ -1,4 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query"
+import { type FC, memo } from "react"
+
+import { useDeleteScheduleMutation } from "@/hooks/mutations/schedules"
+import { QUERY_KEY } from "@/lib/utils/queryKeys"
 import {
   Alert,
   AlertDescription,
@@ -11,9 +15,6 @@ import {
   Text,
   useNotice,
 } from "@yamada-ui/react"
-import { type FC, memo } from "react"
-import { useDeleteScheduleMutation } from "@/hooks/mutations/schedules"
-import { QUERY_KEY } from "@/lib/utils/queryKeys"
 import { useScheduleContext } from "./SchedulesContext"
 
 interface DeleteScheduleFormDialogProps {

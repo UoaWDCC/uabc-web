@@ -2,13 +2,14 @@ import type { ReactNode } from "react"
 
 import "./globals.css"
 
-import { UIProvider } from "@repo/ui/providers"
-import { ColorModeScript } from "@yamada-ui/react"
 import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
+
 import OriginTracker from "@/components/Composite/providers/OriginTracker"
 import QueryClientProvider from "@/components/Composite/providers/QueryClientProvider"
 import SessionProvider from "@/components/Composite/providers/SessionProvider"
+import { UIProvider } from "@repo/ui/providers"
+import { ColorModeScript } from "@yamada-ui/react"
 
 export const metadata: Metadata = {
   title: "UABC Booking Portal",

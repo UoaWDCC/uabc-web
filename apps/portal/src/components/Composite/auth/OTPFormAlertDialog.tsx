@@ -1,10 +1,11 @@
 "use client"
 
 import type { AlertDialogProps } from "@radix-ui/react-alert-dialog"
-import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+
 import { useRegisterMutation, useResendCodeMutation } from "@/hooks/mutations/registration"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import {
   AlertDialog,
   AlertDialogCancel,

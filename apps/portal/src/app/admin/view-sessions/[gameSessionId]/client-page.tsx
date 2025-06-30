@@ -1,5 +1,9 @@
 "use client"
 
+import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
+import { Attendees, Loading } from "@/components/Composite/admin/view-sessions/gameSessionId"
+import { useGameSessionId } from "@/hooks/query/game-sessions"
+import { formatFullDate } from "@/lib/utils/dates"
 import { Heading } from "@repo/ui/components/Heading"
 import { DownloadIcon } from "@yamada-ui/lucide"
 import {
@@ -10,13 +14,9 @@ import {
   HStack,
   Spacer,
   Text,
-  useNotice,
   VStack,
+  useNotice,
 } from "@yamada-ui/react"
-import { Attendees, Loading } from "@/components/Composite/admin/view-sessions/gameSessionId"
-import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
-import { useGameSessionId } from "@/hooks/query/game-sessions"
-import { formatFullDate } from "@/lib/utils/dates"
 
 export default function ClientViewSessionsPageWithId({ gameSessionId }: { gameSessionId: number }) {
   const { data, isLoading } = useGameSessionId(gameSessionId)

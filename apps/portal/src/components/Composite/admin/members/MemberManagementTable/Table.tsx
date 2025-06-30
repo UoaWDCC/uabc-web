@@ -1,13 +1,13 @@
 "use client"
 
+import { useMembers } from "@/hooks/query/useMembers"
+import type { Member } from "@/types/member"
 import type { TdProps } from "@yamada-ui/react"
 import { assignRef } from "@yamada-ui/react"
 import type { Cell, Column, PagingTableProps } from "@yamada-ui/table"
 import { Table } from "@yamada-ui/table"
 import type { FC, Reducer, RefObject } from "react"
 import { memo, useEffect, useMemo, useReducer } from "react"
-import { useMembers } from "@/hooks/query/useMembers"
-import type { Member } from "@/types/member"
 import { ACTIONS_COLUMN, EMAIL_COLUMN, NAME_COLUMN, PREPAID_SESSIONS_COLUMN } from "./Columns"
 import { SkeletonTable } from "./SkeletonTable"
 

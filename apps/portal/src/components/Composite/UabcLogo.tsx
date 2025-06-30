@@ -1,6 +1,6 @@
 import Image from "next/image"
-import Logo from "../../../public/svgs/logo.svg"
 import LogoDarkMode from "../../../public/svgs/logo-darkmode.svg"
+import Logo from "../../../public/svgs/logo.svg"
 
 interface UabcLogoProps {
   className?: string

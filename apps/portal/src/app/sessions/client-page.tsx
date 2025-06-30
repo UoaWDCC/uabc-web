@@ -1,14 +1,15 @@
 "use client"
 
-import { Button } from "@repo/ui/components/Button"
-import { Box, HStack, Spacer, Text, VStack } from "@yamada-ui/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+
+import { CountIndicator } from "@/components/Composite/CountIndicator"
 import { PendingApprovalCard } from "@/components/Composite/booking/sessions/PendingApprovalCard"
 import { SelectSessionList } from "@/components/Composite/booking/sessions/SelectSessionList"
-import { CountIndicator } from "@/components/Composite/CountIndicator"
 import { MEMBER_MAX_SESSIONS, NON_MEMBER_MAX_SESSIONS } from "@/lib/constants"
 import { useCartStore } from "@/stores/useCartStore"
+import { Button } from "@repo/ui/components/Button"
+import { Box, HStack, Spacer, Text, VStack } from "@yamada-ui/react"
 
 interface ClientSessionPageProps {
   isMember: boolean

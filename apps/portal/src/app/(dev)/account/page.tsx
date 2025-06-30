@@ -1,11 +1,12 @@
-import { Center, Container, Loading, Spacer, Tag, Text, VStack } from "@yamada-ui/react"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
+
 import { BackNavigationBar } from "@/components/Composite/BackNavigationBar"
 import type { CurrentUserProps } from "@/lib/hoc/withCurrentUser"
 import withCurrentUser from "@/lib/hoc/withCurrentUser"
 import { getUserFromId } from "@/services/user"
 import { PlayLevel } from "@/types/types"
+import { Center, Container, Loading, Spacer, Tag, Text, VStack } from "@yamada-ui/react"
 import ClientAccountForm from "./client-page"
 
 export const metadata = {

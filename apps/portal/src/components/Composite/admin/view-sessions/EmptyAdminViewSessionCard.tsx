@@ -1,5 +1,6 @@
 "use client"
 
+import { formatFullDate } from "@/lib/utils/dates"
 import { CalendarIcon } from "@yamada-ui/lucide"
 import {
   Button,
@@ -12,7 +13,6 @@ import {
   useNotice,
 } from "@yamada-ui/react"
 import { isPast } from "date-fns"
-import { formatFullDate } from "@/lib/utils/dates"
 import { CreateGameSessionFormDialog } from "./CreateGameSessionFormDialog"
 import { useGameSessionContext } from "./GameSessionContext"
 

@@ -1,11 +1,12 @@
 "use client"
 
-import { Heading } from "@repo/ui/components/Heading"
-import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import { Button, VStack } from "@yamada-ui/react"
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+
+import { Heading } from "@repo/ui/components/Heading"
+import { InputType, TextInput } from "@repo/ui/components/TextInput"
 import { emailSchema } from "./formSchema"
 
 interface SignUpFormData {

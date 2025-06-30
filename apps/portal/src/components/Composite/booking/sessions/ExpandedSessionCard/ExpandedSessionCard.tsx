@@ -1,7 +1,6 @@
-import { Card, CardBody, CardFooter, CardHeader, Text, VStack } from "@yamada-ui/react"
 import type { CartGameSession } from "@/types/game-session"
+import { Card, CardBody, CardFooter, CardHeader, Text, VStack } from "@yamada-ui/react"
 import { LevelSelector } from "./LevelSelector"
-
 interface ExpandedSessionCardProps {
   gameSession: CartGameSession
 }

@@ -1,8 +1,8 @@
 "use client"
 
 import { HStack, noop } from "@yamada-ui/react"
-import type { RefObject } from "react"
 import { memo, useRef } from "react"
+import type { RefObject } from "react"
 import { FilterInput } from "./FilterInput"
 import { FilterResetButton } from "./FilterResetButton"
 
