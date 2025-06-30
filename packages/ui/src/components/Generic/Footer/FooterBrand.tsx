@@ -1,7 +1,7 @@
+import { UabcLogo } from "@repo/ui/components/Icon"
+import { Heading } from "@repo/ui/components/Primitive"
 import { HStack, Text, VStack } from "@yamada-ui/react"
 import { memo } from "react"
-import { UabcLogo } from "@/components/Icon"
-import { Heading } from "@/components/Primitive"
 import { FooterSocialLinks } from "./FooterSocialLinks"
 
 export const FooterBrand = memo(() => {

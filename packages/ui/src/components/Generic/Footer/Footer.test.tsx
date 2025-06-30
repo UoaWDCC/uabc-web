@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom"
-import { render, screen } from "@/test-utils"
+import { render, screen } from "@repo/ui/test-utils"
 import { Footer } from "."
 
 describe("<Footer />", () => {

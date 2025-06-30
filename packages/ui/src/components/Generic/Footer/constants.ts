@@ -1,5 +1,5 @@
+import { LinkTreeIcon } from "@repo/ui/components/Icon"
 import { FacebookIcon, InstagramIcon } from "@yamada-ui/lucide"
-import { LinkTreeIcon } from "@/components/Icon"
 
 // TODO: THESE WILL BE REPLACED WITH PAYLOAD
 

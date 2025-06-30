@@ -1,5 +1,5 @@
+import { Heading } from "@repo/ui/components/Primitive"
 import { Card, CardBody, CardHeader, Text } from "@yamada-ui/react"
-import { Heading } from "@/components/Primitive"
 
 export interface AboutUsCardProps {
   title: string
