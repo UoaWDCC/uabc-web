@@ -4,7 +4,7 @@ import {
   IconButton as UIIconButton,
   type IconButtonProps as UIIconButtonProps,
 } from "@yamada-ui/react"
-import { forwardRef, useMemo } from "react"
+import { forwardRef, memo, useMemo } from "react"
 import { styles } from "./icon-button.style"
 
 /**
@@ -71,23 +71,25 @@ export type IconButtonProps = UIIconButtonProps & IconButtonOptions
  *   icon={<SaveIcon />}
  * />
  */
-export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>((props, ref) => {
-  const { size = "md" } = props
+export const IconButton = memo(
+  forwardRef<HTMLButtonElement, IconButtonProps>((props, ref) => {
+    const { size = "md" } = props
 
-  const iconButtonStyles: HTMLUIProps<"button"> = useMemo(
-    () => ({
-      aspectRatio: "1",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      h: "auto",
-      ...(!Object.hasOwn(styles, size as keyof typeof styles) && styles.base),
-      ...(styles[size as keyof typeof styles] ?? {}),
-    }),
-    [size],
-  )
+    const iconButtonStyles: HTMLUIProps<"button"> = useMemo(
+      () => ({
+        aspectRatio: "1",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        h: "auto",
+        ...(!Object.hasOwn(styles, size as keyof typeof styles) && styles.base),
+        ...(styles[size as keyof typeof styles] ?? {}),
+      }),
+      [size],
+    )
 
-  return <UIIconButton ref={ref} {...iconButtonStyles} {...props} />
-})
+    return <UIIconButton ref={ref} {...iconButtonStyles} {...props} />
+  }),
+)
 
 IconButton.displayName = "IconButton"

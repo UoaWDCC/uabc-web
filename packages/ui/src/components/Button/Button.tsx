@@ -4,7 +4,7 @@ import {
   Button as UIButton,
   type ButtonProps as UIButtonProps,
 } from "@yamada-ui/react"
-import { forwardRef, useMemo } from "react"
+import { forwardRef, memo, useMemo } from "react"
 import { styles } from "./button.style"
 
 /**
@@ -44,18 +44,20 @@ export type ButtonProps = UIButtonProps & ButtonOptions
  * // Navigation button
  * <Button as="a" href="/home">Go to Home</Button>
  */
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-  const { size = "md", variant } = props
+export const Button = memo(
+  forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+    const { size = "md", variant } = props
 
-  const buttonStyles: HTMLUIProps<"button"> = useMemo(
-    () => ({
-      ...(!Object.hasOwn(styles, size as keyof typeof styles) && styles.base),
-      ...styles[size as keyof typeof styles],
-    }),
-    [size],
-  )
+    const buttonStyles: HTMLUIProps<"button"> = useMemo(
+      () => ({
+        ...(!Object.hasOwn(styles, size as keyof typeof styles) && styles.base),
+        ...(styles[size as keyof typeof styles] ?? {}),
+      }),
+      [size],
+    )
 
-  return <UIButton ref={ref} {...(variant !== "unstyled" && buttonStyles)} {...props} />
-})
+    return <UIButton ref={ref} {...(variant !== "unstyled" && buttonStyles)} {...props} />
+  }),
+)
 
 Button.displayName = "Button"
