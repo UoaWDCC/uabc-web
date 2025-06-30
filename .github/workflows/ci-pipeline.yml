@@ -8,6 +8,12 @@ on:
 
 env:
   CI: 'true'
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check_changes:
@@ -29,7 +35,6 @@ jobs:
               !**.md
               !.gitignore
               !.gitattributes
-              !.github/**
               !.vscode/**
               !.env.example
 
@@ -40,6 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -51,22 +58,39 @@ jobs:
         with:
           version: latest
           run_install: false
+
+      - name: Restore node_modules cache
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
 
       - name: Install dependencies
-        run: pnpm install
-
-      # Cache the node_modules directory
-      - name: Cache node_modules
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
+      
+      - name: Upload cache
+        if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/cache@v4
-        id: cache-node-modules
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: |
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-  style:
+  biome:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Prettier
+    name: Biome
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -82,50 +106,27 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
-        uses: actions/cache@v4
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v4
+        id: cache
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: |
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: Install dependencies if cache is not hit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
 
       - name: Check formatting
-        run: pnpm prettier --check .
-
-  lint:
-    needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-          run_install: false
-
-      # Restore cached node_modules
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
-
-      - name: Run linting
-        run: pnpm lint
+        run: pnpm biome check .
 
   build:
-    environment: staging
     env:
       PAYLOAD_SECRET: ${{secrets.PAYLOAD_SECRET}}
       DATABASE_URI: ${{secrets.DATABASE_URI}}
@@ -150,20 +151,30 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
-        uses: actions/cache@v4
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v4
+        id: cache
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: |
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: Install dependencies if cache is not hit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm tsc --noEmit && pnpm build
+        run: pnpm turbo run build
 
-  test:
+  typecheck:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Test
+    name: TypeScript
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -182,15 +193,92 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
-        uses: actions/cache@v4
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v4
+        id: cache
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: |
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
 
-      - name: Test
-        run: pnpm test
+      - name: Install dependencies if cache is not hit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Type Check
+        run: pnpm turbo run check-types
+
+  test:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: |
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: Install dependencies if cache is not hit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Test with Coverage
+        run: |
+          mkdir -p coverage
+          pnpm test:coverage
+          pnpm merge
+
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-coverage
+          path: coverage
+
+  vitest-coverage:
+    name: Vitest Coverage
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Vitest Coverage Composite Action
+        uses: ./.github/composite-actions/vitest-coverage
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   codegen:
     needs: [check_changes, setup]
@@ -214,15 +302,25 @@ jobs:
           version: latest
           run_install: false
 
-      # Restore cached node_modules
-      - name: Restore node_modules
-        uses: actions/cache@v4
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v4
+        id: cache
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          path: |
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: Install dependencies if cache is not hit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
 
       - name: Generate typing
-        run: pnpm generate:types
+        run: pnpm turbo run generate:types
 
       - name: Write git diff
         run: |
@@ -241,9 +339,23 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build, lint, style, test, codegen]
+    needs: [check_changes, build, biome, test, codegen, typecheck]
     runs-on: ubuntu-latest
-    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.build.result == 'success' && needs.lint.result == 'success' && needs.style.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success')) }}
+    if: >
+      always() && 
+      (needs.check_changes.outputs.exists != 'true' || 
+       ((!contains(needs.*.result, 'failure')) && 
+        (!contains(needs.*.result, 'cancelled'))))
+    outputs:
+      success: ${{ steps.set-result.outputs.success }}
     steps:
-      - name: All checks passed
-        run: echo "All checks passed!"
+      - name: Set Result
+        id: set-result
+        run: |
+          # Check if any job failed or was cancelled
+          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" || "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "success=false" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "success=true" >> $GITHUB_OUTPUT
+          fi

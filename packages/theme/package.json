@@ -1,0 +1,25 @@
+{
+  "name": "@repo/theme",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./components": "./src/components/index.ts",
+    "./semantics": "./src/semantics/index.ts",
+    "./tokens": "./src/tokens/index.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "clean": "rm -rf node_modules .turbo dist coverage",
+    "theme": "yamada-cli tokens ./src/theme"
+  },
+  "dependencies": {
+    "@yamada-ui/core": "1.17.3",
+    "@yamada-ui/theme-tools": "1.1.18",
+    "@yamada-ui/utils": "1.7.2"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "5.8.3"
+  }
+}

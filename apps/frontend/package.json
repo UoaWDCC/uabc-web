@@ -1,0 +1,33 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack --port=3001",
+    "build": "next build",
+    "start": "next start --port=3001",
+    "lint": "next lint",
+    "test": "cross-env NODE_ENV=test vitest run",
+    "test:watch": "cross-env NODE_ENV=test vitest",
+    "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
+    "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage",
+    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage",
+    "clean": "rm -rf node_modules .turbo dist coverage"
+  },
+  "dependencies": {
+    "@repo/ui": "workspace:*",
+    "@yamada-ui/lucide": "1.10.5",
+    "@yamada-ui/react": "1.7.7",
+    "next": "15.3.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "5.8.3",
+    "@types/node": "22.15.21",
+    "@types/react": "19.1.5",
+    "@types/react-dom": "19.1.5",
+    "@repo/test-config": "workspace:*"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "@repo/ui",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./components/Primitive": "./src/components/Primitive/index.ts",
+    "./components/Icon": "./src/components/Icon/index.ts",
+    "./components/Asset/*": "./src/components/Asset/*",
+    "./components/Provider": "./src/components/Provider/index.ts",
+    "./components/Generic": "./src/components/Generic/index.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "clean": "rm -rf node_modules .turbo dist coverage",
+    "storybook": "storybook dev -p 6006 -c .storybook",
+    "storybook:build": "storybook build -c .storybook",
+    "test": "cross-env NODE_ENV=test vitest run",
+    "test:watch": "cross-env NODE_ENV=test vitest",
+    "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
+    "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage",
+    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
+  },
+  "dependencies": {
+    "@repo/shared": "workspace:*",
+    "@repo/theme": "workspace:*",
+    "@storybook/nextjs": "9.0.14",
+    "@tanstack/react-query": "5.81.2",
+    "@tanstack/react-query-devtools": "5.81.2",
+    "@yamada-ui/lucide": "1.10.5",
+    "@yamada-ui/react": "1.7.7",
+    "next": "15.3.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "storybook": "9.0.14",
+    "zod": "3.24.3"
+  },
+  "devDependencies": {
+    "@mdx-js/react": "3.1.0",
+    "@repo/test-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@storybook/addon-a11y": "9.0.14",
+    "@storybook/addon-docs": "9.0.14",
+    "@storybook/react": "9.0.14",
+    "@turbo/gen": "2.5.3",
+    "@types/node": "22.15.21",
+    "@types/react": "19.1.5",
+    "@types/react-dom": "19.1.5",
+    "storybook-dark-mode": "4.0.2",
+    "typescript": "5.8.3"
+  }
+}

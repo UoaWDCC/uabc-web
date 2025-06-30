@@ -1,0 +1,44 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:js-app"],
+  "labels": ["dependencies", "renovate"],
+  "timezone": "Pacific/Auckland",
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 2,
+  "rebaseWhen": "conflicted",
+  "dependencyDashboard": true,
+  "ignorePaths": ["apps/portal/**"],
+  "packageRules": [
+    {
+      "description": "Group devDependencies",
+      "groupName": "devDependencies",
+      "matchDepTypes": ["devDependencies"],
+      "automerge": false
+    },
+    {
+      "description": "Group Next.js related packages",
+      "groupName": "nextjs",
+      "matchPackageNames": ["next*", "@next*"],
+      "automerge": false
+    },
+    {
+      "description": "Group Payload CMS related packages",
+      "groupName": "payload-cms",
+      "matchPackageNames": ["payload*", "@payloadcms*"],
+      "automerge": false
+    },
+    {
+      "description": "Group testing libraries (Vitest, Testing Library)",
+      "groupName": "testing",
+      "matchPackageNames": ["vitest*", "@vitest*", "@testing-library*"],
+      "automerge": false
+    },
+    {
+      "description": "Group Storybook-related packages",
+      "groupName": "storybook",
+      "matchPackageNames": ["@storybook*", "storybook*"],
+      "automerge": false
+    }
+  ],
+  "vulnerabilityAlerts": { "labels": ["security"], "automerge": false }
+}

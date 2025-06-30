@@ -1,0 +1,24 @@
+{
+  "name": "@repo/test-config",
+  "type": "module",
+  "exports": {
+    "./ui": "./dist/configs/ui-config.js",
+    "./backend": "./dist/configs/backend-config.js",
+    "./frontend": "./dist/configs/frontend-config.js",
+    "./setups/dom": "./dist/setups/dom-setup.js",
+    "./setups/mongodb": "./dist/setups/mongodb-setup.js"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "build": "tsc",
+    "clean": "rm -rf node_modules .turbo dist coverage",
+    "merge": "node dist/scripts/merge-coverage.js"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@testing-library/jest-dom": "6.6.3",
+    "@yamada-ui/react": "1.7.6",
+    "mongodb-memory-server": "10.1.4",
+    "typescript": "5.8.3"
+  }
+}

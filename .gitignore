@@ -142,3 +142,14 @@ dist
 
 # yamada-ui theme config
 /theme/
+
+*storybook.log
+
+.turbo/
+# Turborepo
+.turbo
+
+storybook-static
+
+# Zed code editor
+.zed

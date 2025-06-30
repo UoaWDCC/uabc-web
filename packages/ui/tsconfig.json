@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "isolatedModules": true,
+    "moduleResolution": "bundler",
+    "paths": {
+      "@storybook-config/*": ["./.storybook/*"],
+      "@repo/ui/*": ["./src/*"]
+    },
+    "rootDir": ".",
+    "types": ["vitest/globals"]
+  },
+  "exclude": ["node_modules", "dist"],
+  "extends": "@repo/typescript-config/react-library.json",
+  "include": ["**/*.ts", "**/*.tsx"]
+}
