@@ -5,7 +5,6 @@ import type { Meta, StoryFn } from "@storybook/react"
 import { PropsTable } from "../../../.storybook/components"
 import { IconButton } from "./IconButton"
 
-// Mock icons for stories
 const AddIcon = () => (
   <svg aria-hidden="true" fill="currentColor" height="16" viewBox="0 0 16 16" width="16">
     <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
