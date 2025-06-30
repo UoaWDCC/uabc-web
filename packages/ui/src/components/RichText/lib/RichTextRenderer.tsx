@@ -220,7 +220,7 @@ export class RichTextRenderer {
     nodes: SerializedLexicalNode[],
     options: RichTextRendererOptions,
   ): React.ReactNode {
-    if (!nodes || nodes.length === 0) {
+    if (!nodes?.length) {
       return null
     }
 
