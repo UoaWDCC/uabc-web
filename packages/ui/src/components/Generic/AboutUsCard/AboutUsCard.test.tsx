@@ -50,7 +50,6 @@ describe("<AboutUsCard />", () => {
 
     render(<AboutUsCard {...props} />)
 
-    // Should still render the heading element even if empty
     expect(screen.getByRole("heading", { level: 3 })).toBeInTheDocument()
   })
 })

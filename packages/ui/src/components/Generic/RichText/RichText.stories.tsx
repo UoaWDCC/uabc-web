@@ -8,7 +8,7 @@ import { Container } from "@yamada-ui/react"
 import { RichText } from "./RichText"
 
 const meta: Meta<typeof RichText> = {
-  title: "Components / RichText",
+  title: "Generic Components / RichText",
   component: RichText,
   argTypes: {
     data: {

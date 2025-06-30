@@ -20,7 +20,7 @@ export const AboutUsCard = ({ title, description }: AboutUsCardProps) => {
       rounded="3xl"
     >
       <CardHeader pt="0">
-        <Heading.h3 fontSize="2xl" fontWeight="semibold" textAlign="center" textColor="primary">
+        <Heading.h3 color="primary" fontSize="2xl" fontWeight="semibold" textAlign="center">
           {title}
         </Heading.h3>
       </CardHeader>

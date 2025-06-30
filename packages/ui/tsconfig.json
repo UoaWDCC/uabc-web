@@ -5,7 +5,7 @@
     "isolatedModules": true,
     "moduleResolution": "bundler",
     "paths": {
-      "@/storybook-config/*": ["./.storybook/*"],
+      "@storybook-config/*": ["./.storybook/*"],
       "@repo/ui/*": ["./src/*"]
     },
     "rootDir": ".",

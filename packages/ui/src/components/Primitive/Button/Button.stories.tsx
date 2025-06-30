@@ -2,14 +2,14 @@ import { BUTTON_VARIANTS } from "@repo/theme/components"
 import { SEMANTIC_COLOR_SCHEMES } from "@repo/theme/semantics"
 import { SIZE_TOKENS } from "@repo/theme/tokens"
 import type { Meta, StoryFn } from "@storybook/react"
-import { PropsTable } from "@/storybook-config/components"
+import { PropsTable } from "@storybook-config/components"
 import { Button } from "./Button"
 
 type Story = StoryFn<typeof Button>
 
 const meta: Meta<typeof Button> = {
   component: Button,
-  title: "Components / Primitive / Button",
+  title: "Primitive Components / Button",
   argTypes: {
     colorScheme: {
       control: "select",

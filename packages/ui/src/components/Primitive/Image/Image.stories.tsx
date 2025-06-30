@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 import { Image } from "."
 
 const meta: Meta<typeof Image> = {
-  title: "Components / Primitive / Image",
+  title: "Primitive Components / Image",
   component: Image,
   argTypes: {
     src: {

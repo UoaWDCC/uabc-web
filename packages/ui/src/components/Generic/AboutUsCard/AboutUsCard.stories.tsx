@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs"
 import { AboutUsCard } from "./AboutUsCard"
 
 const meta: Meta<typeof AboutUsCard> = {
-  title: "Components / Generic / AboutUsCard",
+  title: "Generic Components / AboutUsCard",
   component: AboutUsCard,
   argTypes: {
     title: { control: "text", description: "The components heading title" },
