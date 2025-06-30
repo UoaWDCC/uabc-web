@@ -1,5 +1,5 @@
+import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
-import { render, screen } from "@/test-utils"
 import { IconButton } from "./IconButton"
 import { styles } from "./icon-button.style"
 import * as ButtonModule from "./index"

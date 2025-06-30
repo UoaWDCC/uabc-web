@@ -1,5 +1,5 @@
-import type { IconButtonProps } from "@repo/ui/components/Button"
-import { IconButton } from "@repo/ui/components/Button"
+import type { IconButtonProps } from "@repo/ui/components/Primitive"
+import { IconButton } from "@repo/ui/components/Primitive"
 import { ButtonGroup, type ButtonGroupProps, type IconProps } from "@yamada-ui/react"
 import Link from "next/link"
 import { memo } from "react"
