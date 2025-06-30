@@ -1,12 +1,12 @@
-name: "Build Client"
-description: "This workflow checks if the client builds are working correctly."
+name: "Build"
+description: "This workflow checks if the builds are working correctly."
 
 inputs:
   PAYLOAD_SECRET:
-    description: "The payload secret for the client."
+    description: "The payload secret for the workspace."
     required: false
   DATABASE_URI:
-    description: "The database URI for the client."
+    description: "The database URI for the workspace."
     required: false
   workspace:
     description: "The workspace to build."
@@ -30,17 +30,18 @@ runs:
         version: latest
         run_install: false
 
-    - name: Cache node_modules
-      uses: actions/cache@v4
-      id: cache-node-modules
+    - name: Restore node_modules cache
+      uses: actions/cache/restore@v4
+      id: cache
       with:
         path: |
-          server/node_modules
-          client/node_modules
           node_modules
-        key: node-modules-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          */node_modules
+          packages/*/node_modules
+          apps/*/node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          node-modules-${{ runner.os }}-
+          ${{ runner.os }}-node_modules-
 
     - name: Install dependencies if cache misses
       if: steps.cache-node-modules.outputs.cache-hit != 'true'
