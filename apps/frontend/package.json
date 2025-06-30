@@ -15,6 +15,7 @@
     "clean": "rm -rf node_modules .turbo dist coverage"
   },
   "dependencies": {
+    "@repo/ui": "workspace:*",
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.7",
     "next": "15.3.4",
