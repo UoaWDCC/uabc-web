@@ -1,19 +1,23 @@
+import {
+  FaqQuestionItemSchema,
+  type FaqQuestionItemSchemaType,
+  RichTextDescriptionSchema,
+} from "@repo/shared"
 import { z } from "zod"
-import { SerializedEditorStateSchema } from "../RichText/lib/schemas"
 
-export const FAQItemSchema = z.object({
-  question: z.string().min(1, "Question cannot be empty"),
-  answer: SerializedEditorStateSchema,
+export const UIFAQItemSchema = FaqQuestionItemSchema.extend({
   disabled: z.boolean().optional(),
 })
 
-export const FAQPropsSchema = z.object({
+export const UIFAQPropsSchema = z.object({
   title: z.string().optional(),
-  items: z.array(FAQItemSchema),
+  items: z.array(UIFAQItemSchema),
   allowMultiple: z.boolean().optional(),
   allowToggle: z.boolean().optional(),
 })
 
-export type FAQItem = z.infer<typeof FAQItemSchema>
+export type UIFAQItem = z.infer<typeof UIFAQItemSchema>
+export type UIFAQPropsValidation = z.infer<typeof UIFAQPropsSchema>
 
-export type FAQPropsValidation = z.infer<typeof FAQPropsSchema>
+export type SharedFAQItem = FaqQuestionItemSchemaType
+export { RichTextDescriptionSchema }

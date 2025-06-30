@@ -12,7 +12,7 @@ import {
 } from "@yamada-ui/react"
 import { forwardRef, memo } from "react"
 import { RichText, type RichTextProps } from "../RichText"
-import { type FAQItem, FAQPropsSchema } from "./schema"
+import { type UIFAQItem, UIFAQPropsSchema } from "./schema"
 
 /**
  * Props for {@link FAQ} component
@@ -25,8 +25,9 @@ export interface FAQProps extends Omit<AccordionProps, "children"> {
   title?: string
   /**
    * Array of FAQ items to display
+   * Uses the shared FAQ schema structure with questionTitle and description fields
    */
-  items: FAQItem[]
+  items: UIFAQItem[]
   /**
    * Props for the FAQ title heading
    */
@@ -57,8 +58,8 @@ export interface FAQProps extends Omit<AccordionProps, "children"> {
  * // Basic usage with rich text answers from Payload CMS
  * <FAQ
  *   items={[
- *     { question: "What is this?", answer: richTextData },
- *     { question: "How do I use it?", answer: anotherRichTextData }
+ *     { questionTitle: "What is this?", description: richTextData },
+ *     { questionTitle: "How do I use it?", description: anotherRichTextData }
  *   ]}
  *   richTextProps={{ mediaBaseUrl: process.env.NEXT_PUBLIC_API_URL }}
  * />
@@ -85,7 +86,7 @@ export const FAQ = memo(
       },
       ref,
     ) => {
-      const validatedProps = FAQPropsSchema.parse({
+      const validatedProps = UIFAQPropsSchema.parse({
         title,
         items,
         allowMultiple,
@@ -94,13 +95,14 @@ export const FAQ = memo(
       return (
         <VStack
           backdropFilter="blur(15px)"
-          bg="secondary.900"
+          bg={["secondary.50", "secondary.900"]}
           border="2px solid"
           borderColor="gray.900"
           boxShadow="0px 1.541px 0px 0px rgba(0, 0, 0, 0.05), 0px 6.164px 6.164px 0px rgba(0, 0, 0, 0.05), 0px 15.41px 15.41px 0px rgba(0, 0, 0, 0.10)"
-          p={{ base: "md", md: "lg" }}
+          p={{ base: "calc(lg - sm)", md: "lg" }}
           ref={ref}
           rounded="2xl"
+          textWrap="pretty"
           w="full"
         >
           {title && (
@@ -140,14 +142,14 @@ export const FAQ = memo(
                     borderBottomWidth: "0",
                   }}
                   disabled={item.disabled}
-                  key={`faq-${item.question.slice(0, 50).replace(/\s+/g, "-").toLowerCase()}-${index}`}
+                  key={`faq-${item.questionTitle.slice(0, 50).replace(/\s+/g, "-").toLowerCase()}-${index}`}
                 >
-                  <AccordionLabel fontSize="lg" p={{ base: "md", md: "calc(lg - sm)" }}>
-                    {item.question}
+                  <AccordionLabel fontSize="lg" p={{ base: "md", lg: "calc(lg - sm)" }}>
+                    {item.questionTitle}
                   </AccordionLabel>
-                  <AccordionPanel px={{ base: "md", md: "calc(lg - sm)" }} py="md">
+                  <AccordionPanel px={{ base: "md", lg: "calc(lg - sm)" }} py="md">
                     <VStack>
-                      <RichText data={item.answer} {...richTextProps} />
+                      <RichText data={item.description} {...richTextProps} />
                     </VStack>
                   </AccordionPanel>
                 </AccordionItem>

@@ -1,24 +1,14 @@
-import { createSimpleTextEditorState } from "@repo/ui/test-config/mocks/RichText.mock"
+import { createSimpleSharedFAQItem } from "@repo/ui/test-config/mocks/FAQ.mock"
 import { fireEvent, render, screen, waitFor } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import { FAQ } from "./FAQ"
 import * as FAQModule from "./index"
-import type { FAQItem } from "./schema"
+import type { UIFAQItem } from "./schema"
 
-const mockFAQItems: FAQItem[] = [
-  {
-    question: "Test Question 1",
-    answer: createSimpleTextEditorState("Test Answer 1"),
-  },
-  {
-    question: "Test Question 2",
-    answer: createSimpleTextEditorState("Test Answer 2"),
-  },
-  {
-    question: "Disabled Question",
-    answer: createSimpleTextEditorState("Disabled Answer"),
-    disabled: true,
-  },
+const mockFAQItems: UIFAQItem[] = [
+  createSimpleSharedFAQItem("Test Question 1", "Test Answer 1"),
+  createSimpleSharedFAQItem("Test Question 2", "Test Answer 2"),
+  createSimpleSharedFAQItem("Disabled Question", "Disabled Answer", { disabled: true }),
 ]
 
 describe("<FAQ />", () => {
@@ -90,7 +80,6 @@ describe("<FAQ />", () => {
     render(<FAQ items={mockFAQItems} titleProps={{ color: "red.500", fontSize: "2xl" }} />)
 
     const title = screen.getByText("FAQs")
-    expect(title).toBeInTheDocument()
     expect(title).toHaveStyle({ color: "var(--ui-colors-red-500)" })
   })
 
@@ -98,16 +87,13 @@ describe("<FAQ />", () => {
     render(<FAQ items={[]} />)
 
     expect(screen.getByText("FAQs")).toBeInTheDocument()
-    expect(screen.queryByText("Test Question 1")).not.toBeInTheDocument()
+
+    const accordionItems = screen.queryAllByRole("button", { expanded: false })
+    expect(accordionItems).toHaveLength(0)
   })
 
   it("handles single FAQ item", () => {
-    const singleItem: FAQItem[] = [
-      {
-        question: "Single Question",
-        answer: createSimpleTextEditorState("Single Answer"),
-      },
-    ]
+    const singleItem: UIFAQItem[] = [createSimpleSharedFAQItem("Single Question", "Single Answer")]
 
     render(<FAQ items={singleItem} />)
 
@@ -127,22 +113,23 @@ describe("<FAQ />", () => {
     render(<FAQ allowToggle items={mockFAQItems} />)
 
     const firstQuestion = screen.getByText("Test Question 1")
+    const firstQuestionButton = firstQuestion.closest("button")
+
+    expect(firstQuestionButton).toHaveAttribute("aria-expanded", "false")
 
     fireEvent.click(firstQuestion)
     await waitFor(() => {
       expect(screen.getByText("Test Answer 1")).toBeInTheDocument()
+      expect(firstQuestionButton).toHaveAttribute("aria-expanded", "true")
     })
 
     fireEvent.click(firstQuestion)
-    await waitFor(() => {
-      expect(firstQuestion.closest("button")).toHaveAttribute("aria-expanded", "false")
-    })
+    expect(firstQuestionButton).toHaveAttribute("aria-expanded", "false")
   })
 
   it("passes richTextProps to RichText components", () => {
     const richTextProps = {
       textProps: { color: "blue.500" },
-      mediaBaseUrl: "https://api.example.com",
     }
 
     render(<FAQ items={mockFAQItems} richTextProps={richTextProps} />)
@@ -150,15 +137,12 @@ describe("<FAQ />", () => {
     const firstQuestion = screen.getByText("Test Question 1")
     fireEvent.click(firstQuestion)
 
-    expect(screen.getByText("Test Answer 1")).toBeInTheDocument()
+    expect(screen.getByText("Test Answer 1")).toHaveStyle({ color: "var(--ui-colors-blue-500)" })
   })
 
   it("handles multiline rich text content correctly", () => {
-    const itemsWithMultilineText: FAQItem[] = [
-      {
-        question: "Multiline Question",
-        answer: createSimpleTextEditorState("Line 1\nLine 2\nLine 3"),
-      },
+    const itemsWithMultilineText: UIFAQItem[] = [
+      createSimpleSharedFAQItem("Multiline Question", "Line 1\nLine 2\nLine 3"),
     ]
 
     render(<FAQ items={itemsWithMultilineText} />)
