@@ -54,7 +54,7 @@ export const POST = async (req: NextRequest) => {
   const token = authService.signJWT({ user }, { expiresIn: TOKEN_EXPIRY_TIME })
   const response = NextResponse.json({}, { status: StatusCodes.CREATED })
 
-  response.cookies.set(AUTH_COOKIE_NAME, token, {
+  cookieStore.set(AUTH_COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
