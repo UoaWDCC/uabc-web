@@ -9,7 +9,7 @@ export const FAQItemSchema = z.object({
 
 export const FAQPropsSchema = z.object({
   title: z.string().optional(),
-  items: z.array(FAQItemSchema).min(0, "Items array is required"),
+  items: z.array(FAQItemSchema),
   allowMultiple: z.boolean().optional(),
   allowToggle: z.boolean().optional(),
 })
