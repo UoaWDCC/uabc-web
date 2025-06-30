@@ -36,6 +36,14 @@
     "storybook": "9.0.14",
     "zod": "3.24.3"
   },
+  "peerDependencies": {
+    "react-hook-form": "^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-hook-form": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@mdx-js/react": "3.1.0",
     "@repo/test-config": "workspace:*",
