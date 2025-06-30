@@ -12,7 +12,7 @@
     "build": "turbo run build",
     "check-types": "turbo run check-types",
     "dev": "turbo run dev",
-    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
     "generate:importmap": "turbo run generate:importmap",
     "generate:types": "turbo run generate:types",
     "payload": "turbo run payload",
@@ -64,6 +64,10 @@
   "packageManager": "pnpm@10.12.4",
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@swc/core",
+      "core-js-pure",
+      "esbuild",
+      "mongodb-memory-server",
       "sharp"
     ],
     "patchedDependencies": {

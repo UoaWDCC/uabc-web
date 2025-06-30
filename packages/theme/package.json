@@ -10,6 +10,7 @@
   },
   "scripts": {
     "check-types": "tsc --noEmit",
+    "clean": "rm -rf node_modules .turbo dist coverage",
     "theme": "yamada-cli tokens ./src/theme"
   },
   "dependencies": {
