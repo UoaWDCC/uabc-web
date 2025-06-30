@@ -126,33 +126,33 @@ jobs:
       - name: Check formatting
         run: pnpm biome check .
 
-  build-client:
+  build-frontend:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Build Client
+    name: Build Frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run Build Client
+      - name: Run Build Frontend
         uses: ./.github/ci-actions/build/
         with:
-          workspace: client
+          workspace: frontend
 
-  build-server:
+  build-backend:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Build Server
+    name: Build Backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run Build Server
+      - name: Run Build Backend
         uses: ./.github/ci-actions/build/
         with:
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
-          workspace: server
+          workspace: backend
 
   typecheck:
     needs: [check_changes, setup]
