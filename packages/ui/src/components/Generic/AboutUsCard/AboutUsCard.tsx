@@ -32,3 +32,5 @@ export const AboutUsCard = ({ title, description }: AboutUsCardProps) => {
     </Card>
   )
 }
+
+AboutUsCard.displayName = "AboutUsCard"
