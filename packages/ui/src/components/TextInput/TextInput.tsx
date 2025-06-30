@@ -167,7 +167,7 @@ export const TextInput = memo(
       const isPasswordType = type === InputType.Password
       const [isPasswordVisible, { toggle: togglePasswordVisibility }] = useBoolean(false)
 
-      const inputRef = mergeRefs(registration?.ref, ref)
+      const inputRef = mergeRefs(registration?.ref ?? null, ref)
 
       const inputProps = registration
         ? {
@@ -177,7 +177,7 @@ export const TextInput = memo(
           }
         : {
             ...props,
-            ref,
+            ref: inputRef,
           }
 
       return (
