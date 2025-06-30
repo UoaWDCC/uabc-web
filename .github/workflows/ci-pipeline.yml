@@ -322,7 +322,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build-client, build-server, biome, test, codegen, typecheck]
+    needs: [check_changes, build-frontend, build-backend, biome, test, codegen, typecheck]
     runs-on: ubuntu-latest
     if: >
       always() &&
