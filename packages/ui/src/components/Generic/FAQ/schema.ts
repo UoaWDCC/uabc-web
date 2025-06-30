@@ -1,11 +1,13 @@
-import {
-  FaqQuestionItemSchema,
-  type FaqQuestionItemSchemaType,
-  RichTextDescriptionSchema,
-} from "@repo/shared"
+import type { FaqQuestion } from "@repo/shared/payload-types"
 import { z } from "zod"
+import { SerializedEditorStateSchema } from "../RichText"
 
-export const UIFAQItemSchema = FaqQuestionItemSchema.extend({
+export type SharedFAQItem = FaqQuestion[number]
+
+export const UIFAQItemSchema = z.object({
+  questionTitle: z.string(),
+  description: SerializedEditorStateSchema,
+  id: z.string().nullable().optional(),
   disabled: z.boolean().optional(),
 })
 
@@ -18,6 +20,3 @@ export const UIFAQPropsSchema = z.object({
 
 export type UIFAQItem = z.infer<typeof UIFAQItemSchema>
 export type UIFAQPropsValidation = z.infer<typeof UIFAQPropsSchema>
-
-export type SharedFAQItem = FaqQuestionItemSchemaType
-export { RichTextDescriptionSchema }

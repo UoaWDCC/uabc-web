@@ -1,5 +1,5 @@
 import { createSimpleSharedFAQItem } from "@repo/ui/test-config/mocks/FAQ.mock"
-import { fireEvent, render, screen, waitFor } from "@repo/ui/test-utils"
+import { fireEvent, render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import { FAQ } from "./FAQ"
 import * as FAQModule from "./index"
@@ -118,10 +118,8 @@ describe("<FAQ />", () => {
     expect(firstQuestionButton).toHaveAttribute("aria-expanded", "false")
 
     fireEvent.click(firstQuestion)
-    await waitFor(() => {
-      expect(screen.getByText("Test Answer 1")).toBeInTheDocument()
-      expect(firstQuestionButton).toHaveAttribute("aria-expanded", "true")
-    })
+    expect(screen.getByText("Test Answer 1")).toBeInTheDocument()
+    expect(firstQuestionButton).toHaveAttribute("aria-expanded", "true")
 
     fireEvent.click(firstQuestion)
     expect(firstQuestionButton).toHaveAttribute("aria-expanded", "false")
