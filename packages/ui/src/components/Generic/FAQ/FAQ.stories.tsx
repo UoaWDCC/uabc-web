@@ -259,10 +259,3 @@ export const RichTextFeatures: Story = {
     allowMultiple: true,
   },
 }
-
-export const EmptyState: Story = {
-  args: {
-    title: "No Questions Yet",
-    items: [],
-  },
-}

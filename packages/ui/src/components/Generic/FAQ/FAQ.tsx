@@ -98,7 +98,7 @@ export const FAQ = memo(
           border="2px solid"
           borderColor="gray.900"
           boxShadow="0px 1.541px 0px 0px rgba(0, 0, 0, 0.05), 0px 6.164px 6.164px 0px rgba(0, 0, 0, 0.05), 0px 15.41px 15.41px 0px rgba(0, 0, 0, 0.10)"
-          p={{ base: "md", lg: "lg" }}
+          p={{ base: "md", md: "lg" }}
           ref={ref}
           rounded="2xl"
           w="full"
@@ -142,10 +142,10 @@ export const FAQ = memo(
                   disabled={item.disabled}
                   key={`faq-${item.question.slice(0, 50).replace(/\s+/g, "-").toLowerCase()}-${index}`}
                 >
-                  <AccordionLabel fontSize="lg" p={{ base: "md", lg: "calc(lg - sm)" }}>
+                  <AccordionLabel fontSize="lg" p={{ base: "md", md: "calc(lg - sm)" }}>
                     {item.question}
                   </AccordionLabel>
-                  <AccordionPanel px={{ base: "md", lg: "calc(lg - sm)" }} py="md">
+                  <AccordionPanel px={{ base: "md", md: "calc(lg - sm)" }} py="md">
                     <VStack>
                       <RichText data={item.answer} {...richTextProps} />
                     </VStack>
