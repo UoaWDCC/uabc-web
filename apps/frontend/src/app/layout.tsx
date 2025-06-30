@@ -1,5 +1,5 @@
 import { Footer } from "@repo/ui/components/Generic"
-import { UIProvider } from "@repo/ui/providers"
+import { UIProvider } from "@repo/ui/components/Provider"
 import { ColorModeScript } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"

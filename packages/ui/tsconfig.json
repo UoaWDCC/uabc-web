@@ -2,6 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",
+    "isolatedModules": true,
+    "moduleResolution": "bundler",
     "paths": {
       "@/storybook-config/*": ["./.storybook/*"],
       "@/*": ["./src/*"]
