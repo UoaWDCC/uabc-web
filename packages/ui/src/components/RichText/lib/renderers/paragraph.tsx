@@ -52,7 +52,7 @@ export const renderParagraphNode = (
 ): React.ReactNode => {
   const { children } = node
 
-  if (!children || children.length === 0) {
+  if (!children?.length) {
     return null
   }
 
