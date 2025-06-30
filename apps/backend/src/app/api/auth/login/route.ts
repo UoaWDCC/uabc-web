@@ -1,4 +1,4 @@
-import { AUTH_COOKIE_NAME, STATE_COOKIE_NAME, TOKEN_EXPIRY_TIME } from "@repo/shared"
+import { STATE_COOKIE_NAME, TOKEN_EXPIRY_TIME } from "@repo/shared"
 import type { Authentication, User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
@@ -16,9 +16,9 @@ export const POST = async (req: NextRequest) => {
   const userDataService = new UserDataService()
   const authService = new AuthService()
 
-  const stateParam = params.get("state")
+  const stateParam = params.get("state") as string
   const cookieState = cookieStore.get(STATE_COOKIE_NAME)
-  if (String(stateParam) !== String(cookieState?.value)) {
+  if (stateParam !== (cookieState?.value as string)) {
     return NextResponse.json({}, { status: StatusCodes.BAD_REQUEST })
   }
   cookieStore.delete(STATE_COOKIE_NAME)
@@ -54,13 +54,7 @@ export const POST = async (req: NextRequest) => {
   const token = authService.signJWT({ user }, { expiresIn: TOKEN_EXPIRY_TIME })
   const response = NextResponse.json({}, { status: StatusCodes.CREATED })
 
-  cookieStore.set(AUTH_COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 60 * 60,
-    path: "/",
-  })
+  authService.setCookie(cookieStore, token)
 
   return response
 }

@@ -1,5 +1,6 @@
-import type { JWTEncryptedUser } from "@repo/shared"
+import { AUTH_COOKIE_NAME, type JWTEncryptedUser } from "@repo/shared"
 import jwt, { type JwtPayload } from "jsonwebtoken"
+import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies"
 import type z from "zod"
 
 export default class AuthService {
@@ -39,5 +40,21 @@ export default class AuthService {
     } catch {
       return undefined
     }
+  }
+
+  /**
+   * Writes an auth cookie to store a signed JWT.
+   *
+   * @param cookieStore Cookie store to use
+   * @param token The JWT to store
+   */
+  public setCookie(cookieStore: ReadonlyRequestCookies, token: string): void {
+    cookieStore.set(AUTH_COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60,
+      path: "/",
+    })
   }
 }

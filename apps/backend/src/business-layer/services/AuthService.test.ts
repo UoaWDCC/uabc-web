@@ -1,9 +1,9 @@
-import { JWTEncryptedUserSchema, TOKEN_EXPIRY_TIME } from "@repo/shared"
+import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema, TOKEN_EXPIRY_TIME } from "@repo/shared"
 import jwt from "jsonwebtoken"
-import { JWT_INVALID_TOKEN_MOCK } from "@/test-config/mocks/AuthService.mock"
+import { cookies } from "next/headers"
+import { JWT_INVALID_TOKEN_MOCK, JWT_TOKEN_MOCK } from "@/test-config/mocks/AuthService.mock"
 import { JWT_SECRET_MOCK, tokensMock } from "@/test-config/mocks/GoogleAuth.mock"
 import { casualUserMock } from "@/test-config/mocks/User.mock"
-
 import AuthService from "./AuthService"
 
 describe("AuthService", () => {
@@ -54,6 +54,16 @@ describe("AuthService", () => {
       // Token is invalid, so `undefined` will be checked against the schema hence returning `undefined`
 
       expect(data).toBeUndefined()
+    })
+  })
+
+  describe("setCookie", () => {
+    it("should write a cookie in the cookie store to store a JWT", async () => {
+      const cookieStore = await cookies()
+      authService.setCookie(cookieStore, JWT_TOKEN_MOCK)
+
+      const cookieJWT = cookieStore.get(AUTH_COOKIE_NAME)
+      expect(cookieJWT?.value as string).toEqual(JWT_TOKEN_MOCK)
     })
   })
 })
