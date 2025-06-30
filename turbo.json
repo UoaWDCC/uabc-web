@@ -86,6 +86,10 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["coverage/**"],
       "persistent": true
+    },
+    "clean": {
+      "cache": false,
+      "dependsOn": ["^clean"]
     }
   },
   "ui": "tui"
