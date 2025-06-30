@@ -17,7 +17,7 @@ import {
   isValidLinkFields,
 } from "./validators"
 
-describe("guards", () => {
+describe("validators", () => {
   describe("isQuoteNode", () => {
     it("should return true for a valid quote node", () => {
       const node = {

@@ -13,9 +13,9 @@ export const LinkDocumentSchema = z.object({
 export const LinkFieldsSchema = z
   .object({
     linkType: z.nativeEnum(LinkType).default(LinkType.CUSTOM),
-    url: z.string().optional(),
+    url: z.string().optional().nullable().default(null),
     doc: z.union([z.string(), LinkDocumentSchema, DocumentWithSlugSchema]).optional().nullable(),
-    newTab: z.boolean().optional(),
+    newTab: z.boolean().optional().default(false),
   })
   .superRefine((data, ctx) => {
     if (data.linkType === LinkType.INTERNAL) {

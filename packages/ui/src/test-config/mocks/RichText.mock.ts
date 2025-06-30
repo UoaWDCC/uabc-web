@@ -50,9 +50,10 @@ export const createLinkNode = (
 ): SerializedLinkNode => ({
   type: NodeType.LINK,
   fields: {
-    linkType: options.linkType || LinkType.CUSTOM,
-    ...(options.linkType === LinkType.INTERNAL && options.doc ? { doc: options.doc } : { url }),
-    newTab: options.newTab || false,
+    linkType: options.linkType ?? LinkType.CUSTOM,
+    url: options.linkType === LinkType.INTERNAL ? null : url,
+    doc: options.linkType === LinkType.INTERNAL && options.doc ? options.doc : undefined,
+    newTab: options.newTab ?? false,
   },
   version: 1,
   children: [createTextNode(text)],
@@ -72,6 +73,8 @@ export const createLinkNodeNoUrl = (text = "No URL Link"): SerializedLinkNode =>
   type: NodeType.LINK,
   fields: {
     linkType: LinkType.CUSTOM,
+    url: null,
+    newTab: false,
   },
   version: 1,
   children: [createTextNode(text)],
@@ -86,6 +89,7 @@ export const createInternalLinkWithInvalidDoc = (
   fields: {
     linkType: LinkType.INTERNAL,
     doc,
+    url: null,
     newTab: false,
   },
   version: 1,
@@ -96,6 +100,7 @@ export const createInternalLinkNoDoc = (text = "No Document Link"): SerializedLi
   type: NodeType.LINK,
   fields: {
     linkType: LinkType.INTERNAL,
+    url: null,
     newTab: false,
   },
   version: 1,
@@ -110,6 +115,7 @@ export const createInternalLinkStringDoc = (
   fields: {
     linkType: LinkType.INTERNAL,
     doc,
+    url: null,
     newTab: false,
   },
   version: 1,
@@ -126,6 +132,7 @@ export const createInternalLinkWithLinkDoc = (
   fields: {
     linkType: LinkType.INTERNAL,
     doc,
+    url: null,
     newTab: false,
   },
   version: 1,
@@ -133,10 +140,10 @@ export const createInternalLinkWithLinkDoc = (
 })
 
 export const createUploadNode = (
-  url = "/test-image.jpg",
-  alt = "Test Image",
-  width = 300,
-  height = 200,
+  url: string,
+  alt: string,
+  width: number,
+  height: number,
 ): SerializedUploadNode => ({
   type: NodeType.UPLOAD,
   relationTo: "media",
@@ -327,11 +334,17 @@ export const internalLinkNode = createLinkNode("", "Internal Link", {
 export const internalLinkWithLinkDocNode = createInternalLinkWithLinkDoc()
 export const invalidLinkNode: SerializedLinkNode = createInvalidLinkNode()
 
-export const imageUploadNode: SerializedUploadNode = createUploadNode()
-export const relativeImageUploadNode = createUploadNode("/relative-image.jpg", "Relative Image")
+export const imageUploadNode: SerializedUploadNode = createUploadNode(
+  "/test-image.jpg",
+  "Test Image",
+  300,
+  200,
+)
 export const absoluteImageUploadNode = createUploadNode(
   "https://example.com/absolute-image.jpg",
   "Absolute Image",
+  300,
+  200,
 )
 export const invalidUploadNode: SerializedUploadNode = createInvalidUploadNode()
 export const noUrlUploadNode: SerializedUploadNode = createUploadNodeWithFilenameOnly()
