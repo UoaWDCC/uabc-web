@@ -34,7 +34,7 @@ export const LINKS = {
       },
       {
         label: "FAQs",
-        href: "/faqs",
+        href: "/faq",
       },
     ],
   },
