@@ -109,7 +109,7 @@ describe("<FAQ />", () => {
     expect(screen.getByTestId("faq-accordion")).toBeInTheDocument()
   })
 
-  it("handles toggle behavior correctly", async () => {
+  it("handles toggle behavior correctly", () => {
     render(<FAQ allowToggle items={mockFAQItems} />)
 
     const firstQuestion = screen.getByText("Test Question 1")
