@@ -37,8 +37,8 @@ const App: FC<PropsWithChildren> = ({ children }) => {
       align="start"
       gap={{ base: "lg", md: "md" }}
       minH={{
-        base: "calc(100dvh - {spaces.lg} * 2)",
-        md: "calc(100dvh - {spaces.md} * 2)",
+        base: "calc(100dvh - $spaces.lg * 2)",
+        md: "calc(100dvh - $spaces.md * 2)",
       }}
       overflowX="auto"
       p={{ base: "lg", md: "md" }}
