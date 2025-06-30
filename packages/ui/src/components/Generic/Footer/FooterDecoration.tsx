@@ -28,10 +28,12 @@ export const FooterDecoration = memo(() => {
           aria-hidden
           filter="brightness(0.5)"
           h={{ base: "lg", md: "xl", lg: "2xl" }}
+          height="200"
           objectFit={{ base: "cover", lg: "contain" }}
           opacity={{ base: "0.08", md: "0.12", lg: "0.15" }}
           src={Shuttle}
           w={{ base: "lg", md: "xl", lg: "2xl" }}
+          width="200"
         />
       </Motion>
 
@@ -58,10 +60,12 @@ export const FooterDecoration = memo(() => {
           aria-hidden
           filter="brightness(0.6)"
           h={{ base: "md", md: "lg", lg: "xl" }}
+          height="150"
           objectFit={{ base: "cover", lg: "contain" }}
           opacity={{ base: "0.06", md: "0.08", lg: "0.1" }}
           src={Shuttle}
           w={{ base: "md", md: "lg", lg: "xl" }}
+          width="150"
         />
       </Motion>
     </>
