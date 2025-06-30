@@ -1,0 +1,55 @@
+name: "Build Client"
+description: "This workflow checks if the client builds are working correctly."
+
+inputs:
+  PAYLOAD_SECRET:
+    description: "The payload secret for the client."
+    required: false
+  DATABASE_URI:
+    description: "The database URI for the client."
+    required: false
+  workspace:
+    description: "The workspace to build."
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        run_install: false
+
+    - name: Cache node_modules
+      uses: actions/cache@v4
+      id: cache-node-modules
+      with:
+        path: |
+          server/node_modules
+          client/node_modules
+          node_modules
+        key: node-modules-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          node-modules-${{ runner.os }}-
+
+    - name: Install dependencies if cache misses
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      run: pnpm install
+      shell: bash
+
+    - name: Build
+      shell: bash
+      env:
+        PAYLOAD_SECRET: ${{ inputs.PAYLOAD_SECRET }}
+        DATABASE_URI: ${{ inputs.DATABASE_URI }}
+      run: pnpm turbo run build --filter ${{ inputs.workspace }}
