@@ -1,7 +1,7 @@
+import { IconButton } from "@repo/ui/components/Button"
 import {
   ButtonGroup,
   type ButtonGroupProps,
-  IconButton,
   type IconButtonProps,
   type IconProps,
 } from "@yamada-ui/react"
