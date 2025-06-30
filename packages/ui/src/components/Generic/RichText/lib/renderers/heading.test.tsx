@@ -1,6 +1,6 @@
+import { h1HeadingNode, h2HeadingNode } from "@repo/ui/test-config/mocks/RichText.mock"
 import { render, screen } from "@testing-library/react"
 import type { HeadingProps } from "@yamada-ui/react"
-import { h1HeadingNode, h2HeadingNode } from "@/test-config/mocks/RichText.mock"
 import { renderHeadingNode } from "./heading"
 
 describe("renderHeadingNode", () => {

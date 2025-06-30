@@ -2,7 +2,7 @@ import {
   createLinkNode,
   createParagraphNode,
   createTextNode,
-} from "@/test-config/mocks/RichText.mock"
+} from "@repo/ui/test-config/mocks/RichText.mock"
 import type { SerializedLexicalNode } from "../types"
 import { createAnchor, createNodeKey, extractTextFromNodes } from "./core"
 

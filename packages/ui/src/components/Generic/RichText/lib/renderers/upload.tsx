@@ -1,4 +1,4 @@
-import { Image } from "@repo/ui/components/Image"
+import { Image } from "@repo/ui/components/Primitive"
 import type React from "react"
 import type { RichTextRendererOptions, SerializedUploadNode } from "../types"
 import { isMediaDocument, resolveUrl } from "../utils"

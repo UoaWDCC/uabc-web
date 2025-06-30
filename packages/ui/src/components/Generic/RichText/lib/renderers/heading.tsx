@@ -1,4 +1,4 @@
-import { Heading } from "@repo/ui/components/Heading"
+import { Heading } from "@repo/ui/components/Primitive"
 import type React from "react"
 import type { RichTextRendererOptions, SerializedHeadingNode } from "../types"
 

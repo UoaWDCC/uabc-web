@@ -1,5 +1,5 @@
+import { emptyQuoteNode, simpleQuoteNode } from "@repo/ui/test-config/mocks/RichText.mock"
 import { render, screen } from "@testing-library/react"
-import { emptyQuoteNode, simpleQuoteNode } from "@/test-config/mocks/RichText.mock"
 import { renderQuoteNode } from "./quote"
 
 describe("renderQuoteNode", () => {
