@@ -8,10 +8,8 @@ vi.mock("@tanstack/react-query-devtools", () => ({
 describe("<QueryProvider />", () => {
   const TestChild = () => <div data-testid="test-child">Test Child</div>
 
-  const originalEnv = process.env.NODE_ENV
-
   afterEach(() => {
-    process.env.NODE_ENV = originalEnv
+    vi.unstubAllEnvs()
   })
 
   it("renders children correctly", () => {
@@ -25,7 +23,7 @@ describe("<QueryProvider />", () => {
   })
 
   it("renders ReactQueryDevtools in development environment", () => {
-    process.env.NODE_ENV = "development"
+    vi.stubEnv("NODE_ENV", "development")
 
     render(
       <QueryProvider>
@@ -38,7 +36,7 @@ describe("<QueryProvider />", () => {
   })
 
   it("does not render ReactQueryDevtools in production environment", () => {
-    process.env.NODE_ENV = "production"
+    vi.stubEnv("NODE_ENV", "production")
 
     render(
       <QueryProvider>
@@ -51,7 +49,7 @@ describe("<QueryProvider />", () => {
   })
 
   it("does not render ReactQueryDevtools in test environment", () => {
-    process.env.NODE_ENV = "test"
+    vi.stubEnv("NODE_ENV", "test")
 
     render(
       <QueryProvider>
