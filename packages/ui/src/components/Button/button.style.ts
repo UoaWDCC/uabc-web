@@ -65,6 +65,7 @@ export const styles: Record<string, HTMLUIProps<"button">> = {
     h: 16,
     minW: 16,
     px: 10,
+    py: 3.5,
     rounded: "lg",
   },
 }

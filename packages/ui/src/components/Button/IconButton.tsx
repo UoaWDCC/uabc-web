@@ -30,6 +30,11 @@ type IconButtonOptions = {
    * @see {@link https://yamada-ui.com/components/navigation/link Yamada UI Link}
    */
   href?: string
+  /**
+   * Optional target for navigation icon buttons
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attr-target}
+   */
+  target?: string
 }
 
 export type IconButtonProps = UIIconButtonProps & IconButtonOptions
@@ -77,7 +82,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>((props,
       justifyContent: "center",
       h: "auto",
       ...(!Object.hasOwn(styles, size as keyof typeof styles) && styles.base),
-      ...styles[size as keyof typeof styles],
+      ...(styles[size as keyof typeof styles] ?? {}),
     }),
     [size],
   )

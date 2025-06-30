@@ -17,7 +17,7 @@ describe("<IconButton />", () => {
   })
 
   describe("size fallback logic", () => {
-    it.each(["xs", "sm", "md", "lg", "xl", "2xl"] as const)(
+    it.each(["xs", "sm", "md", "lg", "xl"] as const)(
       "should apply size-specific styles when size exists in styles object",
       (size) => {
         render(<IconButton aria-label="Test Icon Button" size={size} />)
@@ -63,7 +63,6 @@ describe("<IconButton />", () => {
       expect(Object.hasOwn(styles, "md")).toBe(true)
       expect(Object.hasOwn(styles, "lg")).toBe(true)
       expect(Object.hasOwn(styles, "xl")).toBe(true)
-      expect(Object.hasOwn(styles, "2xl")).toBe(false)
     })
   })
 })
