@@ -3,13 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./components/Button": "./src/components/Button/index.ts",
-    "./components/Heading": "./src/components/Heading/index.ts",
-    "./components/TextInput": "./src/components/TextInput/index.ts",
-    "./components/Image": "./src/components/Image/index.ts",
-    "./components/RichText": "./src/components/RichText/index.ts",
-    "./providers": "./src/providers/index.ts",
-    "./test-utils": "./src/test-utils/index.ts"
+    "./components/Primitive": "./src/components/Primitive/index.ts",
+    "./components/Icon": "./src/components/Icon/index.ts",
+    "./components/Asset/*": "./src/components/Asset/*",
+    "./components/Provider": "./src/components/Provider/index.ts",
+    "./components/Generic": "./src/components/Generic/index.ts"
   },
   "scripts": {
     "check-types": "tsc --noEmit",

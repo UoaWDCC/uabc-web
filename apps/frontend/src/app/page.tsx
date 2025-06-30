@@ -1,4 +1,4 @@
-import { Heading } from "@repo/ui/components/Heading"
+import { Heading } from "@repo/ui/components/Primitive"
 import { Container } from "@yamada-ui/react"
 
 export default function Home() {
