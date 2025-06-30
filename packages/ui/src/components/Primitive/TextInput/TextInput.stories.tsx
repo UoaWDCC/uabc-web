@@ -216,7 +216,7 @@ export const CustomStyling: Story = ({ type, ...args }) => {
   )
 }
 
-export const TypesTable: Story = (args) => {
+export const TypesAndStates: Story = (args) => {
   const states = ["normal", "disabled", "error"]
 
   return (
