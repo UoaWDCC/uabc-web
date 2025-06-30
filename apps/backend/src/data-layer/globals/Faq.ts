@@ -28,7 +28,7 @@ export const FAQ: GlobalConfig = {
         },
         {
           name: "description",
-          type: "textarea",
+          type: "richText",
           required: true,
           admin: {
             description: "A detailed answer to this FAQ question.",

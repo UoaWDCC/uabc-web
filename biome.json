@@ -13,7 +13,8 @@
       "!**/.turbo",
       "!**/.vscode",
       "!**/coverage",
-      "!apps/portal"
+      "!apps/portal",
+      "!importMap.js"
     ],
     "ignoreUnknown": false
   },
