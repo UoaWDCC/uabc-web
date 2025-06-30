@@ -72,6 +72,11 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
   startIcon?: React.ReactNode
 
   /**
+   * The icon to display on the right side of the input field.
+   */
+  endIcon?: React.ReactNode
+
+  /**
    * Indicates whether the input field is in an error state.
    *
    * @remarks
@@ -149,6 +154,7 @@ export const TextInput = memo(
         label,
         type = InputType.Text,
         startIcon,
+        endIcon,
         isError = false,
         errorMessage,
         formControlProps,
@@ -216,7 +222,9 @@ export const TextInput = memo(
               {...inputProps}
             />
 
-            {isPasswordType && (
+            {endIcon ? (
+              <InputRightElement>{endIcon}</InputRightElement>
+            ) : isPasswordType ? (
               <InputRightElement>
                 <IconButton
                   _hover={{
@@ -230,7 +238,7 @@ export const TextInput = memo(
                   variant="ghost"
                 />
               </InputRightElement>
-            )}
+            ) : null}
           </InputGroup>
         </FormControl>
       )

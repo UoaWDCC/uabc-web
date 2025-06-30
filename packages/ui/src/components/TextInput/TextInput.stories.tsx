@@ -229,6 +229,56 @@ export const WithStartIcon: Story = ({ type, ...args }) => {
   )
 }
 
+export const WithEndIcon: Story = ({ type, ...args }) => {
+  return (
+    <VStack>
+      <TextInput
+        endIcon={<SearchIcon />}
+        label="Search"
+        placeholder="Search..."
+        type={InputType.Search}
+        {...args}
+      />
+      <TextInput endIcon={<CalendarIcon />} label="Date" type={InputType.Date} {...args} />
+      <TextInput
+        endIcon={<DollarSignIcon />}
+        label="Amount"
+        placeholder="Enter amount"
+        type={InputType.Number}
+        {...args}
+      />
+      <TextInput
+        endIcon={<CreditCardIcon />}
+        label="Credit Card"
+        placeholder="Enter card number"
+        type={InputType.Text}
+        {...args}
+      />
+      <TextInput
+        endIcon={<PhoneIcon />}
+        label="Phone Number"
+        placeholder="Enter your phone number"
+        type={InputType.Tel}
+        {...args}
+      />
+      <TextInput
+        endIcon={<MapPinIcon />}
+        label="Address"
+        placeholder="Enter your address"
+        type={InputType.Text}
+        {...args}
+      />
+      <TextInput
+        endIcon={<MailIcon />}
+        label="Email Address"
+        placeholder="Enter your email"
+        type={InputType.Email}
+        {...args}
+      />
+    </VStack>
+  )
+}
+
 export const StartIconWithStates: Story = ({ type, ...args }) => {
   return (
     <>

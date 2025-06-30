@@ -74,6 +74,42 @@ describe("<TextInput />", () => {
     expect(screen.getByTestId("default-input")).toHaveAttribute("type", "text")
   })
 
+  it("renders endIcon when provided", () => {
+    const endIcon = <span data-testid="end-icon">★</span>
+    render(
+      <TextInput
+        data-testid="input-with-end-icon"
+        endIcon={endIcon}
+        label="Input with End Icon"
+        type={InputType.Text}
+      />,
+    )
+
+    expect(screen.getByTestId("end-icon")).toBeInTheDocument()
+    expect(screen.getByText("★")).toBeInTheDocument()
+  })
+
+  it("prioritizes endIcon over password toggle when both could be rendered", () => {
+    const endIcon = <span data-testid="end-icon">★</span>
+    render(
+      <TextInput
+        data-testid="password-with-end-icon"
+        endIcon={endIcon}
+        type={InputType.Password}
+      />,
+    )
+
+    expect(screen.getByTestId("end-icon")).toBeInTheDocument()
+
+    expect(screen.queryByRole("button")).not.toBeInTheDocument()
+  })
+
+  it("renders no right element when neither endIcon nor password type", () => {
+    render(<TextInput data-testid="text-input-no-icons" type={InputType.Text} />)
+
+    expect(screen.queryByRole("button")).not.toBeInTheDocument()
+  })
+
   describe("React Hook Form integration", () => {
     it("applies registration props when registration is provided", () => {
       const mockRegistration = {
@@ -143,7 +179,8 @@ describe("<TextInput />", () => {
         onChange: vi.fn(),
         onBlur: vi.fn(),
         ref: undefined,
-      } as any // Type assertion for testing the fallback behavior
+        // biome-ignore lint/suspicious/noExplicitAny: fallback behavior
+      } as any
 
       render(<TextInput ref={componentRef} registration={mockRegistration} type={InputType.Text} />)
 
@@ -157,7 +194,8 @@ describe("<TextInput />", () => {
         onChange: vi.fn(),
         onBlur: vi.fn(),
         ref: null,
-      } as any // Type assertion for testing the fallback behavior
+        // biome-ignore lint/suspicious/noExplicitAny: fallback behavior
+      } as any
 
       render(<TextInput ref={componentRef} registration={mockRegistration} type={InputType.Text} />)
 
