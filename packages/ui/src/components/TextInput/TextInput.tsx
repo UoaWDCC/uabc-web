@@ -10,6 +10,7 @@ import {
   InputLeftElement,
   InputRightElement,
   Label,
+  mergeRefs,
   type InputProps as UIInputProps,
   useBoolean,
 } from "@yamada-ui/react"
@@ -166,11 +167,13 @@ export const TextInput = memo(
       const isPasswordType = type === InputType.Password
       const [isPasswordVisible, { toggle: togglePasswordVisibility }] = useBoolean(false)
 
+      const inputRef = mergeRefs(registration?.ref, ref)
+
       const inputProps = registration
         ? {
             ...registration,
             ...props,
-            ref: registration.ref || ref,
+            ref: inputRef,
           }
         : {
             ...props,
