@@ -1,6 +1,17 @@
 import type { Meta, StoryFn } from "@storybook/react"
 import { PropsTable } from "@storybook-config/components"
-import { INPUT_STATES, INPUT_TYPES, InputType, TextInput } from "./TextInput"
+import {
+  CalendarIcon,
+  CreditCardIcon,
+  DollarSignIcon,
+  MailIcon,
+  MapPinIcon,
+  PhoneIcon,
+  SearchIcon,
+  UserIcon,
+} from "@yamada-ui/lucide"
+import { VStack } from "@yamada-ui/react"
+import { INPUT_TYPES, InputType, TextInput } from "./TextInput"
 
 type Story = StoryFn<typeof TextInput>
 
@@ -10,16 +21,16 @@ const meta: Meta<typeof TextInput> = {
   argTypes: {
     label: {
       control: "text",
-      description: "The label of the input",
+      description: "The label text for the input field",
       table: {
         type: { summary: "string" },
-        defaultValue: { summary: '""' },
+        defaultValue: { summary: "undefined" },
       },
     },
     type: {
       control: "select",
       options: INPUT_TYPES,
-      description: "The type of the input",
+      description: "The type of the input field",
       table: {
         type: { summary: `"${INPUT_TYPES.join('" | "')}"` },
         defaultValue: { summary: `"${InputType.Text}"` },
@@ -35,7 +46,7 @@ const meta: Meta<typeof TextInput> = {
     },
     isError: {
       control: "boolean",
-      description: "Whether the input is an error",
+      description: "Whether the input is in an error state",
       table: {
         type: { summary: "boolean" },
         defaultValue: { summary: "false" },
@@ -43,50 +54,18 @@ const meta: Meta<typeof TextInput> = {
     },
     errorMessage: {
       control: "text",
-      description: "The error message of the input",
+      description: "The error message displayed when the input is in an error state",
       table: {
         type: { summary: "string" },
-        defaultValue: { summary: '""' },
+        defaultValue: { summary: "undefined" },
       },
     },
-    placeholderShownLabelCSS: {
-      control: "object",
-      description: "The CSS styles for the label when the placeholder is shown",
+    placeholder: {
+      control: "text",
+      description: "Placeholder text for the input",
       table: {
-        type: { summary: "CSSUIObject" },
-        defaultValue: { summary: "{}" },
-      },
-    },
-    placeholderHiddenLabelCSS: {
-      control: "object",
-      description: "The CSS styles for the label when the placeholder is hidden",
-      table: {
-        type: { summary: "CSSUIObject" },
-        defaultValue: { summary: "{}" },
-      },
-    },
-    focusedLabelCSS: {
-      control: "object",
-      description: "The CSS styles for the label when the input is focused",
-      table: {
-        type: { summary: "CSSUIObject" },
-        defaultValue: { summary: "{}" },
-      },
-    },
-    activeLabelCSS: {
-      control: "object",
-      description: "The CSS styles for the label when the input is active",
-      table: {
-        type: { summary: "CSSUIObject" },
-        defaultValue: { summary: "{}" },
-      },
-    },
-    labelProps: {
-      control: "object",
-      description: "The props for the label",
-      table: {
-        type: { summary: "LabelProps" },
-        defaultValue: { summary: "{}" },
+        type: { summary: "string" },
+        defaultValue: { summary: "undefined" },
       },
     },
   },
@@ -95,44 +74,164 @@ const meta: Meta<typeof TextInput> = {
 export default meta
 
 export const Basic: Story = ({ type, ...args }) => {
-  return <TextInput label="Label" type={type || InputType.Text} {...args} />
+  return <TextInput label="First name" type={type || InputType.Text} {...args} />
 }
 
-export const Types: Story = ({ type, ...args }) => {
+export const WithoutLabel: Story = ({ type, ...args }) => {
   return (
-    <PropsTable rows={INPUT_TYPES} variant="column">
-      {(_, row, key) => (
-        <TextInput
-          key={key}
-          label={row.charAt(0).toUpperCase() + row.slice(1)}
-          type={row as InputType}
-          {...args}
-        />
-      )}
-    </PropsTable>
+    <>
+      <TextInput placeholder="No label" type={type || InputType.Text} {...args} />
+      <TextInput placeholder="Email without label" type={InputType.Email} {...args} />
+      <TextInput placeholder="Password without label" type={InputType.Password} {...args} />
+    </>
   )
 }
 
-export const States: Story = ({ type, ...args }) => {
+export const WithStartIcon: Story = ({ type, ...args }) => {
   return (
-    <PropsTable rows={INPUT_STATES} variant="column">
-      {(_, row, key) => {
-        const props = {
-          ...(row === "disabled" && { disabled: true }),
-          ...(row === "error" && { isError: true, errorMessage: "Error message" }),
-          ...(row === "hovered" && { "data-hover": true }),
-          ...(row === "focused" && { "data-focused": true }),
-          ...(row === "active" && { "data-active": true }),
-          ...(row === "has-value" && { defaultValue: "Value" }),
-        }
+    <VStack>
+      <TextInput
+        label="Full Name"
+        placeholder="Enter your full name"
+        startIcon={<UserIcon />}
+        type={InputType.Text}
+        {...args}
+      />
+      <TextInput
+        label="Email Address"
+        placeholder="Enter your email"
+        startIcon={<MailIcon />}
+        type={InputType.Email}
+        {...args}
+      />
+      <TextInput
+        label="Search"
+        placeholder="Search for anything..."
+        startIcon={<SearchIcon />}
+        type={InputType.Search}
+        {...args}
+      />
+      <TextInput
+        label="Phone Number"
+        placeholder="Enter your phone number"
+        startIcon={<PhoneIcon />}
+        type={InputType.Tel}
+        {...args}
+      />
+      <TextInput
+        label="Address"
+        placeholder="Enter your address"
+        startIcon={<MapPinIcon />}
+        type={InputType.Text}
+        {...args}
+      />
+      <TextInput
+        label="Credit Card"
+        placeholder="Enter card number"
+        startIcon={<CreditCardIcon />}
+        type={InputType.Text}
+        {...args}
+      />
+      <TextInput
+        label="Amount"
+        placeholder="Enter amount"
+        startIcon={<DollarSignIcon />}
+        type={InputType.Number}
+        {...args}
+      />
+      <TextInput label="Date" startIcon={<CalendarIcon />} type={InputType.Date} {...args} />
+    </VStack>
+  )
+}
 
+export const WithEndIcon: Story = ({ type, ...args }) => {
+  return (
+    <VStack>
+      <TextInput
+        endIcon={<SearchIcon />}
+        label="Search"
+        placeholder="Search..."
+        type={InputType.Search}
+        {...args}
+      />
+      <TextInput endIcon={<CalendarIcon />} label="Date" type={InputType.Date} {...args} />
+      <TextInput
+        endIcon={<DollarSignIcon />}
+        label="Amount"
+        placeholder="Enter amount"
+        type={InputType.Number}
+        {...args}
+      />
+      <TextInput
+        endIcon={<CreditCardIcon />}
+        label="Credit Card"
+        placeholder="Enter card number"
+        type={InputType.Text}
+        {...args}
+      />
+      <TextInput
+        endIcon={<PhoneIcon />}
+        label="Phone Number"
+        placeholder="Enter your phone number"
+        type={InputType.Tel}
+        {...args}
+      />
+      <TextInput
+        endIcon={<MapPinIcon />}
+        label="Address"
+        placeholder="Enter your address"
+        type={InputType.Text}
+        {...args}
+      />
+      <TextInput
+        endIcon={<MailIcon />}
+        label="Email Address"
+        placeholder="Enter your email"
+        type={InputType.Email}
+        {...args}
+      />
+    </VStack>
+  )
+}
+
+export const CustomStyling: Story = ({ type, ...args }) => {
+  return (
+    <TextInput
+      _focus={{
+        borderColor: "purple.500",
+        boxShadow: "0 0 0 1px purple",
+      }}
+      borderRadius="lg"
+      borderWidth="2px"
+      fontSize="lg"
+      formControlProps={{
+        maxW: "300px",
+      }}
+      h="12"
+      label="Custom Styled Input"
+      placeholder="Custom styling example"
+      type={type || InputType.Text}
+      {...args}
+    />
+  )
+}
+
+export const TypesAndStates: Story = (args) => {
+  const states = ["normal", "disabled", "error"]
+
+  return (
+    <PropsTable columns={states} rows={INPUT_TYPES}>
+      {(column, row, key) => {
+        const isDisabled = column === "disabled"
+        const isError = column === "error"
         return (
           <TextInput
+            disabled={isDisabled}
+            errorMessage={isError ? "This field has an error" : undefined}
+            isError={isError}
             key={key}
-            label="Input Label"
-            placeholder="Placeholder text"
-            type={type || InputType.Text}
-            {...props}
+            placeholder={`Enter ${row}`}
+            type={row}
             {...args}
           />
         )
@@ -141,27 +240,41 @@ export const States: Story = ({ type, ...args }) => {
   )
 }
 
-export const CustomStyles: Story = ({ type, ...args }) => {
+export const IconVariations: Story = (args) => {
+  const iconTypes = ["startIcon", "endIcon", "both", "none"]
+  const commonInputTypes = [InputType.Text, InputType.Email, InputType.Search, InputType.Tel]
+
   return (
-    <TextInput
-      activeLabelCSS={{
-        color: "orange",
+    <PropsTable columns={iconTypes} rows={commonInputTypes}>
+      {(column, row, key) => {
+        const hasStartIcon = column === "startIcon" || column === "both"
+        const hasEndIcon = column === "endIcon" || column === "both"
+
+        const getIcon = (type: InputType) => {
+          switch (type) {
+            case InputType.Email:
+              return <MailIcon />
+            case InputType.Search:
+              return <SearchIcon />
+            case InputType.Tel:
+              return <PhoneIcon />
+            default:
+              return <UserIcon />
+          }
+        }
+
+        return (
+          <TextInput
+            endIcon={hasEndIcon ? getIcon(row) : undefined}
+            key={key}
+            label={`${row} input`}
+            placeholder={`Enter ${row}`}
+            startIcon={hasStartIcon ? getIcon(row) : undefined}
+            type={row}
+            {...args}
+          />
+        )
       }}
-      focusedLabelCSS={{
-        color: "red",
-      }}
-      label="Label"
-      labelProps={{
-        className: "font-bold",
-      }}
-      placeholderHiddenLabelCSS={{
-        color: "green",
-      }}
-      placeholderShownLabelCSS={{
-        color: "blue",
-      }}
-      type={type || InputType.Text}
-      {...args}
-    />
+    </PropsTable>
   )
 }
