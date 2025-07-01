@@ -25,8 +25,8 @@ describe("api/auth/login", () => {
       const authDataService = new AuthDataService()
       const userDataService = new UserDataService()
 
-      const _newAuth = await authDataService.createAuth(standardAuthCreateMock)
-      const _newUser = await userDataService.createUser(userCreateMock)
+      await authDataService.createAuth(standardAuthCreateMock)
+      await userDataService.createUser(userCreateMock)
 
       const compareSpy = vi.spyOn(bcrypt, "compare")
       const req = createMockNextRequest(
@@ -81,8 +81,8 @@ describe("api/auth/login", () => {
       const authDataService = new AuthDataService()
       const userDataService = new UserDataService()
 
-      const _newAuth = await authDataService.createAuth(standardAuthCreateMock)
-      const _newUser = await userDataService.createUser(userCreateMock)
+      await authDataService.createAuth(standardAuthCreateMock)
+      await userDataService.createUser(userCreateMock)
 
       const req = createMockNextRequest(
         `/api/auth/login?state=${STATE_MOCK}`,
