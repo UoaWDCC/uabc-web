@@ -63,12 +63,12 @@ describe("api/auth/login", () => {
       expect(response.status).toBe(StatusCodes.BAD_REQUEST)
     })
 
-    it("returns 401 if email is invalid", async () => {
+    it("returns 401 if email is incorrect", async () => {
       cookieStore.set(STATE_COOKIE_NAME, STATE_MOCK)
 
       const req = createMockNextRequest(
         `/api/auth/login?state=${STATE_MOCK}`,
-        "invalid-email@wdcc.com",
+        "incorrect-email@wdcc.com",
         PASSWORD_MOCK,
       )
       const response = await login(req)
@@ -76,7 +76,7 @@ describe("api/auth/login", () => {
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
     })
 
-    it("returns 401 if password is invalid", async () => {
+    it("returns 401 if password is incorrect", async () => {
       cookieStore.set(STATE_COOKIE_NAME, STATE_MOCK)
       const authDataService = new AuthDataService()
       const userDataService = new UserDataService()
@@ -87,7 +87,7 @@ describe("api/auth/login", () => {
       const req = createMockNextRequest(
         `/api/auth/login?state=${STATE_MOCK}`,
         EMAIL_MOCK,
-        "invalid-passw0rd",
+        "incorrect-passw0rd",
       )
       const response = await login(req)
 

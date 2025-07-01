@@ -4,6 +4,7 @@ import { casualUserMock } from "./User.mock"
 
 export const EMAIL_MOCK = "straight.zhao@example.com"
 export const PASSWORD_MOCK = "str@!ghtZh@069"
+export const LOWERCASE_PASSWORD_MOCK = "alllowercaseletters"
 export const HASHED_PASSWORD_MOCK = "hashedPassword"
 export const REAL_HASHED_PASSWORD_MOCK =
   "$2b$10$Ye7TUzPvQ16fcBeXp2vFsObtQF4ql2r41PFIKGOJl8cAgQHoC/usS"

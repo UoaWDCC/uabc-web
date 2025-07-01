@@ -24,7 +24,7 @@ export const POST = async (req: NextRequest) => {
   cookieStore.delete(STATE_COOKIE_NAME)
 
   const { email, password } = await req.json()
-  if (!StandardSecurity.validateDetails(email, password)) {
+  if (!StandardSecurity.validateLoginDetails(email, password)) {
     return NextResponse.json({ status: StatusCodes.BAD_REQUEST })
   }
 

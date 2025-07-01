@@ -1,4 +1,4 @@
-import { LoginDetailsSchema } from "@repo/shared"
+import { LoginDetailsSchema, SignUpDetailsSchema } from "@repo/shared"
 import bcrypt from "bcryptjs"
 
 export default class StandardSecurity {
@@ -26,14 +26,34 @@ export default class StandardSecurity {
   }
 
   /**
-   * Method to validate the login/signup data.
+   * Validates sign up data; enforces email to be an email address and enforces the proper password
+   * scheme.
    *
    * @static
    * @param email The email of the user
    * @param password The password of the user
    * @returns True if the data is valid, false otherwise
    */
-  static async validateDetails(email: string, password: string): Promise<boolean> {
+  static async validateSignUpDetails(email: string, password: string): Promise<boolean> {
+    const parse = await SignUpDetailsSchema.safeParseAsync({
+      email,
+      password,
+    })
+
+    if (parse.success) return true
+    return false
+  }
+
+  /**
+   * Validates login data; enforces email to be an email address and enforces password to be a
+   * string.
+   *
+   * @static
+   * @param email The email of the user
+   * @param password The password of the user
+   * @returns True if the data is valid, false otherwise
+   */
+  static async validateLoginDetails(email: string, password: string): Promise<boolean> {
     const parse = await LoginDetailsSchema.safeParseAsync({
       email,
       password,
