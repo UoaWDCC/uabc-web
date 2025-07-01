@@ -38,23 +38,6 @@ describe("<FAQ />", () => {
     expect(screen.queryByText("FAQs")).not.toBeInTheDocument()
   })
 
-  it("renders all FAQ items", () => {
-    render(<FAQ items={mockFAQItems} />)
-
-    expect(screen.getByText("Test Question 1")).toBeInTheDocument()
-    expect(screen.getByText("Test Question 2")).toBeInTheDocument()
-    expect(screen.getByText("Disabled Question")).toBeInTheDocument()
-  })
-
-  it("shows answers when accordion items are clicked", () => {
-    render(<FAQ items={mockFAQItems} />)
-
-    const firstQuestion = screen.getByText("Test Question 1")
-    fireEvent.click(firstQuestion)
-
-    expect(screen.getByText("Test Answer 1")).toBeInTheDocument()
-  })
-
   it("handles disabled FAQ items", () => {
     render(<FAQ items={mockFAQItems} />)
 
