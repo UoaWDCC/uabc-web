@@ -5,6 +5,8 @@ import { casualUserMock } from "./User.mock"
 export const EMAIL_MOCK = "straight.zhao@example.com"
 export const PASSWORD_MOCK = "str@!ghtZh@069"
 export const HASHED_PASSWORD_MOCK = "hashedPassword"
+export const REAL_HASHED_PASSWORD_MOCK =
+  "$2b$10$Ye7TUzPvQ16fcBeXp2vFsObtQF4ql2r41PFIKGOJl8cAgQHoC/usS"
 
 export const CASUAL_JWT_MOCK = "casual_JWT_token"
 export const MEMBER_JWT_MOCK = "member_JWT_token"
@@ -35,14 +37,14 @@ export const mockPaginatedDocs = <T>(docs: T[]): MockPaginatedDocs<T> => ({
 export const standardAuthCreateMock: CreateAuthenticationData = {
   user: casualUserMock,
   email: "straight.zhao@example.com",
-  password: HASHED_PASSWORD_MOCK,
+  password: REAL_HASHED_PASSWORD_MOCK,
 }
 
 export const standardAuthMock: Authentication = {
   id: "60a4fa6ff8ba5b0a929c1142",
   user: casualUserMock,
   email: EMAIL_MOCK,
-  password: HASHED_PASSWORD_MOCK,
+  password: REAL_HASHED_PASSWORD_MOCK,
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),
 }

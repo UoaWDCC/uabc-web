@@ -8,8 +8,8 @@ import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 import {
   EMAIL_MOCK,
-  HASHED_PASSWORD_MOCK,
   PASSWORD_MOCK,
+  REAL_HASHED_PASSWORD_MOCK,
   standardAuthCreateMock,
 } from "@/test-config/mocks/Authentication.mock"
 import { STATE_MOCK } from "@/test-config/mocks/GoogleAuth.mock"
@@ -28,7 +28,7 @@ describe("api/auth/login", () => {
       const _newAuth = await authDataService.createAuth(standardAuthCreateMock)
       const _newUser = await userDataService.createUser(userCreateMock)
 
-      const compareSpy = vi.spyOn(bcrypt, "compare").mockImplementationOnce(async () => true)
+      const compareSpy = vi.spyOn(bcrypt, "compare")
       const req = createMockNextRequest(
         `/api/auth/login?state=${STATE_MOCK}`,
         EMAIL_MOCK,
@@ -36,10 +36,10 @@ describe("api/auth/login", () => {
       )
       const response = await login(req)
 
-      expect(compareSpy).toHaveBeenCalledWith(PASSWORD_MOCK, HASHED_PASSWORD_MOCK)
+      expect(compareSpy).toHaveBeenCalledWith(PASSWORD_MOCK, REAL_HASHED_PASSWORD_MOCK)
       expect(response.status).toBe(StatusCodes.CREATED)
 
-      const token = response.cookies.get(AUTH_COOKIE_NAME)?.value
+      const token = cookieStore.get(AUTH_COOKIE_NAME)?.value
       expect(token).toBeDefined()
 
       const authService = new AuthService()
