@@ -48,6 +48,15 @@ runs:
       run: pnpm install
       shell: bash
 
+    - name: Restore Next.js cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          apps/${{ inputs.workspace }}/.next/cache
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('apps/${{ inputs.workspace }}/*') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-
+
     - name: Build
       shell: bash
       env:
