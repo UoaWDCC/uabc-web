@@ -1,4 +1,4 @@
-import { JWTEncryptedUser } from "@repo/shared"
+import type { JWTEncryptedUser } from "@repo/shared"
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import type z from "zod"
 
