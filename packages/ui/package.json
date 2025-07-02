@@ -23,7 +23,7 @@
   "dependencies": {
     "@repo/shared": "workspace:*",
     "@repo/theme": "workspace:*",
-    "@storybook/nextjs": "9.0.14",
+    "@storybook/nextjs": "9.0.15",
     "@tanstack/react-query": "5.81.2",
     "@tanstack/react-query-devtools": "5.81.2",
     "@yamada-ui/lucide": "1.10.5",
