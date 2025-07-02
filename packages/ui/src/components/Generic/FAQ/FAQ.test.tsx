@@ -52,6 +52,9 @@ describe("<FAQ />", () => {
     const firstQuestion = screen.getByText("Test Question 1")
     const secondQuestion = screen.getByText("Test Question 2")
 
+    expect(screen.queryByText("Test Answer 1")).toBeNull()
+    expect(screen.queryByText("Test Answer 2")).toBeNull()
+
     fireEvent.click(firstQuestion)
     fireEvent.click(secondQuestion)
 
