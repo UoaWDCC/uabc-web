@@ -1,9 +1,9 @@
-import { render, screen } from "@/test-utils"
+import { render, screen } from "@repo/ui/test-utils"
 import userEvent from "@testing-library/user-event"
 import { Option } from "@yamada-ui/react"
 import { isValidElement } from "react"
-import { MobileSingleSelect } from "./MobileSingleSelect"
 import * as MobileSingleSelectModule from "./index"
+import { MobileSingleSelect } from "./MobileSingleSelect"
 
 describe("<MobileSingleSelect />", () => {
   it("should re-export the Select component and check if Select exists", () => {
