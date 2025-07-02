@@ -1,11 +1,29 @@
-import { LOCATION_BUBBLE_TEST_CONSTANTS } from "@repo/ui/test-config/constants"
-import { render, screen } from "@repo/ui/test-utils"
-import { userEvent } from "@testing-library/user-event"
+vi.mock("@yamada-ui/react", async () => {
+  const actual = await vi.importActual<typeof import("@yamada-ui/react")>("@yamada-ui/react")
+  return {
+    ...actual,
+    useReducedMotion: vi.fn(),
+  }
+})
+
+import { LOCATION_BUBBLE_TEST_CONSTANTS } from "@repo/ui/test-config/mocks/LocationBubble.mock"
+import { render, screen, sleep } from "@repo/ui/test-utils"
+import { useReducedMotion } from "@yamada-ui/react"
 import { isValidElement } from "react"
 import * as LocationBubbleModule from "./index"
-import { LocationBubble } from "./LocationBubble"
+import {
+  LocationBubble,
+  LocationBubbleDesktopCard,
+  LocationBubbleMobileCard,
+} from "./LocationBubble"
+
+const mockUseReducedMotion = vi.mocked(useReducedMotion)
 
 describe("<LocationBubble />", () => {
+  beforeEach(() => {
+    mockUseReducedMotion.mockReturnValue(false)
+  })
+
   it("should re-export the LocationBubble component and check if LocationBubble and child elements exists", () => {
     expect(LocationBubbleModule.LocationBubble).toBeDefined()
     expect(
@@ -39,44 +57,123 @@ describe("<LocationBubble />", () => {
   })
 
   it("renders LocationBubbleDesktopCard when hovering by default", async () => {
-    render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+    const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
     const bubble = screen.getByTestId("location-bubble-circle-trigger")
-    await userEvent.hover(bubble)
+    expect(screen.queryByTestId("location-bubble-desktop-card")).not.toBeInTheDocument()
+    await user.hover(bubble)
     expect(await screen.findByTestId("location-bubble-desktop-card")).toBeInTheDocument()
   })
 
-  // it("unmounts desktop card after hovering ends", async () => {
-  //   const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+  it("unmounts desktop card after hovering ends", async () => {
+    const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
 
-  //   const bubble = screen.getByTestId("location-bubble-circle-trigger")
-  //   await user.hover(bubble)
-  //   expect(await screen.findByTestId("location-bubble-desktop-card")).toBeInTheDocument()
+    expect(screen.queryByTestId("location-bubble-desktop-card")).toBeNull()
 
-  //   const cardWrapper = screen.getByTestId("location-bubble-desktop-card-wrapper")
-  //   await user.unhover(cardWrapper)
-  //   expect(screen.queryByTestId("location-bubble-desktop-card")).toBeNull()
-  // })
+    const bubble = screen.getByTestId("location-bubble-circle-trigger")
+    await user.hover(bubble)
+    expect(await screen.findByTestId("location-bubble-desktop-card")).toBeInTheDocument()
 
-  // it("does not render LocationBubbleDesktopCard when hovering for less than 100ms", async () => {
-  //   vi.useFakeTimers()
+    const cardWrapper = screen.getByTestId("location-bubble-desktop-card-wrapper")
 
-  //   const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+    await user.hover(cardWrapper)
+    await sleep(100)
 
-  //   const bubble = screen.getByTestId("location-bubble-circle-trigger")
+    await user.unhover(cardWrapper)
+    await sleep(100)
 
-  //   await user.hover(bubble)
-  //   act(() => vi.advanceTimersByTime(50))
+    expect(screen.queryByTestId("location-bubble-desktop-card")).toBeNull()
+  })
 
-  //   await user.unhover(bubble)
-  //   expect(screen.queryByTestId("location-bubble-desktop-card")).toBeNull()
+  it("does not render LocationBubbleDesktopCard when hovering for less than 100ms", async () => {
+    const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
 
-  //   vi.useRealTimers()
-  // })
+    const bubble = screen.getByTestId("location-bubble-circle-trigger")
+
+    await user.hover(bubble)
+    await sleep(50)
+    expect(screen.queryByTestId("location-bubble-desktop-card")).toBeNull()
+    expect(screen.getByTestId("location-bubble-circle-trigger")).toBeInTheDocument()
+  })
+
+  it("does not render LocationBubbleDesktopCard when hovering for less than 100ms and then unhovered", async () => {
+    const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+
+    const bubble = screen.getByTestId("location-bubble-circle-trigger")
+
+    await user.hover(bubble)
+    await sleep(50)
+    await user.unhover(bubble)
+    await sleep(50)
+    expect(screen.queryByTestId("location-bubble-desktop-card")).toBeNull()
+    expect(screen.getByTestId("location-bubble-circle-trigger")).toBeInTheDocument()
+  })
+
+  it("falls back to '#' for href if no path is provided in LocationBubbleMobileCard", async () => {
+    render(<LocationBubbleDesktopCard {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+
+    const button = screen.getByRole("link", { name: /learn more/i })
+    expect(button).toHaveAttribute("href", "#")
+  })
 
   it("renders LocationBubbleMobileCard when clicked", async () => {
-    render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+    const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+    expect(screen.queryByTestId("location-bubble-mobile-card")).toBeNull()
+
     const bubble = screen.getByTestId("location-bubble-circle-trigger")
-    await userEvent.click(bubble)
+    await user.click(bubble)
     expect(await screen.findByTestId("location-bubble-mobile-card")).toBeInTheDocument()
+  })
+
+  it("falls back to '#' for href if no path is provided in LocationBubbleMobileCard", async () => {
+    const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+
+    const bubble = screen.getByTestId("location-bubble-circle-trigger")
+    await user.click(bubble)
+
+    const mobileCard = await screen.findByTestId("location-bubble-mobile-card")
+    const link = mobileCard.querySelector("a")
+    expect(link).toBeInTheDocument()
+    expect(link?.getAttribute("href")).toBe("#")
+  })
+
+  it("falls back to '#' for href if no path is provided in LocationBubbleMobileCard", async () => {
+    render(<LocationBubbleMobileCard {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+
+    const button = screen.getByRole("link", { name: /learn more/i })
+    expect(button).toHaveAttribute("href", "#")
+  })
+
+  it("LocationBubble doesn't move when prefers-reduced-motion is true", async () => {
+    mockUseReducedMotion.mockReturnValue(true)
+
+    render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+    const bubbleWithReducedMotion = screen.getByTestId("location-bubble-circle-trigger")
+
+    const transformInitial = window.getComputedStyle(bubbleWithReducedMotion).transform
+    await sleep(200)
+    const transformLater = window.getComputedStyle(bubbleWithReducedMotion).transform
+
+    expect(transformLater).toBe(transformInitial)
+    expect(transformLater).toBe("none")
+  })
+
+  it("LocationBubble moves when prefers-reduced-motion is false", async () => {
+    mockUseReducedMotion.mockReturnValue(false)
+
+    render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+
+    const bubbleWithMotion = screen.getByTestId("location-bubble-circle-trigger")
+
+    const transformInitial = window.getComputedStyle(bubbleWithMotion).transform
+    expect(transformInitial).toBeOneOf(["translateX(25px)", "translateX(-25px)"])
+    await sleep(200)
+    const transformMiddle = window.getComputedStyle(bubbleWithMotion).transform
+    expect(transformMiddle).not.toBeOneOf(["translateX(25px)", "translateX(-25px)"])
+    await sleep(200)
+    const transformLater = window.getComputedStyle(bubbleWithMotion).transform
+    expect(transformLater).not.toBeOneOf(["translateX(25px)", "translateX(-25px)"])
+
+    expect(transformInitial).not.toBe(transformMiddle)
+    expect(transformMiddle).not.toBe(transformLater)
   })
 })
