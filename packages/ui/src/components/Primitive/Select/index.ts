@@ -1,1 +1,1 @@
-export * from "./MobileSingleSelect"
+export * from "./Select"

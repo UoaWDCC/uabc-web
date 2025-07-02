@@ -10,7 +10,7 @@ import {
 } from "@yamada-ui/react"
 import type { ReactNode } from "react"
 
-export interface MobileSingleSelectProps extends UISelectProps {
+export interface SelectProps extends UISelectProps {
   /**
    * Label text of the Select component.
    *
@@ -38,15 +38,15 @@ export interface MobileSingleSelectProps extends UISelectProps {
  * @returns A select component
  *
  * @example
- * <MobileSingleSelect icon={<>A React Node</>} label="A label">
+ * <Select icon={<>A React Node</>} label="A label">
  *   <Option value="1">Option 1</Option>
  *   <Option value="2">Option 2</Option>
  *   <Option value="3">Option 3</Option>
- * </MobileSingleSelect>
+ * </Select>
  *
  * @see {@link https://yamada-ui.com/components/forms/select Yamada UI Select Docs}
  */
-export const MobileSingleSelect: FC<MobileSingleSelectProps> = memo(
+export const Select: FC<SelectProps> = memo(
   ({ children, label = "Select option", icon, ...props }) => {
     return (
       <FormControl
@@ -101,4 +101,4 @@ export const MobileSingleSelect: FC<MobileSingleSelectProps> = memo(
   },
 )
 
-MobileSingleSelect.displayName = "MobileSingleSelect"
+Select.displayName = "Select"
