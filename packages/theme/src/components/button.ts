@@ -1,9 +1,10 @@
 import type { ComponentStyle } from "@yamada-ui/core"
-import { isAccessible, isGray, shadeColor, transparentizeColor } from "@yamada-ui/utils"
+import { isAccessible, isGray, transparentizeColor } from "@yamada-ui/utils"
 
 export const Button: ComponentStyle<"Button"> = {
   baseStyle: {
     cursor: "pointer",
+
     fontWeight: "semibold",
     transitionDuration: "slower",
     transitionProperty: "common",
@@ -116,7 +117,15 @@ export const Button: ComponentStyle<"Button"> = {
     solid: ({ colorScheme: c = "gray", errorBorderColor = ["danger.500", "danger.400"] }) => ({
       bg: isGray(c)
         ? [`${c}.50`, `${c}.700`]
-        : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
+        : c === "primary"
+          ? [isAccessible(c) ? `${c}.300` : `${c}.400`, `${c}.500`]
+          : c === "secondary"
+            ? [isAccessible(c) ? `${c}.600` : `${c}.700`, `${c}.800`]
+            : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
+      backdropFilter: "blur(15px)",
+      borderRadius: "12px",
+      boxShadow:
+        "0px 1.5px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.10)",
       color: [isGray(c) || isAccessible(c) ? "black" : "white", "white"],
       vars: [
         {
@@ -125,6 +134,19 @@ export const Button: ComponentStyle<"Button"> = {
           value: errorBorderColor,
         },
       ],
+      _before: {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        borderRadius: "inherit",
+        border: "1.5px solid transparent",
+        background:
+          "linear-gradient(15deg, rgba(255, 255, 255, 0.00) 33.61%, #FFFFFF 89.19%) border-box, rgba(255, 255, 255, 0.2) border-box",
+        mask: "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
+        maskComposite: "exclude",
+        mixBlendMode: "overlay",
+        pointerEvents: "none",
+      },
       _focusVisible: {
         borderColor: "transparent",
         boxShadow: "outline",
@@ -132,11 +154,19 @@ export const Button: ComponentStyle<"Button"> = {
       _hover: {
         bg: isGray(c)
           ? [`${c}.100`, `${c}.800`]
-          : [isAccessible(c) ? `${c}.500` : `${c}.600`, `${c}.700`],
+          : c === "primary"
+            ? [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`]
+            : c === "secondary"
+              ? [isAccessible(c) ? `${c}.700` : `${c}.800`, `${c}.900`]
+              : [isAccessible(c) ? `${c}.500` : `${c}.600`, `${c}.700`],
         _disabled: {
           bg: isGray(c)
             ? [`${c}.50`, `${c}.700`]
-            : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
+            : c === "primary"
+              ? [isAccessible(c) ? `${c}.300` : `${c}.400`, `${c}.500`]
+              : c === "secondary"
+                ? [isAccessible(c) ? `${c}.600` : `${c}.700`, `${c}.800`]
+                : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
         },
       },
       _invalid: {
@@ -145,68 +175,30 @@ export const Button: ComponentStyle<"Button"> = {
         boxShadow: "0 0 0 1px $errorBorderColor",
       },
     }),
-    subtle: ({
-      colorScheme: c = "gray",
-      colorMode: m,
-      errorBorderColor = ["danger.500", "danger.400"],
-      theme: t,
-    }) => ({
-      bg: [`${c}.50`, shadeColor(`${c}.300`, 68)(t, m)],
-      color: [`${c}.800`, isGray(c) ? `${c}.50` : `${c}.200`],
-      vars: [
-        {
-          name: "errorBorderColor",
-          token: "colors",
-          value: errorBorderColor,
-        },
-      ],
-      _focusVisible: {
-        borderColor: "transparent",
-        boxShadow: "outline",
+    gradient: ({ colorScheme: c = "primary" }) => ({
+      backdropFilter: "blur(15px)",
+      bgGradient: `${c}Gradient`,
+      bgSize: "100% 100%",
+      borderRadius: "12px",
+      boxShadow:
+        "0px 1.5px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.10)",
+      color: "white",
+      transition: "all 0.5s ease-in-out",
+      _before: {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        borderRadius: "inherit",
+        border: "1.5px solid transparent",
+        background:
+          "linear-gradient(35deg, rgba(255, 255, 255, 0.00) 33.61%, #FFFFFF 89.19%) border-box, rgba(255, 255, 255, 0.07) border-box",
+        mask: "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
+        maskComposite: "exclude",
+        mixBlendMode: "overlay",
+        pointerEvents: "none",
       },
       _hover: {
-        bg: [`${c}.100`, shadeColor(`${c}.300`, 56)(t, m)],
-        _disabled: {
-          bg: [`${c}.50`, shadeColor(`${c}.300`, 68)(t, m)],
-        },
-      },
-      _invalid: {
-        border: "1px solid",
-        borderColor: "$errorBorderColor",
-        boxShadow: "0 0 0 1px $errorBorderColor",
-      },
-    }),
-    surface: ({
-      colorScheme: c = "gray",
-      colorMode: m,
-      errorBorderColor = ["danger.500", "danger.400"],
-      theme: t,
-    }) => ({
-      bg: [`${c}.50`, shadeColor(`${c}.300`, 68)(t, m)],
-      border: "1px solid",
-      borderColor: [`${c}.100`, shadeColor(`${c}.300`, 56)(t, m)],
-      color: [`${c}.800`, isGray(c) ? `${c}.50` : `${c}.200`],
-      vars: [
-        {
-          name: "errorBorderColor",
-          token: "colors",
-          value: errorBorderColor,
-        },
-      ],
-      _focusVisible: {
-        borderColor: "transparent",
-        boxShadow: "outline",
-      },
-      _hover: {
-        bg: [`${c}.100`, shadeColor(`${c}.300`, 56)(t, m)],
-        _disabled: {
-          bg: [`${c}.50`, shadeColor(`${c}.300`, 68)(t, m)],
-        },
-      },
-      _invalid: {
-        border: "1px solid",
-        borderColor: "$errorBorderColor",
-        boxShadow: "0 0 0 1px $errorBorderColor",
+        bgSize: "250% 100%",
       },
     }),
     unstyled: {
@@ -216,6 +208,9 @@ export const Button: ComponentStyle<"Button"> = {
       lineHeight: "inherit",
       m: 0,
       p: 0,
+      height: "initial",
+      width: "initial",
+      minW: "initial",
       _ripple: {
         display: "none",
       },
@@ -272,7 +267,7 @@ export const Button: ComponentStyle<"Button"> = {
     },
   },
   defaultProps: {
-    colorScheme: "gray",
+    colorScheme: "secondary",
     size: "md",
     variant: "solid",
   },

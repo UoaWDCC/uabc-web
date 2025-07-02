@@ -8,17 +8,31 @@
 
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Link".
+ * via the `definition` "FaqQuestion".
  */
-export type Link = {
+export type FaqQuestion = {
   /**
-   * The text displayed for the link.
+   * The title for this FAQ section, usually the question itself.
    */
-  label: string;
+  questionTitle: string;
   /**
-   * The URL the link points to.
+   * A detailed answer to this FAQ question.
    */
-  url: string;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   id?: string | null;
 }[];
 /**
@@ -112,10 +126,14 @@ export interface Config {
     defaultIDType: string;
   };
   globals: {
+    faq: Faq;
     footer: Footer;
+    navbar: Navbar;
   };
   globalsSelect: {
+    faq: FaqSelect<false> | FaqSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    navbar: NavbarSelect<false> | NavbarSelect<true>;
   };
   locale: null;
   user: Admin & {
@@ -617,6 +635,20 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq".
+ */
+export interface Faq {
+  id: string;
+  /**
+   * The title for the FAQ section.
+   */
+  title: string;
+  questions: FaqQuestion;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
 export interface Footer {
@@ -666,6 +698,57 @@ export interface LinkGroup {
   links: Link;
 }
 /**
+ * Single button displayed on the right side of the navbar.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Link".
+ */
+export interface Link {
+  /**
+   * The text displayed for the sign in button.
+   */
+  label: string;
+  /**
+   * The URL the sign in button points to.
+   */
+  url: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navbar".
+ */
+export interface Navbar {
+  id: string;
+  /**
+   * The logo displayed in the navbar.
+   */
+  logo: string | Media;
+  navItems: Link;
+  rightSideSingleButton: Link;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq_select".
+ */
+export interface FaqSelect<T extends boolean = true> {
+  title?: T;
+  questions?: T | FaqQuestionSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FaqQuestion_select".
+ */
+export interface FaqQuestionSelect<T extends boolean = true> {
+  questionTitle?: T;
+  description?: T;
+  id?: T;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer_select".
  */
@@ -698,7 +781,18 @@ export interface LinkGroupSelect<T extends boolean = true> {
 export interface LinkSelect<T extends boolean = true> {
   label?: T;
   url?: T;
-  id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navbar_select".
+ */
+export interface NavbarSelect<T extends boolean = true> {
+  logo?: T;
+  navItems?: T | LinkSelect<T>;
+  rightSideSingleButton?: T | LinkSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

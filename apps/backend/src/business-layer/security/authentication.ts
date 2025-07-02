@@ -1,6 +1,5 @@
-import { cookies, headers } from "next/headers"
-
 import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
+import { cookies, headers } from "next/headers"
 import AuthService from "../services/AuthService"
 import { UnauthorizedAuthError } from "./errors"
 
@@ -24,7 +23,7 @@ export default async function authenticate(securityName: "jwt", scopes?: string[
         if (!token && !authHeader.startsWith("Bearer ")) {
           throw new UnauthorizedAuthError("No token provided")
         }
-        token = authHeader.split(" ")[1] // Gets part after Bearer
+        if (!token) token = authHeader.split(" ")[1] // Gets part after Bearer
       }
 
       if (!token) {
@@ -57,7 +56,7 @@ export default async function authenticate(securityName: "jwt", scopes?: string[
       } else {
         console.error("Authentication error occurred.")
       }
-      throw new UnauthorizedAuthError("Authentication failed. Please try again.")
+      throw error
     }
   }
   throw new Error("Unsupported security name")

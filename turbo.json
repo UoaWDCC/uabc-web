@@ -50,10 +50,6 @@
     "start": {
       "dependsOn": ["^start"]
     },
-    "storybook": {
-      "cache": false,
-      "persistent": true
-    },
     "storybook:build": {
       "cache": true,
       "dependsOn": ["^storybook:build"],
@@ -83,6 +79,17 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["coverage/**"],
       "persistent": true
+    },
+    "test:ui": {
+      "cache": false,
+      "dependsOn": ["@repo/test-config#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["coverage/**"],
+      "persistent": true
+    },
+    "clean": {
+      "cache": false,
+      "dependsOn": ["^clean"]
     }
   },
   "ui": "tui"

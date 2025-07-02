@@ -7,12 +7,12 @@ export const App: FC<AppProps> = ({ children, ...rest }) => {
   return (
     <Center
       h={{
-        base: "calc(100dvh - {spaces.lg} * 2)",
-        md: "calc(100dvh - {spaces.md} * 2)",
+        base: "calc(100dvh - $spaces.lg * 2)",
+        md: "calc(100dvh - $spaces.md * 2)",
       }}
       w={{
-        base: "calc(100vw - {spaces.lg} * 2)",
-        md: "calc(100vw - {spaces.md} * 2)",
+        base: "calc(100vw - $spaces.lg * 2)",
+        md: "calc(100vw - $spaces.md * 2)",
       }}
       {...rest}
     >

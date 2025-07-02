@@ -3,10 +3,9 @@ import { fileURLToPath } from "node:url"
 // storage-adapter-import-placeholder
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
+import type { Config } from "@repo/shared/payload-types"
 import { buildConfig } from "payload"
 import sharp from "sharp"
-
-import type { Config } from "@repo/shared/payload-types"
 import { Admin } from "./data-layer/collections/Admin"
 import { Authentication } from "./data-layer/collections/Authentication"
 import { Booking } from "./data-layer/collections/Booking"
@@ -16,7 +15,9 @@ import { Media } from "./data-layer/collections/Media"
 import { Semester } from "./data-layer/collections/Semester"
 import { User } from "./data-layer/collections/User"
 
+import { FAQ } from "./data-layer/globals/Faq"
 import { Footer } from "./data-layer/globals/Footer"
+import { Navbar } from "./data-layer/globals/Navbar"
 
 declare module "payload" {
   export interface GeneratedTypes extends Config {}
@@ -47,7 +48,7 @@ export default buildConfig({
     Booking,
     Authentication,
   ],
-  globals: [Footer],
+  globals: [FAQ, Footer, Navbar],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
@@ -59,6 +60,7 @@ export default buildConfig({
   },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
+    allowIDOnCreate: process.env.NODE_ENV === "test",
   }),
   sharp,
   plugins: [

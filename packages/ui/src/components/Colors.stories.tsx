@@ -3,7 +3,7 @@ import { COLORS } from "@repo/theme/tokens"
 import type { Meta, StoryObj } from "@storybook/react"
 import { Grid, VStack } from "@yamada-ui/react"
 import { ColorPallet, ColorPallets } from "../../.storybook/components"
-import { Heading } from "./Heading"
+import { Heading } from "./Primitive/Heading"
 
 const meta: Meta = {
   title: "Theme / Colors",
@@ -29,8 +29,8 @@ export const Colors: Story = {
 
       <Heading.h2>Semantics</Heading.h2>
       <Grid gap="md" templateColumns="repeat(3, 1fr)">
-        <ColorPallet name="primary" value={colors.blue[50]} />
-        <ColorPallet name="secondary" value={colors.secondary[16]} />
+        <ColorPallet name="primary" value={colors.primary} />
+        <ColorPallet name="secondary" value={colors.secondary} />
         <ColorPallet name="success" value={colors.success} />
         <ColorPallet name="warning" value={colors.warning} />
         <ColorPallet name="danger" value={colors.danger} />

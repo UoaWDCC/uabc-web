@@ -1,8 +1,11 @@
 import type { ThemeTokens } from "@yamada-ui/core"
 
 export const gradients: ThemeTokens = {
-  primaryGradient: "linear-gradient(269.98deg, #6DABFD 16.56%, #6337C8 106.08%)",
+  primaryGradient: "linear-gradient(270deg, #6DABFD 16.5%, purple.500 105%)",
   secondaryGradient:
-    "radial-gradient(150.42% 1120.77% at 123.73% 123.3%, #282828 0%, #27164E 100%)",
-  lightGradient: "radial-gradient(112.05% 827.76% at 110.69% 100%, #FFFFFF 0%, #999999 100%)",
+    "linear-gradient(0deg, #292929 0%, #292929 100%), linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.05) 88.89%)",
+  darkPrimaryGradient: "radial-gradient(150% 1120% at 123% 123%, secondary.900, primary.900)",
+  darkSecondaryGradient: "radial-gradient(150% 1120% at 123% 123%, #282828, #27164E)",
+  textGradient: "radial-gradient(112% 827% at 110% 100%, #FFFFFF, #999999)",
+  linBlueGradient: "linear-gradient(90deg, #3769AE, #172B48)",
 }

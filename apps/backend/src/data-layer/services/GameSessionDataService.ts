@@ -1,4 +1,3 @@
-import { payload } from "@/data-layer/adapters/Payload"
 import type {
   CreateGameSessionData,
   CreateGameSessionScheduleData,
@@ -7,6 +6,7 @@ import type {
 } from "@repo/shared"
 import type { GameSession, GameSessionSchedule } from "@repo/shared/payload-types"
 import type { PaginatedDocs } from "payload"
+import { payload } from "@/data-layer/adapters/Payload"
 
 export default class GameSessionDataService {
   /**
