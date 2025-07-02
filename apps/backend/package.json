@@ -19,9 +19,9 @@
     "clean": "rm -rf node_modules .turbo dist coverage"
   },
   "dependencies": {
-    "@payloadcms/db-mongodb": "3.43.0",
-    "@payloadcms/next": "3.43.0",
-    "@payloadcms/richtext-lexical": "3.43.0",
+    "@payloadcms/db-mongodb": "3.44.0",
+    "@payloadcms/next": "3.44.0",
+    "@payloadcms/richtext-lexical": "3.44.0",
     "bcryptjs": "3.0.2",
     "googleapis": "150.0.1",
     "http-status-codes": "2.3.0",
