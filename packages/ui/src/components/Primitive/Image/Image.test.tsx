@@ -1,4 +1,4 @@
-import { IMAGE_TEST_CONSTANTS } from "@repo/ui/test-config/constants"
+import { IMAGE_TEST_CONSTANTS } from "@repo/ui/test-config/mocks/Image.mock"
 import { render } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as ImageModule from "./index"

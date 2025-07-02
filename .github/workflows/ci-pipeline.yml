@@ -75,7 +75,7 @@ jobs:
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
-      
+
       - name: Upload cache
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/cache@v4
@@ -126,50 +126,33 @@ jobs:
       - name: Check formatting
         run: pnpm biome check .
 
-  build:
-    env:
-      PAYLOAD_SECRET: ${{secrets.PAYLOAD_SECRET}}
-      DATABASE_URI: ${{secrets.DATABASE_URI}}
+  build-frontend:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Build
+    name: Build Frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Run Build Frontend
+        uses: ./.github/ci-actions/build/
         with:
-          node-version-file: '.nvmrc'
+          workspace: frontend
 
-      - name: Enable Corepack
-        run: corepack enable
+  build-backend:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Build Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Run Build Backend
+        uses: ./.github/ci-actions/build/
         with:
-          version: latest
-          run_install: false
-
-      - name: Restore node_modules cache
-        uses: actions/cache/restore@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
-
-      - name: Install dependencies if cache is not hit
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm turbo run build
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          workspace: backend
 
   typecheck:
     needs: [check_changes, setup]
@@ -339,12 +322,12 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build, biome, test, codegen, typecheck]
+    needs: [check_changes, build-frontend, build-backend, biome, test, codegen, typecheck]
     runs-on: ubuntu-latest
     if: >
-      always() && 
-      (needs.check_changes.outputs.exists != 'true' || 
-       ((!contains(needs.*.result, 'failure')) && 
+      always() &&
+      (needs.check_changes.outputs.exists != 'true' ||
+       ((!contains(needs.*.result, 'failure')) &&
         (!contains(needs.*.result, 'cancelled'))))
     outputs:
       success: ${{ steps.set-result.outputs.success }}
