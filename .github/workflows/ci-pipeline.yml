@@ -294,7 +294,7 @@ jobs:
         with:
           version: latest
       - name: Run Biome
-        run: biome ci .
+        run: biome ci . --error-on-warnings
 
   verify:
     name: Verify
