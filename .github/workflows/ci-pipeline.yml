@@ -286,7 +286,6 @@ jobs:
     name: Biome
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Biome
