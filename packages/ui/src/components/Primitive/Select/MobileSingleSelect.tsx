@@ -1,4 +1,5 @@
 import {
+  Center,
   type FC,
   FormControl,
   HStack,
@@ -14,6 +15,7 @@ export interface MobileSingleSelectProps extends UISelectProps {
    * Label text of the Select component.
    *
    * @remarks
+   * If not provided, no label will be rendered. The label is rendered within the Select component.
    *
    * @defaultValue "Select option"
    */
@@ -58,7 +60,10 @@ export const MobileSingleSelect: FC<MobileSingleSelectProps> = memo(
         }}
       >
         <UISelect
-          fieldProps={{ px: "calc(md - xs + xl)" }}
+          fieldProps={{ pl: { base: "calc(lg + md)", md: "calc(lg - sm + xl)" } }}
+          iconProps={{
+            pr: { md: "lg" },
+          }}
           portalProps={{ disabled: false }}
           size="lg"
           {...props}
@@ -67,14 +72,26 @@ export const MobileSingleSelect: FC<MobileSingleSelectProps> = memo(
         </UISelect>
         <HStack
           align="center"
+          gap={{ base: "xs", md: "sm" }}
           mx="calc(md - xs)"
+          pl={{ md: "md" }}
           pointerEvents="none"
           position="absolute"
           top="50%"
           transform="translateY(-50%)"
           z={100}
         >
-          {icon}
+          <Center
+            bgGradient={{ md: "secondaryGradient" }}
+            borderColor={["gray.200", "gray.700"]}
+            borderRadius="full"
+            borderWidth={{ base: 0, md: "medium" }}
+            h="fit-content"
+            p={1}
+            w="fit-content"
+          >
+            {icon}
+          </Center>
           <Label fontSize={18} fontWeight="normal" mb={0}>
             {label}
           </Label>
