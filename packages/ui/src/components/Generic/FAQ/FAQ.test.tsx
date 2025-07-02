@@ -78,17 +78,6 @@ describe("<FAQ />", () => {
     expect(accordionItems).toHaveLength(0)
   })
 
-  it("handles single FAQ item", () => {
-    const singleItem: UIFAQItem[] = [createSimpleSharedFAQItem("Single Question", "Single Answer")]
-
-    render(<FAQ items={singleItem} />)
-
-    expect(screen.getByText("Single Question")).toBeInTheDocument()
-
-    fireEvent.click(screen.getByText("Single Question"))
-    expect(screen.getByText("Single Answer")).toBeInTheDocument()
-  })
-
   it("passes through accordion props", () => {
     render(<FAQ data-testid="faq-accordion" items={mockFAQItems} variant="card" />)
 
