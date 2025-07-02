@@ -7,8 +7,6 @@ export const baseConfig = defineConfig({
   test: {
     setupFiles: ["dotenv/config"],
     globals: true,
-    maxWorkers: process.env.CI === "true" ? 1 : undefined,
-    minWorkers: process.env.CI === "true" ? 1 : undefined,
     coverage: {
       reportOnFailure: true,
       provider: "istanbul",
