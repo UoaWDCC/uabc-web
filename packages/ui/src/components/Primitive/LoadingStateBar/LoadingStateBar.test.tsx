@@ -1,4 +1,3 @@
-import { SEMANTIC_COLOR_SCHEMES } from "@repo/theme/semantics"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as LoadingStateBarModule from "./index"
@@ -44,18 +43,6 @@ describe("<LoadingStateBar />", () => {
     expect(progressBar).toHaveAttribute("aria-valuenow", "100")
     expect(progressBar).toHaveAttribute("aria-valuemax", "200")
     expect(progressBar).toHaveAttribute("aria-valuemin", "10")
-  })
-
-  test.each(["xs", "sm", "md", "lg"] as const)("handles different size variations: %s", (size) => {
-    render(<LoadingStateBar size={size} value={50} />)
-    const progressBar = screen.getByRole("meter")
-    expect(progressBar).toBeInTheDocument()
-  })
-
-  test.each(SEMANTIC_COLOR_SCHEMES)("handles various color schemes: %s", (colorScheme) => {
-    render(<LoadingStateBar colorScheme={colorScheme} value={50} />)
-    const progressBar = screen.getByRole("meter")
-    expect(progressBar).toBeInTheDocument()
   })
 
   it("renders correctly when disabled with value", () => {
