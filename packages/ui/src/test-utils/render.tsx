@@ -1,9 +1,9 @@
 import { config, theme } from "@repo/theme"
 import type {
   Queries,
+  queries,
   RenderHookOptions as ReactRenderHookOptions,
   RenderOptions as ReactRenderOptions,
-  queries,
 } from "@testing-library/react"
 import { render as reactRender, renderHook as reactRenderHook } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
@@ -11,7 +11,7 @@ import type { UIProviderProps } from "@yamada-ui/react"
 import type { ReactElement } from "react"
 import type * as ReactDOMClient from "react-dom/client"
 import "@testing-library/jest-dom/vitest"
-import { UIProvider } from "../providers"
+import { UIProvider } from "@repo/ui/components/Provider"
 
 export type RenderOptions = {
   withProvider?: boolean

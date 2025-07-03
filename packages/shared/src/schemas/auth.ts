@@ -1,22 +1,6 @@
 import z from "zod"
 import type { User } from "../payload-types"
-
-// Payload Media Schema
-const MediaSchema = z.object({
-  id: z.string(),
-  alt: z.string(),
-  updatedAt: z.string(),
-  createdAt: z.string(),
-  url: z.string().nullable().optional(),
-  thumbnailURL: z.string().nullable().optional(),
-  filename: z.string().nullable().optional(),
-  mimeType: z.string().nullable().optional(),
-  filesize: z.number().nullable().optional(),
-  width: z.number().nullable().optional(),
-  height: z.number().nullable().optional(),
-  focalX: z.number().nullable().optional(),
-  focalY: z.number().nullable().optional(),
-})
+import { MediaSchema } from "./media"
 
 // Payload User Schema
 const UserSchema = z.object({
@@ -93,7 +77,7 @@ export const LoginDetailsSchema = z.object({
     .regex(/[A-Z]/) // Uppercase letters
     .regex(/[a-z]/) // Lowercase letters
     .regex(/[0-9]/) // Numbers
-    .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/), // Special characters
+    .regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/), // Special characters
 })
 
 export type JWTEncryptedUser = z.infer<typeof JWTEncryptedUserSchema>

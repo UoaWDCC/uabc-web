@@ -1,6 +1,6 @@
-import { createTimeField } from "@/data-layer/fields/date-time"
 import { Weekday } from "@repo/shared"
 import type { CollectionConfig } from "payload"
+import { createTimeField } from "@/data-layer/fields/date-time"
 
 export const Semester: CollectionConfig = {
   slug: "semester",

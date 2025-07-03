@@ -12,31 +12,31 @@
     "build": "turbo run build",
     "check-types": "turbo run check-types",
     "dev": "turbo run dev",
-    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
     "generate:importmap": "turbo run generate:importmap",
     "generate:types": "turbo run generate:types",
     "payload": "turbo run payload",
-    "lint": "cross-env NODE_OPTIONS=--no-deprecation biome check .",
+    "lint": "biome check .",
     "precommit": "lint-staged",
     "prepare": "husky",
     "start": "turbo run start",
     "storybook": "pnpm --prefix=packages/ui storybook",
     "storybook:build": "turbo run storybook:build",
-    "test": "cross-env NODE_ENV=test turbo run test",
-    "test:watch": "cross-env NODE_ENV=test turbo run test:watch",
-    "test:coverage": "cross-env NODE_ENV=test turbo run test:coverage",
-    "test:coverage:watch": "cross-env NODE_ENV=test turbo run test:coverage:watch",
-    "test:ui": "cross-env NODE_ENV=test turbo run test:ui",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
+    "test:coverage": "turbo run test:coverage",
+    "test:coverage:watch": "turbo run test:coverage:watch",
+    "test:ui": "turbo run test:ui",
     "merge": "pnpm --filter=@repo/test-config build && pnpm --prefix=packages/test-config run merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
-    "postinstall": "pnpm theme",
+    "postinstall": "node -e \"if (process.env.NODE_ENV !== 'production') require('child_process').execSync('pnpm theme', { stdio: 'inherit' })\"",
     "commitlint": "commitlint --edit"
   },
   "dependencies": {
     "cross-env": "7.0.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.0.6",
     "@commitlint/cli": "19.8.1",
     "@commitlint/config-conventional": "19.8.1",
     "@testing-library/dom": "10.4.0",
@@ -49,7 +49,7 @@
     "@vitest/coverage-istanbul": "3.1.4",
     "@vitest/ui": "3.1.4",
     "@yamada-ui/cli": "1.2.4",
-    "dotenv": "16.5.0",
+    "dotenv": "17.0.0",
     "glob": "11.0.2",
     "husky": "9.1.7",
     "jsdom": "26.1.0",
@@ -59,19 +59,27 @@
     "turbo": "2.5.3",
     "typescript": "5.8.3",
     "vite-tsconfig-paths": "5.1.4",
-    "vitest": "3.1.4"
+    "vitest": "3.2.4"
   },
-  "packageManager": "pnpm@10.11.1",
+  "packageManager": "pnpm@10.12.4",
   "pnpm": {
-    "onlyBuiltDependencies": ["sharp"],
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "core-js-pure",
+      "esbuild",
+      "mongodb-memory-server",
+      "sharp"
+    ],
     "patchedDependencies": {
       "storybook-dark-mode": "patches/storybook-dark-mode.patch"
     }
   },
   "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["biome check --write ."]
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+      "biome check --write ."
+    ]
   },
   "volta": {
-    "node": "22.16.0"
+    "node": "22.17.0"
   }
 }

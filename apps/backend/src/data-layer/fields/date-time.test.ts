@@ -1,12 +1,12 @@
-import { createTimeField } from "@/data-layer/fields/date-time"
 import type {
   FieldAffectingData,
   FieldHookArgs,
   PayloadRequest,
+  RequestContext,
   SanitizedCollectionConfig,
   SanitizedGlobalConfig,
 } from "payload"
-import type { RequestContext } from "payload"
+import { createTimeField } from "@/data-layer/fields/date-time"
 
 describe("createTimeField", () => {
   it("should set date to 1970-01-01", () => {
