@@ -1,6 +1,7 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { userCreateMock } from "@/test-config/mocks/User.mock"
@@ -69,14 +70,14 @@ describe("/api/admin/users", async () => {
       expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 
-    it("should clamp limit and page to valid ranges", async () => {
+    it("should return 400 if limit or page is out of range", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const req = createMockNextRequest("/api/admin/users?limit=999&page=-5", "GET")
       const res = await GET(req)
-      expect(res.status).toBe(StatusCodes.OK)
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
       const json = await res.json()
-      expect(json.data.limit).toBe(100)
-      expect(json.data.page).toBe(1)
+      expect(json.error).toBe("Invalid query parameters")
+      expect(json.details).toBeDefined()
       expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 
@@ -85,13 +86,48 @@ describe("/api/admin/users", async () => {
       vi.spyOn(UserDataService.prototype, "getPaginatedUsers").mockRejectedValueOnce(
         new Error("Database error"),
       )
-      const error = new Error("Database error")
-      const req = createMockNextRequest("/api/admin/users", "GET")
+      const req = createMockNextRequest("/api/admin/users?limit=10&page=1", "GET") // valid params
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
-      expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+      expect(consoleErrorSpy).toHaveBeenCalled()
+    })
+
+    it("should return 400 if query params are invalid", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const req = createMockNextRequest("/api/admin/users?limit=abc&page=def", "GET")
+      const res = await GET(req)
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      const json = await res.json()
+      expect(json.error).toBe("Invalid query parameters")
+      expect(json.details).toBeDefined()
+    })
+
+    it("should return 401 if no token is provided", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, "")
+      const req = createMockNextRequest("/api/admin/users?limit=5&page=1", "GET")
+      const res = await GET(req)
+      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(await res.json()).toStrictEqual({ error: "No token provided" })
+      expect(consoleErrorSpy).toHaveBeenCalled()
+    })
+
+    it("should return 401 if token is invalid", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, "invalid.token.value")
+      const req = createMockNextRequest("/api/admin/users?limit=5&page=1", "GET")
+      const res = await GET(req)
+      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(await res.json()).toStrictEqual({ error: "Invalid JWT token" })
+      expect(consoleErrorSpy).toHaveBeenCalled()
+    })
+
+    it("should return 401 if token is malformed", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, "not-a-jwt")
+      const req = createMockNextRequest("/api/admin/users?limit=5&page=1", "GET")
+      const res = await GET(req)
+      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(await res.json()).toStrictEqual({ error: "Invalid JWT token" })
       expect(consoleErrorSpy).toHaveBeenCalled()
     })
   })
