@@ -7,6 +7,9 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "scripts": {
+    "clean": "rm -rf node_modules .turbo dist coverage"
+  },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "zod": "3.24.3"

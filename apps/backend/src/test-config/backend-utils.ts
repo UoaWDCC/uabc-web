@@ -1,6 +1,6 @@
 import configPromise from "@payload-config"
 import { NextRequest } from "next/server"
-import { type CollectionSlug, type Payload, getPayload } from "payload"
+import { type CollectionSlug, getPayload, type Payload } from "payload"
 
 /**
  * Payload object to use in integration tests

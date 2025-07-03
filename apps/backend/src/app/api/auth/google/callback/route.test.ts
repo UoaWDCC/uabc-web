@@ -1,15 +1,15 @@
-import AuthService from "@/business-layer/services/AuthService"
 import dotenv from "dotenv"
 import { StatusCodes } from "http-status-codes"
+import AuthService from "@/business-layer/services/AuthService"
 
 import {
   CODE_MOCK,
+  createMockNextRequest,
+  googleUserMock,
   INVALID_CODE_MOCK,
   INVALID_USER_CODE_MOCK,
   SCOPES,
   STATE_MOCK,
-  createMockNextRequest,
-  googleUserMock,
   tokensMock,
 } from "@/test-config/mocks/GoogleAuth.mock"
 
@@ -42,10 +42,10 @@ vi.mock("@/business-layer/provider/google", async () => {
   }
 })
 
-import { GET as callback } from "@/app/api/auth/google/callback/route"
-import UserDataService from "@/data-layer/services/UserDataService"
 import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
 import { cookies } from "next/headers"
+import { GET as callback } from "@/app/api/auth/google/callback/route"
+import UserDataService from "@/data-layer/services/UserDataService"
 
 describe("GET /api/auth/google/callback", async () => {
   const cookieStore = await cookies()

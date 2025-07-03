@@ -2,9 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",
+    "isolatedModules": true,
+    "moduleResolution": "bundler",
     "paths": {
-      ".storybook/*": ["./.storybook/*"],
-      "@/*": ["./src/*"]
+      "@storybook-config/*": ["./.storybook/*"],
+      "@repo/ui/*": ["./src/*"]
     },
     "rootDir": ".",
     "types": ["vitest/globals"]

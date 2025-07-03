@@ -2,7 +2,7 @@ import { defaultTheme } from "@repo/theme"
 import type { Meta, StoryObj } from "@storybook/react"
 import { Grid, VStack } from "@yamada-ui/react"
 import { GradientPallet } from "../../.storybook/components"
-import { Heading } from "./Heading"
+import { Heading } from "./Primitive"
 
 const meta: Meta = {
   title: "Theme / Gradients",

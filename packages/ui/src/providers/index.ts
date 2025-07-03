@@ -1,1 +1,0 @@
-export { UIProvider } from "./UIProvider"

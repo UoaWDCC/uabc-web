@@ -1,5 +1,5 @@
-import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import type { EditBookingData } from "@repo/shared"
+import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import { payload } from "../adapters/Payload"
 import BookingDataService from "./BookingDataService"
 
