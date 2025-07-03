@@ -43,8 +43,8 @@ export const clearCollection = async (payloadObject: Payload, collectionName: Co
  *
  * @param url The url to make the request to
  * @param method The HTTP method to make
- * @param body JSON body content
- * @returns The Next Request
+ * @param body body content as an object
+ * @returns The created Next Request
  */
 export function createMockNextRequest(
   url: string,
