@@ -12,7 +12,7 @@ import {
 } from "@yamada-ui/react"
 import { useMemo } from "react"
 import { Button, Heading } from "../../Primitive"
-import { styles } from "./BookingTimesCard.style"
+import { separatorAfterStyles, styles } from "./BookingTimesCard.style"
 
 export interface BookingTimesCardProps {
   title: string
@@ -57,40 +57,13 @@ export const BookingTimesCard = ({
           <Text>{bookingTime}</Text>
         </HStack>
       </CardHeader>
-      <Separator
-        _after={{
-          content: "''",
-          position: "absolute",
-          left: "0",
-          right: "0",
-          zIndex: 1,
-          height: "1px",
-          bgGradient: "textGradient",
-          borderRadius: "inherit",
-          display: "flex",
-        }}
-        position="relative"
-      />
+      <Separator _after={separatorAfterStyles} position="relative" />
       <CardBody alignSelf="flex-start" p="0" width="full">
         <HStack>
           <MapPinIcon height="24px" width="24px" />
           <Text fontSize="sm">{location}</Text>
         </HStack>
-        <Separator
-          _after={{
-            content: "''",
-            position: "absolute",
-            left: "0",
-            right: "0",
-            zIndex: 1,
-            height: "1px",
-            bgGradient: "textGradient",
-            borderRadius: "inherit",
-            display: "flex",
-          }}
-          borderColor="transparent"
-          position="relative"
-        />
+        <Separator _after={separatorAfterStyles} borderColor="transparent" position="relative" />
       </CardBody>
       <Float placement="end-center">
         <Button
@@ -99,7 +72,7 @@ export const BookingTimesCard = ({
               ? "radial-gradient(1120.78% 150.46% at 123.73% 123.3%, #282828 0%, #27164E 100%)"
               : undefined
           }
-          colorScheme={type === "selected" ? "primary" : "primary"}
+          colorScheme="primary"
           disabled={isDisabled}
           fontWeight="normal"
           opacity={"1"}

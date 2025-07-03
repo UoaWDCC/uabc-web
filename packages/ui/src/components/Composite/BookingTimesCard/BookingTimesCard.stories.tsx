@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@storybook/nextjs"
 import { PropsTable } from "@storybook-config/components"
 import { BookingTimesCard } from "./BookingTimesCard"
-import { styles } from "./BookingTimesCard.style"
+import { BOOKING_TIMES_CARD_TYPES } from "./BookingTimesCard.style"
 
 const meta: Meta<typeof BookingTimesCard> = {
   title: "Composite Components / BookingTimesCard",
@@ -60,7 +60,7 @@ export const Default: Story = (args) => {
 
 export const Types: Story = (args) => {
   return (
-    <PropsTable columns={["Types"]} rows={Object.keys(styles)}>
+    <PropsTable columns={["Types"]} rows={BOOKING_TIMES_CARD_TYPES}>
       {(_col, row, key) => {
         return (
           <BookingTimesCard

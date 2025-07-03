@@ -1,6 +1,18 @@
-import type { CardProps } from "@yamada-ui/react"
+import type { CardProps, CSSUIObject } from "@yamada-ui/react"
 
-export const styles: Record<"default" | "selected" | "full", CardProps> = {
+export const separatorAfterStyles: CSSUIObject = {
+  content: "''",
+  position: "absolute",
+  left: "0",
+  right: "0",
+  zIndex: 1,
+  height: "1px",
+  bgGradient: "textGradient",
+  borderRadius: "inherit",
+  display: "flex",
+}
+
+export const styles: Record<string, CardProps> = {
   default: {
     bg: ["secondary.50", "secondary.900"],
     borderWidth: "1px",
@@ -14,3 +26,5 @@ export const styles: Record<"default" | "selected" | "full", CardProps> = {
     bg: ["gray.100", "gray.800"],
   },
 }
+
+export const BOOKING_TIMES_CARD_TYPES = Object.keys(styles)
