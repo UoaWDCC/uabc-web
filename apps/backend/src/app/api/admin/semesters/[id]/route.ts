@@ -1,8 +1,10 @@
 import { Security } from "@/business-layer/middleware/Security"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
+import { type EditSemesterData, UpdateSemesterRequestSchema } from "@repo/shared"
 import { StatusCodes, getReasonPhrase } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
+import { ZodError } from "zod"
 
 class SemesterRouteWrapper {
   /**
@@ -28,6 +30,41 @@ class SemesterRouteWrapper {
       )
     }
   }
+  /**
+   * PATCH method to update a semester.
+   *
+   * @param _req The request object containing the request body
+   * @returns  The updated  {@link Semester} document
+   */
+  @Security("jwt", ["admin"])
+  static async PATCH(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    try {
+      const { id } = await params
+      const parsedBody = UpdateSemesterRequestSchema.parse(await _req.json())
+      const semesterDataService = new SemesterDataService()
+      const updatedSemester = await semesterDataService.updateSemester(
+        id,
+        parsedBody as EditSemesterData,
+      )
+      return NextResponse.json({ data: updatedSemester }, { status: StatusCodes.OK })
+    } catch (error) {
+      if (error instanceof NotFound) {
+        return NextResponse.json({ error: "Semester not found" }, { status: StatusCodes.NOT_FOUND })
+      }
+      if (error instanceof ZodError) {
+        return NextResponse.json(
+          { error: "Invalid request body", details: error.flatten() },
+          { status: StatusCodes.BAD_REQUEST },
+        )
+      }
+      console.error(error)
+      return NextResponse.json(
+        { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
+        { status: StatusCodes.INTERNAL_SERVER_ERROR },
+      )
+    }
+  }
 }
 
 export const DELETE = SemesterRouteWrapper.DELETE
+export const PATCH = SemesterRouteWrapper.PATCH
