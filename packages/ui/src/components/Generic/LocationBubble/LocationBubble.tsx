@@ -1,3 +1,4 @@
+"use client"
 import { Maximize2Icon } from "@yamada-ui/lucide"
 import {
   Box,
@@ -17,7 +18,6 @@ import {
   VStack,
 } from "@yamada-ui/react"
 import type { StaticImport } from "next/dist/shared/lib/get-img-props"
-// import next link
 import Link from "next/link"
 import { useRef, useState } from "react"
 import { Button, Heading, Image } from "../../Primitive"
