@@ -43,7 +43,6 @@ export const BookingTimesCard = ({
       justifyContent="center"
       minWidth="md"
       p="lg"
-      pb="xl"
       position="relative"
       rounded="2xl"
       {...cardStyles}
@@ -95,8 +94,15 @@ export const BookingTimesCard = ({
       </CardBody>
       <Float placement="end-center">
         <Button
+          bgGradient={
+            type === "selected"
+              ? "radial-gradient(1120.78% 150.46% at 123.73% 123.3%, #282828 0%, #27164E 100%)"
+              : undefined
+          }
           colorScheme={type === "selected" ? "primary" : "primary"}
           disabled={isDisabled}
+          fontWeight="normal"
+          opacity={"1"}
           size="sm"
           variant={type === "selected" ? "gradient" : "solid"}
         >
