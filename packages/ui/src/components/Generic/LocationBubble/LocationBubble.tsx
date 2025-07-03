@@ -17,6 +17,8 @@ import {
   VStack,
 } from "@yamada-ui/react"
 import type { StaticImport } from "next/dist/shared/lib/get-img-props"
+// import next link
+import Link from "next/link"
 import { useRef, useState } from "react"
 import { Button, Heading, Image } from "../../Primitive"
 
@@ -300,7 +302,7 @@ export const LocationBubbleDesktopCard = ({
               </Text>
             )}
           </VStack>
-          <Button as="a" colorScheme="primary" href={buttonLink} size="lg">
+          <Button as={Link} colorScheme="primary" href={buttonLink} size="lg">
             Learn More
           </Button>
         </VStack>
@@ -368,7 +370,7 @@ export const LocationBubbleMobileCard = ({
           ))}
       </VStack>
       <Spacer />
-      <Button as="a" colorScheme="primary" href={buttonLink} size="md" width="fit-content">
+      <Button as={Link} colorScheme="primary" href={buttonLink} size="md" width="fit-content">
         Learn More
       </Button>
     </VStack>
