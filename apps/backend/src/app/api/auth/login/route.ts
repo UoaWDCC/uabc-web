@@ -16,8 +16,11 @@ export const POST = async (req: NextRequest) => {
   const authService = new AuthService()
 
   const { email, password } = await req.json()
-  if (!StandardSecurity.validateLoginDetails(email, password)) {
-    return NextResponse.json({ status: StatusCodes.BAD_REQUEST })
+  if (!(await StandardSecurity.validateLoginDetails(email, password))) {
+    return NextResponse.json(
+      { error: "Invalid email or password" },
+      { status: StatusCodes.BAD_REQUEST },
+    )
   }
 
   let auth: Authentication
