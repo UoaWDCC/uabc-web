@@ -106,5 +106,21 @@ describe("/api/admin/users/[id]", async () => {
       expect(json.data.role).toBe("member")
       expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
+
+    it("should return 500 and log error if an unexpected error occurs", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const error = new Error("Unexpected error")
+      const mockGetUserById = vi
+        .spyOn(UserDataService.prototype, "getUserById")
+        .mockRejectedValueOnce(error)
+
+      const res = await GET({} as NextRequest, {
+        params: Promise.resolve({ id: "any-id" }),
+      })
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      expect(await res.json()).toStrictEqual({ error: "Internal Server Error" })
+      expect(mockGetUserById).toHaveBeenCalledWith("any-id")
+      expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+    })
   })
 })
