@@ -48,11 +48,7 @@ const meta: Meta<typeof LocationBubble> = {
 export default meta
 
 export const Default: Story = (args) => {
-  return (
-    <Box height="100vh" width="100%">
-      <LocationBubble {...args} />
-    </Box>
-  )
+  return <LocationBubble {...args} />
 }
 
 export const Circle: Story = (args) => {
