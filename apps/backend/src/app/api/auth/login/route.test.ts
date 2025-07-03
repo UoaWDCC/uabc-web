@@ -6,6 +6,7 @@ import { POST as login } from "@/app/api/auth/login/route"
 import AuthService from "@/business-layer/services/AuthService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
+import { createMockNextRequest } from "@/test-config/backend-utils"
 import {
   EMAIL_MOCK,
   PASSWORD_MOCK,
@@ -13,7 +14,6 @@ import {
   standardAuthCreateMock,
 } from "@/test-config/mocks/Authentication.mock"
 import { STATE_MOCK } from "@/test-config/mocks/GoogleAuth.mock"
-import { createMockNextRequest } from "@/test-config/mocks/StandardAuth.mock"
 import { userCreateMock } from "@/test-config/mocks/User.mock"
 
 describe("api/auth/login", () => {
@@ -29,11 +29,10 @@ describe("api/auth/login", () => {
       await userDataService.createUser(userCreateMock)
 
       const compareSpy = vi.spyOn(bcrypt, "compare")
-      const req = createMockNextRequest(
-        `/api/auth/login?state=${STATE_MOCK}`,
-        EMAIL_MOCK,
-        PASSWORD_MOCK,
-      )
+      const req = createMockNextRequest(`/api/auth/login?state=${STATE_MOCK}`, "POST", {
+        email: EMAIL_MOCK,
+        password: PASSWORD_MOCK,
+      })
       const response = await login(req)
 
       expect(compareSpy).toHaveBeenCalledWith(PASSWORD_MOCK, REAL_HASHED_PASSWORD_MOCK)
@@ -53,11 +52,10 @@ describe("api/auth/login", () => {
     it("returns 400 if state does not match", async () => {
       cookieStore.set(STATE_COOKIE_NAME, STATE_MOCK)
 
-      const req = createMockNextRequest(
-        "/api/auth/login?state=wrong_state",
-        EMAIL_MOCK,
-        PASSWORD_MOCK,
-      )
+      const req = createMockNextRequest("/api/auth/login?state=wrong_state", "POST", {
+        email: EMAIL_MOCK,
+        password: PASSWORD_MOCK,
+      })
       const response = await login(req)
 
       expect(response.status).toBe(StatusCodes.BAD_REQUEST)
@@ -66,11 +64,10 @@ describe("api/auth/login", () => {
     it("returns 401 if email is incorrect", async () => {
       cookieStore.set(STATE_COOKIE_NAME, STATE_MOCK)
 
-      const req = createMockNextRequest(
-        `/api/auth/login?state=${STATE_MOCK}`,
-        "incorrect-email@wdcc.com",
-        PASSWORD_MOCK,
-      )
+      const req = createMockNextRequest(`/api/auth/login?state=${STATE_MOCK}`, "POST", {
+        email: "incorrect-email@wdcc.com",
+        password: PASSWORD_MOCK,
+      })
       const response = await login(req)
 
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
@@ -84,11 +81,10 @@ describe("api/auth/login", () => {
       await authDataService.createAuth(standardAuthCreateMock)
       await userDataService.createUser(userCreateMock)
 
-      const req = createMockNextRequest(
-        `/api/auth/login?state=${STATE_MOCK}`,
-        EMAIL_MOCK,
-        "incorrect-passw0rd",
-      )
+      const req = createMockNextRequest(`/api/auth/login?state=${STATE_MOCK}`, "POST", {
+        email: EMAIL_MOCK,
+        password: "incorrect-passw0rd",
+      })
       const response = await login(req)
 
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)

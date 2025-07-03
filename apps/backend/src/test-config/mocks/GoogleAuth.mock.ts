@@ -1,10 +1,4 @@
 import type { UserInfoResponse } from "@repo/shared"
-import { NextRequest } from "next/server"
-
-// Mock Next Request
-export function createMockNextRequest(url: string) {
-  return new NextRequest(new URL(url, "http://localhost:3000"))
-}
 
 const googleAuthScopes = [
   "https://www.googleapis.com/auth/userinfo.email",
