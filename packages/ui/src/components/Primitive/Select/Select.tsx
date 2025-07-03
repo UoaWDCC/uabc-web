@@ -97,12 +97,12 @@ export const Select: FC<SelectProps> = memo(
             borderRadius="full"
             borderWidth="thin"
             h="fit-content"
-            p={1}
+            p="xs"
             w="fit-content"
           >
             {icon}
           </Center>
-          <Label fontSize={18} fontWeight="normal" mb={0}>
+          <Label fontSize="lg" fontWeight="normal" mb={0}>
             {label}
           </Label>
         </HStack>

@@ -1,5 +1,4 @@
 import { render, screen } from "@repo/ui/test-utils"
-import userEvent from "@testing-library/user-event"
 import { Option } from "@yamada-ui/react"
 import { isValidElement } from "react"
 import * as SelectModule from "./index"
@@ -24,9 +23,8 @@ describe("<Select />", () => {
   })
 
   it("call onChange when an option is selected by a user", async () => {
-    const user = userEvent.setup()
     const onChange = vi.fn()
-    render(
+    const { user } = render(
       <Select onChange={onChange}>
         <Option value="1">Option 1</Option>
         <Option value="2">Option 2</Option>
@@ -35,7 +33,6 @@ describe("<Select />", () => {
     )
 
     const selectComponent = screen.getByRole("combobox")
-    expect(selectComponent).toBeInTheDocument()
 
     await user.click(selectComponent)
     const optionToSelect = screen.getByText("Option 1")
