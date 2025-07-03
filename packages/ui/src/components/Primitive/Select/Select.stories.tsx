@@ -30,3 +30,13 @@ export const Basic: Story = (args) => {
     </Select>
   )
 }
+
+export const Stylised: Story = (args) => {
+  return (
+    <Select {...args} icon={<CalendarClockIcon fontSize={24} />} stylised>
+      <Option value="1">Option 1</Option>
+      <Option value="2">Option 2</Option>
+      <Option value="3">Option 3</Option>
+    </Select>
+  )
+}

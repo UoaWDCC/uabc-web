@@ -27,10 +27,18 @@ export interface SelectProps extends UISelectProps {
    * Icon rendered inline to the left of the label.
    *
    * @warn This prop takes in any React Node but icons are expected.
+   *
    * @see {@link https://yamada-ui.com/components/media-and-icons/icon Yamada UI Icon}
    * @see {@link https://yamada-ui.com/components/media-and-icons/lucide Yamda UI Lucide Icon}
    */
   icon?: ReactNode
+
+  /**
+   * Whether to have a background gradient and circle around the inline icon.
+   *
+   * @remarks To use in the quick book Select components in the hero/home page.
+   */
+  stylised?: boolean
 }
 
 /**
@@ -49,7 +57,7 @@ export interface SelectProps extends UISelectProps {
  * @see {@link https://yamada-ui.com/components/forms/select Yamada UI Select Docs}
  */
 export const Select: FC<SelectProps> = memo(
-  ({ children, label = "Select option", icon, ...props }) => {
+  ({ children, label = "Select option", icon, stylised = false, ...props }) => {
     return (
       <FormControl
         position="relative"
@@ -62,7 +70,8 @@ export const Select: FC<SelectProps> = memo(
         }}
       >
         <UISelect
-          fieldProps={{ pl: { base: "calc(lg + md)", md: "calc(lg - sm + xl)" } }}
+          bgGradient={stylised ? "heroGradient" : "transparent"}
+          fieldProps={{ pl: { base: "calc(lg + xs + md)", md: "calc(lg - sm - xs + xl)" } }}
           iconProps={{
             pr: { md: "lg" },
           }}
@@ -84,10 +93,9 @@ export const Select: FC<SelectProps> = memo(
           z={100}
         >
           <Center
-            bgGradient={{ md: "secondaryGradient" }}
-            borderColor={["gray.200", "gray.700"]}
+            borderColor={stylised ? "gray.600" : "transparent"}
             borderRadius="full"
-            borderWidth={{ base: 0, md: "medium" }}
+            borderWidth="thin"
             h="fit-content"
             p={1}
             w="fit-content"
