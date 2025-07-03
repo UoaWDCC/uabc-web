@@ -18,7 +18,7 @@ export interface BookingTimesCardProps {
   title: string
   bookingTime: string
   location: string
-  type: keyof typeof styles
+  type?: keyof typeof styles
 }
 
 export const BookingTimesCard = ({
