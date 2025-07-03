@@ -1,11 +1,9 @@
 import type { Meta, StoryFn } from "@storybook/react"
 import { Box } from "@yamada-ui/react"
-import {
-  LocationBubble,
-  LocationBubbleCircle,
-  LocationBubbleDesktopCard,
-  LocationBubbleMobileCard,
-} from "./LocationBubble"
+import { LocationBubble } from "."
+import { LocationBubbleCircle } from "./LocationBubbleCircle"
+import { LocationBubbleDesktopCard } from "./LocationBubbleDesktopCard"
+import { LocationBubbleMobileCard } from "./LocationBubbleMobileCard"
 
 type Story = StoryFn<typeof LocationBubble>
 
@@ -66,7 +64,7 @@ export const DesktopCard: Story = (args) => {
 export const MobileCard: Story = (args) => {
   return (
     <Box height="500px" width="480px">
-      <LocationBubbleMobileCard {...args} />
+      <LocationBubbleMobileCard {...args} onClose={() => {}} open={true} />
     </Box>
   )
 }

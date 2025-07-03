@@ -6,16 +6,17 @@ vi.mock("@yamada-ui/react", async () => {
   }
 })
 
-import { LOCATION_BUBBLE_TEST_CONSTANTS } from "@repo/ui/test-config/mocks/LocationBubble.mock"
+import {
+  LOCATION_BUBBLE_TEST_CONSTANTS,
+  LOCATION_BUBBLE_TEST_CONSTANTS_MOBILE,
+} from "@repo/ui/test-config/mocks/LocationBubble.mock"
 import { render, screen, sleep } from "@repo/ui/test-utils"
 import { useReducedMotion } from "@yamada-ui/react"
 import { isValidElement } from "react"
+import { LocationBubble } from "."
 import * as LocationBubbleModule from "./index"
-import {
-  LocationBubble,
-  LocationBubbleDesktopCard,
-  LocationBubbleMobileCard,
-} from "./LocationBubble"
+import { LocationBubbleDesktopCard } from "./LocationBubbleDesktopCard"
+import { LocationBubbleMobileCard } from "./LocationBubbleMobileCard"
 
 const mockUseReducedMotion = vi.mocked(useReducedMotion)
 
@@ -24,25 +25,10 @@ describe("<LocationBubble />", () => {
     mockUseReducedMotion.mockReturnValue(false)
   })
 
-  it("should re-export the LocationBubble component and check if LocationBubble and child elements exists", () => {
+  it("should re-export the LocationBubble component and check if LocationBubble component exists", () => {
     expect(LocationBubbleModule.LocationBubble).toBeDefined()
     expect(
       isValidElement(<LocationBubbleModule.LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />),
-    ).toBeTruthy()
-    expect(
-      isValidElement(
-        <LocationBubbleModule.LocationBubbleCircle {...LOCATION_BUBBLE_TEST_CONSTANTS} />,
-      ),
-    ).toBeTruthy()
-    expect(
-      isValidElement(
-        <LocationBubbleModule.LocationBubbleDesktopCard {...LOCATION_BUBBLE_TEST_CONSTANTS} />,
-      ),
-    ).toBeTruthy()
-    expect(
-      isValidElement(
-        <LocationBubbleModule.LocationBubbleMobileCard {...LOCATION_BUBBLE_TEST_CONSTANTS} />,
-      ),
     ).toBeTruthy()
   })
 
@@ -137,7 +123,7 @@ describe("<LocationBubble />", () => {
   })
 
   it("falls back to '#' for href if no path is provided in LocationBubbleMobileCard", async () => {
-    render(<LocationBubbleMobileCard {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+    render(<LocationBubbleMobileCard {...LOCATION_BUBBLE_TEST_CONSTANTS_MOBILE} />)
 
     const button = screen.getByRole("link", { name: /learn more/i })
     expect(button).toHaveAttribute("href", "#")
