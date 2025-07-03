@@ -97,6 +97,7 @@ export interface Config {
   blocks: {};
   collections: {
     admin: Admin;
+    event: Event;
     user: User;
     media: Media;
     semester: Semester;
@@ -111,6 +112,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     admin: AdminSelect<false> | AdminSelect<true>;
+    event: EventSelect<false> | EventSelect<true>;
     user: UserSelect<false> | UserSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     semester: SemesterSelect<false> | SemesterSelect<true>;
@@ -181,6 +183,82 @@ export interface Admin {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event".
+ */
+export interface Event {
+  id: string;
+  /**
+   * The title for the event.
+   */
+  title: string;
+  /**
+   * A long description regarding the event.
+   */
+  longDescription: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * A short description (60 characters limit) regarding the event
+   */
+  shortDescription: string;
+  /**
+   * The image displayed for the event.
+   */
+  eventImage: string | Media;
+  joinEventButton: Link;
+  learnMoreButton: Link;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: string;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * Single button displayed on the left of the event image to learn more about the event.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Link".
+ */
+export interface Link {
+  /**
+   * The text displayed for the learn more about the event button
+   */
+  label: string;
+  /**
+   * The URL the learn more button points to.
+   */
+  url: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "user".
  */
 export interface User {
@@ -208,25 +286,6 @@ export interface User {
   image?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: string;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -413,6 +472,10 @@ export interface PayloadLockedDocument {
         value: string | Admin;
       } | null)
     | ({
+        relationTo: 'event';
+        value: string | Event;
+      } | null)
+    | ({
         relationTo: 'user';
         value: string | User;
       } | null)
@@ -496,6 +559,28 @@ export interface AdminSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event_select".
+ */
+export interface EventSelect<T extends boolean = true> {
+  title?: T;
+  longDescription?: T;
+  shortDescription?: T;
+  eventImage?: T;
+  joinEventButton?: T | LinkSelect<T>;
+  learnMoreButton?: T | LinkSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Link_select".
+ */
+export interface LinkSelect<T extends boolean = true> {
+  label?: T;
+  url?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -698,22 +783,6 @@ export interface LinkGroup {
   links: Link;
 }
 /**
- * Single button displayed on the right side of the navbar.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Link".
- */
-export interface Link {
-  /**
-   * The text displayed for the sign in button.
-   */
-  label: string;
-  /**
-   * The URL the sign in button points to.
-   */
-  url: string;
-}
-/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navbar".
  */
@@ -773,14 +842,6 @@ export interface FooterSelect<T extends boolean = true> {
 export interface LinkGroupSelect<T extends boolean = true> {
   title?: T;
   links?: T | LinkSelect<T>;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Link_select".
- */
-export interface LinkSelect<T extends boolean = true> {
-  label?: T;
-  url?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
