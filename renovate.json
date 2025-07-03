@@ -6,44 +6,38 @@
   "prConcurrentLimit": 10,
   "prHourlyLimit": 2,
   "rebaseWhen": "conflicted",
-  "dependencyDashboard": false,
+  "dependencyDashboard": true,
   "ignorePaths": ["apps/portal/**"],
   "packageRules": [
     {
-      "description": "Automatically merge minor and patch-level updates",
-      "matchUpdateTypes": ["minor", "patch", "digest"],
-      "automerge": true,
-      "automergeType": "branch"
+      "description": "Group devDependencies",
+      "groupName": "devDependencies",
+      "matchDepTypes": ["devDependencies"],
+      "automerge": false
     },
     {
       "description": "Group Next.js related packages",
       "groupName": "nextjs",
-      "matchPackageNames": ["next*", "@next*"]
+      "matchPackageNames": ["next*", "@next*"],
+      "automerge": false
     },
     {
       "description": "Group Payload CMS related packages",
       "groupName": "payload-cms",
-      "matchPackageNames": ["payload*", "@payloadcms*"]
+      "matchPackageNames": ["payload*", "@payloadcms*"],
+      "automerge": false
     },
     {
       "description": "Group testing libraries (Vitest, Testing Library)",
       "groupName": "testing",
-      "matchPackageNames": ["vitest*", "@vitest*", "@testing-library*"]
+      "matchPackageNames": ["vitest*", "@vitest*", "@testing-library*"],
+      "automerge": false
     },
     {
       "description": "Group Storybook-related packages",
       "groupName": "storybook",
-      "matchPackageNames": ["@storybook*", "storybook*"]
-    },
-    {
-      "description": "Group devDependencies",
-      "groupName": "devDependencies",
-      "matchDepTypes": ["devDependencies"]
-    },
-    {
-      "description": "Group type definitions",
-      "groupName": "type-definitions",
-      "matchPackageNames": ["@types*"]
+      "matchPackageNames": ["@storybook*", "storybook*"],
+      "automerge": false
     }
   ],
   "vulnerabilityAlerts": { "labels": ["security"], "automerge": false }

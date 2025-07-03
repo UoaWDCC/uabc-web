@@ -8,3 +8,4 @@ export {
 export * from "./drag"
 export * from "./icon"
 export * from "./render"
+export * from "./utils"
