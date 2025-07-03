@@ -1,13 +1,5 @@
-import {
-  Button,
-  Center,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  Link,
-  Text,
-  VStack,
-} from "@yamada-ui/react"
+import { Button, Center, Drawer, DrawerBody, DrawerHeader, Text, VStack } from "@yamada-ui/react"
+import Link from "next/link"
 import { Heading, Image } from "../../Primitive"
 import type { LocationBubbleProps } from "."
 
@@ -91,7 +83,7 @@ export const LocationBubbleMobileCard = ({
                 </Text>
               ))}
           </VStack>
-          <Button as={Link} colorScheme="primary" href={buttonLink} size="md" width="fit-content">
+          <Button as={Link} colorScheme="primary" href={buttonLink} size="lg">
             Learn More
           </Button>
         </VStack>
