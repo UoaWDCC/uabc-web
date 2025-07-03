@@ -284,7 +284,7 @@ export const LocationBubbleDesktopCard = ({
               width={270}
             />
           </Motion>
-          <VStack gap="18px">
+          <VStack gap="md">
             <VStack fontSize="xl" fontWeight="semibold" gap={0} textAlign="center">
               <Heading.h2 bgClip="text" bgGradient="primaryGradient">
                 {locationTitle}
@@ -334,7 +334,7 @@ export const LocationBubbleMobileCard = ({
     <VStack
       align="center"
       data-testid="location-bubble-mobile-card"
-      gap="18px"
+      gap="lg"
       height="100%"
       paddingX="lg"
       width="100%"
