@@ -54,12 +54,18 @@ export const LocationBubble = ({
   const fallback = useMotionValue(0)
   const animatedTime = useTime()
   const time = shouldReduceMotion ? fallback : animatedTime
-  const direction = Math.random() > 0.5 ? 1 : -1
+  const direction = useMotionValue(Math.random() > 0.5 ? 1 : -1)
   const xRadius = useTransform(time, (t) => Math.cos(t / 2000) * 25)
   const yRadius = useTransform(time, (t) => Math.sin(t / 2000) * 25)
-  const bubbleXValue = useTransform(time, (t) => Math.cos(t / 3500) * xRadius.get() * direction)
+  const bubbleXValue = useTransform(
+    time,
+    (t) => Math.cos(t / 3500) * xRadius.get() * direction.get(),
+  )
   const bubbleX = shouldReduceMotion ? fallback : bubbleXValue
-  const bubbleYValue = useTransform(time, (t) => Math.sin(t / 3500) * yRadius.get() * direction)
+  const bubbleYValue = useTransform(
+    time,
+    (t) => Math.sin(t / 3500) * yRadius.get() * direction.get(),
+  )
   const bubbleY = shouldReduceMotion ? fallback : bubbleYValue
 
   return (
@@ -88,7 +94,6 @@ export const LocationBubble = ({
           <Center height="100%" width="100%">
             <Motion
               data-testid="location-bubble-circle-trigger"
-              onClick={onOpen}
               onHoverEnd={() => {
                 if (hoverDebounce.current) {
                   clearTimeout(hoverDebounce.current)
@@ -101,6 +106,7 @@ export const LocationBubble = ({
                   setHovering(true)
                 }, 100)
               }}
+              onTap={onOpen}
               style={{
                 x: bubbleX,
                 y: bubbleY,
