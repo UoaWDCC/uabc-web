@@ -1,4 +1,5 @@
 import z from "zod"
+import type { Media } from "../payload-types"
 
 export const MediaSchema = z.object({
   id: z.string(),
@@ -14,4 +15,4 @@ export const MediaSchema = z.object({
   height: z.number().nullable().optional(),
   focalX: z.number().nullable().optional(),
   focalY: z.number().nullable().optional(),
-})
+}) satisfies z.ZodType<Media>
