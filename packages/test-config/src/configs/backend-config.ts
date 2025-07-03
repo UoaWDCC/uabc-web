@@ -5,6 +5,7 @@ export const backendConfig = mergeConfig(baseConfig, {
   test: {
     environment: "node",
     setupFiles: ["@repo/test-config/setups/mongodb"],
+    maxWorkers: process.env.CI === "true" ? 1 : undefined,
     coverage: {
       thresholds: {
         branches: 50,
