@@ -49,18 +49,6 @@ describe("api/auth/login", () => {
       })
     })
 
-    it("returns 400 if state does not match", async () => {
-      cookieStore.set(STATE_COOKIE_NAME, STATE_MOCK)
-
-      const req = createMockNextRequest("/api/auth/login?state=wrong_state", "POST", {
-        email: EMAIL_MOCK,
-        password: PASSWORD_MOCK,
-      })
-      const response = await login(req)
-
-      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
-    })
-
     it("returns 401 if email is incorrect", async () => {
       cookieStore.set(STATE_COOKIE_NAME, STATE_MOCK)
 

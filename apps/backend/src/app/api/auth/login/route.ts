@@ -1,4 +1,4 @@
-import { STATE_COOKIE_NAME, TOKEN_EXPIRY_TIME } from "@repo/shared"
+import { TOKEN_EXPIRY_TIME } from "@repo/shared"
 import type { Authentication, User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
@@ -10,18 +10,10 @@ import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 
 export const POST = async (req: NextRequest) => {
-  const params = req.nextUrl.searchParams
   const cookieStore = await cookies()
   const authDataService = new AuthDataService()
   const userDataService = new UserDataService()
   const authService = new AuthService()
-
-  const stateParam = params.get("state") as string
-  const cookieState = cookieStore.get(STATE_COOKIE_NAME)
-  if (stateParam !== (cookieState?.value as string)) {
-    return NextResponse.json({}, { status: StatusCodes.BAD_REQUEST })
-  }
-  cookieStore.delete(STATE_COOKIE_NAME)
 
   const { email, password } = await req.json()
   if (!StandardSecurity.validateLoginDetails(email, password)) {
