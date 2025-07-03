@@ -1,12 +1,12 @@
-import SemesterDataService from "@/data-layer/services/SemesterDataService"
-import { createMockNextRequest } from "@/test-config/backend-utils"
-import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
-import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import type { NextRequest } from "next/server"
 import { describe, expect, it } from "vitest"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
+import { createMockNextRequest } from "@/test-config/backend-utils"
+import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
+import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { DELETE, PATCH } from "./route"
 
 describe("/api/admin/semesters/[id]", async () => {
