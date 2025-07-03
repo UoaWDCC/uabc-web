@@ -75,7 +75,6 @@ export const BookingTimesCard = ({
           colorScheme="primary"
           disabled={isDisabled}
           fontWeight="normal"
-          opacity={"1"}
           size="sm"
           variant={type === "selected" ? "gradient" : "solid"}
         >
