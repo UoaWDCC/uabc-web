@@ -1,6 +1,6 @@
 import type { CardProps } from "@yamada-ui/react"
 
-export const styles: Record<string, CardProps> = {
+export const styles: Record<"default" | "selected" | "full", CardProps> = {
   default: {
     bg: ["secondary.50", "secondary.900"],
     borderWidth: "1px",
