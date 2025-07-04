@@ -1,1 +1,2 @@
-export type { AboutUsCarouselProps } from "./AboutUsCarousel"
+export * from "./AboutUsCarousel"
+export * from "./AboutUsCarouselEmoji"

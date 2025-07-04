@@ -5,21 +5,24 @@ import {
   CarouselSlide,
   type CarouselSlideProps,
 } from "@yamada-ui/carousel"
-import {
-  Box,
-  Center,
-  type CenterProps,
-  Float,
-  type FloatProps,
-  type StackProps,
-  VStack,
-} from "@yamada-ui/react"
-import { type FC, memo, useMemo } from "react"
+import { Box, type CenterProps, type FloatProps, type StackProps, VStack } from "@yamada-ui/react"
+import { type FC, memo, useCallback, useState } from "react"
+import { AboutUsCarouselEmoji } from "./AboutUsCarouselEmoji"
+
+/**
+ * Item for {@link AboutUsCarousel} component
+ */
+export interface AboutUsCarouselItem extends Pick<ImageProps, "src" | "alt" | "width" | "height"> {
+  /**
+   * Emoji to display for this slide
+   */
+  emoji: string
+}
 
 /**
  * Props for {@link AboutUsCarousel} component
  */
-export interface AboutUsCarouselProps extends CarouselProps {
+export interface AboutUsCarouselProps extends Omit<CarouselProps, "children"> {
   /**
    * Props to customize the outer VStack wrapper
    */
@@ -33,55 +36,44 @@ export interface AboutUsCarouselProps extends CarouselProps {
    */
   iconProps?: CenterProps
   /**
-   * Array of image objects to display as carousel slides
-   * Each image should include src, alt, width, and height
+   * Array of items (image + emoji) to display as carousel slides
    *
    * @example
-   * images: [
-   *   { src: "https://example.com/image.jpg", alt: "Description", width: 600, height: 400 }
+   * items: [
+   *   { src: "https://example.com/image.jpg", alt: "Description", width: 600, height: 400, emoji: "😄" }
    * ]
    */
-  images?: Pick<ImageProps, "src" | "alt" | "width" | "height">[]
+  items: AboutUsCarouselItem[]
   /**
    * Props to customize each CarouselSlide
    */
   slideProps?: CarouselSlideProps
 }
 
-const happyEmojis = ["😄", "😁", "😃", "😊", "😆", "😍", "😂", "🤩"]
-
 /**
  * AboutUsCarousel component displays a carousel of images or custom slides with a floating happy emoji.
  *
- * @param props - AboutUsCarousel component properties
- * @param props.wrapperProps - Props for the outer VStack wrapper
- * @param props.floatProps - Props for the floating emoji container
- * @param props.iconProps - Props for the emoji icon Center
- * @param props.images - Array of images to display as carousel slides
- * @param props.slideProps - Props for each CarouselSlide
- * @param props.children - Additional CarouselSlide or custom content
+ * @param props AboutUsCarousel component properties
  * @returns A memoized carousel component with optional images and a floating emoji
  *
  * @example
- * // Basic usage with images
+ * // Basic usage with items
  * <AboutUsCarousel
- *   images={[
- *     { src: "https://example.com/image1.jpg", alt: "Image 1", width: 600, height: 400 },
- *     { src: "https://example.com/image2.jpg", alt: "Image 2", width: 600, height: 400 }
+ *   items={[
+ *     { src: "https://example.com/image1.jpg", alt: "Image 1", width: 600, height: 400, emoji: "😄" },
+ *     { src: "https://example.com/image2.jpg", alt: "Image 2", width: 600, height: 400, emoji: "😍" }
  *   ]}
  * />
- *
- * @example
- * // With custom slides
- * <AboutUsCarousel>
- *   <CarouselSlide>Custom Content</CarouselSlide>
- * </AboutUsCarousel>
  */
 export const AboutUsCarousel: FC<AboutUsCarouselProps> = memo(
-  ({ children, wrapperProps, floatProps, iconProps, images, slideProps, ...props }) => {
-    const randomEmoji = useMemo(() => {
-      return happyEmojis[Math.floor(Math.random() * happyEmojis.length)]
+  ({ wrapperProps, floatProps, iconProps, items, slideProps, ...props }) => {
+    const [selectedIndex, setSelectedIndex] = useState(0)
+
+    const handleChange = useCallback((index: number) => {
+      setSelectedIndex(index)
     }, [])
+
+    const currentEmoji = items[selectedIndex].emoji
 
     return (
       <VStack position="relative" {...wrapperProps}>
@@ -118,20 +110,16 @@ export const AboutUsCarousel: FC<AboutUsCarouselProps> = memo(
             ),
             marginBottom: "calc(sm - xl)",
           }}
+          onChange={handleChange}
           {...props}
         >
-          {images?.map((image) => (
-            <CarouselSlide key={image.src as string} {...slideProps}>
-              <Image h="full" overflow="clip" rounded="xl" {...image} />
+          {items?.map((item) => (
+            <CarouselSlide key={item.src as string} {...slideProps} position="relative">
+              <Image h="full" overflow="clip" rounded="xl" w="full" {...item} />
             </CarouselSlide>
           ))}
-          {children}
         </Carousel>
-        <Float placement="end-end" {...floatProps}>
-          <Center bg="primary" fontSize="4xl" h="14" p="2" rounded="full" w="14" {...iconProps}>
-            {randomEmoji}
-          </Center>
-        </Float>
+        <AboutUsCarouselEmoji currentEmoji={currentEmoji} iconProps={iconProps} {...floatProps} />
       </VStack>
     )
   },

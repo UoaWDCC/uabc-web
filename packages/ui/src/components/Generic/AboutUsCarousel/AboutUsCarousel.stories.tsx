@@ -1,5 +1,4 @@
 import type { Meta, StoryFn } from "@storybook/nextjs"
-import { CarouselSlide } from "@yamada-ui/carousel"
 import { Center, Container } from "@yamada-ui/react"
 import { AboutUsCarousel } from "./AboutUsCarousel"
 
@@ -14,43 +13,28 @@ type Story = StoryFn<typeof AboutUsCarousel>
 export const Default: Story = () => {
   return (
     <Container maxW="3xl" px="md">
-      <AboutUsCarousel>
-        <CarouselSlide as={Center} bg="secondary">
-          1
-        </CarouselSlide>
-        <CarouselSlide as={Center} bg="warning">
-          2
-        </CarouselSlide>
-        <CarouselSlide as={Center} bg="danger">
-          3
-        </CarouselSlide>
-      </AboutUsCarousel>
-    </Container>
-  )
-}
-
-export const WithImages: Story = () => {
-  return (
-    <Container maxW="3xl" px="md">
       <AboutUsCarousel
-        images={[
+        items={[
           {
             src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
             alt: "Mountain Lake",
             width: 600,
             height: 400,
+            emoji: "😄",
           },
           {
             src: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=600",
             alt: "Forest Path",
             width: 600,
             height: 400,
+            emoji: "😁",
           },
           {
             src: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=600",
             alt: "Desert Dunes",
             width: 600,
             height: 400,
+            emoji: "😆",
           },
         ]}
       />
@@ -64,24 +48,27 @@ export const WithAutoplay: Story = () => {
       <AboutUsCarousel
         autoplay
         delay={2000}
-        images={[
+        items={[
           {
             src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600",
             alt: "Mountain View",
             width: 600,
             height: 400,
+            emoji: "😃",
           },
           {
             src: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600",
             alt: "Forest Trail",
             width: 600,
             height: 400,
+            emoji: "😂",
           },
           {
             src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600",
             alt: "Ocean Waves",
             width: 600,
             height: 400,
+            emoji: "🙂",
           },
         ]}
       />
@@ -98,26 +85,6 @@ export const CustomizedControls: Story = () => {
           color: "white",
           _hover: { bg: "primary.600" },
         }}
-        images={[
-          {
-            src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
-            alt: "Mountain Lake",
-            width: 600,
-            height: 400,
-          },
-          {
-            src: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=600",
-            alt: "Forest Path",
-            width: 600,
-            height: 400,
-          },
-          {
-            src: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=600",
-            alt: "Desert Dunes",
-            width: 600,
-            height: 400,
-          },
-        ]}
         indicatorsProps={{
           component: ({ selected }) => (
             <Center
@@ -131,6 +98,29 @@ export const CustomizedControls: Story = () => {
             />
           ),
         }}
+        items={[
+          {
+            src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
+            alt: "Mountain Lake",
+            width: 600,
+            height: 400,
+            emoji: "😊",
+          },
+          {
+            src: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=600",
+            alt: "Forest Path",
+            width: 600,
+            height: 400,
+            emoji: "🙂",
+          },
+          {
+            src: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=600",
+            alt: "Desert Dunes",
+            width: 600,
+            height: 400,
+            emoji: "😋",
+          },
+        ]}
         withControls={true}
         withIndicators={true}
       />
@@ -152,18 +142,20 @@ export const CustomEmojiIcon: Story = () => {
           color: "white",
           shadow: "lg",
         }}
-        images={[
+        items={[
           {
             src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
             alt: "Mountain Lake",
             width: 600,
             height: 400,
+            emoji: "😎",
           },
           {
             src: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=600",
             alt: "Forest Path",
             width: 600,
             height: 400,
+            emoji: "🥰",
           },
         ]}
       />
@@ -176,53 +168,32 @@ export const NoControls: Story = () => {
     <Container maxW="3xl" px="md">
       <AboutUsCarousel
         draggable={true}
-        images={[
+        items={[
           {
             src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
             alt: "Mountain Lake",
             width: 600,
             height: 400,
+            emoji: "😄",
           },
           {
             src: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=600",
             alt: "Forest Path",
             width: 600,
             height: 400,
+            emoji: "😆",
           },
           {
             src: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=600",
             alt: "Desert Dunes",
             width: 600,
             height: 400,
+            emoji: "😁",
           },
         ]}
         withControls={false}
         withIndicators={false}
       />
-    </Container>
-  )
-}
-
-export const MixedContent: Story = () => {
-  return (
-    <Container maxW="3xl" px="md">
-      <AboutUsCarousel
-        images={[
-          {
-            src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
-            alt: "Mountain Lake",
-            width: 600,
-            height: 400,
-          },
-        ]}
-      >
-        <CarouselSlide as={Center} bgGradient="primaryGradient" color="white" fontSize="2xl">
-          Custom Slide 1
-        </CarouselSlide>
-        <CarouselSlide as={Center} bgGradient="secondaryGradient" color="white" fontSize="2xl">
-          Custom Slide 2
-        </CarouselSlide>
-      </AboutUsCarousel>
     </Container>
   )
 }
