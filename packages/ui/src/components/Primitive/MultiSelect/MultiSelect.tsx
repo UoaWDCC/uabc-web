@@ -7,6 +7,7 @@ import {
   HStack,
   Label,
   memo,
+  Tag,
   MultiSelect as UIMultiSelect,
   type MultiSelectProps as UIMultiSelectProps,
 } from "@yamada-ui/react"
@@ -71,6 +72,11 @@ export const MultiSelect: FC<MultiSelectProps> = memo(
       >
         <UIMultiSelect
           bgGradient={stylised ? "heroGradient" : "transparent"}
+          component={({ label, onRemove }) => (
+            <Tag color="white" colorScheme="secondary" onClose={onRemove} variant="outline">
+              {label}
+            </Tag>
+          )}
           fieldProps={{ pl: { base: "calc(lg + xs + md)", md: "calc(lg - sm - xs + xl)" } }}
           iconProps={{
             pr: { md: "lg" },
