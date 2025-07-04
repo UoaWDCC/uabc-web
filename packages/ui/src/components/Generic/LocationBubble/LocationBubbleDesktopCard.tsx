@@ -25,22 +25,23 @@ export const LocationBubbleDesktopCard = ({
   return (
     <Box data-testid="location-bubble-desktop-card" h="100%" position="relative" width="100%">
       <Motion
-        animate={{ opacity: 1, scale: 1 }}
+        animate={{ scale: 1 }}
         background="linear-gradient(135deg, #5407FF 8%, #89A5DA 100%) border-box"
         border="6px solid transparent"
-        borderRadius="26px"
         height="100%"
-        initial={{ opacity: 0, scale: 0.5 }}
+        initial={{ scale: 0.5 }}
+        layoutId="bubble-border"
         mask="conic-gradient(white 0 0) padding-box exclude, conic-gradient(white 0 0)"
         padding="6px"
         position="absolute"
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        style={{ borderRadius: "26px" }}
+        transition={{ type: "spring", bounce: 0.3, visualDuration: 0.4 }}
         width="100%"
       />
       <Motion
         layoutId="bubble-background"
         padding="12px"
-        transition={{ type: "spring", stiffness: 300, damping: 20, staggerChildren: 0.1 }}
+        transition={{ type: "spring", bounce: 0.25, visualDuration: 0.4 }}
       >
         <VStack
           bgColor="black"
@@ -52,7 +53,7 @@ export const LocationBubbleDesktopCard = ({
         >
           <Motion
             layoutId="location-image"
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            transition={{ type: "spring", bounce: 0.25, visualDuration: 0.4 }}
           >
             <Image
               alt={locationTitle}
@@ -64,24 +65,35 @@ export const LocationBubbleDesktopCard = ({
               width={270}
             />
           </Motion>
-          <VStack gap="md">
-            <VStack fontSize="xl" fontWeight="semibold" gap={0} textAlign="center">
-              <Heading.h2 bgClip="text" bgGradient="primaryGradient">
-                {locationTitle}
-              </Heading.h2>
-              {locationTimes &&
-                Object.entries(locationTimes).map(([day, time]) => (
-                  <Text bgClip="text" bgGradient="textGradient" key={day}>
-                    {day}: {time}
-                  </Text>
-                ))}
+          <Motion
+            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0 }}
+            layout="position"
+            layoutId="location-title"
+            transition={{
+              default: { type: "spring", bounce: 0.25, visualDuration: 0.4 },
+              opacity: { type: "spring", bounce: 0.25, visualDuration: 0.4, delay: 0.1 },
+            }}
+          >
+            <VStack as={Motion} gap="md">
+              <VStack fontSize="xl" fontWeight="semibold" gap={0} textAlign="center">
+                <Heading.h2 bgClip="text" bgGradient="primaryGradient">
+                  {locationTitle}
+                </Heading.h2>
+                {locationTimes &&
+                  Object.entries(locationTimes).map(([day, time]) => (
+                    <Text bgClip="text" bgGradient="textGradient" key={day}>
+                      {day}: {time}
+                    </Text>
+                  ))}
+              </VStack>
+              {locationDetails && (
+                <Text bgClip="text" bgGradient="textGradient" fontWeight="normal">
+                  {locationDetails}
+                </Text>
+              )}
             </VStack>
-            {locationDetails && (
-              <Text bgClip="text" bgGradient="textGradient" fontWeight="normal">
-                {locationDetails}
-              </Text>
-            )}
-          </VStack>
+          </Motion>
           <Button as={Link} colorScheme="primary" href={buttonLink} size="lg">
             Learn More
           </Button>

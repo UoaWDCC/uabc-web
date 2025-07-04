@@ -25,39 +25,38 @@ export const LocationBubbleCircle = ({
   return (
     <>
       <Motion
-        animate={{ opacity: 1, scale: 1, y: 0 }}
+        animate={{ scale: 1 }}
         background="linear-gradient(135deg, #5407FF 8%, #89A5DA 100%) border-box"
         border="5px solid transparent"
-        borderRadius="50%"
         height={148}
-        initial={{ opacity: 0, scale: 1.5, y: -20 }}
+        initial={{ scale: 1.5 }}
+        layoutId="bubble-border"
         mask="conic-gradient(white 0 0) padding-box exclude, conic-gradient(white 0 0)"
         position="absolute"
-        transition={{
-          default: { type: "spring", stiffness: 300, damping: 22.5, delay: 0.1 },
-        }}
+        style={{ borderRadius: "74px" }}
+        transition={{ type: "spring", bounce: 0.35, visualDuration: 0.5 }}
         width={148}
       />
       <Motion
         height={148}
         layoutId="bubble-background"
         position="absolute"
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        transition={{ type: "spring", bounce: 0.35, visualDuration: 0.6 }}
         width={148}
-      />
+      >
+        <Motion height="full" layoutId="location-title" style={{ opacity: 0 }} width="full" />
+      </Motion>
       <Box data-testid="location-bubble-circle" position="relative" width={148}>
         <Motion
-          animate={{ opacity: 1 }}
           border="10px solid transparent"
           borderRadius="50%"
           height={148}
-          initial={{ opacity: 0 }}
           inset="-5px"
           layoutId="location-image"
           margin="5px"
           overflow="hidden"
           position="relative"
-          transition={{ duration: 0.25 }}
+          transition={{ type: "spring", bounce: 0.3, visualDuration: 0.5 }}
           width={148}
         >
           <Image
@@ -75,7 +74,8 @@ export const LocationBubbleCircle = ({
           initial={{ opacity: 0, scale: 0.5 }}
           position="absolute"
           right={0}
-          transition={{ type: "spring", stiffness: 300, damping: 15 }}
+          // transition={{ type: "spring", stiffness: 300, damping: 15 }}
+          transition={{ type: "spring", bounce: 0.5, visualDuration: 0.5 }}
         >
           <Center bgColor="black" borderRadius="50%" padding="12px">
             <Maximize2Icon boxSize={5} color="white" />
