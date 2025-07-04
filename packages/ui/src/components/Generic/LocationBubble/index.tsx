@@ -111,6 +111,11 @@ export const LocationBubble = ({
                 x: bubbleX,
                 y: bubbleY,
               }}
+              whileTap={{
+                scale: 0.9,
+                rotateZ: 5,
+                transition: { type: "spring", stiffness: 300, damping: 15 },
+              }}
             >
               <LocationBubbleCircle locationImage={locationImage} locationTitle={locationTitle} />
             </Motion>
