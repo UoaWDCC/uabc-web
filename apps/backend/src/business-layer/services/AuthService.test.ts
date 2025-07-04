@@ -59,9 +59,9 @@ describe("AuthService", () => {
 
   describe("setCookie", () => {
     it("should write a cookie in the cookie store to store a JWT", async () => {
-      const cookieStore = await cookies()
-      authService.setCookie(cookieStore, JWT_TOKEN_MOCK)
+      authService.setCookie(JWT_TOKEN_MOCK)
 
+      const cookieStore = await cookies()
       const cookieJWT = cookieStore.get(AUTH_COOKIE_NAME)
       expect(cookieJWT?.value as string).toEqual(JWT_TOKEN_MOCK)
     })

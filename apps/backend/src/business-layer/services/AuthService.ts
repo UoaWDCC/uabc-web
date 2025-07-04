@@ -1,6 +1,6 @@
 import { AUTH_COOKIE_NAME, type JWTEncryptedUser } from "@repo/shared"
 import jwt, { type JwtPayload } from "jsonwebtoken"
-import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies"
+import { cookies } from "next/headers"
 import type z from "zod"
 
 export default class AuthService {
@@ -48,7 +48,8 @@ export default class AuthService {
    * @param cookieStore Cookie store to use
    * @param token The JWT to store
    */
-  public setCookie(cookieStore: ReadonlyRequestCookies, token: string): void {
+  public async setCookie(token: string): Promise<void> {
+    const cookieStore = await cookies()
     cookieStore.set(AUTH_COOKIE_NAME, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

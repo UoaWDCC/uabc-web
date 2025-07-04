@@ -1,7 +1,6 @@
 import { TOKEN_EXPIRY_TIME } from "@repo/shared"
 import type { Authentication, User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
-import { cookies } from "next/headers"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import StandardSecurity from "@/business-layer/provider/standard"
@@ -10,7 +9,6 @@ import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 
 export const POST = async (req: NextRequest) => {
-  const cookieStore = await cookies()
   const authDataService = new AuthDataService()
   const userDataService = new UserDataService()
   const authService = new AuthService()
@@ -52,7 +50,7 @@ export const POST = async (req: NextRequest) => {
     { status: StatusCodes.CREATED },
   )
 
-  authService.setCookie(cookieStore, token)
+  await authService.setCookie(token)
 
   return response
 }
