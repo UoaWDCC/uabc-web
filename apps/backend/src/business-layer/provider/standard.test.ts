@@ -36,19 +36,19 @@ describe("StandardSecurity", () => {
     })
   })
 
-  describe("validateSignUpDetails", () => {
+  describe("validateRegisterDetails", () => {
     it("returns true for valid data", async () => {
-      const result = await StandardSecurity.validateSignUpDetails(EMAIL_MOCK, PASSWORD_MOCK)
+      const result = await StandardSecurity.validateRegisterDetails(EMAIL_MOCK, PASSWORD_MOCK)
       expect(result).toBe(true)
     })
 
     it("returns false for invalid email", async () => {
-      const result = await StandardSecurity.validateSignUpDetails("invalid_email", PASSWORD_MOCK)
+      const result = await StandardSecurity.validateRegisterDetails("invalid_email", PASSWORD_MOCK)
       expect(result).toBe(false)
     })
 
     it("returns false for invalid password", async () => {
-      const result = await StandardSecurity.validateSignUpDetails(
+      const result = await StandardSecurity.validateRegisterDetails(
         EMAIL_MOCK,
         LOWERCASE_PASSWORD_MOCK,
       )

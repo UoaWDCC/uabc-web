@@ -61,7 +61,7 @@ export const UserInfoResponseSchema = z.object({
   hd: z.string(),
 })
 
-export const SignUpDetailsSchema = z.object({
+export const RegisterDetailsSchema = z.object({
   /**
    * The user's email address
    * @example straightzhao@gmail.com

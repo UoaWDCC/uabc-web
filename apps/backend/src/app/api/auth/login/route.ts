@@ -47,7 +47,10 @@ export const POST = async (req: NextRequest) => {
   }
 
   const token = authService.signJWT({ user }, { expiresIn: TOKEN_EXPIRY_TIME })
-  const response = NextResponse.json({}, { status: StatusCodes.CREATED })
+  const response = NextResponse.json(
+    { message: "Login successful" },
+    { status: StatusCodes.CREATED },
+  )
 
   authService.setCookie(cookieStore, token)
 
