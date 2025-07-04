@@ -11,11 +11,6 @@ const meta: Meta<typeof LocationBubble> = {
   component: LocationBubble,
   title: "Generic Components / LocationBubble",
   argTypes: {
-    locationImage: {
-      control: "text",
-      description: "Image source (URL, static import, or path)",
-      table: { type: { summary: "string | StaticImport" } },
-    },
     locationTitle: {
       control: "text",
       description: "Title of the location",
@@ -31,10 +26,19 @@ const meta: Meta<typeof LocationBubble> = {
       description: "Object containing days and times for the location",
       table: { type: { summary: "Record<string, string>" } },
     },
+    locationImage: {
+      control: "object",
+      description: "Props for the location image, including `src` and others",
+      table: { type: { summary: "ImageProps" } },
+    },
   },
   args: {
-    locationImage: "https://placehold.co/300x200/png",
     locationTitle: "Uoa Recreation Centre",
+    locationImage: {
+      src: "https://placehold.co/300x200/png",
+      alt: "Placeholder image for location",
+    },
+    buttonLink: "#",
     locationDetails: "17 Symonds Street",
     locationTimes: {
       Tuesday: "7:30pm - 10pm",

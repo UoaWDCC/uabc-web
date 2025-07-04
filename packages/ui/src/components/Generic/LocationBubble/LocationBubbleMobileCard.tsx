@@ -1,15 +1,21 @@
-import { Button, Center, Drawer, DrawerBody, DrawerHeader, Text, VStack } from "@yamada-ui/react"
+import { Heading, Image } from "@repo/ui/components/Primitive"
+import {
+  Button,
+  Center,
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  type DrawerProps,
+  Text,
+  VStack,
+} from "@yamada-ui/react"
 import Link from "next/link"
-import { Heading, Image } from "../../Primitive"
 import type { LocationBubbleProps } from "."
 
 /**
  * Props for the `LocationBubbleMobileCard` component.
  */
-interface LocationBubbleMobileCardProps extends LocationBubbleProps {
-  open: boolean
-  onClose: () => void
-}
+export interface LocationBubbleMobileCardProps extends LocationBubbleProps, DrawerProps {}
 
 /**
  *
@@ -70,7 +76,7 @@ export const LocationBubbleMobileCard = ({
               h="100%"
               height={150}
               maxW={360}
-              src={locationImage}
+              {...locationImage}
               w="100%"
               width={270}
             />

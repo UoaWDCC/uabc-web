@@ -1,4 +1,5 @@
 "use client"
+import type { ImageProps } from "@repo/ui/components/Primitive"
 import {
   Box,
   Center,
@@ -9,7 +10,6 @@ import {
   useTime,
   useTransform,
 } from "@yamada-ui/react"
-import type { StaticImport } from "next/dist/shared/lib/get-img-props"
 import { useRef, useState } from "react"
 import { LocationBubbleCircle } from "./LocationBubbleCircle"
 import { LocationBubbleDesktopCard } from "./LocationBubbleDesktopCard"
@@ -19,7 +19,7 @@ import { LocationBubbleMobileCard } from "./LocationBubbleMobileCard"
  * Props for the LocationBubble component.
  */
 export interface LocationBubbleProps {
-  locationImage: string | StaticImport
+  locationImage: ImageProps
   locationTitle: string
   locationDetails?: string
   locationTimes?: Record<string, string>

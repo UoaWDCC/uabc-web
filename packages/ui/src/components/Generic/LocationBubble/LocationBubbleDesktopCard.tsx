@@ -1,6 +1,6 @@
+import { Heading, Image } from "@repo/ui/components/Primitive"
 import { Box, Button, Motion, Text, VStack } from "@yamada-ui/react"
 import Link from "next/link"
-import { Heading, Image } from "../../Primitive"
 import type { LocationBubbleProps } from "."
 
 /**
@@ -59,7 +59,7 @@ export const LocationBubbleDesktopCard = ({
               borderRadius="14px"
               h="100%"
               height={150}
-              src={locationImage}
+              {...locationImage}
               w="100%"
               width={270}
             />

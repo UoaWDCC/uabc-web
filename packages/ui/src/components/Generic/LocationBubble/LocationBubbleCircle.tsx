@@ -1,7 +1,14 @@
+import { Image, type ImageProps } from "@repo/ui/components/Primitive"
 import { Maximize2Icon } from "@yamada-ui/lucide"
 import { Box, Center, Motion } from "@yamada-ui/react"
-import type { StaticImport } from "next/dist/shared/lib/get-img-props"
-import { Image } from "../../Primitive"
+
+/**
+ * Props for the `LocationBubbleCircle` component.
+ */
+interface LocationBubbleCircleProps {
+  locationImage: ImageProps
+  locationTitle: string
+}
 
 /**
  *
@@ -14,10 +21,7 @@ import { Image } from "../../Primitive"
 export const LocationBubbleCircle = ({
   locationImage,
   locationTitle,
-}: {
-  locationImage: string | StaticImport
-  locationTitle: string
-}) => {
+}: LocationBubbleCircleProps) => {
   return (
     <>
       <Motion
@@ -61,7 +65,7 @@ export const LocationBubbleCircle = ({
             height={148}
             objectFit="cover"
             objectPosition="center"
-            src={locationImage}
+            {...locationImage}
             width={148}
           />
         </Motion>
