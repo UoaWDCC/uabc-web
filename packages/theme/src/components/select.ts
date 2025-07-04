@@ -5,12 +5,20 @@ import { NativeSelect } from "./native-select"
 
 export const Select: ComponentMultiStyle<"Select"> = mergeMultiStyle(NativeSelect, Menu, {
   baseStyle: {
-    content: {
+    container: ({ colorScheme: c = "secondary" }) => ({
+      bg: [`${c}.50`, `${c}.900`],
+      borderRadius: "md",
+    }),
+    content: ({ colorScheme: c = "secondary" }) => ({
       w: "100%",
-    },
+      bg: [`${c}.50`, `${c}.900`],
+    }),
     footer: {},
     header: {},
-    inner: {},
+    inner: ({ colorScheme: c = "secondary" }) => ({
+      bg: [`${c}.50`, `${c}.900`],
+      rounded: "md",
+    }),
     item: {
       _active: {
         bg: ["blackAlpha.200", "whiteAlpha.200"],
