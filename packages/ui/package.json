@@ -26,6 +26,7 @@
     "@storybook/nextjs": "9.0.14",
     "@tanstack/react-query": "5.81.2",
     "@tanstack/react-query-devtools": "5.81.2",
+    "@yamada-ui/carousel": "^2.1.13",
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.7",
     "next": "15.3.4",
