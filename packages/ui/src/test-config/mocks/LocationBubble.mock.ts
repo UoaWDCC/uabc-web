@@ -1,5 +1,8 @@
 export const LOCATION_BUBBLE_TEST_CONSTANTS = {
-  locationImage: "https://placehold.co/300x200/png",
+  locationImage: {
+    src: "https://placehold.co/300x200/png",
+    alt: "Placeholder image for location",
+  },
   locationTitle: "Uoa Recreation Centre",
 }
 
