@@ -33,7 +33,7 @@ class UsersRouteWrapper {
       const { limit, page } = result.data
       const userDataService = new UserDataService()
       const paginatedUsers = await userDataService.getPaginatedUsers(limit, page)
-      return NextResponse.json({ data: paginatedUsers }, { status: StatusCodes.OK })
+      return NextResponse.json({ data: paginatedUsers })
     } catch (error) {
       console.error(error)
       return NextResponse.json(

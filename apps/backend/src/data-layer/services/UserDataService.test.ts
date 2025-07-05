@@ -1,5 +1,4 @@
 import { payload } from "@/data-layer/adapters/Payload"
-import { clearCollection } from "@/test-config/backend-utils"
 import { userCreateMock } from "@/test-config/mocks/User.mock"
 import UserDataService from "./UserDataService"
 
@@ -79,10 +78,6 @@ describe("UserDataService", () => {
   })
 
   describe("getPaginatedUsers", () => {
-    beforeEach(async () => {
-      await clearCollection(payload, "user")
-    })
-
     it("should return paginated users with default limit and page", async () => {
       const usersToCreate = Array.from({ length: 15 }, (_, i) => ({
         ...userCreateMock,

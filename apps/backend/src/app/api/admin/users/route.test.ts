@@ -24,7 +24,7 @@ describe("/api/admin/users", async () => {
   describe("GET", () => {
     it("should return 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const req = createMockNextRequest("/api/admin/users?limit=5&page=1", "GET")
+      const req = createMockNextRequest("/api/admin/users?limit=5&page=1")
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
@@ -33,7 +33,7 @@ describe("/api/admin/users", async () => {
 
     it("should return 401 if user is a member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
-      const req = createMockNextRequest("/api/admin/users?limit=5&page=1", "GET")
+      const req = createMockNextRequest("/api/admin/users?limit=5&page=1")
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
@@ -47,7 +47,7 @@ describe("/api/admin/users", async () => {
         email: `user${i}@test.com`,
       }))
       await Promise.all(usersToCreate.map((u) => userDataService.createUser(u)))
-      const req = createMockNextRequest("/api/admin/users?limit=10&page=2", "GET")
+      const req = createMockNextRequest("/api/admin/users?limit=10&page=2")
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
@@ -61,7 +61,7 @@ describe("/api/admin/users", async () => {
 
     it("should use default pagination if params are missing", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const req = createMockNextRequest("/api/admin/users", "GET")
+      const req = createMockNextRequest("/api/admin/users")
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
@@ -72,7 +72,7 @@ describe("/api/admin/users", async () => {
 
     it("should return 400 if limit or page is out of range", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const req = createMockNextRequest("/api/admin/users?limit=999&page=-5", "GET")
+      const req = createMockNextRequest("/api/admin/users?limit=999&page=-5")
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
       const json = await res.json()
@@ -86,7 +86,7 @@ describe("/api/admin/users", async () => {
       vi.spyOn(UserDataService.prototype, "getPaginatedUsers").mockRejectedValueOnce(
         new Error("Database error"),
       )
-      const req = createMockNextRequest("/api/admin/users?limit=10&page=1", "GET") // valid params
+      const req = createMockNextRequest("/api/admin/users?limit=10&page=1")
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
@@ -96,7 +96,7 @@ describe("/api/admin/users", async () => {
 
     it("should return 400 if query params are invalid", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const req = createMockNextRequest("/api/admin/users?limit=abc&page=def", "GET")
+      const req = createMockNextRequest("/api/admin/users?limit=abc&page=def")
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
       const json = await res.json()
@@ -106,7 +106,7 @@ describe("/api/admin/users", async () => {
 
     it("should return 401 if no token is provided", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, "")
-      const req = createMockNextRequest("/api/admin/users?limit=5&page=1", "GET")
+      const req = createMockNextRequest("/api/admin/users?limit=5&page=1")
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No token provided" })
@@ -115,7 +115,7 @@ describe("/api/admin/users", async () => {
 
     it("should return 401 if token is invalid", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, "invalid.token.value")
-      const req = createMockNextRequest("/api/admin/users?limit=5&page=1", "GET")
+      const req = createMockNextRequest("/api/admin/users?limit=5&page=1")
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "Invalid JWT token" })
@@ -124,7 +124,7 @@ describe("/api/admin/users", async () => {
 
     it("should return 401 if token is malformed", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, "not-a-jwt")
-      const req = createMockNextRequest("/api/admin/users?limit=5&page=1", "GET")
+      const req = createMockNextRequest("/api/admin/users?limit=5&page=1")
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "Invalid JWT token" })
