@@ -1,6 +1,6 @@
 "use client"
 import { UabcLogo } from "@repo/ui/components/Icon"
-import { Box, Center, HStack, Motion, Spacer, ui } from "@yamada-ui/react"
+import { Center, HStack, Motion, Spacer, ui } from "@yamada-ui/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useRef, useState } from "react"
@@ -40,7 +40,7 @@ export const NavigationBar = ({ navItems, admin = false, user }: NavigationBarPr
 
   return (
     <Center marginBlockStart="md" padding="md" position="sticky" top={0} width="full">
-      <Box
+      <HStack
         _before={{
           content: '""',
           position: "absolute",
@@ -60,55 +60,54 @@ export const NavigationBar = ({ navItems, admin = false, user }: NavigationBarPr
         borderRadius="150px"
         boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.10)"
         maxWidth="1220px"
-        padding="9px 35px"
+        paddingX="lg"
+        paddingY="md"
         position="relative"
         width="full"
       >
-        <HStack padding="sm">
-          <HStack as={Motion} gap="none">
-            <StyledLink borderRadius="50%" href="/" padding="sm" position="relative" zIndex="1">
-              <UabcLogo />
-            </StyledLink>
-            <HStack
-              as={Motion}
-              data-testid="navbar-buttons-container"
-              gap="none"
-              onHoverEnd={clearHover}
-            >
-              {navItems.map((item, index) => (
-                <Motion key={item.label} onHoverStart={() => handleHover(index)}>
-                  <NavigationBarButton
-                    {...item}
-                    hovering={hoveredIndex === index}
-                    ref={(el) => {
-                      itemRefs.current[index] = el
-                      if (item.path === currentPath && !activeRef.current) {
-                        activeRef.current = el
-                      }
-                    }}
-                  />
-                </Motion>
-              ))}
-            </HStack>
-          </HStack>
-          <Spacer />
-          <HStack as={Motion} gap="md">
-            {admin && (
-              <NavigationBarButton
-                colorScheme="tertiary"
-                hovering={hoveredIndex === navItems.length}
-                label="Admin"
-                path="/admin"
-              />
-            )}
-            {user ? (
-              <NavigationBarUserMenu user={user} />
-            ) : (
-              <NavigationBarButton colorScheme="primary" label="Sign In" path="/signin" />
-            )}
+        <HStack as={Motion} gap="none">
+          <StyledLink borderRadius="50%" href="/" padding="sm" position="relative" zIndex="1">
+            <UabcLogo />
+          </StyledLink>
+          <HStack
+            as={Motion}
+            data-testid="navbar-buttons-container"
+            gap="none"
+            onHoverEnd={clearHover}
+          >
+            {navItems.map((item, index) => (
+              <Motion key={item.label} onHoverStart={() => handleHover(index)}>
+                <NavigationBarButton
+                  {...item}
+                  hovering={hoveredIndex === index}
+                  ref={(el) => {
+                    itemRefs.current[index] = el
+                    if (item.path === currentPath && !activeRef.current) {
+                      activeRef.current = el
+                    }
+                  }}
+                />
+              </Motion>
+            ))}
           </HStack>
         </HStack>
-      </Box>
+        <Spacer />
+        <HStack as={Motion} gap="md">
+          {admin && (
+            <NavigationBarButton
+              colorScheme="tertiary"
+              hovering={hoveredIndex === navItems.length}
+              label="Admin"
+              path="/admin"
+            />
+          )}
+          {user ? (
+            <NavigationBarUserMenu user={user} />
+          ) : (
+            <NavigationBarButton colorScheme="primary" label="Sign In" path="/signin" />
+          )}
+        </HStack>
+      </HStack>
     </Center>
   )
 }
