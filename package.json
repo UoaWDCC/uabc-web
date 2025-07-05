@@ -43,11 +43,11 @@
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.3.0",
     "@testing-library/user-event": "14.6.1",
-    "@types/glob": "8.1.0",
+    "@types/glob": "9.0.0",
     "@vitejs/plugin-react-swc": "3.10.0",
-    "@vitest/browser": "3.1.4",
-    "@vitest/coverage-istanbul": "3.1.4",
-    "@vitest/ui": "3.1.4",
+    "@vitest/browser": "3.2.4",
+    "@vitest/coverage-istanbul": "3.2.4",
+    "@vitest/ui": "3.2.4",
     "@yamada-ui/cli": "1.2.4",
     "dotenv": "17.0.0",
     "glob": "11.0.2",
@@ -59,7 +59,7 @@
     "turbo": "2.5.3",
     "typescript": "5.8.3",
     "vite-tsconfig-paths": "5.1.4",
-    "vitest": "3.1.4"
+    "vitest": "3.2.4"
   },
   "packageManager": "pnpm@10.12.4",
   "pnpm": {
