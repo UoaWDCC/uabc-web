@@ -14,10 +14,20 @@ import {
 } from "@yamada-ui/react"
 import Link from "next/link"
 
+/**
+ * Props for the NavigationBarUserMenu component.
+ */
 export interface NavigationBarUserMenuProps extends MenuProps {
   avatarProps: AvatarProps
 }
 
+/**
+ * NavigationBarUserMenu component renders a user menu with an avatar and options for profile and sign out.
+ *
+ * @param avatarProps - Props for the avatar component, including name and image source.
+ * @param props - Additional props for the menu component.
+ * @returns A user menu with an avatar and options for profile and sign out.
+ */
 export const NavigationBarUserMenu = ({ avatarProps, ...props }: NavigationBarUserMenuProps) => {
   return (
     <Menu placement="bottom-end" trigger="hover" {...props}>

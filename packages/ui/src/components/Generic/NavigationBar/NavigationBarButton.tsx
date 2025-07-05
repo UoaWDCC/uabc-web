@@ -12,6 +12,17 @@ interface NavigationBarButtonProps extends ButtonProps {
   hovering?: boolean
 }
 
+/**
+ * NavigationBarButton component renders a button with a label and a link.
+ * It also displays a hover indicator when the button is hovered.
+ *
+ * @param label - The label of the button.
+ * @param path - The path to navigate to when the button is clicked.
+ * @param hovering - Optional boolean to indicate if the hover indicator should be shown.
+ * @param props - Additional props for the button component.
+ * @param ref - Ref to the button element.
+ * @returns A button with a label and a link, with an optional hover indicator.
+ */
 export const NavigationBarButton = forwardRef<NavigationBarButtonProps, "a">(
   ({ label, path, hovering, ...props }, ref) => {
     return (
@@ -37,6 +48,12 @@ export const NavigationBarButton = forwardRef<NavigationBarButtonProps, "a">(
   },
 )
 
+/**
+ *
+ * An indicator that appears when hovering over a navigation bar button.
+ *
+ * @returns A hover indicator for the navigation bar button.
+ */
 export const NavigationBarHoverIndicator = () => {
   return (
     <Motion

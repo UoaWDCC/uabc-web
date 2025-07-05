@@ -9,12 +9,24 @@ import { NavigationBarUserMenu } from "./NavigationBarUserMenu"
 
 const StyledLink = ui(Link)
 
+/**
+ * Props for the NavigationBar component.
+ */
 interface NavigationBarProps {
   navItems: Array<{ label: string; path: string }>
   admin?: boolean
   user?: Record<string, string> // TODO: replace with actual user type/ type based on actual user type
 }
 
+/**
+ *
+ * NavigationBar component renders a navigation bar with links to different pages.
+ *
+ * @param navItems - Array of navigation items with label and path.
+ * @param admin - Boolean indicating if the user is an admin, and should see the admin page link.
+ * @param user - Optional user object containing user information (name and profile image src) for the user menu.
+ * @returns A navigation bar with links to different pages, an admin link if the user is an admin, and a user menu if the user is signed in.
+ */
 export const NavigationBar = ({ navItems, admin = false, user }: NavigationBarProps) => {
   const currentPath = usePathname()
 
