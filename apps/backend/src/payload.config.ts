@@ -9,6 +9,7 @@ import sharp from "sharp"
 import { Admin } from "./data-layer/collections/Admin"
 import { Authentication } from "./data-layer/collections/Authentication"
 import { Booking } from "./data-layer/collections/Booking"
+import { Event } from "./data-layer/collections/Event"
 import { GameSession } from "./data-layer/collections/GameSession"
 import { GameSessionSchedule } from "./data-layer/collections/GameSessionSchedule"
 import { Media } from "./data-layer/collections/Media"
@@ -40,6 +41,7 @@ export default buildConfig({
   },
   collections: [
     Admin,
+    Event,
     User,
     Media,
     Semester,
