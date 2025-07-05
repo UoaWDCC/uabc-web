@@ -181,14 +181,18 @@ describe("<NavigationBarUserMenu />", () => {
     expect(NavigationBarModule.NavigationBarUserMenu).toBeDefined()
     expect(
       isValidElement(
-        <NavigationBarModule.NavigationBarUserMenu user={NAVIGATION_BAR_TEST_CONSTANTS.user} />,
+        <NavigationBarModule.NavigationBarUserMenu
+          avatarProps={{ ...NAVIGATION_BAR_TEST_CONSTANTS.user }}
+        />,
       ),
     ).toBeTruthy()
   })
 
   it("should render the NavigationBarUserMenu with correct menu items", async () => {
     const mockUser = NAVIGATION_BAR_TEST_CONSTANTS.user
-    const { user } = render(<NavigationBarModule.NavigationBarUserMenu user={mockUser} />)
+    const { user } = render(
+      <NavigationBarModule.NavigationBarUserMenu avatarProps={{ ...mockUser }} />,
+    )
 
     const userMenu = screen.getByTestId("navbar-user-menu-avatar")
     expect(userMenu).toBeInTheDocument()

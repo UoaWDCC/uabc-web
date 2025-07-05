@@ -2,25 +2,31 @@ import { Heading } from "@repo/ui/components/Primitive"
 import { LogOutIcon, UserIcon } from "@yamada-ui/lucide"
 import {
   Avatar,
+  type AvatarProps,
   HStack,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  type MenuProps,
   MenuSeparator,
   Text,
 } from "@yamada-ui/react"
 import Link from "next/link"
 
-export const NavigationBarUserMenu = ({ user }: { user: Record<string, string> }) => {
+export interface NavigationBarUserMenuProps extends MenuProps {
+  avatarProps: AvatarProps
+}
+
+export const NavigationBarUserMenu = ({ avatarProps, ...props }: NavigationBarUserMenuProps) => {
   return (
-    <Menu placement="bottom-end" trigger="hover">
+    <Menu placement="bottom-end" trigger="hover" {...props}>
       <MenuButton>
-        <Avatar cursor="pointer" data-testid="navbar-user-menu-avatar" {...user} />
+        <Avatar cursor="pointer" data-testid="navbar-user-menu-avatar" {...avatarProps} />
       </MenuButton>
       <MenuList>
         <Heading.h5 paddingX="calc(md - xs)" paddingY="xs">
-          {user.name}
+          {avatarProps.name}
         </Heading.h5>
         <MenuSeparator />
         <MenuItem as={Link} data-testid="navbar-user-menu-profile-link" href="/profile">

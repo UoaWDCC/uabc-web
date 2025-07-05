@@ -102,7 +102,7 @@ export const NavigationBar = ({ navItems, admin = false, user }: NavigationBarPr
             />
           )}
           {user ? (
-            <NavigationBarUserMenu user={user} />
+            <NavigationBarUserMenu avatarProps={user} />
           ) : (
             <NavigationBarButton colorScheme="primary" label="Sign In" path="/signin" />
           )}
