@@ -49,12 +49,12 @@ beforeEach(async () => {
   casualToken = authService.signJWT({ user: casualUserMock })
   memberToken = authService.signJWT({ user: memberUserMock })
   adminToken = authService.signJWT({ user: adminUserMock })
-})
-
-afterEach(async () => {
   for (const slug of Object.keys(payload.collections)) {
     await clearCollection(payload, slug as CollectionSlug)
   }
+})
+
+afterEach(async () => {
   cookies = {}
   headers = {}
 })
