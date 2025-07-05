@@ -11,7 +11,7 @@ on:
           - disabled
           - reset
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 8 * * 1'
 
 env:
   cache_archive: renovate_cache.tar.gz
@@ -59,14 +59,16 @@ jobs:
 
       - name: Compress renovate cache
         if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset' }}
+        continue-on-error: true
         run: |
           ls $cache_dir
           tar -czvf $cache_archive -C $cache_dir .
 
       - name: Upload renovate cache artifact
-        if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset' }}
+        if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset'}}
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.cache_key }}
           path: ${{ env.cache_archive }}
-          retention-days: 1
+          retention-days: 5
