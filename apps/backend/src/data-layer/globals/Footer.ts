@@ -69,6 +69,20 @@ export const Footer: GlobalConfig = {
           required: true,
           maxRows: 5,
           interfaceName: "Link",
+          defaultValue: [
+            {
+              label: "Home",
+              url: "/",
+            },
+            {
+              label: "Book a Court",
+              url: "/book",
+            },
+            {
+              label: "Events",
+              url: "/events",
+            },
+          ],
           fields: [
             {
               name: "label",
@@ -111,6 +125,20 @@ export const Footer: GlobalConfig = {
           required: true,
           maxRows: 5,
           interfaceName: "Link",
+          defaultValue: [
+            {
+              label: "About Us",
+              url: "/about",
+            },
+            {
+              label: "Contact Us",
+              url: "/contact",
+            },
+            {
+              label: "FAQs",
+              url: "/faq",
+            },
+          ],
           fields: [
             {
               name: "label",
