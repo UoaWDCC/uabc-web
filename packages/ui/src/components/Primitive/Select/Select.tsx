@@ -44,7 +44,7 @@ export interface SelectProps extends UISelectProps {
 /**
  * Select component for both mobile and desktop screens with left icon and label support.
  *
- * @param props - Select component properties
+ * @param props Select component properties
  * @returns A select component
  *
  * @example

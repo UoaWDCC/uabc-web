@@ -47,7 +47,7 @@ export interface MultiSelectProps extends UIMultiSelectProps {
 /**
  * Multi select component for both mobile and desktop screens with left icon and label support.
  *
- * @param props - MultiSelect component properties
+ * @param props MultiSelect component properties
  * @returns A multi select component
  *
  * @example
