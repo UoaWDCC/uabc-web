@@ -5,9 +5,9 @@ import type { NextRequest } from "next/server"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import UserDataService from "@/data-layer/services/UserDataService"
 import {
-  adminUserMock,
-  casualUserMock,
-  memberUserMock,
+  ADMIN_USER_UID,
+  CASUAL_USER_UID,
+  MEMBER_USER_UID,
   userCreateMock,
 } from "@/test-config/mocks/User.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
@@ -74,11 +74,11 @@ describe("/api/admin/users/[id]", async () => {
     it("should return existing admin user by ID", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const res = await GET({} as NextRequest, {
-        params: Promise.resolve({ id: adminUserMock.id }),
+        params: Promise.resolve({ id: ADMIN_USER_UID }),
       })
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
-      expect(json.data.id).toBe(adminUserMock.id)
+      expect(json.data.id).toBe(ADMIN_USER_UID)
       expect(json.data.role).toBe("admin")
       expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
@@ -86,11 +86,11 @@ describe("/api/admin/users/[id]", async () => {
     it("should return existing casual user by ID", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const res = await GET({} as NextRequest, {
-        params: Promise.resolve({ id: casualUserMock.id }),
+        params: Promise.resolve({ id: CASUAL_USER_UID }),
       })
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
-      expect(json.data.id).toBe(casualUserMock.id)
+      expect(json.data.id).toBe(CASUAL_USER_UID)
       expect(json.data.role).toBe("casual")
       expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
@@ -98,11 +98,11 @@ describe("/api/admin/users/[id]", async () => {
     it("should return existing member user by ID", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const res = await GET({} as NextRequest, {
-        params: Promise.resolve({ id: memberUserMock.id }),
+        params: Promise.resolve({ id: MEMBER_USER_UID }),
       })
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
-      expect(json.data.id).toBe(memberUserMock.id)
+      expect(json.data.id).toBe(MEMBER_USER_UID)
       expect(json.data.role).toBe("member")
       expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
