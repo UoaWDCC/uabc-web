@@ -1,5 +1,5 @@
-import type { Semester } from "@repo/shared/payload-types"
 import { z } from "zod"
+import type { CreateSemesterData, EditSemesterData } from "./collections"
 import { Weekday } from "./enums"
 
 export const CreateSemesterRequestSchema = z.object({
@@ -12,4 +12,7 @@ export const CreateSemesterRequestSchema = z.object({
   bookingOpenTime: z
     .string()
     .datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-}) satisfies z.ZodType<Omit<Semester, "id" | "createdAt" | "updatedAt">>
+}) satisfies z.ZodType<CreateSemesterData>
+
+export const UpdateSemesterRequestSchema =
+  CreateSemesterRequestSchema.partial() satisfies z.ZodType<EditSemesterData>
