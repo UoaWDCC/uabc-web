@@ -35,7 +35,7 @@ export const NavigationBarUserMenu = ({ avatarProps, ...props }: NavigationBarUs
         <Avatar cursor="pointer" data-testid="navbar-user-menu-avatar" {...avatarProps} />
       </MenuButton>
       <MenuList>
-        <Heading.h5 paddingX="calc(md - xs)" paddingY="xs">
+        <Heading.h5 px="calc(md - xs)" py="xs">
           {avatarProps.name}
         </Heading.h5>
         <MenuSeparator />

@@ -71,9 +71,9 @@ export const NavigationBar = ({ navItems, admin = false, user }: NavigationBarPr
         borderRadius="150px"
         boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.10)"
         maxWidth="1220px"
-        paddingX="lg"
-        paddingY="md"
         position="relative"
+        px="lg"
+        py="md"
         width="full"
       >
         <HStack as={Motion} gap={0}>
