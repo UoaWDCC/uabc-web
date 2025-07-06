@@ -4,16 +4,26 @@ import { CalendarClockIcon, CircleGaugeIcon } from "@yamada-ui/lucide"
 import { Option, Stack, VStack } from "@yamada-ui/react"
 
 export interface QuickBookProps {
-  title: string
+  title?: string
+  submitLabel?: string
+  schedules: { id: string; label: string }[]
 }
 
-export const QuickBook = ({ title = "Quick Book" }: QuickBookProps) => {
+export const QuickBook = ({
+  title = "Quick Book",
+  submitLabel = "Book Now",
+  schedules,
+}: QuickBookProps) => {
   return (
     <VStack bgColor="secondary.800" borderRadius="3xl" borderWidth="medium" p="md">
-      {title && <Heading.h2>{title}</Heading.h2>}
+      <Heading.h2>{title}</Heading.h2>
       <Stack direction={{ base: "column", md: "row" }}>
         <Select icon={<CalendarClockIcon fontSize={24} />} label="Location & Time" stylised>
-          stuff
+          {schedules.map((schedule) => (
+            <Option key={schedule.id} value={schedule.label}>
+              {schedule.label}
+            </Option>
+          ))}
         </Select>
         <Select icon={<CircleGaugeIcon fontSize={24} />} label="Skill Level" stylised>
           {Object.keys(PlayLevel).map((playLevel) => {
@@ -26,7 +36,7 @@ export const QuickBook = ({ title = "Quick Book" }: QuickBookProps) => {
           })}
         </Select>
         <Button colorScheme="primary" variant="gradient">
-          Book Now
+          {submitLabel}
         </Button>
       </Stack>
     </VStack>
