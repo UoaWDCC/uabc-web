@@ -14,11 +14,43 @@ describe("globals/footer", () => {
           instagram: "https://www.instagram.com/uoa.badminton/",
           linkGroup1: {
             title: "Quick Links",
-            links: [],
+            links: [
+              {
+                id: expect.any(String),
+                label: "Home",
+                url: "/",
+              },
+              {
+                id: expect.any(String),
+                label: "Book a Court",
+                url: "/book",
+              },
+              {
+                id: expect.any(String),
+                label: "Events",
+                url: "/events",
+              },
+            ],
           },
           linkGroup2: {
             title: "UABC",
-            links: [],
+            links: [
+              {
+                id: expect.any(String),
+                label: "About Us",
+                url: "/about",
+              },
+              {
+                id: expect.any(String),
+                label: "Contact Us",
+                url: "/contact",
+              },
+              {
+                id: expect.any(String),
+                label: "FAQs",
+                url: "/faq",
+              },
+            ],
           },
           copyright: "© 2025 University of Auckland Badminton Club. \nAll rights reserved.",
           credits: "Developed by the 2025 WDCC UABC Team.",
