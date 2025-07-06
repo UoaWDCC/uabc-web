@@ -2,10 +2,10 @@ name: Pull Request Notifications
 
 on:
   pull_request:
-    types: [opened, reopened, closed]
+    types: [opened, reopened, closed, ready_for_review]
 
 jobs:
-  pull_request_created:
+  pull_request_opened:
     if: github.event.pull_request.draft == false && (github.event.action == 'opened' || github.event.action == 'reopened')
     runs-on: ubuntu-latest
     steps:
@@ -14,6 +14,16 @@ jobs:
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           content: "Pull request opened: ${{ github.event.pull_request.title }} | Link: [View Pull Request](${{ github.event.pull_request.html_url }})"
+
+  pull_request_ready_for_review:
+    if: github.event.action == 'ready_for_review'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Discord Webhook Action
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          content: "Pull request is now ready for review: ${{ github.event.pull_request.title }} | Link: [View Pull Request](${{ github.event.pull_request.html_url }})"
 
   pull_request_merged:
     if: github.event.action == 'closed' && github.event.pull_request.merged == true
