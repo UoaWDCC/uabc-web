@@ -1,11 +1,35 @@
 import { Heading } from "@repo/ui/components/Primitive"
 import { Card, CardBody, CardHeader, Text } from "@yamada-ui/react"
 
+/**
+ * Props for {@link AboutUsCard} component
+ */
 export interface AboutUsCardProps {
+  /**
+   * The title to display in the card header
+   */
   title: string
+  /**
+   * The description text to display in the card body
+   */
   description: string
 }
 
+/**
+ * Card component for displaying "About Us" content with a title and description
+ *
+ * Renders a styled card with a title heading and description text, designed to
+ * provide information about the organization, team members, or services.
+ *
+ * @param props - AboutUsCard component properties
+ * @returns A styled card with title and description
+ *
+ * @example
+ * <AboutUsCard
+ *   title="Our Mission"
+ *   description="We aim to provide exceptional services to our community."
+ * />
+ */
 export const AboutUsCard = ({ title, description }: AboutUsCardProps) => {
   return (
     <Card
