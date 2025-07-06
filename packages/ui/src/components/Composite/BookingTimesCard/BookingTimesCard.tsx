@@ -2,9 +2,9 @@ import { Clock10Icon, MapPinIcon } from "@yamada-ui/lucide"
 import {
   Card,
   CardBody,
+  CardFooter,
   CardHeader,
   type CardProps,
-  Float,
   HStack,
   Separator,
   Spacer,
@@ -110,9 +110,9 @@ export const BookingTimesCard = memo(
             <MapPinIcon height="24px" width="24px" />
             <Text fontSize="sm">{location}</Text>
           </HStack>
-          <Separator _after={separatorAfterStyles} borderColor="transparent" position="relative" />
         </CardBody>
-        <Float placement="end-center">
+        <Separator _after={separatorAfterStyles} borderColor="transparent" position="relative" />
+        <CardFooter p="0">
           <Button
             bgGradient={
               type === "selected"
@@ -127,7 +127,7 @@ export const BookingTimesCard = memo(
           >
             {type === "selected" ? "Unselect" : type === "full" ? "Full" : "Select"}
           </Button>
-        </Float>
+        </CardFooter>
       </Card>
     )
   },
