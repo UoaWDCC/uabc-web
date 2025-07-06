@@ -76,7 +76,7 @@ export const BookingTimesCard = memo(
   ({ title, bookingTime, location, type = "default" }: BookingTimesCardProps) => {
     const cardStyles: CardProps = useMemo(
       () => ({
-        ...(styles[type as keyof typeof styles] ?? {}),
+        ...(styles[type] ?? {}),
       }),
       [type],
     )
