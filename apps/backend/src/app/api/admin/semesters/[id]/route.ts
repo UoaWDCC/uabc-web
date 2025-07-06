@@ -1,4 +1,4 @@
-import { type EditSemesterData, UpdateSemesterRequestSchema } from "@repo/shared"
+import { UpdateSemesterRequestSchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
@@ -42,10 +42,7 @@ class SemesterRouteWrapper {
       const { id } = await params
       const parsedBody = UpdateSemesterRequestSchema.parse(await req.json())
       const semesterDataService = new SemesterDataService()
-      const updatedSemester = await semesterDataService.updateSemester(
-        id,
-        parsedBody as EditSemesterData,
-      )
+      const updatedSemester = await semesterDataService.updateSemester(id, parsedBody)
       return NextResponse.json({ data: updatedSemester }, { status: StatusCodes.OK })
     } catch (error) {
       if (error instanceof NotFound) {

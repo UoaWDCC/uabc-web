@@ -14,27 +14,5 @@ export const CreateSemesterRequestSchema = z.object({
     .datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
 }) satisfies z.ZodType<CreateSemesterData>
 
-export const UpdateSemesterRequestSchema = z.object({
-  name: z.string().optional(),
-  startDate: z
-    .string()
-    .datetime({ message: "Invalid date format, should be in ISO 8601 format" })
-    .optional(),
-  endDate: z
-    .string()
-    .datetime({ message: "Invalid date format, should be in ISO 8601 format" })
-    .optional(),
-  breakStart: z
-    .string()
-    .datetime({ message: "Invalid date format, should be in ISO 8601 format" })
-    .optional(),
-  breakEnd: z
-    .string()
-    .datetime({ message: "Invalid date format, should be in ISO 8601 format" })
-    .optional(),
-  bookingOpenDay: z.nativeEnum(Weekday).optional(),
-  bookingOpenTime: z
-    .string()
-    .datetime({ message: "Invalid date format, should be in ISO 8601 format" })
-    .optional(),
-}) satisfies z.ZodType<EditSemesterData>
+export const UpdateSemesterRequestSchema =
+  CreateSemesterRequestSchema.partial() satisfies z.ZodType<EditSemesterData>
