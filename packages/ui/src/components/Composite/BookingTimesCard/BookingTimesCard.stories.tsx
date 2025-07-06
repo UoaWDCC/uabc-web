@@ -1,7 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/nextjs"
 import { PropsTable } from "@storybook-config/components"
-import { BookingTimesCard } from "./BookingTimesCard"
-import { BOOKING_TIMES_CARD_TYPES } from "./BookingTimesCard.style"
+import { BookingTimesCard, BookingTimesCardTypes } from "./BookingTimesCard"
 
 const meta: Meta<typeof BookingTimesCard> = {
   title: "Composite Components / BookingTimesCard",
@@ -40,10 +39,14 @@ const meta: Meta<typeof BookingTimesCard> = {
     },
     type: {
       control: "select",
-      options: BOOKING_TIMES_CARD_TYPES,
+      options: Object.values(BookingTimesCardTypes),
       description: "The components type",
       table: {
-        type: { summary: BOOKING_TIMES_CARD_TYPES.map((type) => `"${type}"`).join(" | ") },
+        type: {
+          summary: Object.values(BookingTimesCardTypes)
+            .map((type) => `"${type}"`)
+            .join(" | "),
+        },
         defaultValue: { summary: "default" },
       },
     },
@@ -68,7 +71,7 @@ export const Default: Story = (args) => {
 
 export const Types: Story = (args) => {
   return (
-    <PropsTable columns={["Types"]} rows={BOOKING_TIMES_CARD_TYPES}>
+    <PropsTable columns={["Types"]} rows={Object.values(BookingTimesCardTypes)}>
       {(_col, row, key) => {
         return (
           <BookingTimesCard

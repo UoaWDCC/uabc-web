@@ -1,5 +1,4 @@
 import type { CardProps, CSSUIObject } from "@yamada-ui/react"
-import { BookingTimesCardTypes } from "./BookingTimesCard"
 
 export const separatorAfterStyles: CSSUIObject = {
   content: "''",
@@ -14,18 +13,16 @@ export const separatorAfterStyles: CSSUIObject = {
 }
 
 export const styles: Record<string, CardProps> = {
-  [BookingTimesCardTypes.default]: {
+  default: {
     bg: ["secondary.50", "secondary.900"],
     borderWidth: "1px",
   },
-  [BookingTimesCardTypes.selected]: {
+  selected: {
     bg: ["primary.50", "secondary.950"],
     borderColor: "secondary.200",
     borderWidth: "3px",
   },
-  [BookingTimesCardTypes.full]: {
+  full: {
     bg: ["gray.100", "gray.800"],
   },
 }
-
-export const BOOKING_TIMES_CARD_TYPES = Object.keys(BookingTimesCardTypes)
