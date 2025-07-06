@@ -1,4 +1,3 @@
-import type { CreateSemesterData } from "@repo/shared"
 import { CreateSemesterRequestSchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import type { NextRequest } from "next/server"
@@ -19,7 +18,7 @@ class SemesterRouteWrapper {
     try {
       const parsedBody = CreateSemesterRequestSchema.parse(await req.json())
       const semesterDataService = new SemesterDataService()
-      const newSemester = await semesterDataService.createSemester(parsedBody as CreateSemesterData)
+      const newSemester = await semesterDataService.createSemester(parsedBody)
 
       return NextResponse.json({ data: newSemester }, { status: StatusCodes.CREATED })
     } catch (error) {
