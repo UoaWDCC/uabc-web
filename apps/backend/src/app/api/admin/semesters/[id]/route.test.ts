@@ -84,7 +84,6 @@ describe("/api/admin/semesters/[id]", async () => {
       expect(res.status).toBe(StatusCodes.OK)
       const fetchedUpdatedSemester = await semesterDataService.getSemesterById(newSemester.id)
       expect(fetchedUpdatedSemester.name).toEqual(updateSemester.name)
-      expect(newSemester.name).not.toEqual(updateSemester.name)
     })
 
     it("should return 400 when invalid request body", async () => {

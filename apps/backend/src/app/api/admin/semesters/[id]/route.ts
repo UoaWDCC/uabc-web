@@ -33,14 +33,14 @@ class SemesterRouteWrapper {
   /**
    * PATCH method to update a semester.
    *
-   * @param _req The request object containing the request body
+   * @param req The request object containing the request body
    * @returns  The updated  {@link Semester} document
    */
   @Security("jwt", ["admin"])
-  static async PATCH(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  static async PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
-      const parsedBody = UpdateSemesterRequestSchema.parse(await _req.json())
+      const parsedBody = UpdateSemesterRequestSchema.parse(await req.json())
       const semesterDataService = new SemesterDataService()
       const updatedSemester = await semesterDataService.updateSemester(
         id,
@@ -66,5 +66,4 @@ class SemesterRouteWrapper {
   }
 }
 
-export const DELETE = SemesterRouteWrapper.DELETE
-export const PATCH = SemesterRouteWrapper.PATCH
+export const { DELETE, PATCH } = SemesterRouteWrapper
