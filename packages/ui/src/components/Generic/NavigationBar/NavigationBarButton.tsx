@@ -1,7 +1,7 @@
 "use client"
+import { Button } from "@repo/ui/components/Primitive"
 import { AnimatePresence, Box, type ButtonProps, forwardRef, Motion } from "@yamada-ui/react"
 import Link from "next/link"
-import { Button } from "../../Primitive"
 
 /**
  * Props for the NavigationBarButton component.
@@ -19,25 +19,27 @@ interface NavigationBarButtonProps extends ButtonProps {
  * @param label The label of the button.
  * @param path The path to navigate to when the button is clicked.
  * @param hovering Optional boolean to indicate if the hover indicator should be shown.
+ * @param colorScheme Optional color scheme for the button.
  * @param props Additional props for the button component.
  * @param ref Ref to the button element.
  * @returns A button with a label and a link, with an optional hover indicator.
  */
 export const NavigationBarButton = forwardRef<NavigationBarButtonProps, "a">(
-  ({ label, path, hovering, ...props }, ref) => {
+  ({ label, path, hovering, colorScheme, ...props }, ref) => {
     return (
       <Box position="relative">
         <AnimatePresence>{hovering && <NavigationBarHoverIndicator />}</AnimatePresence>
         <Button
           as={Link}
           borderRadius="150px"
+          colorScheme={colorScheme}
           fontSize="lg"
           href={path}
           position="relative"
           px="md"
           ref={ref}
           size="sm"
-          variant={props.colorScheme ? "solid" : ""}
+          variant={colorScheme ? "solid" : ""}
           zIndex="1"
           {...props}
         >
