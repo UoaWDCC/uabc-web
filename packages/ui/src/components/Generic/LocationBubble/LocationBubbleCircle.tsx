@@ -11,11 +11,10 @@ interface LocationBubbleCircleProps {
 }
 
 /**
- *
  * Location Bubble Circle component that displays the circular bubble with an image and a maximize icon.
  *
- * @param locationImage - The image source for the location, can be a URL or a static import.
- * @param locationTitle - The title of the location.
+ * @param locationImage The image source for the location, can be a URL or a static import.
+ * @param locationTitle The title of the location.
  * @returns A `LocationBubbleCircle` component that displays a circular bubble with an image and a maximize icon.
  */
 export const LocationBubbleCircle = ({

@@ -27,15 +27,14 @@ export interface LocationBubbleProps {
 }
 
 /**
- *
  * Location Bubble component that displays a location with an floating bubble effect and provides more details on hover or click.
  *
- * @param locationImage - The image source for the location, can be a URL or a static import.
- * @param locationTitle - The title of the location.
- * @param locationDetails - Optional details about the location, such as address or description.
- * @param locationTimes - Optional object containing days and times for the location, e.g.,
+ * @param locationImage The image source for the location, can be a URL or a static import.
+ * @param locationTitle The title of the location.
+ * @param locationDetails Optional details about the location, such as address or description.
+ * @param locationTimes Optional object containing days and times for the location, e.g.,
  * `{ Tuesday: "7:30pm - 10pm", Friday: "7:30pm - 10pm" }`.
- * @param buttonLink - Optional link for a button to learn more about the location, defaults to `"#"`.
+ * @param buttonLink Optional link for a button to learn more about the location, defaults to `"#"`.
  * @returns A `LocationBubble` component that displays a floating circular bubble, and expands to show more details on hover or click.
  */
 export const LocationBubble = ({
