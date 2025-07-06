@@ -128,7 +128,6 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
 /**
  * Array of supported input types for easy iteration and Storybook controls
  */
-export const INPUT_TYPES = Object.values(InputType)
 
 /**
  * A clean, modern text input component with built-in React Hook Form support.
