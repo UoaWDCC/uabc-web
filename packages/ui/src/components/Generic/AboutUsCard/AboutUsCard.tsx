@@ -21,7 +21,7 @@ export interface AboutUsCardProps {
  * Renders a styled card with a title heading and description text, designed to
  * provide information about the organization, team members, or services.
  *
- * @param props - AboutUsCard component properties
+ * @param props AboutUsCard component properties
  * @returns A styled card with title and description
  *
  * @example
