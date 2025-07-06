@@ -14,13 +14,64 @@ import { useMemo } from "react"
 import { Button, Heading } from "../../Primitive"
 import { separatorAfterStyles, styles } from "./BookingTimesCard.style"
 
+/**
+ * Props for the {@link BookingTimesCard} component.
+ */
 export interface BookingTimesCardProps {
+  /**
+   * The title for the BookingTimesCard
+   * @example "Tuesday, 12th May"
+   */
   title: string
+  /**
+   * The time for the booking
+   * @example "7:30 - 10pm"
+   */
   bookingTime: string
+  /**
+   * The location for the booking
+   * @example "UoA Hiwa Center"
+   */
   location: string
+  /**
+   * The type of the BookingTimesCard
+   * @example "default"
+   */
   type?: keyof typeof styles
 }
 
+/**
+ * The BookingTimesCard component displays a card with a title, booking time, and location.
+ *
+ * @param props Props for the BookingTimesCard component.
+ * @returns A BookingTimesCard component.
+ *
+ * @example
+ * // Default usage
+ * <BookingTimesCard
+ *   title="Tuesday, 12th May"
+ *   bookingTime="7:30 - 10pm"
+ *   location="UoA Hiwa Center"
+ * />
+ *
+ * @example
+ * // Selected type
+ * <BookingTimesCard
+ *   title="Wednesday, 13th May"
+ *   bookingTime="8:00 - 11pm"
+ *   location="UoA Hiwa Center"
+ *   type="selected"
+ * />
+ *
+ * @example
+ * // Disabled/Full state
+ * <BookingTimesCard
+ *   title="Thursday, 14th May"
+ *   bookingTime="9:00 - 12pm"
+ *   location="UoA Hiwa Center"
+ *   type="full"
+ * />
+ */
 export const BookingTimesCard = ({
   title,
   bookingTime,
