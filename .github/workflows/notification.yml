@@ -8,28 +8,27 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Send notification on PR Opened or Ready for Review
         if: github.event.pull_request.draft == false && (github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'ready_for_review')
-        uses: ./.github/composite-actions/send-notification
+        uses: taroj1205/discord-notification@v1
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          color: 3447003 # Blue
           title: 'PR Ready for Review: ${{ github.event.pull_request.title }}'
-          description: |
-            ${{ github.event.pull_request.body }}
+          description: ${{ github.event.pull_request.body }}
           url: ${{ github.event.pull_request.html_url }}
           image_url: 'https://opengraph.githubassets.com/${{ github.sha }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
           author_name: ${{ github.event.pull_request.user.login }}
           author_url: ${{ github.event.pull_request.user.html_url }}
           author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
+          button_label: 'View Pull Request'
           branch_info: '`${{ github.event.pull_request.head.ref }}` -> `${{ github.event.pull_request.base.ref }}`'
 
       - name: Send notification on PR Merged
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
-        uses: ./.github/composite-actions/send-notification
+        uses: taroj1205/discord-notification@v1
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           color: 3066993 # Green
@@ -43,7 +42,7 @@ jobs:
 
       - name: Send notification on PR Closed
         if: github.event.action == 'closed' && github.event.pull_request.merged == false
-        uses: ./.github/composite-actions/send-notification
+        uses: taroj1205/discord-notification@v1
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           color: 15158332 # Red
