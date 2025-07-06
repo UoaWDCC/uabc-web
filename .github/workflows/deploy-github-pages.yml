@@ -32,10 +32,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/checkout@v4
+
       - name: Setup pnpm environment
         uses: ./.github/composite-actions/setup-pnpm
-        with:
-          fetch-depth: 0
 
       - name: Build Storybook
         run: pnpm turbo run storybook:build

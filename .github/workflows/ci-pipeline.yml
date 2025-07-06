@@ -41,6 +41,8 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Setup pnpm environment
         uses: ./.github/composite-actions/setup-pnpm
 
@@ -78,6 +80,8 @@ jobs:
     name: TypeScript
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Setup pnpm environment
         uses: ./.github/composite-actions/setup-pnpm
 
@@ -90,10 +94,10 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Setup pnpm environment
         uses: ./.github/composite-actions/setup-pnpm
-        with:
-          fetch-depth: 2
 
       - name: Test with Coverage
         run: |
@@ -113,8 +117,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - name: Run Vitest Coverage Composite Action
         uses: ./.github/composite-actions/vitest-coverage
@@ -127,6 +129,7 @@ jobs:
     name: Codegen
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Setup pnpm environment
         uses: ./.github/composite-actions/setup-pnpm
 
