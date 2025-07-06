@@ -1,6 +1,6 @@
 import { render, screen } from "@repo/ui/test-utils"
 import { vi } from "vitest"
-import { BookingTimesCard } from "./BookingTimesCard"
+import { BookingTimesCard, BookingTimesCardTypes } from "./BookingTimesCard"
 
 const baseProps = {
   title: "Tuesday, 12th May",
@@ -11,16 +11,16 @@ const baseProps = {
 
 describe("<BookingTimesCard />", () => {
   it("should render the title, booking time, and location", () => {
-    render(<BookingTimesCard {...baseProps} type="default" />)
+    render(<BookingTimesCard {...baseProps} type={BookingTimesCardTypes.default} />)
     expect(screen.getByText(baseProps.title)).toBeInTheDocument()
     expect(screen.getByText(baseProps.bookingTime)).toBeInTheDocument()
     expect(screen.getByText(baseProps.location)).toBeInTheDocument()
   })
 
   it.each([
-    ["default", "Select", false],
-    ["selected", "Unselect", false],
-    ["full", "Full", true],
+    [BookingTimesCardTypes.default, "Select", false],
+    [BookingTimesCardTypes.selected, "Unselect", false],
+    [BookingTimesCardTypes.full, "Full", true],
   ] as const)(
     "should render correct button label and disabled state for type=%s",
     (type, label, disabled) => {

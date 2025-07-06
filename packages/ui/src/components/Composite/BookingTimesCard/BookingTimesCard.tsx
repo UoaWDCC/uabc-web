@@ -14,6 +14,12 @@ import { memo, useMemo } from "react"
 import { Button, Heading } from "../../Primitive"
 import { separatorAfterStyles, styles } from "./BookingTimesCard.style"
 
+export enum BookingTimesCardTypes {
+  default = "default",
+  selected = "selected",
+  full = "full",
+}
+
 /**
  * Props for the {@link BookingTimesCard} component.
  */
@@ -65,7 +71,7 @@ export interface BookingTimesCardProps {
  *   title="Wednesday, 13th May"
  *   bookingTime="8:00 - 11pm"
  *   location="UoA Hiwa Center"
- *   type="selected"
+ *   type={BookingTimesCardTypes.selected}
  *   onClick={() => console.log("Card unselected")}
  * />
  *
@@ -75,19 +81,25 @@ export interface BookingTimesCardProps {
  *   title="Thursday, 14th May"
  *   bookingTime="9:00 - 12pm"
  *   location="UoA Hiwa Center"
- *   type="full"
+ *   type={BookingTimesCardTypes.full}
  *   onClick={() => console.log("This won't be called when disabled")}
  * />
  */
 export const BookingTimesCard = memo(
-  ({ title, bookingTime, location, type = "default", onClick }: BookingTimesCardProps) => {
+  ({
+    title,
+    bookingTime,
+    location,
+    type = BookingTimesCardTypes.default,
+    onClick,
+  }: BookingTimesCardProps) => {
     const cardStyles: CardProps = useMemo(
       () => ({
         ...(styles[type] ?? {}),
       }),
       [type],
     )
-    const isDisabled = type === "full"
+    const isDisabled = type === BookingTimesCardTypes.full
 
     return (
       <Card
@@ -122,7 +134,7 @@ export const BookingTimesCard = memo(
         <CardFooter p="0">
           <Button
             bgGradient={
-              type === "selected"
+              type === BookingTimesCardTypes.selected
                 ? "radial-gradient(1120.78% 150.46% at 123.73% 123.3%, #282828 0%, #27164E 100%)"
                 : undefined
             }
@@ -131,9 +143,13 @@ export const BookingTimesCard = memo(
             fontWeight="normal"
             onClick={onClick}
             size="sm"
-            variant={type === "selected" ? "gradient" : "solid"}
+            variant={type === BookingTimesCardTypes.selected ? "gradient" : "solid"}
           >
-            {type === "selected" ? "Unselect" : type === "full" ? "Full" : "Select"}
+            {type === BookingTimesCardTypes.selected
+              ? "Unselect"
+              : type === BookingTimesCardTypes.full
+                ? "Full"
+                : "Select"}
           </Button>
         </CardFooter>
       </Card>

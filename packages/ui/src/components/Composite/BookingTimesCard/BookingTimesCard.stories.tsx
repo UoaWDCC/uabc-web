@@ -43,7 +43,7 @@ const meta: Meta<typeof BookingTimesCard> = {
       options: BOOKING_TIMES_CARD_TYPES,
       description: "The components type",
       table: {
-        type: { summary: '"default" | "selected" | "full"' },
+        type: { summary: BOOKING_TIMES_CARD_TYPES.map((type) => `"${type}"`).join(" | ") },
         defaultValue: { summary: "default" },
       },
     },
