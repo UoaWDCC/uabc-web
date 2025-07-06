@@ -75,7 +75,6 @@ export const Select: FC<SelectProps> = memo(
           iconProps={{
             pr: { md: "lg" },
           }}
-          portalProps={{ disabled: false }}
           size="lg"
           {...props}
         >

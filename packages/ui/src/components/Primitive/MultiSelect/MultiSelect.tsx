@@ -81,7 +81,6 @@ export const MultiSelect: FC<MultiSelectProps> = memo(
           iconProps={{
             pr: { md: "lg" },
           }}
-          portalProps={{ disabled: false }}
           size="lg"
           {...props}
         >
