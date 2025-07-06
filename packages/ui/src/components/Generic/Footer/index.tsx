@@ -1,33 +1,61 @@
+import type { StackProps } from "@yamada-ui/react"
 import { HStack, Separator, VStack } from "@yamada-ui/react"
+import type { ReactNode } from "react"
 import { memo } from "react"
-import { FooterBottom } from "./FooterBottom"
-import { FooterBrand } from "./FooterBrand"
+import { MOCK_LINKS, MOCK_SOCIAL_LINKS } from "./constants"
+import { FooterBottom, type FooterBottomProps } from "./FooterBottom"
+import { FooterBrand, type FooterBrandProps } from "./FooterBrand"
 import { FooterDecoration } from "./FooterDecoration"
-import { FooterLinks } from "./FooterLinks"
+import { FooterLinks, type FooterLinksProps } from "./FooterLinks"
 
-export const Footer = memo(() => {
-  return (
-    <VStack
-      as="footer"
-      bg={["blackAlpha.50", "whiteAlpha.50"]}
-      display="grid"
-      gap="xl"
-      overflow="clip"
-      placeItems="center"
-      px={{ base: "lg", lg: "24" }}
-      py={{ base: "3xl", md: "24" }}
-    >
-      <HStack justifyContent="center" maxW="9xl" position="relative" w="full">
-        <FooterBrand />
-        <FooterLinks />
-        <FooterDecoration />
-      </HStack>
-      <Separator />
-      <FooterBottom />
-    </VStack>
-  )
-})
+export interface FooterProps extends StackProps {
+  brand?: Omit<FooterBrandProps, "socialLinks">
+  bottomProps?: Omit<FooterBottomProps, "socialLinks">
+  links?: FooterLinksProps["links"]
+  socialLinks?: FooterBottomProps["socialLinks"]
+  decoration?: ReactNode
+}
+
+export const Footer = memo<FooterProps>(
+  ({
+    brand = {
+      title: "UABC",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+    },
+    bottomProps = {
+      copyrightName: "University of Auckland Badminton Club",
+      credits: "Developed by the 2025 WDCC UABC Team",
+    },
+    links = MOCK_LINKS,
+    socialLinks = MOCK_SOCIAL_LINKS,
+    decoration = <FooterDecoration />,
+    ...props
+  }) => {
+    return (
+      <VStack
+        as="footer"
+        bg={["blackAlpha.50", "whiteAlpha.50"]}
+        display="grid"
+        gap="xl"
+        overflow="clip"
+        placeItems="center"
+        px={{ base: "lg", lg: "24" }}
+        py={{ base: "3xl", md: "24" }}
+        {...props}
+      >
+        <HStack justifyContent="center" maxW="9xl" position="relative" w="full">
+          <FooterBrand {...brand} socialLinks={socialLinks} />
+          <FooterLinks links={links} />
+          {decoration}
+        </HStack>
+        <Separator />
+        <FooterBottom {...bottomProps} socialLinks={socialLinks} />
+      </VStack>
+    )
+  },
+)
 
 Footer.displayName = "Footer"
 
-export { LINKS, SOCIAL_LINKS } from "./constants"
+export * from "./constants"

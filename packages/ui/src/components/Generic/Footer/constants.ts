@@ -1,9 +1,26 @@
 import { LinkTreeIcon } from "@repo/ui/components/Icon"
 import { FacebookIcon, InstagramIcon } from "@yamada-ui/lucide"
+import type { FC } from "react"
+
+export type LinkType = {
+  label: string
+  href: string
+}
+
+export type LinkGroup = {
+  title: string
+  links: LinkType[]
+}
+
+export type SocialLink = {
+  label: string
+  href: string
+  icon: FC
+}
 
 // TODO: THESE WILL BE REPLACED WITH PAYLOAD
 
-export const LINKS = {
+export const MOCK_LINKS: Record<string, LinkGroup> = {
   quick: {
     title: "Quick Links",
     links: [
@@ -40,7 +57,7 @@ export const LINKS = {
   },
 }
 
-export const SOCIAL_LINKS = [
+export const MOCK_SOCIAL_LINKS: SocialLink[] = [
   {
     label: "LinkTree",
     href: "https://linktr.ee/",

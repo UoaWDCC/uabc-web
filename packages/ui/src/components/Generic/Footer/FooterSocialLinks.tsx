@@ -3,18 +3,19 @@ import { IconButton } from "@repo/ui/components/Primitive"
 import { ButtonGroup, type ButtonGroupProps, type IconProps } from "@yamada-ui/react"
 import Link from "next/link"
 import { memo } from "react"
-import { SOCIAL_LINKS } from "./constants"
+import type { SocialLink } from "./constants"
 
 interface FooterSocialLinksProps extends ButtonGroupProps {
   iconButtonProps?: IconButtonProps
   iconProps?: IconProps
+  links: SocialLink[]
 }
 
 export const FooterSocialLinks = memo<FooterSocialLinksProps>(
-  ({ iconButtonProps, iconProps, ...props }) => {
+  ({ iconButtonProps, iconProps, links, ...props }) => {
     return (
       <ButtonGroup variant="ghost" {...props}>
-        {SOCIAL_LINKS.map(({ icon: Icon, ...link }) => (
+        {links.map(({ icon: Icon, ...link }) => (
           <IconButton
             aria-label={link.label}
             as={Link}
