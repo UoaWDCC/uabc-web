@@ -38,6 +38,10 @@ export interface BookingTimesCardProps {
    * @example "default"
    */
   type?: keyof typeof styles
+  /**
+   * Callback function triggered when the button is clicked
+   */
+  onClick?: () => void
 }
 
 /**
@@ -52,6 +56,7 @@ export interface BookingTimesCardProps {
  *   title="Tuesday, 12th May"
  *   bookingTime="7:30 - 10pm"
  *   location="UoA Hiwa Center"
+ *   onClick={() => console.log("Card selected")}
  * />
  *
  * @example
@@ -61,6 +66,7 @@ export interface BookingTimesCardProps {
  *   bookingTime="8:00 - 11pm"
  *   location="UoA Hiwa Center"
  *   type="selected"
+ *   onClick={() => console.log("Card unselected")}
  * />
  *
  * @example
@@ -70,10 +76,11 @@ export interface BookingTimesCardProps {
  *   bookingTime="9:00 - 12pm"
  *   location="UoA Hiwa Center"
  *   type="full"
+ *   onClick={() => console.log("This won't be called when disabled")}
  * />
  */
 export const BookingTimesCard = memo(
-  ({ title, bookingTime, location, type = "default" }: BookingTimesCardProps) => {
+  ({ title, bookingTime, location, type = "default", onClick }: BookingTimesCardProps) => {
     const cardStyles: CardProps = useMemo(
       () => ({
         ...(styles[type] ?? {}),
@@ -122,6 +129,7 @@ export const BookingTimesCard = memo(
             colorScheme="primary"
             disabled={isDisabled}
             fontWeight="normal"
+            onClick={onClick}
             size="sm"
             variant={type === "selected" ? "gradient" : "solid"}
           >

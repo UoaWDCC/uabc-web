@@ -15,6 +15,13 @@ const meta: Meta<typeof BookingTimesCard> = {
         defaultValue: { summary: "Tuesday, 12th May" },
       },
     },
+    onClick: {
+      action: "clicked",
+      description: "Function called when the button is clicked",
+      table: {
+        type: { summary: "() => void" },
+      },
+    },
     bookingTime: {
       control: "text",
       description: "The components booking time",
@@ -53,6 +60,7 @@ export const Default: Story = (args) => {
       {...args}
       bookingTime="7:30 - 10pm"
       location="UoA Hiwa Center"
+      onClick={() => console.log("Button clicked")}
       title="Tuesday, 12th May"
     />
   )
@@ -68,6 +76,7 @@ export const Types: Story = (args) => {
             {...args}
             bookingTime="7:30 - 10pm"
             location="UoA Hiwa Center"
+            onClick={() => console.log(`${row} button clicked`)}
             title="Tuesday, 12th May"
             type={row}
           />

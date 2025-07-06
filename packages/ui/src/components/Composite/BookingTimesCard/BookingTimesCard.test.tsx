@@ -1,10 +1,12 @@
 import { render, screen } from "@repo/ui/test-utils"
+import { vi } from "vitest"
 import { BookingTimesCard } from "./BookingTimesCard"
 
 const baseProps = {
   title: "Tuesday, 12th May",
   bookingTime: "7:30 - 10pm",
   location: "UoA Hiwa Center",
+  onClick: vi.fn(),
 }
 
 describe("<BookingTimesCard />", () => {
@@ -36,5 +38,19 @@ describe("<BookingTimesCard />", () => {
   it("should default to type=default if type is not provided", () => {
     render(<BookingTimesCard {...baseProps} />)
     expect(screen.getByRole("button", { name: "Select" })).toBeInTheDocument()
+  })
+
+  it("should call onClick when button is clicked", () => {
+    const onClickMock = vi.fn()
+    render(<BookingTimesCard {...baseProps} onClick={onClickMock} />)
+    screen.getByRole("button", { name: "Select" }).click()
+    expect(onClickMock).toHaveBeenCalledTimes(1)
+  })
+
+  it("should not call onClick when disabled button is clicked", () => {
+    const onClickMock = vi.fn()
+    render(<BookingTimesCard {...baseProps} onClick={onClickMock} type="full" />)
+    screen.getByRole("button", { name: "Full" }).click()
+    expect(onClickMock).not.toHaveBeenCalled()
   })
 })
