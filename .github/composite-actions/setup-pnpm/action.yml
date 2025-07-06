@@ -1,0 +1,46 @@
+name: 'Setup pnpm environment'
+description: 'Sets up Node, pnpm, cache, and installs dependencies'
+inputs:
+  fetch-depth:
+    description: 'Fetch depth for checkout'
+    required: false
+    default: '1'
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Enable Corepack
+      run: corepack enable
+      shell: bash
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        run_install: false
+
+    - name: Get pnpm store path
+      id: pnpm-cache
+      shell: bash
+      run: echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+    - name: Configure pnpm cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile 
