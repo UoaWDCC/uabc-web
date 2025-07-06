@@ -74,16 +74,17 @@ export const NavigationBarHoverIndicator = () => {
       animate={{ opacity: 1 }}
       backdropBlur="xl"
       backdropFilter="auto"
-      backgroundColor="gray.900"
+      bgGradient="secondaryGradient"
       borderRadius="150px"
       data-testid="navbar-hover-indicator"
       exit={{ opacity: 0.25, transition: { duration: 0.4 } }}
-      height="2.125rem"
+      height={8}
       initial={{ opacity: 0 }}
       inset={0}
       layoutId="navigation-bar-indicator"
       position="absolute"
       px="md"
+      transform={"translateY(-0.75px)"}
       transition={{
         layout: { type: "spring", stiffness: 275, damping: 25 },
         default: { duration: 0.3, ease: "easeOut" },
