@@ -4,7 +4,6 @@ about: For issues relating to design
 title: ''
 labels: design
 assignees: ''
-
 ---
 
 **Is your feature request related to a problem? Please describe.**

@@ -2,9 +2,9 @@
 name: Backend feature template
 about: Features relating to the backend
 title: "[BACKEND] "
+type: Feature
 labels: backend
 assignees: ''
-
 ---
 
 **Is your feature request related to a problem? Please describe.**
