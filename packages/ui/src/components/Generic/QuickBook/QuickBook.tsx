@@ -35,7 +35,7 @@ export const QuickBook = ({
             )
           })}
         </Select>
-        <Button colorScheme="primary" variant="gradient">
+        <Button colorScheme="primary" size="lg" variant="gradient">
           {submitLabel}
         </Button>
       </Stack>
