@@ -19,12 +19,11 @@ interface NavigationBarProps {
 }
 
 /**
- *
  * NavigationBar component renders a navigation bar with links to different pages.
  *
- * @param navItems - Array of navigation items with label and path.
- * @param admin - Boolean indicating if the user is an admin, and should see the admin page link.
- * @param user - Optional user object containing user information (name and profile image src) for the user menu.
+ * @param navItems Array of navigation items with label and path.
+ * @param admin Boolean indicating if the user is an admin, and should see the admin page link.
+ * @param user Optional user object containing user information (name and profile image src) for the user menu.
  * @returns A navigation bar with links to different pages, an admin link if the user is an admin, and a user menu if the user is signed in.
  */
 export const NavigationBar = ({ navItems, admin = false, user }: NavigationBarProps) => {
