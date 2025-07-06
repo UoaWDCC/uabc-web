@@ -49,7 +49,9 @@ describe("<BookingTimesCard />", () => {
 
   it("should not call onClick when disabled button is clicked", () => {
     const onClickMock = vi.fn()
-    render(<BookingTimesCard {...baseProps} onClick={onClickMock} type="full" />)
+    render(
+      <BookingTimesCard {...baseProps} onClick={onClickMock} type={BookingTimesCardTypes.full} />,
+    )
     screen.getByRole("button", { name: "Full" }).click()
     expect(onClickMock).not.toHaveBeenCalled()
   })

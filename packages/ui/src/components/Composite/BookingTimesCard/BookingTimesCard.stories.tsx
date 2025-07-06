@@ -8,7 +8,7 @@ const meta: Meta<typeof BookingTimesCard> = {
   argTypes: {
     title: {
       control: "text",
-      description: "The components heading title",
+      description: "The component's heading title",
       table: {
         type: { summary: "string" },
         defaultValue: { summary: "Tuesday, 12th May" },
@@ -23,7 +23,7 @@ const meta: Meta<typeof BookingTimesCard> = {
     },
     bookingTime: {
       control: "text",
-      description: "The components booking time",
+      description: "The component's booking time",
       table: {
         type: { summary: "string" },
         defaultValue: { summary: "7:30 - 10pm" },
@@ -31,7 +31,7 @@ const meta: Meta<typeof BookingTimesCard> = {
     },
     location: {
       control: "text",
-      description: "The components location",
+      description: "The component's location",
       table: {
         type: { summary: "string" },
         defaultValue: { summary: "UoA Hiwa Center" },
@@ -40,7 +40,7 @@ const meta: Meta<typeof BookingTimesCard> = {
     type: {
       control: "select",
       options: Object.values(BookingTimesCardTypes),
-      description: "The components type",
+      description: "The component's type",
       table: {
         type: {
           summary: Object.values(BookingTimesCardTypes)
