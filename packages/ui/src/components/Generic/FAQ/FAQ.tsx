@@ -51,7 +51,7 @@ export interface FAQProps extends Omit<AccordionProps, "children"> {
 /**
  * FAQ component that displays frequently asked questions in an accordion format
  *
- * @param props - FAQ component properties
+ * @param props FAQ component properties
  * @returns A memoized FAQ component with accordion functionality
  *
  * @example
