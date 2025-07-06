@@ -76,14 +76,14 @@ export const NavigationBar = ({ navItems, admin = false, user }: NavigationBarPr
         position="relative"
         width="full"
       >
-        <HStack as={Motion} gap="none">
+        <HStack as={Motion} gap={0}>
           <StyledLink borderRadius="50%" href="/" padding="sm" position="relative" zIndex="1">
             <UabcLogo />
           </StyledLink>
           <HStack
             as={Motion}
             data-testid="navbar-buttons-container"
-            gap="none"
+            gap={0}
             onHoverEnd={clearHover}
           >
             {navItems.map((item, index) => (
