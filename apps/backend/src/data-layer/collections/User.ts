@@ -49,7 +49,6 @@ export const User: CollectionConfig = {
       type: "select",
       required: false,
       options: Object.values(PlayLevel),
-      defaultValue: PlayLevel.beginner,
       admin: {
         description: "The player level of the user",
       },
@@ -92,7 +91,6 @@ export const User: CollectionConfig = {
       type: "select",
       required: false,
       options: Object.values(University),
-      defaultValue: University.uoa,
       admin: {
         description: "The university of the user",
       },
