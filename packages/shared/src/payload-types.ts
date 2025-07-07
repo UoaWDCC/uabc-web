@@ -206,6 +206,34 @@ export interface User {
    */
   role: 'member' | 'casual' | 'admin';
   /**
+   * The phone number of the user
+   */
+  phoneNumber?: string | null;
+  /**
+   * The player level of the user
+   */
+  playLevel?: ('beginner' | 'intermediate' | 'advanced') | null;
+  /**
+   * The gender of the user
+   */
+  gender?: ('male' | 'female' | 'non-binary' | 'other' | 'prefer-not-to-answer') | null;
+  /**
+   * The dietary requirements of the user
+   */
+  dietaryRequirements?: string | null;
+  /**
+   * The student ID of the user
+   */
+  studentId?: string | null;
+  /**
+   * The student UPI of the user
+   */
+  studentUpi?: string | null;
+  /**
+   * The university of the user
+   */
+  university?: ('UoA' | 'AUT' | 'Massey University' | 'Other' | 'Working' | 'Not a student') | null;
+  /**
    * The number of remaining sessions the user has
    */
   remainingSessions?: number | null;
@@ -282,6 +310,10 @@ export interface GameSessionSchedule {
    * The semester this game session schedule belongs to
    */
   semester: string | Semester;
+  /**
+   * The day of the week this game session schedule belongs to
+   */
+  day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
   /**
    * The start time of the game session
    */
@@ -520,6 +552,13 @@ export interface UserSelect<T extends boolean = true> {
   lastName?: T;
   email?: T;
   role?: T;
+  phoneNumber?: T;
+  playLevel?: T;
+  gender?: T;
+  dietaryRequirements?: T;
+  studentId?: T;
+  studentUpi?: T;
+  university?: T;
   remainingSessions?: T;
   image?: T;
   updatedAt?: T;
@@ -564,6 +603,7 @@ export interface SemesterSelect<T extends boolean = true> {
  */
 export interface GameSessionScheduleSelect<T extends boolean = true> {
   semester?: T;
+  day?: T;
   startTime?: T;
   endTime?: T;
   capacity?: T;

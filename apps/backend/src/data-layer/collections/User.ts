@@ -1,4 +1,4 @@
-import { MembershipType } from "@repo/shared"
+import { Gender, MembershipType, PlayLevel, University } from "@repo/shared"
 import type { CollectionConfig } from "payload"
 
 export const User: CollectionConfig = {
@@ -34,6 +34,65 @@ export const User: CollectionConfig = {
       defaultValue: MembershipType.casual,
       admin: {
         description: "The role of the user",
+      },
+    },
+    {
+      name: "phoneNumber",
+      type: "text",
+      required: false,
+      admin: {
+        description: "The phone number of the user",
+      },
+    },
+    {
+      name: "playLevel",
+      type: "select",
+      required: false,
+      options: Object.values(PlayLevel),
+      admin: {
+        description: "The player level of the user",
+      },
+    },
+    {
+      name: "gender",
+      type: "select",
+      required: false,
+      options: Object.values(Gender),
+      admin: {
+        description: "The gender of the user",
+      },
+    },
+    {
+      name: "dietaryRequirements",
+      type: "text",
+      required: false,
+      admin: {
+        description: "The dietary requirements of the user",
+      },
+    },
+    {
+      name: "studentId",
+      type: "text",
+      required: false,
+      admin: {
+        description: "The student ID of the user",
+      },
+    },
+    {
+      name: "studentUpi",
+      type: "text",
+      required: false,
+      admin: {
+        description: "The student UPI of the user",
+      },
+    },
+    {
+      name: "university",
+      type: "select",
+      required: false,
+      options: Object.values(University),
+      admin: {
+        description: "The university of the user",
       },
     },
     {

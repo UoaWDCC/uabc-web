@@ -19,3 +19,20 @@ export enum PlayLevel {
   intermediate = "intermediate",
   advanced = "advanced",
 }
+
+export enum Gender {
+  male = "male",
+  female = "female",
+  nonBinary = "non-binary",
+  other = "other",
+  preferNotToAnswer = "prefer-not-to-answer",
+}
+
+export enum University {
+  uoa = "UoA",
+  aut = "AUT",
+  massey = "Massey University",
+  other = "Other",
+  working = "Working",
+  notAStudent = "Not a student",
+}
