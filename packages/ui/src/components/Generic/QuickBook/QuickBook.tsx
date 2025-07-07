@@ -1,3 +1,5 @@
+"use client"
+
 import { Button, Heading, Select } from "@repo/ui/components/Primitive"
 import { CalendarClockIcon, CircleGaugeIcon } from "@yamada-ui/lucide"
 import { Grid, GridItem, memo, type SelectItem, VStack } from "@yamada-ui/react"
