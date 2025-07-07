@@ -31,9 +31,6 @@ runs:
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
 
-    - name: Set NODE_ENV to production
-      run: echo "NODE_ENV=production" >> $GITHUB_ENV
-
     - name: Install dependencies
       shell: bash
-      run: pnpm install --frozen-lockfile 
+      run: NODE_ENV=production pnpm install --frozen-lockfile 
