@@ -3,6 +3,7 @@ import type { ImageProps } from "@repo/ui/components/Primitive"
 import {
   Box,
   Center,
+  LayoutGroup,
   Motion,
   useDisclosure,
   useMotionValue,
@@ -70,29 +71,10 @@ export const LocationBubble = ({
   return (
     <>
       <Box data-testid="location-bubble" height={468} position="relative" width={348}>
-        {hovering ? (
-          <Motion
-            data-testid="location-bubble-desktop-card-wrapper"
-            onHoverEnd={() => {
-              if (hoverDebounce.current) {
-                clearTimeout(hoverDebounce.current)
-                hoverDebounce.current = null
-              }
-              setHovering(false)
-            }}
-          >
-            <LocationBubbleDesktopCard
-              buttonLink={buttonLink}
-              locationDetails={locationDetails}
-              locationImage={locationImage}
-              locationTimes={locationTimes}
-              locationTitle={locationTitle}
-            />
-          </Motion>
-        ) : (
-          <Center height="100%" width="100%">
+        <LayoutGroup id={locationTitle}>
+          {hovering ? (
             <Motion
-              data-testid="location-bubble-circle-trigger"
+              data-testid="location-bubble-desktop-card-wrapper"
               onHoverEnd={() => {
                 if (hoverDebounce.current) {
                   clearTimeout(hoverDebounce.current)
@@ -100,26 +82,47 @@ export const LocationBubble = ({
                 }
                 setHovering(false)
               }}
-              onHoverStart={() => {
-                hoverDebounce.current = setTimeout(() => {
-                  setHovering(true)
-                }, 100)
-              }}
-              onTap={onOpen}
-              style={{
-                x: bubbleX,
-                y: bubbleY,
-              }}
-              whileTap={{
-                scale: 0.9,
-                rotateZ: 5,
-                transition: { type: "spring", stiffness: 300, damping: 15 },
-              }}
             >
-              <LocationBubbleCircle locationImage={locationImage} locationTitle={locationTitle} />
+              <LocationBubbleDesktopCard
+                buttonLink={buttonLink}
+                locationDetails={locationDetails}
+                locationImage={locationImage}
+                locationTimes={locationTimes}
+                locationTitle={locationTitle}
+              />
             </Motion>
-          </Center>
-        )}
+          ) : (
+            <Center height="100%" width="100%">
+              <Motion
+                data-testid="location-bubble-circle-trigger"
+                onHoverEnd={() => {
+                  if (hoverDebounce.current) {
+                    clearTimeout(hoverDebounce.current)
+                    hoverDebounce.current = null
+                  }
+                  setHovering(false)
+                }}
+                onHoverStart={() => {
+                  hoverDebounce.current = setTimeout(() => {
+                    setHovering(true)
+                  }, 100)
+                }}
+                onTap={onOpen}
+                style={{
+                  x: bubbleX,
+                  y: bubbleY,
+                }}
+                whileTap={{
+                  scale: 0.9,
+                  rotateZ: 5,
+                  transition: { type: "spring", stiffness: 300, damping: 15 },
+                }}
+              >
+                <LocationBubbleCircle locationImage={locationImage} locationTitle={locationTitle} />
+              </Motion>
+            </Center>
+          )}
+        </LayoutGroup>
       </Box>
       <LocationBubbleMobileCard
         buttonLink={buttonLink}
