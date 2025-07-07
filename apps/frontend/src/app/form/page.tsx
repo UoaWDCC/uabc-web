@@ -6,6 +6,7 @@ import { Button, Container, useNotice, VStack } from "@yamada-ui/react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+// THIS SCHEMA IN A REAL APP SHOULD BE IN SHARED FOLDER.
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
