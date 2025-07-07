@@ -52,13 +52,16 @@ export const LocationBubbleDesktopCard = ({
         >
           <Motion
             layoutId="location-image"
+            overflow="hidden"
+            style={{ borderRadius: "14px", height: "100%", width: "100%" }}
             transition={{ type: "spring", bounce: 0.25, visualDuration: 0.4 }}
           >
             <Image
               alt={locationTitle}
-              borderRadius="14px"
               h="100%"
               height={150}
+              objectFit="cover"
+              objectPosition="center"
               {...locationImage}
               w="100%"
               width={270}

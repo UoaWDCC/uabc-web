@@ -47,25 +47,29 @@ export const LocationBubbleCircle = ({
       </Motion>
       <Box data-testid="location-bubble-circle" position="relative" width={148}>
         <Motion
+          animate={{ scale: 1 }}
           border="10px solid transparent"
-          borderRadius="50%"
-          height={148}
+          initial={{ scale: 1.75 }}
           inset="-5px"
           layoutId="location-image"
           margin="5px"
           overflow="hidden"
           position="relative"
-          transition={{ type: "spring", bounce: 0.3, visualDuration: 0.5 }}
-          width={148}
+          style={{ borderRadius: "74px", width: "148px", height: "148px" }}
+          transition={{ type: "spring", bounce: 0.3, visualDuration: 0.4 }}
         >
-          <Image
-            alt={locationTitle}
-            height={148}
-            objectFit="cover"
-            objectPosition="center"
-            {...locationImage}
-            width={148}
-          />
+          <Center height="100%" overflow="hidden" width="100%">
+            <Image
+              alt={locationTitle}
+              h="100%"
+              height={150}
+              objectFit="cover"
+              objectPosition="center"
+              {...locationImage}
+              w="100%"
+              width={270}
+            />
+          </Center>
         </Motion>
         <Motion
           animate={{ opacity: 1, scale: 1 }}
@@ -73,7 +77,6 @@ export const LocationBubbleCircle = ({
           initial={{ opacity: 0, scale: 0.5 }}
           position="absolute"
           right={0}
-          // transition={{ type: "spring", stiffness: 300, damping: 15 }}
           transition={{ type: "spring", bounce: 0.5, visualDuration: 0.5 }}
         >
           <Center bgColor="black" borderRadius="50%" padding="12px">
