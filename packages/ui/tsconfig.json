@@ -6,12 +6,13 @@
     "moduleResolution": "bundler",
     "paths": {
       "@storybook-config/*": ["./.storybook/*"],
-      "@repo/ui/*": ["./src/*"]
+      "@repo/ui/*": ["./src/*"],
+      "@backend/test-config/mocks/*": ["../../apps/backend/src/test-config/mocks/*"]
     },
-    "rootDir": ".",
+    "rootDir": "../..",
     "types": ["vitest/globals"]
   },
   "exclude": ["node_modules", "dist"],
   "extends": "@repo/typescript-config/react-library.json",
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": ["**/*.ts", "**/*.tsx", "../../apps/backend/src/test-config/mocks/**/*.ts"]
 }
