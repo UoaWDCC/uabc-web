@@ -25,7 +25,7 @@ describe("<NavigationBar />", () => {
     mockUsePathname.mockReset()
   })
 
-  it("should re-export the NavigationBar component anc child components and check if they exists", () => {
+  it("should re-export the NavigationBar component anc child components and check if they exist", () => {
     expect(NavigationBarModule.NavigationBar).toBeDefined()
     expect(isValidElement(<NavigationBarModule.NavigationBar navItems={[]} />)).toBeTruthy()
   })
