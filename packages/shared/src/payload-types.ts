@@ -311,6 +311,10 @@ export interface GameSessionSchedule {
    */
   semester: string | Semester;
   /**
+   * The day of the week this game session schedule belongs to
+   */
+  day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+  /**
    * The start time of the game session
    */
   startTime: string;
@@ -599,6 +603,7 @@ export interface SemesterSelect<T extends boolean = true> {
  */
 export interface GameSessionScheduleSelect<T extends boolean = true> {
   semester?: T;
+  day?: T;
   startTime?: T;
   endTime?: T;
   capacity?: T;
