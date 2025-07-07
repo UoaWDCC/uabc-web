@@ -4,18 +4,18 @@ runs:
   using: 'composite'
   steps:
     - name: Check node_modules cache
-        id: cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
-          lookup-only: true
+      id: cache
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          node_modules
+          */node_modules
+          packages/*/node_modules
+          apps/*/node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+        lookup-only: true
 
     - name: Setup Node.js
       if: steps.cache.outputs.cache-hit != 'true'
