@@ -30,7 +30,7 @@ export const QuickBook = memo(
         onSubmit={handleSubmit}
         p="md"
       >
-        <Heading.h2>{title}</Heading.h2>
+        <Heading.h2 display={{ base: "none", md: "block" }}>{title}</Heading.h2>
         <Grid gap="md" templateColumns={{ base: "1fr", md: "1fr 1fr auto" }}>
           <GridItem minW={0}>
             <Select
