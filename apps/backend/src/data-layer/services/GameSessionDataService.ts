@@ -12,7 +12,7 @@ export default class GameSessionDataService {
   /**
    * Creates a new {@link GameSession} document
    *
-   * @param {CreateGameSessionData} newGameSessionData the {@link CreateGameSessionData} to create a new game session with
+   * @param newGameSessionData the {@link CreateGameSessionData} to create a new game session with
    * @returns the created {@link GameSession} document
    */
   public async createGameSession(newGameSessionData: CreateGameSessionData): Promise<GameSession> {
@@ -57,7 +57,7 @@ export default class GameSessionDataService {
    * Updates a {@link GameSession} by it's ID
    *
    * @param id the ID of the {@link GameSession} to update
-   * @param {UpdateGameSessionData} data the new data for the {@link GameSession}
+   * @param  data the new data for the {@link GameSession}
    * @returns the updated {@link GameSession} document if it exists, otherwise throws a {@link NotFound} error
    */
   public async updateGameSession(id: string, data: UpdateGameSessionData): Promise<GameSession> {
@@ -74,7 +74,7 @@ export default class GameSessionDataService {
    * @param id the ID of the {@link GameSession} to delete
    * @returns the deleted {@link GameSession} document if it exists, otherwise throws a {@link NotFound} error
    */
-  public async deleteGameSession(id: string): Promise<GameSessionSchedule> {
+  public async deleteGameSession(id: string): Promise<GameSession> {
     return await payload.delete({
       collection: "gameSession",
       id,
@@ -131,7 +131,7 @@ export default class GameSessionDataService {
    * Updates a {@link GameSessionSchedule} by it's ID
    *
    * @param id the ID of the {@link GameSessionSchedule} to update
-   * @param {UpdateGameSessionScheduleData} data the new data for the {@link GameSessionSchedule}
+   * @param data the new data for the {@link GameSessionSchedule}
    * @returns the updated {@link GameSessionSchedule} document if it exists, otherwise throws a {@link NotFound} error
    */
   public async updateGameSessionSchedule(

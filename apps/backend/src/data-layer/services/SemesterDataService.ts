@@ -6,13 +6,13 @@ export default class SemesterDataService {
   /**
    * Creates a new {@link Semester} document in the database
    *
-   * @param {createSemesterData} newSemesterData The {@link CreateSemesterData} to create a new Semester
+   * @param newSemesterData The {@link CreateSemesterData} to create a new Semester
    * @returns The created {@link Semester} document
    */
-  public async createSemester(createSemesterData: CreateSemesterData): Promise<Semester> {
+  public async createSemester(newSemesterData: CreateSemesterData): Promise<Semester> {
     return await payload.create({
       collection: "semester",
-      data: createSemesterData,
+      data: newSemesterData,
     })
   }
 

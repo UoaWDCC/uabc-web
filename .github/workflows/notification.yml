@@ -2,25 +2,55 @@ name: Pull Request Notifications
 
 on:
   pull_request:
-    types: [opened, reopened, closed]
+    types: [opened, reopened, ready_for_review, closed]
 
 jobs:
-  pull_request_created:
-    if: github.event_name == 'pull_request' && github.event.action == 'opened' || github.event.action == 'reopened'
+  notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Discord Webhook Action
-        uses: tsickert/discord-webhook@v5.3.0
-        with:
-          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          content: "Pull request opened: ${{ github.event.pull_request.title }} | Link: [View Pull Request](${{ github.event.pull_request.html_url }})"
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  pull_request_merged:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - name: Discord Webhook Action
-        uses: tsickert/discord-webhook@v5.3.0
+      - name: Send notification on PR Opened or Ready for Review
+        if: github.event.pull_request.draft == false && (github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'ready_for_review')
+        uses: taroj1205/discord-notification@v1
         with:
-          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          content: "Pull request merged: ${{ github.event.pull_request.title }}"
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          title: 'PR Ready for Review: ${{ github.event.pull_request.title }}'
+          description: ${{ github.event.pull_request.body }}
+          description_max_length: 180
+          url: ${{ github.event.pull_request.html_url }}
+          image_url: 'https://opengraph.githubassets.com/${{ github.sha }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
+          author_name: ${{ github.event.pull_request.user.login }}
+          author_url: ${{ github.event.pull_request.user.html_url }}
+          author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
+          button_label: 'View Pull Request'
+          branch_info: '`${{ github.event.pull_request.head.ref }}` -> `${{ github.event.pull_request.base.ref }}`'
+
+      - name: Send notification on PR Merged
+        if: github.event.action == 'closed' && github.event.pull_request.merged == true
+        uses: taroj1205/discord-notification@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          color: 3066993 # Green
+          title: 'PR Merged: ${{ github.event.pull_request.title }}'
+          description: 'The pull request was merged by **${{ github.event.pull_request.merged_by.login }}**.'
+          url: ${{ github.event.pull_request.html_url }}
+          author_name: ${{ github.event.pull_request.user.login }}
+          author_url: ${{ github.event.pull_request.user.html_url }}
+          author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
+          button_label: 'View Merged PR'
+
+      - name: Send notification on PR Closed
+        if: github.event.action == 'closed' && github.event.pull_request.merged == false
+        uses: taroj1205/discord-notification@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          color: 15158332 # Red
+          title: 'PR Closed: ${{ github.event.pull_request.title }}'
+          description: 'The pull request was closed without merging.'
+          url: ${{ github.event.pull_request.html_url }}
+          author_name: ${{ github.event.pull_request.user.login }}
+          author_url: ${{ github.event.pull_request.user.html_url }}
+          author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
+          button_label: 'View Closed PR'

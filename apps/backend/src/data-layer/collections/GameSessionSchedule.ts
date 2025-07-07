@@ -1,3 +1,4 @@
+import { Weekday } from "@repo/shared"
 import type { CollectionConfig } from "payload"
 import { createTimeField } from "@/data-layer/fields/date-time"
 
@@ -12,6 +13,15 @@ export const GameSessionSchedule: CollectionConfig = {
       required: true,
       admin: {
         description: "The semester this game session schedule belongs to",
+      },
+    },
+    {
+      name: "day",
+      type: "select",
+      options: Object.values(Weekday),
+      required: true,
+      admin: {
+        description: "The day of the week this game session schedule belongs to",
       },
     },
     createTimeField("startTime", "The start time of the game session"),
