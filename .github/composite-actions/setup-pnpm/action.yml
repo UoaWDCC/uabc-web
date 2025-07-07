@@ -1,5 +1,10 @@
 name: 'Setup pnpm environment'
 description: 'Sets up Node, pnpm, cache, and installs dependencies'
+inputs:
+  is-setup-job:
+    description: 'Flag to indicate if this is the main setup job'
+    required: false
+    default: 'false'
 runs:
   using: 'composite'
   steps:
@@ -17,26 +22,39 @@ runs:
           ${{ runner.os }}-node_modules-
         lookup-only: true
 
+    - name: Restore node_modules cache
+      if: inputs.is-setup-job == 'false'
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          node_modules
+          */node_modules
+          packages/*/node_modules
+          apps/*/node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
     - name: Setup Node.js
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true' && inputs.is-setup-job == 'true'
       uses: actions/setup-node@v4
       with:
         node-version-file: '.nvmrc'
 
     - name: Setup pnpm
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true' && inputs.is-setup-job == 'true'
       uses: pnpm/action-setup@v2
       with:
         version: latest
         run_install: false
 
     - name: Install dependencies
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true' && inputs.is-setup-job == 'true'
       shell: bash
       run: NODE_ENV=production pnpm install --frozen-lockfile
 
     - name: Save node_modules cache
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true' && inputs.is-setup-job == 'true'
       uses: actions/cache/save@v4
       with:
         path: |

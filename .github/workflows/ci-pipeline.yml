@@ -48,6 +48,8 @@ jobs:
 
       - name: Setup pnpm environment
         uses: ./.github/composite-actions/setup-pnpm
+        with:
+          is-setup-job: 'true'
 
   build-frontend:
     needs: [check_changes, setup]
