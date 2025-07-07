@@ -1,4 +1,6 @@
 "use client"
+import { MembershipType } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { UabcLogo } from "@repo/ui/components/Icon"
 import { Center, HStack, Motion, Spacer, ui } from "@yamada-ui/react"
 import Link from "next/link"
@@ -14,19 +16,20 @@ const StyledLink = ui(Link)
  */
 interface NavigationBarProps {
   navItems: Array<{ label: string; path: string }>
-  admin?: boolean
-  user?: Record<string, string> // TODO: replace with actual user type/ type based on actual user type
+  user?: User
 }
 
 /**
  * NavigationBar component renders a navigation bar with links to different pages.
  *
  * @param navItems Array of navigation items with label and path.
- * @param admin Boolean indicating if the user is an admin, and should see the admin page link.
- * @param user Optional user object containing user information (name and profile image src) for the user menu.
+ * @param user Optional user object containing user information if signed in.
  * @returns A navigation bar with links to different pages, an admin link if the user is an admin, and a user menu if the user is signed in.
  */
-export const NavigationBar = ({ navItems, admin = false, user }: NavigationBarProps) => {
+export const NavigationBar = ({ navItems, user }: NavigationBarProps) => {
+  const fullName = `${user?.firstName} ${user?.lastName}`.trim()
+  const src = typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""
+
   const currentPath = usePathname()
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(() => {
@@ -104,7 +107,7 @@ export const NavigationBar = ({ navItems, admin = false, user }: NavigationBarPr
         </HStack>
         <Spacer />
         <HStack as={Motion} gap="md">
-          {admin && (
+          {user?.role === MembershipType.admin && (
             <NavigationBarButton
               colorScheme="tertiary"
               hovering={hoveredIndex === navItems.length}
@@ -113,7 +116,7 @@ export const NavigationBar = ({ navItems, admin = false, user }: NavigationBarPr
             />
           )}
           {user ? (
-            <NavigationBarUserMenu avatarProps={user} />
+            <NavigationBarUserMenu avatarProps={{ name: fullName, src: src }} />
           ) : (
             <NavigationBarButton colorScheme="primary" label="Sign In" path="/signin" />
           )}

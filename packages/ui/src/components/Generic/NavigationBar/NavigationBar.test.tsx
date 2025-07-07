@@ -7,7 +7,13 @@ vi.mock("next/navigation", async () => {
 })
 
 import * as NavigationBarModule from "@repo/ui/components/Generic/NavigationBar"
-import { NAVIGATION_BAR_TEST_CONSTANTS } from "@repo/ui/test-config/mocks/NavigationBar.mock"
+import {
+  NAVIGATION_BAR_ADMIN_TEST_CONSTANTS,
+  NAVIGATION_BAR_CASUAL_TEST_CONSTANTS,
+  NAVIGATION_BAR_MEMBER_TEST_CONSTANTS,
+  NAVIGATION_BAR_NO_USER_TEST_CONSTANTS,
+  NAVIGATION_BAR_USER_MENU_TEST_CONSTANTS,
+} from "@repo/ui/test-config/mocks/NavigationBar.mock"
 import { render, screen, waitFor, waitForElementToBeRemoved } from "@repo/ui/test-utils"
 import { usePathname } from "next/navigation"
 import { isValidElement } from "react"
@@ -31,39 +37,45 @@ describe("<NavigationBar />", () => {
   })
 
   it("should render the NavigationBar with correct props", () => {
-    render(<NavigationBar {...NAVIGATION_BAR_TEST_CONSTANTS} />)
+    render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     expect(screen.getByText("Book")).toBeInTheDocument()
     expect(screen.getByText("About")).toBeInTheDocument()
     expect(screen.getByText("Contact")).toBeInTheDocument()
   })
 
-  it("should render admin button when admin prop is true", () => {
-    render(<NavigationBar admin={true} {...NAVIGATION_BAR_TEST_CONSTANTS} />)
+  it("should render admin button when admin signed in", () => {
+    render(<NavigationBar {...NAVIGATION_BAR_ADMIN_TEST_CONSTANTS} />)
     const adminButton = screen.getByText("Admin")
     expect(adminButton).toBeInTheDocument()
     expect(adminButton).toHaveAttribute("href", "/admin")
   })
 
-  it("should not render admin button when admin prop is false", () => {
-    render(<NavigationBar admin={false} {...NAVIGATION_BAR_TEST_CONSTANTS} />)
+  it("should not render admin button when casual, member, or nobody is signed in", () => {
+    render(<NavigationBar {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />)
+    expect(screen.queryByText("Admin")).not.toBeInTheDocument()
+
+    render(<NavigationBar {...NAVIGATION_BAR_CASUAL_TEST_CONSTANTS} />)
+    expect(screen.queryByText("Admin")).not.toBeInTheDocument()
+
+    render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     expect(screen.queryByText("Admin")).not.toBeInTheDocument()
   })
 
-  it("should render sign in button when user prop is not provided", () => {
-    render(<NavigationBar navItems={NAVIGATION_BAR_TEST_CONSTANTS.navItems} />)
+  it("should render sign in button when user is not signed in", () => {
+    render(<NavigationBar {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />)
     const signInButton = screen.getByText("Sign In")
     expect(signInButton).toBeInTheDocument()
     expect(signInButton).toHaveAttribute("href", "/signin")
   })
 
-  it("should render user menu when user prop is provided", () => {
-    render(<NavigationBar {...NAVIGATION_BAR_TEST_CONSTANTS} />)
+  it("should render user menu when user is signed in", () => {
+    render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     const userMenu = screen.getByTestId("navbar-user-menu-avatar")
     expect(userMenu).toBeInTheDocument()
   })
 
   it("should highlight the current path", async () => {
-    render(<NavigationBar {...NAVIGATION_BAR_TEST_CONSTANTS} />)
+    render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     const indicator = screen.getByTestId("navbar-hover-indicator")
     expect(indicator).toBeInTheDocument()
 
@@ -75,7 +87,7 @@ describe("<NavigationBar />", () => {
   })
 
   it("should move indicator to the hovered button", async () => {
-    const { user } = render(<NavigationBar {...NAVIGATION_BAR_TEST_CONSTANTS} />)
+    const { user } = render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
 
     const initialIndicator = screen.getByTestId("navbar-hover-indicator")
     expect(initialIndicator).toBeInTheDocument()
@@ -100,7 +112,7 @@ describe("<NavigationBar />", () => {
 
   it("should clear hover indicator when mouse leaves the navbar", async () => {
     mockUsePathname.mockReturnValue("/unknown-path")
-    const { user } = render(<NavigationBar {...NAVIGATION_BAR_TEST_CONSTANTS} />)
+    const { user } = render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
 
     expect(screen.queryByTestId("navbar-hover-indicator")).not.toBeInTheDocument()
 
@@ -118,7 +130,7 @@ describe("<NavigationBar />", () => {
   })
 
   it("should return indicator to current path when other button is unhovered", async () => {
-    const { user } = render(<NavigationBar {...NAVIGATION_BAR_TEST_CONSTANTS} />)
+    const { user } = render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
 
     const initialIndicator = screen.getByTestId("navbar-hover-indicator")
     expect(initialIndicator).toBeInTheDocument()
@@ -154,7 +166,7 @@ describe("<NavigationBar />", () => {
 
   it("should not show indicator when current path does not match any nav item", () => {
     mockUsePathname.mockReturnValue("/unknown-path")
-    render(<NavigationBar {...NAVIGATION_BAR_TEST_CONSTANTS} />)
+    render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     expect(screen.queryByTestId("navbar-hover-indicator")).not.toBeInTheDocument()
   })
 })
@@ -196,19 +208,17 @@ describe("<NavigationBarButton />", () => {
 describe("<NavigationBarUserMenu />", () => {
   it("should re-export the NavigationBarUserMenu component and check if it exists", () => {
     expect(NavigationBarModule.NavigationBarUserMenu).toBeDefined()
+
     expect(
       isValidElement(
-        <NavigationBarModule.NavigationBarUserMenu
-          avatarProps={{ ...NAVIGATION_BAR_TEST_CONSTANTS.user }}
-        />,
+        <NavigationBarModule.NavigationBarUserMenu {...NAVIGATION_BAR_USER_MENU_TEST_CONSTANTS} />,
       ),
     ).toBeTruthy()
   })
 
   it("should render the NavigationBarUserMenu with correct menu items", async () => {
-    const mockUser = NAVIGATION_BAR_TEST_CONSTANTS.user
     const { user } = render(
-      <NavigationBarModule.NavigationBarUserMenu avatarProps={{ ...mockUser }} />,
+      <NavigationBarModule.NavigationBarUserMenu {...NAVIGATION_BAR_USER_MENU_TEST_CONSTANTS} />,
     )
 
     const userMenu = screen.getByTestId("navbar-user-menu-avatar")
@@ -217,7 +227,8 @@ describe("<NavigationBarUserMenu />", () => {
     const menuTrigger = screen.getByRole("button")
     await user.click(menuTrigger)
 
-    expect(screen.getByText(mockUser.name)).toBeInTheDocument()
+    const mockName = NAVIGATION_BAR_USER_MENU_TEST_CONSTANTS.avatarProps.name
+    expect(screen.getByText(mockName)).toBeInTheDocument()
 
     const profileLink = screen.getByTestId("navbar-user-menu-profile-link")
     expect(profileLink).toBeInTheDocument()

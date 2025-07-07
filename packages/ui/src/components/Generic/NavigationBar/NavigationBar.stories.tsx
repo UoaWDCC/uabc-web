@@ -1,4 +1,8 @@
-import { NAVIGATION_BAR_TEST_CONSTANTS } from "@repo/ui/test-config/mocks/NavigationBar.mock"
+import {
+  NAVIGATION_BAR_ADMIN_TEST_CONSTANTS,
+  NAVIGATION_BAR_CASUAL_TEST_CONSTANTS,
+  NAVIGATION_BAR_MEMBER_TEST_CONSTANTS,
+} from "@repo/ui/test-config/mocks/NavigationBar.mock"
 import type { Meta, StoryObj } from "@storybook/react"
 import { NavigationBar } from "./NavigationBar"
 
@@ -8,16 +12,6 @@ const meta: Meta<typeof NavigationBar> = {
   component: NavigationBar,
   title: "Generic Components / NavigationBar",
   argTypes: {
-    user: {
-      control: "object",
-      description: "User object containing user information (name and profile image src)",
-      table: { type: { summary: "User | null" } },
-    },
-    admin: {
-      control: "boolean",
-      description: "Indicates if the user is an admin",
-      table: { type: { summary: "boolean" } },
-    },
     navItems: {
       control: "object",
       description: "Array of navigation items with label and path",
@@ -25,32 +19,29 @@ const meta: Meta<typeof NavigationBar> = {
         type: { summary: "Array<{ label: string; path: string }>" },
       },
     },
+    user: {
+      control: "object",
+      description: "User object containing user information",
+      table: { type: { summary: "User | undefined" } },
+    },
   },
-  args: {
-    user: undefined,
-    admin: undefined,
-    navItems: NAVIGATION_BAR_TEST_CONSTANTS.navItems,
-  },
+  args: NAVIGATION_BAR_CASUAL_TEST_CONSTANTS,
 }
 
 export default meta
 
 export const Desktop: Story = {
-  render: (args) => {
-    return <NavigationBar {...args} />
-  },
+  args: { user: undefined },
 }
 
-export const DesktopSignedIn: Story = {
-  args: {
-    user: { name: "Eddie Wang", src: "https://placehold.co/300x200/png" },
-    admin: false,
-  },
+export const DesktopSignedInAsCasual: Story = {
+  args: NAVIGATION_BAR_CASUAL_TEST_CONSTANTS,
 }
 
-export const DesktopSignedInWithAdmin: Story = {
-  args: {
-    user: { name: "Eddie Wang", src: "" },
-    admin: true,
-  },
+export const DesktopSignedInAsMember: Story = {
+  args: NAVIGATION_BAR_MEMBER_TEST_CONSTANTS,
+}
+
+export const DesktopSignedInAsAdmin: Story = {
+  args: NAVIGATION_BAR_ADMIN_TEST_CONSTANTS,
 }
