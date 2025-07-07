@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs"
 import {
   EMAIL_MOCK,
   HASHED_PASSWORD_MOCK,
+  LOWERCASE_PASSWORD_MOCK,
   PASSWORD_MOCK,
 } from "@/test-config/mocks/Authentication.mock"
 import StandardSecurity from "./standard"
@@ -35,14 +36,40 @@ describe("StandardSecurity", () => {
     })
   })
 
-  describe("validateDetails", () => {
+  describe("validateRegisterDetails", () => {
     it("returns true for valid data", async () => {
-      const result = await StandardSecurity.validateDetails(EMAIL_MOCK, PASSWORD_MOCK)
+      const result = await StandardSecurity.validateRegisterDetails(EMAIL_MOCK, PASSWORD_MOCK)
       expect(result).toBe(true)
     })
 
-    it("returns false for invalid data", async () => {
-      const result = await StandardSecurity.validateDetails("bademail", "pw")
+    it("returns false for invalid email", async () => {
+      const result = await StandardSecurity.validateRegisterDetails("invalid_email", PASSWORD_MOCK)
+      expect(result).toBe(false)
+    })
+
+    it("returns false for invalid password", async () => {
+      const result = await StandardSecurity.validateRegisterDetails(
+        EMAIL_MOCK,
+        LOWERCASE_PASSWORD_MOCK,
+      )
+      expect(result).toBe(false)
+    })
+  })
+
+  describe("validateLoginDetails", () => {
+    it("returns true for valid data", async () => {
+      const result = await StandardSecurity.validateLoginDetails(
+        EMAIL_MOCK,
+        LOWERCASE_PASSWORD_MOCK,
+      )
+      expect(result).toBe(true)
+    })
+
+    it("returns false for invalid email", async () => {
+      const result = await StandardSecurity.validateLoginDetails(
+        "not_an_email",
+        LOWERCASE_PASSWORD_MOCK,
+      )
       expect(result).toBe(false)
     })
   })
