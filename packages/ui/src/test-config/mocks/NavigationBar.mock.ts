@@ -1,43 +1,4 @@
-// import { adminUserMock, casualUserMock, memberUserMock } from "@backend/test-config/mocks/User.mock"
-import { MembershipType } from "@repo/shared"
-import type { User } from "@repo/shared/payload-types"
-
-const CASUAL_USER_UID = "000000000000000000000001"
-const MEMBER_USER_UID = "000000000000000000000002"
-const ADMIN_USER_UID = "000000000000000000000003"
-
-export const casualUserMock: User = {
-  id: CASUAL_USER_UID,
-  firstName: "straight",
-  lastName: "zhao",
-  email: "straight.zhao@casual.com",
-  role: MembershipType.casual,
-  remainingSessions: 5,
-  updatedAt: new Date(2025, 0, 1).toISOString(),
-  createdAt: new Date(2025, 0, 1).toISOString(),
-}
-
-export const memberUserMock: User = {
-  id: MEMBER_USER_UID,
-  firstName: "straight",
-  lastName: "zhao",
-  email: "straight.zhao@member.com",
-  role: MembershipType.member,
-  remainingSessions: 5,
-  updatedAt: new Date(2025, 0, 1).toISOString(),
-  createdAt: new Date(2025, 0, 1).toISOString(),
-}
-
-export const adminUserMock: User = {
-  id: ADMIN_USER_UID,
-  firstName: "straight",
-  lastName: "zhao",
-  email: "straight.zhao@admin.com",
-  role: MembershipType.admin,
-  remainingSessions: 5,
-  updatedAt: new Date(2025, 0, 1).toISOString(),
-  createdAt: new Date(2025, 0, 1).toISOString(),
-}
+import { adminUserMock, casualUserMock, memberUserMock } from "@backend/test-config/mocks/User.mock"
 
 const navItemsMock = [
   { label: "Book", path: "/book" },
