@@ -11,7 +11,8 @@ import {
   UserIcon,
 } from "@yamada-ui/lucide"
 import { VStack } from "@yamada-ui/react"
-import { INPUT_TYPES, InputType, TextInput } from "./TextInput"
+import { TextInput } from "./TextInput"
+import { INPUT_TYPES, InputType } from "./types"
 
 type Story = StoryFn<typeof TextInput>
 

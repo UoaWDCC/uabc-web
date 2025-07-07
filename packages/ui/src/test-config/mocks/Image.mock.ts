@@ -5,3 +5,18 @@ export const IMAGE_TEST_CONSTANTS = {
   height: 100,
   "data-testid": "next-image",
 }
+
+export const mockImages = [
+  {
+    src: "https://example.com/image1.jpg",
+    alt: "Test Image 1",
+    width: 600,
+    height: 400,
+  },
+  {
+    src: "https://example.com/image2.jpg",
+    alt: "Test Image 2",
+    width: 800,
+    height: 600,
+  },
+]
