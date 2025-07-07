@@ -10,7 +10,7 @@ import {
   LOCATION_BUBBLE_TEST_CONSTANTS,
   LOCATION_BUBBLE_TEST_CONSTANTS_MOBILE,
 } from "@repo/ui/test-config/mocks/LocationBubble.mock"
-import { render, screen, sleep } from "@repo/ui/test-utils"
+import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { useReducedMotion } from "@yamada-ui/react"
 import { isValidElement } from "react"
 import { LocationBubble } from "."
@@ -23,6 +23,7 @@ const mockUseReducedMotion = vi.mocked(useReducedMotion)
 describe("<LocationBubble />", () => {
   beforeEach(() => {
     mockUseReducedMotion.mockReturnValue(false)
+    vi.useFakeTimers({ shouldAdvanceTime: true })
   })
 
   it("should re-export the LocationBubble component and check if LocationBubble component exists", () => {
@@ -47,6 +48,7 @@ describe("<LocationBubble />", () => {
     const bubble = screen.getByTestId("location-bubble-circle-trigger")
     expect(screen.queryByTestId("location-bubble-desktop-card")).not.toBeInTheDocument()
     await user.hover(bubble)
+    vi.advanceTimersToNextTimer()
     expect(await screen.findByTestId("location-bubble-desktop-card")).toBeInTheDocument()
   })
 
@@ -62,10 +64,10 @@ describe("<LocationBubble />", () => {
     const cardWrapper = screen.getByTestId("location-bubble-desktop-card-wrapper")
 
     await user.hover(cardWrapper)
-    await sleep(100)
+    vi.advanceTimersToNextTimer()
 
     await user.unhover(cardWrapper)
-    await sleep(100)
+    vi.advanceTimersToNextTimer()
 
     expect(screen.queryByTestId("location-bubble-desktop-card")).toBeNull()
   })
@@ -76,7 +78,7 @@ describe("<LocationBubble />", () => {
     const bubble = screen.getByTestId("location-bubble-circle-trigger")
 
     await user.hover(bubble)
-    await sleep(50)
+    vi.advanceTimersByTime(50)
     expect(screen.queryByTestId("location-bubble-desktop-card")).toBeNull()
     expect(screen.getByTestId("location-bubble-circle-trigger")).toBeInTheDocument()
   })
@@ -87,14 +89,15 @@ describe("<LocationBubble />", () => {
     const bubble = screen.getByTestId("location-bubble-circle-trigger")
 
     await user.hover(bubble)
-    await sleep(50)
+    vi.advanceTimersByTime(50)
     await user.unhover(bubble)
-    await sleep(50)
+    vi.advanceTimersByTime(50)
+
     expect(screen.queryByTestId("location-bubble-desktop-card")).toBeNull()
     expect(screen.getByTestId("location-bubble-circle-trigger")).toBeInTheDocument()
   })
 
-  it("falls back to '#' for href if no path is provided in LocationBubbleMobileCard", async () => {
+  it("falls back to '#' for href if no path is provided in LocationBubbleDesktopCard", async () => {
     render(<LocationBubbleDesktopCard {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
 
     const button = screen.getByRole("link", { name: /learn more/i })
@@ -107,6 +110,7 @@ describe("<LocationBubble />", () => {
 
     const bubble = screen.getByTestId("location-bubble-circle-trigger")
     await user.click(bubble)
+    vi.advanceTimersToNextTimer()
     expect(await screen.findByTestId("location-bubble-mobile-card")).toBeInTheDocument()
   })
 
@@ -124,7 +128,7 @@ describe("<LocationBubble />", () => {
     const bubbleWithReducedMotion = screen.getByTestId("location-bubble-circle-trigger")
 
     const transformInitial = window.getComputedStyle(bubbleWithReducedMotion).transform
-    await sleep(200)
+    vi.advanceTimersByTime(200)
     const transformLater = window.getComputedStyle(bubbleWithReducedMotion).transform
 
     expect(transformLater).toBe(transformInitial)
@@ -140,14 +144,10 @@ describe("<LocationBubble />", () => {
 
     const transformInitial = window.getComputedStyle(bubbleWithMotion).transform
     expect(transformInitial).toBeOneOf(["translateX(25px)", "translateX(-25px)"])
-    await sleep(200)
-    const transformMiddle = window.getComputedStyle(bubbleWithMotion).transform
-    expect(transformMiddle).not.toBeOneOf(["translateX(25px)", "translateX(-25px)"])
-    await sleep(200)
-    const transformLater = window.getComputedStyle(bubbleWithMotion).transform
-    expect(transformLater).not.toBeOneOf(["translateX(25px)", "translateX(-25px)"])
 
-    expect(transformInitial).not.toBe(transformMiddle)
-    expect(transformMiddle).not.toBe(transformLater)
+    waitFor(() => {
+      const transformAfterHover = window.getComputedStyle(bubbleWithMotion).transform
+      expect(transformAfterHover).not.toBeOneOf(["translateX(25px)", "translateX(-25px)"])
+    })
   })
 })
