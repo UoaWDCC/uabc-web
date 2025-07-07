@@ -73,7 +73,10 @@ export const MultiSelect: FC<MultiSelectProps> = memo(
         }}
       >
         <UIMultiSelect
-          bgGradient={stylised ? "heroGradient" : "transparent"}
+          bgGradient={stylised ? "heroGradient" : undefined}
+          clearIconProps={{
+            pr: { md: "lg" },
+          }}
           component={({ label, onRemove }) => (
             <Tag color="white" colorScheme="secondary" onClose={onRemove} variant="outline">
               {label}
