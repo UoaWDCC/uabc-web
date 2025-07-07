@@ -8,7 +8,7 @@ vi.mock("next/navigation", async () => {
 
 import * as NavigationBarModule from "@repo/ui/components/Generic/NavigationBar"
 import { NAVIGATION_BAR_TEST_CONSTANTS } from "@repo/ui/test-config/mocks/NavigationBar.mock"
-import { render, screen, sleep } from "@repo/ui/test-utils"
+import { render, screen, waitFor, waitForElementToBeRemoved } from "@repo/ui/test-utils"
 import { usePathname } from "next/navigation"
 import { isValidElement } from "react"
 import { NavigationBar } from "./NavigationBar"
@@ -19,6 +19,10 @@ const mockUsePathname = vi.mocked(usePathname)
 describe("<NavigationBar />", () => {
   beforeEach(() => {
     mockUsePathname.mockReturnValue("/book")
+  })
+
+  afterEach(() => {
+    mockUsePathname.mockReset()
   })
 
   it("should re-export the NavigationBar component anc child components and check if they exists", () => {
@@ -52,9 +56,8 @@ describe("<NavigationBar />", () => {
     expect(signInButton).toHaveAttribute("href", "/signin")
   })
 
-  it("should render user menu when user prop is provided", async () => {
+  it("should render user menu when user prop is provided", () => {
     render(<NavigationBar {...NAVIGATION_BAR_TEST_CONSTANTS} />)
-
     const userMenu = screen.getByTestId("navbar-user-menu-avatar")
     expect(userMenu).toBeInTheDocument()
   })
@@ -63,8 +66,12 @@ describe("<NavigationBar />", () => {
     render(<NavigationBar {...NAVIGATION_BAR_TEST_CONSTANTS} />)
     const indicator = screen.getByTestId("navbar-hover-indicator")
     expect(indicator).toBeInTheDocument()
-    await sleep(500)
-    expect(indicator).toBeVisible()
+
+    const indicatorPosition = indicator.getBoundingClientRect()
+    const bookButton = screen.getByText("Book")
+    expect(bookButton).toBeInTheDocument()
+    const bookButtonPosition = bookButton.getBoundingClientRect()
+    expect(indicatorPosition).toStrictEqual(bookButtonPosition)
   })
 
   it("should move indicator to the hovered button", async () => {
@@ -72,71 +79,77 @@ describe("<NavigationBar />", () => {
 
     const initialIndicator = screen.getByTestId("navbar-hover-indicator")
     expect(initialIndicator).toBeInTheDocument()
-    await sleep(500)
-    expect(initialIndicator).toBeVisible()
     const initialPosition = initialIndicator.getBoundingClientRect()
 
     const contactButton = screen.getByText("Contact")
     expect(contactButton).toBeInTheDocument()
+    const contactButtonPosition = contactButton.getBoundingClientRect()
 
     await user.hover(contactButton)
-
-    await sleep(500)
+    await waitFor(() => {
+      expect(initialPosition).toStrictEqual(contactButtonPosition)
+    })
 
     const newIndicator = screen.getAllByTestId("navbar-hover-indicator")[1]
-    expect(newIndicator).not.toBe(initialIndicator)
     expect(newIndicator).toBeInTheDocument()
-    expect(newIndicator).toBeVisible()
+    expect(newIndicator).not.toBe(initialIndicator)
+
     const newPosition = newIndicator.getBoundingClientRect()
-    expect(newPosition).not.toBe(initialPosition)
+    expect(newPosition).toStrictEqual(contactButtonPosition)
   })
 
   it("should clear hover indicator when mouse leaves the navbar", async () => {
     mockUsePathname.mockReturnValue("/unknown-path")
     const { user } = render(<NavigationBar {...NAVIGATION_BAR_TEST_CONSTANTS} />)
 
+    expect(screen.queryByTestId("navbar-hover-indicator")).not.toBeInTheDocument()
+
     const bookButton = screen.getByText("Book")
     expect(bookButton).toBeInTheDocument()
     await user.hover(bookButton)
-    await sleep(500)
-
-    const indicator = screen.getByTestId("navbar-hover-indicator")
-    expect(indicator).toBeInTheDocument()
-    await sleep(500)
-    expect(indicator).toBeVisible()
+    await waitFor(() => {
+      expect(screen.getByTestId("navbar-hover-indicator")).toBeInTheDocument()
+    })
 
     await user.unhover(bookButton)
     await user.hover(screen.getByTestId("navbar-buttons-container"))
     await user.unhover(screen.getByTestId("navbar-buttons-container"))
-    await sleep(500)
-    expect(screen.queryByTestId("navbar-hover-indicator")).not.toBeInTheDocument()
+    await waitForElementToBeRemoved(() => screen.queryByTestId("navbar-hover-indicator"))
   })
 
   it("should return indicator to current path when other button is unhovered", async () => {
     const { user } = render(<NavigationBar {...NAVIGATION_BAR_TEST_CONSTANTS} />)
 
-    const aboutButton = screen.getByText("About")
-    expect(aboutButton).toBeInTheDocument()
-
     const initialIndicator = screen.getByTestId("navbar-hover-indicator")
     expect(initialIndicator).toBeInTheDocument()
+    const initialPosition = initialIndicator.getBoundingClientRect()
 
+    const aboutButton = screen.getByText("About")
+    expect(aboutButton).toBeInTheDocument()
     await user.hover(aboutButton)
-    await sleep(500)
+    await waitFor(() => {
+      expect(initialIndicator).toHaveStyle({ opacity: "0.25" })
+    })
 
-    const hoveredIndicator = screen.getAllByTestId("navbar-hover-indicator")[1]
-    expect(hoveredIndicator).toBeInTheDocument()
-    expect(hoveredIndicator).toBeVisible()
+    const aboutIndicator = screen.getAllByTestId("navbar-hover-indicator")[1]
+    expect(aboutIndicator).toBeInTheDocument()
+    const aboutPosition = aboutIndicator.getBoundingClientRect()
+    expect(aboutPosition).toStrictEqual(aboutButton.getBoundingClientRect())
+    expect(aboutIndicator).not.toBe(initialIndicator)
 
     await user.unhover(aboutButton)
     await user.hover(screen.getByTestId("navbar-buttons-container"))
     await user.unhover(screen.getByTestId("navbar-buttons-container"))
-    await sleep(1000)
+
+    await waitFor(() => {
+      expect(aboutIndicator).toHaveStyle({ opacity: "0.25" })
+    })
 
     const returnedIndicator = screen.getAllByTestId("navbar-hover-indicator")[0]
     expect(returnedIndicator).toBeInTheDocument()
-    expect(returnedIndicator).toBeVisible()
-    expect(returnedIndicator).toBe(initialIndicator)
+    expect(returnedIndicator).toHaveStyle({ opacity: "1" })
+    const returnedPosition = returnedIndicator.getBoundingClientRect()
+    expect(returnedPosition).toStrictEqual(initialPosition)
   })
 
   it("should not show indicator when current path does not match any nav item", () => {
@@ -171,8 +184,12 @@ describe("<NavigationBarButton />", () => {
 
     const indicator = screen.getByTestId("navbar-hover-indicator")
     expect(indicator).toBeInTheDocument()
-    await sleep(500)
-    expect(indicator).toBeVisible()
+    await waitFor(() => {
+      expect(indicator).toHaveStyle({ opacity: "1" })
+    })
+
+    const button = screen.getByText("Hover Test")
+    expect(button.getBoundingClientRect()).toStrictEqual(indicator.getBoundingClientRect())
   })
 })
 
