@@ -29,7 +29,7 @@ export const LocationBubbleCircle = ({
         border="5px solid transparent"
         height={148}
         initial={{ scale: 1.5 }}
-        layoutId="bubble-border"
+        layoutId="location-bubble-border"
         mask="conic-gradient(white 0 0) padding-box exclude, conic-gradient(white 0 0)"
         position="absolute"
         style={{ borderRadius: "74px" }}
@@ -38,12 +38,17 @@ export const LocationBubbleCircle = ({
       />
       <Motion
         height={148}
-        layoutId="bubble-background"
+        layoutId="location-bubble-background"
         position="absolute"
         transition={{ type: "spring", bounce: 0.35, visualDuration: 0.6 }}
         width={148}
       >
-        <Motion height="full" layoutId="location-title" style={{ opacity: 0 }} width="full" />
+        <Motion
+          height="full"
+          layoutId="location-bubble-title"
+          style={{ opacity: 0 }}
+          width="full"
+        />
       </Motion>
       <Box data-testid="location-bubble-circle" position="relative" width={148}>
         <Motion
@@ -51,7 +56,7 @@ export const LocationBubbleCircle = ({
           border="10px solid transparent"
           initial={{ scale: 1.75 }}
           inset="-5px"
-          layoutId="location-image"
+          layoutId="location-bubble-image"
           margin="5px"
           overflow="hidden"
           position="relative"

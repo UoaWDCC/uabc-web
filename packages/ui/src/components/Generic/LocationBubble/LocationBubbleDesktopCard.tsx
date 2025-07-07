@@ -29,7 +29,7 @@ export const LocationBubbleDesktopCard = ({
         border="6px solid transparent"
         height="100%"
         initial={{ scale: 0.5 }}
-        layoutId="bubble-border"
+        layoutId="location-bubble-border"
         mask="conic-gradient(white 0 0) padding-box exclude, conic-gradient(white 0 0)"
         padding="6px"
         position="absolute"
@@ -38,7 +38,7 @@ export const LocationBubbleDesktopCard = ({
         width="100%"
       />
       <Motion
-        layoutId="bubble-background"
+        layoutId="location-bubble-background"
         padding="12px"
         transition={{ type: "spring", bounce: 0.25, visualDuration: 0.4 }}
       >
@@ -51,7 +51,7 @@ export const LocationBubbleDesktopCard = ({
           textAlign="center"
         >
           <Motion
-            layoutId="location-image"
+            layoutId="location-bubble-image"
             overflow="hidden"
             style={{ borderRadius: "14px", height: "100%", width: "100%" }}
             transition={{ type: "spring", bounce: 0.25, visualDuration: 0.4 }}
@@ -71,7 +71,7 @@ export const LocationBubbleDesktopCard = ({
             animate={{ opacity: 1, scale: 1 }}
             initial={{ opacity: 0, scale: 0 }}
             layout="position"
-            layoutId="location-title"
+            layoutId="location-bubble-title"
             transition={{
               default: { type: "spring", bounce: 0.25, visualDuration: 0.4 },
               opacity: { type: "spring", bounce: 0.25, visualDuration: 0.4, delay: 0.1 },
