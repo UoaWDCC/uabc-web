@@ -6152,6 +6152,12 @@ packages:
       '@types/react':
         optional: true
 
+  react-hook-form@7.59.0:
+    resolution: {integrity: sha512-kmkek2/8grqarTJExFNjy+RXDIP8yM+QTl3QL6m6Q8b2bih4ltmiXxH7T9n+yXNK477xPh5yZT/6vD8sYGzJTA==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
   react-hook-form@7.60.0:
     resolution: {integrity: sha512-SBrYOvMbDB7cV8ZfNpaiLcgjH/a1c7aK0lK+aNigpf4xWLO8q+o4tcvVurv3c4EOyzn/3dCsYt4GKD42VvJ/+A==}
     engines: {node: '>=18.0.0'}
@@ -15273,6 +15279,10 @@ snapshots:
       use-sidecar: 1.1.3(@types/react@19.1.5)(react@19.1.0)
     optionalDependencies:
       '@types/react': 19.1.5
+
+  react-hook-form@7.59.0(react@19.1.0):
+    dependencies:
+      react: 19.1.0
 
   react-hook-form@7.60.0(react@19.1.0):
     dependencies:
