@@ -111,18 +111,6 @@ describe("<LocationBubble />", () => {
   })
 
   it("falls back to '#' for href if no path is provided in LocationBubbleMobileCard", async () => {
-    const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
-
-    const bubble = screen.getByTestId("location-bubble-circle-trigger")
-    await user.click(bubble)
-
-    const mobileCard = await screen.findByTestId("location-bubble-mobile-card")
-    const link = mobileCard.querySelector("a")
-    expect(link).toBeInTheDocument()
-    expect(link?.getAttribute("href")).toBe("#")
-  })
-
-  it("falls back to '#' for href if no path is provided in LocationBubbleMobileCard", async () => {
     render(<LocationBubbleMobileCard {...LOCATION_BUBBLE_TEST_CONSTANTS_MOBILE} />)
 
     const button = screen.getByRole("link", { name: /learn more/i })
