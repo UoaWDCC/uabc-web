@@ -18,6 +18,7 @@ jobs:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           title: 'PR Ready for Review: ${{ github.event.pull_request.title }}'
           description: ${{ github.event.pull_request.body }}
+          description_max_length: 180
           url: ${{ github.event.pull_request.html_url }}
           image_url: 'https://opengraph.githubassets.com/${{ github.sha }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
           author_name: ${{ github.event.pull_request.user.login }}
