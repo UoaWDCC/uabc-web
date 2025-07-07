@@ -36,25 +36,25 @@ runs:
           ${{ runner.os }}-node_modules-
 
     - name: Setup Node.js
-      if: steps.cache.outputs.cache-hit != 'true' && inputs.is-setup-job == 'true'
+      if: steps.cache.outputs.cache-hit != 'true'
       uses: actions/setup-node@v4
       with:
         node-version-file: '.nvmrc'
 
     - name: Setup pnpm
-      if: steps.cache.outputs.cache-hit != 'true' && inputs.is-setup-job == 'true'
+      if: steps.cache.outputs.cache-hit != 'true'
       uses: pnpm/action-setup@v2
       with:
         version: latest
         run_install: false
 
     - name: Install dependencies
-      if: steps.cache.outputs.cache-hit != 'true' && inputs.is-setup-job == 'true'
+      if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
       run: NODE_ENV=production pnpm install --frozen-lockfile
 
     - name: Save node_modules cache
-      if: steps.cache.outputs.cache-hit != 'true' && inputs.is-setup-job == 'true'
+      if: steps.cache.outputs.cache-hit != 'true' && steps.cache.outputs.cache-hit == 'true'
       uses: actions/cache/save@v4
       with:
         path: |
