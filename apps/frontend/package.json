@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --turbopack --port=3001",
-    "build": "next build",
+    "build": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation next build",
     "start": "next start --port=3001",
     "lint": "next lint",
     "test": "cross-env NODE_ENV=test vitest run",
