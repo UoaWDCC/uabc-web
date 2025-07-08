@@ -1,6 +1,7 @@
+import type { SerializedLexicalNode, SerializedQuoteNode } from "@repo/shared"
 import { Blockquote } from "@yamada-ui/react"
 import type React from "react"
-import type { RichTextRendererOptions, SerializedLexicalNode, SerializedQuoteNode } from "../types"
+import type { RichTextRendererOptions } from "../types"
 
 type RenderInlineNodes = (
   nodes: SerializedLexicalNode[],

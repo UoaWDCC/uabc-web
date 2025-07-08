@@ -1,9 +1,9 @@
+import type { SerializedLexicalNode } from "@repo/shared"
 import {
   createLinkNode,
   createParagraphNode,
   createTextNode,
 } from "@repo/ui/test-config/mocks/RichText.mock"
-import type { SerializedLexicalNode } from "../types"
 import { createAnchor, createNodeKey, extractTextFromNodes } from "./core"
 
 describe("extractTextFromNodes", () => {

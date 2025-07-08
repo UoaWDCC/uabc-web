@@ -1,10 +1,7 @@
+import type { SerializedLexicalNode, SerializedListItemNode } from "@repo/shared"
 import { ListItem } from "@yamada-ui/react"
 import type React from "react"
-import type {
-  RichTextRendererOptions,
-  SerializedLexicalNode,
-  SerializedListItemNode,
-} from "../types"
+import type { RichTextRendererOptions } from "../types"
 
 type RenderInlineNodes = (
   nodes: SerializedLexicalNode[],
