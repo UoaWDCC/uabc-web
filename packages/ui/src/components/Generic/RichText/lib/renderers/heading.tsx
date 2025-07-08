@@ -1,6 +1,7 @@
+import type { SerializedHeadingNode } from "@repo/shared"
 import { Heading } from "@repo/ui/components/Primitive"
 import type React from "react"
-import type { RichTextRendererOptions, SerializedHeadingNode } from "../types"
+import type { RichTextRendererOptions } from "../types"
 
 /**
  * Renders a heading node as a styled Heading component

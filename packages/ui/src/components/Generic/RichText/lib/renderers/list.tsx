@@ -1,7 +1,8 @@
+import type { SerializedLexicalNode, SerializedListNode } from "@repo/shared"
 import { DecimalList, DiscList, For } from "@yamada-ui/react"
 import type React from "react"
 import { ListType } from "../constants"
-import type { RichTextRendererOptions, SerializedLexicalNode, SerializedListNode } from "../types"
+import type { RichTextRendererOptions } from "../types"
 
 type RenderNode = (node: SerializedLexicalNode, options: RichTextRendererOptions) => React.ReactNode
 

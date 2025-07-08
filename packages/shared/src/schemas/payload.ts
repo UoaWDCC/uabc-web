@@ -1,7 +1,42 @@
-import { MediaSchema } from "@repo/shared"
 import { z } from "zod"
-import { ListType, NodeType } from "../constants"
-import { LinkFieldsSchema } from "./payload"
+import { MediaSchema } from "./media"
+import { LinkType, ListType, NodeType } from "./richtext"
+
+export const DocumentWithSlugSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
+})
+
+export const LinkDocumentSchema = z.object({
+  value: DocumentWithSlugSchema,
+})
+
+export const LinkFieldsSchema = z
+  .object({
+    linkType: z.nativeEnum(LinkType).default(LinkType.CUSTOM),
+    url: z.string().optional().nullable().default(null),
+    doc: z.union([z.string(), LinkDocumentSchema, DocumentWithSlugSchema]).optional().nullable(),
+    newTab: z.boolean().optional().default(false),
+  })
+  .superRefine((data, ctx) => {
+    if (data.linkType === LinkType.INTERNAL) {
+      if (!data.doc) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["doc"],
+          message: "doc is required when linkType is internal",
+        })
+      }
+    } else if (data.linkType === LinkType.CUSTOM) {
+      if (!data.url) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["url"],
+          message: "url is required when linkType is custom",
+        })
+      }
+    }
+  })
 
 const baseNodeSchema = z.object({
   version: z.number(),
@@ -80,6 +115,12 @@ export const SerializedNodeWithChildrenSchema = baseNodeSchema.extend({
   type: z.string(),
 })
 
+export const SerializedRelationshipNode = baseNodeSchema.extend({
+  type: z.literal(NodeType.RELATIONSHIP),
+  relationTo: z.string(),
+  value: z.any().optional(),
+})
+
 export const lexicalNodeSchema: z.ZodType<SerializedLexicalNode> = z.union([
   SerializedTextNodeSchema,
   SerializedHeadingNodeSchema,
@@ -92,5 +133,17 @@ export const lexicalNodeSchema: z.ZodType<SerializedLexicalNode> = z.union([
   SerializedLineBreakNodeSchema,
   SerializedHorizontalRuleNodeSchema,
   SerializedCodeNodeSchema,
+  SerializedRelationshipNode,
   SerializedNodeWithChildrenSchema,
 ])
+
+export const SerializedEditorStateSchema = z.object({
+  root: z.object({
+    children: z.array(lexicalNodeSchema),
+    direction: z.enum(["ltr", "rtl"]).nullable(),
+    format: z.enum(["left", "start", "center", "right", "end", "justify", ""]),
+    indent: z.number(),
+    type: z.string(),
+    version: z.number(),
+  }),
+})

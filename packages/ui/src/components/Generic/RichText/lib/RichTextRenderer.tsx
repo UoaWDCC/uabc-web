@@ -1,3 +1,4 @@
+import type { SerializedEditorState, SerializedLexicalNode } from "@repo/shared"
 import { Box, For, Text } from "@yamada-ui/react"
 import type React from "react"
 import {
@@ -13,7 +14,7 @@ import {
   renderTextNode,
   renderUploadNode,
 } from "./renderers"
-import type { RichTextRendererOptions, SerializedEditorState, SerializedLexicalNode } from "./types"
+import type { RichTextRendererOptions } from "./types"
 import {
   createNodeKey,
   hasChildren,
