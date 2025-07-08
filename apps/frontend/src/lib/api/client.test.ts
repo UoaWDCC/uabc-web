@@ -136,6 +136,26 @@ describe("ApiClient", () => {
 
       expect(result).toEqual({ data: mockResponse, isError: false })
     })
+
+    it("should successfully fetch and parse data with revalidate", async () => {
+      const testSchema = z.object({
+        message: z.string(),
+        data: z.array(z.string()),
+      })
+      const mockResponse = {
+        message: "success",
+        data: ["item1", "item2"],
+      }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
+      const result = await client.get("/test", testSchema, ["tag1"], 60)
+      expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
+        next: {
+          tags: ["tag1"],
+          revalidate: 60,
+        },
+      })
+      expect(result).toEqual({ data: mockResponse, isError: false })
+    })
   })
 
   describe("post method", () => {
@@ -178,6 +198,22 @@ describe("ApiClient", () => {
       expect(result.isError).toBe(true)
       expect(result.error).toBeInstanceOf(Error)
     })
+    it("should successfully post and parse data with revalidate", async () => {
+      const testSchema = z.object({ message: z.string(), id: z.number() })
+      const mockResponse = { message: "created", id: 1 }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
+      const result = await client.post("/test", { foo: "bar" }, testSchema, ["postTag"], false)
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api.example.com/test",
+        expect.objectContaining({
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ foo: "bar" }),
+          next: { tags: ["postTag"], revalidate: false },
+        }),
+      )
+      expect(result).toEqual({ data: mockResponse, isError: false })
+    })
   })
 
   describe("put method", () => {
@@ -217,6 +253,22 @@ describe("ApiClient", () => {
       const result = await client.put("/test", { foo: "bar" }, testSchema)
       expect(result.isError).toBe(true)
       expect(result.error).toBeInstanceOf(Error)
+    })
+    it("should successfully put and parse data with revalidate", async () => {
+      const testSchema = z.object({ message: z.string(), updated: z.boolean() })
+      const mockResponse = { message: "updated", updated: true }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
+      const result = await client.put("/test", { foo: "bar" }, testSchema, ["putTag"], 120)
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api.example.com/test",
+        expect.objectContaining({
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ foo: "bar" }),
+          next: { tags: ["putTag"], revalidate: 120 },
+        }),
+      )
+      expect(result).toEqual({ data: mockResponse, isError: false })
     })
   })
 
@@ -260,6 +312,22 @@ describe("ApiClient", () => {
       expect(result.isError).toBe(true)
       expect(result.error).toBeInstanceOf(Error)
     })
+    it("should successfully patch and parse data with revalidate", async () => {
+      const testSchema = z.object({ message: z.string(), patched: z.boolean() })
+      const mockResponse = { message: "patched", patched: true }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
+      const result = await client.patch("/test", { foo: "bar" }, testSchema, ["patchTag"], 0)
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api.example.com/test",
+        expect.objectContaining({
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ foo: "bar" }),
+          next: { tags: ["patchTag"], revalidate: 0 },
+        }),
+      )
+      expect(result).toEqual({ data: mockResponse, isError: false })
+    })
   })
 
   describe("delete method", () => {
@@ -297,6 +365,20 @@ describe("ApiClient", () => {
       const result = await client.delete("/test", testSchema)
       expect(result.isError).toBe(true)
       expect(result.error).toBeInstanceOf(Error)
+    })
+    it("should successfully delete and parse data with revalidate", async () => {
+      const testSchema = z.object({ message: z.string(), deleted: z.boolean() })
+      const mockResponse = { message: "deleted", deleted: true }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
+      const result = await client.delete("/test", testSchema, ["deleteTag"], 10)
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api.example.com/test",
+        expect.objectContaining({
+          method: "DELETE",
+          next: { tags: ["deleteTag"], revalidate: 10 },
+        }),
+      )
+      expect(result).toEqual({ data: mockResponse, isError: false })
     })
   })
 })

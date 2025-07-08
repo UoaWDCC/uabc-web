@@ -30,17 +30,20 @@ class ApiClient {
    * @param {string} path - The API endpoint path (relative to baseUrl).
    * @param {z.Schema<T>} schema - The zod schema to validate the response data.
    * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
+   * @param {number | false | undefined} [revalidate] - Optional revalidation time in seconds or false to disable revalidation.
    * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
    */
   public async get<T>(
     path: string,
     schema: z.Schema<T>,
     tags: string[] = [],
+    revalidate?: number | false,
   ): Promise<{ data?: T; error?: Error; isError: boolean }> {
     try {
       const response = await fetch(`${this.baseUrl}${path}`, {
         next: {
           tags,
+          ...(revalidate !== undefined ? { revalidate } : {}),
         },
       })
 
@@ -62,6 +65,7 @@ class ApiClient {
    * @param {unknown} body - The request body to send.
    * @param {z.Schema<T>} schema - The zod schema to validate the response data.
    * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
+   * @param {number | false | undefined} [revalidate] - Optional revalidation time in seconds or false to disable revalidation.
    * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
    */
   public async post<T>(
@@ -69,13 +73,17 @@ class ApiClient {
     body: unknown,
     schema: z.Schema<T>,
     tags: string[] = [],
+    revalidate?: number | false,
   ): Promise<{ data?: T; error?: Error; isError: boolean }> {
     try {
       const response = await fetch(`${this.baseUrl}${path}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
-        next: { tags },
+        next: {
+          tags,
+          ...(revalidate !== undefined ? { revalidate } : {}),
+        },
       })
       if (!response.ok) {
         throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
@@ -89,19 +97,29 @@ class ApiClient {
 
   /**
    * Performs a PUT request to the specified path and validates the response using the provided zod schema.
+   * @param {string} path - The API endpoint path (relative to baseUrl).
+   * @param {unknown} body - The request body to send.
+   * @param {z.Schema<T>} schema - The zod schema to validate the response data.
+   * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
+   * @param {number | false | undefined} [revalidate] - Optional revalidation time in seconds or false to disable revalidation.
+   * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
    */
   public async put<T>(
     path: string,
     body: unknown,
     schema: z.Schema<T>,
     tags: string[] = [],
+    revalidate?: number | false,
   ): Promise<{ data?: T; error?: Error; isError: boolean }> {
     try {
       const response = await fetch(`${this.baseUrl}${path}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
-        next: { tags },
+        next: {
+          tags,
+          ...(revalidate !== undefined ? { revalidate } : {}),
+        },
       })
       if (!response.ok) {
         throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
@@ -115,19 +133,29 @@ class ApiClient {
 
   /**
    * Performs a PATCH request to the specified path and validates the response using the provided zod schema.
+   * @param {string} path - The API endpoint path (relative to baseUrl).
+   * @param {unknown} body - The request body to send.
+   * @param {z.Schema<T>} schema - The zod schema to validate the response data.
+   * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
+   * @param {number | false | undefined} [revalidate] - Optional revalidation time in seconds or false to disable revalidation.
+   * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
    */
   public async patch<T>(
     path: string,
     body: unknown,
     schema: z.Schema<T>,
     tags: string[] = [],
+    revalidate?: number | false,
   ): Promise<{ data?: T; error?: Error; isError: boolean }> {
     try {
       const response = await fetch(`${this.baseUrl}${path}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
-        next: { tags },
+        next: {
+          tags,
+          ...(revalidate !== undefined ? { revalidate } : {}),
+        },
       })
       if (!response.ok) {
         throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
@@ -145,17 +173,22 @@ class ApiClient {
    * @param {string} path - The API endpoint path (relative to baseUrl).
    * @param {z.Schema<T>} schema - The zod schema to validate the response data.
    * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
+   * @param {number | false | undefined} [revalidate] - Optional revalidation time in seconds or false to disable revalidation.
    * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
    */
   public async delete<T>(
     path: string,
     schema: z.Schema<T>,
     tags: string[] = [],
+    revalidate?: number | false,
   ): Promise<{ data?: T; error?: Error; isError: boolean }> {
     try {
       const response = await fetch(`${this.baseUrl}${path}`, {
         method: "DELETE",
-        next: { tags },
+        next: {
+          tags,
+          ...(revalidate !== undefined ? { revalidate } : {}),
+        },
       })
       if (!response.ok) {
         throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
