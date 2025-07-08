@@ -7,7 +7,9 @@
     "./components/Icon": "./src/components/Icon/index.ts",
     "./components/Asset/*": "./src/components/Asset/*",
     "./components/Provider": "./src/components/Provider/index.ts",
-    "./components/Generic": "./src/components/Generic/index.ts"
+    "./components/Generic": "./src/components/Generic/index.ts",
+    "./test-utils": "./src/test-utils/index.ts",
+    "./test-config/mocks/*": "./src/test-config/mocks/*"
   },
   "scripts": {
     "check-types": "tsc --noEmit",

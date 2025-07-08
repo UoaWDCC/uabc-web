@@ -12,7 +12,8 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@repo/ui/*": ["../../packages/ui/src/*"]
+      "@repo/ui/*": ["../../packages/ui/src/*"],
+      "@repo/shared/*": ["../../packages/shared/src/*"]
     },
     "plugins": [
       {

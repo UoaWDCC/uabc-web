@@ -1,5 +1,6 @@
 import { userCreateMock } from "@repo/shared/test-config/mocks/User.mock"
 import { payload } from "@/data-layer/adapters/Payload"
+import { clearCollection } from "@/test-config/backend-utils"
 import UserDataService from "./UserDataService"
 
 const userDataService = new UserDataService()
@@ -74,6 +75,47 @@ describe("UserDataService", () => {
 
     it("should return null when deleting non-existent user", async () => {
       await expect(userDataService.deleteUser("nonexistentid")).rejects.toThrow("Not Found")
+    })
+  })
+
+  describe("getPaginatedUsers", () => {
+    beforeEach(async () => {
+      await clearCollection(payload, "user")
+    })
+
+    it("should return paginated users with default limit and page", async () => {
+      const usersToCreate = Array.from({ length: 15 }, (_, i) => ({
+        ...userCreateMock,
+        email: `user${i}@test.com`,
+      }))
+      await Promise.all(usersToCreate.map((u) => userDataService.createUser(u)))
+      const result = await userDataService.getPaginatedUsers()
+      expect(result.docs.length).toBeLessThanOrEqual(10)
+      expect(result.page).toBe(1)
+      expect(result.limit).toBe(10)
+      expect(result.totalDocs).toBeGreaterThanOrEqual(15)
+      expect(result.totalPages).toBeGreaterThanOrEqual(2)
+    })
+
+    it("should return paginated users for custom limit and page", async () => {
+      const usersToCreate = Array.from({ length: 12 }, (_, i) => ({
+        ...userCreateMock,
+        email: `user${i}@test.com`,
+      }))
+      await Promise.all(usersToCreate.map((u) => userDataService.createUser(u)))
+      const result = await userDataService.getPaginatedUsers(5, 3)
+      expect(result.docs.length).toBeLessThanOrEqual(5)
+      expect(result.page).toBe(3)
+      expect(result.limit).toBe(5)
+      expect(result.totalDocs).toBeGreaterThanOrEqual(12)
+      expect(result.totalPages).toBeGreaterThanOrEqual(3)
+    })
+
+    it("should return empty docs if no users exist", async () => {
+      const result = await userDataService.getPaginatedUsers()
+      expect(result.docs).toHaveLength(0)
+      expect(result.page).toBe(1)
+      expect(result.limit).toBe(10)
     })
   })
 })

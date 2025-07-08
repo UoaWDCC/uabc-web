@@ -43,7 +43,6 @@
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.3.0",
     "@testing-library/user-event": "14.6.1",
-    "@types/glob": "9.0.0",
     "@vitejs/plugin-react-swc": "3.10.0",
     "@vitest/browser": "3.2.4",
     "@vitest/coverage-istanbul": "3.2.4",
@@ -68,7 +67,8 @@
       "core-js-pure",
       "esbuild",
       "mongodb-memory-server",
-      "sharp"
+      "sharp",
+      "workerd"
     ],
     "patchedDependencies": {
       "storybook-dark-mode": "patches/storybook-dark-mode.patch"

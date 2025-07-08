@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack --port=3001",
-    "build": "next build",
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --turbopack --port=3001",
+    "build": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation next build",
     "start": "next start --port=3001",
+    "pages:build": "pnpx @cloudflare/next-on-pages",
+    "preview": "pnpm run pages:build && wrangler pages dev",
+    "deploy": "pnpm run pages:build && wrangler pages deploy",
     "lint": "next lint",
     "test": "cross-env NODE_ENV=test vitest run",
     "test:watch": "cross-env NODE_ENV=test vitest",
@@ -15,19 +18,24 @@
     "clean": "rm -rf node_modules .turbo dist coverage"
   },
   "dependencies": {
+    "@hookform/resolvers": "5.1.1",
+    "@repo/shared": "workspace:*",
     "@repo/ui": "workspace:*",
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.7",
     "next": "15.3.5",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-hook-form": "7.60.0",
+    "zod": "3.25.74"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "1.13.12",
+    "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "typescript": "5.8.3",
     "@types/node": "22.15.21",
     "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5",
-    "@repo/test-config": "workspace:*"
+    "typescript": "5.8.3"
   }
 }

@@ -1,22 +1,3 @@
-import { MediaSchema } from "@repo/shared"
-import {
-  DocumentWithSlugSchema,
-  LinkDocumentSchema,
-  LinkFieldsSchema,
-  SerializedCodeNodeSchema,
-  SerializedHeadingNodeSchema,
-  SerializedHorizontalRuleNodeSchema,
-  SerializedLineBreakNodeSchema,
-  SerializedLinkNodeSchema,
-  SerializedListItemNodeSchema,
-  SerializedListNodeSchema,
-  SerializedNodeWithChildrenSchema,
-  SerializedParagraphNodeSchema,
-  SerializedQuoteNodeSchema,
-  SerializedTextNodeSchema,
-  SerializedUploadNodeSchema,
-} from "../schemas"
-
 import type {
   DocumentWithSlug,
   LinkDocument,
@@ -35,7 +16,25 @@ import type {
   SerializedQuoteNode,
   SerializedTextNode,
   SerializedUploadNode,
-} from "../types"
+} from "@repo/shared"
+import { MediaSchema } from "@repo/shared"
+import {
+  DocumentWithSlugSchema,
+  LinkDocumentSchema,
+  LinkFieldsSchema,
+  SerializedCodeNodeSchema,
+  SerializedHeadingNodeSchema,
+  SerializedHorizontalRuleNodeSchema,
+  SerializedLineBreakNodeSchema,
+  SerializedLinkNodeSchema,
+  SerializedListItemNodeSchema,
+  SerializedListNodeSchema,
+  SerializedNodeWithChildrenSchema,
+  SerializedParagraphNodeSchema,
+  SerializedQuoteNodeSchema,
+  SerializedTextNodeSchema,
+  SerializedUploadNodeSchema,
+} from "../schemas"
 
 export const isMediaDocument = (value: unknown): value is MediaDocument => {
   return MediaSchema.safeParse(value).success

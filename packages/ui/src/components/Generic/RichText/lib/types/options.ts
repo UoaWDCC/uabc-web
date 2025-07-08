@@ -1,6 +1,6 @@
+import type { SerializedEditorState, SerializedLexicalNode } from "@repo/shared"
 import type { CodeProps, HeadingProps, ImageProps, LinkProps, TextProps } from "@yamada-ui/react"
 import type React from "react"
-import type { SerializedEditorState, SerializedLexicalNode } from "./nodes"
 
 export interface RichTextRendererOptions {
   textProps?: Partial<TextProps>
