@@ -9,7 +9,6 @@ export const PinInput: ComponentMultiStyle<"PinInput"> = mergeMultiStyle(Input, 
     },
     field: {
       textAlign: "center",
-      bgGradient: "secondaryGradient",
     },
   },
 
@@ -52,6 +51,7 @@ export const PinInput: ComponentMultiStyle<"PinInput"> = mergeMultiStyle(Input, 
     },
     outline: {
       field: {
+        bgGradient: "secondaryGradient",
         borderColor: ["gray.300", "gray.600"],
         _focus: {
           borderColor: ["primary.500", "primary.400"],
