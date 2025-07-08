@@ -6,14 +6,16 @@ import type { z } from "zod"
 class ApiClient {
   /**
    * The base URL for all API requests.
+   *
    * @private
    */
   private readonly baseUrl: string
 
   /**
    * Creates an instance of ApiClient.
-   * @param baseUrl - The base URL for the API. If not provided, uses NEXT_PUBLIC_API_URL from environment variables.
-   * @throws {Error} If no base URL is provided or found in environment variables.
+   *
+   * @param baseUrl The base URL for the API. If not provided, uses NEXT_PUBLIC_API_URL from environment variables.
+   * @throws If no base URL is provided or found in environment variables.
    */
   constructor(baseUrl?: string) {
     this.baseUrl = baseUrl ?? process.env.NEXT_PUBLIC_API_URL
@@ -26,6 +28,7 @@ class ApiClient {
 
   /**
    * Performs a GET request to the specified path and validates the response using the provided zod schema.
+   *
    * @param path The API endpoint path (relative to baseUrl).
    * @param schema The zod schema to validate the response data.
    * @param tags Optional tags for caching or revalidation (used by Next.js fetch).
@@ -59,6 +62,7 @@ class ApiClient {
 
   /**
    * Performs a POST request to the specified path and validates the response using the provided zod schema.
+   *
    * @param path The API endpoint path (relative to baseUrl).
    * @param body The request body to send.
    * @param schema The zod schema to validate the response data.
@@ -95,6 +99,7 @@ class ApiClient {
 
   /**
    * Performs a PUT request to the specified path and validates the response using the provided zod schema.
+   *
    * @param path The API endpoint path (relative to baseUrl).
    * @param body The request body to send.
    * @param schema The zod schema to validate the response data.
@@ -131,6 +136,7 @@ class ApiClient {
 
   /**
    * Performs a PATCH request to the specified path and validates the response using the provided zod schema.
+   *
    * @param path The API endpoint path (relative to baseUrl).
    * @param body The request body to send.
    * @param schema The zod schema to validate the response data.
@@ -167,6 +173,7 @@ class ApiClient {
 
   /**
    * Performs a DELETE request to the specified path and validates the response using the provided zod schema.
+   *
    * @param path The API endpoint path (relative to baseUrl).
    * @param schema The zod schema to validate the response data.
    * @param tags Optional tags for caching or revalidation (used by Next.js fetch).
@@ -202,6 +209,7 @@ class ApiClient {
  * Factory function to create a new ApiClient instance.
  * In most cases, you should use the exported {@link apiClient} instance directly,
  * unless you need to target a different API base URL (e.g., for testing or multi-environment support).
+ *
  * @param baseUrl Optional base URL for the API. Defaults to NEXT_PUBLIC_API_URL.
  * @returns A new ApiClient instance.
  */
