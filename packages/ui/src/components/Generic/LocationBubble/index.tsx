@@ -46,7 +46,7 @@ export const LocationBubble = ({
   buttonLink = "#",
 }: LocationBubbleProps) => {
   const [hovering, setHovering] = useState(false)
-  const hoverDebounce = useRef<NodeJS.Timeout | null>(null)
+  const hoverDebounce = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const { open, onOpen, onClose } = useDisclosure()
 
