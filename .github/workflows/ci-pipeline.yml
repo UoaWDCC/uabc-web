@@ -76,17 +76,6 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
-      - name: Upload cache
-        if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-
   build-backend:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
