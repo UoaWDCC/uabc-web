@@ -7,19 +7,20 @@ import {
   HStack,
   Label,
   memo,
-  Select as UISelect,
-  type SelectProps as UISelectProps,
+  Tag,
+  MultiSelect as UIMultiSelect,
+  type MultiSelectProps as UIMultiSelectProps,
 } from "@yamada-ui/react"
 import type { ReactNode } from "react"
 
-export interface SelectProps extends UISelectProps {
+export interface MultiSelectProps extends UIMultiSelectProps {
   /**
-   * Label text of the Select component.
+   * Label text of the MultiSelect component.
    *
    * @remarks
-   * The label is rendered within the Select component.
+   * The label is rendered within the MultiSelect component.
    *
-   * @defaultValue "Select option"
+   * @defaultValue "Select option(s)"
    */
   label?: string
 
@@ -36,28 +37,30 @@ export interface SelectProps extends UISelectProps {
   /**
    * Whether to have a background gradient and circle around the inline icon.
    *
-   * @remarks To use in the quick book Select components in the hero/home page.
+   * @remarks Same styling as in Select component. MultiSelect is not needed in the quick book
+   * component in the hero/home page, but MultiSelect will feel left out if it doesn't have its own
+   * stylised version :(
    */
   stylised?: boolean
 }
 
 /**
- * Select component for both mobile and desktop screens with left icon and label support.
+ * Multi select component for both mobile and desktop screens with left icon and label support.
  *
- * @param props Select component properties
- * @returns A select component
+ * @param props MultiSelect component properties
+ * @returns A multi select component
  *
  * @example
- * <Select icon={<>A React Node</>} label="A label">
+ * <MultiSelect icon={<>A React Node</>} label="A label">
  *   <Option value="1">Option 1</Option>
  *   <Option value="2">Option 2</Option>
  *   <Option value="3">Option 3</Option>
- * </Select>
+ * </MultiSelect>
  *
- * @see {@link https://yamada-ui.com/components/forms/select Yamada UI Select Docs}
+ * @see {@link https://yamada-ui.com/components/forms/multi-select Yamada UI Select Docs}
  */
-export const Select: FC<SelectProps> = memo(
-  ({ children, label = "Select option", icon, stylised = false, ...props }) => {
+export const MultiSelect: FC<MultiSelectProps> = memo(
+  ({ children, label = "Select option(s)", icon, stylised = false, ...props }) => {
     return (
       <FormControl
         position="relative"
@@ -69,8 +72,16 @@ export const Select: FC<SelectProps> = memo(
           },
         }}
       >
-        <UISelect
-          bgGradient={stylised ? "heroGradient" : "transparent"}
+        <UIMultiSelect
+          bgGradient={stylised ? "heroGradient" : undefined}
+          clearIconProps={{
+            pr: { md: "lg" },
+          }}
+          component={({ label, onRemove }) => (
+            <Tag color="white" colorScheme="secondary" onClose={onRemove} variant="outline">
+              {label}
+            </Tag>
+          )}
           fieldProps={{ pl: { base: "calc(lg + xs + md)", md: "calc(lg - sm - xs + xl)" } }}
           iconProps={{
             pr: { md: "lg" },
@@ -79,7 +90,7 @@ export const Select: FC<SelectProps> = memo(
           {...props}
         >
           {children}
-        </UISelect>
+        </UIMultiSelect>
         <HStack
           align="center"
           gap={{ base: "xs", md: "sm" }}
@@ -110,4 +121,4 @@ export const Select: FC<SelectProps> = memo(
   },
 )
 
-Select.displayName = "Select"
+MultiSelect.displayName = "MultiSelect"
