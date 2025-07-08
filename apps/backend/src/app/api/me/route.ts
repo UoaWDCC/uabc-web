@@ -10,7 +10,9 @@ class RouteWrapper {
   static async GET(req: NextRequest & { user: User }) {
     try {
       const userDataService = new UserDataService()
+
       const userData = await userDataService.getUserById(req.user.id)
+
       return NextResponse.json({ data: userData })
     } catch (error) {
       console.error(error)
