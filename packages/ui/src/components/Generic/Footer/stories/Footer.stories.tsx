@@ -27,15 +27,15 @@ export const AllProps: Story = {
       custom1: {
         title: "Story Links",
         links: [
-          { label: "Story 1", href: "#" },
-          { label: "Story 2", href: "#" },
+          { label: "Story 1", url: "#" },
+          { label: "Story 2", url: "#" },
         ],
       },
       custom2: {
         title: "Book Links",
         links: [
-          { label: "Book 1", href: "#" },
-          { label: "Book 2", href: "#" },
+          { label: "Book 1", url: "#" },
+          { label: "Book 2", url: "#" },
         ],
       },
     },

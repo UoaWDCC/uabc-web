@@ -24,16 +24,16 @@ export const Custom: Story = {
       custom1: {
         title: "Custom Links",
         links: [
-          { label: "Custom 1", href: "#" },
-          { label: "Custom 2", href: "#" },
-          { label: "Custom 3", href: "#" },
+          { label: "Custom 1", url: "#" },
+          { label: "Custom 2", url: "#" },
+          { label: "Custom 3", url: "#" },
         ],
       },
       custom2: {
         title: "More Links",
         links: [
-          { label: "More 1", href: "#" },
-          { label: "More 2", href: "#" },
+          { label: "More 1", url: "#" },
+          { label: "More 2", url: "#" },
         ],
       },
     },
