@@ -8,6 +8,21 @@ inputs:
   DATABASE_URI:
     description: "The database URI for the workspace."
     required: false
+  NEXT_PUBLIC_URL:
+    description: "The public URL for the workspace."
+    required: false
+  NEXT_PUBLIC_API_URL:
+    description: "The public API URL for the workspace."
+    required: false
+  GOOGLE_CLIENT_ID:
+    description: "The Google OAuth client ID."
+    required: false
+  GOOGLE_CLIENT_SECRET:
+    description: "The Google OAuth client secret."
+    required: false
+  JWT_SECRET:
+    description: "The JWT signing secret."
+    required: false
   workspace:
     description: "The workspace to build."
     required: true
@@ -30,22 +45,22 @@ runs:
         version: latest
         run_install: false
 
-    - name: Restore node_modules cache
-      uses: actions/cache/restore@v4
-      id: cache
-      with:
-        path: |
-          node_modules
-          */node_modules
-          packages/*/node_modules
-          apps/*/node_modules
-        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-node_modules-
+    # - name: Restore node_modules cache
+    #   uses: actions/cache/restore@v4
+    #   id: cache
+    #   with:
+    #     path: |
+    #       node_modules
+    #       */node_modules
+    #       packages/*/node_modules
+    #       apps/*/node_modules
+    #     key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-node_modules-
 
     - name: Install dependencies if cache misses
       if: steps.cache.outputs.cache-hit != 'true'
-      run: pnpm install
+      run: NODE_ENV=production pnpm install --frozen-lockfile
       shell: bash
 
     - name: Restore Next.js cache
@@ -53,13 +68,37 @@ runs:
       with:
         path: |
           apps/${{ inputs.workspace }}/.next/cache
-        key: ${{ runner.os }}-nextjs-${{ hashFiles('apps/${{ inputs.workspace }}/*') }}
+        key: ${{ runner.os }}-nextjs-${{ inputs.workspace }}-${{ hashFiles('apps/${{ inputs.workspace }}/*') }}
         restore-keys: |
-          ${{ runner.os }}-nextjs-
+          ${{ runner.os }}-nextjs-${{ inputs.workspace }}
+
+    - name: Build and start Backend Server
+      if: inputs.workspace == 'frontend'
+      shell: bash
+      env:
+        PAYLOAD_SECRET: ${{ inputs.PAYLOAD_SECRET }}
+        DATABASE_URI: ${{ inputs.DATABASE_URI }}
+        NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
+        NEXT_PUBLIC_API_URL: http://localhost:3000
+        GOOGLE_CLIENT_ID: ${{ inputs.GOOGLE_CLIENT_ID }}
+        GOOGLE_CLIENT_SECRET: ${{ inputs.GOOGLE_CLIENT_SECRET }}
+        JWT_SECRET: ${{ inputs.JWT_SECRET }}
+        PORT: 3000
+      run: |
+        pnpm turbo run build --filter backend
+        # Start the backend server in background
+        pnpm turbo run start --filter backend -- --port 3000
+        # Wait for server to be ready
+        timeout 30 bash -c 'until curl -f http://localhost:3000/api/health; do sleep 1; done'
 
     - name: Build
       shell: bash
       env:
         PAYLOAD_SECRET: ${{ inputs.PAYLOAD_SECRET }}
         DATABASE_URI: ${{ inputs.DATABASE_URI }}
+        NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
+        NEXT_PUBLIC_API_URL: ${{ inputs.workspace == 'frontend' && 'http://localhost:3000' || inputs.NEXT_PUBLIC_API_URL }}
+        GOOGLE_CLIENT_ID: ${{ inputs.GOOGLE_CLIENT_ID }}
+        GOOGLE_CLIENT_SECRET: ${{ inputs.GOOGLE_CLIENT_SECRET }}
+        JWT_SECRET: ${{ inputs.JWT_SECRET }}
       run: pnpm turbo run build --filter ${{ inputs.workspace }}

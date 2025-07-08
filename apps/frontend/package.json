@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack --port=3001",
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --turbopack --port=3001",
     "build": "next build",
     "start": "next start --port=3001",
     "lint": "next lint",
@@ -15,7 +15,8 @@
     "clean": "rm -rf node_modules .turbo dist coverage"
   },
   "dependencies": {
-    "@hookform/resolvers": "3.10.0",
+    "@hookform/resolvers": "5.1.1",
+    "@repo/shared": "workspace:*",
     "@repo/ui": "workspace:*",
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.7",
@@ -26,6 +27,7 @@
     "zod": "3.25.74"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "1.13.12",
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "22.15.21",

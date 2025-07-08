@@ -87,33 +87,51 @@ jobs:
             apps/*/node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-  build-frontend:
-    needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Build Frontend
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run Build Frontend
-        uses: ./.github/ci-actions/build/
-        with:
-          workspace: frontend
-
   build-backend:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Backend
     runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://wdcc-uabc-backend-staging.fly.dev/
     steps:
       - uses: actions/checkout@v4
 
       - name: Run Build Backend
         uses: ./.github/ci-actions/build/
         with:
+          workspace: backend
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
-          workspace: backend
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+  build-frontend:
+    needs: [check_changes, setup, build-backend]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://wdcc-uabc-frontend-staging.fly.dev/
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Frontend
+        uses: ./.github/ci-actions/build/
+        with:
+          workspace: frontend
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_API_URL: http://localhost:3000
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
   typecheck:
     needs: [check_changes, setup]

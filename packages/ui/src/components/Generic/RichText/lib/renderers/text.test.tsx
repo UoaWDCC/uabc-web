@@ -1,6 +1,6 @@
+import type { SerializedTextNode } from "@repo/shared"
+import { NodeType, TextFormat } from "@repo/shared"
 import { render, screen } from "@testing-library/react"
-import { NodeType, TextFormat } from "../constants"
-import type { SerializedTextNode } from "../types"
 import { renderTextNode } from "./text"
 
 const baseNode: SerializedTextNode = {
