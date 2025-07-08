@@ -55,7 +55,6 @@ runs:
           ${{ runner.os }}-node_modules-
 
     - name: Install dependencies if cache misses
-      if: steps.cache.outputs.cache-hit != 'true'
       run: NODE_ENV=production pnpm install --frozen-lockfile
       shell: bash
 

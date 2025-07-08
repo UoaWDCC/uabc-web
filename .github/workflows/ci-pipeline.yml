@@ -45,23 +45,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check if node_modules cache exists
+        id: cache-check
+        uses: actions/cache@v4
         with:
-          fetch-depth: 2
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          lookup-only: true
 
       - name: Setup Node.js
+        if: steps.cache-check.outputs.cache-hit != 'true'
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
 
       - name: Setup pnpm
+        if: steps.cache-check.outputs.cache-hit != 'true'
         uses: pnpm/action-setup@v2
         with:
           version: latest
           run_install: false
 
-      - name: Restore node_modules cache
-        id: cache
-        uses: actions/cache@v4
+      - name: Install dependencies
+        if: steps.cache-check.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Save node_modules cache
+        if: steps.cache-check.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
         with:
           path: |
             node_modules
@@ -69,12 +81,6 @@ jobs:
             packages/*/node_modules
             apps/*/node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
-
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
 
   build-backend:
     needs: [check_changes, setup]
