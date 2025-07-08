@@ -3,11 +3,11 @@ import { Container } from "@yamada-ui/react"
 import { getFaq } from "@/lib/api/endpoints"
 
 export default async function Home() {
-  const faq = await getFaq()
+  const { data: faq } = await getFaq()
 
   return (
     <Container as="main">
-      <FAQ items={faq.questions} />
+      <FAQ items={faq?.data?.questions ?? []} />
     </Container>
   )
 }

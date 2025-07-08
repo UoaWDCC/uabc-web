@@ -137,4 +137,166 @@ describe("ApiClient", () => {
       expect(result).toEqual({ data: mockResponse, isError: false })
     })
   })
+
+  describe("post method", () => {
+    let client: ReturnType<typeof createApiClient>
+    beforeEach(() => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
+      client = createApiClient()
+    })
+    it("should successfully post and parse data", async () => {
+      const testSchema = z.object({ message: z.string(), id: z.number() })
+      const mockResponse = { message: "created", id: 1 }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
+      const result = await client.post("/test", { foo: "bar" }, testSchema, ["postTag"])
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api.example.com/test",
+        expect.objectContaining({
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ foo: "bar" }),
+          next: { tags: ["postTag"] },
+        }),
+      )
+      expect(result).toEqual({ data: mockResponse, isError: false })
+    })
+    it("should return error when response is not ok", async () => {
+      const testSchema = z.object({ message: z.string() })
+      mockFetch.mockResolvedValueOnce(
+        new Response(null, { status: 400, statusText: "Bad Request" }),
+      )
+      const result = await client.post("/test", { foo: "bar" }, testSchema)
+      expect(result.isError).toBe(true)
+      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error?.message).toBe("Failed to fetch /test: Bad Request")
+    })
+    it("should return error when schema validation fails", async () => {
+      const testSchema = z.object({ message: z.string(), id: z.number() })
+      const invalidResponse = { message: "created" }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
+      const result = await client.post("/test", { foo: "bar" }, testSchema)
+      expect(result.isError).toBe(true)
+      expect(result.error).toBeInstanceOf(Error)
+    })
+  })
+
+  describe("put method", () => {
+    let client: ReturnType<typeof createApiClient>
+    beforeEach(() => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
+      client = createApiClient()
+    })
+    it("should successfully put and parse data", async () => {
+      const testSchema = z.object({ message: z.string(), updated: z.boolean() })
+      const mockResponse = { message: "updated", updated: true }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
+      const result = await client.put("/test", { foo: "bar" }, testSchema, ["putTag"])
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api.example.com/test",
+        expect.objectContaining({
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ foo: "bar" }),
+          next: { tags: ["putTag"] },
+        }),
+      )
+      expect(result).toEqual({ data: mockResponse, isError: false })
+    })
+    it("should return error when response is not ok", async () => {
+      const testSchema = z.object({ message: z.string() })
+      mockFetch.mockResolvedValueOnce(new Response(null, { status: 404, statusText: "Not Found" }))
+      const result = await client.put("/test", { foo: "bar" }, testSchema)
+      expect(result.isError).toBe(true)
+      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error?.message).toBe("Failed to fetch /test: Not Found")
+    })
+    it("should return error when schema validation fails", async () => {
+      const testSchema = z.object({ message: z.string(), updated: z.boolean() })
+      const invalidResponse = { message: "updated" }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
+      const result = await client.put("/test", { foo: "bar" }, testSchema)
+      expect(result.isError).toBe(true)
+      expect(result.error).toBeInstanceOf(Error)
+    })
+  })
+
+  describe("patch method", () => {
+    let client: ReturnType<typeof createApiClient>
+    beforeEach(() => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
+      client = createApiClient()
+    })
+    it("should successfully patch and parse data", async () => {
+      const testSchema = z.object({ message: z.string(), patched: z.boolean() })
+      const mockResponse = { message: "patched", patched: true }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
+      const result = await client.patch("/test", { foo: "bar" }, testSchema, ["patchTag"])
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api.example.com/test",
+        expect.objectContaining({
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ foo: "bar" }),
+          next: { tags: ["patchTag"] },
+        }),
+      )
+      expect(result).toEqual({ data: mockResponse, isError: false })
+    })
+    it("should return error when response is not ok", async () => {
+      const testSchema = z.object({ message: z.string() })
+      mockFetch.mockResolvedValueOnce(
+        new Response(null, { status: 500, statusText: "Internal Server Error" }),
+      )
+      const result = await client.patch("/test", { foo: "bar" }, testSchema)
+      expect(result.isError).toBe(true)
+      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error?.message).toBe("Failed to fetch /test: Internal Server Error")
+    })
+    it("should return error when schema validation fails", async () => {
+      const testSchema = z.object({ message: z.string(), patched: z.boolean() })
+      const invalidResponse = { message: "patched" }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
+      const result = await client.patch("/test", { foo: "bar" }, testSchema)
+      expect(result.isError).toBe(true)
+      expect(result.error).toBeInstanceOf(Error)
+    })
+  })
+
+  describe("delete method", () => {
+    let client: ReturnType<typeof createApiClient>
+    beforeEach(() => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
+      client = createApiClient()
+    })
+    it("should successfully delete and parse data", async () => {
+      const testSchema = z.object({ message: z.string(), deleted: z.boolean() })
+      const mockResponse = { message: "deleted", deleted: true }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
+      const result = await client.delete("/test", testSchema, ["deleteTag"])
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api.example.com/test",
+        expect.objectContaining({
+          method: "DELETE",
+          next: { tags: ["deleteTag"] },
+        }),
+      )
+      expect(result).toEqual({ data: mockResponse, isError: false })
+    })
+    it("should return error when response is not ok", async () => {
+      const testSchema = z.object({ message: z.string() })
+      mockFetch.mockResolvedValueOnce(new Response(null, { status: 403, statusText: "Forbidden" }))
+      const result = await client.delete("/test", testSchema)
+      expect(result.isError).toBe(true)
+      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error?.message).toBe("Failed to fetch /test: Forbidden")
+    })
+    it("should return error when schema validation fails", async () => {
+      const testSchema = z.object({ message: z.string(), deleted: z.boolean() })
+      const invalidResponse = { message: "deleted" }
+      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
+      const result = await client.delete("/test", testSchema)
+      expect(result.isError).toBe(true)
+      expect(result.error).toBeInstanceOf(Error)
+    })
+  })
 })

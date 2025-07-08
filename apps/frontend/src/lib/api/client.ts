@@ -54,6 +54,118 @@ class ApiClient {
       return { error: error as Error, isError: true }
     }
   }
+
+  /**
+   * Performs a POST request to the specified path and validates the response using the provided zod schema.
+   * @template T The expected response type.
+   * @param {string} path - The API endpoint path (relative to baseUrl).
+   * @param {unknown} body - The request body to send.
+   * @param {z.Schema<T>} schema - The zod schema to validate the response data.
+   * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
+   * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
+   */
+  public async post<T>(
+    path: string,
+    body: unknown,
+    schema: z.Schema<T>,
+    tags: string[] = [],
+  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+    try {
+      const response = await fetch(`${this.baseUrl}${path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        next: { tags },
+      })
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+      }
+      const data = await response.json()
+      return { data: schema.parse(data), isError: false }
+    } catch (error) {
+      return { error: error as Error, isError: true }
+    }
+  }
+
+  /**
+   * Performs a PUT request to the specified path and validates the response using the provided zod schema.
+   */
+  public async put<T>(
+    path: string,
+    body: unknown,
+    schema: z.Schema<T>,
+    tags: string[] = [],
+  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+    try {
+      const response = await fetch(`${this.baseUrl}${path}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        next: { tags },
+      })
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+      }
+      const data = await response.json()
+      return { data: schema.parse(data), isError: false }
+    } catch (error) {
+      return { error: error as Error, isError: true }
+    }
+  }
+
+  /**
+   * Performs a PATCH request to the specified path and validates the response using the provided zod schema.
+   */
+  public async patch<T>(
+    path: string,
+    body: unknown,
+    schema: z.Schema<T>,
+    tags: string[] = [],
+  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+    try {
+      const response = await fetch(`${this.baseUrl}${path}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        next: { tags },
+      })
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+      }
+      const data = await response.json()
+      return { data: schema.parse(data), isError: false }
+    } catch (error) {
+      return { error: error as Error, isError: true }
+    }
+  }
+
+  /**
+   * Performs a DELETE request to the specified path and validates the response using the provided zod schema.
+   * @template T The expected response type.
+   * @param {string} path - The API endpoint path (relative to baseUrl).
+   * @param {z.Schema<T>} schema - The zod schema to validate the response data.
+   * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
+   * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
+   */
+  public async delete<T>(
+    path: string,
+    schema: z.Schema<T>,
+    tags: string[] = [],
+  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+    try {
+      const response = await fetch(`${this.baseUrl}${path}`, {
+        method: "DELETE",
+        next: { tags },
+      })
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+      }
+      const data = await response.json()
+      return { data: schema.parse(data), isError: false }
+    } catch (error) {
+      return { error: error as Error, isError: true }
+    }
+  }
 }
 
 /**
