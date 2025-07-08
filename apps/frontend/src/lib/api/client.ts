@@ -1,15 +1,38 @@
 import type { z } from "zod"
 
-export class ApiClient {
+/**
+ * ApiClient is a simple HTTP client for making API requests with runtime validation using zod schemas.
+ */
+class ApiClient {
+  /**
+   * The base URL for all API requests.
+   * @private
+   */
   private readonly baseUrl: string
 
-  constructor() {
-    this.baseUrl = process.env.NEXT_PUBLIC_API_URL
+  /**
+   * Creates an instance of ApiClient.
+   * @param {string} [baseUrl] - The base URL for the API. If not provided, uses NEXT_PUBLIC_API_URL from environment variables.
+   * @throws {Error} If no base URL is provided or found in environment variables.
+   */
+  constructor(baseUrl?: string) {
+    this.baseUrl = baseUrl ?? process.env.NEXT_PUBLIC_API_URL
     if (!this.baseUrl) {
-      throw new Error("NEXT_PUBLIC_API_URL is not defined")
+      throw new Error(
+        "API URL is not defined. Please provide it in the constructor or set NEXT_PUBLIC_API_URL environment variable.",
+      )
     }
   }
 
+  /**
+   * Performs a GET request to the specified path and validates the response using the provided zod schema.
+   * @template T The expected response type.
+   * @param {string} path - The API endpoint path (relative to baseUrl).
+   * @param {z.Schema<T>} schema - The zod schema to validate the response data.
+   * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
+   * @returns {Promise<T>} The validated response data.
+   * @throws {Error} If the fetch fails or the response is invalid.
+   */
   public async get<T>(path: string, schema: z.Schema<T>, tags: string[] = []): Promise<T> {
     const response = await fetch(`${this.baseUrl}${path}`, {
       next: {
@@ -26,4 +49,20 @@ export class ApiClient {
   }
 }
 
-export const api = new ApiClient()
+/**
+ * Factory function to create a new ApiClient instance.
+ * In most cases, you should use the exported {@link apiClient} instance directly,
+ * unless you need to target a different API base URL (e.g., for testing or multi-environment support).
+ * @param {string} [baseUrl] - Optional base URL for the API. Defaults to NEXT_PUBLIC_API_URL.
+ * @returns {ApiClient} A new ApiClient instance.
+ */
+export const createApiClient = (baseUrl?: string): ApiClient => {
+  return new ApiClient(baseUrl ?? process.env.NEXT_PUBLIC_API_URL)
+}
+
+/**
+ * Default ApiClient instance using the environment base URL.
+ * In most cases, prefer using this exported instance.
+ * @type {ApiClient}
+ */
+export const apiClient = createApiClient()

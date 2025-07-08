@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { ApiClient } from "./client"
+import { createApiClient } from "./client"
 
 // Mock fetch globally
 global.fetch = vi.fn()
@@ -16,23 +16,32 @@ describe("ApiClient", () => {
     it("should initialize with NEXT_PUBLIC_API_URL from environment", () => {
       vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
 
-      const client = new ApiClient()
-      expect(client).toBeInstanceOf(ApiClient)
+      expect(createApiClient()).toBeInstanceOf(Object.getPrototypeOf(createApiClient()).constructor)
+    })
+
+    it("should throw error when NEXT_PUBLIC_API_URL is empty string", () => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "")
+
+      expect(() => createApiClient()).toThrow(
+        "API URL is not defined. Please provide it in the constructor or set NEXT_PUBLIC_API_URL environment variable.",
+      )
     })
 
     it("should throw error when NEXT_PUBLIC_API_URL is not defined", () => {
-      vi.stubEnv("NEXT_PUBLIC_API_URL", "")
+      vi.stubEnv("NEXT_PUBLIC_API_URL", undefined)
 
-      expect(() => new ApiClient()).toThrow("NEXT_PUBLIC_API_URL is not defined")
+      expect(() => createApiClient()).toThrow(
+        "API URL is not defined. Please provide it in the constructor or set NEXT_PUBLIC_API_URL environment variable.",
+      )
     })
   })
 
   describe("get method", () => {
-    let client: ApiClient
+    let client: ReturnType<typeof createApiClient>
 
     beforeEach(() => {
       vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
-      client = new ApiClient()
+      client = createApiClient()
     })
 
     it("should successfully fetch and parse data", async () => {
