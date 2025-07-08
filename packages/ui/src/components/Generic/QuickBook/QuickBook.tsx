@@ -3,14 +3,20 @@
 import { Button, Heading, Select } from "@repo/ui/components/Primitive"
 import { CalendarClockIcon, CircleGaugeIcon } from "@yamada-ui/lucide"
 import { Grid, GridItem, memo, type SelectItem, VStack } from "@yamada-ui/react"
-import type { FormEventHandler } from "react"
+import { type SubmitHandler, useForm } from "react-hook-form"
+import z from "zod"
+
+const formSchema = z.object({
+  locationAndTimeId: z.string().min(1, "Field is required"),
+  skillLevel: z.string().min(1, "Field is required"),
+})
 
 export interface QuickBookProps {
   title?: string
   submitLabel?: string
   locationAndTimeOptions: SelectItem[]
   skillLevelOptions: SelectItem[]
-  handleSubmit?: FormEventHandler<HTMLDivElement>
+  onSubmit: SubmitHandler<z.infer<typeof formSchema>>
 }
 
 export const QuickBook = memo(
@@ -19,15 +25,20 @@ export const QuickBook = memo(
     submitLabel = "Book Now",
     locationAndTimeOptions,
     skillLevelOptions,
-    handleSubmit,
+    onSubmit,
   }: QuickBookProps) => {
+    const {
+      handleSubmit,
+      formState: { isSubmitting },
+    } = useForm<z.infer<typeof formSchema>>()
+
     return (
       <VStack
         as="form"
         bgColor="secondary.800"
         borderRadius="3xl"
         borderWidth="medium"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         p="md"
       >
         <Heading.h2 display={{ base: "none", md: "block" }}>{title}</Heading.h2>
@@ -51,7 +62,14 @@ export const QuickBook = memo(
             />
           </GridItem>
           <GridItem placeSelf="center" w="full">
-            <Button colorScheme="primary" size="lg" type="submit" variant="gradient" w="full">
+            <Button
+              colorScheme="primary"
+              loading={isSubmitting}
+              size="lg"
+              type="submit"
+              variant="gradient"
+              w="full"
+            >
               {submitLabel}
             </Button>
           </GridItem>
