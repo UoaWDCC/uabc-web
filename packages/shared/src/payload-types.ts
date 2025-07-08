@@ -224,8 +224,8 @@ export interface Event {
    * The image displayed for the event.
    */
   eventImage: string | Media;
-  joinEventButton: Link;
-  learnMoreButton: Link;
+  button1: Link;
+  button2: Link;
   updatedAt: string;
   createdAt: string;
 }
@@ -615,8 +615,8 @@ export interface EventSelect<T extends boolean = true> {
   longDescription?: T;
   shortDescription?: T;
   eventImage?: T;
-  joinEventButton?: T | LinkSelect<T>;
-  learnMoreButton?: T | LinkSelect<T>;
+  button1?: T | LinkSelect<T>;
+  button2?: T | LinkSelect<T>;
   updatedAt?: T;
   createdAt?: T;
 }
