@@ -19,7 +19,7 @@ export const FooterSocialLinks = memo<FooterSocialLinksProps>(
           <IconButton
             aria-label={link.label}
             as={Link}
-            href={link.href}
+            href={link.url}
             key={link.label}
             rel="noopener noreferrer"
             target="_blank"

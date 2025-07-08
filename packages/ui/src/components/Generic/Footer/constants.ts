@@ -1,20 +1,14 @@
+import type { Link } from "@repo/shared/payload-types"
 import { LinkTreeIcon } from "@repo/ui/components/Icon"
 import { FacebookIcon, InstagramIcon } from "@yamada-ui/lucide"
 import type { FC } from "react"
 
-export type LinkType = {
-  label: string
-  href: string
-}
-
 export type LinkGroup = {
   title: string
-  links: LinkType[]
+  links: Link[]
 }
 
-export type SocialLink = {
-  label: string
-  href: string
+export type SocialLink = Link & {
   icon: FC
 }
 
@@ -26,15 +20,15 @@ export const MOCK_LINKS: Record<string, LinkGroup> = {
     links: [
       {
         label: "Home",
-        href: "/",
+        url: "/",
       },
       {
         label: "Book a Court",
-        href: "/book",
+        url: "/book",
       },
       {
         label: "Events",
-        href: "/events",
+        url: "/events",
       },
     ],
   },
@@ -43,15 +37,15 @@ export const MOCK_LINKS: Record<string, LinkGroup> = {
     links: [
       {
         label: "About Us",
-        href: "/about",
+        url: "/about",
       },
       {
         label: "Contact Us",
-        href: "/contact",
+        url: "/contact",
       },
       {
         label: "FAQs",
-        href: "/faq",
+        url: "/faq",
       },
     ],
   },
@@ -60,17 +54,17 @@ export const MOCK_LINKS: Record<string, LinkGroup> = {
 export const MOCK_SOCIAL_LINKS: SocialLink[] = [
   {
     label: "LinkTree",
-    href: "https://linktr.ee/",
+    url: "https://linktr.ee/",
     icon: LinkTreeIcon,
   },
   {
     label: "Facebook",
-    href: "https://www.facebook.com/",
+    url: "https://www.facebook.com/",
     icon: FacebookIcon,
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com/",
+    url: "https://www.instagram.com/",
     icon: InstagramIcon,
   },
 ]

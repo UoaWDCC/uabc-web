@@ -26,7 +26,7 @@ export const FooterLinks = memo<FooterLinksProps>(({ links, ...props }) => {
           <List color="muted" fontWeight="semibold">
             {value.links.map((link) => (
               <ListItem key={link.label}>
-                <UILink as={Link} color="muted" href={link.href}>
+                <UILink as={Link} color="muted" href={link.url}>
                   {link.label}
                 </UILink>
               </ListItem>
