@@ -1,6 +1,7 @@
+import type { SerializedCodeNode } from "@repo/shared"
 import { Code } from "@yamada-ui/react"
 import type React from "react"
-import type { RichTextRendererOptions, SerializedCodeNode } from "../types"
+import type { RichTextRendererOptions } from "../types"
 import { extractTextFromNodes } from "../utils"
 
 /**

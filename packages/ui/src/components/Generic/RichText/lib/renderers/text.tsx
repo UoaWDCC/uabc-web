@@ -1,7 +1,8 @@
+import type { SerializedTextNode } from "@repo/shared"
 import { Code, Em, Text, type TextProps } from "@yamada-ui/react"
 import React from "react"
 import { TextFormat } from "../constants"
-import type { RichTextRendererOptions, SerializedTextNode } from "../types"
+import type { RichTextRendererOptions } from "../types"
 
 /**
  * Renders a text node with appropriate formatting based on format flags
