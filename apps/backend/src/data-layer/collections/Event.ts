@@ -38,7 +38,7 @@ export const Event: CollectionConfig = {
       },
     },
     {
-      name: "joinEventButton",
+      name: "button1",
       type: "group",
       interfaceName: "Link",
       required: true,
@@ -67,7 +67,7 @@ export const Event: CollectionConfig = {
       },
     },
     {
-      name: "learnMoreButton",
+      name: "button2",
       type: "group",
       interfaceName: "Link",
       required: true,
