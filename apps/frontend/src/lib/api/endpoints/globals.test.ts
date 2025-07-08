@@ -30,9 +30,6 @@ describe("getFaq", () => {
     const response = await getFaq()
 
     expect(response).toEqual(mockFaq)
-    expect(fetch).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/globals/faq`,
-      expect.any(Object),
-    )
+    expect(fetch).toHaveBeenCalledWith("http://localhost:3000/api/globals/faq", expect.any(Object))
   })
 })
