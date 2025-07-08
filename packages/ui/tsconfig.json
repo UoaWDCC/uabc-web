@@ -7,12 +7,12 @@
     "paths": {
       "@storybook-config/*": ["./.storybook/*"],
       "@repo/ui/*": ["./src/*"],
-      "@backend/test-config/mocks/*": ["../../apps/backend/src/test-config/mocks/*"]
+      "@repo/shared/test-config/mocks/*": ["../shared/src/test-config/mocks/*"]
     },
     "rootDir": "../..",
     "types": ["vitest/globals"]
   },
   "exclude": ["node_modules", "dist"],
   "extends": "@repo/typescript-config/react-library.json",
-  "include": ["**/*.ts", "**/*.tsx", "../../apps/backend/src/test-config/mocks/**/*.ts"]
+  "include": ["**/*.ts", "**/*.tsx"]
 }

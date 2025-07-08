@@ -1,5 +1,5 @@
+import { userCreateMock } from "@repo/shared/test-config/mocks/User.mock"
 import { payload } from "@/data-layer/adapters/Payload"
-import { userCreateMock } from "@/test-config/mocks/User.mock"
 import UserDataService from "./UserDataService"
 
 const userDataService = new UserDataService()

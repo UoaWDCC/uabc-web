@@ -1,10 +1,13 @@
+import {
+  adminUserMock,
+  casualUserMock,
+  memberUserMock,
+} from "@repo/shared/test-config/mocks/User.mock"
 import type { CollectionSlug } from "payload"
-
 import AuthService from "@/business-layer/services/AuthService"
 import { payload } from "@/data-layer/adapters/Payload"
 import { clearCollection } from "./backend-utils"
 import { JWT_SECRET_MOCK } from "./mocks/GoogleAuth.mock"
-import { adminUserMock, casualUserMock, memberUserMock } from "./mocks/User.mock"
 
 let cookies: Record<string, string> = {}
 let headers: Record<string, string> = {}

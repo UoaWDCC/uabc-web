@@ -2,7 +2,8 @@
   "name": "@repo/shared",
   "exports": {
     ".": "./src/index.ts",
-    "./payload-types": "./src/payload-types.ts"
+    "./payload-types": "./src/payload-types.ts",
+    "./test-config/*": "./src/test-config/*"
   },
   "version": "0.0.0",
   "private": true,

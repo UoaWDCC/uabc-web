@@ -1,4 +1,8 @@
-import { adminUserMock, casualUserMock, memberUserMock } from "@backend/test-config/mocks/User.mock"
+import {
+  adminUserMock,
+  casualUserMock,
+  memberUserMock,
+} from "@repo/shared/test-config/mocks/User.mock"
 
 const navItemsMock = [
   { label: "Book", path: "/book" },

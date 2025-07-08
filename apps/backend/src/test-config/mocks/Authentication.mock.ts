@@ -1,6 +1,7 @@
 import type { CreateAuthenticationData } from "@repo/shared"
 import type { Authentication } from "@repo/shared/payload-types"
-import { casualUserMock } from "./User.mock"
+// import { casualUserMock } from "./User.mock"
+import { casualUserMock } from "@repo/shared/test-config/mocks/User.mock"
 
 export const EMAIL_MOCK = "straight.zhao@example.com"
 export const PASSWORD_MOCK = "str@!ghtZh@069"
