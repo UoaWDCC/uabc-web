@@ -64,7 +64,7 @@ describe("ApiClient", () => {
           tags: ["tag1", "tag2"],
         },
       })
-      expect(result).toEqual(mockResponse)
+      expect(result).toEqual({ data: mockResponse, isError: false })
     })
 
     it("should handle fetch with default empty tags", async () => {
@@ -73,26 +73,28 @@ describe("ApiClient", () => {
 
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
 
-      await client.get("/test", testSchema)
+      const result = await client.get("/test", testSchema)
 
       expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
         next: {
           tags: [],
         },
       })
+      expect(result).toEqual({ data: mockResponse, isError: false })
     })
 
-    it("should throw error when response is not ok", async () => {
+    it("should return error when response is not ok", async () => {
       const testSchema = z.object({ message: z.string() })
 
       mockFetch.mockResolvedValueOnce(new Response(null, { status: 404, statusText: "Not Found" }))
 
-      await expect(client.get("/test", testSchema)).rejects.toThrow(
-        "Failed to fetch /test: Not Found",
-      )
+      const result = await client.get("/test", testSchema)
+      expect(result.isError).toBe(true)
+      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error?.message).toBe("Failed to fetch /test: Not Found")
     })
 
-    it("should throw error when schema validation fails", async () => {
+    it("should return error when schema validation fails", async () => {
       const testSchema = z.object({
         message: z.string(),
         requiredField: z.string(),
@@ -102,7 +104,9 @@ describe("ApiClient", () => {
 
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
 
-      await expect(client.get("/test", testSchema)).rejects.toThrow()
+      const result = await client.get("/test", testSchema)
+      expect(result.isError).toBe(true)
+      expect(result.error).toBeInstanceOf(Error)
     })
 
     it("should handle different response types with complex schemas", async () => {
@@ -130,7 +134,7 @@ describe("ApiClient", () => {
 
       const result = await client.get("/complex", complexSchema, ["complex"])
 
-      expect(result).toEqual(mockResponse)
+      expect(result).toEqual({ data: mockResponse, isError: false })
     })
   })
 })

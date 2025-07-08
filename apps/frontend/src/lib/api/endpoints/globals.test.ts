@@ -29,7 +29,7 @@ describe("getFaq", () => {
   it("should return faq", async () => {
     const response = await getFaq()
 
-    expect(response).toEqual(mockFaq)
+    expect(response).toEqual({ data: { data: mockFaq }, isError: false })
     expect(fetch).toHaveBeenCalledWith("http://localhost:3000/api/globals/faq", expect.any(Object))
   })
 })

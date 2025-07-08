@@ -30,22 +30,29 @@ class ApiClient {
    * @param {string} path - The API endpoint path (relative to baseUrl).
    * @param {z.Schema<T>} schema - The zod schema to validate the response data.
    * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
-   * @returns {Promise<T>} The validated response data.
-   * @throws {Error} If the fetch fails or the response is invalid.
+   * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
    */
-  public async get<T>(path: string, schema: z.Schema<T>, tags: string[] = []): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${path}`, {
-      next: {
-        tags,
-      },
-    })
+  public async get<T>(
+    path: string,
+    schema: z.Schema<T>,
+    tags: string[] = [],
+  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+    try {
+      const response = await fetch(`${this.baseUrl}${path}`, {
+        next: {
+          tags,
+        },
+      })
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+      }
+
+      const data = await response.json()
+      return { data: schema.parse(data), isError: false }
+    } catch (error) {
+      return { error: error as Error, isError: true }
     }
-
-    const data = await response.json()
-    return schema.parse(data)
   }
 }
 
