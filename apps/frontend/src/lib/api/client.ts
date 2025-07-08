@@ -27,10 +27,10 @@ class ApiClient {
   /**
    * Performs a GET request to the specified path and validates the response using the provided zod schema.
    * @template T The expected response type.
-   * @param {string} path - The API endpoint path (relative to baseUrl).
-   * @param {z.Schema<T>} schema - The zod schema to validate the response data.
-   * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param {number | false | undefined} [revalidate] - Optional revalidation time in seconds or false to disable revalidation.
+   * @param {string} path The API endpoint path (relative to baseUrl).
+   * @param {z.Schema<T>} schema The zod schema to validate the response data.
+   * @param {string[]} [tags=[]] Optional tags for caching or revalidation (used by Next.js fetch).
+   * @param {number | false | undefined} [revalidate] Optional revalidation time in seconds or false to disable revalidation.
    * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
    */
   public async get<T>(
@@ -61,11 +61,11 @@ class ApiClient {
   /**
    * Performs a POST request to the specified path and validates the response using the provided zod schema.
    * @template T The expected response type.
-   * @param {string} path - The API endpoint path (relative to baseUrl).
-   * @param {unknown} body - The request body to send.
-   * @param {z.Schema<T>} schema - The zod schema to validate the response data.
-   * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param {number | false | undefined} [revalidate] - Optional revalidation time in seconds or false to disable revalidation.
+   * @param {string} path The API endpoint path (relative to baseUrl).
+   * @param {unknown} body The request body to send.
+   * @param {z.Schema<T>} schema The zod schema to validate the response data.
+   * @param {string[]} [tags=[]] Optional tags for caching or revalidation (used by Next.js fetch).
+   * @param {number | false | undefined} [revalidate] Optional revalidation time in seconds or false to disable revalidation.
    * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
    */
   public async post<T>(
@@ -97,11 +97,11 @@ class ApiClient {
 
   /**
    * Performs a PUT request to the specified path and validates the response using the provided zod schema.
-   * @param {string} path - The API endpoint path (relative to baseUrl).
-   * @param {unknown} body - The request body to send.
-   * @param {z.Schema<T>} schema - The zod schema to validate the response data.
-   * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param {number | false | undefined} [revalidate] - Optional revalidation time in seconds or false to disable revalidation.
+   * @param {string} path The API endpoint path (relative to baseUrl).
+   * @param {unknown} body The request body to send.
+   * @param {z.Schema<T>} schema The zod schema to validate the response data.
+   * @param {string[]} [tags=[]] Optional tags for caching or revalidation (used by Next.js fetch).
+   * @param {number | false | undefined} [revalidate] Optional revalidation time in seconds or false to disable revalidation.
    * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
    */
   public async put<T>(
@@ -133,11 +133,11 @@ class ApiClient {
 
   /**
    * Performs a PATCH request to the specified path and validates the response using the provided zod schema.
-   * @param {string} path - The API endpoint path (relative to baseUrl).
-   * @param {unknown} body - The request body to send.
-   * @param {z.Schema<T>} schema - The zod schema to validate the response data.
-   * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param {number | false | undefined} [revalidate] - Optional revalidation time in seconds or false to disable revalidation.
+   * @param {string} path The API endpoint path (relative to baseUrl).
+   * @param {unknown} body The request body to send.
+   * @param {z.Schema<T>} schema The zod schema to validate the response data.
+   * @param {string[]} [tags=[]] Optional tags for caching or revalidation (used by Next.js fetch).
+   * @param {number | false | undefined} [revalidate] Optional revalidation time in seconds or false to disable revalidation.
    * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
    */
   public async patch<T>(
@@ -170,10 +170,10 @@ class ApiClient {
   /**
    * Performs a DELETE request to the specified path and validates the response using the provided zod schema.
    * @template T The expected response type.
-   * @param {string} path - The API endpoint path (relative to baseUrl).
-   * @param {z.Schema<T>} schema - The zod schema to validate the response data.
-   * @param {string[]} [tags=[]] - Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param {number | false | undefined} [revalidate] - Optional revalidation time in seconds or false to disable revalidation.
+   * @param {string} path The API endpoint path (relative to baseUrl).
+   * @param {z.Schema<T>} schema The zod schema to validate the response data.
+   * @param {string[]} [tags=[]] Optional tags for caching or revalidation (used by Next.js fetch).
+   * @param {number | false | undefined} [revalidate] Optional revalidation time in seconds or false to disable revalidation.
    * @returns {Promise<{ data?: T; error?: Error; isError: boolean }>} The validated response data or error.
    */
   public async delete<T>(
@@ -205,7 +205,7 @@ class ApiClient {
  * Factory function to create a new ApiClient instance.
  * In most cases, you should use the exported {@link apiClient} instance directly,
  * unless you need to target a different API base URL (e.g., for testing or multi-environment support).
- * @param {string} [baseUrl] - Optional base URL for the API. Defaults to NEXT_PUBLIC_API_URL.
+ * @param {string} [baseUrl] Optional base URL for the API. Defaults to NEXT_PUBLIC_API_URL.
  * @returns {ApiClient} A new ApiClient instance.
  */
 export const createApiClient = (baseUrl?: string): ApiClient => {
