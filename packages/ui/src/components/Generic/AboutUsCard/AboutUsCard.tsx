@@ -20,12 +20,17 @@ export const AboutUsCard = ({ title, description }: AboutUsCardProps) => {
       rounded="3xl"
     >
       <CardHeader pt="0">
-        <Heading.h3 color="primary" fontSize="2xl" fontWeight="semibold" textAlign="center">
+        <Heading.h3
+          color={{ base: "primary", md: "white" }}
+          fontSize={{ base: "2xl", md: "3xl" }}
+          fontWeight={{ base: "semibold", md: "medium" }}
+          textAlign="center"
+        >
           {title}
         </Heading.h3>
       </CardHeader>
       <CardBody p="0">
-        <Text fontSize="sm" textAlign="center">
+        <Text fontSize={{ base: "sm", md: "md" }} textAlign="center">
           {description}
         </Text>
       </CardBody>
