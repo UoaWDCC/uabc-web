@@ -22,14 +22,13 @@ describe("api/me", async () => {
 
     it("should return 500 and log error if an unexpected error occurs", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const response = await GET(createMockNextRequest("/api/me"))
-      const json = await response.json()
-
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
-
       vi.spyOn(UserDataService.prototype, "getUserById").mockRejectedValueOnce(
         new Error("Database error"),
       )
+      cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+      const response = await GET(createMockNextRequest("/api/me"))
+      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
