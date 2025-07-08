@@ -1,4 +1,5 @@
 import configPromise from "@payload-config"
+import type { User } from "@repo/shared/payload-types"
 import { NextRequest } from "next/server"
 import { type CollectionSlug, getPayload, type Payload } from "payload"
 
@@ -59,5 +60,5 @@ export function createMockNextRequest(
         "Content-Type": "application/json",
       },
     }),
-  }) as NextRequest
+  }) as NextRequest & { user: User }
 }

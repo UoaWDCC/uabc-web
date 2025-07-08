@@ -45,40 +45,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check if node_modules cache exists
+        id: cache-check
+        uses: actions/cache@v4
         with:
-          fetch-depth: 2
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          lookup-only: true
 
       - name: Setup Node.js
+        if: steps.cache-check.outputs.cache-hit != 'true'
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
 
       - name: Setup pnpm
+        if: steps.cache-check.outputs.cache-hit != 'true'
         uses: pnpm/action-setup@v2
         with:
           version: latest
           run_install: false
 
-      - name: Restore node_modules cache
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
-
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache-check.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
-      - name: Upload cache
-        if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
+      - name: Save node_modules cache
+        if: steps.cache-check.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
         with:
           path: |
             node_modules
@@ -86,34 +81,52 @@ jobs:
             packages/*/node_modules
             apps/*/node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-
-  build-frontend:
-    needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Build Frontend
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run Build Frontend
-        uses: ./.github/ci-actions/build/
-        with:
-          workspace: frontend
 
   build-backend:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Backend
     runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://wdcc-uabc-backend-staging.fly.dev/
     steps:
       - uses: actions/checkout@v4
 
       - name: Run Build Backend
         uses: ./.github/ci-actions/build/
         with:
+          workspace: backend
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
-          workspace: backend
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+  build-frontend:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://wdcc-uabc-frontend-staging.fly.dev/
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Frontend
+        uses: ./.github/ci-actions/build/
+        with:
+          workspace: frontend
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
   typecheck:
     needs: [check_changes, setup]

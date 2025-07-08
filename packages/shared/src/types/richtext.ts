@@ -2,6 +2,7 @@ import type { z } from "zod"
 import type {
   lexicalNodeSchema,
   SerializedCodeNodeSchema,
+  SerializedEditorStateSchema,
   SerializedHeadingNodeSchema,
   SerializedHorizontalRuleNodeSchema,
   SerializedLineBreakNodeSchema,
@@ -28,14 +29,4 @@ export type SerializedLineBreakNode = z.infer<typeof SerializedLineBreakNodeSche
 export type SerializedHorizontalRuleNode = z.infer<typeof SerializedHorizontalRuleNodeSchema>
 export type SerializedCodeNode = z.infer<typeof SerializedCodeNodeSchema>
 export type SerializedNodeWithChildren = z.infer<typeof SerializedNodeWithChildrenSchema>
-
-export interface SerializedEditorState {
-  root: {
-    children: SerializedLexicalNode[]
-    direction: string | null
-    format: string
-    indent: number
-    type: string
-    version: number
-  }
-}
+export type SerializedEditorState = z.infer<typeof SerializedEditorStateSchema>

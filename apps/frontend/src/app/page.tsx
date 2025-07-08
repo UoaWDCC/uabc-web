@@ -1,10 +1,15 @@
-import { Heading } from "@repo/ui/components/Primitive"
+import { FAQ } from "@repo/ui/components/Generic"
 import { Container } from "@yamada-ui/react"
+import { getFaq } from "@/lib/api/endpoints"
 
-export default function Home() {
+// TODO: Implement actual homepage
+export default async function Home() {
+  //  TODO: Discuss with team if we want to fail the build if faq is not found
+  const { data: faq } = await getFaq()
+
   return (
     <Container as="main">
-      <Heading.h1>UABC</Heading.h1>
+      <FAQ items={faq?.data?.questions ?? []} />
     </Container>
   )
 }
