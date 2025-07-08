@@ -4,7 +4,7 @@ export class ApiClient {
   private readonly baseUrl: string
 
   constructor() {
-    this.baseUrl = process.env.NEXT_PUBLIC_API_URL ?? ""
+    this.baseUrl = process.env.NEXT_PUBLIC_API_URL
     if (!this.baseUrl) {
       throw new Error("NEXT_PUBLIC_API_URL is not defined")
     }
