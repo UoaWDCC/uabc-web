@@ -26,7 +26,6 @@ describe("api/me", async () => {
       vi.spyOn(UserDataService.prototype, "getUserById").mockRejectedValueOnce(
         new Error("Database error"),
       )
-      cookieStore.set(AUTH_COOKIE_NAME, casualToken)
       const response = await GET(createMockNextRequest("/api/me"))
       const json = await response.json()
 
