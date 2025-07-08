@@ -1,6 +1,5 @@
 import type { CreateBookingData } from "@repo/shared"
 import type { Booking } from "@repo/shared/payload-types"
-// import { casualUserMock } from "./User.mock"
 import { casualUserMock } from "@repo/shared/test-config/mocks/User.mock"
 import { gameSessionMock } from "./GameSession.mock"
 

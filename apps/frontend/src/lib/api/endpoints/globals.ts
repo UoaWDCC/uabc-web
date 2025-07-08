@@ -1,4 +1,4 @@
-import { GetFaqResponseSchema } from "@repo/shared"
+import { GetFaqResponseSchema } from "@repo/shared/schemas"
 import { apiClient } from "../client"
 
 /**
