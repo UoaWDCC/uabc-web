@@ -155,3 +155,5 @@ storybook-static
 .zed
 
 node-compile-cache
+
+.vercel
