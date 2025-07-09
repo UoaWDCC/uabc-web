@@ -1,3 +1,4 @@
+import type { SerializedEditorState } from "@repo/shared"
 import { basicEditorState, complexEditorState } from "@repo/ui/test-config/mocks/RichText.mock"
 import { render, screen } from "@testing-library/react"
 import type React from "react"
@@ -27,7 +28,7 @@ describe("RichText", () => {
         type: "root",
         version: 1,
       },
-    }
+    } as SerializedEditorState
     render(<RichText data={emptyData} fallback={fallbackText} />)
     expect(screen.getByText(fallbackText)).toBeInTheDocument()
   })

@@ -1,9 +1,3 @@
-import {
-  LinkType,
-  ListType,
-  NodeType,
-  TextFormat,
-} from "@repo/ui/components/Generic/RichText/lib/constants"
 import type {
   SerializedCodeNode,
   SerializedEditorState,
@@ -17,7 +11,8 @@ import type {
   SerializedQuoteNode,
   SerializedTextNode,
   SerializedUploadNode,
-} from "@repo/ui/components/Generic/RichText/lib/types"
+} from "@repo/shared"
+import { LinkType, ListType, NodeType, TextFormat } from "@repo/shared"
 
 export const createTextNode = (text: string, format?: TextFormat): SerializedTextNode => ({
   type: NodeType.TEXT,

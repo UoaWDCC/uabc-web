@@ -19,7 +19,7 @@ export interface SelectProps extends UISelectProps {
    * Label text of the Select component.
    *
    * @remarks
-   * If not provided, no label will be rendered. The label is rendered within the Select component.
+   * The label is rendered within the Select component.
    *
    * @defaultValue "Select option"
    */
@@ -78,9 +78,9 @@ export interface SelectProps extends UISelectProps {
 }
 
 /**
- * Select component for mobile screens with left icon and label support.
+ * Select component for both mobile and desktop screens with left icon and label support.
  *
- * @param props - Select component properties
+ * @param props Select component properties
  * @returns A select component
  *
  * @example
@@ -149,7 +149,6 @@ export const Select: FC<SelectProps> = memo(
           iconProps={{
             pr: { md: "lg" },
           }}
-          portalProps={{ disabled: false }}
           size="lg"
           {...selectProps}
         >
