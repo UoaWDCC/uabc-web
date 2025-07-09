@@ -26,14 +26,14 @@ describe("<BookingTimesCardGroup />", () => {
   })
 
   it("renders a FormControl and CheckboxCardGroup", () => {
-    render(<BookingTimesCardGroup items={items} />)
+    render(<BookingTimesCardGroup items={items} name="bookingTimes" />)
     expect(screen.getByRole("group")).toBeInTheDocument()
     expect(screen.getByTestId("test-id-1")).toBeInTheDocument()
     expect(screen.getByTestId("test-id-2")).toBeInTheDocument()
   })
 
   it("renders nothing if items is empty", () => {
-    render(<BookingTimesCardGroup items={[]} />)
+    render(<BookingTimesCardGroup items={[]} name="bookingTimes" />)
     expect(screen.getByRole("group")).toBeInTheDocument()
     expect(screen.queryAllByRole("checkbox").length).toBe(0)
   })

@@ -1,3 +1,4 @@
+"use client"
 import { Clock10Icon, MapPinIcon } from "@yamada-ui/lucide"
 import {
   CheckboxCardGroup,
@@ -7,7 +8,8 @@ import {
   type FormControlProps,
 } from "@yamada-ui/react"
 import { forwardRef, memo } from "react"
-import type { FieldPath, FieldValues, UseFormRegisterReturn } from "react-hook-form"
+import type { Control } from "react-hook-form"
+import { Controller } from "react-hook-form"
 import { IconWithText } from "../../Primitive"
 
 /**
@@ -38,7 +40,6 @@ export interface BookingTimesCardGroupProps extends Omit<CheckboxCardGroupProps,
    * Typically used with React Hook Form error messages.
    */
   errorMessage?: string
-
   /**
    * Additional props for the FormControl wrapper.
    *
@@ -46,18 +47,14 @@ export interface BookingTimesCardGroupProps extends Omit<CheckboxCardGroupProps,
    * Allows customization of the FormControl container.
    */
   formControlProps?: FormControlProps
-
   /**
-   * React Hook Form registration object.
-   *
-   * @remarks
-   * When using with React Hook Form, spread the register() result into this prop.
-   * This automatically handles onChange, onBlur, name, and ref.
-   *
-   * @example
-   * <BookingTimesCardGroup {...register("fieldName")} />
+   * Field name for Controller integration.
    */
-  registration?: UseFormRegisterReturn<FieldPath<FieldValues>>
+  name: string
+  /**
+   * React Hook Form control object for Controller integration.
+   */
+  control?: Control<any>
 }
 
 /**
@@ -101,35 +98,36 @@ export const BookingTimesCardGroup = memo(
         isError = false,
         errorMessage,
         formControlProps,
-        registration,
+        control,
+        name,
         ...props
       }: BookingTimesCardGroupProps,
       ref,
     ) => {
-      const { onChange: rhfOnChange, ...registrationProps } = registration || {}
-
-      const checkboxGroupProps = {
-        ...registrationProps,
-        ...props,
-        ref,
-        onChange: rhfOnChange
-          ? (value: string[]) => rhfOnChange({ target: { value } })
-          : props.onChange,
-      }
-
       return (
-        <FormControl errorMessage={errorMessage} invalid={isError} {...formControlProps}>
-          <CheckboxCardGroup
-            {...checkboxGroupProps}
-            items={items.map((item) => {
-              return {
-                ...item,
-                addon: <IconWithText icon={<MapPinIcon />} label={item.addon} />,
-                description: <IconWithText icon={<Clock10Icon />} label={item.description} />,
-              }
-            })}
-          />
-        </FormControl>
+        <Controller
+          control={control}
+          name={name}
+          render={({ field, fieldState }) => (
+            <FormControl
+              errorMessage={fieldState.error?.message || errorMessage}
+              invalid={!!fieldState.error || isError}
+              {...formControlProps}
+            >
+              <CheckboxCardGroup
+                {...props}
+                items={items.map((item) => ({
+                  ...item,
+                  addon: <IconWithText icon={<MapPinIcon />} label={item.addon} />,
+                  description: <IconWithText icon={<Clock10Icon />} label={item.description} />,
+                }))}
+                onChange={field.onChange}
+                ref={ref}
+                value={field.value}
+              />
+            </FormControl>
+          )}
+        />
       )
     },
   ),

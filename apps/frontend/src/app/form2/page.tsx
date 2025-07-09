@@ -41,6 +41,7 @@ const bookingTimesData = [
 
 export default function Form2Page() {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -86,10 +87,11 @@ export default function Form2Page() {
         />
 
         <BookingTimesCardGroup
+          control={control}
           errorMessage={errors.bookingTimes?.message}
           isError={!!errors.bookingTimes}
           items={bookingTimesData}
-          registration={register("bookingTimes")}
+          name="bookingTimes"
         />
 
         <Button
