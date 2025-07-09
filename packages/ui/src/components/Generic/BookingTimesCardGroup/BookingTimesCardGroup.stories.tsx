@@ -1,7 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react"
 import { PropsTable } from "@storybook-config/components"
-import { Clock10Icon, MapPinIcon } from "@yamada-ui/lucide"
-import { IconWithText } from "../../Primitive"
 import { BookingTimesCardGroup } from "./BookingTimesCardGroup"
 
 const meta: Meta<typeof BookingTimesCardGroup> = {
@@ -46,8 +44,6 @@ export const TypesAndStates: Story = (_args) => {
 
         const items = defaultData.map((item) => ({
           ...item,
-          addon: <IconWithText icon={<MapPinIcon />} label={item.label} />,
-          description: <IconWithText icon={<Clock10Icon />} label={item.description} />,
           invalid: isError,
           disabled: isDisabled,
           checked: isChecked ? true : undefined,
