@@ -14,5 +14,5 @@ export const getFaq = async () => {
 
 export const getSemester = async (id: string) => {
   "use server"
-  return await apiClient.get(`/api/semesters/${id}`, GetSemesterResponseSchema, ["semester"])
+  return await apiClient.get(`/api/semesters/${id}`, GetSemesterResponseSchema, ["semester", id])
 }
