@@ -33,18 +33,20 @@ const defaultData = [
 ]
 
 export const TypesAndStates: Story = (_args) => {
-  const states = ["normal", "disabled", "error"]
+  const states = ["normal", "disabled", "error", "checked"]
 
   return (
     <PropsTable rows={states} variant="column">
       {(_col, row, _index) => {
         const isDisabled = row === "disabled"
         const isError = row === "error"
+        const isChecked = row === "checked"
 
         const items = defaultData.map((item) => ({
           ...item,
           invalid: isError,
           full: isDisabled,
+          checked: isChecked,
         }))
 
         return <BookingTimesCardGroup defaultValue={["1"]} items={items} />
