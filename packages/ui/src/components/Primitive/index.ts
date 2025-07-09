@@ -1,5 +1,6 @@
 export * from "./Button"
 export * from "./Heading"
+export * from "./IconWithText"
 export * from "./Image"
 export * from "./LoadingStateBar"
 export * from "./MultiSelect"

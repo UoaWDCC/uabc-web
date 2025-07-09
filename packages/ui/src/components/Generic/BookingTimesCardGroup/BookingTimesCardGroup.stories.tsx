@@ -1,9 +1,11 @@
 import type { Meta, StoryFn } from "@storybook/react"
 import { PropsTable } from "@storybook-config/components"
+import { Clock10Icon, MapPinIcon } from "@yamada-ui/lucide"
+import { IconWithText } from "../../Primitive"
 import { BookingTimesCardGroup } from "./BookingTimesCardGroup"
 
 const meta: Meta<typeof BookingTimesCardGroup> = {
-  title: "Composite Components / BookingTimesCardGroup",
+  title: "Generic Components / BookingTimesCardGroup",
   component: BookingTimesCardGroup,
 }
 
@@ -13,20 +15,20 @@ type Story = StoryFn<typeof BookingTimesCardGroup>
 
 const defaultData = [
   {
-    location: "UoA Hiwa Center",
-    bookingTime: "19:30 - 20:00",
+    addon: "UoA Hiwa Center",
+    description: "19:30 - 20:00",
     label: "Tuesday, 12th May",
     value: "1",
   },
   {
-    location: "UoA Hiwa Center",
-    bookingTime: "19:30 - 20:00",
+    addon: "UoA Hiwa Center",
+    description: "19:30 - 20:00",
     label: "Tuesday, 12th May",
     value: "2",
   },
   {
-    location: "UoA Hiwa Center",
-    bookingTime: "19:30 - 20:00",
+    addon: "UoA Hiwa Center",
+    description: "19:30 - 20:00",
     label: "Tuesday, 12th May",
     value: "3",
   },
@@ -44,12 +46,14 @@ export const TypesAndStates: Story = (_args) => {
 
         const items = defaultData.map((item) => ({
           ...item,
+          addon: <IconWithText icon={<MapPinIcon />} label={item.label} />,
+          description: <IconWithText icon={<Clock10Icon />} label={item.description} />,
           invalid: isError,
-          full: isDisabled,
-          checked: isChecked,
+          disabled: isDisabled,
+          checked: isChecked ? true : undefined,
         }))
 
-        return <BookingTimesCardGroup defaultValue={["1"]} items={items} />
+        return <BookingTimesCardGroup items={items} />
       }}
     </PropsTable>
   )
