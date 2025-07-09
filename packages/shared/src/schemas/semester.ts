@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { Semester } from "@/payload-types"
+import type { Semester } from "../payload-types"
 
 export const SemesterSchema = z.object({
   id: z.string(),
