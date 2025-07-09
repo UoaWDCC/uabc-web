@@ -1,3 +1,4 @@
+import { Weekday } from "@repo/shared"
 import { z } from "zod"
 import type { Semester } from "../payload-types"
 
@@ -8,15 +9,7 @@ export const SemesterSchema = z.object({
   endDate: z.string(),
   breakStart: z.string(),
   breakEnd: z.string(),
-  bookingOpenDay: z.enum([
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ]),
+  bookingOpenDay: z.nativeEnum(Weekday),
   bookingOpenTime: z.string(),
   updatedAt: z.string(),
   createdAt: z.string(),
