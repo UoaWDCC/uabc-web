@@ -11,6 +11,29 @@ export interface BookingTimesCardGroupProps extends CheckboxCardGroupProps {
   items: BookingTimesCardProps[]
 }
 
+/**
+ * BookingTimesCardGroup is a component that displays a group of BookingTimesCard components.
+ * It wraps multiple booking time options in a checkbox card group for selection.
+ *
+ * @example
+ * <BookingTimesCardGroup
+ *   items={[
+ *     {
+ *       label: "Tuesday, 12th May",
+ *       value: "booking-123",
+ *       location: "UoA Hiwa Center",
+ *       bookingTime: "7:30 - 10pm"
+ *     },
+ *     {
+ *       label: "Wednesday, 13th May",
+ *       value: "booking-456",
+ *       location: "UoA Hiwa Center",
+ *       bookingTime: "2:00 - 4:30pm",
+ *       full: true
+ *     }
+ *   ]}
+ * />
+ */
 export const BookingTimesCardGroup = ({ items, ...props }: BookingTimesCardGroupProps) => {
   return (
     <FormControl>
