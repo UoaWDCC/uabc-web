@@ -4,19 +4,14 @@ import { Button, Heading, Select } from "@repo/ui/components/Primitive"
 import { CalendarClockIcon, CircleGaugeIcon } from "@yamada-ui/lucide"
 import { Grid, GridItem, memo, type SelectItem, VStack } from "@yamada-ui/react"
 import { type SubmitHandler, useForm } from "react-hook-form"
-import z from "zod"
-
-const quickBookFormSchema = z.object({
-  locationAndTimeId: z.string().min(1, "Field is required"),
-  skillLevel: z.string().min(1, "Field is required"),
-})
+import type { UIQuickBookFormValues } from "./schema"
 
 export interface QuickBookProps {
   title?: string
   submitLabel?: string
   locationAndTimeOptions: SelectItem[]
   skillLevelOptions: SelectItem[]
-  onSubmit?: SubmitHandler<z.infer<typeof quickBookFormSchema>>
+  onSubmit?: SubmitHandler<UIQuickBookFormValues>
 }
 
 export const QuickBook = memo(
@@ -31,7 +26,7 @@ export const QuickBook = memo(
       register,
       handleSubmit,
       formState: { errors, isSubmitting },
-    } = useForm<z.infer<typeof quickBookFormSchema>>()
+    } = useForm<UIQuickBookFormValues>()
 
     return (
       <VStack
