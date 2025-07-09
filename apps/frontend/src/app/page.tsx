@@ -9,7 +9,10 @@ export default async function Home() {
 
   return (
     <Container as="main">
-      <FAQ items={faq?.data?.questions ?? []} />
+      <FAQ
+        items={faq?.data?.questions ?? []}
+        richTextProps={{ mediaBaseUrl: process.env.NEXT_PUBLIC_API_URL }}
+      />
     </Container>
   )
 }

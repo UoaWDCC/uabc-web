@@ -165,6 +165,9 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@tanstack/react-query':
+        specifier: 5.81.5
+        version: 5.81.5(react@19.1.0)
       '@yamada-ui/lucide':
         specifier: 1.10.5
         version: 1.10.5(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
