@@ -1,32 +1,25 @@
-import type { Meta, StoryFn } from "@storybook/nextjs"
-import { PropsTable } from "@storybook-config/components"
-import { BookingTimesCard, BookingTimesCardTypes } from "./BookingTimesCard"
+import type { Meta, StoryFn } from "@storybook/react"
+import { CheckboxCardGroup } from "@yamada-ui/react"
+import { BookingTimesCard } from "./BookingTimesCard"
 
 const meta: Meta<typeof BookingTimesCard> = {
   title: "Composite Components / BookingTimesCard",
   component: BookingTimesCard,
   argTypes: {
-    title: {
+    label: {
       control: "text",
-      description: "The component's heading title",
+      description: "The component's heading title label",
       table: {
         type: { summary: "string" },
         defaultValue: { summary: "Tuesday, 12th May" },
       },
     },
-    onClick: {
-      action: "clicked",
-      description: "Function called when the button is clicked",
-      table: {
-        type: { summary: "() => void" },
-      },
-    },
-    bookingTime: {
+    value: {
       control: "text",
-      description: "The component's booking time",
+      description: "The component's value",
       table: {
         type: { summary: "string" },
-        defaultValue: { summary: "7:30 - 10pm" },
+        defaultValue: { summary: "e7f2ge97g2fu9beu2ge97gfu9i2heb" },
       },
     },
     location: {
@@ -37,19 +30,21 @@ const meta: Meta<typeof BookingTimesCard> = {
         defaultValue: { summary: "UoA Hiwa Center" },
       },
     },
-    type: {
-      control: "select",
-      options: Object.values(BookingTimesCardTypes),
-      description: "The component's type",
+    bookingTime: {
+      control: "text",
+      description: "The component's booking time",
       table: {
-        type: {
-          summary: Object.values(BookingTimesCardTypes)
-            .map((type) => `"${type}"`)
-            .join(" | "),
-        },
-        defaultValue: { summary: "default" },
+        type: { summary: "string" },
+        defaultValue: { summary: "7:30 - 10pm" },
       },
     },
+    // onClick: {
+    //   action: "clicked",
+    //   description: "Function called when the button is clicked",
+    //   table: {
+    //     type: { summary: "() => void" },
+    //   },
+    // },
   },
 }
 
@@ -59,32 +54,14 @@ type Story = StoryFn<typeof BookingTimesCard>
 
 export const Default: Story = (args) => {
   return (
-    <BookingTimesCard
-      {...args}
-      bookingTime="7:30 - 10pm"
-      location="UoA Hiwa Center"
-      onClick={() => console.log("Button clicked")}
-      title="Tuesday, 12th May"
-    />
-  )
-}
-
-export const Types: Story = (args) => {
-  return (
-    <PropsTable columns={["Types"]} rows={Object.values(BookingTimesCardTypes)}>
-      {(_col, row, key) => {
-        return (
-          <BookingTimesCard
-            key={key}
-            {...args}
-            bookingTime="7:30 - 10pm"
-            location="UoA Hiwa Center"
-            onClick={() => console.log(`${row} button clicked`)}
-            title="Tuesday, 12th May"
-            type={row}
-          />
-        )
-      }}
-    </PropsTable>
+    <CheckboxCardGroup>
+      <BookingTimesCard
+        {...args}
+        bookingTime="7:30 - 10pm"
+        label="Tuesday, 12th May"
+        location="UoA Hiwa Center"
+        onClick={() => console.log("Button clicked")}
+      />
+    </CheckboxCardGroup>
   )
 }
