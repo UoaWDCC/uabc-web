@@ -9,6 +9,7 @@ describe("<BookingTimesCardGroup />", () => {
       value: "booking-123",
       addon: "UoA Hiwa Center",
       description: "7:30 - 10pm",
+      "data-testid": "test-id-1",
     },
     {
       label: "Wednesday, 13th May",
@@ -16,6 +17,7 @@ describe("<BookingTimesCardGroup />", () => {
       addon: "UoA Hiwa Center",
       description: "2:00 - 4:30pm",
       disabled: true,
+      "data-testid": "test-id-2",
     },
   ]
 
@@ -26,6 +28,8 @@ describe("<BookingTimesCardGroup />", () => {
   it("renders a FormControl and CheckboxCardGroup", () => {
     render(<BookingTimesCardGroup items={items} />)
     expect(screen.getByRole("group")).toBeInTheDocument()
+    expect(screen.getByTestId("test-id-1")).toBeInTheDocument()
+    expect(screen.getByTestId("test-id-2")).toBeInTheDocument()
   })
 
   it("renders nothing if items is empty", () => {
