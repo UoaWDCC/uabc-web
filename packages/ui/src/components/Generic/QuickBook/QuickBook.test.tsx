@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom"
+import { PlayLevel } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as QuickBookModule from "./index"
@@ -37,7 +38,7 @@ describe("<QuickBook />", () => {
 
     const skillLevelSelect = screen.getByTestId("skill-level")
     await user.click(skillLevelSelect)
-    await user.click(screen.getByText(skillLevelOptionsMock[0].label as string))
+    await user.click(screen.getByText(PlayLevel.beginner))
 
     const submitButton = screen.getByText("Book Now")
     await user.click(submitButton)

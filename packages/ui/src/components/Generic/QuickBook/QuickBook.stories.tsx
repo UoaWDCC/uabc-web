@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs"
 import { QuickBook } from "./QuickBook"
-import { locationAndTimeOptionsMock, skillLevelOptionsMock } from "./QuickBook.mock"
+import { locationAndTimeOptionsMock } from "./QuickBook.mock"
 
 type Story = StoryObj<typeof QuickBook>
 
@@ -18,6 +18,5 @@ export default meta
 export const Default: Story = {
   args: {
     locationAndTimeOptions: locationAndTimeOptionsMock,
-    skillLevelOptions: skillLevelOptionsMock,
   },
 }

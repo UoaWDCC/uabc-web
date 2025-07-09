@@ -14,6 +14,32 @@ import {
 import type { ReactNode, Ref } from "react"
 import type { FieldPath, FieldValues, UseFormRegisterReturn } from "react-hook-form"
 
+/**
+ * Props for {@link Select} component
+ *
+ *  @example
+ * // With React Hook Form
+ * <Select
+ *    errorMessage={errors.locationAndTimeId?.message}
+ *    icon={<CalendarClockIcon fontSize={24} />}
+ *    isError={!!errors.locationAndTimeId}
+ *    items={locationAndTimeOptions}
+ *    label="Location & Time"
+ *    registration={register("locationAndTimeId")}
+ *    stylised
+ * />
+ *
+ * @example
+ * // Manual error handling
+ * <Select
+ *    errorMessage="Field is required"
+ *    icon={<CalendarClockIcon fontSize={24} />}
+ *    isError={true}
+ *    items={locationAndTimeOptions}
+ *    label="Location & Time"
+ *    stylised
+ * />
+ */
 export interface SelectProps extends UISelectProps {
   /**
    * Label text of the Select component.
