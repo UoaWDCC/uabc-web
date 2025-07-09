@@ -14,6 +14,7 @@ export enum Weekday {
   sunday = "sunday",
 }
 
+// TODO: Decide if we should change PlayLevel enum values to title case
 export enum PlayLevel {
   beginner = "beginner",
   intermediate = "intermediate",

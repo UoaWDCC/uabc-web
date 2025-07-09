@@ -259,6 +259,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@hookform/resolvers':
+        specifier: 5.1.1
+        version: 5.1.1(react-hook-form@7.60.0(react@19.1.0))
       '@repo/shared':
         specifier: workspace:*
         version: link:../shared
