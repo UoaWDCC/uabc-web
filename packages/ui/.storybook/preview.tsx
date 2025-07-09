@@ -4,7 +4,7 @@ import { DocsContainer } from "@storybook/addon-docs/blocks"
 import type { Preview } from "@storybook/react"
 import { UIProvider, useColorMode, VStack } from "@yamada-ui/react"
 import type { FC, PropsWithChildren } from "react"
-import { useEffect, useState } from "react"
+import React from "react"
 import { addons } from "storybook/preview-api"
 import { themes } from "storybook/theming"
 import { DARK_MODE_EVENT_NAME } from "storybook-dark-mode"
@@ -14,9 +14,9 @@ import "./styles.css"
 const channel = addons.getChannel()
 
 const useDarkMode = (callback?: (darkMode: boolean) => void) => {
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = React.useState(false)
 
-  useEffect(() => {
+  React.useEffect(() => {
     channel.on(DARK_MODE_EVENT_NAME, callback ?? setDarkMode)
 
     return () => channel.off(DARK_MODE_EVENT_NAME, callback ?? setDarkMode)
@@ -25,7 +25,11 @@ const useDarkMode = (callback?: (darkMode: boolean) => void) => {
   return darkMode
 }
 
-const App: FC<PropsWithChildren> = ({ children }) => {
+interface AppProps extends PropsWithChildren {
+  isDocs?: boolean
+}
+
+const App: FC<AppProps> = ({ children, isDocs }) => {
   const { changeColorMode } = useColorMode()
 
   useDarkMode((darkMode) => {
@@ -36,10 +40,14 @@ const App: FC<PropsWithChildren> = ({ children }) => {
     <VStack
       align="start"
       gap={{ base: "lg", md: "md" }}
-      minH={{
-        base: "calc(100dvh - $spaces.lg * 2)",
-        md: "calc(100dvh - $spaces.md * 2)",
-      }}
+      minH={
+        isDocs
+          ? undefined
+          : {
+              base: "calc(100dvh - $spaces.lg * 2)",
+              md: "calc(100dvh - $spaces.md * 2)",
+            }
+      }
       overflowX="auto"
       p={{ base: "lg", md: "md" }}
     >
@@ -84,10 +92,10 @@ const preview: Preview = {
   },
 
   decorators: [
-    (Story) => {
+    (Story, { viewMode }) => {
       return (
         <UIProvider config={config} theme={theme}>
-          <App>
+          <App isDocs={viewMode === "docs"}>
             <Story />
           </App>
         </UIProvider>

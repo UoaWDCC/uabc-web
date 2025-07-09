@@ -1,4 +1,4 @@
-import type { SerializedLexicalNode } from "../types"
+import type { SerializedLexicalNode } from "@repo/shared"
 import { hasChildren, isTextNode } from "./validators"
 
 /**
