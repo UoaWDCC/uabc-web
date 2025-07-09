@@ -16,6 +16,7 @@ import {
 } from "@yamada-ui/react"
 import { forwardRef, memo } from "react"
 import type { FieldPath, FieldValues, UseFormRegisterReturn } from "react-hook-form"
+import { type AutoCompleteType, InputType } from "./types"
 
 /**
  * Props for {@link TextInput}
@@ -66,6 +67,12 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types HTML Input Types}
    */
   type?: InputType
+
+  /**
+   * The autocomplete attribute for the input field.
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete}
+   */
+  autoComplete?: AutoCompleteType
 
   /**
    * The icon to display on the left side of the input field.
@@ -119,28 +126,8 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
 }
 
 /**
- * Supported HTML input types for the TextInput component
- * @enum {string}
- */
-export enum InputType {
-  Text = "text",
-  Email = "email",
-  Password = "password",
-  Number = "number",
-  Tel = "tel",
-  Url = "url",
-  Search = "search",
-  Date = "date",
-  Time = "time",
-  Datetime = "datetime-local",
-  Month = "month",
-  Week = "week",
-}
-
-/**
  * Array of supported input types for easy iteration and Storybook controls
  */
-export const INPUT_TYPES = Object.values(InputType)
 
 /**
  * A clean, modern text input component with built-in React Hook Form support.
@@ -160,6 +147,7 @@ export const TextInput = memo(
         errorMessage,
         formControlProps,
         registration,
+        autoComplete,
         ...props
       }: TextInputProps,
       ref,
@@ -169,16 +157,12 @@ export const TextInput = memo(
 
       const inputRef = mergeRefs(registration?.ref ?? null, ref)
 
-      const inputProps = registration
-        ? {
-            ...registration,
-            ...props,
-            ref: inputRef,
-          }
-        : {
-            ...props,
-            ref: inputRef,
-          }
+      const inputProps = {
+        ...registration,
+        ...props,
+        ref: inputRef,
+        autoComplete,
+      }
 
       return (
         <FormControl errorMessage={errorMessage} invalid={isError} {...formControlProps}>
@@ -228,7 +212,7 @@ export const TextInput = memo(
             {endIcon ? (
               <InputRightElement>{endIcon}</InputRightElement>
             ) : isPasswordType ? (
-              <InputRightElement>
+              <InputRightElement clickable>
                 <IconButton
                   _hover={{
                     color: ["gray.700", "gray.200"],
