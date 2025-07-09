@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 import { AboutUsSection } from "./AboutUsSection"
 
 const meta: Meta<typeof AboutUsSection> = {
-  title: "Generic Components / AboutUsSection",
+  title: "Composite Components / AboutUsSection",
   component: AboutUsSection,
   argTypes: {
     cards: {
