@@ -7,9 +7,3 @@ export const locationAndTimeOptionsMock: SelectItem[] = [
   { label: "Fri | 7:30pm - 10:00pm | UoA Recreation Centre", value: "smpt3sa8hgwn19osvdf3l3wa" },
   { label: "Sat | 4:00pm - 6:00pm | ABA", value: "o2akj1d225h1fecaydjxze1b" },
 ]
-
-export const skillLevelOptionsMock: SelectItem[] = [
-  { label: "Beginner", value: "beginner" },
-  { label: "Intermediate", value: "intermediate" },
-  { label: "Advanced", value: "advanced" },
-]

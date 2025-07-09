@@ -3,17 +3,13 @@ import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as QuickBookModule from "./index"
 import { QuickBook } from "./QuickBook"
-import { locationAndTimeOptionsMock, skillLevelOptionsMock } from "./QuickBook.mock"
+import { locationAndTimeOptionsMock } from "./QuickBook.mock"
 import type { UIQuickBookFormValues } from "./schema"
 
 describe("<QuickBook />", () => {
   it("should re-export the Select component and check if Select exists", () => {
     expect(QuickBookModule.QuickBook).toBeDefined()
-    expect(
-      isValidElement(
-        <QuickBookModule.QuickBook locationAndTimeOptions={[]} skillLevelOptions={[]} />,
-      ),
-    ).toBeTruthy()
+    expect(isValidElement(<QuickBookModule.QuickBook locationAndTimeOptions={[]} />)).toBeTruthy()
   })
 
   it("should have correct displayName", () => {
@@ -21,7 +17,7 @@ describe("<QuickBook />", () => {
   })
 
   it("should render default submit button label correctly", () => {
-    render(<QuickBook locationAndTimeOptions={[]} skillLevelOptions={[]} />)
+    render(<QuickBook locationAndTimeOptions={[]} />)
 
     // At base (mobile), the title is not displayed and cannot be tested for in a vitest test
 
@@ -32,11 +28,7 @@ describe("<QuickBook />", () => {
     const handleSubmit = vi.fn((data: UIQuickBookFormValues) => data)
 
     const { user } = render(
-      <QuickBook
-        locationAndTimeOptions={locationAndTimeOptionsMock}
-        onSubmit={handleSubmit}
-        skillLevelOptions={skillLevelOptionsMock}
-      />,
+      <QuickBook locationAndTimeOptions={locationAndTimeOptionsMock} onSubmit={handleSubmit} />,
     )
 
     const locationAndTimeSelect = screen.getByTestId("location-and-time")
