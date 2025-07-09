@@ -5,6 +5,13 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  workflow_dispatch:
+    inputs:
+      use_node_modules_cache:
+        description: 'Use node_modules cache'
+        required: false
+        default: true
+        type: boolean
 
 env:
   CI: 'true'
@@ -45,8 +52,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        if: github.event.inputs.use_node_modules_cache == 'true'
 
       - name: Check if node_modules cache exists
+        if: github.event.inputs.use_node_modules_cache == 'true'
         id: cache-check
         uses: actions/cache@v4
         with:
@@ -55,24 +64,24 @@ jobs:
           lookup-only: true
 
       - name: Setup Node.js
-        if: steps.cache-check.outputs.cache-hit != 'true'
+        if: steps.cache-check.outputs.cache-hit != 'true' && github.event.inputs.use_node_modules_cache == 'true'
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
 
       - name: Setup pnpm
-        if: steps.cache-check.outputs.cache-hit != 'true'
+        if: steps.cache-check.outputs.cache-hit != 'true' && github.event.inputs.use_node_modules_cache == 'true'
         uses: pnpm/action-setup@v2
         with:
           version: latest
           run_install: false
 
       - name: Install dependencies
-        if: steps.cache-check.outputs.cache-hit != 'true'
+        if: steps.cache-check.outputs.cache-hit != 'true' && github.event.inputs.use_node_modules_cache == 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Save node_modules cache
-        if: steps.cache-check.outputs.cache-hit != 'true'
+        if: steps.cache-check.outputs.cache-hit != 'true' && github.event.inputs.use_node_modules_cache == 'true'
         uses: actions/cache/save@v4
         with:
           path: |
@@ -104,6 +113,7 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          CACHE: ${{ github.event.inputs.use_node_modules_cache }}
 
   build-frontend:
     needs: [check_changes, setup]
@@ -127,6 +137,7 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          CACHE: ${{ github.event.inputs.use_node_modules_cache }}
 
   typecheck:
     needs: [check_changes, setup]
@@ -151,6 +162,7 @@ jobs:
           run_install: false
 
       - name: Restore node_modules cache
+        if: github.event.inputs.use_node_modules_cache == 'true'
         uses: actions/cache/restore@v4
         id: cache
         with:
@@ -195,6 +207,7 @@ jobs:
           run_install: false
 
       - name: Restore node_modules cache
+        if: github.event.inputs.use_node_modules_cache == 'true'
         uses: actions/cache/restore@v4
         id: cache
         with:
@@ -260,6 +273,7 @@ jobs:
           run_install: false
 
       - name: Restore node_modules cache
+        if: github.event.inputs.use_node_modules_cache == 'true'
         uses: actions/cache/restore@v4
         id: cache
         with:

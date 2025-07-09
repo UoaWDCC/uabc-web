@@ -23,6 +23,9 @@ inputs:
   JWT_SECRET:
     description: "The JWT signing secret."
     required: false
+  CACHE:
+    description: "Whether to use the node_modules cache."
+    required: true
   workspace:
     description: "The workspace to build."
     required: true
@@ -42,6 +45,7 @@ runs:
         run_install: false
 
     - name: Restore node_modules cache
+      if: ${{ inputs.CACHE == 'true' }}
       uses: actions/cache/restore@v4
       id: cache
       with:
@@ -55,6 +59,7 @@ runs:
           ${{ runner.os }}-node_modules-
 
     - name: Install dependencies if cache misses
+      if: ${{ inputs.CACHE == 'true' }}
       run: NODE_ENV=production pnpm install --frozen-lockfile
       shell: bash
 
