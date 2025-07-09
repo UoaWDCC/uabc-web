@@ -1,4 +1,4 @@
-import type { CardProps, CSSUIObject } from "@yamada-ui/react"
+import type { CheckboxCardProps, CSSUIObject } from "@yamada-ui/react"
 
 export const separatorAfterStyles: CSSUIObject = {
   content: "''",
@@ -12,7 +12,7 @@ export const separatorAfterStyles: CSSUIObject = {
   display: "flex",
 }
 
-export const styles: Record<string, CardProps> = {
+export const styles: Record<string, CheckboxCardProps> = {
   default: {
     bg: ["secondary.50", "secondary.900"],
     borderWidth: "1px",
