@@ -13,21 +13,22 @@ export interface AboutUsSectionProps extends AboutUsCarouselProps {
 
 export const AboutUsSection = ({ cards, ...carouselProps }: AboutUsSectionProps) => {
   return (
-    <Container as={VStack} centerContent gap="md" padding="calc(lg - sm)">
-      <Heading.h2 fontWeight="semibold" w="full">
+    <Container as={VStack} centerContent gap={{ base: "md", md: "xl" }} padding="calc(lg - sm)">
+      <Heading.h2 fontSize={{ base: "2xl", md: "6xl" }} fontWeight="semibold" w="full">
         About Us
       </Heading.h2>
       <VStack gap="2xl">
         <AboutUsCarousel
           data-testid="about-us-carousel"
-          wrapperProps={{ padding: { sm: "sm" } }}
+          floatProps={{ marginX: { sm: "sm", md: "lg" }, marginY: "sm" }}
+          wrapperProps={{ paddingX: { sm: "sm", md: "lg" }, paddingY: "sm" }}
           {...carouselProps}
           autoplay
           delay={4000}
           height="auto"
           width="full"
         />
-        <Flex flexDir={{ base: "column", md: "row" }} gap="md">
+        <Flex flexDir={{ base: "column", md: "row" }} gap={{ base: "md", md: "xl" }}>
           {cards.map((card) => (
             <AboutUsCard key={card.title} {...card} />
           ))}
