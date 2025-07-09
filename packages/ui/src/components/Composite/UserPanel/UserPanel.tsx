@@ -20,37 +20,99 @@ import { InfoField } from "./InfoField"
 import { StatusBadge } from "./StatusBadge"
 import type { UserStatus } from "./StatusIcon"
 
+/**
+ * Props for {@link UserPanel} component
+ */
 export interface UserPanelProps extends CardProps {
   /**
    * User's profile image URL
+   *
+   * @remarks
+   * If not provided, the avatar will display the user's initials.
+   * Should be a valid image URL or data URI.
    */
   avatarSrc?: string
   /**
    * User's display name
+   *
+   * @remarks
+   * This is the primary identifier displayed prominently in the panel.
+   * Used for avatar fallback if no image is provided.
    */
   name: string
   /**
    * User's membership status
+   *
+   * @remarks
+   * Determines the status badge and icon displayed.
+   * Affects the visual styling of the status indicator.
    */
   status: UserStatus
   /**
    * User's email address
+   *
+   * @remarks
+   * Displayed in the info section of the panel.
+   * Should be a valid email format for proper display.
    */
   email: string
   /**
    * User's phone number
+   *
+   * @remarks
+   * Displayed in the info section of the panel.
+   * Should be formatted for readability.
    */
   phone: string
   /**
    * Number of sessions remaining
+   *
+   * @remarks
+   * Displayed in the footer with a shuttle icon.
+   * Represents the user's remaining session count.
    */
   sessionsLeft: number
   /**
    * Props for the edit icon button
+   *
+   * @remarks
+   * Allows customization of the edit button that appears on the avatar.
+   * Common use cases include onClick handlers and accessibility props.
    */
   iconButtonProps?: IconButtonProps
 }
 
+/**
+ * UserPanel component for displaying user information in a card format
+ *
+ * @param props UserPanel component properties
+ * @returns A user information panel component
+ *
+ * @example
+ * // Basic user panel
+ * <UserPanel
+ *   name="John Doe"
+ *   status="Member"
+ *   email="john@example.com"
+ *   phone="+1 234 567 8900"
+ *   sessionsLeft={5}
+ * />
+ *
+ * @example
+ * // User panel with avatar and edit functionality
+ * <UserPanel
+ *   avatarSrc="https://example.com/avatar.jpg"
+ *   name="Jane Smith"
+ *   status="Casual"
+ *   email="jane@example.com"
+ *   phone="+1 234 567 8901"
+ *   sessionsLeft={0}
+ *   iconButtonProps={{
+ *     onClick: () => handleEdit(),
+ *     "aria-label": "Edit user profile"
+ *   }}
+ * />
+ */
 export const UserPanel: FC<UserPanelProps> = ({
   avatarSrc,
   name,
