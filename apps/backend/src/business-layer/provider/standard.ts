@@ -34,8 +34,15 @@ export default class StandardSecurity {
    * @param password The password of the user
    * @returns True if the data is valid, false otherwise
    */
-  static async validateRegisterDetails(email: string, password: string): Promise<boolean> {
+  static async validateRegisterDetails(
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+  ): Promise<boolean> {
     const parse = await RegisterDetailsSchema.safeParseAsync({
+      firstName,
+      lastName,
       email,
       password,
     })
