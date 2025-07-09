@@ -4,7 +4,7 @@ import { CheckboxCardGroup } from "@yamada-ui/react"
 import { BookingTimesCard } from "./BookingTimesCard"
 
 const meta: Meta<typeof BookingTimesCard> = {
-  title: "Composite Components / BookingTimesCard",
+  title: "Generic Components / BookingTimesCard",
   component: BookingTimesCard,
   argTypes: {
     label: {
@@ -69,7 +69,7 @@ export const Disabled: Story = (args) => {
             <BookingTimesCard
               {...args}
               bookingTime="7:30 - 10pm"
-              full={Boolean(row)}
+              full={row === "true"}
               key={key}
               label="Tuesday, 12th May"
               location="UoA Hiwa Center"
