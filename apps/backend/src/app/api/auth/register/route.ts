@@ -1,5 +1,4 @@
 import { RegisterDetailsSchema } from "@repo/shared"
-import type { User } from "@repo/shared/payload-types"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
@@ -13,7 +12,6 @@ export const POST = async (req: NextRequest) => {
   const authDataService = new AuthDataService()
 
   try {
-    let user: User
     const parsedBody = RegisterDetailsSchema.parse(await req.json())
     try {
       await authDataService.getAuthByEmail(parsedBody.email)
@@ -26,7 +24,7 @@ export const POST = async (req: NextRequest) => {
         throw error
       }
     }
-    user = await userDataService.createUser({ ...parsedBody, role: "casual" })
+    const user = await userDataService.createUser({ ...parsedBody, role: "casual" })
 
     const hash = await StandardSecurity.hashPassword(parsedBody.password)
     await authDataService.createAuth({
