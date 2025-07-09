@@ -1,3 +1,4 @@
+import type { SerializedEditorState, SerializedLexicalNode } from "@repo/shared"
 import {
   basicEditorState,
   complexEditorState,
@@ -28,7 +29,6 @@ import { List } from "@yamada-ui/react"
 import type React from "react"
 import { ListType, NodeType } from "./constants"
 import { RichTextRenderer, richTextRenderer } from "./RichTextRenderer"
-import type { SerializedEditorState, SerializedLexicalNode } from "./types"
 
 describe("RichTextRenderer", () => {
   const renderer = new RichTextRenderer()

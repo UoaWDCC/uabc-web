@@ -1,8 +1,9 @@
+import type { SerializedLexicalNode, SerializedLinkNode } from "@repo/shared"
 import { Link, Text } from "@yamada-ui/react"
 import NextLink from "next/link"
 import type React from "react"
 import { LinkType } from "../constants"
-import type { RichTextRendererOptions, SerializedLexicalNode, SerializedLinkNode } from "../types"
+import type { RichTextRendererOptions } from "../types"
 import { isDocumentWithSlug, isLinkDocument, isValidLinkFields } from "../utils"
 
 type RenderInlineNodes = (

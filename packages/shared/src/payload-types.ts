@@ -97,6 +97,7 @@ export interface Config {
   blocks: {};
   collections: {
     admin: Admin;
+    event: Event;
     user: User;
     media: Media;
     semester: Semester;
@@ -111,6 +112,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     admin: AdminSelect<false> | AdminSelect<true>;
+    event: EventSelect<false> | EventSelect<true>;
     user: UserSelect<false> | UserSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     semester: SemesterSelect<false> | SemesterSelect<true>;
@@ -188,31 +190,42 @@ export interface Admin {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "user".
+ * via the `definition` "event".
  */
-export interface User {
+export interface Event {
   id: string;
   /**
-   * The first name of the user
+   * The title for the event.
    */
-  firstName: string;
+  title: string;
   /**
-   * The last name of the user
+   * A long description regarding the event.
    */
-  lastName?: string | null;
-  email: string;
+  longDescription: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   /**
-   * The role of the user
+   * A short description (60 characters limit) regarding the event
    */
-  role: 'member' | 'casual' | 'admin';
+  shortDescription: string;
   /**
-   * The number of remaining sessions the user has
+   * The image displayed for the event.
    */
-  remainingSessions?: number | null;
-  /**
-   * The image of the user
-   */
-  image?: (string | null) | Media;
+  eventImage: string | Media;
+  button1: Link;
+  button2: Link;
   updatedAt: string;
   createdAt: string;
 }
@@ -234,6 +247,80 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * Single button displayed on the left of the event image to learn more about the event.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Link".
+ */
+export interface Link {
+  /**
+   * The text displayed for the learn more about the event button
+   */
+  label: string;
+  /**
+   * The URL the learn more button points to.
+   */
+  url: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user".
+ */
+export interface User {
+  id: string;
+  /**
+   * The first name of the user
+   */
+  firstName: string;
+  /**
+   * The last name of the user
+   */
+  lastName?: string | null;
+  email: string;
+  /**
+   * The role of the user
+   */
+  role: 'member' | 'casual' | 'admin';
+  /**
+   * The phone number of the user
+   */
+  phoneNumber?: string | null;
+  /**
+   * The player level of the user
+   */
+  playLevel?: ('beginner' | 'intermediate' | 'advanced') | null;
+  /**
+   * The gender of the user
+   */
+  gender?: ('male' | 'female' | 'non-binary' | 'other' | 'prefer-not-to-answer') | null;
+  /**
+   * The dietary requirements of the user
+   */
+  dietaryRequirements?: string | null;
+  /**
+   * The student ID of the user
+   */
+  studentId?: string | null;
+  /**
+   * The student UPI of the user
+   */
+  studentUpi?: string | null;
+  /**
+   * The university of the user
+   */
+  university?: ('UoA' | 'AUT' | 'Massey University' | 'Other' | 'Working' | 'Not a student') | null;
+  /**
+   * The number of remaining sessions the user has
+   */
+  remainingSessions?: number | null;
+  /**
+   * The image of the user
+   */
+  image?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -282,6 +369,10 @@ export interface GameSessionSchedule {
    * The semester this game session schedule belongs to
    */
   semester: string | Semester;
+  /**
+   * The day of the week this game session schedule belongs to
+   */
+  day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
   /**
    * The start time of the game session
    */
@@ -420,6 +511,10 @@ export interface PayloadLockedDocument {
         value: string | Admin;
       } | null)
     | ({
+        relationTo: 'event';
+        value: string | Event;
+      } | null)
+    | ({
         relationTo: 'user';
         value: string | User;
       } | null)
@@ -513,6 +608,28 @@ export interface AdminSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event_select".
+ */
+export interface EventSelect<T extends boolean = true> {
+  title?: T;
+  longDescription?: T;
+  shortDescription?: T;
+  eventImage?: T;
+  button1?: T | LinkSelect<T>;
+  button2?: T | LinkSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Link_select".
+ */
+export interface LinkSelect<T extends boolean = true> {
+  label?: T;
+  url?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "user_select".
  */
 export interface UserSelect<T extends boolean = true> {
@@ -520,6 +637,13 @@ export interface UserSelect<T extends boolean = true> {
   lastName?: T;
   email?: T;
   role?: T;
+  phoneNumber?: T;
+  playLevel?: T;
+  gender?: T;
+  dietaryRequirements?: T;
+  studentId?: T;
+  studentUpi?: T;
+  university?: T;
   remainingSessions?: T;
   image?: T;
   updatedAt?: T;
@@ -564,6 +688,7 @@ export interface SemesterSelect<T extends boolean = true> {
  */
 export interface GameSessionScheduleSelect<T extends boolean = true> {
   semester?: T;
+  day?: T;
   startTime?: T;
   endTime?: T;
   capacity?: T;
@@ -712,22 +837,6 @@ export interface LinkGroup {
   links: Link;
 }
 /**
- * Single button displayed on the right side of the navbar.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Link".
- */
-export interface Link {
-  /**
-   * The text displayed for the sign in button.
-   */
-  label: string;
-  /**
-   * The URL the sign in button points to.
-   */
-  url: string;
-}
-/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navbar".
  */
@@ -787,14 +896,6 @@ export interface FooterSelect<T extends boolean = true> {
 export interface LinkGroupSelect<T extends boolean = true> {
   title?: T;
   links?: T | LinkSelect<T>;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Link_select".
- */
-export interface LinkSelect<T extends boolean = true> {
-  label?: T;
-  url?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
