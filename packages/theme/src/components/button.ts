@@ -5,7 +5,7 @@ export const Button: ComponentStyle<"Button"> = {
   baseStyle: {
     cursor: "pointer",
 
-    fontWeight: "semibold",
+    fontWeight: { base: "normal", md: "semibold" },
     transitionDuration: "slower",
     transitionProperty: "common",
     _disabled: {

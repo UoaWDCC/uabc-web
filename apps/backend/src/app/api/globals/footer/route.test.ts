@@ -10,6 +10,7 @@ describe("globals/footer", () => {
         data: {
           title: "UABC",
           description: "The largest university badminton club in New Zealand!",
+          linktree: "linktr.ee/uoa.badminton",
           facebook: "https://www.facebook.com/groups/uoabadminton/",
           instagram: "https://www.instagram.com/uoa.badminton/",
           linkGroup1: {
