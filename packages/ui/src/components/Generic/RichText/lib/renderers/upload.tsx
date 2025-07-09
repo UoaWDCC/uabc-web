@@ -1,6 +1,7 @@
+import type { SerializedUploadNode } from "@repo/shared"
 import { Image } from "@repo/ui/components/Primitive"
 import type React from "react"
-import type { RichTextRendererOptions, SerializedUploadNode } from "../types"
+import type { RichTextRendererOptions } from "../types"
 import { isMediaDocument, resolveUrl } from "../utils"
 
 /**

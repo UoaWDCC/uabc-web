@@ -134,19 +134,7 @@ export const Button: ComponentStyle<"Button"> = {
           value: errorBorderColor,
         },
       ],
-      _before: {
-        content: '""',
-        position: "absolute",
-        inset: 0,
-        borderRadius: "inherit",
-        border: "1.5px solid transparent",
-        background:
-          "linear-gradient(15deg, rgba(255, 255, 255, 0.00) 33.61%, #FFFFFF 89.19%) border-box, rgba(255, 255, 255, 0.2) border-box",
-        mask: "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
-        maskComposite: "exclude",
-        mixBlendMode: "overlay",
-        pointerEvents: "none",
-      },
+      layerStyle: "gradientBorder",
       _focusVisible: {
         borderColor: "transparent",
         boxShadow: "outline",
@@ -184,19 +172,7 @@ export const Button: ComponentStyle<"Button"> = {
         "0px 1.5px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.10)",
       color: "white",
       transition: "all 0.5s ease-in-out",
-      _before: {
-        content: '""',
-        position: "absolute",
-        inset: 0,
-        borderRadius: "inherit",
-        border: "1.5px solid transparent",
-        background:
-          "linear-gradient(35deg, rgba(255, 255, 255, 0.00) 33.61%, #FFFFFF 89.19%) border-box, rgba(255, 255, 255, 0.07) border-box",
-        mask: "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
-        maskComposite: "exclude",
-        mixBlendMode: "overlay",
-        pointerEvents: "none",
-      },
+      layerStyle: "gradientBorder",
       _hover: {
         bgSize: "250% 100%",
       },

@@ -94,14 +94,3 @@ export const lexicalNodeSchema: z.ZodType<SerializedLexicalNode> = z.union([
   SerializedCodeNodeSchema,
   SerializedNodeWithChildrenSchema,
 ])
-
-export const SerializedEditorStateSchema = z.object({
-  root: z.object({
-    children: z.array(lexicalNodeSchema),
-    direction: z.string().nullable(),
-    format: z.string(),
-    indent: z.number(),
-    type: z.string(),
-    version: z.number(),
-  }),
-})

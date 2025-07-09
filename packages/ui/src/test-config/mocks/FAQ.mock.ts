@@ -1,9 +1,5 @@
+import type { SerializedEditorState } from "@repo/shared"
 import type { UIFAQItem } from "@repo/ui/components/Generic"
-import type {
-  SerializedEditorState,
-  SerializedEditorStateSchema,
-} from "@repo/ui/components/Generic/RichText"
-import type { z } from "zod"
 import { createSimpleTextEditorState } from "./RichText.mock"
 
 /**
@@ -16,7 +12,7 @@ export const createSharedFAQItem = (
   options?: { disabled?: boolean; id?: string | null },
 ) => ({
   questionTitle,
-  description: description as z.infer<typeof SerializedEditorStateSchema>,
+  description,
   id: options?.id ?? null,
   ...(options?.disabled !== undefined && { disabled: options.disabled }),
 })
@@ -32,7 +28,7 @@ export function createSimpleSharedFAQItem(
 ): UIFAQItem {
   return {
     questionTitle,
-    description: createSimpleTextEditorState(descriptionText),
+    description: createSimpleTextEditorState(descriptionText) as UIFAQItem["description"],
     disabled: options.disabled,
   }
 }

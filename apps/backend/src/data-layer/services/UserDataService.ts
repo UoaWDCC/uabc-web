@@ -1,5 +1,6 @@
 import type { CreateUserData, EditUserData } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
+import type { PaginatedDocs } from "payload"
 import { NotFound } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
 
@@ -7,13 +8,28 @@ export default class UserDataService {
   /**
    * Creates a new {@link User} document
    *
-   * @param {CreateUserData} newUserData the {@link CreateUserData} to create a new user with
+   * @param newUserData the {@link CreateUserData} to create a new user with
    * @returns the created {@link User} document
    */
   public async createUser(newUserData: CreateUserData): Promise<User> {
     return await payload.create({
       collection: "user",
       data: newUserData,
+    })
+  }
+
+  /**
+   * Gets paginated {@link User} documents
+   *
+   * @param limit The maximum documents to be returned, defaults to 10
+   * @param page The specific page number to offset to, defaults to 1
+   * @returns a {@link PaginatedDocs} object containing {@link User} documents
+   */
+  public async getPaginatedUsers(limit = 10, page = 1): Promise<PaginatedDocs<User>> {
+    return await payload.find({
+      collection: "user",
+      limit,
+      page,
     })
   }
 

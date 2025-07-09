@@ -1,6 +1,6 @@
+import { SerializedEditorStateSchema } from "@repo/shared"
 import type { FaqQuestion } from "@repo/shared/payload-types"
 import { z } from "zod"
-import { SerializedEditorStateSchema } from "../RichText"
 
 export type SharedFAQItem = FaqQuestion[number]
 

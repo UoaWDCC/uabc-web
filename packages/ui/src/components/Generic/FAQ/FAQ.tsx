@@ -1,3 +1,4 @@
+"use client"
 import { PlusIcon } from "@yamada-ui/lucide"
 import {
   Accordion,
