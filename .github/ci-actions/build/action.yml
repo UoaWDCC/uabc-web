@@ -60,7 +60,7 @@ runs:
 
     - name: Install dependencies if cache misses
       if: ${{ inputs.CACHE == 'true' }}
-      run: NODE_ENV=production pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile
       shell: bash
 
     - name: Restore Next.js cache
