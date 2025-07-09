@@ -64,24 +64,24 @@ jobs:
           lookup-only: true
 
       - name: Setup Node.js
-        if: steps.cache-check.outputs.cache-hit != 'true' && github.event.inputs.use_node_modules_cache == 'true'
+        if: github.event.inputs.use_node_modules_cache == 'true' && steps.cache-check.outputs.cache-hit != 'true'
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
 
       - name: Setup pnpm
-        if: steps.cache-check.outputs.cache-hit != 'true' && github.event.inputs.use_node_modules_cache == 'true'
+        if: github.event.inputs.use_node_modules_cache == 'true' && steps.cache-check.outputs.cache-hit != 'true'
         uses: pnpm/action-setup@v2
         with:
           version: latest
           run_install: false
 
       - name: Install dependencies
-        if: steps.cache-check.outputs.cache-hit != 'true' && github.event.inputs.use_node_modules_cache == 'true'
+        if: github.event.inputs.use_node_modules_cache == 'true' && steps.cache-check.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Save node_modules cache
-        if: steps.cache-check.outputs.cache-hit != 'true' && github.event.inputs.use_node_modules_cache == 'true'
+        if: github.event.inputs.use_node_modules_cache == 'true' && steps.cache-check.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: |
@@ -176,7 +176,7 @@ jobs:
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
-        if: steps.cache.outputs.cache-hit != 'true' || github.event.inputs.use_node_modules_cache == 'false'
+        if: github.event.inputs.use_node_modules_cache == 'true' && steps.cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Type Check
@@ -221,7 +221,7 @@ jobs:
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
-        if: steps.cache.outputs.cache-hit != 'true' || github.event.inputs.use_node_modules_cache == 'false'
+        if: github.event.inputs.use_node_modules_cache == 'true' && steps.cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Test with Coverage
@@ -287,7 +287,7 @@ jobs:
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies if cache is not hit
-        if: steps.cache.outputs.cache-hit != 'true' || github.event.inputs.use_node_modules_cache == 'false'
+        if: github.event.inputs.use_node_modules_cache == 'true' && steps.cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Generate typing
