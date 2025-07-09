@@ -1,9 +1,11 @@
+import { Clock10Icon, MapPinIcon } from "@yamada-ui/lucide"
 import {
   CheckboxCardGroup,
   type CheckboxCardGroupProps,
   type CheckboxCardProps,
   FormControl,
 } from "@yamada-ui/react"
+import { IconWithText } from "../../Primitive"
 
 /**
  * Props for the {@link BookingTimesCardGroup} component.
@@ -41,7 +43,16 @@ export interface BookingTimesCardGroupProps extends Omit<CheckboxCardGroupProps,
 export const BookingTimesCardGroup = ({ items, ...props }: BookingTimesCardGroupProps) => {
   return (
     <FormControl>
-      <CheckboxCardGroup {...props} items={items} />
+      <CheckboxCardGroup
+        {...props}
+        items={items.map((item) => {
+          return {
+            ...item,
+            addon: <IconWithText icon={<MapPinIcon />} label={item.label} />,
+            description: <IconWithText icon={<Clock10Icon />} label={item.description} />,
+          }
+        })}
+      />
     </FormControl>
   )
 }

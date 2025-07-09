@@ -13,7 +13,7 @@ export interface IconWithTextProps extends StackProps {
   /**
    * The label to display next to the icon.
    */
-  label: string
+  label?: ReactNode
 }
 
 /**
