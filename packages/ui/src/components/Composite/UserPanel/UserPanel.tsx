@@ -20,8 +20,6 @@ import { InfoField } from "./InfoField"
 import { StatusBadge } from "./StatusBadge"
 import type { UserStatus } from "./StatusIcon"
 
-export type { UserStatus } from "./StatusIcon"
-
 export interface UserPanelProps extends CardProps {
   /**
    * User's profile image URL
