@@ -1,3 +1,4 @@
+import type { MembershipType } from "@repo/shared"
 import { ShuttleIcon } from "@repo/ui/components/Icon"
 import { PencilIcon } from "@yamada-ui/lucide"
 import {
@@ -18,7 +19,6 @@ import {
 import type { FC } from "react"
 import { InfoField } from "./InfoField"
 import { StatusBadge } from "./StatusBadge"
-import type { UserStatus } from "./StatusIcon"
 
 /**
  * Props for {@link UserPanel} component
@@ -47,7 +47,7 @@ export interface UserPanelProps extends CardProps {
    * Determines the status badge and icon displayed.
    * Affects the visual styling of the status indicator.
    */
-  status: UserStatus
+  status: MembershipType
   /**
    * User's email address
    *

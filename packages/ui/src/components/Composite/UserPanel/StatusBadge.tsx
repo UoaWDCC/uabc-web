@@ -1,6 +1,7 @@
+import type { MembershipType } from "@repo/shared"
 import { Center, HStack, Text } from "@yamada-ui/react"
 import { type FC, memo } from "react"
-import { StatusIcon, type UserStatus } from "./StatusIcon"
+import { StatusIcon } from "./StatusIcon"
 
 /**
  * Props for {@link StatusBadge} component
@@ -13,7 +14,7 @@ export interface StatusBadgeProps {
    * Determines which icon and styling to display.
    * Affects the visual representation of the user's status.
    */
-  status: UserStatus
+  status: MembershipType
 }
 
 /**
@@ -24,11 +25,11 @@ export interface StatusBadgeProps {
  *
  * @example
  * // Member status badge
- * <StatusBadge status="Member" />
+ * <StatusBadge status={MembershipType.member} />
  *
  * @example
  * // Casual status badge
- * <StatusBadge status="Casual" />
+ * <StatusBadge status={MembershipType.casual} />
  */
 export const StatusBadge: FC<StatusBadgeProps> = memo(({ status }) => (
   <HStack as={Center} color={["primary.600", "primary.300"]} gap="xs">

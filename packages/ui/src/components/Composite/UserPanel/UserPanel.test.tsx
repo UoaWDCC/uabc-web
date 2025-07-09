@@ -1,9 +1,10 @@
+import { MembershipType } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { UserPanel } from "./UserPanel"
 
 const defaultProps = {
   name: "Stitch Pelekai",
-  status: "Member" as const,
+  status: MembershipType.member,
   email: "spel626@aucklanduni.ac.nz",
   phone: "021 234 5678",
   sessionsLeft: 7,
