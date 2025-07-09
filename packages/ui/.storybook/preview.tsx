@@ -56,32 +56,6 @@ const App: FC<AppProps> = ({ children, isDocs }) => {
   )
 }
 
-// Cleanup utility to prevent focus property redefinition
-const cleanupFocusProperties = () => {
-  if (typeof window !== "undefined") {
-    // Clear any existing focus-related properties that might cause conflicts
-    try {
-      // Remove any global focus event listeners
-      const events = ["focus", "blur", "focusin", "focusout"]
-      events.forEach((event) => {
-        window.removeEventListener(event, () => {}, true)
-        window.removeEventListener(event, () => {}, false)
-      })
-
-      // Clear any document-level focus handlers
-      if (document) {
-        events.forEach((event) => {
-          document.removeEventListener(event, () => {}, true)
-          document.removeEventListener(event, () => {}, false)
-        })
-      }
-    } catch (error) {
-      // Silently handle any cleanup errors
-      console.warn("Focus cleanup warning:", error)
-    }
-  }
-}
-
 const preview: Preview = {
   globalTypes: {},
   initialGlobals: {
@@ -119,14 +93,6 @@ const preview: Preview = {
 
   decorators: [
     (Story, { viewMode }) => {
-      React.useEffect(() => {
-        cleanupFocusProperties()
-
-        return () => {
-          cleanupFocusProperties()
-        }
-      }, [])
-
       return (
         <UIProvider config={config} theme={theme}>
           <App isDocs={viewMode === "docs"}>
