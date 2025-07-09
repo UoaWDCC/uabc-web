@@ -35,10 +35,6 @@ export interface BookingTimesCardProps extends CheckboxCardProps {
    * Whether the booking is full or not
    */
   full?: boolean
-  /**
-   * Callback function to update the value of the BookingTimesCard
-   */
-  onUpdate: (value: string) => void
 }
 
 export const BookingTimesCard = ({
@@ -52,21 +48,19 @@ export const BookingTimesCard = ({
   return (
     <CheckboxCard disabled={full} {...props}>
       <CheckboxCardLabel>
-        <HStack gap="sm">
-          <Heading.h3 fontSize="xl" fontWeight="semibold" textAlign="left">
-            {label}
-          </Heading.h3>
-        </HStack>
+        <Heading.h3 fontSize="lg" fontWeight="semibold" textAlign="left">
+          {label}
+        </Heading.h3>
       </CheckboxCardLabel>
       <CheckboxCardDescription>
-        <HStack>
+        <HStack gap="xs">
           <Clock10Icon />
           <Text>{bookingTime}</Text>
         </HStack>
       </CheckboxCardDescription>
       <CheckboxCardAddon>
-        <HStack>
-          <MapPinIcon height="24px" width="24px" />
+        <HStack gap="xs">
+          <MapPinIcon fontSize="md" />
           <Text fontSize="sm">{location}</Text>
         </HStack>
       </CheckboxCardAddon>

@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react"
+import { PropsTable } from "@storybook-config/components"
 import { CheckboxCardGroup } from "@yamada-ui/react"
 import { BookingTimesCard } from "./BookingTimesCard"
 
@@ -38,13 +39,6 @@ const meta: Meta<typeof BookingTimesCard> = {
         defaultValue: { summary: "7:30 - 10pm" },
       },
     },
-    // onClick: {
-    //   action: "clicked",
-    //   description: "Function called when the button is clicked",
-    //   table: {
-    //     type: { summary: "() => void" },
-    //   },
-    // },
   },
 }
 
@@ -63,5 +57,27 @@ export const Default: Story = (args) => {
         onClick={() => console.log("Button clicked")}
       />
     </CheckboxCardGroup>
+  )
+}
+
+export const Disabled: Story = (args) => {
+  return (
+    <PropsTable columns={["Disabled"]} rows={["true", "false"]}>
+      {(_column, row, key) => {
+        return (
+          <CheckboxCardGroup>
+            <BookingTimesCard
+              {...args}
+              bookingTime="7:30 - 10pm"
+              full={Boolean(row)}
+              key={key}
+              label="Tuesday, 12th May"
+              location="UoA Hiwa Center"
+              onClick={() => console.log("Button clicked")}
+            />
+          </CheckboxCardGroup>
+        )
+      }}
+    </PropsTable>
   )
 }
