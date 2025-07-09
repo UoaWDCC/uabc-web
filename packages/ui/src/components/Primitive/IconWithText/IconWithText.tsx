@@ -41,3 +41,5 @@ export const IconWithText = ({ icon, label, children, ...props }: IconWithTextPr
     </HStack>
   )
 }
+
+IconWithText.displayName = "IconWithText"
