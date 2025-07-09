@@ -801,6 +801,10 @@ export interface Footer {
    */
   title: string;
   /**
+   * The URL to the club's Linktree page.
+   */
+  linktree: string;
+  /**
    * The URL to the club's Facebook page.
    */
   facebook: string;
@@ -878,6 +882,7 @@ export interface FaqQuestionSelect<T extends boolean = true> {
 export interface FooterSelect<T extends boolean = true> {
   logo?: T;
   title?: T;
+  linktree?: T;
   facebook?: T;
   instagram?: T;
   description?: T;
