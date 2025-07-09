@@ -37,8 +37,6 @@ export const AboutUsCard = ({ title, description }: AboutUsCardProps) => {
       backdropBlur="15px"
       backdropFilter="auto"
       bg={["secondary.50", "secondary.800"]}
-      borderColor="transparent"
-      borderWidth="1px"
       boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.1)"
       gap="md"
       justifyContent="center"

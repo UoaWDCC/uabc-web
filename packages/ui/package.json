@@ -32,6 +32,7 @@
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.7",
     "next": "15.3.5",
+    "nuqs": "^2.4.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "7.60.0",
