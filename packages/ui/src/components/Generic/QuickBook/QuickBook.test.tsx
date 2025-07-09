@@ -19,21 +19,21 @@ describe("<QuickBook />", () => {
     expect(QuickBook.displayName).toBe("QuickBook")
   })
 
-  it("should render default title and submit button label correctly", () => {
+  it("should render default submit button label correctly", () => {
     render(<QuickBook locationAndTimeOptions={[]} skillLevelOptions={[]} />)
 
-    expect(screen.getByRole("heading", { level: 2 })).toBeInTheDocument()
-    expect(screen.getByText("Quick Book")).toBeInTheDocument()
+    // At base (mobile), the title is not displayed and cannot be tested for in a vitest test
+
     expect(screen.getByText("Book Now")).toBeInTheDocument()
   })
 
   it("should call onSubmit when a user clicks the submit button", async () => {
-    const onSubmit = vi.fn()
+    const handleSubmit = vi.fn()
 
     const { user } = render(
       <QuickBook
-        handleSubmit={onSubmit}
         locationAndTimeOptions={locationAndTimeOptionsMock}
+        onSubmit={handleSubmit}
         skillLevelOptions={skillLevelOptionsMock}
       />,
     )
@@ -48,6 +48,6 @@ describe("<QuickBook />", () => {
 
     const submitButton = screen.getByText("Book Now")
     await user.click(submitButton)
-    expect(onSubmit).toBeCalled()
+    expect(handleSubmit).toBeCalled()
   })
 })

@@ -16,7 +16,7 @@ export interface QuickBookProps {
   submitLabel?: string
   locationAndTimeOptions: SelectItem[]
   skillLevelOptions: SelectItem[]
-  onSubmit: SubmitHandler<z.infer<typeof quickBookFormSchema>>
+  onSubmit?: SubmitHandler<z.infer<typeof quickBookFormSchema>>
 }
 
 export const QuickBook = memo(
@@ -39,7 +39,7 @@ export const QuickBook = memo(
         bgColor="secondary.800"
         borderRadius="3xl"
         borderWidth="medium"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={onSubmit && handleSubmit(onSubmit)}
         p="md"
       >
         <Heading.h2 display={{ base: "none", md: "block" }}>{title}</Heading.h2>
