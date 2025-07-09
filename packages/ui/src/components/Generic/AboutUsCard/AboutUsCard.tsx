@@ -9,18 +9,6 @@ export interface AboutUsCardProps {
 export const AboutUsCard = ({ title, description }: AboutUsCardProps) => {
   return (
     <Card
-      _before={{
-        content: '""',
-        position: "absolute",
-        inset: 0,
-        borderRadius: "inherit",
-        border: "1px solid transparent",
-        bg: "linear-gradient(15deg, rgba(255, 255, 255, 0.00) 33%, #FFFFFF 90%) border-box, rgba(255, 255, 255, 0.2) border-box",
-        mask: "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
-        maskComposite: "exclude",
-        mixBlendMode: "overlay",
-        pointerEvents: "none",
-      }}
       alignItems="center"
       backdropBlur="15px"
       backdropFilter="auto"
@@ -30,6 +18,7 @@ export const AboutUsCard = ({ title, description }: AboutUsCardProps) => {
       boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.1)"
       gap="md"
       justifyContent="center"
+      layerStyle="gradientBorder"
       px="md"
       py="lg"
       rounded="3xl"
