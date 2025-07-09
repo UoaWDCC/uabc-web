@@ -54,6 +54,7 @@ export interface BookingTimesCardGroupProps extends Omit<CheckboxCardGroupProps,
   /**
    * React Hook Form control object for Controller integration.
    */
+  // biome-ignore lint/suspicious/noExplicitAny: It could be anything
   control?: Control<any>
 }
 
