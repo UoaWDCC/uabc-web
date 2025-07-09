@@ -25,3 +25,7 @@ export const SemesterSchema = z.object({
 export const GetSemesterResponseSchema = z.object({
   data: SemesterSchema,
 })
+
+export const GetSemestersResponseSchema = z.object({
+  data: z.array(SemesterSchema),
+})

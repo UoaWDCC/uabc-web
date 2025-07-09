@@ -1,5 +1,5 @@
 import { Footer } from "@repo/ui/components/Generic"
-import { UIProvider } from "@repo/ui/components/Provider"
+import { NuqsProvider, UIProvider } from "@repo/ui/components/Provider"
 import { ColorModeScript } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
@@ -27,11 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
-        <ColorModeScript initialColorMode="dark" />
-        <UIProvider>
-          {children}
-          <Footer />
-        </UIProvider>
+        <NuqsProvider>
+          <ColorModeScript initialColorMode="dark" />
+          <UIProvider>
+            {children}
+            <Footer />
+          </UIProvider>
+        </NuqsProvider>
       </body>
     </html>
   )
