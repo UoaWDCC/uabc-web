@@ -7,10 +7,12 @@ import {
   HStack,
   Label,
   memo,
+  mergeRefs,
   Select as UISelect,
   type SelectProps as UISelectProps,
 } from "@yamada-ui/react"
-import type { ReactNode } from "react"
+import type { ReactNode, Ref } from "react"
+import type { FieldPath, FieldValues, UseFormRegisterReturn } from "react-hook-form"
 
 export interface SelectProps extends UISelectProps {
   /**
@@ -39,6 +41,40 @@ export interface SelectProps extends UISelectProps {
    * @remarks To use in the quick book Select components in the hero/home page.
    */
   stylised?: boolean
+
+  /**
+   * Indicates whether the Select is in an error state.
+   *
+   * @remarks
+   * When `true`, the input displays an error border and error message.
+   * Works seamlessly with React Hook Form validation.
+   *
+   * @defaultValue `false`
+   */
+  isError?: boolean
+
+  /**
+   * The error message displayed when the Select is in an error state.
+   *
+   * @remarks
+   * If not provided, no error message will be shown.
+   * Typically used with React Hook Form error messages.
+   */
+  errorMessage?: string
+
+  /**
+   * React Hook Form registration object.
+   *
+   * @remarks
+   * When using with React Hook Form, spread the register() result into this prop.
+   * This automatically handles onChange, onBlur, name, and ref.
+   *
+   * @example
+   * <TextInput {...register("fieldName")} />
+   */
+  registration?: UseFormRegisterReturn<FieldPath<FieldValues>>
+
+  ref?: Ref<HTMLSelectElement>
 }
 
 /**
@@ -57,9 +93,28 @@ export interface SelectProps extends UISelectProps {
  * @see {@link https://yamada-ui.com/components/forms/select Yamada UI Select Docs}
  */
 export const Select: FC<SelectProps> = memo(
-  ({ children, label = "Select option", icon, stylised = false, ...props }) => {
+  ({
+    children,
+    label = "Select option",
+    icon,
+    stylised = false,
+    isError,
+    errorMessage,
+    registration,
+    ref,
+    ...props
+  }) => {
+    const selectRef = mergeRefs(registration?.ref ?? null, ref)
+
+    const selectProps = {
+      ...props,
+      ref: selectRef,
+    }
+
     return (
       <FormControl
+        errorMessage={errorMessage}
+        invalid={isError}
         position="relative"
         sx={{
           "&:not(:has(div[data-placeholder]))": {
@@ -70,6 +125,25 @@ export const Select: FC<SelectProps> = memo(
         }}
       >
         <UISelect
+          _focus={{
+            borderColor: isError ? ["danger.500", "danger.400"] : ["primary.500", "primary.400"],
+            boxShadow: isError
+              ? ["0 0 0 1px $colors.danger.500", "0 0 0 1px $colors.danger.400"]
+              : ["0 0 0 1px $colors.primary.500", "0 0 0 1px $colors.primary.400"],
+          }}
+          _hover={{
+            borderColor: isError ? ["danger.600", "danger.500"] : ["gray.400", "gray.500"],
+          }}
+          _invalid={{
+            borderColor: ["danger.500", "danger.400"],
+            _hover: {
+              borderColor: ["danger.600", "danger.500"],
+            },
+            _focus: {
+              borderColor: ["danger.500", "danger.400"],
+              boxShadow: ["0 0 0 1px $colors.danger.500", "0 0 0 1px $colors.danger.400"],
+            },
+          }}
           bgGradient={stylised ? "heroGradient" : "transparent"}
           fieldProps={{ pl: { base: "calc(lg + xs + md)", md: "calc(lg - sm - xs + xl)" } }}
           iconProps={{
@@ -77,7 +151,7 @@ export const Select: FC<SelectProps> = memo(
           }}
           portalProps={{ disabled: false }}
           size="lg"
-          {...props}
+          {...selectProps}
         >
           {children}
         </UISelect>

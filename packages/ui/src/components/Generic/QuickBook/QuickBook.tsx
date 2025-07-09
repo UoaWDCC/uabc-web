@@ -6,7 +6,7 @@ import { Grid, GridItem, memo, type SelectItem, VStack } from "@yamada-ui/react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import z from "zod"
 
-const formSchema = z.object({
+const quickBookFormSchema = z.object({
   locationAndTimeId: z.string().min(1, "Field is required"),
   skillLevel: z.string().min(1, "Field is required"),
 })
@@ -16,7 +16,7 @@ export interface QuickBookProps {
   submitLabel?: string
   locationAndTimeOptions: SelectItem[]
   skillLevelOptions: SelectItem[]
-  onSubmit: SubmitHandler<z.infer<typeof formSchema>>
+  onSubmit: SubmitHandler<z.infer<typeof quickBookFormSchema>>
 }
 
 export const QuickBook = memo(
@@ -28,9 +28,10 @@ export const QuickBook = memo(
     onSubmit,
   }: QuickBookProps) => {
     const {
+      register,
       handleSubmit,
-      formState: { isSubmitting },
-    } = useForm<z.infer<typeof formSchema>>()
+      formState: { errors, isSubmitting },
+    } = useForm<z.infer<typeof quickBookFormSchema>>()
 
     return (
       <VStack
@@ -46,18 +47,24 @@ export const QuickBook = memo(
           <GridItem minW={0}>
             <Select
               data-testid="location-and-time"
+              errorMessage={errors.locationAndTimeId?.message}
               icon={<CalendarClockIcon fontSize={24} />}
+              isError={!!errors.locationAndTimeId}
               items={locationAndTimeOptions}
               label="Location & Time"
+              registration={register("locationAndTimeId")}
               stylised
             />
           </GridItem>
           <GridItem minW={0}>
             <Select
               data-testid="skill-level"
+              errorMessage={errors.skillLevel?.message}
               icon={<CircleGaugeIcon fontSize={24} />}
+              isError={!!errors.skillLevel}
               items={skillLevelOptions}
               label="Skill Level"
+              registration={register("skillLevel")}
               stylised
             />
           </GridItem>
