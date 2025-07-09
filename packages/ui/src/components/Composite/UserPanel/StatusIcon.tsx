@@ -1,12 +1,11 @@
-import { BadgeCheckIcon, CircleUserRoundIcon } from "@yamada-ui/lucide"
+import { BadgeCheckIcon, CircleUserRoundIcon, ShieldCheckIcon } from "@yamada-ui/lucide"
 import type { IconProps } from "@yamada-ui/react"
 import { type FC, memo } from "react"
 
 /**
  * Supported user membership status values
- * @enum {string}
  */
-export type UserStatus = "Member" | "Casual"
+export type UserStatus = "Member" | "Casual" | "Admin"
 
 /**
  * Props for {@link StatusIcon} component
@@ -45,7 +44,10 @@ export const StatusIcon: FC<StatusIconProps> = memo(({ status, ...props }) => {
   if (status === "Member") {
     return <BadgeCheckIcon {...props} />
   }
-  return <CircleUserRoundIcon {...props} />
+  if (status === "Casual") {
+    return <CircleUserRoundIcon {...props} />
+  }
+  return <ShieldCheckIcon {...props} />
 })
 
 StatusIcon.displayName = "StatusIcon"

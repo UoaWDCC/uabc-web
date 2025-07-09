@@ -62,3 +62,13 @@ export const Casual: Story = {
     sessionsLeft: 0,
   },
 }
+
+export const Admin: Story = {
+  args: {
+    name: "Stitch Pelekai",
+    status: "Admin",
+    email: "spel626@aucklanduni.ac.nz",
+    phone: "021 234 5678",
+    sessionsLeft: 0,
+  },
+}
