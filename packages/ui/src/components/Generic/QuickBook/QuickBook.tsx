@@ -1,10 +1,12 @@
 "use client"
 
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Heading, Select } from "@repo/ui/components/Primitive"
 import { CalendarClockIcon, CircleGaugeIcon } from "@yamada-ui/lucide"
-import { Grid, GridItem, memo, type SelectItem, VStack } from "@yamada-ui/react"
+import { Grid, GridItem, memo, noop, type SelectItem, VStack } from "@yamada-ui/react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import type { UIQuickBookFormValues } from "./schema"
+import { UIQuickBookFormSchema } from "./schema"
 
 export interface QuickBookProps {
   title?: string
@@ -26,7 +28,9 @@ export const QuickBook = memo(
       register,
       handleSubmit,
       formState: { errors, isSubmitting },
-    } = useForm<UIQuickBookFormValues>()
+    } = useForm<UIQuickBookFormValues>({
+      resolver: zodResolver(UIQuickBookFormSchema),
+    })
 
     return (
       <VStack
@@ -34,7 +38,7 @@ export const QuickBook = memo(
         bgColor="secondary.800"
         borderRadius="3xl"
         borderWidth="medium"
-        onSubmit={onSubmit && handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit ?? noop)}
         p="md"
       >
         <Heading.h2 display={{ base: "none", md: "block" }}>{title}</Heading.h2>

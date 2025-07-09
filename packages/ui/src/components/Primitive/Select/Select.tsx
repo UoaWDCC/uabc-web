@@ -109,6 +109,14 @@ export const Select: FC<SelectProps> = memo(
     const selectProps = {
       ...props,
       ref: selectRef,
+      name: registration?.name,
+      onBlur: registration?.onBlur,
+      onChange: (value: string) => {
+        registration?.onChange?.({
+          target: { name: registration?.name || "", value },
+          type: "change",
+        })
+      },
     }
 
     return (
