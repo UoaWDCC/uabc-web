@@ -15,19 +15,6 @@ export const POST = async (req: NextRequest) => {
   try {
     let user: User
     const parsedBody = RegisterDetailsSchema.parse(await req.json())
-    if (
-      !(await StandardSecurity.validateRegisterDetails(
-        parsedBody.firstName,
-        parsedBody.lastName,
-        parsedBody.email,
-        parsedBody.password,
-      ))
-    ) {
-      return NextResponse.json(
-        { error: "Invalid credentials" },
-        { status: StatusCodes.BAD_REQUEST },
-      )
-    }
     try {
       await authDataService.getAuthByEmail(parsedBody.email)
       return NextResponse.json(
@@ -38,16 +25,15 @@ export const POST = async (req: NextRequest) => {
       if (!(error instanceof NotFound)) {
         throw error
       }
-
-      user = await userDataService.createUser({ ...parsedBody, role: "casual" })
-
-      const hash = await StandardSecurity.hashPassword(parsedBody.password)
-      await authDataService.createAuth({
-        email: parsedBody.email,
-        password: hash,
-        user: user,
-      })
     }
+    user = await userDataService.createUser({ ...parsedBody, role: "casual" })
+
+    const hash = await StandardSecurity.hashPassword(parsedBody.password)
+    await authDataService.createAuth({
+      email: parsedBody.email,
+      password: hash,
+      user: user,
+    })
     return NextResponse.json(
       { message: "User registered successfully", data: user },
       {
