@@ -48,12 +48,10 @@ export interface QuickBookProps {
 
 /**
  * Options for the Skill Level Select component, using enum values from {@link PlayLevel}.
- *
- * @remarks TODO: Change PlayLevel enum values to title case and remove string manipulation here
  */
 const skillLevelOptions = Object.values(PlayLevel).map((playLevel) => ({
   value: playLevel,
-  label: playLevel.charAt(0).toUpperCase() + playLevel.slice(1),
+  label: playLevel,
 }))
 
 /**
