@@ -133,8 +133,6 @@ export const Select: FC<SelectProps> = memo(
     const selectRef = mergeRefs(registration?.ref ?? null, ref)
 
     const selectProps = {
-      ...props,
-      ref: selectRef,
       name: registration?.name,
       onBlur: registration?.onBlur,
       onChange: (value: string) => {
@@ -143,6 +141,8 @@ export const Select: FC<SelectProps> = memo(
           type: "change",
         })
       },
+      ...props,
+      ref: selectRef,
     }
 
     return (
