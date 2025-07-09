@@ -1,4 +1,4 @@
-import { GetFaqResponseSchema } from "@repo/shared"
+import { GetFaqResponseSchema, GetSemesterResponseSchema } from "@repo/shared"
 import { apiClient } from "../client"
 
 /**
@@ -10,4 +10,9 @@ import { apiClient } from "../client"
 export const getFaq = async () => {
   "use server"
   return await apiClient.get("/api/globals/faq", GetFaqResponseSchema, ["faq"])
+}
+
+export const getSemester = async (id: string) => {
+  "use server"
+  return await apiClient.get(`/api/semesters/${id}`, GetSemesterResponseSchema, ["semester"])
 }
