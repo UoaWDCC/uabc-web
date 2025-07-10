@@ -1,6 +1,6 @@
 import type { User } from "@repo/shared/payload-types"
 import { EllipsisVerticalIcon } from "@yamada-ui/lucide"
-import { Badge, Bleed, IconButton, Text } from "@yamada-ui/react"
+import { Badge, IconButton, Menu, MenuButton, MenuItem, MenuList, Text } from "@yamada-ui/react"
 import type { Column } from "@yamada-ui/table"
 import { memo, useCallback } from "react"
 
@@ -35,6 +35,7 @@ EmailCell.displayName = "EmailCell"
 export const EMAIL_COLUMN: Column<User> = {
   accessorKey: "email",
   header: "Email",
+  css: { w: "350px" },
   cell: ({ getValue }) => {
     const value = getValue() as string
     return <EmailCell value={value} />
@@ -118,16 +119,27 @@ const EditButton = memo(() => {
 EditButton.displayName = "EditButton"
 
 const ActionsCell = memo(() => (
-  <Bleed block="2" inline="3">
-    <EditButton />
-  </Bleed>
+  <Menu>
+    <MenuButton as={IconButton} icon={<EllipsisVerticalIcon />} size="sm" variant="ghost" />
+    <MenuList>
+      <MenuItem>Edit</MenuItem>
+    </MenuList>
+  </Menu>
 ))
 
 ActionsCell.displayName = "ActionsCell"
 
 export const ACTIONS_COLUMN: Column<User> = {
   id: "actions",
-  header: "",
-  css: { textAlign: "center" },
+  header: "Actions",
+  css: {
+    textAlign: "center",
+    maxW: "4",
+    minW: "4",
+    color: "transparent",
+    overflow: "clip",
+    px: "0",
+    py: "0",
+  },
   cell: () => <ActionsCell />,
 }

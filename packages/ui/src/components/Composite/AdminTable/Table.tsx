@@ -48,7 +48,9 @@ export const MemberManagementTable: FC = memo(() => {
       }
 
       if (column.columnDef.header === "Actions") {
-        props.w = "4"
+        props.pl = "0"
+        props.pr = "xs"
+        props.py = "xs"
       }
 
       return props

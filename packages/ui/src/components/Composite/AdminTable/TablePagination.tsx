@@ -24,7 +24,13 @@ export const TablePagination: FC = memo(() => {
     <Grid gap="md" gridTemplateColumns="repeat(3, 1fr)" placeItems="center">
       <GridItem />
       <GridItem>
-        <Pagination onChange={handlePageChange} page={currentPage} total={totalPages} withEdges />
+        <Pagination
+          colorScheme="secondary"
+          onChange={handlePageChange}
+          page={currentPage}
+          total={totalPages}
+          withEdges
+        />
       </GridItem>
       <GridItem display="grid" placeSelf="end">
         <Select defaultValue={perPage.toString()} onChange={handlePerPageChange} w="32">
