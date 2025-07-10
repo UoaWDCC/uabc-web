@@ -95,6 +95,7 @@ jobs:
       - name: Run Build Backend
         uses: ./.github/ci-actions/build-backend/
         with:
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
