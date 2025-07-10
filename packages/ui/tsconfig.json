@@ -6,7 +6,8 @@
     "moduleResolution": "bundler",
     "paths": {
       "@storybook-config/*": ["./.storybook/*"],
-      "@repo/ui/*": ["./src/*"]
+      "@repo/ui/*": ["./src/*"],
+      "@repo/shared/*": ["../shared/src/*"]
     },
     "rootDir": ".",
     "types": ["vitest/globals"]
