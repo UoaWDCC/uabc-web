@@ -1,4 +1,4 @@
-name: "Storybook Build"
+name: "Build Storybook"
 description: "This workflow builds Storybook for the specified workspace."
 
 runs:
