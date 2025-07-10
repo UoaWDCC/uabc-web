@@ -118,7 +118,7 @@ EditButton.displayName = "EditButton"
 
 const ActionsCell = memo(() => (
   <Menu>
-    <MenuButton as={IconButton} icon={<EllipsisVerticalIcon />} size="sm" variant="ghost" />
+    <MenuButton as={EditButton} />
     <MenuList>
       <MenuItem>Edit</MenuItem>
     </MenuList>

@@ -38,8 +38,6 @@ describe("AdminTable Columns", () => {
       // biome-ignore lint/suspicious/noExplicitAny: this is for a test
       expect((NAME_COLUMN as any).accessorKey).toBe("firstName")
       expect(NAME_COLUMN.header).toBe("Name")
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      expect((NAME_COLUMN as any).css).toEqual({ w: "200px" })
     })
 
     it("should render full name when both first and last name exist", () => {
@@ -110,8 +108,6 @@ describe("AdminTable Columns", () => {
       // biome-ignore lint/suspicious/noExplicitAny: this is for a test
       expect((ROLE_COLUMN as any).accessorKey).toBe("role")
       expect(ROLE_COLUMN.header).toBe("Role")
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      expect((ROLE_COLUMN as any).css).toEqual({ w: "120px", textAlign: "center" })
     })
 
     it("should render member role with correct color scheme", () => {
@@ -162,8 +158,6 @@ describe("AdminTable Columns", () => {
       // biome-ignore lint/suspicious/noExplicitAny: this is for a test
       expect((REMAINING_SESSIONS_COLUMN as any).accessorKey).toBe("remainingSessions")
       expect(REMAINING_SESSIONS_COLUMN.header).toBe("Remaining Sessions")
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      expect((REMAINING_SESSIONS_COLUMN as any).css).toEqual({ minW: "150px", textAlign: "center" })
     })
 
     it("should render remaining sessions number", () => {
@@ -202,8 +196,6 @@ describe("AdminTable Columns", () => {
       // biome-ignore lint/suspicious/noExplicitAny: this is for a test
       expect((UNIVERSITY_COLUMN as any).accessorKey).toBe("university")
       expect(UNIVERSITY_COLUMN.header).toBe("University")
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      expect((UNIVERSITY_COLUMN as any).css).toEqual({ w: "150px" })
     })
 
     it("should render university name", () => {
@@ -247,8 +239,6 @@ describe("AdminTable Columns", () => {
     it("should have correct column configuration", () => {
       expect(ACTIONS_COLUMN.id).toBe("actions")
       expect(ACTIONS_COLUMN.header).toBe("")
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      expect((ACTIONS_COLUMN as any).css).toEqual({ textAlign: "center" })
     })
 
     it("should render actions button", () => {

@@ -11,13 +11,7 @@ export const FilterUniversitySelect: FC = memo(() => {
   }
 
   return (
-    <Select
-      onChange={handleUniversityChange}
-      placeholder="Filter by university"
-      size="md"
-      value={universityFilter || "all"}
-      w="xs"
-    >
+    <Select onChange={handleUniversityChange} size="md" value={universityFilter || "all"} w="xs">
       {availableUniversities.map((university) => (
         <Option key={university || "all"} value={university || "all"}>
           {university === "all" ? "All Universities" : university || "Unknown"}
