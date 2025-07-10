@@ -45,6 +45,7 @@ export const POST = async (req: NextRequest) => {
         { status: StatusCodes.BAD_REQUEST },
       )
     }
+    console.error(error)
     return NextResponse.json(
       { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
       { status: StatusCodes.INTERNAL_SERVER_ERROR },
