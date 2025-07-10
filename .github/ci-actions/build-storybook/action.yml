@@ -1,11 +1,6 @@
 name: "Storybook Build"
 description: "This workflow builds Storybook for the specified workspace."
 
-inputs:
-  workspace:
-    description: "The workspace to build Storybook for."
-    required: true
-
 runs:
   using: composite
   steps:
@@ -38,6 +33,6 @@ runs:
       run: NODE_ENV=production pnpm install --frozen-lockfile
       shell: bash
 
-    - name: Build Storybook for ${{ inputs.workspace }}
+    - name: Build Storybook for @repo/ui
       shell: bash
-      run: pnpm turbo run storybook:build --filter ${{ inputs.workspace }} 
+      run: pnpm turbo run storybook:build --filter @repo/ui
