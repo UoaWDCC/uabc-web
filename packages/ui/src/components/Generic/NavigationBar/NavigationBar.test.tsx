@@ -17,12 +17,12 @@ import {
 import { render, screen, waitFor, waitForElementToBeRemoved } from "@repo/ui/test-utils"
 import { usePathname } from "next/navigation"
 import { isValidElement } from "react"
-import { NavigationBar } from "./NavigationBar"
 import { NavigationBarButton } from "./NavigationBarButton"
+import { NavigationBarDesktop } from "./NavigationBarDesktop"
 
 const mockUsePathname = vi.mocked(usePathname)
 
-describe("<NavigationBar />", () => {
+describe("<NavigationBarDesktop />", () => {
   beforeEach(() => {
     mockUsePathname.mockReturnValue("/book")
   })
@@ -31,51 +31,56 @@ describe("<NavigationBar />", () => {
     mockUsePathname.mockReset()
   })
 
-  it("should re-export the NavigationBar component anc child components and check if they exist", () => {
-    expect(NavigationBarModule.NavigationBar).toBeDefined()
-    expect(isValidElement(<NavigationBarModule.NavigationBar navItems={[]} />)).toBeTruthy()
+  it("should re-export the NavigationBarDesktop component anc child components and check if they exist", () => {
+    expect(NavigationBarModule.NavigationBarDesktop).toBeDefined()
+    expect(isValidElement(<NavigationBarModule.NavigationBarDesktop navItems={[]} />)).toBeTruthy()
   })
 
-  it("should render the NavigationBar with correct props", () => {
-    render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+  it("should render the NavigationBarDesktop with correct props", () => {
+    render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     expect(screen.getByText("Book")).toBeInTheDocument()
     expect(screen.getByText("About")).toBeInTheDocument()
     expect(screen.getByText("Contact")).toBeInTheDocument()
   })
 
-  it("should render admin button when admin signed in", () => {
-    render(<NavigationBar {...NAVIGATION_BAR_ADMIN_TEST_CONSTANTS} />)
-    const adminButton = screen.getByText("Admin")
-    expect(adminButton).toBeInTheDocument()
-    expect(adminButton).toHaveAttribute("href", "/admin")
+  it("should render admin link in user menu when admin signed in", async () => {
+    const { user } = render(<NavigationBarDesktop {...NAVIGATION_BAR_ADMIN_TEST_CONSTANTS} />)
+
+    const userMenu = screen.getByTestId("navbar-user-menu-avatar")
+    expect(userMenu).toBeInTheDocument()
+    await user.click(userMenu)
+
+    const adminLink = screen.getByTestId("navbar-user-menu-admin-link")
+    expect(adminLink).toBeInTheDocument()
+    expect(adminLink).toHaveAttribute("href", "/admin")
   })
 
   it("should not render admin button when casual, member, or nobody is signed in", () => {
-    render(<NavigationBar {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />)
+    render(<NavigationBarDesktop {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />)
     expect(screen.queryByText("Admin")).not.toBeInTheDocument()
 
-    render(<NavigationBar {...NAVIGATION_BAR_CASUAL_TEST_CONSTANTS} />)
+    render(<NavigationBarDesktop {...NAVIGATION_BAR_CASUAL_TEST_CONSTANTS} />)
     expect(screen.queryByText("Admin")).not.toBeInTheDocument()
 
-    render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+    render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     expect(screen.queryByText("Admin")).not.toBeInTheDocument()
   })
 
   it("should render sign in button when user is not signed in", () => {
-    render(<NavigationBar {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />)
+    render(<NavigationBarDesktop {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />)
     const signInButton = screen.getByText("Sign In")
     expect(signInButton).toBeInTheDocument()
     expect(signInButton).toHaveAttribute("href", "/signin")
   })
 
   it("should render user menu when user is signed in", () => {
-    render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+    render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     const userMenu = screen.getByTestId("navbar-user-menu-avatar")
     expect(userMenu).toBeInTheDocument()
   })
 
   it("should highlight the current path", async () => {
-    render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+    render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     const indicator = screen.getByTestId("navbar-hover-indicator")
     expect(indicator).toBeInTheDocument()
 
@@ -87,7 +92,7 @@ describe("<NavigationBar />", () => {
   })
 
   it("should move indicator to the hovered button", async () => {
-    const { user } = render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+    const { user } = render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
 
     const initialIndicator = screen.getByTestId("navbar-hover-indicator")
     expect(initialIndicator).toBeInTheDocument()
@@ -112,7 +117,7 @@ describe("<NavigationBar />", () => {
 
   it("should clear hover indicator when mouse leaves the navbar", async () => {
     mockUsePathname.mockReturnValue("/unknown-path")
-    const { user } = render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+    const { user } = render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
 
     expect(screen.queryByTestId("navbar-hover-indicator")).not.toBeInTheDocument()
 
@@ -130,7 +135,7 @@ describe("<NavigationBar />", () => {
   })
 
   it("should return indicator to current path when other button is unhovered", async () => {
-    const { user } = render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+    const { user } = render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
 
     const initialIndicator = screen.getByTestId("navbar-hover-indicator")
     expect(initialIndicator).toBeInTheDocument()
@@ -166,7 +171,7 @@ describe("<NavigationBar />", () => {
 
   it("should not show indicator when current path does not match any nav item", () => {
     mockUsePathname.mockReturnValue("/unknown-path")
-    render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+    render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     expect(screen.queryByTestId("navbar-hover-indicator")).not.toBeInTheDocument()
   })
 })
