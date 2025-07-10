@@ -210,7 +210,7 @@ describe("FilterResetButton", () => {
       expect(isValidElement(<FilterResetButton />)).toBe(true)
     })
 
-    it("should be memoized component", () => {
+    it("should have correct displayName", () => {
       expect(FilterResetButton.displayName).toBe("FilterResetButton")
     })
   })

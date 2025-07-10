@@ -5,10 +5,10 @@ export default mergeConfig(uiConfig, {
   test: {
     coverage: {
       thresholds: {
-        statements: 65,
-        branches: 65,
-        functions: 65,
-        lines: 65,
+        statements: 90,
+        branches: 80,
+        functions: 80,
+        lines: 90,
       },
     },
   },
