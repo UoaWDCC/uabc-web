@@ -11,7 +11,7 @@ const nextConfig = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: process.env.NEXT_PUBLIC_URL,
+            value: process.env.NEXT_PUBLIC_URL?.replace(/\/$/, ""),
           },
           {
             key: "Access-Control-Allow-Methods",
