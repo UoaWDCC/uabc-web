@@ -1,5 +1,4 @@
 import { z } from "zod"
-import { MediaSchema } from "@/schemas"
 import type { CreateUserData, EditUserData } from "@/types"
 
 export const CreateUserRequestSchema = z.object({
@@ -21,7 +20,7 @@ export const CreateUserRequestSchema = z.object({
     .nullable()
     .optional(),
   remainingSessions: z.number().nullable().optional(),
-  image: z.union([z.string(), z.null(), MediaSchema]).optional(),
+  image: z.string().nullable().optional(),
 }) satisfies z.ZodType<CreateUserData>
 
 export const UpdateUserRequestSchema =

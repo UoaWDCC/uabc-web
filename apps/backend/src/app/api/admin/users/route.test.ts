@@ -178,5 +178,22 @@ describe("/api/admin/users", async () => {
       const json = await res.json()
       expect(json.error).toEqual("Invalid request body")
     })
+
+    it("should return a 500 error for internal server error", async () => {
+      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      vi.spyOn(UserDataService.prototype, "createUser").mockRejectedValueOnce(
+        new Error("Database error"),
+      )
+      const res = await POST(createMockNextRequest("/api/auth/register", "POST"))
+      const json = await res.json()
+
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+
+      expect(consoleErrorSpy).toHaveBeenCalled()
+      consoleErrorSpy.mockRestore()
+    })
   })
 })
