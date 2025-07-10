@@ -5,7 +5,7 @@ import { Button } from "../../../Primitive"
 import { useMemberManagement } from "../MemberManagementContext"
 
 export const FilterActions: FC = memo(() => {
-  const { filteredMembers } = useMemberManagement()
+  const { selectedRows, filteredMembers } = useMemberManagement()
 
   const handleAddMember = () => {
     // TODO: Implement add member functionality
@@ -14,7 +14,15 @@ export const FilterActions: FC = memo(() => {
 
   const handleExportData = () => {
     // TODO: Implement export data functionality
-    console.log(`Export ${filteredMembers.length} users clicked`)
+    const exportCount = selectedRows.size > 0 ? selectedRows.size : filteredMembers.length
+    console.log(`Export ${exportCount} users clicked`)
+  }
+
+  const getExportText = () => {
+    if (selectedRows.size > 0) {
+      return `Export ${selectedRows.size} selected`
+    }
+    return `Export ${filteredMembers.length} users`
   }
 
   return (
@@ -28,7 +36,7 @@ export const FilterActions: FC = memo(() => {
         size="sm"
         startIcon={<DownloadIcon />}
       >
-        Export {filteredMembers.length} users
+        {getExportText()}
       </Button>
     </ButtonGroup>
   )

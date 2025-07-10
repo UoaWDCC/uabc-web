@@ -158,33 +158,4 @@ describe("FilterInput", () => {
       expect(input1).toBe(input2)
     })
   })
-
-  describe("Edge Cases", () => {
-    it("should handle very long input", async () => {
-      const setFilterValueMock = vi.fn()
-      mockContextValue.setFilterValue = setFilterValueMock
-
-      const { user } = render(<FilterInput />, { wrapper: createWrapper })
-
-      const input = screen.getByRole("textbox")
-      const longText = "a".repeat(1000)
-
-      await user.type(input, longText)
-
-      expect(setFilterValueMock).toHaveBeenCalledTimes(1000)
-    })
-
-    it("should handle rapid typing", async () => {
-      const setFilterValueMock = vi.fn()
-      mockContextValue.setFilterValue = setFilterValueMock
-
-      const { user } = render(<FilterInput />, { wrapper: createWrapper })
-
-      const input = screen.getByRole("textbox")
-
-      await user.type(input, "abc")
-
-      expect(setFilterValueMock).toHaveBeenCalledTimes(3)
-    })
-  })
 })

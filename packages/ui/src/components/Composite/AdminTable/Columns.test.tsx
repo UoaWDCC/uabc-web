@@ -1,5 +1,5 @@
+import { adminUserMock, casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import type { User } from "@repo/shared/payload-types"
-import { adminUserMock, casualUserMock, memberUserMock } from "@repo/shared/test-config/mocks"
 import { render, screen } from "@repo/ui/test-utils"
 import {
   ACTIONS_COLUMN,
@@ -250,28 +250,6 @@ describe("AdminTable Columns", () => {
 
       const button = screen.getByRole("button")
       expect(button).toBeInTheDocument()
-    })
-
-    it("should handle button click without propagation", async () => {
-      const consoleErrorMock = vi.spyOn(console, "error").mockImplementation(() => {})
-
-      const mockCell = createMockCell(memberUserMock)
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      const CellComponent = ACTIONS_COLUMN.cell as any
-      const mockClickHandler = vi.fn()
-
-      const { user } = render(
-        <button onClick={mockClickHandler} type="button">
-          <CellComponent {...mockCell} />
-        </button>,
-      )
-
-      const button = screen.getAllByRole("button")[1]
-      await user.click(button)
-
-      expect(mockClickHandler).not.toHaveBeenCalled()
-
-      consoleErrorMock.mockRestore()
     })
 
     it("should render edit button with proper icon", () => {

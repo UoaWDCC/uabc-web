@@ -2,7 +2,7 @@ import type { User } from "@repo/shared/payload-types"
 import { EllipsisVerticalIcon } from "@yamada-ui/lucide"
 import { Badge, IconButton, Menu, MenuButton, MenuItem, MenuList, Text } from "@yamada-ui/react"
 import type { Column } from "@yamada-ui/table"
-import { memo, useCallback } from "react"
+import { memo } from "react"
 
 const NameCell = memo(({ user }: { user: User }) => {
   const fullName = [user.firstName, user.lastName].filter(Boolean).join(" ")
@@ -102,23 +102,9 @@ export const UNIVERSITY_COLUMN: Column<User> = {
   },
 }
 
-const EditButton = memo(() => {
-  const handleClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation()
-  }, [])
-
-  return (
-    <IconButton onClick={handleClick} size="sm" variant="ghost">
-      <EllipsisVerticalIcon />
-    </IconButton>
-  )
-})
-
-EditButton.displayName = "EditButton"
-
 const ActionsCell = memo(() => (
   <Menu>
-    <MenuButton as={EditButton} />
+    <MenuButton as={IconButton} icon={<EllipsisVerticalIcon />} size="sm" variant="ghost" />
     <MenuList>
       <MenuItem>Edit</MenuItem>
     </MenuList>

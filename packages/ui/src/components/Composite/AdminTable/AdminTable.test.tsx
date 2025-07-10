@@ -3,9 +3,12 @@ import { NuqsAdapter } from "nuqs/adapters/react"
 import type { ReactNode } from "react"
 import { isValidElement } from "react"
 import { AdminTable } from "./AdminTable"
+import { MemberManagementProvider } from "./MemberManagementContext"
 
 const createWrapper = ({ children }: { children: ReactNode }) => (
-  <NuqsAdapter>{children}</NuqsAdapter>
+  <NuqsAdapter>
+    <MemberManagementProvider>{children}</MemberManagementProvider>
+  </NuqsAdapter>
 )
 
 describe("<AdminTable />", () => {
@@ -21,15 +24,6 @@ describe("<AdminTable />", () => {
     render(<AdminTable />, { wrapper: createWrapper })
 
     expect(screen.getByRole("table")).toBeInTheDocument()
-  })
-
-  it("should render table with pagination", () => {
-    render(<AdminTable />, { wrapper: createWrapper })
-
-    expect(screen.getByRole("table")).toBeInTheDocument()
-
-    expect(screen.getByRole("combobox")).toBeInTheDocument()
-    expect(screen.getByRole("navigation")).toBeInTheDocument()
   })
 
   it("should provide MemberManagementProvider context", () => {

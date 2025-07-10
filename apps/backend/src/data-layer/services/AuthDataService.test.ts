@@ -1,4 +1,4 @@
-import { casualUserMock } from "@repo/shared/test-config/mocks"
+import { casualUserMock } from "@repo/shared/mocks"
 import { payload } from "@/data-layer/adapters/Payload"
 import {
   googleAuthCreateMock,

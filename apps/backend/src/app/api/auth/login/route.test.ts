@@ -1,5 +1,5 @@
 import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
-import { userCreateMock } from "@repo/shared/test-config/mocks"
+import { userCreateMock } from "@repo/shared/mocks"
 import bcrypt from "bcryptjs"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"

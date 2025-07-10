@@ -1,5 +1,5 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
-import { casualUserMock } from "@repo/shared/test-config/mocks"
+import { casualUserMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import { GET } from "@/app/api/me/route"

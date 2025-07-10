@@ -1,5 +1,5 @@
+import { adminUserMock, casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import type { User } from "@repo/shared/payload-types"
-import { adminUserMock, casualUserMock, memberUserMock } from "@repo/shared/test-config/mocks"
 import { render, screen } from "@repo/ui/test-utils"
 import { NuqsAdapter } from "nuqs/adapters/react"
 import type { ReactNode } from "react"
@@ -26,6 +26,9 @@ const mockContextValue = {
   perPage: 20,
   setPerPage: vi.fn(),
   totalPages: 1,
+  visibleColumns: ["name", "email", "role", "remainingSessions", "university", "actions"] as const,
+  setVisibleColumns: vi.fn(),
+  toggleColumn: vi.fn(),
 }
 
 const mockUsers: User[] = [memberUserMock, adminUserMock]
@@ -51,6 +54,7 @@ describe("MemberManagementTable", () => {
       currentPage: 1,
       perPage: 20,
       totalPages: 1,
+      visibleColumns: ["name", "email", "role", "remainingSessions", "university", "actions"],
     })
   })
 

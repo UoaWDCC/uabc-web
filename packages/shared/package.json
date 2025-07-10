@@ -3,7 +3,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./payload-types": "./src/payload-types.ts",
-    "./test-config/mocks": "./dist/src/test-config/mocks/index.js"
+    "./mocks": "./dist/src/mocks/index.js"
   },
   "version": "0.0.0",
   "private": true,

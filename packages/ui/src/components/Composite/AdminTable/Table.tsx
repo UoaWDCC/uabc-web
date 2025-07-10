@@ -5,7 +5,7 @@ import type { TdProps } from "@yamada-ui/react"
 import type { Cell, Column, PagingTableProps } from "@yamada-ui/table"
 import { Table } from "@yamada-ui/table"
 import type { FC } from "react"
-import { memo, useMemo } from "react"
+import { memo, useCallback, useMemo } from "react"
 import {
   ACTIONS_COLUMN,
   EMAIL_COLUMN,
@@ -18,7 +18,8 @@ import { useMemberManagement } from "./MemberManagementContext"
 import { SkeletonTable } from "./SkeletonTable"
 
 export const MemberManagementTable: FC = memo(() => {
-  const { paginatedMembers, isLoading, visibleColumns } = useMemberManagement()
+  const { paginatedMembers, isLoading, visibleColumns, selectedRows, setSelectedRows } =
+    useMemberManagement()
 
   const allColumns = useMemo<Record<string, Column<User>>>(
     () => ({
@@ -63,6 +64,17 @@ export const MemberManagementTable: FC = memo(() => {
     }
   }, [visibleColumns.length])
 
+  const handleSelectionChange = useCallback(
+    (rowSelection: string[]) => {
+      setSelectedRows(new Set(rowSelection))
+    },
+    [setSelectedRows],
+  )
+
+  const selectedRowIds = useMemo(() => {
+    return Array.from(selectedRows)
+  }, [selectedRows])
+
   const hasData = !!paginatedMembers.length
 
   const resolvedData = hasData
@@ -102,9 +114,11 @@ export const MemberManagementTable: FC = memo(() => {
       data={resolvedData}
       highlightOnHover={hasData}
       highlightOnSelected={hasData}
+      onChangeSelect={handleSelectionChange}
       rounded="md"
       rowId="id"
       rowsClickSelect={hasData}
+      selectedRowIds={selectedRowIds}
       sx={{ "tbody > tr:last-of-type > td": { borderBottomWidth: "0px" } }}
     />
   )
