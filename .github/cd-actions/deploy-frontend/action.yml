@@ -64,4 +64,4 @@ runs:
       with:
         apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
-        command: pages deploy client/out --project-name=uabc
+        command: pages deploy apps/frontend/out --project-name=uabc
