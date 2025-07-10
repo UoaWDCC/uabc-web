@@ -1,10 +1,10 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
+import { userCreateMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
-import { userCreateMock } from "@/test-config/mocks/User.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { GET } from "./route"
 
