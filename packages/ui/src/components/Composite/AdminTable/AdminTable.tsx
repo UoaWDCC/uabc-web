@@ -5,7 +5,7 @@ import { Filter } from "./Filter"
 import { MemberManagementProvider } from "./MemberManagementContext"
 import { PagingTable } from "./PagingTable"
 
-export const AdminMembers = memo(() => {
+export const AdminTable = memo(() => {
   return (
     <MemberManagementProvider>
       <Filter />
@@ -14,4 +14,4 @@ export const AdminMembers = memo(() => {
   )
 })
 
-AdminMembers.displayName = "AdminMembers"
+AdminTable.displayName = "AdminTable"

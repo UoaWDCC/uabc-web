@@ -1,6 +1,6 @@
-import { Weekday } from "@repo/shared"
 import { z } from "zod"
 import type { Semester } from "../payload-types"
+import { Weekday } from "../types"
 
 export const SemesterSchema = z.object({
   id: z.string(),

@@ -1,7 +1,7 @@
 import type { CreateBookingData } from "@repo/shared"
 import type { Booking } from "@repo/shared/payload-types"
+import { casualUserMock } from "@repo/shared/test-config/mocks"
 import { gameSessionMock } from "./GameSession.mock"
-import { casualUserMock } from "./User.mock"
 
 export const bookingCreateMock: CreateBookingData = {
   user: casualUserMock,

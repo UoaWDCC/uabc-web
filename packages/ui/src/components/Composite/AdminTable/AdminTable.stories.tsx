@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { NuqsAdapter } from "nuqs/adapters/react"
-import { AdminMembers } from "./index"
+import { AdminTable } from "./AdminTable"
 
-const meta: Meta<typeof AdminMembers> = {
+const meta: Meta<typeof AdminTable> = {
   title: "Composite Components / AdminTable",
-  component: AdminMembers,
+  component: AdminTable,
   decorators: [
     (Story) => (
       <NuqsAdapter>
@@ -17,4 +17,4 @@ const meta: Meta<typeof AdminMembers> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const AdminTable: Story = {}
+export const Default: Story = {}

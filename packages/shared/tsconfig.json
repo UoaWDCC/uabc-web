@@ -1,6 +1,11 @@
 {
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./dist",
+    "declaration": true,
+    "noEmit": false,
+    "declarationDir": "./dist/types",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
