@@ -9,7 +9,7 @@
       "@repo/ui/*": ["./src/*"],
       "@repo/shared/*": ["../shared/src/*"]
     },
-    "rootDir": ".",
+    "rootDir": "../../packages",
     "types": ["vitest/globals"]
   },
   "exclude": ["node_modules", "dist"],

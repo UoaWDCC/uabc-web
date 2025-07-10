@@ -18,6 +18,9 @@ import Link from "next/link"
  * Props for the NavigationBarUserMenu component.
  */
 export interface NavigationBarUserMenuProps extends MenuProps {
+  /**
+   * Props for the avatar component, including name and image source.
+   */
   avatarProps: AvatarProps
 }
 
