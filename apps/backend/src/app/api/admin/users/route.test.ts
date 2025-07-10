@@ -6,7 +6,7 @@ import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { userCreateMock } from "@/test-config/mocks/User.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
-import { GET } from "./route"
+import { GET, POST } from "./route"
 
 describe("/api/admin/users", async () => {
   const userDataService = new UserDataService()
@@ -129,6 +129,54 @@ describe("/api/admin/users", async () => {
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "Invalid JWT token" })
       expect(consoleErrorSpy).toHaveBeenCalled()
+    })
+  })
+  describe("POST", () => {
+    it("should return a 401 if user is a casual", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+      const res = await POST(createMockNextRequest("api/admin/users", "POST", userCreateMock))
+      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(await res.json()).toStrictEqual({ error: "No scope" })
+    })
+
+    it("should return a 401 if user is a member", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+      const res = await POST(createMockNextRequest("api/admin/users", "POST", userCreateMock))
+      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(await res.json()).toStrictEqual({ error: "No scope" })
+    })
+
+    it("should create a semester if user is admin", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const res = await POST(createMockNextRequest("api/admin/users", "POST", userCreateMock))
+      expect(res.status).toBe(StatusCodes.CREATED)
+      const json = (await res.json()).data
+      const fetchedUser = await userDataService.getUserById(json.id)
+      expect(json).toEqual(fetchedUser)
+    })
+
+    it("should return 400 when invalid request body", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const res = await POST(
+        createMockNextRequest("api/admin/users", "POST", {
+          ...userCreateMock,
+          firstName: undefined,
+        }),
+      )
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      const json = await res.json()
+      expect(json.error).toEqual("Invalid request body")
+      expect(json.details.fieldErrors.firstName[0]).toEqual("Required")
+    })
+
+    it("should error if an invalid firstName is provided", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const res = await POST(
+        createMockNextRequest("api/admin/users", "POST", { ...userCreateMock, role: "Test" }),
+      )
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      const json = await res.json()
+      expect(json.error).toEqual("Invalid request body")
     })
   })
 })
