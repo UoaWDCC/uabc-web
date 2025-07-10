@@ -1,0 +1,56 @@
+name: Deploy Frontend
+description: Deploy the frontend to the production environment
+
+inputs:
+  CLOUDFLARE_API_TOKEN:
+    description: 'Cloudflare API token'
+    required: true
+  CLOUDFLARE_ACCOUNT_ID:
+    description: 'Cloudflare account ID'
+    required: true
+  GITHUB_TOKEN:
+    description: 'GitHub token'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        run_install: false
+
+    - name: Restore node_modules cache
+      uses: actions/cache/restore@v4
+      id: cache
+      with:
+        path: |
+          node_modules
+          */node_modules
+          packages/*/node_modules
+          apps/*/node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
+    - name: Install dependencies if cache misses
+      run: NODE_ENV=production pnpm install --frozen-lockfile
+      shell: bash
+
+    - name: Build frontend
+      run: NODE_ENV=production pnpm run build --filter frontend
+      shell: bash
+
+    # - name: Publish to cloudflare
+    #   uses: cloudflare/wrangler-action@v3
+    #   with:
+    #     apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
+    #     accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
+    #     command: pages deploy client/out --project-name=uabc
+    #     gitHubToken: ${{ inputs.GITHUB_TOKEN }}
