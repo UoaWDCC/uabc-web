@@ -2,8 +2,11 @@ import { DownloadIcon, PlusIcon } from "@yamada-ui/lucide"
 import { ButtonGroup } from "@yamada-ui/react"
 import { type FC, memo } from "react"
 import { Button } from "../../../Primitive"
+import { useMemberManagement } from "../MemberManagementContext"
 
 export const FilterActions: FC = memo(() => {
+  const { filteredMembers } = useMemberManagement()
+
   const handleAddMember = () => {
     // TODO: Implement add member functionality
     console.log("Add new member clicked")
@@ -11,7 +14,7 @@ export const FilterActions: FC = memo(() => {
 
   const handleExportData = () => {
     // TODO: Implement export data functionality
-    console.log("Export data clicked")
+    console.log(`Export ${filteredMembers.length} users clicked`)
   }
 
   return (
@@ -25,7 +28,7 @@ export const FilterActions: FC = memo(() => {
         size="sm"
         startIcon={<DownloadIcon />}
       >
-        Export
+        Export {filteredMembers.length} users
       </Button>
     </ButtonGroup>
   )

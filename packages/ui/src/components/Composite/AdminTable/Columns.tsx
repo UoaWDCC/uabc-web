@@ -76,7 +76,7 @@ SessionsCell.displayName = "SessionsCell"
 
 export const REMAINING_SESSIONS_COLUMN: Column<User> = {
   accessorKey: "remainingSessions",
-  header: "Remaining",
+  header: "Remaining Sessions",
   css: { w: "150px", textAlign: "center" },
   cell: ({ getValue }) => {
     const value = getValue() as number | null

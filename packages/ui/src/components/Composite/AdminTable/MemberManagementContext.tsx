@@ -1,9 +1,9 @@
 "use client"
 
 import type { User } from "@repo/shared/payload-types"
-import { parseAsInteger, parseAsString, useQueryStates } from "nuqs"
+import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from "nuqs"
 import type { ReactNode } from "react"
-import { createContext, useContext, useMemo } from "react"
+import { createContext, useCallback, useContext, useMemo, useState } from "react"
 
 // Mock data generation
 const FIRST_NAMES = [
@@ -168,6 +168,25 @@ const generateMockUsers = (): User[] => {
   })
 }
 
+// Add column definitions
+export const AVAILABLE_COLUMNS = [
+  { key: "name", label: "Name", required: true },
+  { key: "email", label: "Email", required: true },
+  { key: "role", label: "Role", required: false },
+  { key: "remainingSessions", label: "Remaining Sessions", required: false },
+  { key: "university", label: "University", required: false },
+  { key: "actions", label: "Actions", required: true },
+] as const
+
+export type ColumnKey = (typeof AVAILABLE_COLUMNS)[number]["key"]
+
+export type FilterOptions = {
+  searchFields?: (keyof User)[]
+  enableRoleFilter?: boolean
+  enableUniversityFilter?: boolean
+  customFilters?: Record<string, (member: User, value: any) => boolean>
+}
+
 type MemberManagementState = {
   // Data
   members: User[]
@@ -178,8 +197,34 @@ type MemberManagementState = {
   // Filter state
   filterValue: string
   setFilterValue: (value: string) => void
+  roleFilter: User["role"] | "all"
+  setRoleFilter: (role: User["role"] | "all") => void
+  universityFilter: User["university"] | "all"
+  setUniversityFilter: (university: User["university"] | "all") => void
   hasFilter: boolean
   clearFilter: () => void
+  clearAllFilters: () => void
+
+  // Column visibility state
+  visibleColumns: ColumnKey[]
+  setVisibleColumns: (columns: ColumnKey[]) => void
+  toggleColumn: (column: ColumnKey) => void
+
+  // Row selection state
+  selectedRows: Set<string>
+  setSelectedRows: (rows: Set<string>) => void
+  toggleRowSelection: (rowId: string) => void
+  selectAllRows: () => void
+  clearSelection: () => void
+  isRowSelected: (rowId: string) => boolean
+  isAllSelected: boolean
+  isIndeterminate: boolean
+  selectedMembers: User[]
+
+  // Search and filtering
+  searchInFields: (keyof User)[]
+  setSearchFields: (fields: (keyof User)[]) => void
+  availableUniversities: (User["university"] | "all")[]
 
   // Pagination state
   currentPage: number
@@ -187,18 +232,38 @@ type MemberManagementState = {
   perPage: number
   setPerPage: (perPage: number) => void
   totalPages: number
+  totalItems: number
+
+  // UI State
+  isSelectionMode: boolean
+  setSelectionMode: (enabled: boolean) => void
 }
 
 const MemberManagementContext = createContext<MemberManagementState | null>(null)
 
 type MemberManagementProviderProps = {
   children: ReactNode
+  filterOptions?: FilterOptions
 }
 
-export const MemberManagementProvider = ({ children }: MemberManagementProviderProps) => {
+export const MemberManagementProvider = ({
+  children,
+  filterOptions = {},
+}: MemberManagementProviderProps) => {
   const [searchParams, setSearchParams] = useQueryStates(
     {
       filter: parseAsString.withDefault(""),
+      role: parseAsString.withDefault("all"),
+      university: parseAsString.withDefault("all"),
+      columns: parseAsArrayOf(parseAsString).withDefault([
+        "name",
+        "email",
+        "role",
+        "remainingSessions",
+        "university",
+        "actions",
+      ]),
+      selectedRows: parseAsArrayOf(parseAsString).withDefault([]),
       page: parseAsInteger.withDefault(1),
       perPage: parseAsInteger.withDefault(20),
     },
@@ -207,27 +272,115 @@ export const MemberManagementProvider = ({ children }: MemberManagementProviderP
     },
   )
 
-  const { filter: filterValue, page: currentPage, perPage } = searchParams
+  const {
+    filter: filterValue,
+    role: roleFilter,
+    university: universityFilter,
+    columns: rawVisibleColumns,
+    selectedRows: selectedRowIds,
+    page: currentPage,
+    perPage,
+  } = searchParams
+
+  // UI State
+  const [isSelectionMode, setSelectionMode] = useState(false)
+
+  // Search configuration
+  const defaultSearchFields: (keyof User)[] = [
+    "firstName",
+    "lastName",
+    "email",
+    "role",
+    "university",
+  ]
+  const [searchInFields, setSearchFields] = useState<(keyof User)[]>(
+    filterOptions.searchFields || defaultSearchFields,
+  )
+
+  // Validate and cast columns to ColumnKey[]
+  const visibleColumns = useMemo(() => {
+    const validColumns: ColumnKey[] = []
+    const availableKeys = AVAILABLE_COLUMNS.map((col) => col.key)
+
+    for (const col of rawVisibleColumns) {
+      if (availableKeys.includes(col as ColumnKey)) {
+        validColumns.push(col as ColumnKey)
+      }
+    }
+
+    // Ensure required columns are always included
+    const requiredColumns = AVAILABLE_COLUMNS.filter((col) => col.required).map((col) => col.key)
+    for (const reqCol of requiredColumns) {
+      if (!validColumns.includes(reqCol)) {
+        validColumns.push(reqCol)
+      }
+    }
+
+    return validColumns
+  }, [rawVisibleColumns])
 
   const members = useMemo(() => generateMockUsers(), [])
   const isLoading = false
 
-  const filteredMembers = useMemo(() => {
-    if (!filterValue) {
-      return members
-    }
-    const lowercaseFilter = filterValue.toLowerCase()
-    return members.filter((member) => {
-      const fullName = [member.firstName, member.lastName].filter(Boolean).join(" ").toLowerCase()
-      return (
-        fullName.includes(lowercaseFilter) ||
-        member.email.toLowerCase().includes(lowercaseFilter) ||
-        member.role.toLowerCase().includes(lowercaseFilter) ||
-        member.university?.toLowerCase().includes(lowercaseFilter) ||
-        member.remainingSessions?.toString().includes(lowercaseFilter)
-      )
+  // Convert selectedRowIds array to Set for easier manipulation
+  const selectedRows = useMemo(() => {
+    return new Set(selectedRowIds)
+  }, [selectedRowIds])
+
+  // Available filter options
+  const availableUniversities = useMemo(() => {
+    const universities = new Set<User["university"]>()
+    members.forEach((member) => {
+      if (member.university) universities.add(member.university)
     })
-  }, [members, filterValue])
+    return ["all" as const, ...Array.from(universities).sort()]
+  }, [members])
+
+  const filteredMembers = useMemo(() => {
+    let filtered = members
+
+    // Apply text filter
+    if (filterValue) {
+      const lowercaseFilter = filterValue.toLowerCase()
+      filtered = filtered.filter((member) => {
+        return searchInFields.some((field) => {
+          const value = member[field]
+          if (value === null || value === undefined) return false
+          return String(value).toLowerCase().includes(lowercaseFilter)
+        })
+      })
+    }
+
+    // Apply role filter
+    if (roleFilter && roleFilter !== "all") {
+      filtered = filtered.filter((member) => member.role === roleFilter)
+    }
+
+    // Apply university filter
+    if (universityFilter && universityFilter !== "all") {
+      filtered = filtered.filter((member) => member.university === universityFilter)
+    }
+
+    // Apply custom filters
+    if (filterOptions.customFilters) {
+      Object.entries(filterOptions.customFilters).forEach(([key, filterFn]) => {
+        const filterValue = searchParams[key as keyof typeof searchParams]
+        if (filterValue) {
+          filtered = filtered.filter((member) => filterFn(member, filterValue))
+        }
+      })
+    }
+
+    return filtered
+  }, [
+    members,
+    filterValue,
+    roleFilter,
+    universityFilter,
+    searchInFields,
+    filterOptions.customFilters,
+    searchParams,
+  ])
 
   const totalPages = useMemo(() => {
     return Math.ceil(filteredMembers.length / perPage)
@@ -239,32 +392,154 @@ export const MemberManagementProvider = ({ children }: MemberManagementProviderP
     return filteredMembers.slice(startIndex, endIndex)
   }, [filteredMembers, currentPage, perPage])
 
-  const setFilterValue = (value: string) => {
-    setSearchParams({
-      filter: value || null,
-      page: 1,
-    })
-  }
+  // Selected members
+  const selectedMembers = useMemo(() => {
+    return members.filter((member) => selectedRows.has(member.id))
+  }, [members, selectedRows])
 
-  const setCurrentPage = (page: number) => {
-    setSearchParams({ page: page === 1 ? null : page })
-  }
+  // Selection state calculations
+  const isAllSelected = useMemo(() => {
+    if (paginatedMembers.length === 0) return false
+    return paginatedMembers.every((member) => selectedRows.has(member.id))
+  }, [paginatedMembers, selectedRows])
 
-  const setPerPage = (newPerPage: number) => {
-    setSearchParams({
-      perPage: newPerPage === 20 ? null : newPerPage,
-      page: 1,
-    })
-  }
+  const isIndeterminate = useMemo(() => {
+    if (paginatedMembers.length === 0) return false
+    const selectedCount = paginatedMembers.filter((member) => selectedRows.has(member.id)).length
+    return selectedCount > 0 && selectedCount < paginatedMembers.length
+  }, [paginatedMembers, selectedRows])
 
-  const clearFilter = () => {
+  // Filter functions
+  const setFilterValue = useCallback(
+    (value: string) => {
+      setSearchParams({
+        filter: value || null,
+        page: 1,
+      })
+    },
+    [setSearchParams],
+  )
+
+  const setRoleFilter = useCallback(
+    (role: User["role"] | "all") => {
+      setSearchParams({
+        role: role === "all" ? null : role,
+        page: 1,
+      })
+    },
+    [setSearchParams],
+  )
+
+  const setUniversityFilter = useCallback(
+    (university: User["university"] | "all") => {
+      setSearchParams({
+        university: university === "all" ? null : university,
+        page: 1,
+      })
+    },
+    [setSearchParams],
+  )
+
+  const clearFilter = useCallback(() => {
     setSearchParams({
       filter: null,
       page: 1,
     })
-  }
+  }, [setSearchParams])
 
-  const hasFilter = !!filterValue
+  const clearAllFilters = useCallback(() => {
+    setSearchParams({
+      filter: null,
+      role: null,
+      university: null,
+      page: 1,
+    })
+  }, [setSearchParams])
+
+  // Column functions
+  const setVisibleColumns = useCallback(
+    (columns: ColumnKey[]) => {
+      setSearchParams({
+        columns: columns.length === 6 ? null : (columns as string[]),
+      })
+    },
+    [setSearchParams],
+  )
+
+  const toggleColumn = useCallback(
+    (column: ColumnKey) => {
+      const isRequired = AVAILABLE_COLUMNS.find((col) => col.key === column)?.required
+      if (isRequired) return // Don't allow toggling required columns
+
+      const newColumns = visibleColumns.includes(column)
+        ? visibleColumns.filter((col) => col !== column)
+        : [...visibleColumns, column]
+
+      setVisibleColumns(newColumns)
+    },
+    [visibleColumns, setVisibleColumns],
+  )
+
+  // Row selection functions
+  const setSelectedRows = useCallback(
+    (rows: Set<string>) => {
+      const rowArray = Array.from(rows)
+      setSearchParams({
+        selectedRows: rowArray.length === 0 ? null : rowArray,
+      })
+    },
+    [setSearchParams],
+  )
+
+  const toggleRowSelection = useCallback(
+    (rowId: string) => {
+      const newSelection = new Set(selectedRows)
+      if (newSelection.has(rowId)) {
+        newSelection.delete(rowId)
+      } else {
+        newSelection.add(rowId)
+      }
+      setSelectedRows(newSelection)
+    },
+    [selectedRows, setSelectedRows],
+  )
+
+  const selectAllRows = useCallback(() => {
+    const newSelection = new Set(selectedRows)
+    paginatedMembers.forEach((member) => newSelection.add(member.id))
+    setSelectedRows(newSelection)
+  }, [selectedRows, paginatedMembers, setSelectedRows])
+
+  const clearSelection = useCallback(() => {
+    setSelectedRows(new Set())
+  }, [setSelectedRows])
+
+  const isRowSelected = useCallback(
+    (rowId: string) => {
+      return selectedRows.has(rowId)
+    },
+    [selectedRows],
+  )
+
+  // Pagination functions
+  const setCurrentPage = useCallback(
+    (page: number) => {
+      setSearchParams({ page: page === 1 ? null : page })
+    },
+    [setSearchParams],
+  )
+
+  const setPerPage = useCallback(
+    (newPerPage: number) => {
+      setSearchParams({
+        perPage: newPerPage === 20 ? null : newPerPage,
+        page: 1,
+      })
+    },
+    [setSearchParams],
+  )
+
+  const hasFilter = !!filterValue || roleFilter !== "all" || universityFilter !== "all"
 
   const value: MemberManagementState = {
     // Data
@@ -276,8 +551,34 @@ export const MemberManagementProvider = ({ children }: MemberManagementProviderP
     // Filter state
     filterValue,
     setFilterValue,
+    roleFilter: roleFilter as User["role"] | "all",
+    setRoleFilter,
+    universityFilter: universityFilter as User["university"] | "all",
+    setUniversityFilter,
     hasFilter,
     clearFilter,
+    clearAllFilters,
+
+    // Column visibility state
+    visibleColumns,
+    setVisibleColumns,
+    toggleColumn,
+
+    // Row selection state
+    selectedRows,
+    setSelectedRows,
+    toggleRowSelection,
+    selectAllRows,
+    clearSelection,
+    isRowSelected,
+    isAllSelected,
+    isIndeterminate,
+    selectedMembers,
+
+    // Search and filtering
+    searchInFields,
+    setSearchFields,
+    availableUniversities,
 
     // Pagination state
     currentPage,
@@ -285,6 +586,11 @@ export const MemberManagementProvider = ({ children }: MemberManagementProviderP
     perPage,
     setPerPage,
     totalPages,
+    totalItems: filteredMembers.length,
+
+    // UI State
+    isSelectionMode,
+    setSelectionMode,
   }
 
   return (

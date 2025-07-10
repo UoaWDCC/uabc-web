@@ -18,19 +18,23 @@ import { useMemberManagement } from "./MemberManagementContext"
 import { SkeletonTable } from "./SkeletonTable"
 
 export const MemberManagementTable: FC = memo(() => {
-  const { paginatedMembers, isLoading } = useMemberManagement()
+  const { paginatedMembers, isLoading, visibleColumns } = useMemberManagement()
 
-  const columns = useMemo<Column<User>[]>(
-    () => [
-      NAME_COLUMN,
-      EMAIL_COLUMN,
-      ROLE_COLUMN,
-      REMAINING_SESSIONS_COLUMN,
-      UNIVERSITY_COLUMN,
-      ACTIONS_COLUMN,
-    ],
+  const allColumns = useMemo<Record<string, Column<User>>>(
+    () => ({
+      name: NAME_COLUMN,
+      email: EMAIL_COLUMN,
+      role: ROLE_COLUMN,
+      remainingSessions: REMAINING_SESSIONS_COLUMN,
+      university: UNIVERSITY_COLUMN,
+      actions: ACTIONS_COLUMN,
+    }),
     [],
   )
+
+  const columns = useMemo<Column<User>[]>(() => {
+    return visibleColumns.map((columnKey) => allColumns[columnKey]).filter(Boolean)
+  }, [visibleColumns, allColumns])
 
   const cellProps = useMemo<PagingTableProps<User>["cellProps"]>(() => {
     return ({ column, row }: Cell<User & { empty?: boolean }, unknown>) => {
@@ -38,7 +42,7 @@ export const MemberManagementTable: FC = memo(() => {
 
       if (row.original.empty) {
         if (column.columnDef.header === "Name") {
-          props.colSpan = 6
+          props.colSpan = visibleColumns.length
           props.textAlign = "center"
           props.color = "muted"
           props.h = "3xs"
@@ -57,7 +61,7 @@ export const MemberManagementTable: FC = memo(() => {
 
       return props
     }
-  }, [])
+  }, [visibleColumns.length])
 
   const hasData = !!paginatedMembers.length
 
@@ -96,9 +100,11 @@ export const MemberManagementTable: FC = memo(() => {
       cellProps={cellProps}
       columns={columns}
       data={resolvedData}
+      highlightOnHover={hasData}
+      highlightOnSelected={hasData}
       rounded="md"
       rowId="id"
-      selectColumnProps={false}
+      rowsClickSelect={hasData}
       sx={{ "tbody > tr:last-of-type > td": { borderBottomWidth: "0px" } }}
     />
   )
