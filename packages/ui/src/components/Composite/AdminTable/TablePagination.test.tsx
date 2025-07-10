@@ -42,4 +42,17 @@ describe("<TablePagination />", () => {
       expect(page2Button).toBeInTheDocument()
     }
   })
+
+  it("should handle per page change", async () => {
+    const { user } = render(<TablePagination />, { wrapper: createWrapper })
+
+    const select = screen.getByRole("combobox")
+    expect(select).toBeInTheDocument()
+
+    await user.click(select)
+    expect(screen.getByText("10")).toBeInTheDocument()
+    expect(screen.getByText("20")).toBeInTheDocument()
+    expect(screen.getByText("50")).toBeInTheDocument()
+    expect(screen.getByText("100")).toBeInTheDocument()
+  })
 })
