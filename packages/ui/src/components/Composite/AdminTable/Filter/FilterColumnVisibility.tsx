@@ -29,8 +29,8 @@ export const FilterColumnVisibility: FC = memo(() => {
             </Text>
             {AVAILABLE_COLUMNS.map((column) => (
               <Checkbox
-                isChecked={visibleColumns.includes(column.key)}
-                isDisabled={column.required}
+                checked={visibleColumns.includes(column.key)}
+                disabled={column.required}
                 key={column.key}
                 onChange={() => toggleColumn(column.key)}
               >

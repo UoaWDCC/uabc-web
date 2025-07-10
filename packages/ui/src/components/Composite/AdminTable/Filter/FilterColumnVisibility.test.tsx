@@ -50,7 +50,7 @@ describe("FilterColumnVisibility", () => {
       expect(screen.getByText("Name")).toBeInTheDocument()
       expect(screen.getByText("Email")).toBeInTheDocument()
       expect(screen.getByText("Role")).toBeInTheDocument()
-      expect(screen.getByText("Remaining Sessions")).toBeInTheDocument()
+      expect(screen.getByText("Remaining")).toBeInTheDocument()
       expect(screen.getByText("University")).toBeInTheDocument()
       expect(screen.getByText("Actions")).toBeInTheDocument()
     })

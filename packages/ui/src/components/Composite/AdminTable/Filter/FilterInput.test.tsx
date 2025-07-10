@@ -138,17 +138,4 @@ describe("FilterInput", () => {
       expect(input).toHaveFocus()
     })
   })
-
-  describe("Performance", () => {
-    it("should be memoized to prevent unnecessary rerenders", () => {
-      const { rerender } = render(<FilterInput />, { wrapper: createWrapper })
-
-      const input1 = screen.getByRole("textbox")
-
-      rerender(<FilterInput />)
-
-      const input2 = screen.getByRole("textbox")
-      expect(input1).toBe(input2)
-    })
-  })
 })

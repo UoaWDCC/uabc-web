@@ -105,11 +105,11 @@ export const UNIVERSITY_COLUMN: Column<User> = {
 const ActionsCell = memo(() => {
   const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    console.log("Edit")
+    console.log("Action")
   }
 
-  const handleOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
+  const handleOnEdit = (e: React.MouseEvent<HTMLElement>) => {
+    // e.stopPropagation()
     console.log("Edit")
   }
 
@@ -122,7 +122,7 @@ const ActionsCell = memo(() => {
         size="sm"
         variant="ghost"
       />
-      <MenuList>
+      <MenuList onClick={(e) => e.stopPropagation()}>
         <MenuItem onClick={handleOnEdit}>Edit</MenuItem>
       </MenuList>
     </Menu>

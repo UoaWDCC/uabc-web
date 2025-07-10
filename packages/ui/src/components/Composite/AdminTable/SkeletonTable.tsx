@@ -29,7 +29,7 @@ export const SkeletonTable: FC = memo(() => {
               Role
             </Th>
             <Th textAlign="center" w="150px">
-              Remaining Sessions
+              Remaining
             </Th>
             <Th w="150px">University</Th>
             <Th textAlign="center" w="4" />
