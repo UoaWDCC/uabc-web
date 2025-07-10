@@ -1,4 +1,5 @@
 import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
+import { userCreateMock } from "@repo/shared/mocks"
 import bcrypt from "bcryptjs"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
@@ -13,7 +14,6 @@ import {
   REAL_HASHED_PASSWORD_MOCK,
   standardAuthCreateMock,
 } from "@/test-config/mocks/Authentication.mock"
-import { userCreateMock } from "@/test-config/mocks/User.mock"
 
 describe("api/auth/login", () => {
   describe("POST", async () => {
