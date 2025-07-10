@@ -179,7 +179,10 @@ export const Select: FC<SelectProps> = memo(
             },
           }}
           bgGradient={stylised ? "heroGradient" : "transparent"}
-          fieldProps={{ px: { base: "calc(lg + xs + md)", md: "calc(lg - sm - xs + xl)" } }}
+          fieldProps={{
+            pl: { base: "calc(lg + xs + md)", md: "calc(lg - sm - xs + xl)" },
+            pr: { base: "lg", md: "xl" },
+          }}
           iconProps={{
             pr: { md: "lg" },
           }}
