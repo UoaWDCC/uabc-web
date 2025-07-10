@@ -8,6 +8,5 @@ import { apiClient } from "../client"
  * @throws When the API request fails
  */
 export const getFaq = async () => {
-  "use server"
   return await apiClient.get("/api/globals/faq", GetFaqResponseSchema, ["faq"])
 }
