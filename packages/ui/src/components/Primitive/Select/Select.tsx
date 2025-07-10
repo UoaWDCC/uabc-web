@@ -121,7 +121,6 @@ export interface SelectProps extends UISelectProps {
 export const Select: FC<SelectProps> = memo(
   ({
     children,
-    disabled,
     label = "Select option",
     icon,
     stylised = false,
