@@ -30,9 +30,9 @@ export interface AdminTabBarProps extends TabsProps {
  *
  * @example
  * <AdminTabBar tabPanelsProps={{ bgColor: "secondary" }}>
+ *    <TabPanel>Panel 0</TabPanel>
  *    <TabPanel>Panel 1</TabPanel>
  *    <TabPanel>Panel 2</TabPanel>
- *    <TabPanel>Panel 3</TabPanel>
  * </AdminTabBar>
  *
  * @remarks Currently, only 3 tabs are currently permitted.
