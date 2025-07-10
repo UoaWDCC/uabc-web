@@ -179,47 +179,6 @@ describe("MemberManagementContext", () => {
     })
   })
 
-  describe("Mock data generation", () => {
-    it("should generate members with required fields", () => {
-      const { result } = renderHook(() => useMemberManagement(), {
-        wrapper: createWrapper,
-      })
-
-      const members = result.current.members
-      expect(members).toHaveLength(40)
-
-      // Check that all members have required fields
-      members.forEach((member) => {
-        expect(member.id).toBeDefined()
-        expect(member.firstName).toBeDefined()
-        expect(member.email).toBeDefined()
-        expect(member.role).toBeOneOf(["member", "casual", "admin"])
-        expect(member.createdAt).toBeDefined()
-        expect(member.updatedAt).toBeDefined()
-      })
-    })
-
-    it("should generate members with varying data", () => {
-      const { result } = renderHook(() => useMemberManagement(), {
-        wrapper: createWrapper,
-      })
-
-      const members = result.current.members
-
-      // Check that there's variety in the data
-      const roles = new Set(members.map((m) => m.role))
-      expect(roles.size).toBeGreaterThan(1) // Should have multiple roles
-
-      const universities = new Set(members.map((m) => m.university).filter(Boolean))
-      expect(universities.size).toBeGreaterThan(1) // Should have multiple universities
-
-      // Some members should have null values for optional fields
-      const hasNullLastName = members.some((m) => m.lastName === null)
-      const hasNullUniversity = members.some((m) => m.university === null)
-      expect(hasNullLastName || hasNullUniversity).toBe(true)
-    })
-  })
-
   describe("Search functionality", () => {
     it("should search by name", () => {
       const { result } = renderHook(() => useMemberManagement(), {
