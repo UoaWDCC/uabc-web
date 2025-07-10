@@ -2,10 +2,18 @@
 
 import { GetSemesterResponseSchema } from "@repo/shared"
 import { useQuery } from "@tanstack/react-query"
-import { DataList, EmptyState, VStack } from "@yamada-ui/react"
+import {
+  DataList,
+  DataListDescription,
+  DataListItem,
+  DataListTerm,
+  EmptyState,
+  Skeleton,
+  Text,
+  VStack,
+} from "@yamada-ui/react"
 import { useQueryState } from "nuqs"
 import { apiClient } from "@/lib/api/client"
-import { SemesterLoadingSkeleton } from "./page"
 import { parsers } from "./search"
 
 type Semester = NonNullable<NonNullable<ReturnType<typeof GetSemesterResponseSchema.parse>>["data"]>
@@ -41,7 +49,34 @@ const createSemesterItems = (semester: Semester) => [
   },
 ]
 
-export default function SemesterContent() {
+const terms = [
+  "Name",
+  "Start Date",
+  "End Date",
+  "Break Start",
+  "Break End",
+  "Booking Open Day",
+  "Booking Open Time",
+]
+
+export const SemesterLoadingSkeleton = () => {
+  return (
+    <DataList col={2}>
+      {terms.map((term) => (
+        <DataListItem key={term}>
+          <DataListTerm>{term}</DataListTerm>
+          <DataListDescription>
+            <Skeleton>
+              <Text>Description</Text>
+            </Skeleton>
+          </DataListDescription>
+        </DataListItem>
+      ))}
+    </DataList>
+  )
+}
+
+export const SemesterContent = () => {
   const [id] = useQueryState("id", parsers.id)
 
   const {
