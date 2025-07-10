@@ -75,7 +75,7 @@ export const MemberManagementTable: FC = memo(() => {
     return Array.from(selectedRows)
   }, [selectedRows])
 
-  const hasData = !!paginatedMembers.length
+  const hasData = !!paginatedMembers?.length
 
   const resolvedData = hasData
     ? paginatedMembers

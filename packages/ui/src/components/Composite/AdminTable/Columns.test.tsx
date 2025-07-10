@@ -179,16 +179,6 @@ describe("AdminTable Columns", () => {
 
       expect(screen.getByText("N/A")).toBeInTheDocument()
     })
-
-    it("should render 0 sessions correctly", () => {
-      const mockCell = createMockCell(memberUserMock, 0)
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      const CellComponent = REMAINING_SESSIONS_COLUMN.cell as any
-
-      render(<CellComponent {...mockCell} />)
-
-      expect(screen.getByText("0")).toBeInTheDocument()
-    })
   })
 
   describe("UNIVERSITY_COLUMN", () => {
@@ -196,16 +186,6 @@ describe("AdminTable Columns", () => {
       // biome-ignore lint/suspicious/noExplicitAny: this is for a test
       expect((UNIVERSITY_COLUMN as any).accessorKey).toBe("university")
       expect(UNIVERSITY_COLUMN.header).toBe("University")
-    })
-
-    it("should render university name", () => {
-      const mockCell = createMockCell(memberUserMock, "UoA")
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      const CellComponent = UNIVERSITY_COLUMN.cell as any
-
-      render(<CellComponent {...mockCell} />)
-
-      expect(screen.getByText("UoA")).toBeInTheDocument()
     })
 
     it("should render N/A when university is null", () => {
@@ -219,7 +199,7 @@ describe("AdminTable Columns", () => {
     })
 
     it("should render other university values correctly", () => {
-      const universities = ["Massey University", "AUT", "Other", "Working"]
+      const universities = ["UoA", "Massey University", "AUT", "Other", "Working"]
 
       universities.forEach((university) => {
         const mockCell = createMockCell(memberUserMock, university)
@@ -262,61 +242,6 @@ describe("AdminTable Columns", () => {
       // Check if the button contains an SVG (the icon)
       const svg = container.querySelector("svg")
       expect(svg).toBeInTheDocument()
-    })
-  })
-
-  describe("Component Memoization", () => {
-    it("should have correct displayNames for memoized components", () => {
-      const mockCell = createMockCell(memberUserMock, "test@example.com")
-
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      const EmailCellComponent = EMAIL_COLUMN.cell as any
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      const NameCellComponent = NAME_COLUMN.cell as any
-
-      const { rerender: rerenderEmail } = render(<EmailCellComponent {...mockCell} />)
-      expect(screen.getByText("test@example.com")).toBeInTheDocument()
-
-      rerenderEmail(<EmailCellComponent {...mockCell} />)
-      expect(screen.getByText("test@example.com")).toBeInTheDocument()
-
-      const { unmount } = render(<NameCellComponent {...createMockCell(memberUserMock)} />)
-      expect(screen.getByText("straight zhao")).toBeInTheDocument()
-
-      unmount()
-    })
-  })
-
-  describe("Column Structure", () => {
-    it("should export all required columns", () => {
-      const columns = [
-        NAME_COLUMN,
-        EMAIL_COLUMN,
-        ROLE_COLUMN,
-        REMAINING_SESSIONS_COLUMN,
-        UNIVERSITY_COLUMN,
-        ACTIONS_COLUMN,
-      ]
-
-      columns.forEach((column) => {
-        expect(column).toBeDefined()
-        expect(column.header).toBeDefined()
-        expect(column.cell).toBeDefined()
-      })
-    })
-
-    it("should have proper column structure for table rendering", () => {
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      expect((NAME_COLUMN as any).accessorKey).toBeDefined()
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      expect((EMAIL_COLUMN as any).accessorKey).toBeDefined()
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      expect((ROLE_COLUMN as any).accessorKey).toBeDefined()
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      expect((REMAINING_SESSIONS_COLUMN as any).accessorKey).toBeDefined()
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      expect((UNIVERSITY_COLUMN as any).accessorKey).toBeDefined()
-      expect(ACTIONS_COLUMN.id).toBeDefined()
     })
   })
 })

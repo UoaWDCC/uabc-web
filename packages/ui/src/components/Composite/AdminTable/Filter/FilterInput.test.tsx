@@ -55,13 +55,6 @@ describe("FilterInput", () => {
       expect(input).toBeInTheDocument()
       expect(input).toHaveAttribute("placeholder", "Filter members...")
     })
-
-    it("should have correct width styling", () => {
-      const { container } = render(<FilterInput />, { wrapper: createWrapper })
-
-      const input = container.querySelector("input")
-      expect(input).toBeInTheDocument()
-    })
   })
 
   describe("Input Functionality", () => {

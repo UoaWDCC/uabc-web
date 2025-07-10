@@ -1,7 +1,7 @@
+import { Button } from "@repo/ui/components/Primitive"
 import { DownloadIcon, PlusIcon } from "@yamada-ui/lucide"
 import { ButtonGroup } from "@yamada-ui/react"
 import { type FC, memo } from "react"
-import { Button } from "../../../Primitive"
 import { useMemberManagement } from "../MemberManagementContext"
 
 export const FilterActions: FC = memo(() => {
