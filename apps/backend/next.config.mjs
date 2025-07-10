@@ -4,6 +4,10 @@ import { withPayload } from "@payloadcms/next/withPayload"
 const nextConfig = {
   output: "standalone",
   async headers() {
+    if (!process.env.NEXT_PUBLIC_URL) {
+      throw new Error("NEXT_PUBLIC_URL environment variable is required for CORS configuration")
+    }
+
     return [
       {
         source: "/api/:path*",
@@ -11,7 +15,7 @@ const nextConfig = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: process.env.NEXT_PUBLIC_URL?.replace(/\/$/, ""),
+            value: process.env.NEXT_PUBLIC_URL.replace(/\/$/, ""),
           },
           {
             key: "Access-Control-Allow-Methods",
