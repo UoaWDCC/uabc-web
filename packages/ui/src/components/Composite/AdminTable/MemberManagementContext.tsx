@@ -184,6 +184,7 @@ export type FilterOptions = {
   searchFields?: (keyof User)[]
   enableRoleFilter?: boolean
   enableUniversityFilter?: boolean
+  // biome-ignore lint/suspicious/noExplicitAny: we need to allow any type here
   customFilters?: Record<string, (member: User, value: any) => boolean>
 }
 
