@@ -1,7 +1,7 @@
 {
   "name": "@repo/shared",
   "exports": {
-    ".": "/src/index.ts",
+    ".": "./src/index.ts",
     "./payload-types": "./src/payload-types.ts",
     "./test-config/mocks": "./dist/src/test-config/mocks/index.js"
   },
