@@ -1,4 +1,5 @@
 "use client"
+import { IconWithText } from "@repo/ui/components/Primitive"
 import { Clock10Icon, MapPinIcon } from "@yamada-ui/lucide"
 import {
   CheckboxCardGroup,
@@ -10,7 +11,6 @@ import {
 import { forwardRef, memo } from "react"
 import type { Control } from "react-hook-form"
 import { Controller } from "react-hook-form"
-import { IconWithText } from "../../Primitive"
 
 /**
  * Props for the {@link BookingTimesCardGroup} component.
