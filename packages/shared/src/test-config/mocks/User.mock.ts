@@ -42,7 +42,7 @@ export const userCreateMock: CreateUserData = {
   firstName: "straight",
   lastName: "zhao",
   email: "straight.zhao@example.com",
-  role: "casual",
+  role: MembershipType.casual,
   remainingSessions: 7,
   image: null,
 }

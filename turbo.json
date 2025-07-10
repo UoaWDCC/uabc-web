@@ -24,7 +24,7 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
     },
     "check-types": {
-      "dependsOn": ["^check-types", "@repo/test-config#build"],
+      "dependsOn": ["^check-types", "@repo/test-config#build", "@repo/shared#build"],
       "cache": true
     },
     "dev": {
