@@ -4,7 +4,7 @@ import {
   CASUAL_USER_UID,
   MEMBER_USER_UID,
   userCreateMock,
-} from "@repo/shared/test-config/mocks/User.mock"
+} from "@repo/shared/mocks"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import type { NextRequest } from "next/server"

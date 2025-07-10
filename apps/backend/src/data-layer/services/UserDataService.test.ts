@@ -1,4 +1,4 @@
-import { userCreateMock } from "@repo/shared/test-config/mocks/User.mock"
+import { userCreateMock } from "@repo/shared/mocks"
 import { payload } from "@/data-layer/adapters/Payload"
 import { clearCollection } from "@/test-config/backend-utils"
 import UserDataService from "./UserDataService"

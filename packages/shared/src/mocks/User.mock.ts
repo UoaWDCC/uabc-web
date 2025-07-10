@@ -1,5 +1,5 @@
-import { type CreateUserData, MembershipType } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
+import { type CreateUserData, MembershipType } from "../types"
 
 export const CASUAL_USER_UID = "000000000000000000000001"
 export const MEMBER_USER_UID = "000000000000000000000002"
@@ -11,7 +11,7 @@ export const casualUserMock: User = {
   lastName: "zhao",
   email: "straight.zhao@casual.com",
   role: MembershipType.casual,
-  remainingSessions: 5,
+  remainingSessions: 4,
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),
 }
@@ -33,7 +33,7 @@ export const adminUserMock: User = {
   lastName: "zhao",
   email: "straight.zhao@admin.com",
   role: MembershipType.admin,
-  remainingSessions: 5,
+  remainingSessions: 6,
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),
 }
@@ -42,7 +42,7 @@ export const userCreateMock: CreateUserData = {
   firstName: "straight",
   lastName: "zhao",
   email: "straight.zhao@example.com",
-  role: "casual",
-  remainingSessions: 5,
+  role: MembershipType.casual,
+  remainingSessions: 7,
   image: null,
 }

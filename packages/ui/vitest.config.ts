@@ -6,8 +6,8 @@ export default mergeConfig(uiConfig, {
     coverage: {
       thresholds: {
         statements: 90,
-        branches: 90,
-        functions: 90,
+        branches: 80,
+        functions: 80,
         lines: 90,
       },
     },

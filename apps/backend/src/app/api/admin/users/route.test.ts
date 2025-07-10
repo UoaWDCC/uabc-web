@@ -1,5 +1,5 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
-import { userCreateMock } from "@repo/shared/test-config/mocks/User.mock"
+import { userCreateMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"

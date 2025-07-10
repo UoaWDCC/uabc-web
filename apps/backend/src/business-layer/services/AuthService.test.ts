@@ -1,5 +1,5 @@
 import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema, TOKEN_EXPIRY_TIME } from "@repo/shared"
-import { casualUserMock } from "@repo/shared/test-config/mocks/User.mock"
+import { casualUserMock } from "@repo/shared/mocks"
 import jwt from "jsonwebtoken"
 import { cookies } from "next/headers"
 import { JWT_INVALID_TOKEN_MOCK, JWT_TOKEN_MOCK } from "@/test-config/mocks/AuthService.mock"

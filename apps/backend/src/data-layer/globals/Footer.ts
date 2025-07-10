@@ -22,6 +22,15 @@ export const Footer: GlobalConfig = {
       },
     },
     {
+      name: "linktree",
+      type: "text",
+      required: true,
+      defaultValue: "linktr.ee/uoa.badminton",
+      admin: {
+        description: "The URL to the club's Linktree page.",
+      },
+    },
+    {
       name: "facebook",
       type: "text",
       required: true,

@@ -1,8 +1,4 @@
-import {
-  adminUserMock,
-  casualUserMock,
-  memberUserMock,
-} from "@repo/shared/test-config/mocks/User.mock"
+import { adminUserMock, casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import type { CollectionSlug } from "payload"
 import AuthService from "@/business-layer/services/AuthService"
 import { payload } from "@/data-layer/adapters/Payload"
