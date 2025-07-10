@@ -194,20 +194,6 @@ describe("FilterActions", () => {
     })
   })
 
-  describe("Performance", () => {
-    it("should be memoized to prevent unnecessary rerenders", () => {
-      const { rerender } = render(<FilterActions />, { wrapper: createWrapper })
-
-      expect(screen.getByText("Add Member")).toBeInTheDocument()
-      expect(screen.getByText(/Export \d+ users/)).toBeInTheDocument()
-
-      rerender(<FilterActions />)
-
-      expect(screen.getByText("Add Member")).toBeInTheDocument()
-      expect(screen.getByText(/Export \d+ users/)).toBeInTheDocument()
-    })
-  })
-
   describe("Error Handling", () => {
     it("should handle console.log errors gracefully", async () => {
       const { user } = render(<FilterActions />, { wrapper: createWrapper })

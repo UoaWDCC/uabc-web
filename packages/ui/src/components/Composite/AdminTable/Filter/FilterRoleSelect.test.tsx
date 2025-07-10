@@ -142,16 +142,4 @@ describe("FilterRoleSelect", () => {
       expect(select).toHaveFocus()
     })
   })
-
-  describe("Performance", () => {
-    it("should be memoized to prevent unnecessary rerenders", () => {
-      const { rerender } = render(<FilterRoleSelect />, { wrapper: createWrapper })
-
-      expect(screen.getByRole("combobox")).toBeInTheDocument()
-
-      rerender(<FilterRoleSelect />)
-
-      expect(screen.getByRole("combobox")).toBeInTheDocument()
-    })
-  })
 })

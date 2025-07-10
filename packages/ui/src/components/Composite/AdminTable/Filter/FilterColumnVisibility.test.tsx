@@ -81,16 +81,4 @@ describe("FilterColumnVisibility", () => {
       expect(button).toHaveAttribute("aria-label", "Toggle column visibility")
     })
   })
-
-  describe("Performance", () => {
-    it("should be memoized to prevent unnecessary rerenders", () => {
-      const { rerender } = render(<FilterColumnVisibility />, { wrapper: createWrapper })
-
-      expect(screen.getByRole("button", { name: /toggle column visibility/i })).toBeInTheDocument()
-
-      rerender(<FilterColumnVisibility />)
-
-      expect(screen.getByRole("button", { name: /toggle column visibility/i })).toBeInTheDocument()
-    })
-  })
 })

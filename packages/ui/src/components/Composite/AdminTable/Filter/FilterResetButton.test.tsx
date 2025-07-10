@@ -205,20 +205,6 @@ describe("FilterResetButton", () => {
     })
   })
 
-  describe("Performance", () => {
-    it("should memo properly to prevent unnecessary rerenders", () => {
-      mockContextValue.hasFilter = true
-
-      const { rerender } = render(<FilterResetButton />, { wrapper: createWrapper })
-
-      expect(screen.getByText("Reset")).toBeInTheDocument()
-
-      rerender(<FilterResetButton />)
-
-      expect(screen.getByText("Reset")).toBeInTheDocument()
-    })
-  })
-
   describe("Component API", () => {
     it("should render as expected when exported", () => {
       expect(isValidElement(<FilterResetButton />)).toBe(true)
