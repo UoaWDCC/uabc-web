@@ -89,9 +89,6 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Backend
     runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: https://wdcc-uabc-backend-staging.fly.dev/
     steps:
       - uses: actions/checkout@v4
 
@@ -112,9 +109,6 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Frontend
     runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: https://wdcc-uabc-frontend-staging.fly.dev/
     steps:
       - uses: actions/checkout@v4
 
