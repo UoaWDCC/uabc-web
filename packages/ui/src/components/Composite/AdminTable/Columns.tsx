@@ -108,7 +108,7 @@ const ActionsCell = memo(() => {
     console.log("Action")
   }
 
-  const handleOnEdit = (e: React.MouseEvent<HTMLElement>) => {
+  const handleOnEdit = (_e: React.MouseEvent<HTMLElement>) => {
     // e.stopPropagation()
     console.log("Edit")
   }
