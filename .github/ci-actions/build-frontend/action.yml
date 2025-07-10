@@ -4,10 +4,10 @@ description: "This workflow checks if the frontend builds are working correctly.
 inputs:
   NEXT_PUBLIC_URL:
     description: "The public URL for the workspace."
-    required: false
+    required: true
   NEXT_PUBLIC_API_URL:
     description: "The public API URL for the workspace."
-    required: false
+    required: true
 
 runs:
   using: composite
