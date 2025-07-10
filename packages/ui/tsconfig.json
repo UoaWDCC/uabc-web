@@ -6,9 +6,10 @@
     "moduleResolution": "bundler",
     "paths": {
       "@storybook-config/*": ["./.storybook/*"],
-      "@repo/ui/*": ["./src/*"]
+      "@repo/ui/*": ["./src/*"],
+      "@repo/shared/*": ["../shared/src/*"]
     },
-    "rootDir": ".",
+    "rootDir": "../../packages",
     "types": ["vitest/globals"]
   },
   "exclude": ["node_modules", "dist"],
