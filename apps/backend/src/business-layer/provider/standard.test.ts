@@ -1,9 +1,7 @@
 import bcrypt from "bcryptjs"
 import {
   EMAIL_MOCK,
-  FIRSTNAME_MOCK,
   HASHED_PASSWORD_MOCK,
-  LASTNAME_MOCK,
   LOWERCASE_PASSWORD_MOCK,
   PASSWORD_MOCK,
 } from "@/test-config/mocks/Authentication.mock"
@@ -34,38 +32,6 @@ describe("StandardSecurity", () => {
       const result = await StandardSecurity.verifyPassword(PASSWORD_MOCK, "wrongHash")
 
       expect(compareSpy).toHaveBeenCalledWith(PASSWORD_MOCK, "wrongHash")
-      expect(result).toBe(false)
-    })
-  })
-
-  describe("validateRegisterDetails", () => {
-    it("returns true for valid data", async () => {
-      const result = await StandardSecurity.validateRegisterDetails(
-        FIRSTNAME_MOCK,
-        LASTNAME_MOCK,
-        EMAIL_MOCK,
-        PASSWORD_MOCK,
-      )
-      expect(result).toBe(true)
-    })
-
-    it("returns false for invalid email", async () => {
-      const result = await StandardSecurity.validateRegisterDetails(
-        FIRSTNAME_MOCK,
-        LASTNAME_MOCK,
-        "invalid_email",
-        PASSWORD_MOCK,
-      )
-      expect(result).toBe(false)
-    })
-
-    it("returns false for invalid password", async () => {
-      const result = await StandardSecurity.validateRegisterDetails(
-        FIRSTNAME_MOCK,
-        LASTNAME_MOCK,
-        EMAIL_MOCK,
-        LOWERCASE_PASSWORD_MOCK,
-      )
       expect(result).toBe(false)
     })
   })

@@ -24,8 +24,8 @@ export const POST = async (req: NextRequest) => {
         throw error
       }
     }
-    const user = await userDataService.createUser({ ...parsedBody, role: "casual" })
 
+    const user = await userDataService.createUser({ ...parsedBody, role: "casual" })
     const hash = await StandardSecurity.hashPassword(parsedBody.password)
     await authDataService.createAuth({
       email: parsedBody.email,

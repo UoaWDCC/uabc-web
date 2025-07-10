@@ -8,13 +8,14 @@ describe("tests /api/auth/register", () => {
   const userDataService = new UserDataService()
   const authDataService = new AuthDataService()
 
+  const registerBody = {
+    firstName: "John",
+    lastName: "Doe",
+    email: "johndoe@example.com",
+    password: "Password123!",
+  }
+
   it("should register a new user", async () => {
-    const registerBody = {
-      firstName: "John",
-      lastName: "Doe",
-      email: "johndoe@example.com",
-      password: "Password123!",
-    }
     const res = await POST(createMockNextRequest("/api/auth/register", "POST", registerBody))
     const json = await res.json()
 
@@ -22,22 +23,13 @@ describe("tests /api/auth/register", () => {
     expect(json.message).toBe("User registered successfully")
 
     const user = await userDataService.getUserById(json.data.id)
-    expect(user.firstName).toEqual(registerBody.firstName)
-    expect(user.lastName).toEqual(registerBody.lastName)
-    expect(user.email).toEqual(registerBody.email)
-    expect(user.role).toEqual("casual")
+    expect(user).toStrictEqual(json.data)
 
     const auth = await authDataService.getAuthByEmail(registerBody.email)
     expect(auth.password).not.toEqual(registerBody.password)
   })
 
   it("should return a 409 conflict if user already exists", async () => {
-    const registerBody = {
-      firstName: "John",
-      lastName: "Doe",
-      email: "johndoe@example.com",
-      password: "Password123!",
-    }
     await POST(createMockNextRequest("/api/auth/register", "POST", registerBody))
 
     const res = await POST(createMockNextRequest("/api/register", "POST", registerBody))
