@@ -47,10 +47,12 @@ export const MemberManagementTable: FC = memo(() => {
         }
       }
 
-      if (column.columnDef.header === "Actions") {
+      if (column.columnDef.id === "actions") {
         props.pl = "0"
         props.pr = "xs"
         props.py = "xs"
+        props.display = "flex"
+        props.justifyContent = "flex-end"
       }
 
       return props

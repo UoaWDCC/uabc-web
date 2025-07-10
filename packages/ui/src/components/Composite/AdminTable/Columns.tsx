@@ -18,7 +18,6 @@ NameCell.displayName = "NameCell"
 export const NAME_COLUMN: Column<User> = {
   accessorKey: "firstName",
   header: "Name",
-  css: { w: "200px" },
   cell: ({ row }) => {
     return <NameCell user={row.original} />
   },
@@ -35,7 +34,6 @@ EmailCell.displayName = "EmailCell"
 export const EMAIL_COLUMN: Column<User> = {
   accessorKey: "email",
   header: "Email",
-  css: { w: "350px" },
   cell: ({ getValue }) => {
     const value = getValue() as string
     return <EmailCell value={value} />
@@ -78,8 +76,8 @@ SessionsCell.displayName = "SessionsCell"
 
 export const REMAINING_SESSIONS_COLUMN: Column<User> = {
   accessorKey: "remainingSessions",
-  header: "Remaining Sessions",
-  css: { minW: "150px", textAlign: "center" },
+  header: "Remaining",
+  css: { w: "150px", textAlign: "center" },
   cell: ({ getValue }) => {
     const value = getValue() as number | null
     return <SessionsCell value={value} />
@@ -131,12 +129,13 @@ ActionsCell.displayName = "ActionsCell"
 
 export const ACTIONS_COLUMN: Column<User> = {
   id: "actions",
-  header: "Actions",
+  header: "",
   css: {
     textAlign: "center",
     maxW: "4",
     minW: "4",
     color: "transparent",
+    userSelect: "none",
     overflow: "clip",
     px: "0",
     py: "0",
