@@ -151,9 +151,6 @@ dist
 
 storybook-static
 
-# Zed code editor
-.zed
-
 node-compile-cache
 
 .vercel
