@@ -52,7 +52,7 @@
     },
     "storybook:build": {
       "cache": true,
-      "dependsOn": ["^storybook:build"],
+      "dependsOn": ["^storybook:build", "@repo/test-config#build", "@repo/shared#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "!**/*.stories.{tsx,jsx,mdx}"],
       "outputs": ["storybook-static/**"]
     },
