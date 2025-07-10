@@ -1,4 +1,4 @@
-import { LoginDetailsSchema, RegisterDetailsSchema } from "@repo/shared"
+import { LoginDetailsSchema } from "@repo/shared"
 import bcrypt from "bcryptjs"
 
 export default class StandardSecurity {
@@ -23,25 +23,6 @@ export default class StandardSecurity {
    */
   static async verifyPassword(password: string, hash: string): Promise<boolean> {
     return await bcrypt.compare(password, hash)
-  }
-
-  /**
-   * Validates registration data; enforces email to be an email address and enforces the proper
-   * password scheme.
-   *
-   * @static
-   * @param email The email of the user
-   * @param password The password of the user
-   * @returns True if the data is valid, false otherwise
-   */
-  static async validateRegisterDetails(email: string, password: string): Promise<boolean> {
-    const parse = await RegisterDetailsSchema.safeParseAsync({
-      email,
-      password,
-    })
-
-    if (parse.success) return true
-    return false
   }
 
   /**
