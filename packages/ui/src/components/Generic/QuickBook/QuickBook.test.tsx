@@ -8,7 +8,7 @@ import { locationAndTimeOptionsMock } from "./QuickBook.mock"
 import type { UIQuickBookFormValues } from "./schema"
 
 describe("<QuickBook />", () => {
-  it("should re-export the Select component and check if Select exists", () => {
+  it("should re-export the QuickBook component and check if QuickBook exists", () => {
     expect(QuickBookModule.QuickBook).toBeDefined()
     expect(isValidElement(<QuickBookModule.QuickBook locationAndTimeOptions={[]} />)).toBeTruthy()
   })
