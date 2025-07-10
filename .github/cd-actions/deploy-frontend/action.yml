@@ -57,6 +57,7 @@ runs:
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
+        NEXT_CONFIG_ENV: production
 
     - name: Publish to cloudflare
       uses: cloudflare/wrangler-action@v3
