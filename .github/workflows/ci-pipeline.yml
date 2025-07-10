@@ -139,7 +139,7 @@ jobs:
       - name: Build Storybook
         uses: ./.github/ci-actions/storybook-build/
         with:
-          workspace: ui
+          workspace: "@repo/ui"
 
   typecheck:
     needs: [check_changes, setup]
