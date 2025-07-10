@@ -76,7 +76,7 @@ SessionsCell.displayName = "SessionsCell"
 
 export const REMAINING_SESSIONS_COLUMN: Column<User> = {
   accessorKey: "remainingSessions",
-  header: "Remaining Sessions",
+  header: "Remaining",
   css: { w: "150px", textAlign: "center" },
   cell: ({ getValue }) => {
     const value = getValue() as number | null
@@ -102,14 +102,32 @@ export const UNIVERSITY_COLUMN: Column<User> = {
   },
 }
 
-const ActionsCell = memo(() => (
-  <Menu>
-    <MenuButton as={IconButton} icon={<EllipsisVerticalIcon />} size="sm" variant="ghost" />
-    <MenuList>
-      <MenuItem>Edit</MenuItem>
-    </MenuList>
-  </Menu>
-))
+const ActionsCell = memo(() => {
+  const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    console.log("Edit")
+  }
+
+  const handleOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    console.log("Edit")
+  }
+
+  return (
+    <Menu>
+      <MenuButton
+        as={IconButton}
+        icon={<EllipsisVerticalIcon />}
+        onClick={handleOnClick}
+        size="sm"
+        variant="ghost"
+      />
+      <MenuList>
+        <MenuItem onClick={handleOnEdit}>Edit</MenuItem>
+      </MenuList>
+    </Menu>
+  )
+})
 
 ActionsCell.displayName = "ActionsCell"
 
