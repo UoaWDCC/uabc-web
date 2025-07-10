@@ -21,16 +21,14 @@ runs:
       with:
         path: |
           node_modules
-          */node_modules
-          packages/*/node_modules
-          apps/*/node_modules
+          packages/ui/node_modules
         key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-node_modules-
 
     - name: Install dependencies if cache misses
       if: steps.cache-check.outputs.cache-hit != 'true'
-      run: NODE_ENV=production pnpm install --frozen-lockfile
+      run: NODE_ENV=production pnpm install --filter @repo/ui --frozen-lockfile
       shell: bash
 
     - name: Build Storybook for @repo/ui
