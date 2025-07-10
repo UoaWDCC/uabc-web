@@ -227,7 +227,7 @@ jobs:
     name: Vitest Coverage
     needs: [test]
     runs-on: ubuntu-latest
-    if: always() && needs.test.result != 'skipped'
+    if: always() && needs.test.result != 'skipped' && needs.test.result != 'cancelled'
     steps:
       - uses: actions/checkout@v4
         with:
