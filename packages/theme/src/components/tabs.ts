@@ -61,6 +61,28 @@ export const Tabs: ComponentMultiStyle<"Tabs"> = {
         },
       }
     },
+    lineSubtle: ({ colorScheme: c = "primary" }) => {
+      return {
+        tab: {
+          borderColor: "transparent",
+          _horizontal: {
+            borderBottomStyle: "solid",
+            borderBottomWidth: "1px",
+            mb: "-1px",
+          },
+          _ripple: { display: "none" },
+          _selected: {
+            borderColor: "currentColor",
+            color: isGray(c) ? ["blackAlpha.800", "whiteAlpha.700"] : [`${c}.600`, `${c}.500`],
+          },
+          _vertical: {
+            borderEndStyle: "solid",
+            borderEndWidth: "1px",
+            me: "-1px",
+          },
+        },
+      }
+    },
     rounded: ({ colorScheme: c = "primary" }) => ({
       tab: {
         borderRadius: "full",
@@ -225,3 +247,5 @@ export const Tabs: ComponentMultiStyle<"Tabs"> = {
     variant: "line",
   },
 }
+
+export const TABS_VARIANTS = Object.keys(Tabs.variants || {})

@@ -10,7 +10,7 @@ export const Menu: ComponentMultiStyle<"Menu"> = {
       opacity: 0.6,
     },
     content: {
-      bg: ["white", "black"],
+      bgGradient: ["secondaryGradient", "secondaryGradient"],
       border: "1px solid",
       borderColor: ["blackAlpha.200", "whiteAlpha.100"],
       boxShadow: ["lg", "dark-lg"],
