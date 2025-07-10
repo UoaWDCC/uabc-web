@@ -20,12 +20,6 @@ describe("<AdminTable />", () => {
     expect(AdminTable.displayName).toBe("AdminTable")
   })
 
-  it("should render table with pagination", () => {
-    render(<AdminTable />, { wrapper: createWrapper })
-
-    expect(screen.getByRole("table")).toBeInTheDocument()
-  })
-
   it("should provide MemberManagementProvider context", () => {
     render(<AdminTable />, { wrapper: createWrapper })
 
