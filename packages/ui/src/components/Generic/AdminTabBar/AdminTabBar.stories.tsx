@@ -31,7 +31,7 @@ export const WithTabPanels: Story = ({ ...args }) => {
 export const Variant: Story = ({ ...args }) => {
   return (
     <PropsTable columns={[""]} rows={TABS_VARIANTS}>
-      {(column, row, key) => {
+      {(_column, row, key) => {
         return <AdminTabBar key={key} variant={row} {...args} />
       }}
     </PropsTable>
