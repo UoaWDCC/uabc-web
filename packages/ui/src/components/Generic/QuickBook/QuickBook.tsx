@@ -115,7 +115,7 @@ export const QuickBook = memo(
               stylised
             />
           </GridItem>
-          <GridItem placeSelf="center" w="full">
+          <GridItem w="full">
             <Button
               colorScheme="primary"
               loading={isSubmitting}
