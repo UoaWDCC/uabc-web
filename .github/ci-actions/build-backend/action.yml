@@ -2,12 +2,24 @@ name: "Build Backend"
 description: "This workflow checks if the backend builds are working correctly."
 
 inputs:
+  PAYLOAD_SECRET:
+    description: "The payload secret for the workspace."
+    required: true
+  DATABASE_URI:
+    description: "The database URI for the workspace."
+    required: true
   NEXT_PUBLIC_URL:
     description: "The public URL for the workspace."
-    required: false
-  NEXT_PUBLIC_API_URL:
-    description: "The public API URL for the workspace."
-    required: false
+    required: true
+  GOOGLE_CLIENT_ID:
+    description: "The Google OAuth client ID."
+    required: true
+  GOOGLE_CLIENT_SECRET:
+    description: "The Google OAuth client secret."
+    required: true
+  JWT_SECRET:
+    description: "The JWT signing secret."
+    required: true
 
 runs:
   using: composite
