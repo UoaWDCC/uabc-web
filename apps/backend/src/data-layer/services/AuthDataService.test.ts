@@ -1,9 +1,9 @@
+import { casualUserMock } from "@repo/shared/test-config/mocks"
 import { payload } from "@/data-layer/adapters/Payload"
 import {
   googleAuthCreateMock,
   standardAuthCreateMock,
 } from "@/test-config/mocks/Authentication.mock"
-import { casualUserMock } from "@/test-config/mocks/User.mock"
 import "dotenv/config"
 import AuthDataService from "./AuthDataService"
 
