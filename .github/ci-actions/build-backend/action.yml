@@ -64,6 +64,7 @@ runs:
     - name: Build backend
       shell: bash
       env:
+        NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         PAYLOAD_SECRET: ${{ inputs.PAYLOAD_SECRET }}
         DATABASE_URI: ${{ inputs.DATABASE_URI }}
         GOOGLE_CLIENT_ID: ${{ inputs.GOOGLE_CLIENT_ID }}
