@@ -121,6 +121,7 @@ export interface SelectProps extends UISelectProps {
 export const Select: FC<SelectProps> = memo(
   ({
     children,
+    disabled,
     label = "Select option",
     icon,
     stylised = false,
@@ -193,12 +194,13 @@ export const Select: FC<SelectProps> = memo(
         </UISelect>
         <HStack
           align="center"
+          bottom={isError && errorMessage ? "25%" : undefined}
           gap={{ base: "xs", md: "sm" }}
           mx="calc(md - xs)"
           pl={{ md: "md" }}
           pointerEvents="none"
           position="absolute"
-          top="50%"
+          top={isError && errorMessage ? undefined : "50%"}
           transform="translateY(-50%)"
           z={1}
         >
