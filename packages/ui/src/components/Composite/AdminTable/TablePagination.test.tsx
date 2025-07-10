@@ -51,7 +51,7 @@ describe("<TablePagination />", () => {
 
     await user.click(select)
     expect(screen.getByText("10")).toBeInTheDocument()
-    expect(screen.getByText("20")).toBeInTheDocument()
+    expect(screen.getAllByText("20")).toHaveLength(2)
     expect(screen.getByText("50")).toBeInTheDocument()
     expect(screen.getByText("100")).toBeInTheDocument()
   })
