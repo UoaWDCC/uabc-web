@@ -1,40 +1,71 @@
-import "@testing-library/jest-dom"
 import { render, screen } from "@repo/ui/test-utils"
+import { forwardRef } from "react"
+import { useForm } from "react-hook-form"
 import { BookingTimesCardGroup } from "./BookingTimesCardGroup"
 
-describe("<BookingTimesCardGroup />", () => {
-  const items = [
-    {
-      label: "Tuesday, 12th May",
-      value: "booking-123",
-      addon: "UoA Hiwa Center",
-      description: "7:30 - 10pm",
-      "data-testid": "test-id-1",
-    },
-    {
-      label: "Wednesday, 13th May",
-      value: "booking-456",
-      addon: "UoA Hiwa Center",
-      description: "2:00 - 4:30pm",
-      disabled: true,
-      "data-testid": "test-id-2",
-    },
-  ]
+const bookingTimesItems = [
+  {
+    label: "Tuesday, 12th May",
+    value: "booking-123",
+    addon: "UoA Hiwa Center",
+    description: "7:30 - 10pm",
+  },
+  {
+    label: "Wednesday, 13th May",
+    value: "booking-456",
+    addon: "Cool Center",
+    description: "2:00 - 4:30pm",
+    disabled: true,
+  },
+]
 
+function renderWithForm(props: Partial<React.ComponentProps<typeof BookingTimesCardGroup>> = {}) {
+  // Wrap in a component to provide react-hook-form context
+  const Wrapper = forwardRef<HTMLDivElement>((_, ref) => {
+    const { control, handleSubmit, formState } = useForm({
+      defaultValues: {
+        bookingTimes: [],
+      },
+      mode: "onChange",
+    })
+
+    return (
+      <form onSubmit={handleSubmit(() => {})}>
+        <BookingTimesCardGroup
+          control={control}
+          errorMessage={formState.errors.bookingTimes?.message}
+          isError={!!formState.errors.bookingTimes}
+          items={bookingTimesItems}
+          name="bookingTimes"
+          ref={ref}
+          {...props}
+        />
+        <button type="submit">Submit</button>
+      </form>
+    )
+  })
+  return render(<Wrapper />)
+}
+
+describe("<BookingTimesCardGroup />", () => {
   it("should have correct displayName", () => {
     expect(BookingTimesCardGroup.displayName).toBe("BookingTimesCardGroup")
   })
 
-  it("renders a FormControl and CheckboxCardGroup", () => {
-    render(<BookingTimesCardGroup items={items} name="bookingTimes" />)
-    expect(screen.getByRole("group")).toBeInTheDocument()
-    expect(screen.getByTestId("test-id-1")).toBeInTheDocument()
-    expect(screen.getByTestId("test-id-2")).toBeInTheDocument()
+  it("renders all booking time cards", () => {
+    renderWithForm()
+    expect(screen.getByText("Tuesday, 12th May")).toBeInTheDocument()
+    expect(screen.getByText("Wednesday, 13th May")).toBeInTheDocument()
+    expect(screen.getByText("UoA Hiwa Center")).toBeInTheDocument()
+    expect(screen.getByText("Cool Center")).toBeInTheDocument()
+    expect(screen.getByText("7:30 - 10pm")).toBeInTheDocument()
+    expect(screen.getByText("2:00 - 4:30pm")).toBeInTheDocument()
   })
 
-  it("renders nothing if items is empty", () => {
-    render(<BookingTimesCardGroup items={[]} name="bookingTimes" />)
-    expect(screen.getByRole("group")).toBeInTheDocument()
-    expect(screen.queryAllByRole("checkbox").length).toBe(0)
+  it("renders disabled state for disabled items", () => {
+    renderWithForm()
+
+    const disabledCard = screen.getByText("Wednesday, 13th May").closest("label")
+    expect(disabledCard).toHaveAttribute("aria-disabled", "true")
   })
 })
