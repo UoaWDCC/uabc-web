@@ -21,9 +21,9 @@ export const Default: Story = ({ ...args }) => {
 export const WithTabPanels: Story = ({ ...args }) => {
   return (
     <AdminTabBar {...args} tabPanelsProps={{ bgColor: "secondary" }}>
+      <TabPanel>Panel 0</TabPanel>
       <TabPanel>Panel 1</TabPanel>
       <TabPanel>Panel 2</TabPanel>
-      <TabPanel>Panel 3</TabPanel>
     </AdminTabBar>
   )
 }

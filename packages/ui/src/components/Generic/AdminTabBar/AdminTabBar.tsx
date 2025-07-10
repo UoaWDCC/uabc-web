@@ -7,19 +7,19 @@ import { memo, Tab, TabList, TabPanel, TabPanels, Tabs, type TabsProps } from "@
  */
 export interface AdminTabBarProps extends TabsProps {
   /**
-   * Label for tab 1 (left side)
+   * Label for the first tab (left side)
+   */
+  tabLabel0?: string
+
+  /**
+   * Label for the second tab (middle)
    */
   tabLabel1?: string
 
   /**
-   * Label for tab 2 (middle)
+   * Label for the third tab (right side)
    */
   tabLabel2?: string
-
-  /**
-   * Label for tab 3 (right side)
-   */
-  tabLabel3?: string
 }
 
 /**
@@ -41,9 +41,9 @@ export interface AdminTabBarProps extends TabsProps {
 export const AdminTabBar = memo(
   ({
     children,
-    tabLabel1 = "View Members",
-    tabLabel2 = "Edit/View Sessions",
-    tabLabel3 = "Create Semesters & Sessions",
+    tabLabel0 = "View Members",
+    tabLabel1 = "Edit/View Sessions",
+    tabLabel2 = "Create Semesters & Sessions",
     tabListProps,
     tabPanelsProps,
     ...props
@@ -51,9 +51,9 @@ export const AdminTabBar = memo(
     return (
       <Tabs {...props}>
         <TabList {...tabListProps}>
+          <Tab>{tabLabel0}</Tab>
           <Tab>{tabLabel1}</Tab>
           <Tab>{tabLabel2}</Tab>
-          <Tab>{tabLabel3}</Tab>
         </TabList>
 
         <TabPanels {...tabPanelsProps}>{children}</TabPanels>
