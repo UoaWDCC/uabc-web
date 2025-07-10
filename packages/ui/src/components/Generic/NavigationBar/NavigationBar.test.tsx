@@ -216,7 +216,7 @@ describe("<NavigationBarUserMenu />", () => {
     ).toBeTruthy()
   })
 
-  it("should render the NavigationBarUserMenu with correct menu items", async () => {
+  it("should render the NavigationBarUserMenu with correct menu items for non-admin", async () => {
     const { user } = render(
       <NavigationBarModule.NavigationBarUserMenu {...NAVIGATION_BAR_USER_MENU_TEST_CONSTANTS} />,
     )
@@ -229,6 +229,36 @@ describe("<NavigationBarUserMenu />", () => {
 
     const mockName = NAVIGATION_BAR_USER_MENU_TEST_CONSTANTS.avatarProps.name
     expect(screen.getByText(mockName)).toBeInTheDocument()
+
+    const profileLink = screen.getByTestId("navbar-user-menu-profile-link")
+    expect(profileLink).toBeInTheDocument()
+    expect(profileLink).toHaveAttribute("href", "/profile")
+
+    const signOutLink = screen.getByTestId("navbar-user-menu-signout-link")
+    expect(signOutLink).toBeInTheDocument()
+    expect(signOutLink).toHaveAttribute("href", "/signout")
+  })
+
+  it("should render the NavigationBarUserMenu with correct menu items for admin", async () => {
+    const { user } = render(
+      <NavigationBarModule.NavigationBarUserMenu
+        admin
+        {...NAVIGATION_BAR_USER_MENU_TEST_CONSTANTS}
+      />,
+    )
+
+    const userMenu = screen.getByTestId("navbar-user-menu-avatar")
+    expect(userMenu).toBeInTheDocument()
+
+    const menuTrigger = screen.getByRole("button")
+    await user.click(menuTrigger)
+
+    const mockName = NAVIGATION_BAR_USER_MENU_TEST_CONSTANTS.avatarProps.name
+    expect(screen.getByText(mockName)).toBeInTheDocument()
+
+    const adminLink = screen.getByTestId("navbar-user-menu-admin-link")
+    expect(adminLink).toBeInTheDocument()
+    expect(adminLink).toHaveAttribute("href", "/admin")
 
     const profileLink = screen.getByTestId("navbar-user-menu-profile-link")
     expect(profileLink).toBeInTheDocument()
