@@ -27,7 +27,7 @@ runs:
           ${{ runner.os }}-node_modules-
 
     - name: Install dependencies if cache misses
-      if: steps.cache-check.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true'
       run: NODE_ENV=production pnpm install --filter @repo/ui --frozen-lockfile
       shell: bash
 
