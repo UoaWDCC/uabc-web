@@ -36,3 +36,9 @@ runs:
     - name: Build Storybook for @repo/ui
       shell: bash
       run: pnpm turbo run storybook:build --filter @repo/ui
+
+    - name: Upload Storybook
+      uses: actions/upload-artifact@v4
+      with:
+        name: storybook-pr-${{ github.event.pull_request.number }}
+        path: packages/ui/storybook-static
