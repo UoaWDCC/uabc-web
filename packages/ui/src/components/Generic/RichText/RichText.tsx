@@ -9,15 +9,15 @@ import type { RichTextProps, RichTextRendererOptions } from "./lib/types"
  * as styled React components using Yamada UI. It supports text formatting, headings,
  * paragraphs, links, images, lists, quotes, code blocks, and more.
  *
- * @param data - The rich text data from Payload CMS (Lexical editor state)
- * @param fallback - Content to display when data is null/undefined or empty (default: null)
- * @param textProps - Props to pass to Text components for styling paragraphs and text
- * @param headingProps - Props to pass to Heading components for styling headings
- * @param linkProps - Props to pass to Link components for styling links
- * @param imageProps - Props to pass to Image components for styling images
- * @param codeProps - Props to pass to Code components for styling inline code and code blocks
- * @param mediaBaseUrl - Base URL for resolving relative media URLs (e.g., "https://api.example.com")
- * @param customComponents - Custom React components to override default renderers for specific node types
+ * @param data The rich text data from Payload CMS (Lexical editor state)
+ * @param fallback Content to display when data is null/undefined or empty (default: null)
+ * @param textProps Props to pass to Text components for styling paragraphs and text
+ * @param headingProps Props to pass to Heading components for styling headings
+ * @param linkProps Props to pass to Link components for styling links
+ * @param imageProps Props to pass to Image components for styling images
+ * @param codeProps Props to pass to Code components for styling inline code and code blocks
+ * @param mediaBaseUrl Base URL for resolving relative media URLs (e.g., "https://api.example.com")
+ * @param customComponents Custom React components to override default renderers for specific node types
  *
  * @returns The rendered rich text content as React elements, or fallback if no content
  *
