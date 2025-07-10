@@ -35,7 +35,7 @@ export const colors: ThemeTokens = {
     200: "#AA93E1",
     300: "#8B6BD6",
     400: "#693FCF",
-    500: "#512DA4",
+    500: "#512DA4", // Tertiary
     600: "#432588",
     700: "#351E6C",
     800: "#25154C",

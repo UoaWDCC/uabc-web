@@ -1,5 +1,7 @@
 export * from "./AboutUsCard/AboutUsCard"
+export * from "./AdminTabBar"
 export * from "./FAQ"
 export * from "./Footer"
 export * from "./LocationBubble"
+export * from "./NavigationBar"
 export * from "./QuickBook"
