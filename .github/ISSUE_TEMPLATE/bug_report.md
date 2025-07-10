@@ -4,7 +4,6 @@ about: Unexpecting or breaking behavior
 title: "[BUG]"
 labels: bug
 assignees: ''
-
 ---
 
 **Describe the bug**

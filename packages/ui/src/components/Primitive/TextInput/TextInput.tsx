@@ -6,6 +6,7 @@ import {
   type FormControlProps,
   IconButton,
   Input,
+  type InputElementProps,
   InputGroup,
   InputLeftElement,
   InputRightElement,
@@ -57,7 +58,6 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
    * The label is rendered above the input field.
    */
   label?: string
-
   /**
    * The type of the input field.
    *
@@ -67,23 +67,23 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types HTML Input Types}
    */
   type?: InputType
-
   /**
    * The autocomplete attribute for the input field.
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete}
    */
   autoComplete?: AutoCompleteType
-
   /**
    * The icon to display on the left side of the input field.
    */
   startIcon?: React.ReactNode
-
   /**
    * The icon to display on the right side of the input field.
    */
   endIcon?: React.ReactNode
-
+  /**
+   * Additional props for the end icon.
+   */
+  rightElementProps?: InputElementProps
   /**
    * Indicates whether the input field is in an error state.
    *
@@ -94,7 +94,6 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
    * @defaultValue `false`
    */
   isError?: boolean
-
   /**
    * The error message displayed when the input is in an error state.
    *
@@ -103,7 +102,6 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
    * Typically used with React Hook Form error messages.
    */
   errorMessage?: string
-
   /**
    * Additional props for the FormControl wrapper.
    *
@@ -111,7 +109,6 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
    * Allows customization of the FormControl container.
    */
   formControlProps?: FormControlProps
-
   /**
    * React Hook Form registration object.
    *
@@ -148,6 +145,7 @@ export const TextInput = memo(
         formControlProps,
         registration,
         autoComplete,
+        rightElementProps,
         ...props
       }: TextInputProps,
       ref,
@@ -210,9 +208,9 @@ export const TextInput = memo(
             />
 
             {endIcon ? (
-              <InputRightElement>{endIcon}</InputRightElement>
+              <InputRightElement {...rightElementProps}>{endIcon}</InputRightElement>
             ) : isPasswordType ? (
-              <InputRightElement clickable>
+              <InputRightElement clickable {...rightElementProps}>
                 <IconButton
                   _hover={{
                     color: ["gray.700", "gray.200"],

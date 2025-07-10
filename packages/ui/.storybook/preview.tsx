@@ -10,6 +10,7 @@ import { themes } from "storybook/theming"
 import { DARK_MODE_EVENT_NAME } from "storybook-dark-mode"
 import { customThemes } from "./themes"
 import "./styles.css"
+import { NuqsProvider, QueryProvider } from "@repo/ui/components/Provider"
 
 const channel = addons.getChannel()
 
@@ -88,17 +89,24 @@ const preview: Preview = {
         order: ["Theme", "Components"],
       },
     },
+    nextjs: {
+      appDirectory: true,
+    },
     codePanel: true,
   },
 
   decorators: [
     (Story, { viewMode }) => {
       return (
-        <UIProvider config={config} theme={theme}>
-          <App isDocs={viewMode === "docs"}>
-            <Story />
-          </App>
-        </UIProvider>
+        <QueryProvider>
+          <NuqsProvider>
+            <UIProvider config={config} theme={theme}>
+              <App isDocs={viewMode === "docs"}>
+                <Story />
+              </App>
+            </UIProvider>
+          </NuqsProvider>
+        </QueryProvider>
       )
     },
   ],
