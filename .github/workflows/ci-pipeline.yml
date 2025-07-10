@@ -36,6 +36,7 @@ jobs:
               !.gitignore
               !.gitattributes
               !.vscode/**
+              !.zed/**
               !.env.example
 
   setup:
