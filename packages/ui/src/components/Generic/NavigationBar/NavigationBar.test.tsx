@@ -17,10 +17,145 @@ import {
 import { render, screen, waitFor, waitForElementToBeRemoved } from "@repo/ui/test-utils"
 import { usePathname } from "next/navigation"
 import { isValidElement } from "react"
+import { NavigationBar } from "./NavigationBar"
 import { NavigationBarButton } from "./NavigationBarButton"
 import { NavigationBarDesktop } from "./NavigationBarDesktop"
+import { NavigationBarMobile } from "./NavigationBarMobile"
 
 const mockUsePathname = vi.mocked(usePathname)
+
+describe("<NavigationBar />", () => {
+  it("should re-export the NavigationBar component and check if it exists", () => {
+    expect(NavigationBarModule.NavigationBar).toBeDefined()
+    expect(isValidElement(<NavigationBarModule.NavigationBar navItems={[]} />)).toBeTruthy()
+  })
+
+  it("should render the NavigationBar with correct props", () => {
+    render(<NavigationBar {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+    expect(screen.getAllByText("Book")).toHaveLength(2)
+    expect(screen.getAllByText("Events")).toHaveLength(2)
+    expect(screen.getAllByText("About")).toHaveLength(2)
+    expect(screen.getAllByText("Contact")).toHaveLength(2)
+    expect(screen.getAllByText("FAQ")).toHaveLength(2)
+  })
+})
+
+describe("<NavigationBarMobile />", () => {
+  beforeEach(() => {
+    mockUsePathname.mockReturnValue("/book")
+  })
+
+  afterEach(() => {
+    mockUsePathname.mockReset()
+  })
+
+  it("should re-export the NavigationBarMobile component and check if it exists", () => {
+    expect(NavigationBarModule.NavigationBarMobile).toBeDefined()
+    expect(isValidElement(<NavigationBarModule.NavigationBarMobile navItems={[]} />)).toBeTruthy()
+  })
+
+  it("should render NavigationBarMobile with links hidden", () => {
+    render(<NavigationBarMobile {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+    expect(screen.getByText("Book")).not.toBeVisible()
+    expect(screen.getByText("Events")).not.toBeVisible()
+    expect(screen.getByText("About")).not.toBeVisible()
+    expect(screen.getByText("Contact")).not.toBeVisible()
+    expect(screen.getByText("FAQ")).not.toBeVisible()
+  })
+
+  it("should render NavigationBarMobile with links visible when menu is open", async () => {
+    const { user } = render(<NavigationBarMobile {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+
+    const menuButton = screen.getByRole("button")
+    expect(menuButton).toBeInTheDocument()
+    await user.click(menuButton)
+
+    expect(screen.getByText("Book")).toBeInTheDocument()
+    expect(screen.getByText("Events")).toBeInTheDocument()
+    expect(screen.getByText("About")).toBeInTheDocument()
+    expect(screen.getByText("Contact")).toBeInTheDocument()
+    expect(screen.getByText("FAQ")).toBeInTheDocument()
+  })
+
+  it("should render a sign in button when user is not signed in", () => {
+    render(<NavigationBarMobile {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />)
+    const signInButton = screen.getByText("Sign In")
+    expect(signInButton).toBeInTheDocument()
+    expect(signInButton).toHaveAttribute("href", "/login")
+  })
+
+  it("should render a profile link and sign out button when user is signed in as a casual", async () => {
+    const { user } = render(<NavigationBarMobile {...NAVIGATION_BAR_CASUAL_TEST_CONSTANTS} />)
+
+    const menuButton = screen.getByRole("button")
+    expect(menuButton).toBeInTheDocument()
+    await user.click(menuButton)
+
+    const profileLink = screen.getByText("Profile")
+    expect(profileLink).toBeInTheDocument()
+    expect(profileLink).toHaveAttribute("href", "/profile")
+
+    const signOutLink = screen.getByText("Sign Out")
+    expect(signOutLink).toBeInTheDocument()
+    expect(signOutLink).toHaveAttribute("href", "/signout")
+
+    const adminLink = screen.queryByText("Admin")
+    expect(adminLink).not.toBeInTheDocument()
+  })
+
+  it("should render a profile link and sign out button when user is signed as a member", async () => {
+    const { user } = render(<NavigationBarMobile {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+
+    const menuButton = screen.getByRole("button")
+    expect(menuButton).toBeInTheDocument()
+    await user.click(menuButton)
+
+    const profileLink = screen.getByText("Profile")
+    expect(profileLink).toBeInTheDocument()
+    expect(profileLink).toHaveAttribute("href", "/profile")
+
+    const signOutLink = screen.getByText("Sign Out")
+    expect(signOutLink).toBeInTheDocument()
+    expect(signOutLink).toHaveAttribute("href", "/signout")
+
+    const adminLink = screen.queryByText("Admin")
+    expect(adminLink).not.toBeInTheDocument()
+  })
+
+  it("should render admin link in user menu when admin signed in", async () => {
+    const { user } = render(<NavigationBarMobile {...NAVIGATION_BAR_ADMIN_TEST_CONSTANTS} />)
+
+    const menuButton = screen.getByRole("button")
+    expect(menuButton).toBeInTheDocument()
+    await user.click(menuButton)
+
+    const profileLink = screen.getByText("Profile")
+    expect(profileLink).toBeInTheDocument()
+    expect(profileLink).toHaveAttribute("href", "/profile")
+
+    const signOutLink = screen.getByText("Sign Out")
+    expect(signOutLink).toBeInTheDocument()
+    expect(signOutLink).toHaveAttribute("href", "/signout")
+
+    const adminLink = screen.queryByText("Admin")
+    expect(adminLink).toBeInTheDocument()
+    expect(adminLink).toHaveAttribute("href", "/admin")
+  })
+
+  it("should render a backdrop when menu is open", async () => {
+    const { user } = render(<NavigationBarMobile {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+
+    const backdrop = screen.getByTestId("navbar-mobile-backdrop")
+    expect(backdrop).not.toBeVisible()
+
+    const menuButton = screen.getByRole("button")
+    expect(menuButton).toBeInTheDocument()
+    await user.click(menuButton)
+
+    expect(backdrop).toBeInTheDocument()
+    expect(backdrop).toBeVisible()
+  })
+})
 
 describe("<NavigationBarDesktop />", () => {
   beforeEach(() => {
