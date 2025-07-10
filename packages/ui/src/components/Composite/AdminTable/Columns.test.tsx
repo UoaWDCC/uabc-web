@@ -157,7 +157,7 @@ describe("AdminTable Columns", () => {
     it("should have correct column configuration", () => {
       // biome-ignore lint/suspicious/noExplicitAny: this is for a test
       expect((REMAINING_SESSIONS_COLUMN as any).accessorKey).toBe("remainingSessions")
-      expect(REMAINING_SESSIONS_COLUMN.header).toBe("Remaining Sessions")
+      expect(REMAINING_SESSIONS_COLUMN.header).toBe("Remaining")
     })
 
     it("should render remaining sessions number", () => {
