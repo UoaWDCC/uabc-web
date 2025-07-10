@@ -20,7 +20,6 @@ export interface BookingTimesCardGroupProps extends Omit<CheckboxCardGroupProps,
    * An array of {@link CheckboxCardProps} objects representing the booking times.
    */
   items: CheckboxCardProps[]
-
   /**
    * Indicates whether the input field is in an error state.
    *
@@ -31,7 +30,6 @@ export interface BookingTimesCardGroupProps extends Omit<CheckboxCardGroupProps,
    * @defaultValue `false`
    */
   isError?: boolean
-
   /**
    * The error message displayed when the input is in an error state.
    *
@@ -48,22 +46,28 @@ export interface BookingTimesCardGroupProps extends Omit<CheckboxCardGroupProps,
    */
   formControlProps?: FormControlProps
   /**
-   * Field name for Controller integration.
+   * Field name for React Hook Form Controller integration.
+   *
+   * @remarks
+   * This is the name of the field in the form data.
    */
   name: string
   /**
    * React Hook Form control object for Controller integration.
+   *
+   * @remarks
+   * This should be the `control` object returned by `useForm`.
    */
-  // biome-ignore lint/suspicious/noExplicitAny: It could be anything
-  control?: Control<any>
+  // biome-ignore lint/suspicious/noExplicitAny: It could be any control
+  control: Control<any>
 }
 
 /**
- * BookingTimesCardGroup is a component that displays a group of BookingTimesCard components.
- * It wraps multiple booking time options in a checkbox card group for selection with built-in React Hook Form support.
+ * `BookingTimesCardGroup` displays a group of booking time options as selectable cards,
+ * with built-in support for React Hook Form validation and error display.
  *
  * @example
- * // Basic usage
+ * // With React Hook Form
  * <BookingTimesCardGroup
  *   items={[
  *     {
@@ -80,13 +84,8 @@ export interface BookingTimesCardGroupProps extends Omit<CheckboxCardGroupProps,
  *       disabled: true
  *     }
  *   ]}
- * />
- *
- * @example
- * // With React Hook Form
- * <BookingTimesCardGroup
- *   items={bookingTimesData}
- *   {...register("bookingTimes")}
+ *   name="bookingTimes"
+ *   control={control}
  *   isError={!!errors.bookingTimes}
  *   errorMessage={errors.bookingTimes?.message}
  * />
