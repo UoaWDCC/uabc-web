@@ -1,15 +1,15 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
-import { StatusCodes } from "http-status-codes"
-import { cookies } from "next/headers"
-import type { NextRequest } from "next/server"
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import UserDataService from "@/data-layer/services/UserDataService"
 import {
   ADMIN_USER_UID,
   CASUAL_USER_UID,
   MEMBER_USER_UID,
   userCreateMock,
-} from "@/test-config/mocks/User.mock"
+} from "@repo/shared/mocks"
+import { StatusCodes } from "http-status-codes"
+import { cookies } from "next/headers"
+import type { NextRequest } from "next/server"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import UserDataService from "@/data-layer/services/UserDataService"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { GET } from "./route"
 

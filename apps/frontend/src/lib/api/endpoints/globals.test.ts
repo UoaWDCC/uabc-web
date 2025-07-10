@@ -1,5 +1,5 @@
+import { GetFaqResponseSchema } from "@repo/shared"
 import type { Faq } from "@repo/shared/payload-types"
-import { GetFaqResponseSchema } from "@repo/shared/schemas"
 import { createSimpleSharedFAQItem } from "@repo/ui/test-config/mocks/FAQ.mock"
 import { describe, expect, it, vi } from "vitest"
 import { getFaq } from "./globals"

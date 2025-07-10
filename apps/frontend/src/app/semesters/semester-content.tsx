@@ -1,6 +1,6 @@
 "use client"
 
-import { GetSemesterResponseSchema } from "@repo/shared/schemas"
+import { GetSemesterResponseSchema } from "@repo/shared"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { DataList, EmptyState, VStack } from "@yamada-ui/react"
 import { useQueryState } from "nuqs"
