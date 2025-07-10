@@ -27,6 +27,19 @@ class ApiClient {
   }
 
   /**
+   * Properly joins the base URL with a path, ensuring no double slashes or missing slashes.
+   *
+   * @param path The path to join with the base URL.
+   * @returns The properly formatted URL.
+   * @private
+   */
+  private joinUrl(path: string): string {
+    const normalizedBaseUrl = this.baseUrl.replace(/\/+$/, "")
+    const normalizedPath = path.replace(/^\/+/, "")
+    return `${normalizedBaseUrl}/${normalizedPath}`
+  }
+
+  /**
    * Performs a GET request to the specified path and validates the response using the provided zod schema.
    *
    * @param path The API endpoint path (relative to baseUrl).
@@ -42,7 +55,7 @@ class ApiClient {
     revalidate?: number | false,
   ): Promise<{ data?: T; error?: Error; isError: boolean }> {
     try {
-      const response = await fetch(`${this.baseUrl}${path}`, {
+      const response = await fetch(this.joinUrl(path), {
         next: {
           tags,
           ...(revalidate !== undefined ? { revalidate } : {}),
@@ -78,7 +91,7 @@ class ApiClient {
     revalidate?: number | false,
   ): Promise<{ data?: T; error?: Error; isError: boolean }> {
     try {
-      const response = await fetch(`${this.baseUrl}${path}`, {
+      const response = await fetch(this.joinUrl(path), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -115,7 +128,7 @@ class ApiClient {
     revalidate?: number | false,
   ): Promise<{ data?: T; error?: Error; isError: boolean }> {
     try {
-      const response = await fetch(`${this.baseUrl}${path}`, {
+      const response = await fetch(this.joinUrl(path), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -152,7 +165,7 @@ class ApiClient {
     revalidate?: number | false,
   ): Promise<{ data?: T; error?: Error; isError: boolean }> {
     try {
-      const response = await fetch(`${this.baseUrl}${path}`, {
+      const response = await fetch(this.joinUrl(path), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -187,7 +200,7 @@ class ApiClient {
     revalidate?: number | false,
   ): Promise<{ data?: T; error?: Error; isError: boolean }> {
     try {
-      const response = await fetch(`${this.baseUrl}${path}`, {
+      const response = await fetch(this.joinUrl(path), {
         method: "DELETE",
         next: {
           tags,
