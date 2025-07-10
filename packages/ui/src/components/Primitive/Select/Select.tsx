@@ -179,7 +179,10 @@ export const Select: FC<SelectProps> = memo(
             },
           }}
           bgGradient={stylised ? "heroGradient" : "transparent"}
-          fieldProps={{ pl: { base: "calc(lg + xs + md)", md: "calc(lg - sm - xs + xl)" } }}
+          fieldProps={{
+            pl: { base: "calc(lg + xs + md)", md: "calc(lg - sm - xs + xl)" },
+            pr: { base: "lg", md: "xl" },
+          }}
           iconProps={{
             pr: { md: "lg" },
           }}
@@ -190,14 +193,15 @@ export const Select: FC<SelectProps> = memo(
         </UISelect>
         <HStack
           align="center"
+          bottom={isError && errorMessage ? "25%" : undefined}
           gap={{ base: "xs", md: "sm" }}
           mx="calc(md - xs)"
           pl={{ md: "md" }}
           pointerEvents="none"
           position="absolute"
-          top="50%"
+          top={isError && errorMessage ? undefined : "50%"}
           transform="translateY(-50%)"
-          z={100}
+          z={1}
         >
           <Center
             borderColor={stylised ? "gray.600" : "transparent"}
