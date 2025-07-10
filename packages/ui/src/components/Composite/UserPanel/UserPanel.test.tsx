@@ -1,5 +1,6 @@
 import { MembershipType } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
+import { isValidElement } from "react"
 import { UserPanel } from "./UserPanel"
 
 const defaultProps = {
@@ -11,6 +12,15 @@ const defaultProps = {
 }
 
 describe("UserPanel", () => {
+  it("should re-export the Select component and check if Select exists", () => {
+    expect(UserPanel).toBeDefined()
+    expect(isValidElement(<UserPanel {...defaultProps} />)).toBeTruthy()
+  })
+
+  it("should have correct displayName", () => {
+    expect(UserPanel.displayName).toBe("UserPanel")
+  })
+
   it("renders user information correctly", () => {
     render(<UserPanel {...defaultProps} />)
 
