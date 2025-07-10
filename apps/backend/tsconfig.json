@@ -12,8 +12,7 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@payload-config": ["./src/payload.config.ts"],
-      "@repo/shared/test-config/mocks/*": ["../../packages/shared/src/test-config/mocks/*"]
+      "@payload-config": ["./src/payload.config.ts"]
     },
     "plugins": [
       {
