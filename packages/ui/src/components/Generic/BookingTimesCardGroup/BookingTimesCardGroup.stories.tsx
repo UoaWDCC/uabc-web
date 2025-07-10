@@ -49,7 +49,7 @@ export const TypesAndStates: Story = (_args) => {
           checked: isChecked ? true : undefined,
         }))
 
-        return <BookingTimesCardGroup items={items} />
+        return <BookingTimesCardGroup items={items} name="bookingTimes" />
       }}
     </PropsTable>
   )

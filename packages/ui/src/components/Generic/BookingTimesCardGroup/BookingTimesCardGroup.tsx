@@ -59,7 +59,7 @@ export interface BookingTimesCardGroupProps extends Omit<CheckboxCardGroupProps,
    * This should be the `control` object returned by `useForm`.
    */
   // biome-ignore lint/suspicious/noExplicitAny: It could be any control
-  control: Control<any>
+  control?: Control<any>
 }
 
 /**
