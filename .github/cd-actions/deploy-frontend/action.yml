@@ -47,10 +47,9 @@ runs:
       run: NODE_ENV=production pnpm run build --filter frontend
       shell: bash
 
-    # - name: Publish to cloudflare
-    #   uses: cloudflare/wrangler-action@v3
-    #   with:
-    #     apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
-    #     accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
-    #     command: pages deploy client/out --project-name=uabc
-    #     gitHubToken: ${{ inputs.GITHUB_TOKEN }}
+    - name: Publish to cloudflare
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
+        command: pages deploy client/out --project-name=uabc
