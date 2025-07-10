@@ -6,8 +6,19 @@ import { memo, Tab, TabList, TabPanel, TabPanels, Tabs, type TabsProps } from "@
  * Props for {@link AdminTabBar} component
  */
 export interface AdminTabBarProps extends TabsProps {
+  /**
+   * Label for tab 1 (left side)
+   */
   tab1Label?: string
+
+  /**
+   * Label for tab 2 (middle)
+   */
   tab2Label?: string
+
+  /**
+   * Label for tab 3 (right side)
+   */
   tab3Label?: string
 }
 
@@ -17,7 +28,15 @@ export interface AdminTabBarProps extends TabsProps {
  * @param props AdminTabBar component props
  * @returns The Admin Tab Bar component
  *
- * @remarks Only {@link TabPanel}s should be put as child components
+ * @example
+ * <AdminTabBar tabPanelsProps={{ bgColor: "secondary" }}>
+ *    <TabPanel>Panel 1</TabPanel>
+ *    <TabPanel>Panel 2</TabPanel>
+ *    <TabPanel>Panel 3</TabPanel>
+ * </AdminTabBar>
+ *
+ * @remarks Currently, only 3 tabs are currently permitted.
+ * @remarks Only {@link TabPanel}s should be added as children.
  */
 export const AdminTabBar = memo(
   ({
