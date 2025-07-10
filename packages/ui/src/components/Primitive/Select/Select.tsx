@@ -197,7 +197,7 @@ export const Select: FC<SelectProps> = memo(
           position="absolute"
           top="50%"
           transform="translateY(-50%)"
-          z={100}
+          z={1}
         >
           <Center
             borderColor={stylised ? "gray.600" : "transparent"}
