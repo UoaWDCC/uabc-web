@@ -63,6 +63,16 @@ export const UserInfoResponseSchema = z.object({
 
 export const RegisterDetailsSchema = z.object({
   /**
+   * The user's first name
+   * @example John
+   */
+  firstName: z.string().min(1).max(30),
+  /**
+   * The user's last name
+   * @example Doe
+   */
+  lastName: z.string().min(1).max(30),
+  /**
    * The user's email address
    * @example straightzhao@gmail.com
    */
