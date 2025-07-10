@@ -1,12 +1,7 @@
+import { adminUserMock, casualUserMock, memberUserMock } from "@repo/shared/test-config/mocks"
 import type { CollectionSlug } from "payload"
-
 import AuthService from "@/business-layer/services/AuthService"
 import { payload } from "@/data-layer/adapters/Payload"
-import {
-  adminUserMock,
-  casualUserMock,
-  memberUserMock,
-} from "../../../../packages/shared/src/test-config/mocks/User.mock"
 import { clearCollection } from "./backend-utils"
 import { JWT_SECRET_MOCK } from "./mocks/GoogleAuth.mock"
 
