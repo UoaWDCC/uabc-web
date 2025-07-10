@@ -24,7 +24,7 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
     },
     "check-types": {
-      "dependsOn": ["^check-types", "@repo/test-config#build"],
+      "dependsOn": ["^check-types", "@repo/test-config#build", "@repo/shared#build"],
       "cache": true
     },
     "dev": {
@@ -58,31 +58,31 @@
     },
     "test": {
       "cache": true,
-      "dependsOn": ["^test", "@repo/test-config#build"],
+      "dependsOn": ["^test", "@repo/test-config#build", "@repo/shared#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "test:watch": {
       "cache": false,
-      "dependsOn": ["^test:watch", "@repo/test-config#build"],
+      "dependsOn": ["^test:watch", "@repo/test-config#build", "@repo/shared#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "persistent": true
     },
     "test:coverage": {
       "cache": true,
-      "dependsOn": ["^test:coverage", "@repo/test-config#build"],
+      "dependsOn": ["^test:coverage", "@repo/test-config#build", "@repo/shared#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["coverage/**"]
     },
     "test:coverage:watch": {
       "cache": false,
-      "dependsOn": ["^test:coverage:watch", "@repo/test-config#build"],
+      "dependsOn": ["^test:coverage:watch", "@repo/test-config#build", "@repo/shared#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["coverage/**"],
       "persistent": true
     },
     "test:ui": {
       "cache": false,
-      "dependsOn": ["@repo/test-config#build"],
+      "dependsOn": ["@repo/test-config#build", "@repo/shared#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["coverage/**"],
       "persistent": true

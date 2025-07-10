@@ -1,10 +1,10 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
+import { casualUserMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import { GET } from "@/app/api/me/route"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
-import { casualUserMock } from "@/test-config/mocks/User.mock"
 import { casualToken } from "@/test-config/vitest.setup"
 
 describe("api/me", async () => {
