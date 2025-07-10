@@ -12,6 +12,13 @@ inputs:
     description: 'GitHub token'
     required: true
 
+  NEXT_PUBLIC_URL:
+    description: 'Next.js public URL'
+    required: true
+  NEXT_PUBLIC_API_URL:
+    description: 'Next.js public API URL'
+    required: true
+
 runs:
   using: composite
   steps:
@@ -44,8 +51,11 @@ runs:
       shell: bash
 
     - name: Build frontend
-      run: NODE_ENV=production pnpm run build --filter frontend
+      run: pnpm run build --filter frontend
       shell: bash
+      env:
+        NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
+        NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
 
     - name: Publish to cloudflare
       uses: cloudflare/wrangler-action@v3
