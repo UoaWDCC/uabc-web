@@ -1,5 +1,7 @@
 import type { Meta, StoryFn } from "@storybook/nextjs"
+import { PropsTable } from "@storybook-config/components"
 import { TabPanel } from "@yamada-ui/react"
+import { TABS_VARIANTS } from "node_modules/@repo/theme/src/components/tabs"
 import { AdminTabBar } from "./AdminTabBar"
 
 type Story = StoryFn<typeof AdminTabBar>
@@ -27,5 +29,11 @@ export const WithTabPanels: Story = ({ ...args }) => {
 }
 
 export const Variant: Story = ({ ...args }) => {
-  return <AdminTabBar {...args} />
+  return (
+    <PropsTable columns={[""]} rows={TABS_VARIANTS}>
+      {(column, row, key) => {
+        return <AdminTabBar key={key} variant={row} {...args} />
+      }}
+    </PropsTable>
+  )
 }
