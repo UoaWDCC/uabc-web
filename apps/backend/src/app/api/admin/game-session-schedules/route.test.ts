@@ -57,7 +57,7 @@ describe("/api/admin/game-session-schedules", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const req = createMockNextRequest("/api/admin/game-session-schedules", "POST", {
         ...gameSessionScheduleCreateMock,
-        name: undefined,
+        day: undefined,
       })
       const res = await POST(req)
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
@@ -71,7 +71,7 @@ describe("/api/admin/game-session-schedules", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const req = createMockNextRequest("/api/admin/game-session-schedules", "POST", {
         ...gameSessionScheduleCreateMock,
-        startTime: "invalid date",
+        startTime: "invalid-date",
       })
       const res = await POST(req)
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
