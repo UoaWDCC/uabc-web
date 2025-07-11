@@ -6,7 +6,7 @@ import { GET } from "./route"
 
 const gameSessionDataService = new GameSessionDataService()
 
-describe("/api/gameSessions/[id]", () => {
+describe("/api/game-sessions/[id]", () => {
   describe("GET", () => {
     it("should return game session data when game session exists", async () => {
       const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
