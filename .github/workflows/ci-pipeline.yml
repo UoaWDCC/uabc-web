@@ -132,10 +132,6 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     environment:
       name: staging
-    permissions:
-      contents: read
-      pull-requests: write
-    name: Preview Storybook
     runs-on: ubuntu-latest
     outputs:
       deployment-url: ${{ steps.deploy-storybook.outputs.deployment-url }}
@@ -150,16 +146,10 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Output deployment URL
-        shell: bash
-        run: echo "deployment-url=${{ steps.deploy-storybook.outputs.deployment-url }}" >> $GITHUB_OUTPUT
-
   comment:
     name: Comment
     needs: [preview-storybook]
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     steps:
       - name: Find Comment
         uses: peter-evans/find-comment@v2
