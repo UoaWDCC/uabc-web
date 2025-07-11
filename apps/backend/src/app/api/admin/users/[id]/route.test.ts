@@ -10,8 +10,9 @@ import { cookies } from "next/headers"
 import type { NextRequest } from "next/server"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import UserDataService from "@/data-layer/services/UserDataService"
+import { createMockNextRequest } from "@/test-config/backend-utils"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
-import { GET } from "./route"
+import { GET, PATCH } from "./route"
 
 describe("/api/admin/users/[id]", async () => {
   const userDataService = new UserDataService()
@@ -121,6 +122,81 @@ describe("/api/admin/users/[id]", async () => {
       expect(await res.json()).toStrictEqual({ error: "Internal Server Error" })
       expect(mockGetUserById).toHaveBeenCalledWith("any-id")
       expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+    })
+  })
+
+  describe("PATCH", () => {
+    const updateUser = { firstName: "Test" }
+
+    it("should return a 401 if user is a casual", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+      const newUser = await userDataService.createUser(userCreateMock)
+      const res = await PATCH(createMockNextRequest("/api/admin/users", "PATCH", updateUser), {
+        params: Promise.resolve({ id: newUser.id }),
+      })
+      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(await res.json()).toStrictEqual({ error: "No scope" })
+    })
+
+    it("should return a 401 if user is a member", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+      const newUser = await userDataService.createUser(userCreateMock)
+      const res = await PATCH(createMockNextRequest("/api/admin/users", "PATCH", updateUser), {
+        params: Promise.resolve({ id: newUser.id }),
+      })
+      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(await res.json()).toStrictEqual({ error: "No scope" })
+    })
+
+    it("should update user if user is admin", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const newUser = await userDataService.createUser(userCreateMock)
+      const res = await PATCH(createMockNextRequest("/api/admin/users", "PATCH", updateUser), {
+        params: Promise.resolve({ id: newUser.id }),
+      })
+      expect(res.status).toBe(StatusCodes.OK)
+      const fetchedUpdatedUser = await userDataService.getUserById(newUser.id)
+      expect(fetchedUpdatedUser.firstName).toEqual(updateUser.firstName)
+    })
+
+    it("should return 400 when invalid request body", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const newUser = await userDataService.createUser(userCreateMock)
+      const res = await PATCH(
+        createMockNextRequest("/api/admin/users", "PATCH", { firstName: null }),
+        {
+          params: Promise.resolve({ id: newUser.id }),
+        },
+      )
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      const json = await res.json()
+      expect(json.error).toEqual("Invalid request body")
+    })
+
+    it("should return a 404 error if the user does not exist", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const res = await PATCH(
+        createMockNextRequest("/api/admin/users", "PATCH", { name: "Updated User" }),
+        {
+          params: Promise.resolve({ id: "does not exist" }),
+        },
+      )
+      expect(res.status).toBe(StatusCodes.NOT_FOUND)
+      const json = await res.json()
+      expect(json.error).toEqual("User not found")
+    })
+
+    it("should return a 500 error for internal server error", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const res = await PATCH(
+        createMockNextRequest("/api/admin/users", "PATCH", { firstName: "Something" }),
+        {
+          params: Promise.reject(new Error("Param parsing failed")),
+        },
+      )
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await res.json()
+      expect(json.error).toEqual("Internal Server Error")
     })
   })
 })
