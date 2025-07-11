@@ -44,11 +44,26 @@ runs:
         run_install: |
           - args: [--global, wrangler@3.90.0]
 
-    - name: Download Next Build
-      uses: actions/download-artifact@v4
+    - name: Restore node_modules cache
+      uses: actions/cache/restore@v4
+      id: cache
       with:
-        name: nextjs-static-pr-${{ github.event.pull_request.number }}
-        path: apps/frontend/out
+        path: |
+          node_modules
+          */node_modules
+          packages/*/node_modules
+          apps/*/node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
+    - name: Install dependencies if cache misses
+      run: NODE_ENV=production pnpm install --frozen-lockfile
+      shell: bash
+
+    - name: Create Cloudflare static Next build
+      run: pnpm --prefix=apps/frontend pages:build
+      shell: bash
 
     - name: Publish frontend to cloudflare
       uses: cloudflare/wrangler-action@v3
@@ -57,7 +72,7 @@ runs:
         apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
-        command: pages deploy apps/frontend/out --project-name=${{ inputs.project-name }}
+        command: pages deploy apps/frontend/.vercel/output/static --project-name=${{ inputs.project-name }}
 
     - name: Output deployment url
       shell: bash
