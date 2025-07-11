@@ -41,6 +41,7 @@ export const UnderConstructionCard = ({
   title = "Feature is Under Construction 🔧",
   description = "Our team is busy working on this page.\nCheck back later!",
   returnLabel = "Return",
+  buttonProps,
 }: UnderConstructionCardProps) => {
   return (
     <Card
@@ -69,7 +70,7 @@ export const UnderConstructionCard = ({
         <Text fontSize={{ base: "sm", md: "md" }} textAlign="center" whiteSpace="break-spaces">
           {description}
         </Text>
-        <Button as={Link} colorScheme="primary" href="/" placeSelf="center">
+        <Button as={Link} colorScheme="primary" href="/" placeSelf="center" {...buttonProps}>
           {returnLabel}
         </Button>
       </CardBody>
