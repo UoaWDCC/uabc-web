@@ -52,15 +52,15 @@ describe("/api/admin/game-sessions/[id]", async () => {
       })
       expect(res.status).toBe(StatusCodes.NOT_FOUND)
     })
-  })
 
-  it("should return a 500 error for internal server error", async () => {
-    cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-    const res = await DELETE(createMockNextRequest("/api/admin/game-sessions", "DELETE"), {
-      params: Promise.reject(new Error("Param parsing failed")),
+    it("should return a 500 error for internal server error", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const res = await DELETE(createMockNextRequest("/api/admin/game-sessions", "DELETE"), {
+        params: Promise.reject(new Error("Param parsing failed")),
+      })
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await res.json()
+      expect(json.error).toEqual("Internal Server Error")
     })
-    expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
-    const json = await res.json()
-    expect(json.error).toEqual("Internal Server Error")
   })
 })
