@@ -43,6 +43,7 @@ export const LocationBubbleDesktopCard = ({
         transition={{ type: "spring", bounce: 0.25, visualDuration: 0.4 }}
       >
         <VStack
+          align="center"
           bgColor="black"
           border="12px solid transparent"
           borderRadius="18px"
@@ -77,17 +78,19 @@ export const LocationBubbleDesktopCard = ({
               opacity: { type: "spring", bounce: 0.25, visualDuration: 0.4, delay: 0.1 },
             }}
           >
-            <VStack as={Motion} gap="md">
-              <VStack fontSize="xl" fontWeight="semibold" gap={0} textAlign="center">
+            <VStack as={Motion} gap="md" maxW="270px">
+              <VStack fontSize="xl" fontWeight="semibold" gap="sm" textAlign="center">
                 <Heading.h2 bgClip="text" bgGradient="primaryGradient">
                   {locationTitle}
                 </Heading.h2>
-                {locationTimes &&
-                  Object.entries(locationTimes).map(([day, time]) => (
-                    <Text bgClip="text" bgGradient="textGradient" key={day}>
-                      {day}: {time}
-                    </Text>
-                  ))}
+                <VStack gap={0}>
+                  {locationTimes &&
+                    Object.entries(locationTimes).map(([day, time]) => (
+                      <Text bgClip="text" bgGradient="textGradient" key={day}>
+                        {day}: {time}
+                      </Text>
+                    ))}
+                </VStack>
               </VStack>
               {locationDetails && (
                 <Text bgClip="text" bgGradient="textGradient" fontWeight="normal">
@@ -96,7 +99,7 @@ export const LocationBubbleDesktopCard = ({
               )}
             </VStack>
           </Motion>
-          <Button as={Link} colorScheme="primary" href={buttonLink} size="lg">
+          <Button as={Link} colorScheme="primary" href={buttonLink} size="lg" width="full">
             Learn More
           </Button>
         </VStack>
