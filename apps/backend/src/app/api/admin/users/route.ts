@@ -1,14 +1,9 @@
-import { CreateUserRequestSchema } from "@repo/shared"
+import { CreateUserRequestSchema, QuerySchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
-import { ZodError, z } from "zod"
+import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import UserDataService from "@/data-layer/services/UserDataService"
-
-const QuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(10),
-  page: z.coerce.number().int().min(1).default(1),
-})
 
 class UsersRouteWrapper {
   /**
