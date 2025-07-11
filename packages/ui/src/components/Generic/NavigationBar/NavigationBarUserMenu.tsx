@@ -1,5 +1,5 @@
 import { Heading } from "@repo/ui/components/Primitive"
-import { LogOutIcon, UserIcon } from "@yamada-ui/lucide"
+import { LogOutIcon, SettingsIcon, UserIcon } from "@yamada-ui/lucide"
 import {
   Avatar,
   type AvatarProps,
@@ -22,16 +22,22 @@ export interface NavigationBarUserMenuProps extends MenuProps {
    * Props for the avatar component, including name and image source.
    */
   avatarProps: AvatarProps
+  admin?: boolean
 }
 
 /**
  * NavigationBarUserMenu component renders a user menu with an avatar and options for profile and sign out.
  *
  * @param avatarProps Props for the avatar component, including name and image source.
+ * @param admin Optional boolean indicating if the user is an admin. If true, an admin link will be displayed.
  * @param props Additional props for the menu component.
  * @returns A user menu with an avatar and options for profile and sign out.
  */
-export const NavigationBarUserMenu = ({ avatarProps, ...props }: NavigationBarUserMenuProps) => {
+export const NavigationBarUserMenu = ({
+  avatarProps,
+  admin = false,
+  ...props
+}: NavigationBarUserMenuProps) => {
   return (
     <Menu placement="bottom-end" trigger="hover" {...props}>
       <MenuButton>
@@ -42,6 +48,17 @@ export const NavigationBarUserMenu = ({ avatarProps, ...props }: NavigationBarUs
           {avatarProps.name}
         </Heading.h5>
         <MenuSeparator />
+        {admin && (
+          <>
+            <MenuItem as={Link} data-testid="navbar-user-menu-admin-link" href="/admin">
+              <HStack>
+                <SettingsIcon />
+                <Text fontSize="md">Admin</Text>
+              </HStack>
+            </MenuItem>
+            <MenuSeparator />
+          </>
+        )}
         <MenuItem as={Link} data-testid="navbar-user-menu-profile-link" href="/profile">
           <HStack>
             <UserIcon />
