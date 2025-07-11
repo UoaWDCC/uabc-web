@@ -36,6 +36,8 @@ jobs:
               !.gitignore
               !.gitattributes
               !.vscode/**
+              !.idea/**
+              !.zed/**
               !.env.example
 
   setup:
@@ -127,6 +129,17 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+  build-storybook:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Build Storybook
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Storybook
+        uses: ./.github/ci-actions/build-storybook/
 
   typecheck:
     needs: [check_changes, setup]
@@ -310,7 +323,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build-frontend, build-backend, biome, test, codegen, typecheck]
+    needs: [check_changes, build-frontend, build-backend, build-storybook, biome, test, codegen, typecheck]
     runs-on: ubuntu-latest
     if: >
       always() &&

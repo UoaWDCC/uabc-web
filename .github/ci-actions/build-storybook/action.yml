@@ -1,0 +1,44 @@
+name: "Build Storybook"
+description: "This workflow builds Storybook for the specified workspace."
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        run_install: false
+
+    - name: Restore node_modules cache
+      uses: actions/cache/restore@v4
+      id: cache
+      with:
+        path: |
+          node_modules
+          */node_modules
+          packages/*/node_modules
+          apps/*/node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
+    - name: Install dependencies if cache misses
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: NODE_ENV=production pnpm install --filter @repo/ui --frozen-lockfile
+      shell: bash
+
+    - name: Build Storybook for @repo/ui
+      shell: bash
+      run: pnpm turbo run storybook:build --filter @repo/ui
+
+    - name: Upload Storybook
+      uses: actions/upload-artifact@v4
+      with:
+        name: storybook-pr-${{ github.event.pull_request.number }}
+        path: packages/ui/storybook-static
