@@ -7,7 +7,7 @@ class GameSessionRouteWrapper {
   /**
    * GET method to fetch a single GameSession by ID.
    *
-   * @param req The request object
+   * @param _req The request object
    * @param params The route parameters containing the GameSession ID
    * @returns The GameSession data if found, otherwise appropriate error response
    */

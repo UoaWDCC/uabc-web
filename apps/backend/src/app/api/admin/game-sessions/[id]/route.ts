@@ -8,7 +8,8 @@ class GameSessionRouteWrapper {
   /**
    * DELETE method to delete a game session.
    *
-   * @param req The request object containing the request body
+   * @param _req The request object
+   * @param params route parameters containing the GameSession ID
    * @returns No content status code
    */
   @Security("jwt", ["admin"])
@@ -25,6 +26,7 @@ class GameSessionRouteWrapper {
           { status: StatusCodes.NOT_FOUND },
         )
       }
+      console.error(error)
       return NextResponse.json(
         { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
         { status: StatusCodes.INTERNAL_SERVER_ERROR },
