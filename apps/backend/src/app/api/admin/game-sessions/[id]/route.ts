@@ -1,23 +1,24 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
+import { Security } from "@/business-layer/middleware/Security"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 
 class GameSessionRouteWrapper {
   /**
-   * GET method to fetch a single GameSession by ID.
+   * DELETE method to delete a game session.
    *
    * @param _req The request object
-   * @param params The route parameters containing the GameSession ID
-   * @returns The GameSession data if found, otherwise appropriate error response
+   * @param params route parameters containing the GameSession ID
+   * @returns No content status code
    */
-  static async GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  @Security("jwt", ["admin"])
+  static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
       const gameSessionDataService = new GameSessionDataService()
-      const gameSession = await gameSessionDataService.getGameSessionById(id)
-
-      return NextResponse.json({ data: gameSession }, { status: StatusCodes.OK })
+      await gameSessionDataService.deleteGameSession(id)
+      return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
       if (error instanceof NotFound) {
         return NextResponse.json(
@@ -34,4 +35,4 @@ class GameSessionRouteWrapper {
   }
 }
 
-export const GET = GameSessionRouteWrapper.GET
+export const DELETE = GameSessionRouteWrapper.DELETE
