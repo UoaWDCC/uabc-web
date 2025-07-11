@@ -127,6 +127,35 @@ jobs:
       - name: Build Storybook
         uses: ./.github/ci-actions/build-storybook/
 
+  preview-storybook:
+    needs: [build-storybook]
+    if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy-storybook.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Storybook
+        id: deploy-storybook
+        uses: ./.github/cd-actions/deploy-storybook/
+        with:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  comment:
+    name: Comment
+    needs: [preview-storybook]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Comment information
+        uses: ./.github/ci-actions/comment/
+        with:
+          preview-storybook: ${{ needs.preview-storybook.outputs.deployment-url }}
+
   typecheck:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
