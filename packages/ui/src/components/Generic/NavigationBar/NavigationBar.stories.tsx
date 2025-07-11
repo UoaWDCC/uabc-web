@@ -10,7 +10,7 @@ type Story = StoryObj<typeof NavigationBar>
 
 const meta: Meta<typeof NavigationBar> = {
   component: NavigationBar,
-  title: "Generic Components / NavigationBar",
+  title: "Composite Components / NavigationBar",
   argTypes: {
     navItems: {
       control: "object",
