@@ -1,0 +1,109 @@
+name: Deploy Frontend
+description: Deploy frontend to Cloudflare
+
+inputs:
+  # Environment variables
+  CLOUDFLARE_API_TOKEN:
+    description: 'Cloudflare API token'
+    required: true
+  CLOUDFLARE_ACCOUNT_ID:
+    description: 'Cloudflare account ID'
+    required: true
+  GH_TOKEN:
+    description: 'GitHub token'
+    required: true
+  # Frontend secrets
+  NEXT_PUBLIC_URL:
+    description: 'Frontend URL'
+    required: true
+  NEXT_PUBLIC_API_URL:
+    description: 'Backend API URL'
+    required: true
+  # Additional variables
+  project-name:
+    description: 'Project name'
+    required: true
+
+outputs:
+  deployment-url:
+    description: 'The URL of the deployment'
+    value: ${{ steps.deploy.outputs.deployment-url }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        run_install: |
+          - args: [--global, wrangler@3.90.0]
+
+    - name: Restore node_modules cache
+      uses: actions/cache/restore@v4
+      id: cache
+      with:
+        path: |
+          node_modules
+          */node_modules
+          packages/*/node_modules
+          apps/*/node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
+    - name: Install dependencies if cache misses
+      run: NODE_ENV=production pnpm install --frozen-lockfile
+      shell: bash
+
+    - name: Restore node_modules cache
+      uses: actions/cache/restore@v4
+      id: cache
+      with:
+        path: |
+          node_modules
+          */node_modules
+          packages/*/node_modules
+          apps/*/node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
+    - name: Install dependencies if cache misses
+      run: NODE_ENV=production pnpm install --frozen-lockfile
+      shell: bash
+
+    - name: Restore Next.js cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          apps/frontend/.next/cache
+        key: ${{ runner.os }}-nextjs-frontend-${{ hashFiles('apps/frontend/*') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-frontend
+
+    - name: Build frontend
+      shell: bash
+      env:
+        NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
+        NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
+        NEXT_CONFIG_ENV: production
+      run: pnpm build --filter frontend
+
+    - name: Publish frontend to cloudflare
+      uses: cloudflare/wrangler-action@v3
+      id: deploy
+      with:
+        apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
+        gitHubToken: ${{ inputs.GH_TOKEN }}
+        command: pages deploy apps/frontend/out --project-name=${{ inputs.project-name }}
+
+    - name: Output deployment url
+      shell: bash
+      run: echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
