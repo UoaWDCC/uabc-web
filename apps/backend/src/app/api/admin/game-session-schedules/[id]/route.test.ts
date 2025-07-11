@@ -11,6 +11,15 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
   const gameSessionDataService = new GameSessionDataService()
   const cookieStore = await cookies()
 
+  describe("PATCH", () => {
+    it("should return 401 if user is casual", async () => {})
+    it("should return 401 if user is member", async () => {})
+    it("should update the game session schedule if user is admin", async () => {})
+    it("should return 400 if request body is invalid", async () => {})
+    it("should return 400 if invalid date is provided", async () => {})
+    it("should return 404 if game session schedule is not found", async () => {})
+  })
+
   describe("DELETE", () => {
     it("should return 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)

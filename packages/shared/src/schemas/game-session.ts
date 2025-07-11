@@ -1,6 +1,10 @@
 import z from "zod"
 import type { GameSessionSchedule } from "@/payload-types"
-import { type CreateGameSessionScheduleData, Weekday } from "../types"
+import {
+  type CreateGameSessionScheduleData,
+  type UpdateGameSessionScheduleData,
+  Weekday,
+} from "../types"
 import { SemesterSchema } from "./semester"
 
 export const GameSessionScheduleSchema = z.object({
@@ -23,3 +27,6 @@ export const CreateGameSessionScheduleRequestSchema = z.object({
   capacity: z.number(),
   casualCapacity: z.number(),
 }) satisfies z.ZodType<CreateGameSessionScheduleData>
+
+export const UpdateGameSessionScheduleRequestSchema =
+  CreateGameSessionScheduleRequestSchema.partial() satisfies z.ZodType<UpdateGameSessionScheduleData>
