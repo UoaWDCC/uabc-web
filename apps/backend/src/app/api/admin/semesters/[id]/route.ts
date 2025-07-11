@@ -43,7 +43,7 @@ class SemesterRouteWrapper {
       const parsedBody = UpdateSemesterRequestSchema.parse(await req.json())
       const semesterDataService = new SemesterDataService()
       const updatedSemester = await semesterDataService.updateSemester(id, parsedBody)
-      return NextResponse.json({ data: updatedSemester }, { status: StatusCodes.OK })
+      return NextResponse.json({ data: updatedSemester }, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
       if (error instanceof NotFound) {
         return NextResponse.json({ error: "Semester not found" }, { status: StatusCodes.NOT_FOUND })

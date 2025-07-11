@@ -95,7 +95,7 @@ describe("/api/admin/semesters/[id]", async () => {
       const res = await PATCH(createMockNextRequest("", "PATCH", updateSemester), {
         params: Promise.resolve({ id: newSemester.id }),
       })
-      expect(res.status).toBe(StatusCodes.OK)
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
       const fetchedUpdatedSemester = await semesterDataService.getSemesterById(newSemester.id)
       expect(fetchedUpdatedSemester.name).toEqual(updateSemester.name)
     })
