@@ -151,9 +151,8 @@ jobs:
     needs: [preview-storybook]
     runs-on: ubuntu-latest
     steps:
-      - name: Use comment
-        id: deploy-storybook
-        uses: ./.github/cd-actions/deploy-storybook/
+      - name: Comment information
+        uses: ./.github/ci-actions/comment/
         with:
           preview-storybook: ${{ needs.preview-storybook.outputs.deployment-url }}
 
