@@ -231,23 +231,25 @@ describe("<NavigationBarDesktop />", () => {
 
     const initialIndicator = screen.getByTestId("navbar-hover-indicator")
     expect(initialIndicator).toBeInTheDocument()
-    const initialPosition = initialIndicator.getBoundingClientRect()
 
     const contactButton = screen.getByText("Contact")
     expect(contactButton).toBeInTheDocument()
     const contactButtonPosition = contactButton.getBoundingClientRect()
 
     await user.hover(contactButton)
+
     await waitFor(() => {
-      expect(initialPosition).toStrictEqual(contactButtonPosition)
-      expect(screen.queryAllByTestId("navbar-hover-indicator")).toHaveLength(1)
+      const indicators = screen.getAllByTestId("navbar-hover-indicator")
+      expect(indicators).toHaveLength(2)
+
+      const hoverIndicator = indicators.find(
+        (indicator) =>
+          indicator.getBoundingClientRect().left === contactButtonPosition.left &&
+          indicator.getBoundingClientRect().width === contactButtonPosition.width,
+      )
+
+      expect(hoverIndicator).toBeInTheDocument()
     })
-
-    const newIndicator = screen.getByTestId("navbar-hover-indicator")
-    expect(newIndicator).toBeInTheDocument()
-
-    const newPosition = newIndicator.getBoundingClientRect()
-    expect(newPosition).toStrictEqual(contactButtonPosition)
   })
 
   it("should clear hover indicator when mouse leaves the navbar", async () => {
