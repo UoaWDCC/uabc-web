@@ -44,39 +44,11 @@ runs:
         run_install: |
           - args: [--global, wrangler@3.90.0]
 
-    - name: Restore node_modules cache
-      uses: actions/cache/restore@v4
-      id: cache
+    - name: Download Next Build
+      uses: actions/download-artifact@v4
       with:
-        path: |
-          node_modules
-          */node_modules
-          packages/*/node_modules
-          apps/*/node_modules
-        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-node_modules-
-
-    - name: Install dependencies if cache misses
-      run: NODE_ENV=production pnpm install --frozen-lockfile
-      shell: bash
-
-    - name: Restore Next.js cache
-      uses: actions/cache@v4
-      with:
-        path: |
-          apps/frontend/.next/cache
-        key: ${{ runner.os }}-nextjs-frontend-${{ hashFiles('apps/frontend/*') }}
-        restore-keys: |
-          ${{ runner.os }}-nextjs-frontend
-
-    - name: Build frontend
-      shell: bash
-      env:
-        NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
-        NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
-        NEXT_CONFIG_ENV: production
-      run: pnpm build --filter frontend
+        name: nextjs-static-pr-${{ github.event.pull_request.number }}
+        path: apps/frontend/out
 
     - name: Publish frontend to cloudflare
       uses: cloudflare/wrangler-action@v3
