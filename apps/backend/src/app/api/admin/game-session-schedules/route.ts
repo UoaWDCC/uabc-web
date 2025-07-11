@@ -18,7 +18,8 @@ class GameSessionSchedulesRouteWrapper {
     try {
       const parsedBody = CreateGameSessionScheduleRequestSchema.parse(await req.json())
       const gameSessionDataService = new GameSessionDataService()
-      const newGameSessionSchedule = gameSessionDataService.createGameSessionSchedule(parsedBody)
+      const newGameSessionSchedule =
+        await gameSessionDataService.createGameSessionSchedule(parsedBody)
 
       return NextResponse.json({ data: newGameSessionSchedule }, { status: StatusCodes.CREATED })
     } catch (error) {
