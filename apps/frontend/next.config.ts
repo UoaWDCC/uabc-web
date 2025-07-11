@@ -1,12 +1,21 @@
 import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev"
 import type { NextConfig } from "next"
+import type { RemotePattern } from "next/dist/shared/lib/image-config"
 
 const config = (async () => {
   if (process.env.NODE_ENV === "development") {
     await setupDevPlatform()
   }
+  const remotePatterns: RemotePattern[] = [
+    // TODO: remove once actual images implemented
+    {
+      protocol: "https",
+      hostname: "images.unsplash.com",
+      port: "",
+      pathname: "/**",
+    },
+  ]
 
-  const remotePatterns = []
   if (process.env.NEXT_PUBLIC_API_URL) {
     const { protocol, hostname, port, pathname } = new URL(process.env.NEXT_PUBLIC_API_URL)
     remotePatterns.push({
