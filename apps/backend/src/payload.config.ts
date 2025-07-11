@@ -32,9 +32,7 @@ export default buildConfig({
     admin: "/payload/admin",
     api: "/payload/api",
   },
-  cors: {
-    origins: ["*uabc.pages.dev"],
-  },
+  cors: "*",
   admin: {
     user: Admin.slug,
     importMap: {
