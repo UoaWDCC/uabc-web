@@ -156,6 +156,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Deploy frontend
+        id: deploy-frontend
         uses: ./.github/cd-actions/deploy-frontend/
         with:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
@@ -167,8 +168,7 @@ jobs:
 
   comment:
     name: Comment
-    needs: [storybook-preview]
-    # needs: [storybook-preview, frontend-preview]
+    needs: [storybook-preview, frontend-preview]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -177,7 +177,7 @@ jobs:
         uses: ./.github/ci-actions/comment/
         with:
           storybook-preview: ${{ needs.storybook-preview.outputs.deployment-url }}
-          # frontend-preview: ${{ needs.frontend-preview.outputs.deployment-url }}
+          frontend-preview: ${{ needs.frontend-preview.outputs.deployment-url }}
 
   typecheck:
     needs: [check_changes, setup]
