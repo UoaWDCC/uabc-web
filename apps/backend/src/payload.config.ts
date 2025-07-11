@@ -33,7 +33,7 @@ export default buildConfig({
     api: "/payload/api",
   },
   cors: {
-    origins: [process.env.NEXT_PUBLIC_URL],
+    origins: ["*uabc.pages.dev"],
   },
   admin: {
     user: Admin.slug,
