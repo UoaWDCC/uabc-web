@@ -130,8 +130,6 @@ jobs:
   preview-storybook:
     needs: [build-storybook]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    environment:
-      name: staging
     runs-on: ubuntu-latest
     outputs:
       deployment-url: ${{ steps.deploy-storybook.outputs.deployment-url }}
@@ -142,8 +140,8 @@ jobs:
         id: deploy-storybook
         uses: ./.github/cd-actions/deploy-storybook/
         with:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   comment:
