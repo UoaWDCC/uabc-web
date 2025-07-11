@@ -18,8 +18,7 @@
         "NEXT_PUBLIC_API_URL",
         "JWT_SECRET",
         "TURBO_TEAM",
-        "TURBO_TOKEN",
-        "NEXT_CONFIG_ENV"
+        "TURBO_TOKEN"
       ],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]

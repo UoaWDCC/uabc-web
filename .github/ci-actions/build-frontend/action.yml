@@ -8,9 +8,6 @@ inputs:
   NEXT_PUBLIC_API_URL:
     description: "The public API URL for the workspace."
     required: true
-  NEXT_CONFIG_ENV:
-    description: "The environment configuration for Next."
-    required: false
 
 runs:
   using: composite
@@ -57,12 +54,4 @@ runs:
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
-        NEXT_CONFIG_ENV: ${{ inputs.NEXT_CONFIG_ENV }}
       run: pnpm build --filter frontend
-
-    - name: Upload Frontend Artifact
-      if: ${{ inputs.NEXT_CONFIG_ENV == 'production' && github.event.pull_request.number }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: nextjs-static-pr-${{ github.event.pull_request.number }}
-        path: apps/frontend/out
