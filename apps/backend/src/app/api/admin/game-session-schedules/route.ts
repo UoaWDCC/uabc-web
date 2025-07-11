@@ -10,8 +10,8 @@ class GameSessionSchedulesRouteWrapper {
   /**
    * POST Method to create a new game session schedule.
    *
-   * @param req The request object containing the request body
-   * @returns The created {@link GameSessionSchedule} document.
+   * @param req The request object containing the request body.
+   * @returns The created {@link GameSessionSchedule} document, otherwise an appropriate error response.
    */
   @Security("jwt", ["admin"])
   static async POST(req: NextRequest) {
@@ -37,4 +37,4 @@ class GameSessionSchedulesRouteWrapper {
   }
 }
 
-export const POST = GameSessionSchedulesRouteWrapper.POST
+export const { POST } = GameSessionSchedulesRouteWrapper
