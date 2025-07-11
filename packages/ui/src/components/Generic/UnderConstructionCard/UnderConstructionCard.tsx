@@ -67,7 +67,6 @@ export const UnderConstructionCard = ({
     >
       <CardHeader pt="0">
         <Heading.h3
-          // color={{ base: "primary", md: "white" }}
           fontSize={{ base: "2xl", md: "3xl" }}
           fontWeight={{ base: "semibold", md: "medium" }}
           textAlign="center"
