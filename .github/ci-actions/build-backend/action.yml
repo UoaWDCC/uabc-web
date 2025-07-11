@@ -1,30 +1,24 @@
-name: "Build"
-description: "This workflow checks if the builds are working correctly."
+name: "Build Backend"
+description: "This workflow checks if the backend builds are working correctly."
 
 inputs:
   PAYLOAD_SECRET:
     description: "The payload secret for the workspace."
-    required: false
+    required: true
   DATABASE_URI:
     description: "The database URI for the workspace."
-    required: false
+    required: true
   NEXT_PUBLIC_URL:
     description: "The public URL for the workspace."
-    required: false
-  NEXT_PUBLIC_API_URL:
-    description: "The public API URL for the workspace."
-    required: false
+    required: true
   GOOGLE_CLIENT_ID:
     description: "The Google OAuth client ID."
-    required: false
+    required: true
   GOOGLE_CLIENT_SECRET:
     description: "The Google OAuth client secret."
-    required: false
+    required: true
   JWT_SECRET:
     description: "The JWT signing secret."
-    required: false
-  workspace:
-    description: "The workspace to build."
     required: true
 
 runs:
@@ -62,19 +56,18 @@ runs:
       uses: actions/cache@v4
       with:
         path: |
-          apps/${{ inputs.workspace }}/.next/cache
-        key: ${{ runner.os }}-nextjs-${{ inputs.workspace }}-${{ hashFiles('apps/${{ inputs.workspace }}/*') }}
+          apps/backend/.next/cache
+        key: ${{ runner.os }}-nextjs-backend-${{ hashFiles('apps/backend/*') }}
         restore-keys: |
-          ${{ runner.os }}-nextjs-${{ inputs.workspace }}
+          ${{ runner.os }}-nextjs-backend
 
-    - name: Build ${{ inputs.workspace }}
+    - name: Build backend
       shell: bash
       env:
+        NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         PAYLOAD_SECRET: ${{ inputs.PAYLOAD_SECRET }}
         DATABASE_URI: ${{ inputs.DATABASE_URI }}
-        NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
-        NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
         GOOGLE_CLIENT_ID: ${{ inputs.GOOGLE_CLIENT_ID }}
         GOOGLE_CLIENT_SECRET: ${{ inputs.GOOGLE_CLIENT_SECRET }}
         JWT_SECRET: ${{ inputs.JWT_SECRET }}
-      run: pnpm turbo run build --filter ${{ inputs.workspace }}
+      run: pnpm turbo run build --filter backend
