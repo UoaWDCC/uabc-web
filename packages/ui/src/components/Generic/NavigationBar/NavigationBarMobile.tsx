@@ -13,15 +13,13 @@ import {
   PopoverContent,
   PopoverTrigger,
   Spacer,
-  ui,
+  Text,
   useDisclosure,
   VStack,
 } from "@yamada-ui/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import type { NavigationBarProps } from "./NavigationBar"
-
-const StyledLink = ui(Link)
 
 /**
  * NavigationBar component renders a navigation bar with links to different pages for mobile devices.
@@ -84,9 +82,9 @@ export const NavigationBarMobile = ({ navItems, user }: NavigationBarProps) => {
             width="full"
             zIndex={1002}
           >
-            <StyledLink href="/">
+            <Link href="/">
               <UabcLogo height="36px" />
-            </StyledLink>
+            </Link>
             <Spacer />
             <PopoverTrigger>
               <IconButton borderRadius="full" fontSize="24px" size="sm" variant="gradient">
@@ -111,14 +109,15 @@ export const NavigationBarMobile = ({ navItems, user }: NavigationBarProps) => {
           }}
           borderRadius="3xl"
           padding="sm"
-          width="calc(100% - 32px)"
+          width="100%"
           zIndex={1002}
         >
           <PopoverBody>
             <VStack gap="xs" minH="lg">
               {allNavItems.map((item) => (
-                <StyledLink
+                <Text
                   _hover={{ bgColor: "secondary" }}
+                  as={Link}
                   borderRadius="xl"
                   color={currentPath === item.path ? "primary" : "white"}
                   fontSize="xl"
@@ -129,7 +128,7 @@ export const NavigationBarMobile = ({ navItems, user }: NavigationBarProps) => {
                   py="sm"
                 >
                   {item.label}
-                </StyledLink>
+                </Text>
               ))}
             </VStack>
           </PopoverBody>

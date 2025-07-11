@@ -240,11 +240,11 @@ describe("<NavigationBarDesktop />", () => {
     await user.hover(contactButton)
     await waitFor(() => {
       expect(initialPosition).toStrictEqual(contactButtonPosition)
+      expect(screen.queryAllByTestId("navbar-hover-indicator")).toHaveLength(1)
     })
 
-    const newIndicator = screen.getAllByTestId("navbar-hover-indicator")[1]
+    const newIndicator = screen.getByTestId("navbar-hover-indicator")
     expect(newIndicator).toBeInTheDocument()
-    expect(newIndicator).not.toBe(initialIndicator)
 
     const newPosition = newIndicator.getBoundingClientRect()
     expect(newPosition).toStrictEqual(contactButtonPosition)
