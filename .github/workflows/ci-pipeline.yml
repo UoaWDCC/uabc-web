@@ -151,26 +151,11 @@ jobs:
     needs: [preview-storybook]
     runs-on: ubuntu-latest
     steps:
-      - name: Find Comment
-        uses: peter-evans/find-comment@v2
-        if: github.event_name == 'pull_request'
-        id: find-comment
+      - name: Use comment
+        id: deploy-storybook
+        uses: ./.github/cd-actions/deploy-storybook/
         with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Preview Deployment Status
-          direction: last
-
-      - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@v3
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-id: ${{ steps.find-comment.outputs.comment-id }}
-          edit-mode: replace
-          body: |
-            ## Preview Deployment Status
-
-            Storybook deployed to: ${{ needs.preview-storybook.outputs.deployment-url }}
+          preview-storybook: ${{ needs.preview-storybook.outputs.deployment-url }}
 
   typecheck:
     needs: [check_changes, setup]
