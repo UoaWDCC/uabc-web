@@ -14,5 +14,11 @@
     "**/*.code-search": true,
     "**/dist": true,
     "**/portal": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
   }
 }
