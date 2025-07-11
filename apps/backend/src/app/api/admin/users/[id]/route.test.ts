@@ -130,9 +130,8 @@ describe("/api/admin/users/[id]", async () => {
 
     it("should return a 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const newUser = await userDataService.createUser(userCreateMock)
       const res = await PATCH(createMockNextRequest("/api/admin/users", "PATCH", updateUser), {
-        params: Promise.resolve({ id: newUser.id }),
+        params: Promise.resolve({ id: "test" }),
       })
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
@@ -140,9 +139,8 @@ describe("/api/admin/users/[id]", async () => {
 
     it("should return a 401 if user is a member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
-      const newUser = await userDataService.createUser(userCreateMock)
       const res = await PATCH(createMockNextRequest("/api/admin/users", "PATCH", updateUser), {
-        params: Promise.resolve({ id: newUser.id }),
+        params: Promise.resolve({ id: "test" }),
       })
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
