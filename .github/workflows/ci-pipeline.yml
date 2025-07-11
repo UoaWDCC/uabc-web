@@ -130,6 +130,7 @@ jobs:
   preview-storybook:
     needs: [build-storybook]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Preview Storybook
     runs-on: ubuntu-latest
     outputs:
       deployment-url: ${{ steps.deploy-storybook.outputs.deployment-url }}
@@ -147,6 +148,7 @@ jobs:
   preview-frontend:
     needs: [build-frontend]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Preview Frontend
     runs-on: ubuntu-latest
     outputs:
       deployment-url: ${{ steps.deploy-frontend.outputs.deployment-url }}
