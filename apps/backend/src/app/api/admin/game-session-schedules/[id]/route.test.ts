@@ -63,7 +63,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
         gameSessionScheduleCreateMock,
       )
       const req = createMockNextRequest("/api/admin/game-session-schedules", "PATCH", {
-        invalidProperty: undefined,
+        day: "invalid",
       })
       const res = await PATCH(req, {
         params: Promise.resolve({ id: newGameSessionSchedule.id }),
