@@ -138,7 +138,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Deploy Storybook
-        id: deploy-storybook
         uses: ./.github/cd-actions/deploy-storybook/
         with:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
@@ -156,7 +155,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Deploy frontend
-        id: deploy-frontend
         uses: ./.github/cd-actions/deploy-frontend/
         with:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}

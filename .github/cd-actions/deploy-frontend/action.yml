@@ -63,6 +63,9 @@ runs:
 
     - name: Create Cloudflare static Next build
       run: pnpm --prefix=apps/frontend pages:build
+      env:
+        NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
+        NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
       shell: bash
 
     - name: Publish frontend to cloudflare
