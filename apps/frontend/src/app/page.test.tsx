@@ -56,6 +56,6 @@ describe("<Home />", () => {
   it("should render the faq section", async () => {
     const HomeComponent = await Home()
     render(HomeComponent)
-    expect(screen.getByText("FAQs")).not.toBeInTheDocument()
+    expect(screen.getByText("FAQs")).toBeInTheDocument()
   })
 })
