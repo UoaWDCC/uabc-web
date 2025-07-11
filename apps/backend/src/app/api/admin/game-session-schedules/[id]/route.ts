@@ -16,7 +16,6 @@ class GameSessionScheduleRouteWrapper {
         (await params).id,
         parsedBody,
       )
-
       return NextResponse.json({ data: updatedGameSessionSchedule }, { status: StatusCodes.OK })
     } catch (error) {
       if (error instanceof ZodError) {

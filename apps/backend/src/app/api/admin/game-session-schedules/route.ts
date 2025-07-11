@@ -20,7 +20,6 @@ class GameSessionSchedulesRouteWrapper {
       const gameSessionDataService = new GameSessionDataService()
       const newGameSessionSchedule =
         await gameSessionDataService.createGameSessionSchedule(parsedBody)
-
       return NextResponse.json({ data: newGameSessionSchedule }, { status: StatusCodes.CREATED })
     } catch (error) {
       if (error instanceof ZodError) {
