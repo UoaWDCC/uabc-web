@@ -26,42 +26,45 @@ export const LocationBubbleCircle = ({
       <Motion
         animate={{ scale: 1 }}
         background="linear-gradient(135deg, #5407FF 8%, #89A5DA 100%) border-box"
-        border="5px solid transparent"
-        height={148}
-        initial={{ scale: 1.5 }}
+        borderColor="transparent"
+        borderWidth={{ base: "3.25px", md: "5px" }}
+        height={{ base: "96px", md: "148px" }}
+        initial={{ scale: 1.25 }}
         layoutId="location-bubble-border"
         mask="conic-gradient(white 0 0) padding-box exclude, conic-gradient(white 0 0)"
         position="absolute"
         style={{ borderRadius: "74px" }}
         transition={{ type: "spring", bounce: 0.35, visualDuration: 0.5 }}
-        width={148}
+        width={{ base: "96px", md: "148px" }}
       />
       <Motion
-        height={148}
+        height={{ base: "96px", md: "148px" }}
         layoutId="location-bubble-background"
         position="absolute"
         transition={{ type: "spring", bounce: 0.35, visualDuration: 0.6 }}
-        width={148}
+        width={{ base: "96px", md: "148px" }}
+      >
+        <Motion height="full" layoutId="location-bubble-title" width="full" />
+      </Motion>
+      <Box
+        data-testid="location-bubble-circle"
+        position="relative"
+        width={{ base: "96px", md: "148px" }}
       >
         <Motion
-          height="full"
-          layoutId="location-bubble-title"
-          style={{ opacity: 0 }}
-          width="full"
-        />
-      </Motion>
-      <Box data-testid="location-bubble-circle" position="relative" width={148}>
-        <Motion
           animate={{ scale: 1 }}
-          border="10px solid transparent"
-          initial={{ scale: 1.75 }}
-          inset="-5px"
+          borderColor="transparent"
+          borderWidth={{ base: "6.5px", md: "10px" }}
+          height={{ base: "96px", md: "148px" }}
+          initial={{ scale: 1.25 }}
+          inset={{ base: "-3.25px", md: "-5px" }}
           layoutId="location-bubble-image"
-          margin="5px"
+          margin={{ base: "3.25px", md: "5px" }}
           overflow="hidden"
           position="relative"
-          style={{ borderRadius: "74px", width: "148px", height: "148px" }}
+          style={{ borderRadius: "74px" }}
           transition={{ type: "spring", bounce: 0.3, visualDuration: 0.4 }}
+          width={{ base: "96px", md: "148px" }}
         >
           <Center height="100%" overflow="hidden" width="100%">
             <Image
@@ -84,8 +87,8 @@ export const LocationBubbleCircle = ({
           right={0}
           transition={{ type: "spring", bounce: 0.5, visualDuration: 0.5 }}
         >
-          <Center bgColor="black" borderRadius="50%" padding="12px">
-            <Maximize2Icon boxSize={5} color="white" />
+          <Center bgColor="black" borderRadius="50%" padding={{ base: "7.2px", md: "12px" }}>
+            <Maximize2Icon boxSize={{ base: 3, md: 5 }} color="white" />
           </Center>
         </Motion>
       </Box>
