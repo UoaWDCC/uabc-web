@@ -61,7 +61,7 @@ describe("<LocationBubble />", () => {
     await user.hover(bubble)
     expect(await screen.findByTestId("location-bubble-desktop-card")).toBeInTheDocument()
 
-    const cardWrapper = screen.getByTestId("location-bubble-desktop-card-wrapper")
+    const cardWrapper = screen.getByTestId("location-bubble-hover-container")
 
     await user.hover(cardWrapper)
     vi.advanceTimersToNextTimer()

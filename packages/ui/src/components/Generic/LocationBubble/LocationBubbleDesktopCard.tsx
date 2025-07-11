@@ -68,8 +68,8 @@ export const LocationBubbleDesktopCard = ({
             />
           </Motion>
           <Motion
-            animate={{ opacity: 1, scale: 1 }}
-            initial={{ opacity: 0, scale: 0 }}
+            animate={{ scale: 1 }}
+            initial={{ scale: 0 }}
             layout="position"
             layoutId="location-bubble-title"
             transition={{

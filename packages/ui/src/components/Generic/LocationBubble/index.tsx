@@ -54,7 +54,8 @@ export const LocationBubble = ({
   const fallback = useMotionValue(0)
   const animatedTime = useTime()
   const time = shouldReduceMotion ? fallback : animatedTime
-  const direction = useMotionValue(Math.random() > 0.5 ? 1 : -1)
+  // const direction = useMotionValue(Math.random() > 0.5 ? 1 : -1)
+  const direction = useMotionValue(1)
   const xRadius = useTransform(time, (t) => Math.cos(t / 2000) * 25)
   const yRadius = useTransform(time, (t) => Math.sin(t / 2000) * 25)
   const bubbleXValue = useTransform(
@@ -70,19 +71,25 @@ export const LocationBubble = ({
 
   return (
     <>
-      <Box data-testid="location-bubble" height={468} position="relative" width={348}>
+      <Box data-testid="location-bubble" pointerEvents="none" position="relative">
         <LayoutGroup id={locationTitle}>
-          {hovering ? (
-            <Motion
-              data-testid="location-bubble-desktop-card-wrapper"
-              onHoverEnd={() => {
-                if (hoverDebounce.current) {
-                  clearTimeout(hoverDebounce.current)
-                  hoverDebounce.current = null
-                }
-                setHovering(false)
-              }}
-            >
+          <Motion
+            data-testid="location-bubble-hover-container"
+            onHoverEnd={() => {
+              if (hoverDebounce.current) {
+                clearTimeout(hoverDebounce.current)
+                hoverDebounce.current = null
+              }
+              setHovering(false)
+            }}
+            onHoverStart={() => {
+              hoverDebounce.current = setTimeout(() => {
+                setHovering(true)
+              }, 100)
+            }}
+            pointerEvents="all"
+          >
+            {hovering ? (
               <LocationBubbleDesktopCard
                 buttonLink={buttonLink}
                 locationDetails={locationDetails}
@@ -90,38 +97,32 @@ export const LocationBubble = ({
                 locationTimes={locationTimes}
                 locationTitle={locationTitle}
               />
-            </Motion>
-          ) : (
-            <Center height="100%" width="100%">
-              <Motion
-                data-testid="location-bubble-circle-trigger"
-                onHoverEnd={() => {
-                  if (hoverDebounce.current) {
-                    clearTimeout(hoverDebounce.current)
-                    hoverDebounce.current = null
-                  }
-                  setHovering(false)
-                }}
-                onHoverStart={() => {
-                  hoverDebounce.current = setTimeout(() => {
-                    setHovering(true)
-                  }, 100)
-                }}
-                onTap={onOpen}
-                style={{
-                  x: bubbleX,
-                  y: bubbleY,
-                }}
-                whileTap={{
-                  scale: 0.9,
-                  rotateZ: 5,
-                  transition: { type: "spring", stiffness: 300, damping: 15 },
-                }}
-              >
-                <LocationBubbleCircle locationImage={locationImage} locationTitle={locationTitle} />
-              </Motion>
-            </Center>
-          )}
+            ) : (
+              <Center pointerEvents="none">
+                <Motion
+                  data-testid="location-bubble-circle-trigger"
+                  height="fit-content"
+                  onTap={onOpen}
+                  pointerEvents="auto"
+                  style={{
+                    x: bubbleX,
+                    y: bubbleY,
+                  }}
+                  whileTap={{
+                    scale: 0.9,
+                    rotateZ: 5,
+                    transition: { type: "spring", stiffness: 300, damping: 15 },
+                  }}
+                  width="fit-content"
+                >
+                  <LocationBubbleCircle
+                    locationImage={locationImage}
+                    locationTitle={locationTitle}
+                  />
+                </Motion>
+              </Center>
+            )}
+          </Motion>
         </LayoutGroup>
       </Box>
       <LocationBubbleMobileCard
