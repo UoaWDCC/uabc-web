@@ -56,7 +56,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       )
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
       await expect(
-        gameSessionDataService.getGameSessionById(newGameSessionSchedule.id),
+        gameSessionDataService.getGameSessionScheduleById(newGameSessionSchedule.id),
       ).rejects.toThrow("Not Found")
     })
 
