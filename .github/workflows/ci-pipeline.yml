@@ -150,6 +150,10 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Output deployment URL
+        shell: bash
+        run: echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
+
   comment:
     name: Comment
     needs: [preview-storybook]
