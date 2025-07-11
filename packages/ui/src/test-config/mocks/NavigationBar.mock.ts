@@ -2,7 +2,6 @@ import { adminUserMock, casualUserMock, memberUserMock } from "@repo/shared/mock
 
 const navItemsMock = [
   { label: "Book", path: "/book" },
-  { label: "Profile", path: "/profile" },
   { label: "Events", path: "/events" },
   { label: "About", path: "/about" },
   { label: "Contact", path: "/contact" },

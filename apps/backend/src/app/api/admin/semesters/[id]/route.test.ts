@@ -1,5 +1,5 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
-import { StatusCodes } from "http-status-codes"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import type { NextRequest } from "next/server"
 import { describe, expect, it } from "vitest"
@@ -50,6 +50,20 @@ describe("/api/admin/semesters/[id]", async () => {
         params: Promise.resolve({ id: "non-existent" }),
       })
       expect(res.status).toBe(StatusCodes.NOT_FOUND)
+    })
+
+    it("should handle errors and return 500 status", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      vi.spyOn(SemesterDataService.prototype, "deleteSemester").mockRejectedValueOnce(
+        new Error("Database error"),
+      )
+
+      const res = await DELETE({} as NextRequest, {
+        params: Promise.resolve({ id: "test" }),
+      })
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await res.json()
+      expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
     })
   })
 
