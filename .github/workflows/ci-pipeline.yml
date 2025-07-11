@@ -127,10 +127,10 @@ jobs:
       - name: Build Storybook
         uses: ./.github/ci-actions/build-storybook/
 
-  preview-storybook:
+  storybook-preview:
     needs: [build-storybook]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Preview Storybook
+    name: Storybook Preview
     runs-on: ubuntu-latest
     outputs:
       deployment-url: ${{ steps.deploy-storybook.outputs.deployment-url }}
@@ -145,10 +145,10 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  preview-frontend:
+  frontend-preview:
     needs: [build-frontend]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Preview Frontend
+    name: Frontend Preview
     runs-on: ubuntu-latest
     outputs:
       deployment-url: ${{ steps.deploy-frontend.outputs.deployment-url }}
@@ -168,7 +168,7 @@ jobs:
 
   comment:
     name: Comment
-    needs: [preview-storybook, preview-frontend]
+    needs: [storybook-preview, frontend-preview]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -176,8 +176,8 @@ jobs:
       - name: Comment information
         uses: ./.github/ci-actions/comment/
         with:
-          preview-storybook: ${{ needs.preview-storybook.outputs.deployment-url }}
-          frontend-preview: ${{ needs.preview-frontend.outputs.deployment-url }}
+          storybook-preview: ${{ needs.storybook-preview.outputs.deployment-url }}
+          frontend-preview: ${{ needs.frontend-preview.outputs.deployment-url }}
 
   typecheck:
     needs: [check_changes, setup]
