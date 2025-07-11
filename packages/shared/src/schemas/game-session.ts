@@ -1,5 +1,5 @@
 import z from "zod"
-import type { GameSessionSchedule } from "@/payload-types"
+import type { GameSessionSchedule } from "../payload-types"
 import {
   type CreateGameSessionScheduleData,
   type UpdateGameSessionScheduleData,
