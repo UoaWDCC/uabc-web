@@ -129,7 +129,7 @@ jobs:
 
   storybook-preview:
     needs: [build-storybook]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     name: Storybook Preview
     runs-on: ubuntu-latest
     outputs:
