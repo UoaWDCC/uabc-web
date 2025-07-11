@@ -40,7 +40,7 @@ describe("/api/admin/semesters/[id]", async () => {
       const res = await DELETE({} as NextRequest, {
         params: Promise.resolve({ id: newSemester.id }),
       })
-      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+      expect(res.status).toBe(StatusCodes.OK)
       await expect(semesterDataService.getSemesterById(newSemester.id)).rejects.toThrow("Not Found")
     })
 

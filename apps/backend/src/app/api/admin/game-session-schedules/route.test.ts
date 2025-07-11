@@ -55,7 +55,10 @@ describe("/api/admin/game-session-schedules", async () => {
 
     it("should return 400 if request body is invalid", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const req = createMockNextRequest("/api/admin/game-session-schedules", "POST", undefined)
+      const req = createMockNextRequest("/api/admin/game-session-schedules", "POST", {
+        ...gameSessionScheduleCreateMock,
+        name: undefined,
+      })
       const res = await POST(req)
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
 

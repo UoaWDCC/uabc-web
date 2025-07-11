@@ -17,10 +17,7 @@ class GameSessionScheduleRouteWrapper {
         parsedBody,
       )
 
-      return NextResponse.json(
-        { data: updatedGameSessionSchedule },
-        { status: StatusCodes.NO_CONTENT },
-      )
+      return NextResponse.json({ data: updatedGameSessionSchedule }, { status: StatusCodes.OK })
     } catch (error) {
       if (error instanceof ZodError) {
         return NextResponse.json(
