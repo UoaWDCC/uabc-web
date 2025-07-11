@@ -1,5 +1,5 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
-import { StatusCodes } from "http-status-codes"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
@@ -14,13 +14,10 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
   describe("DELETE", () => {
     it("should return 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
-        gameSessionScheduleCreateMock,
-      )
       const res = await DELETE(
         createMockNextRequest("/api/admin/game-session-schedules", "DELETE"),
         {
-          params: Promise.resolve({ id: newGameSessionSchedule.id }),
+          params: Promise.resolve({ id: "some-id" }),
         },
       )
 
@@ -30,13 +27,10 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
 
     it("should return 401 if user is member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
-      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
-        gameSessionScheduleCreateMock,
-      )
       const res = await DELETE(
         createMockNextRequest("/api/admin/game-session-schedules", "DELETE"),
         {
-          params: Promise.resolve({ id: newGameSessionSchedule.id }),
+          params: Promise.resolve({ id: "some-id" }),
         },
       )
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
@@ -57,7 +51,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
       await expect(
         gameSessionDataService.getGameSessionScheduleById(newGameSessionSchedule.id),
-      ).rejects.toThrow("Not Found")
+      ).rejects.toThrow(getReasonPhrase(StatusCodes.NOT_FOUND))
     })
 
     it("should return 404 if gameSessionSchedule is non-existent", async () => {
@@ -81,7 +75,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       )
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
-      expect(json.error).toEqual("Internal Server Error")
+      expect(json.error).toEqual(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
     })
   })
 })

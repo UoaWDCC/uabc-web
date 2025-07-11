@@ -22,7 +22,7 @@ class GameSessionScheduleRouteWrapper {
     } catch (error) {
       if (error instanceof NotFound) {
         return NextResponse.json(
-          { error: "Game Session Schedule not found" },
+          { error: "Game session schedule not found" },
           { status: StatusCodes.NOT_FOUND },
         )
       }
