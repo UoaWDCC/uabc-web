@@ -12,6 +12,11 @@ inputs:
     description: 'GitHub token'
     required: true
 
+outputs:
+  deployment-url:
+    description: 'The URL of the deployed Storybook'
+    value: ${{ steps.deploy.outputs.deployment-url }}
+
 runs:
   using: composite
   steps:
@@ -40,3 +45,7 @@ runs:
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
         command: pages deploy packages/ui/storybook-static --project-name=uabc-storybook
+
+    - name: Output deployment url
+      shell: bash
+      run: echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT

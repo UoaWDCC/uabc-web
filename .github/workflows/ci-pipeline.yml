@@ -132,12 +132,18 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     environment:
       name: staging
+    permissions:
+      contents: read
+      pull-requests: write
     name: Preview Storybook
     runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy-storybook.outputs.deployment-url }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Deploy Storybook
+        id: deploy-storybook
         uses: ./.github/cd-actions/deploy-storybook/
         with:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
