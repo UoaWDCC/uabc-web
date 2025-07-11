@@ -8,6 +8,9 @@ inputs:
   NEXT_PUBLIC_API_URL:
     description: "The public API URL for the workspace."
     required: true
+  NEXT_CONFIG_ENV:
+    description: "The environment configuration for Next."
+    required: false
 
 runs:
   using: composite
@@ -54,4 +57,5 @@ runs:
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
-      run: pnpm turbo run build --filter frontend
+        NEXT_CONFIG_ENV: ${{ inputs.NEXT_CONFIG_ENV }}
+      run: pnpm build --filter frontend
