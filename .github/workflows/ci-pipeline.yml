@@ -152,7 +152,7 @@ jobs:
 
       - name: Output deployment URL
         shell: bash
-        run: echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
+        run: echo "deployment-url=${{ steps.deploy-storybook.outputs.deployment-url }}" >> $GITHUB_OUTPUT
 
   comment:
     name: Comment
