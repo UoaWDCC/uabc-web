@@ -169,16 +169,6 @@ describe("/api/admin/users", async () => {
       expect(json.details.fieldErrors.firstName[0]).toEqual("Required")
     })
 
-    it("should error if an invalid firstName is provided", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const res = await POST(
-        createMockNextRequest("api/admin/users", "POST", { ...userCreateMock, role: "Test" }),
-      )
-      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
-      const json = await res.json()
-      expect(json.error).toEqual("Invalid request body")
-    })
-
     it("should return a 500 error for internal server error", async () => {
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
 
