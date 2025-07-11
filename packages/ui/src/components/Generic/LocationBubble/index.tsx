@@ -5,6 +5,7 @@ import {
   Center,
   LayoutGroup,
   Motion,
+  useBreakpointValue,
   useDisclosure,
   useMotionValue,
   useReducedMotion,
@@ -50,6 +51,26 @@ export const LocationBubble = ({
 
   const { open, onOpen, onClose } = useDisclosure()
 
+  const onHoverEnd = useBreakpointValue({
+    base: () => {},
+    md: () => {
+      if (hoverDebounce.current) {
+        clearTimeout(hoverDebounce.current)
+        hoverDebounce.current = null
+      }
+      setHovering(false)
+    },
+  })
+
+  const onHoverStart = useBreakpointValue({
+    base: () => {},
+    md: () => {
+      hoverDebounce.current = setTimeout(() => {
+        setHovering(true)
+      }, 100)
+    },
+  })
+
   const shouldReduceMotion = useReducedMotion()
   const fallback = useMotionValue(0)
   const animatedTime = useTime()
@@ -75,18 +96,8 @@ export const LocationBubble = ({
         <LayoutGroup id={locationTitle}>
           <Motion
             data-testid="location-bubble-hover-container"
-            onHoverEnd={() => {
-              if (hoverDebounce.current) {
-                clearTimeout(hoverDebounce.current)
-                hoverDebounce.current = null
-              }
-              setHovering(false)
-            }}
-            onHoverStart={() => {
-              hoverDebounce.current = setTimeout(() => {
-                setHovering(true)
-              }, 100)
-            }}
+            onHoverEnd={onHoverEnd}
+            onHoverStart={onHoverStart}
             pointerEvents="all"
           >
             {hovering ? (
