@@ -1,9 +1,7 @@
 "use client"
 
-import { Button, Heading } from "@repo/ui/components/Primitive"
-import { Card, CardBody, CardHeader, Text } from "@yamada-ui/react"
-import { useRouter } from "next/navigation"
-import type { MouseEventHandler } from "react"
+import { Button, type ButtonProps, Heading } from "@repo/ui/components/Primitive"
+import { Card, CardBody, CardHeader, Link, Text } from "@yamada-ui/react"
 
 /**
  * Props for {@link UnderConstructionCard} component
@@ -28,11 +26,9 @@ export interface UnderConstructionCardProps {
    */
   returnLabel?: string
   /**
-   * Function called when the user clicks the return button
-   *
-   * @defaultValue `() => router.back()` (navigate to the previous history entry)
+   * Props for the return button
    */
-  handleReturn?: MouseEventHandler<HTMLButtonElement>
+  buttonProps?: ButtonProps
 }
 
 /**
@@ -40,17 +36,12 @@ export interface UnderConstructionCardProps {
  *
  * @param props UnderConstructionCard component properties
  * @returns A styled card communicating that the feature is under construction
- *
- * @example
- * TODO
  */
 export const UnderConstructionCard = ({
   title = "Feature is Under Construction 🔧",
   description = "Our team is busy working on this page.\nCheck back later!",
   returnLabel = "Return",
-  handleReturn,
 }: UnderConstructionCardProps) => {
-  const router = useRouter()
   return (
     <Card
       alignItems="center"
@@ -78,11 +69,7 @@ export const UnderConstructionCard = ({
         <Text fontSize={{ base: "sm", md: "md" }} textAlign="center" whiteSpace="break-spaces">
           {description}
         </Text>
-        <Button
-          colorScheme="primary"
-          onClick={handleReturn ?? (() => router.back())}
-          placeSelf="center"
-        >
+        <Button as={Link} colorScheme="primary" href="/" placeSelf="center">
           {returnLabel}
         </Button>
       </CardBody>
