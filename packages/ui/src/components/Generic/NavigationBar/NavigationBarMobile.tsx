@@ -137,15 +137,14 @@ export const NavigationBarMobile = ({ navItems, user }: NavigationBarProps) => {
       </Popover>
       <Fade
         bgColor="rgba(0, 0, 0, 0.4)"
-        bottom={0}
         data-testid="navbar-mobile-backdrop"
         duration={0.35}
-        left={0}
+        inset={0}
         open={open}
+        pointerEvents={open ? "auto" : "none"}
         position="fixed"
-        right={0}
-        top={0}
-        zIndex={1001}
+        width="100vw"
+        zIndex={99}
       />
     </Box>
   )

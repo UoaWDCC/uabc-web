@@ -153,7 +153,7 @@ describe("<NavigationBarMobile />", () => {
     await user.click(menuButton)
 
     expect(backdrop).toBeInTheDocument()
-    expect(backdrop).toBeVisible()
+    await waitFor(() => expect(backdrop).toBeVisible())
   })
 })
 
