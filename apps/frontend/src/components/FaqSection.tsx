@@ -1,6 +1,6 @@
 "use client"
-import { FAQ } from "@repo/ui/components/Generic"
-import { Skeleton, Text } from "@yamada-ui/react"
+import { FAQ, FAQSkeleton } from "@repo/ui/components/Generic"
+import { Text } from "@yamada-ui/react"
 import { useFaq } from "@/services/cms/faq/FaqQuery"
 
 /**
@@ -12,7 +12,7 @@ export const FaqSection = () => {
   const { data: faqData, isLoading, isError } = useFaq()
 
   if (isLoading) {
-    return <Skeleton borderRadius="xl" data-testid="faq-loading" height="sm" width="full" />
+    return <FAQSkeleton />
   }
 
   if (isError) {
