@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
+import { Semester } from "@/data-layer/collections/Semester"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 
 class SemesterRouteWrapper {
