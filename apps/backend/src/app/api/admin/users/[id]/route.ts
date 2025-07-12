@@ -33,7 +33,7 @@ class UserRouteWrapper {
       )
     }
   }
-  
+
   /**
    * PATCH method to update a user.
    *
@@ -66,7 +66,7 @@ class UserRouteWrapper {
       )
     }
   }
-  
+
   /**
    * DELETE method to delete a single user by ID.
    *
