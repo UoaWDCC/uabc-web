@@ -96,6 +96,25 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       const json = await res.json()
       expect(json.error).toEqual("Game session schedule not found")
     })
+
+    it("should return 500 for internal server error", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      vi.spyOn(GameSessionDataService.prototype, "updateGameSessionSchedule").mockRejectedValueOnce(
+        new Error("Database error"),
+      )
+      const req = createMockNextRequest(
+        "/api/admin/game-session-schedules",
+        "PATCH",
+        gameSessionScheduleCreateMock,
+      )
+      const res = await PATCH(req, {
+        params: Promise.resolve({ id: "some-id" }),
+      })
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+
+      const json = await res.json()
+      expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+    })
   })
 
   describe("DELETE", () => {

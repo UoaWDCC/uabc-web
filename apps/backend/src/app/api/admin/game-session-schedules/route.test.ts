@@ -1,5 +1,5 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
-import { StatusCodes } from "http-status-codes"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
@@ -81,6 +81,23 @@ describe("/api/admin/game-session-schedules", async () => {
       expect(json.details.fieldErrors.startTime[0]).toEqual(
         "Invalid date format, should be in ISO 8601 format",
       )
+    })
+
+    it("should return 500 for internal server error", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      vi.spyOn(GameSessionDataService.prototype, "createGameSessionSchedule").mockRejectedValueOnce(
+        new Error("Database error"),
+      )
+      const req = createMockNextRequest(
+        "/api/admin/game-session-schedules",
+        "POST",
+        gameSessionScheduleCreateMock,
+      )
+      const res = await POST(req)
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+
+      const json = await res.json()
+      expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
     })
   })
 })
