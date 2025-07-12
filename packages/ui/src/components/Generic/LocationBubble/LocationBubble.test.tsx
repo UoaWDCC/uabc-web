@@ -158,11 +158,18 @@ describe("<LocationBubble />", () => {
     const bubbleWithMotion = screen.getByTestId("location-bubble-circle-trigger")
 
     const transformInitial = window.getComputedStyle(bubbleWithMotion).transform
-    expect(transformInitial).toBeOneOf(["translateX(25px)", "translateX(-25px)"])
+    const expectedPeriod =
+      1900 +
+      (LOCATION_BUBBLE_TEST_CONSTANTS.locationTitle
+        .split("")
+        .reduce((acc, char) => acc + 31 * char.charCodeAt(0), 0) %
+        200)
+    const expectedX = Math.cos(expectedPeriod) * 25
+    expect(transformInitial).toStrictEqual(`translateX(${expectedX}px)`)
 
     waitFor(() => {
       const transformAfterHover = window.getComputedStyle(bubbleWithMotion).transform
-      expect(transformAfterHover).not.toBeOneOf(["translateX(25px)", "translateX(-25px)"])
+      expect(transformAfterHover).not.toStrictEqual(transformInitial)
     })
   })
 

@@ -75,19 +75,14 @@ export const LocationBubble = ({
   const fallback = useMotionValue(0)
   const animatedTime = useTime()
   const time = shouldReduceMotion ? fallback : animatedTime
-  // const direction = useMotionValue(Math.random() > 0.5 ? 1 : -1)
-  const direction = useMotionValue(1)
-  const xRadius = useTransform(time, (t) => Math.cos(t / 2000) * 25)
-  const yRadius = useTransform(time, (t) => Math.sin(t / 2000) * 25)
-  const bubbleXValue = useTransform(
-    time,
-    (t) => Math.cos(t / 3500) * xRadius.get() * direction.get(),
+  const period = useMotionValue(
+    1900 + (locationTitle.split("").reduce((acc, char) => acc + 31 * char.charCodeAt(0), 0) % 200),
   )
+  const xRadius = useTransform(time, (t) => Math.cos(t / period.get() + period.get()) * 25)
+  const yRadius = useTransform(time, (t) => Math.sin(t / period.get() + period.get()) * 25)
+  const bubbleXValue = useTransform(time, (t) => Math.cos(t / 3500) * xRadius.get())
   const bubbleX = shouldReduceMotion ? fallback : bubbleXValue
-  const bubbleYValue = useTransform(
-    time,
-    (t) => Math.sin(t / 3500) * yRadius.get() * direction.get(),
-  )
+  const bubbleYValue = useTransform(time, (t) => Math.sin(t / 3500) * yRadius.get())
   const bubbleY = shouldReduceMotion ? fallback : bubbleYValue
 
   return (
