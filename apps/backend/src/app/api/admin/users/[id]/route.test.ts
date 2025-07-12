@@ -12,7 +12,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
-import { DELETE, GET, PATH } from "./route"
+import { DELETE, GET, PATCH } from "./route"
 
 const baseRoute = "/api/admin/users"
 
