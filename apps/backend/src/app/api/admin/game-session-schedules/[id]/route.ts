@@ -10,7 +10,7 @@ class RouteWrapper {
    *
    * @param _req The request object
    * @param params route parameters containing the GameSessionSchedule ID
-   * @returns No content status code
+   * @returns OK code and the game session schedule data
    */
   @Security("jwt", ["admin"])
   static async GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
