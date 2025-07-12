@@ -2,6 +2,7 @@ import { createSimpleSharedFAQItem } from "@repo/ui/test-config/mocks/FAQ.mock"
 import { fireEvent, render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import { FAQ } from "./FAQ"
+import { FAQSkeleton } from "./FAQSkeleton"
 import * as FAQModule from "./index"
 import type { UIFAQItem } from "./schema"
 
@@ -124,5 +125,18 @@ describe("<FAQ />", () => {
     fireEvent.click(question)
 
     expect(screen.getByText("Line 1 Line 2 Line 3")).toBeInTheDocument()
+  })
+})
+
+describe("<FAQSkeleton />", () => {
+  it("should rexport the FAQSkeleton component", () => {
+    expect(FAQModule.FAQSkeleton).toBeDefined()
+    expect(isValidElement(<FAQModule.FAQSkeleton />)).toBeTruthy()
+  })
+
+  it("renders skeleton with default number of items", () => {
+    render(<FAQSkeleton />)
+    expect(screen.getByTestId("faq-loading")).toBeInTheDocument()
+    expect(screen.getAllByTestId("faq-loading-item")).toHaveLength(3)
   })
 })
