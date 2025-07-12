@@ -14,8 +14,6 @@ const config = (async () => {
     {
       protocol: "https",
       hostname: "images.unsplash.com",
-      port: "",
-      pathname: "/**",
     },
   ]
 
