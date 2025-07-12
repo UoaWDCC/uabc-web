@@ -177,3 +177,5 @@ export default async function Home() {
     </VStack>
   )
 }
+
+Home.displayName = "Home"
