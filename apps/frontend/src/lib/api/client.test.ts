@@ -36,6 +36,109 @@ describe("ApiClient", () => {
     })
   })
 
+  describe("URL joining", () => {
+    let client: ReturnType<typeof createApiClient>
+    const testSchema = z.object({ message: z.string() })
+    const mockResponse = { message: "success" }
+
+    beforeEach(() => {
+      mockFetch.mockResolvedValue(new Response(JSON.stringify(mockResponse)))
+    })
+
+    it("should handle base URL with trailing slash and path with leading slash", async () => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com/")
+      client = createApiClient()
+
+      await client.get("/users", testSchema)
+
+      expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/users", expect.any(Object))
+    })
+
+    it("should handle base URL without trailing slash and path without leading slash", async () => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
+      client = createApiClient()
+
+      await client.get("users", testSchema)
+
+      expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/users", expect.any(Object))
+    })
+
+    it("should handle base URL with trailing slash and path without leading slash", async () => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com/")
+      client = createApiClient()
+
+      await client.get("users", testSchema)
+
+      expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/users", expect.any(Object))
+    })
+
+    it("should handle base URL without trailing slash and path with leading slash", async () => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
+      client = createApiClient()
+
+      await client.get("/users", testSchema)
+
+      expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/users", expect.any(Object))
+    })
+
+    it("should handle multiple trailing slashes in base URL", async () => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com///")
+      client = createApiClient()
+
+      await client.get("/users", testSchema)
+
+      expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/users", expect.any(Object))
+    })
+
+    it("should handle multiple leading slashes in path", async () => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
+      client = createApiClient()
+
+      await client.get("///users", testSchema)
+
+      expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/users", expect.any(Object))
+    })
+
+    it("should handle complex path with subdirectories", async () => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com/")
+      client = createApiClient()
+
+      await client.get("/api/v1/users/123", testSchema)
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api.example.com/api/v1/users/123",
+        expect.any(Object),
+      )
+    })
+
+    it("should handle empty path", async () => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com/")
+      client = createApiClient()
+
+      await client.get("", testSchema)
+
+      expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/", expect.any(Object))
+    })
+
+    it("should work consistently across all HTTP methods", async () => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com/")
+      client = createApiClient()
+
+      // Test all methods with the same URL joining scenario
+      await client.get("/test", testSchema)
+      await client.post("/test", {}, testSchema)
+      await client.put("/test", {}, testSchema)
+      await client.patch("/test", {}, testSchema)
+      await client.delete("/test", testSchema)
+
+      // All should result in the same properly joined URL
+      expect(mockFetch).toHaveBeenCalledTimes(5)
+      mockFetch.mock.calls.forEach((call) => {
+        expect(call[0]).toBe("https://api.example.com/test")
+      })
+    })
+  })
+
   describe("get method", () => {
     let client: ReturnType<typeof createApiClient>
 
@@ -223,7 +326,10 @@ describe("ApiClient", () => {
       client = createApiClient()
     })
     it("should successfully put and parse data", async () => {
-      const testSchema = z.object({ message: z.string(), updated: z.boolean() })
+      const testSchema = z.object({
+        message: z.string(),
+        updated: z.boolean(),
+      })
       const mockResponse = { message: "updated", updated: true }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
       const result = await client.put("/test", { foo: "bar" }, testSchema, ["putTag"])
@@ -247,7 +353,10 @@ describe("ApiClient", () => {
       expect(result.error?.message).toBe("Failed to fetch /test: Not Found")
     })
     it("should return error when schema validation fails", async () => {
-      const testSchema = z.object({ message: z.string(), updated: z.boolean() })
+      const testSchema = z.object({
+        message: z.string(),
+        updated: z.boolean(),
+      })
       const invalidResponse = { message: "updated" }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
       const result = await client.put("/test", { foo: "bar" }, testSchema)
@@ -255,7 +364,10 @@ describe("ApiClient", () => {
       expect(result.error).toBeInstanceOf(Error)
     })
     it("should successfully put and parse data with revalidate", async () => {
-      const testSchema = z.object({ message: z.string(), updated: z.boolean() })
+      const testSchema = z.object({
+        message: z.string(),
+        updated: z.boolean(),
+      })
       const mockResponse = { message: "updated", updated: true }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
       const result = await client.put("/test", { foo: "bar" }, testSchema, ["putTag"], 120)
@@ -279,7 +391,10 @@ describe("ApiClient", () => {
       client = createApiClient()
     })
     it("should successfully patch and parse data", async () => {
-      const testSchema = z.object({ message: z.string(), patched: z.boolean() })
+      const testSchema = z.object({
+        message: z.string(),
+        patched: z.boolean(),
+      })
       const mockResponse = { message: "patched", patched: true }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
       const result = await client.patch("/test", { foo: "bar" }, testSchema, ["patchTag"])
@@ -305,7 +420,10 @@ describe("ApiClient", () => {
       expect(result.error?.message).toBe("Failed to fetch /test: Internal Server Error")
     })
     it("should return error when schema validation fails", async () => {
-      const testSchema = z.object({ message: z.string(), patched: z.boolean() })
+      const testSchema = z.object({
+        message: z.string(),
+        patched: z.boolean(),
+      })
       const invalidResponse = { message: "patched" }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
       const result = await client.patch("/test", { foo: "bar" }, testSchema)
@@ -313,7 +431,10 @@ describe("ApiClient", () => {
       expect(result.error).toBeInstanceOf(Error)
     })
     it("should successfully patch and parse data with revalidate", async () => {
-      const testSchema = z.object({ message: z.string(), patched: z.boolean() })
+      const testSchema = z.object({
+        message: z.string(),
+        patched: z.boolean(),
+      })
       const mockResponse = { message: "patched", patched: true }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
       const result = await client.patch("/test", { foo: "bar" }, testSchema, ["patchTag"], 0)
@@ -337,7 +458,10 @@ describe("ApiClient", () => {
       client = createApiClient()
     })
     it("should successfully delete and parse data", async () => {
-      const testSchema = z.object({ message: z.string(), deleted: z.boolean() })
+      const testSchema = z.object({
+        message: z.string(),
+        deleted: z.boolean(),
+      })
       const mockResponse = { message: "deleted", deleted: true }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
       const result = await client.delete("/test", testSchema, ["deleteTag"])
@@ -359,7 +483,10 @@ describe("ApiClient", () => {
       expect(result.error?.message).toBe("Failed to fetch /test: Forbidden")
     })
     it("should return error when schema validation fails", async () => {
-      const testSchema = z.object({ message: z.string(), deleted: z.boolean() })
+      const testSchema = z.object({
+        message: z.string(),
+        deleted: z.boolean(),
+      })
       const invalidResponse = { message: "deleted" }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
       const result = await client.delete("/test", testSchema)
@@ -367,7 +494,10 @@ describe("ApiClient", () => {
       expect(result.error).toBeInstanceOf(Error)
     })
     it("should successfully delete and parse data with revalidate", async () => {
-      const testSchema = z.object({ message: z.string(), deleted: z.boolean() })
+      const testSchema = z.object({
+        message: z.string(),
+        deleted: z.boolean(),
+      })
       const mockResponse = { message: "deleted", deleted: true }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
       const result = await client.delete("/test", testSchema, ["deleteTag"], 10)

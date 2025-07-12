@@ -89,20 +89,15 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Backend
     runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: https://wdcc-uabc-backend-staging.fly.dev/
     steps:
       - uses: actions/checkout@v4
 
       - name: Run Build Backend
-        uses: ./.github/ci-actions/build/
+        uses: ./.github/ci-actions/build-backend/
         with:
-          workspace: backend
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
-          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
-          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -112,23 +107,14 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Frontend
     runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: https://wdcc-uabc-frontend-staging.fly.dev/
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Frontend
-        uses: ./.github/ci-actions/build/
+      - name: Run Build Frontend
+        uses: ./.github/ci-actions/build-frontend/
         with:
-          workspace: frontend
-          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
-          DATABASE_URI: ${{ secrets.DATABASE_URI }}
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
   build-storybook:
     needs: [check_changes, setup]
@@ -140,6 +126,35 @@ jobs:
 
       - name: Build Storybook
         uses: ./.github/ci-actions/build-storybook/
+
+  preview-storybook:
+    needs: [build-storybook]
+    if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy-storybook.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Storybook
+        id: deploy-storybook
+        uses: ./.github/cd-actions/deploy-storybook/
+        with:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  comment:
+    name: Comment
+    needs: [preview-storybook]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Comment information
+        uses: ./.github/ci-actions/comment/
+        with:
+          preview-storybook: ${{ needs.preview-storybook.outputs.deployment-url }}
 
   typecheck:
     needs: [check_changes, setup]

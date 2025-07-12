@@ -34,7 +34,8 @@ class SemesterRouteWrapper {
    * PATCH method to update a semester.
    *
    * @param req The request object containing the request body
-   * @returns  The updated  {@link Semester} document
+   * @param params The route parameters containing the Semester ID
+   * @returns The updated {@link Semester} document
    */
   @Security("jwt", ["admin"])
   static async PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

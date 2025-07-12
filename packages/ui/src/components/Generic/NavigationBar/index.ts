@@ -1,3 +1,5 @@
 export * from "./NavigationBar"
 export * from "./NavigationBarButton"
+export * from "./NavigationBarDesktop"
+export * from "./NavigationBarMobile"
 export * from "./NavigationBarUserMenu"
