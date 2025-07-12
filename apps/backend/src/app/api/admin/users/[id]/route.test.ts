@@ -126,7 +126,7 @@ describe(`${baseRoute}/[id]`, async () => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(error)
     })
   })
-  
+
   describe("DELETE", () => {
     it("should return 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
