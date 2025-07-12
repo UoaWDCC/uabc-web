@@ -50,7 +50,11 @@ const meta: Meta<typeof LocationBubble> = {
 export default meta
 
 export const Default: Story = (args) => {
-  return <LocationBubble {...args} />
+  return (
+    <Box left="25%" position="absolute" top="50%" transform="translate(-50%, -50%)">
+      <LocationBubble {...args} />
+    </Box>
+  )
 }
 
 export const Circle: Story = (args) => {
