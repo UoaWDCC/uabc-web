@@ -131,7 +131,6 @@ describe("/api/admin/users/[id]", async () => {
       const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
         params: Promise.resolve({ id: "some-id" }),
       })
-
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
     })
