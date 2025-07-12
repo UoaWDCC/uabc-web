@@ -3,18 +3,15 @@ description: Leaves a comment with relevant preview information
 
 inputs:
   preview-storybook:
-    description: The URL of the preview storybook
+    description: The URL of the storybook preview
+    required: true
+  preview-frontend:
+    description: The URL of the frontend preview
     required: true
 
 runs:
   using: composite
   steps:
-    - name: Get timestamp
-      shell: bash
-      if: github.event_name == 'pull_request'
-      id: timestamp
-      run: echo "time=$(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_OUTPUT
-
     - name: Find Comment
       uses: peter-evans/find-comment@v2
       if: github.event_name == 'pull_request'
@@ -36,4 +33,6 @@ runs:
 
           ✅ Storybook deployment successful!
           URL: ${{ inputs.preview-storybook }}
-          Completed at: ${{ steps.timestamp.outputs.time }}
+
+          ✅ Frontend deployment successful!
+          URL: ${{ inputs.preview-frontend }}

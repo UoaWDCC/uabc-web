@@ -1,12 +1,22 @@
 import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev"
 import type { NextConfig } from "next"
+import type { RemotePattern } from "next/dist/shared/lib/image-config"
+
+const env = process.env.NEXT_CONFIG_ENV || "development"
+const generateStatic = env === "staging" || env === "production"
 
 const config = (async () => {
-  if (process.env.NODE_ENV === "development") {
+  if (env === "development") {
     await setupDevPlatform()
   }
+  const remotePatterns: RemotePattern[] = [
+    // TODO: remove once actual images implemented
+    {
+      protocol: "https",
+      hostname: "images.unsplash.com",
+    },
+  ]
 
-  const remotePatterns = []
   if (process.env.NEXT_PUBLIC_API_URL) {
     const { protocol, hostname, port, pathname } = new URL(process.env.NEXT_PUBLIC_API_URL)
     remotePatterns.push({
@@ -18,10 +28,12 @@ const config = (async () => {
   }
 
   const nextConfig: NextConfig = {
-    output: "standalone",
+    output: generateStatic ? "export" : "standalone",
     images: {
       remotePatterns,
     },
+    // Need this to allow static site generation to work with SSG hosting
+    trailingSlash: generateStatic,
     rewrites: async () => {
       return [
         {

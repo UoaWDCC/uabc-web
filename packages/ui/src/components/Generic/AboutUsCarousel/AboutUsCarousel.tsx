@@ -1,3 +1,4 @@
+"use client"
 import { Image, type ImageProps } from "@repo/ui/components/Primitive"
 import {
   Carousel,
