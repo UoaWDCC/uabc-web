@@ -159,7 +159,7 @@ export default async function Home() {
           <Box
             left="33%"
             position="absolute"
-            top={{ base: "65%", md: "75%" }}
+            top="75%"
             transform="translate(-50%, -50%)"
             zIndex={25}
           >

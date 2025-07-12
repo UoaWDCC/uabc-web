@@ -99,6 +99,7 @@ export const LocationBubble = ({
             onHoverEnd={onHoverEnd}
             onHoverStart={onHoverStart}
             pointerEvents="all"
+            width={hovering ? "332px" : "auto"}
           >
             {hovering ? (
               <LocationBubbleDesktopCard
