@@ -3,6 +3,11 @@ import { FAQ } from "@repo/ui/components/Generic"
 import { Skeleton, Text } from "@yamada-ui/react"
 import { useFaq } from "@/services/cms/faq/FaqQuery"
 
+/**
+ * A section that displays frequently asked questions (FAQs). Fetches data using the {@link useFaq} hook and displays a loading and an error state when necessary.
+ *
+ * @returns A section with fetched FAQs
+ */
 export const FaqSection = () => {
   const { data: faqData, isLoading, isError } = useFaq()
 
