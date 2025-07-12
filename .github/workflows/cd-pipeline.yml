@@ -77,7 +77,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy frontend
+      - name: Deploy Frontend
         id: deploy-frontend
         uses: ./.github/cd-actions/deploy-frontend/
         with:
