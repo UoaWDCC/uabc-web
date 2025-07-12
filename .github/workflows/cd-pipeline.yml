@@ -66,43 +66,27 @@ jobs:
 
   deploy-frontend:
     name: Deploy Frontend
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
-    env:
-      FLY_API_TOKEN: ${{ secrets.FLY_CLIENT_API_TOKEN }}
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && (github.event.inputs.environment == 'staging' || github.event.inputs.environment == 'frontend-staging'))
     environment:
       name: staging
-      url: https://wdcc-uabc-frontend-staging.fly.dev/
+      url: https://uabc.pages.dev/
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-deploy-frontend
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - uses: actions/checkout@v4
 
-      - name: Set Frontend Secrets
-        id: frontend-secrets
-        run: >
-          flyctl secrets set --config apps/frontend/fly.staging.toml
-          NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
-          NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
-          JWT_SECRET=${{ secrets.JWT_SECRET }}
-          TURBO_TEAM=${{ vars.TURBO_TEAM }}
-          TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
-
-      - name: Deploy Frontend Secrets
-        id: frontend-secrets-deploy
-        run: flyctl secrets deploy --config apps/frontend/fly.staging.toml
-
-      - name: Deploy Frontend
+      - name: Deploy frontend
         id: deploy-frontend
-        run: >
-          flyctl deploy --remote-only --config apps/frontend/fly.staging.toml
-          --build-arg NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}"
-          --build-arg NEXT_PUBLIC_URL="${{ secrets.NEXT_PUBLIC_URL }}"
-          --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}"
-          --build-arg TURBO_TEAM="${{ vars.TURBO_TEAM }}"
-          --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}"
+        uses: ./.github/cd-actions/deploy-frontend/
+        with:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          project-name: uabc
 
   deploy-to-production:
     name: Deploy UABC Production App
