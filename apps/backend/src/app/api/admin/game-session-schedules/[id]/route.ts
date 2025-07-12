@@ -6,7 +6,36 @@ import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 
-class GameSessionScheduleRouteWrapper {
+class RouteWrapper {
+  /**
+   * GET method to fetch a game session schedule.
+   *
+   * @param _req The request object
+   * @param params route parameters containing the GameSessionSchedule ID
+   * @returns OK code and the game session schedule data
+   */
+  @Security("jwt", ["admin"])
+  static async GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    try {
+      const { id } = await params
+      const gameSessionDataService = new GameSessionDataService()
+      const gameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(id)
+      return NextResponse.json(gameSessionSchedule, { status: StatusCodes.OK })
+    } catch (error) {
+      if (error instanceof NotFound) {
+        return NextResponse.json(
+          { error: "Game session schedule not found" },
+          { status: StatusCodes.NOT_FOUND },
+        )
+      }
+      console.error(error)
+      return NextResponse.json(
+        { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
+        { status: StatusCodes.INTERNAL_SERVER_ERROR },
+      )
+    }
+  }
+
   /**
    * PATCH Method to update a game session schedule.
    *
@@ -75,4 +104,4 @@ class GameSessionScheduleRouteWrapper {
   }
 }
 
-export const { PATCH, DELETE } = GameSessionScheduleRouteWrapper
+export const { GET, PATCH, DELETE } = RouteWrapper

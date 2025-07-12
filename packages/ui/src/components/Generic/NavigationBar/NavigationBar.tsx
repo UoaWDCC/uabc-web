@@ -23,12 +23,11 @@ export const NavigationBar = ({ navItems, user }: NavigationBarProps) => {
   return (
     <Center
       height="fit-content"
-      marginBlockStart="lg"
-      padding="md"
+      paddingTop="md"
       position="sticky"
       top={0}
       width="full"
-      zIndex={1002}
+      zIndex={100}
     >
       <NavigationBarDesktop navItems={navItems} user={user} />
       <NavigationBarMobile navItems={navItems} user={user} />
