@@ -20,7 +20,7 @@ vi.stubGlobal("IntersectionObserver", IntersectionObserverMock)
 
 describe("<Home />", () => {
   let queryClient: QueryClient
-  let Wrapper: ({ children }: { children: React.ReactNode }) => React.JSX.Element
+  let wrapper: ({ children }: { children: React.ReactNode }) => React.JSX.Element
 
   beforeEach(() => {
     queryClient = new QueryClient({
@@ -30,7 +30,7 @@ describe("<Home />", () => {
         },
       },
     })
-    Wrapper = ({ children }: { children: React.ReactNode }) => (
+    wrapper = ({ children }: { children: React.ReactNode }) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     )
 
@@ -54,7 +54,7 @@ describe("<Home />", () => {
 
   it("should render the home page", async () => {
     const HomeComponent = await Home()
-    render(<Wrapper>{HomeComponent}</Wrapper>)
+    render(HomeComponent, { wrapper: wrapper })
     expect(screen.getByText("UNIVERSITY OF AUCKLAND BADMINTON CLUB")).toBeInTheDocument()
     expect(screen.getByText("We are UABC.")).toBeInTheDocument()
     expect(screen.getByText("NZ's Largest Student")).toBeInTheDocument()
@@ -68,7 +68,7 @@ describe("<Home />", () => {
 
   it("should render the quick book component", async () => {
     const HomeComponent = await Home()
-    render(<Wrapper>{HomeComponent}</Wrapper>)
+    render(HomeComponent, { wrapper: wrapper })
     expect(screen.getByText("Quick Book")).toBeInTheDocument()
     expect(screen.getAllByRole("combobox")).toHaveLength(2)
     expect(screen.getByText("Book Now")).toBeInTheDocument()
@@ -76,14 +76,14 @@ describe("<Home />", () => {
 
   it("should render the location bubbles", async () => {
     const HomeComponent = await Home()
-    render(<Wrapper>{HomeComponent}</Wrapper>)
+    render(HomeComponent, { wrapper: wrapper })
     const locationBubbles = screen.getAllByTestId("location-bubble-circle-trigger")
     expect(locationBubbles).toHaveLength(3)
   })
 
   it("should render the about us section", async () => {
     const HomeComponent = await Home()
-    render(<Wrapper>{HomeComponent}</Wrapper>)
+    render(HomeComponent, { wrapper: wrapper })
     expect(screen.getByText("About Us")).toBeInTheDocument()
     expect(screen.getByTestId("about-us-carousel")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Learn More" })).toHaveAttribute("href", "/about")
@@ -91,7 +91,7 @@ describe("<Home />", () => {
 
   it("should render the faq section", async () => {
     const HomeComponent = await Home()
-    render(<Wrapper>{HomeComponent}</Wrapper>)
+    render(HomeComponent, { wrapper: wrapper })
     await waitFor(() => expect(screen.getByText("FAQs")).toBeInTheDocument())
   })
 })
