@@ -55,14 +55,11 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
 
     it("should return 400 if request body is invalid", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
-        gameSessionScheduleCreateMock,
-      )
       const req = createMockNextRequest("/api/admin/game-session-schedules", "PATCH", {
         day: "invalid",
       })
       const res = await PATCH(req, {
-        params: Promise.resolve({ id: newGameSessionSchedule.id }),
+        params: Promise.resolve({ id: "some-id" }),
       })
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
 
@@ -73,14 +70,11 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
 
     it("should return 400 if invalid date is provided", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
-        gameSessionScheduleCreateMock,
-      )
       const req = createMockNextRequest("/api/admin/game-session-schedules", "PATCH", {
         startTime: "invalid-date",
       })
       const res = await PATCH(req, {
-        params: Promise.resolve({ id: newGameSessionSchedule.id }),
+        params: Promise.resolve({ id: "some-id" }),
       })
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
 
