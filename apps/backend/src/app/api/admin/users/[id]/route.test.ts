@@ -14,9 +14,7 @@ import { createMockNextRequest } from "@/test-config/backend-utils"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { DELETE, GET, PATCH } from "./route"
 
-const baseRoute = "/api/admin/users"
-
-describe(`${baseRoute}/[id]`, async () => {
+describe("/api/admin/users/[id]", async () => {
   const userDataService = new UserDataService()
   const cookieStore = await cookies()
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>
@@ -130,7 +128,7 @@ describe(`${baseRoute}/[id]`, async () => {
   describe("DELETE", () => {
     it("should return 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const res = await DELETE(createMockNextRequest(baseRoute, "DELETE"), {
+      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
         params: Promise.resolve({ id: "some-id" }),
       })
 
@@ -140,7 +138,7 @@ describe(`${baseRoute}/[id]`, async () => {
 
     it("should return 401 if user is member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
-      const res = await DELETE(createMockNextRequest(baseRoute, "DELETE"), {
+      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
         params: Promise.resolve({ id: "some-id" }),
       })
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
@@ -150,7 +148,7 @@ describe(`${baseRoute}/[id]`, async () => {
     it("should delete specified user if user is admin", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const newUser = await userDataService.createUser(userCreateMock)
-      const res = await DELETE(createMockNextRequest(baseRoute, "DELETE"), {
+      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
         params: Promise.resolve({ id: newUser.id }),
       })
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
@@ -161,7 +159,7 @@ describe(`${baseRoute}/[id]`, async () => {
 
     it("should return 404 if user is non-existent", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const res = await DELETE(createMockNextRequest(baseRoute, "DELETE"), {
+      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
         params: Promise.resolve({ id: "non-existent" }),
       })
       expect(res.status).toBe(StatusCodes.NOT_FOUND)
@@ -169,7 +167,7 @@ describe(`${baseRoute}/[id]`, async () => {
 
     it("should return a 500 error for internal server error", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const res = await DELETE(createMockNextRequest(baseRoute, "DELETE"), {
+      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
         params: Promise.reject(new Error("Param parsing failed")),
       })
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)

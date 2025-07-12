@@ -10,7 +10,7 @@ class UserRouteWrapper {
   /**
    * GET method to fetch a single user by ID.
    *
-   * @param req The request object
+   * @param _req The request object
    * @param params The route parameters containing the user ID
    * @returns The user data if found, otherwise appropriate error response
    */
@@ -70,7 +70,7 @@ class UserRouteWrapper {
   /**
    * DELETE method to delete a single user by ID.
    *
-   * @param req The request object
+   * @param _req The request object
    * @param params The route parameters containing the user ID
    * @returns No content response if successful, otherwise appropriate error response
    */
