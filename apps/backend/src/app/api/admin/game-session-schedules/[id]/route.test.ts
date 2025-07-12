@@ -1,8 +1,4 @@
-import {
-  AUTH_COOKIE_NAME,
-  type UpdateGameSessionData,
-  type UpdateGameSessionScheduleData,
-} from "@repo/shared"
+import { AUTH_COOKIE_NAME, type UpdateGameSessionScheduleData } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
@@ -80,12 +76,9 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
         gameSessionScheduleCreateMock,
       )
-      const updateGameSessionSchedule = { startTime: "invalid-date" }
-      const req = createMockNextRequest(
-        "/api/admin/game-session-schedules",
-        "PATCH",
-        updateGameSessionSchedule,
-      )
+      const req = createMockNextRequest("/api/admin/game-session-schedules", "PATCH", {
+        startTime: "invalid-date",
+      })
       const res = await PATCH(req, {
         params: Promise.resolve({ id: newGameSessionSchedule.id }),
       })
@@ -100,12 +93,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
 
     it("should return 404 if game session schedule is not found", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const updateGameSessionSchedule: UpdateGameSessionData = { capacity: 100 }
-      const req = createMockNextRequest(
-        "/api/admin/game-session-schedules",
-        "PATCH",
-        updateGameSessionSchedule,
-      )
+      const req = createMockNextRequest("/api/admin/game-session-schedules", "PATCH", {})
       const res = await PATCH(req, {
         params: Promise.resolve({ id: "invalid-id" }),
       })
