@@ -128,7 +128,8 @@ export const Calendar: ComponentMultiStyle<"Calendar"> = {
         _selected: {
           bg: isGray(c)
             ? [`${c}.100`, `${c}.700`]
-            : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
+            : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.500`],
+          layerStyle: "gradientBorder",
           borderColor: ["transparent", "transparent"],
           color: [isGray(c) || isAccessible(c) ? "black" : "white", "white"],
         },

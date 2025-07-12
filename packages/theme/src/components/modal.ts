@@ -13,7 +13,7 @@ export const Modal: ComponentMultiStyle<"Modal"> = {
       top: "3",
     },
     container: {
-      bg: ["white", "black"],
+      bg: ["white", "gray.900"],
       boxShadow: ["lg", "dark-lg"],
       color: "inherit",
       rounded: "md",
