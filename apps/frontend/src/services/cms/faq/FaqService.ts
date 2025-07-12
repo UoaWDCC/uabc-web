@@ -1,5 +1,5 @@
 import { GetFaqResponseSchema } from "@repo/shared"
-import { apiClient } from "../client"
+import { apiClient } from "@/lib/api/client"
 
 /**
  * Retrieves FAQ data from the global API endpoint
