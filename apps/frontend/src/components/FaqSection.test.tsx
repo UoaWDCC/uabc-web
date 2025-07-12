@@ -92,6 +92,3 @@ describe("<FaqSection />", async () => {
     expect(accordionItems).toHaveLength(0)
   })
 })
-//     expect(accordionItems).toHaveLength(0)
-//   })
-// })
