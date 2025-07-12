@@ -1,19 +1,11 @@
 import { AboutUsSection } from "@repo/ui/components/Composite/AboutUsSection"
-import {
-  FAQ,
-  LocationBubble,
-  type LocationBubbleProps,
-  QuickBook,
-} from "@repo/ui/components/Generic"
+import { LocationBubble, type LocationBubbleProps, QuickBook } from "@repo/ui/components/Generic"
 import { locationAndTimeOptionsMock } from "@repo/ui/components/Generic/QuickBook/QuickBook.mock"
 import { Heading, Image } from "@repo/ui/components/Primitive"
 import { Bleed, Box, Center, Text, VStack } from "@yamada-ui/react"
-import { getFaq } from "@/lib/api/endpoints"
+import { FaqSection } from "@/components/FaqSection"
 
 export default async function Home() {
-  //  TODO: Discuss with team if we want to fail the build if faq is not found
-  const { data: faq } = await getFaq()
-
   // TODO: replace mock data with real data
   const mockCards = [
     {
@@ -168,12 +160,7 @@ export default async function Home() {
         </Box>
       </Bleed>
       <AboutUsSection cards={mockCards} items={mockItems} />
-      <Box marginY="2xl">
-        <FAQ
-          items={faq?.data?.questions ?? []}
-          richTextProps={{ mediaBaseUrl: process.env.NEXT_PUBLIC_API_URL }}
-        />
-      </Box>
+      <FaqSection />
     </VStack>
   )
 }
