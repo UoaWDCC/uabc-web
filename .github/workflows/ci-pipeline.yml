@@ -176,7 +176,7 @@ jobs:
       - name: Comment information
         uses: ./.github/ci-actions/comment/
         with:
-          preview-storybook: ${{ needs.preview-frontend.outputs.deployment-url }}
+          preview-storybook: ${{ needs.preview-storybook.outputs.deployment-url }}
           preview-frontend: ${{ needs.preview-frontend.outputs.deployment-url }}
 
   typecheck:
