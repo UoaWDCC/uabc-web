@@ -1,15 +1,13 @@
 "use client"
 import { MembershipType } from "@repo/shared"
 import { UabcLogo } from "@repo/ui/components/Icon"
-import { Box, HStack, Motion, Spacer, ui } from "@yamada-ui/react"
+import { Box, HStack, Motion, Spacer } from "@yamada-ui/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useRef, useState } from "react"
 import type { NavigationBarProps } from "./NavigationBar"
 import { NavigationBarButton } from "./NavigationBarButton"
 import { NavigationBarUserMenu } from "./NavigationBarUserMenu"
-
-const StyledLink = ui(Link)
 
 /**
  * NavigationBarDesktop component renders a navigation bar with links to different pages for use on desktop devices.
@@ -75,9 +73,9 @@ export const NavigationBarDesktop = ({ navItems, user }: NavigationBarProps) => 
       zIndex={1001}
     >
       <HStack as={Motion} gap={0}>
-        <StyledLink borderRadius="50%" href="/" padding="sm" position="relative" zIndex="1">
+        <Box as={Link} borderRadius="50%" href="/" padding="sm" position="relative">
           <UabcLogo />
-        </StyledLink>
+        </Box>
         <HStack as={Motion} data-testid="navbar-buttons-container" gap={0} onHoverEnd={clearHover}>
           {navItems.map((item, index) => (
             <Motion key={item.label} onHoverStart={() => handleHover(index)}>
