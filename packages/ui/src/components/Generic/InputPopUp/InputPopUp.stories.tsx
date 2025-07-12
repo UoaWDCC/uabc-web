@@ -1,0 +1,28 @@
+import type { Meta, StoryFn } from "@storybook/nextjs"
+import { Box } from "@yamada-ui/react"
+import { InputPopUp } from "./InputPopUp"
+
+const meta: Meta<typeof InputPopUp> = {
+  title: "Generic Components / InputPopUp",
+  component: InputPopUp,
+  argTypes: {
+    title: { control: "text", description: "The components heading title" },
+    description: { control: "text", description: "The components description" },
+  },
+  args: {
+    buttonText: "Create New Semester",
+    title: "Create New Semester",
+    description: "Enter Semester Name:",
+  },
+}
+
+export default meta
+type Story = StoryFn<typeof InputPopUp>
+
+export const Default: Story = (args) => {
+  return (
+    <Box maxW={{ base: "none", md: "33%" }}>
+      <InputPopUp {...args} />
+    </Box>
+  )
+}
