@@ -7,7 +7,9 @@ import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { DELETE } from "./route"
 
-describe("/api/admin/game-sessions/[id]", async () => {
+const baseRoute = "/api/admin/game-sessions"
+
+describe(`${baseRoute}/[id]`, async () => {
   const gameSessionDataService = new GameSessionDataService()
   const cookieStore = await cookies()
 
@@ -15,7 +17,7 @@ describe("/api/admin/game-sessions/[id]", async () => {
     it("should return 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
       const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
-      const res = await DELETE(createMockNextRequest("/api/admin/game-sessions", "DELETE"), {
+      const res = await DELETE(createMockNextRequest(baseRoute, "DELETE"), {
         params: Promise.resolve({ id: newGameSession.id }),
       })
 
@@ -26,7 +28,7 @@ describe("/api/admin/game-sessions/[id]", async () => {
     it("should return 401 if user is member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
       const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
-      const res = await DELETE(createMockNextRequest("/api/admin/game-sessions", "DELETE"), {
+      const res = await DELETE(createMockNextRequest(baseRoute, "DELETE"), {
         params: Promise.resolve({ id: newGameSession.id }),
       })
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
@@ -36,7 +38,7 @@ describe("/api/admin/game-sessions/[id]", async () => {
     it("should delete gameSession if user is admin", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
-      const res = await DELETE(createMockNextRequest("/api/admin/game-sessions", "DELETE"), {
+      const res = await DELETE(createMockNextRequest(baseRoute, "DELETE"), {
         params: Promise.resolve({ id: newGameSession.id }),
       })
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
@@ -47,7 +49,7 @@ describe("/api/admin/game-sessions/[id]", async () => {
 
     it("should return 404 if gameSession is non-existent", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const res = await DELETE(createMockNextRequest("/api/admin/game-sessions", "DELETE"), {
+      const res = await DELETE(createMockNextRequest(baseRoute, "DELETE"), {
         params: Promise.resolve({ id: "non-existent" }),
       })
       expect(res.status).toBe(StatusCodes.NOT_FOUND)
@@ -55,7 +57,7 @@ describe("/api/admin/game-sessions/[id]", async () => {
 
     it("should return a 500 error for internal server error", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const res = await DELETE(createMockNextRequest("/api/admin/game-sessions", "DELETE"), {
+      const res = await DELETE(createMockNextRequest(baseRoute, "DELETE"), {
         params: Promise.reject(new Error("Param parsing failed")),
       })
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)

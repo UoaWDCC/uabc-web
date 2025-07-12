@@ -31,6 +31,33 @@ class UserRouteWrapper {
       )
     }
   }
+
+  /**
+   * DELETE method to deelte a single user by ID.
+   *
+   * @param req The request object
+   * @param params The route parameters containing the user ID
+   * @returns No content response if successful, otherwise appropriate error response
+   */
+  @Security("jwt", ["admin"])
+  static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    try {
+      const { id } = await params
+      const userDataService = new UserDataService()
+      await userDataService.deleteUser(id)
+
+      return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
+    } catch (error) {
+      if (error instanceof NotFound) {
+        return NextResponse.json({ error: "User not found" }, { status: StatusCodes.NOT_FOUND })
+      }
+      console.error(error)
+      return NextResponse.json(
+        { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
+        { status: StatusCodes.INTERNAL_SERVER_ERROR },
+      )
+    }
+  }
 }
 
-export const GET = UserRouteWrapper.GET
+export const { GET, DELETE } = UserRouteWrapper
