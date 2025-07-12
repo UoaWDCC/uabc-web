@@ -2,10 +2,10 @@ name: Comment
 description: Leaves a comment with relevant preview information
 
 inputs:
-  storybook-preview:
+  preview-storybook:
     description: The URL of the storybook preview
     required: true
-  frontend-preview:
+  preview-frontend:
     description: The URL of the frontend preview
     required: true
 
@@ -32,7 +32,7 @@ runs:
           ## Preview Deployment Status
 
           ✅ Storybook deployment successful!
-          URL: ${{ inputs.storybook-preview }}
+          URL: ${{ inputs.preview-storybook }}
 
           ✅ Frontend deployment successful!
-          URL: ${{ inputs.frontend-preview }}
+          URL: ${{ inputs.preview-frontend }}
