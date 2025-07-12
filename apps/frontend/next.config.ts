@@ -5,7 +5,7 @@ const env = process.env.NEXT_CONFIG_ENV || "development"
 const generateStatic = env === "staging" || env === "production"
 
 const config = (async () => {
-  if (process.env.NODE_ENV === "development") {
+  if (env === "development") {
     await setupDevPlatform()
   }
 
