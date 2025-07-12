@@ -3,6 +3,7 @@ vi.mock("@yamada-ui/react", async () => {
   return {
     ...actual,
     useReducedMotion: vi.fn(),
+    useBreakpointValue: vi.fn(),
   }
 })
 
@@ -11,7 +12,7 @@ import {
   LOCATION_BUBBLE_TEST_CONSTANTS_MOBILE,
 } from "@repo/ui/test-config/mocks/LocationBubble.mock"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
-import { useReducedMotion } from "@yamada-ui/react"
+import { useBreakpointValue, useReducedMotion } from "@yamada-ui/react"
 import { isValidElement } from "react"
 import { LocationBubble } from "."
 import * as LocationBubbleModule from "./index"
@@ -19,11 +20,17 @@ import { LocationBubbleDesktopCard } from "./LocationBubbleDesktopCard"
 import { LocationBubbleMobileCard } from "./LocationBubbleMobileCard"
 
 const mockUseReducedMotion = vi.mocked(useReducedMotion)
+const mockUseBreakpointValue = vi.mocked(useBreakpointValue)
 
 describe("<LocationBubble />", () => {
   beforeEach(() => {
     mockUseReducedMotion.mockReturnValue(false)
     vi.useFakeTimers({ shouldAdvanceTime: true })
+
+    // Mock breakpoint value to allow hover functionality to work
+    mockUseBreakpointValue.mockImplementation((config) => {
+      return config.md || config.base
+    })
   })
 
   it("should re-export the LocationBubble component and check if LocationBubble component exists", () => {
@@ -44,6 +51,8 @@ describe("<LocationBubble />", () => {
   })
 
   it("renders LocationBubbleDesktopCard when hovering by default", async () => {
+    mockUseBreakpointValue.mockImplementation((config) => config.md)
+
     const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
     const bubble = screen.getByTestId("location-bubble-circle-trigger")
     expect(screen.queryByTestId("location-bubble-desktop-card")).not.toBeInTheDocument()
@@ -53,6 +62,8 @@ describe("<LocationBubble />", () => {
   })
 
   it("unmounts desktop card after hovering ends", async () => {
+    mockUseBreakpointValue.mockImplementation((config) => config.md)
+
     const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
 
     expect(screen.queryByTestId("location-bubble-desktop-card")).toBeNull()
@@ -61,7 +72,7 @@ describe("<LocationBubble />", () => {
     await user.hover(bubble)
     expect(await screen.findByTestId("location-bubble-desktop-card")).toBeInTheDocument()
 
-    const cardWrapper = screen.getByTestId("location-bubble-desktop-card-wrapper")
+    const cardWrapper = screen.getByTestId("location-bubble-hover-container")
 
     await user.hover(cardWrapper)
     vi.advanceTimersToNextTimer()
@@ -73,6 +84,8 @@ describe("<LocationBubble />", () => {
   })
 
   it("does not render LocationBubbleDesktopCard when hovering for less than 100ms", async () => {
+    mockUseBreakpointValue.mockImplementation((config) => config.md)
+
     const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
 
     const bubble = screen.getByTestId("location-bubble-circle-trigger")
@@ -84,6 +97,8 @@ describe("<LocationBubble />", () => {
   })
 
   it("does not render LocationBubbleDesktopCard when hovering for less than 100ms and then unhovered", async () => {
+    mockUseBreakpointValue.mockImplementation((config) => config.md)
+
     const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
 
     const bubble = screen.getByTestId("location-bubble-circle-trigger")
@@ -143,11 +158,31 @@ describe("<LocationBubble />", () => {
     const bubbleWithMotion = screen.getByTestId("location-bubble-circle-trigger")
 
     const transformInitial = window.getComputedStyle(bubbleWithMotion).transform
-    expect(transformInitial).toBeOneOf(["translateX(25px)", "translateX(-25px)"])
+    const expectedPeriod =
+      1900 +
+      (LOCATION_BUBBLE_TEST_CONSTANTS.locationTitle
+        .split("")
+        .reduce((acc, char) => acc + 31 * char.charCodeAt(0), 0) %
+        200)
+    const expectedX = Math.cos(expectedPeriod) * 25
+    expect(transformInitial).toStrictEqual(`translateX(${expectedX}px)`)
 
     waitFor(() => {
       const transformAfterHover = window.getComputedStyle(bubbleWithMotion).transform
-      expect(transformAfterHover).not.toBeOneOf(["translateX(25px)", "translateX(-25px)"])
+      expect(transformAfterHover).not.toStrictEqual(transformInitial)
     })
+  })
+
+  it("does not show desktop card on hover when on mobile", async () => {
+    mockUseBreakpointValue.mockImplementation((config) => config.base)
+
+    const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
+    const bubble = screen.getByTestId("location-bubble-circle-trigger")
+
+    await user.hover(bubble)
+    vi.advanceTimersToNextTimer()
+
+    expect(screen.queryByTestId("location-bubble-desktop-card")).not.toBeInTheDocument()
+    expect(screen.getByTestId("location-bubble-circle-trigger")).toBeInTheDocument()
   })
 })
