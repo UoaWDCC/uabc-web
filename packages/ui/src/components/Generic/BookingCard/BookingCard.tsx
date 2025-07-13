@@ -125,11 +125,12 @@ export const BookingCard = memo(
         flexDirection="row"
         h="fit-content"
         layerStyle="gradientBorder"
+        maxW="xl"
         overflow="hidden"
         p="3"
         rounded="calc($radii.2xl + $spaces.3)"
         variant="solid"
-        w="xl"
+        w="full"
         {...cardProps}
       >
         <Image
@@ -160,31 +161,33 @@ export const BookingCard = memo(
             </Text>
           </CardBody>
         </VStack>
-        <CardFooter pb="0" px="0">
-          <Menu {...menuProps}>
-            <MenuButton
-              aria-label="Edit"
-              as={IconButton}
-              color={["black", "white"]}
-              h="12"
-              icon={<EllipsisVerticalIcon />}
-              minW="0"
-              rounded="xl"
-              variant="ghost"
-              w="6"
-              {...menuButtonProps}
-            />
-            <Portal {...portalProps}>
-              <MenuList {...menuListProps}>
-                {menuItems.map((item) => (
-                  <MenuItem key={item.label} {...menuItemProps} {...item}>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </MenuList>
-            </Portal>
-          </Menu>
-        </CardFooter>
+        {menuItems.length > 0 && (
+          <CardFooter pb="0" px="0">
+            <Menu {...menuProps}>
+              <MenuButton
+                aria-label="Edit"
+                as={IconButton}
+                color={["black", "white"]}
+                h="12"
+                icon={<EllipsisVerticalIcon />}
+                minW="0"
+                rounded="xl"
+                variant="ghost"
+                w="6"
+                {...menuButtonProps}
+              />
+              <Portal {...portalProps}>
+                <MenuList {...menuListProps}>
+                  {menuItems.map((item) => (
+                    <MenuItem key={item.label} {...menuItemProps} {...item}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Portal>
+            </Menu>
+          </CardFooter>
+        )}
       </Card>
     )
   },

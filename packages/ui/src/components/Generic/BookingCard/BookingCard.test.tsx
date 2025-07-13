@@ -1,5 +1,7 @@
 import { render, screen } from "@repo/ui/test-utils"
+import { isValidElement } from "react"
 import { BookingCard } from "./BookingCard"
+import * as BookingCardModule from "./index"
 
 const defaultProps = {
   day: "Saturday",
@@ -20,6 +22,11 @@ const defaultProps = {
 }
 
 describe("<BookingCard />", () => {
+  it("should re-export the BookingCard component and check if BookingCard exists", () => {
+    expect(BookingCardModule.BookingCard).toBeDefined()
+    expect(isValidElement(<BookingCardModule.BookingCard {...defaultProps} />)).toBeTruthy()
+  })
+
   it("should have correct displayName", () => {
     expect(BookingCard.displayName).toBe("BookingCard")
   })
