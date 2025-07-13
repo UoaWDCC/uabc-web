@@ -35,3 +35,21 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
 }))
 
 vi.spyOn(window.HTMLCanvasElement.prototype, "getContext").mockImplementation(() => null)
+
+if (!globalThis.location) {
+  globalThis.location = {
+    ...window.location,
+    assign: vi.fn(),
+    replace: vi.fn(),
+    reload: vi.fn(),
+    search: "",
+    hash: "",
+    href: "http://localhost/",
+    pathname: "/",
+    protocol: "http:",
+    host: "localhost",
+    hostname: "localhost",
+    port: "",
+    origin: "http://localhost",
+  }
+}
