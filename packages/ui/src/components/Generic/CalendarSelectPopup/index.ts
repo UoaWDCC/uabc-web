@@ -1,6 +1,4 @@
 export * as CalendarSelectPopup from "./namespace"
-// Export individual components for convenience
-export { BackButton, NextButton } from "./namespace"
 export type {
   CalendarSelectPopupProps,
   CloseBehavior,
@@ -13,4 +11,11 @@ export type {
   UseCalendarSelectPopupReturn,
 } from "./types"
 export { useCalendarSelectPopup } from "./useCalendarSelectPopup"
-export { createCompositeProps, createPopupConfig, NavigationPatterns } from "./utils"
+export {
+  createCompositeProps,
+  createPopupConfig,
+  fromPopupValue,
+  isStringArray,
+  NavigationPatterns,
+  toPopupValue,
+} from "./utils"

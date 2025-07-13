@@ -3,6 +3,7 @@ import { mergeConfig } from "vitest/config"
 
 export default mergeConfig(uiConfig, {
   test: {
+    setupFiles: ["./src/test-config/vitest-setup.ts"],
     coverage: {
       thresholds: {
         statements: 90,

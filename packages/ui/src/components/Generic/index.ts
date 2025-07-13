@@ -1,6 +1,7 @@
 export * from "./AboutUsCard/AboutUsCard"
 export * from "./AdminTabBar"
 export * from "./BookingTimesCardGroup"
+export * from "./CalendarSelectPopup"
 export * from "./FAQ"
 export * from "./Footer"
 export * from "./LocationBubble"

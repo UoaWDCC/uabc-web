@@ -1,22 +1,77 @@
 "use client"
 
+import { Heading, IconButton } from "@repo/ui/components/Primitive"
 import { Calendar } from "@yamada-ui/calendar"
 import { CalendarIcon } from "@yamada-ui/lucide"
 import {
   Dialog,
   DialogBody,
   DialogCloseButton,
+  DialogFooter,
   DialogHeader,
   SimpleGrid,
   Text,
   VStack,
 } from "@yamada-ui/react"
 import { memo, useCallback, useMemo } from "react"
-import { Heading, IconButton } from "../../Primitive"
 import { CalendarSelectPopupContext } from "./CalendarSelectPopupContext"
 import type { CalendarSelectPopupProps, DateValue, ExtendedCalendarProps } from "./types"
 import { useCalendarSelectPopup } from "./useCalendarSelectPopup"
 
+/**
+ * CalendarSelectPopup component for date selection with popup dialog interface
+ *
+ * A comprehensive calendar component that combines a calendar picker with popup dialog
+ * functionality. Supports both single date and date range selection, URL state
+ * synchronization, multi-step flows, and custom content areas.
+ *
+ * @param props CalendarSelectPopup component properties
+ * @returns A memoized calendar popup component
+ *
+ * @example
+ * ```tsx
+ * // Basic single date selection
+ * <CalendarSelectPopup
+ *   popupId="date-picker"
+ *   title="Select Date"
+ *   onDateSelect={(date) => console.log("Selected:", date)}
+ *   showTrigger
+ * />
+ *
+ * // Date range selection
+ * <CalendarSelectPopup
+ *   popupId="date-range"
+ *   title="Select Date Range"
+ *   initialDate={[undefined, undefined]}
+ *   calendarProps={{ enableRange: true }}
+ *   onDateSelect={(dates) => console.log("Range:", dates)}
+ *   showTrigger
+ * />
+ *
+ * // Multi-step flow with custom content
+ * <CalendarSelectPopup
+ *   popupId="booking-step-1"
+ *   title="Step 1: Select Date"
+ *   currentStep={1}
+ *   totalSteps={3}
+ *   onStepChange={setStep}
+ *   closeBehavior="back"
+ * >
+ *   <CalendarSelectPopup.Content>
+ *     <CalendarSelectPopup.Header title="Choose your date" />
+ *     <CalendarSelectPopup.Body>
+ *       <CalendarSelectPopup.BackButton />
+ *       <CalendarSelectPopup.NextButton />
+ *     </CalendarSelectPopup.Body>
+ *   </CalendarSelectPopup.Content>
+ * </CalendarSelectPopup>
+ * ```
+ *
+ * @remarks
+ * The component automatically handles URL state synchronization, allowing for
+ * deep linking and browser navigation support. It integrates with the
+ * CalendarSelectPopupContext to provide step navigation and date state to child components.
+ */
 export const CalendarSelectPopup = memo(
   <T extends boolean = false>(props: CalendarSelectPopupProps<T>) => {
     const {
@@ -30,11 +85,7 @@ export const CalendarSelectPopup = memo(
       allowClose = true,
       closeBehavior = "close",
       onStepChange,
-      initialDate = props.initialDate !== undefined
-        ? (props.initialDate as DateValue<T>)
-        : props.calendarProps?.enableRange
-          ? ([undefined, undefined] as unknown as DateValue<T>)
-          : (undefined as unknown as DateValue<T>),
+      initialDate,
       description = "Select a date to book your session",
       onDateSelect,
       onClose,
@@ -85,10 +136,8 @@ export const CalendarSelectPopup = memo(
     }, [allowClose, externalIsOpen, closeBehavior, currentStep, onStepChange, onClose, close])
 
     const handleCalendarChange = useCallback(
-      (date: any) => {
-        if (date) {
-          setDate(date)
-        }
+      (date: Date | [Date?, Date?]) => {
+        setDate(date as DateValue<T>)
       },
       [setDate],
     )
@@ -100,7 +149,9 @@ export const CalendarSelectPopup = memo(
         type: "date" as const,
         locale: "nz",
         ...calendarProps,
-        value: selectedDate ?? undefined,
+        value: calendarProps.enableRange
+          ? (selectedDate as [Date?, Date?] | undefined)
+          : (selectedDate as Date | undefined),
         onChange: handleCalendarChange,
       }),
       [calendarProps, selectedDate, handleCalendarChange],
@@ -173,7 +224,7 @@ export const CalendarSelectPopup = memo(
               </VStack>
             </SimpleGrid>
           </DialogBody>
-          {dialogFooter}
+          {dialogFooter && <DialogFooter>{dialogFooter}</DialogFooter>}
         </Dialog>
       </>
     )

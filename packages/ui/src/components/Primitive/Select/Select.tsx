@@ -2,16 +2,15 @@
 
 import {
   Center,
-  type FC,
   FormControl,
   HStack,
   Label,
-  memo,
   mergeRefs,
   Select as UISelect,
   type SelectProps as UISelectProps,
 } from "@yamada-ui/react"
-import type { ReactNode, Ref } from "react"
+import type { FC, ReactNode, Ref } from "react"
+import { memo } from "react"
 import type { FieldPath, FieldValues, UseFormRegisterReturn } from "react-hook-form"
 
 /**

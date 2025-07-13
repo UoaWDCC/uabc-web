@@ -2,16 +2,14 @@
 
 import {
   Center,
-  type FC,
   FormControl,
   HStack,
   Label,
-  memo,
   Tag,
   MultiSelect as UIMultiSelect,
   type MultiSelectProps as UIMultiSelectProps,
 } from "@yamada-ui/react"
-import type { ReactNode } from "react"
+import { type FC, memo, type ReactNode } from "react"
 
 export interface MultiSelectProps extends UIMultiSelectProps {
   /**

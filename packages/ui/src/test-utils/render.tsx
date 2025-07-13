@@ -21,14 +21,37 @@ export type RenderReturn = {
   user: ReturnType<typeof userEvent.setup>
 } & ReturnType<typeof reactRender>
 
+/**
+ * Renders a React element for testing, wrapping it with UIProvider unless withProvider is false.
+ *
+ * @param ui React element to render
+ * @param options Optional render options, including withProvider to disable UIProvider
+ * @returns An object containing userEvent and the result of reactRender
+ *
+ * @example
+ * // Basic usage
+ * render(<Button>Click me</Button>)
+ *
+ * // Without UIProvider
+ * render(<Button>Click me</Button>, { withProvider: false })
+ */
 export function render(
   ui: ReactElement,
   { withProvider = true, ...rest }: RenderOptions = {},
 ): RenderReturn {
   const user = userEvent.setup()
 
-  if (withProvider)
-    rest.wrapper ??= (props) => <UIProvider config={config} theme={theme} {...props} />
+  if (withProvider) {
+    const prevWrapper = rest.wrapper
+    rest.wrapper = (props) => {
+      const element = prevWrapper ? prevWrapper(props) : ui
+      return (
+        <UIProvider config={config} theme={theme}>
+          {element}
+        </UIProvider>
+      )
+    }
+  }
 
   const result = reactRender(ui, rest)
 
@@ -48,6 +71,20 @@ export type RenderHookOptions<
   providerProps?: Omit<UIProviderProps, "children">
 } & ReactRenderHookOptions<Y, M, D, H>
 
+/**
+ * Renders a React hook for testing, wrapping it with UIProvider unless withProvider is false.
+ *
+ * @param render Function that returns the hook value
+ * @param options Optional renderHook options, including withProvider and providerProps
+ * @returns The result of reactRenderHook
+ *
+ * @example
+ * // Basic usage
+ * renderHook(() => useMyHook())
+ *
+ * // Without UIProvider
+ * renderHook(() => useMyHook(), { withProvider: false })
+ */
 export function renderHook<
   Y,
   M,
@@ -58,10 +95,17 @@ export function renderHook<
   render: (props: M) => Y,
   { withProvider = true, providerProps, ...rest }: RenderHookOptions<M, D, H, R> = {},
 ) {
-  if (withProvider)
-    rest.wrapper ??= (props) => (
-      <UIProvider {...props} config={config} theme={theme} {...providerProps} />
-    )
+  if (withProvider) {
+    const prevWrapper = rest.wrapper
+    rest.wrapper = (props) => {
+      const element = prevWrapper ? prevWrapper(props) : render(props as M)
+      return (
+        <UIProvider config={config} theme={theme} {...providerProps}>
+          {element}
+        </UIProvider>
+      )
+    }
+  }
 
   return reactRenderHook<Y, M, D, H, R>(render, rest)
 }
