@@ -97,11 +97,11 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         <Checkbox label="Remember me" textAlign="start" />
         <Spacer />
         <UILink
+          _hover={{ color: "white" }}
           as={Link}
           color="gray.100"
-          fontWeight="semibold"
           href="/auth/forgot-password"
-          textAlign="end"
+          textDecoration="underline"
         >
           Forgot Password?
         </UILink>
@@ -122,7 +122,6 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         >
           or
         </Text>
-
         <Box
           color="white"
           layerStyle="fadeFromMiddle"
@@ -134,11 +133,18 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
       </Center>
 
       <Center gap={4}>
-        <IconButton colorScheme="secondary" fullRounded onClick={onClickGoogle} variant="gradient">
+        <IconButton
+          aria-label="Google"
+          colorScheme="secondary"
+          fullRounded
+          onClick={onClickGoogle}
+          variant="gradient"
+        >
           <GoogleLogo fontSize="2xl" />
         </IconButton>
         {/* TODO: implement Apple auth or remove Apple icon button */}
         <IconButton
+          aria-label="Apple"
           colorScheme="secondary"
           disabled
           fullRounded
@@ -150,9 +156,15 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
       </Center>
 
       <Center textAlign="center">
-        <Text color="gray.100">
+        <Text color="muted">
           Don't have an account?&nbsp;
-          <UILink as={Link} color="gray.100" fontWeight="semibold" href="/auth/signup">
+          <UILink
+            _hover={{ color: "white" }}
+            as={Link}
+            color="gray.100"
+            href="/auth/signup"
+            textDecoration="underline"
+          >
             Create Account
           </UILink>
         </Text>
