@@ -19,24 +19,34 @@ export const Navbar: GlobalConfig = {
       maxRows: 5,
       defaultValue: [
         {
-          label: "Book",
-          url: "/book",
+          link: {
+            label: "Book",
+            url: "/book",
+          },
         },
         {
-          label: "Events",
-          url: "/events",
+          link: {
+            label: "Events",
+            url: "/events",
+          },
         },
         {
-          label: "About",
-          url: "/about",
+          link: {
+            label: "About",
+            url: "/about",
+          },
         },
         {
-          label: "Contact",
-          url: "/contact",
+          link: {
+            label: "Contact",
+            url: "/contact",
+          },
         },
         {
-          label: "FAQ",
-          url: "/faq",
+          link: {
+            label: "FAQ",
+            url: "/faq",
+          },
         },
       ],
       fields: [

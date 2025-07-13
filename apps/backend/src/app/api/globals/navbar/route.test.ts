@@ -11,28 +11,38 @@ describe("globals/navbar", () => {
           navItems: [
             {
               id: expect.any(String),
-              label: "Book",
-              url: "/book",
+              link: {
+                label: "Book",
+                url: "/book",
+              },
             },
             {
               id: expect.any(String),
-              label: "Events",
-              url: "/events",
+              link: {
+                label: "Events",
+                url: "/events",
+              },
             },
             {
               id: expect.any(String),
-              label: "About",
-              url: "/about",
+              link: {
+                label: "About",
+                url: "/about",
+              },
             },
             {
               id: expect.any(String),
-              label: "Contact",
-              url: "/contact",
+              link: {
+                label: "Contact",
+                url: "/contact",
+              },
             },
             {
               id: expect.any(String),
-              label: "FAQ",
-              url: "/faq",
+              link: {
+                label: "FAQ",
+                url: "/faq",
+              },
             },
           ],
           rightSideSingleButton: {
