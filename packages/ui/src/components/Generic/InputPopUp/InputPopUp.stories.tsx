@@ -1,16 +1,16 @@
 import type { Meta, StoryFn } from "@storybook/nextjs"
-import { Box } from "@yamada-ui/react"
-import { InputPopUp } from "./InputPopUp"
+import { Box, Button, useDisclosure } from "@yamada-ui/react"
+import { InputPopUp, type InputPopUpProps } from "./InputPopUp"
 
-const meta: Meta<typeof InputPopUp> = {
+const meta: Meta<InputPopUpProps> = {
   title: "Generic Components / InputPopUp",
   component: InputPopUp,
   argTypes: {
-    title: { control: "text", description: "The components heading title" },
-    description: { control: "text", description: "The components description" },
+    title: { control: "text", description: "The dialog header title" },
+    description: { control: "text", description: "The dialog body description" },
+    onConfirm: { action: "confirmed" },
   },
   args: {
-    buttonText: "Create New Semester",
     title: "Create New Semester",
     description: "Enter Semester Name:",
   },
@@ -19,12 +19,18 @@ const meta: Meta<typeof InputPopUp> = {
 export default meta
 type Story = StoryFn<typeof InputPopUp>
 
-export const Default: Story = (args) => {
+export const Default: Story = () => {
   const { open, onOpen, onClose } = useDisclosure()
   return (
     <Box maxW={{ base: "none", md: "33%" }}>
       <Button onClick={onOpen}>Open</Button>
-      <InputPopUp onClose={onClose} open={open} {...args} />
+      <InputPopUp
+        description="Enter Semester Name:"
+        onClose={onClose}
+        onConfirm={(val) => console.log("Confirmed:", val)}
+        open={open}
+        title="Create New Semester"
+      />
     </Box>
   )
 }
