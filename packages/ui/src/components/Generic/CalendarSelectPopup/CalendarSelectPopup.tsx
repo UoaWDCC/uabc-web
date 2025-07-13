@@ -200,18 +200,28 @@ export const CalendarSelectPopup = memo(
         {!externalIsOpen && showTrigger && (trigger || defaultTrigger)}
 
         <Dialog {...resolvedDialogProps}>
-          {allowClose && <DialogCloseButton right="lg" top="lg" />}
-          <DialogHeader>
+          {allowClose && (
+            <DialogCloseButton
+              aria-label="Close"
+              bg={["white", "black"]}
+              layerStyle="gradientBorder"
+              right="lg"
+              rounded="full"
+              top="lg"
+              variant="solid"
+            />
+          )}
+          <DialogHeader placeSelf={{ base: "center", md: "start" }}>
             <Heading.h2>{title}</Heading.h2>
           </DialogHeader>
 
-          <DialogBody>
+          <DialogBody alignItems={{ base: "center", md: "start" }} mt={{ base: "0", md: "md" }}>
             <Text fontSize="lg">{description}</Text>
-            <SimpleGrid columns={2} flex={1} gap="md" h="full" w="full">
-              <VStack h="full" w="full">
+            <SimpleGrid columns={{ base: 1, md: 2 }} flex={1} gap="md" h="full" w="full">
+              <VStack h="full" placeItems={{ base: "center", md: "start" }} w="full">
                 <Calendar {...resolvedCalendarProps} />
               </VStack>
-              <VStack h="full" w="full">
+              <VStack h="full" placeItems={{ base: "center", md: "start" }} w="full">
                 <CalendarSelectPopupContext.Provider
                   value={{
                     selectedDate: selectedDate as Date | [Date?, Date?] | null,
