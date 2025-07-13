@@ -15,10 +15,6 @@ const config = (async () => {
       protocol: "https",
       hostname: "images.unsplash.com",
     },
-    {
-      protocol: "http",
-      hostname: "localhost",
-    },
   ]
 
   if (process.env.NEXT_PUBLIC_API_URL) {
