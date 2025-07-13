@@ -12,11 +12,16 @@ import { NavigationBarUserMenu } from "./NavigationBarUserMenu"
 /**
  * NavigationBarDesktop component renders a navigation bar with links to different pages for use on desktop devices.
  *
- * @param navItems Array of navigation items with label and path.
+ * @param navItems Array of navigation items with label and url.
+ * @param rightSideSingleButton Button to display on the right side of the navigation bar.
  * @param user Optional user object containing user information if signed in.
  * @returns A navigation bar with links to different pages, an admin link if the user is an admin, and a user menu if the user is signed in.
  */
-export const NavigationBarDesktop = ({ navItems, user }: NavigationBarProps) => {
+export const NavigationBarDesktop = ({
+  navItems,
+  rightSideSingleButton,
+  user,
+}: NavigationBarProps) => {
   const currentPath = usePathname()
 
   const fullName = `${user?.firstName} ${user?.lastName}`.trim()
@@ -24,7 +29,7 @@ export const NavigationBarDesktop = ({ navItems, user }: NavigationBarProps) => 
   const admin = user?.role === MembershipType.admin
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(() => {
-    const initialIndex = navItems.findIndex((item) => item.path === currentPath)
+    const initialIndex = navItems.findIndex(({ link }) => link.url === currentPath)
     return initialIndex !== -1 ? initialIndex : null
   })
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([])
@@ -39,7 +44,7 @@ export const NavigationBarDesktop = ({ navItems, user }: NavigationBarProps) => 
   }
 
   const clearHover = () => {
-    const initialIndex = navItems.findIndex((item) => item.path === currentPath)
+    const initialIndex = navItems.findIndex(({ link }) => link.url === currentPath)
     setHoveredIndex(initialIndex !== -1 ? initialIndex : null)
   }
 
@@ -77,14 +82,14 @@ export const NavigationBarDesktop = ({ navItems, user }: NavigationBarProps) => 
           <UabcLogo />
         </Box>
         <HStack as={Motion} data-testid="navbar-buttons-container" gap={0} onHoverEnd={clearHover}>
-          {navItems.map((item, index) => (
-            <Motion key={item.label} onHoverStart={() => handleHover(index)}>
+          {navItems.map(({ link }, index) => (
+            <Motion key={link.label} onHoverStart={() => handleHover(index)}>
               <NavigationBarButton
-                {...item}
+                {...link}
                 hovering={hoveredIndex === index}
                 ref={(el) => {
                   itemRefs.current[index] = el
-                  if (item.path === currentPath && !activeRef.current) {
+                  if (link.url === currentPath && !activeRef.current) {
                     activeRef.current = el
                   }
                 }}
@@ -98,7 +103,7 @@ export const NavigationBarDesktop = ({ navItems, user }: NavigationBarProps) => 
         {user ? (
           <NavigationBarUserMenu admin={admin} avatarProps={{ name: fullName, src: src }} />
         ) : (
-          <NavigationBarButton colorScheme="primary" label="Sign In" path="/signin" />
+          <NavigationBarButton colorScheme="primary" {...rightSideSingleButton} />
         )}
       </Box>
     </HStack>

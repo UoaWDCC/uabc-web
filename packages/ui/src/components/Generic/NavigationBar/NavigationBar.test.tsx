@@ -27,7 +27,11 @@ const mockUsePathname = vi.mocked(usePathname)
 describe("<NavigationBar />", () => {
   it("should re-export the NavigationBar component and check if it exists", () => {
     expect(NavigationBarModule.NavigationBar).toBeDefined()
-    expect(isValidElement(<NavigationBarModule.NavigationBar navItems={[]} />)).toBeTruthy()
+    expect(
+      isValidElement(
+        <NavigationBarModule.NavigationBar {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />,
+      ),
+    ).toBeTruthy()
   })
 
   it("should render the NavigationBar with correct props", () => {
@@ -51,7 +55,11 @@ describe("<NavigationBarMobile />", () => {
 
   it("should re-export the NavigationBarMobile component and check if it exists", () => {
     expect(NavigationBarModule.NavigationBarMobile).toBeDefined()
-    expect(isValidElement(<NavigationBarModule.NavigationBarMobile navItems={[]} />)).toBeTruthy()
+    expect(
+      isValidElement(
+        <NavigationBarModule.NavigationBarMobile {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />,
+      ),
+    ).toBeTruthy()
   })
 
   it("should render NavigationBarMobile with links hidden", () => {
@@ -81,7 +89,7 @@ describe("<NavigationBarMobile />", () => {
     render(<NavigationBarMobile {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />)
     const signInButton = screen.getByText("Sign In")
     expect(signInButton).toBeInTheDocument()
-    expect(signInButton).toHaveAttribute("href", "/login")
+    expect(signInButton).toHaveAttribute("href", "/auth/signin")
   })
 
   it("should render a profile link and sign out button when user is signed in as a casual", async () => {
@@ -97,7 +105,7 @@ describe("<NavigationBarMobile />", () => {
 
     const signOutLink = screen.getByText("Sign Out")
     expect(signOutLink).toBeInTheDocument()
-    expect(signOutLink).toHaveAttribute("href", "/signout")
+    expect(signOutLink).toHaveAttribute("href", "/auth/signout")
 
     const adminLink = screen.queryByText("Admin")
     expect(adminLink).not.toBeInTheDocument()
@@ -116,7 +124,7 @@ describe("<NavigationBarMobile />", () => {
 
     const signOutLink = screen.getByText("Sign Out")
     expect(signOutLink).toBeInTheDocument()
-    expect(signOutLink).toHaveAttribute("href", "/signout")
+    expect(signOutLink).toHaveAttribute("href", "/auth/signout")
 
     const adminLink = screen.queryByText("Admin")
     expect(adminLink).not.toBeInTheDocument()
@@ -135,7 +143,7 @@ describe("<NavigationBarMobile />", () => {
 
     const signOutLink = screen.getByText("Sign Out")
     expect(signOutLink).toBeInTheDocument()
-    expect(signOutLink).toHaveAttribute("href", "/signout")
+    expect(signOutLink).toHaveAttribute("href", "/auth/signout")
 
     const adminLink = screen.queryByText("Admin")
     expect(adminLink).toBeInTheDocument()
@@ -168,7 +176,11 @@ describe("<NavigationBarDesktop />", () => {
 
   it("should re-export the NavigationBarDesktop component anc child components and check if they exist", () => {
     expect(NavigationBarModule.NavigationBarDesktop).toBeDefined()
-    expect(isValidElement(<NavigationBarModule.NavigationBarDesktop navItems={[]} />)).toBeTruthy()
+    expect(
+      isValidElement(
+        <NavigationBarModule.NavigationBarDesktop {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />,
+      ),
+    ).toBeTruthy()
   })
 
   it("should render the NavigationBarDesktop with correct props", () => {
@@ -205,7 +217,7 @@ describe("<NavigationBarDesktop />", () => {
     render(<NavigationBarDesktop {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />)
     const signInButton = screen.getByText("Sign In")
     expect(signInButton).toBeInTheDocument()
-    expect(signInButton).toHaveAttribute("href", "/signin")
+    expect(signInButton).toHaveAttribute("href", "/auth/signin")
   })
 
   it("should render user menu when user is signed in", () => {
@@ -214,7 +226,7 @@ describe("<NavigationBarDesktop />", () => {
     expect(userMenu).toBeInTheDocument()
   })
 
-  it("should highlight the current path", async () => {
+  it("should highlight the current url", async () => {
     render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     const indicator = screen.getByTestId("navbar-hover-indicator")
     expect(indicator).toBeInTheDocument()
@@ -253,7 +265,7 @@ describe("<NavigationBarDesktop />", () => {
   })
 
   it("should clear hover indicator when mouse leaves the navbar", async () => {
-    mockUsePathname.mockReturnValue("/unknown-path")
+    mockUsePathname.mockReturnValue("/unknown-url")
     const { user } = render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
 
     expect(screen.queryByTestId("navbar-hover-indicator")).not.toBeInTheDocument()
@@ -271,7 +283,7 @@ describe("<NavigationBarDesktop />", () => {
     await waitForElementToBeRemoved(() => screen.queryByTestId("navbar-hover-indicator"))
   })
 
-  it("should return indicator to current path when other button is unhovered", async () => {
+  it("should return indicator to current url when other button is unhovered", async () => {
     const { user } = render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
 
     const initialIndicator = screen.getByTestId("navbar-hover-indicator")
@@ -306,8 +318,8 @@ describe("<NavigationBarDesktop />", () => {
     expect(returnedPosition).toStrictEqual(initialPosition)
   })
 
-  it("should not show indicator when current path does not match any nav item", () => {
-    mockUsePathname.mockReturnValue("/unknown-path")
+  it("should not show indicator when current url does not match any nav item", () => {
+    mockUsePathname.mockReturnValue("/unknown-url")
     render(<NavigationBarDesktop {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
     expect(screen.queryByTestId("navbar-hover-indicator")).not.toBeInTheDocument()
   })
@@ -317,24 +329,24 @@ describe("<NavigationBarButton />", () => {
   it("should re-export the NavigationBarButton component and check if it exists", () => {
     expect(NavigationBarModule.NavigationBarButton).toBeDefined()
     expect(
-      isValidElement(<NavigationBarModule.NavigationBarButton label="Test" path="/" />),
+      isValidElement(<NavigationBarModule.NavigationBarButton label="Test" url="/" />),
     ).toBeTruthy()
   })
 
   it("should render the NavigationBarButton with correct props", () => {
-    render(<NavigationBarButton label="Test Button" path="/test" />)
+    render(<NavigationBarButton label="Test Button" url="/test" />)
     expect(screen.getByText("Test Button")).toBeInTheDocument()
     expect(screen.getByRole("link")).toHaveAttribute("href", "/test")
   })
 
   it("should forward ref correctly", () => {
     const ref = { current: null }
-    render(<NavigationBarButton label="Ref Test" path="/ref-test" ref={ref} />)
+    render(<NavigationBarButton label="Ref Test" ref={ref} url="/ref-test" />)
     expect(ref.current).toBeInstanceOf(HTMLAnchorElement)
   })
 
   it("should display hover indicator when hovered", async () => {
-    render(<NavigationBarButton hovering={true} label="Hover Test" path="/hover-test" />)
+    render(<NavigationBarButton hovering={true} label="Hover Test" url="/hover-test" />)
 
     const indicator = screen.getByTestId("navbar-hover-indicator")
     expect(indicator).toBeInTheDocument()
@@ -378,7 +390,7 @@ describe("<NavigationBarUserMenu />", () => {
 
     const signOutLink = screen.getByTestId("navbar-user-menu-signout-link")
     expect(signOutLink).toBeInTheDocument()
-    expect(signOutLink).toHaveAttribute("href", "/signout")
+    expect(signOutLink).toHaveAttribute("href", "/auth/signout")
   })
 
   it("should render the NavigationBarUserMenu with correct menu items for admin", async () => {
@@ -408,6 +420,6 @@ describe("<NavigationBarUserMenu />", () => {
 
     const signOutLink = screen.getByTestId("navbar-user-menu-signout-link")
     expect(signOutLink).toBeInTheDocument()
-    expect(signOutLink).toHaveAttribute("href", "/signout")
+    expect(signOutLink).toHaveAttribute("href", "/auth/signout")
   })
 })
