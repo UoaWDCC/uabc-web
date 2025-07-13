@@ -1,6 +1,5 @@
 import { GetNavbarResponseSchema } from "@repo/shared"
 import type { Navbar } from "@repo/shared/payload-types"
-import { describe, expect, it, vi } from "vitest"
 import { getNavigationBar } from "./NavigationBarService"
 
 const mockNavbar: Navbar = {
