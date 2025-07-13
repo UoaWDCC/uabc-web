@@ -8,7 +8,8 @@ import type {
 import { render as reactRender, renderHook as reactRenderHook } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 import type { UIProviderProps } from "@yamada-ui/react"
-import type { ReactElement } from "react"
+import type { ReactElement, ReactNode } from "react"
+import React from "react"
 import type * as ReactDOMClient from "react-dom/client"
 import "@testing-library/jest-dom/vitest"
 import { UIProvider } from "@repo/ui/components/Provider"
@@ -43,8 +44,8 @@ export function render(
 
   if (withProvider) {
     const prevWrapper = rest.wrapper
-    rest.wrapper = (props) => {
-      const element = prevWrapper ? prevWrapper(props) : ui
+    rest.wrapper = ({ children }: { children: ReactNode }) => {
+      const element = prevWrapper ? React.createElement(prevWrapper, { children }) : children
       return (
         <UIProvider config={config} theme={theme}>
           {element}
@@ -97,8 +98,8 @@ export function renderHook<
 ) {
   if (withProvider) {
     const prevWrapper = rest.wrapper
-    rest.wrapper = (props) => {
-      const element = prevWrapper ? prevWrapper(props) : render(props as M)
+    rest.wrapper = ({ children }: { children: ReactNode }) => {
+      const element = prevWrapper ? React.createElement(prevWrapper, { children }) : children
       return (
         <UIProvider config={config} theme={theme} {...providerProps}>
           {element}
