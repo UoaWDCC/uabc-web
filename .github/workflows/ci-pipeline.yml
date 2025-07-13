@@ -129,7 +129,8 @@ jobs:
 
   pre-comment:
     name: Pre Comment
-    needs: [setup]
+    needs: [check_changes, setup]
+    if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
