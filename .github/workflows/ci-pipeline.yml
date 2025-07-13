@@ -130,6 +130,7 @@ jobs:
   preview-storybook:
     needs: [build-storybook]
     if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
+    name: Preview Storybook
     runs-on: ubuntu-latest
     outputs:
       deployment-url: ${{ steps.deploy-storybook.outputs.deployment-url }}
@@ -144,9 +145,30 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  preview-frontend:
+    needs: [check_changes, setup]
+    if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
+    name: Preview Frontend
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy-frontend.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy frontend
+        id: deploy-frontend
+        uses: ./.github/cd-actions/deploy-frontend/
+        with:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          project-name: uabc
+
   comment:
     name: Comment
-    needs: [preview-storybook]
+    needs: [preview-storybook, preview-frontend]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -155,6 +177,7 @@ jobs:
         uses: ./.github/ci-actions/comment/
         with:
           preview-storybook: ${{ needs.preview-storybook.outputs.deployment-url }}
+          preview-frontend: ${{ needs.preview-frontend.outputs.deployment-url }}
 
   typecheck:
     needs: [check_changes, setup]

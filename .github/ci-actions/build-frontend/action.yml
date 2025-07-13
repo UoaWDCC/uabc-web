@@ -54,4 +54,4 @@ runs:
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
-      run: pnpm turbo run build --filter frontend
+      run: pnpm build --filter frontend
