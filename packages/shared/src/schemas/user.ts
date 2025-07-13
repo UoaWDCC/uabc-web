@@ -7,6 +7,7 @@ import {
   PlayLevel,
   University,
 } from "../types"
+import { UserSchema } from "./auth"
 
 export const CreateUserRequestSchema = z.object({
   firstName: z.string().min(1).max(30),
@@ -26,3 +27,11 @@ export const CreateUserRequestSchema = z.object({
 
 export const UpdateUserRequestSchema =
   CreateUserRequestSchema.partial() satisfies z.ZodType<EditUserData>
+
+export const GetAllUsersResponseSchema = z.object({
+  data: z.array(UserSchema),
+})
+
+export const GetUserResponseSchema = z.object({
+  data: UserSchema,
+})
