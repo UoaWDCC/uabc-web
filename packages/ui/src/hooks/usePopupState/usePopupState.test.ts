@@ -1,26 +1,7 @@
 import { act, renderHook } from "@testing-library/react"
+import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { vi } from "vitest"
 import { usePopupState } from "./usePopupState"
-
-vi.mock("nuqs", () => {
-  const actual = vi.importActual("nuqs")
-  return {
-    ...actual,
-    useQueryStates: vi.fn((config: Record<string, { _default: unknown }>) => {
-      let params = Object.fromEntries(
-        Object.entries(config).map(([k, v]: [string, { _default: unknown }]) => [k, v._default]),
-      )
-      const setParams = vi.fn((newParams: Record<string, unknown>) => {
-        params = { ...params, ...newParams }
-      })
-      return [params, setParams]
-    }),
-    parseAsString: {
-      withDefault: (def: string) => ({ _default: def }),
-    },
-    parseAsArrayOf: () => ({ withDefault: (def: string[]) => ({ _default: def }) }),
-  }
-})
 
 describe("usePopupState", () => {
   afterEach(() => {
@@ -28,21 +9,28 @@ describe("usePopupState", () => {
   })
 
   it("should initialize with default values (single mode)", () => {
-    const { result } = renderHook(() =>
-      usePopupState({ popupId: "test", initialValue: "", valueKey: "test-value" }),
+    const { result } = renderHook(
+      () => usePopupState({ popupId: "test", initialValue: "", valueKey: "test-value" }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     expect(result.current.isOpen).toBe(false)
     expect(result.current.value).toBe("")
   })
 
   it("should initialize with default values (range mode)", () => {
-    const { result } = renderHook(() =>
-      usePopupState({
-        popupId: "test",
-        initialValue: ["a", "b"],
-        valueKey: "test-value",
-        isRange: true,
-      }),
+    const { result } = renderHook(
+      () =>
+        usePopupState({
+          popupId: "test",
+          initialValue: ["a", "b"],
+          valueKey: "test-value",
+          isRange: true,
+        }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     expect(result.current.value).toEqual(["a", "b"])
   })
@@ -50,8 +38,11 @@ describe("usePopupState", () => {
   it("should open and close the popup", () => {
     const onOpen = vi.fn()
     const onClose = vi.fn()
-    const { result } = renderHook(() =>
-      usePopupState({ popupId: "test", initialValue: "", onOpen, onClose }),
+    const { result } = renderHook(
+      () => usePopupState({ popupId: "test", initialValue: "", onOpen, onClose }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     act(() => {
       result.current.open()
@@ -64,14 +55,18 @@ describe("usePopupState", () => {
   })
 
   it("should toggle the popup", () => {
-    const { result } = renderHook(() => usePopupState({ popupId: "test", initialValue: "" }))
-    act(() => {
-      result.current.open()
+    const { result } = renderHook(() => usePopupState({ popupId: "test", initialValue: "" }), {
+      wrapper: withNuqsTestingAdapter(),
     })
     expect(result.current.isOpen).toBe(false)
     act(() => {
       result.current.toggle()
     })
+    expect(result.current.isOpen).toBe(true)
+    act(() => {
+      result.current.toggle()
+    })
+    expect(result.current.isOpen).toBe(false)
   })
 
   it("should call close when toggle is called and isOpen is true", async () => {
@@ -89,8 +84,11 @@ describe("usePopupState", () => {
       }
     })
     const { usePopupState } = await import("./usePopupState")
-    const { result } = renderHook(() =>
-      usePopupState({ popupId: "test", initialValue: "", onClose }),
+    const { result } = renderHook(
+      () => usePopupState({ popupId: "test", initialValue: "", onClose }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     act(() => {
       result.current.toggle()
@@ -101,8 +99,12 @@ describe("usePopupState", () => {
 
   it("should set and clear value (single mode)", () => {
     const onValueChange = vi.fn()
-    const { result } = renderHook(() =>
-      usePopupState({ popupId: "test", initialValue: "", valueKey: "test-value", onValueChange }),
+    const { result } = renderHook(
+      () =>
+        usePopupState({ popupId: "test", initialValue: "", valueKey: "test-value", onValueChange }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     act(() => {
       result.current.setValue("foo")
@@ -116,14 +118,18 @@ describe("usePopupState", () => {
 
   it("should set and clear value (range mode)", () => {
     const onValueChange = vi.fn()
-    const { result } = renderHook(() =>
-      usePopupState({
-        popupId: "test",
-        initialValue: [] as string[],
-        valueKey: "test-value",
-        isRange: true,
-        onValueChange,
-      }),
+    const { result } = renderHook(
+      () =>
+        usePopupState({
+          popupId: "test",
+          initialValue: [] as string[],
+          valueKey: "test-value",
+          isRange: true,
+          onValueChange,
+        }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     act(() => {
       result.current.setValue(["a", "b"] as string[])
@@ -137,8 +143,12 @@ describe("usePopupState", () => {
 
   it("should not call onValueChange when setting null/empty value (single mode)", () => {
     const onValueChange = vi.fn()
-    const { result } = renderHook(() =>
-      usePopupState({ popupId: "test", initialValue: "", valueKey: "test-value", onValueChange }),
+    const { result } = renderHook(
+      () =>
+        usePopupState({ popupId: "test", initialValue: "", valueKey: "test-value", onValueChange }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     act(() => {
       result.current.setValue(null as unknown as string)
@@ -152,14 +162,18 @@ describe("usePopupState", () => {
 
   it("should not call onValueChange when setting null/empty value (range mode)", () => {
     const onValueChange = vi.fn()
-    const { result } = renderHook(() =>
-      usePopupState({
-        popupId: "test",
-        initialValue: [] as string[],
-        valueKey: "test-value",
-        isRange: true,
-        onValueChange,
-      }),
+    const { result } = renderHook(
+      () =>
+        usePopupState({
+          popupId: "test",
+          initialValue: [] as string[],
+          valueKey: "test-value",
+          isRange: true,
+          onValueChange,
+        }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     act(() => {
       result.current.setValue(null as unknown as string[])
@@ -172,7 +186,9 @@ describe("usePopupState", () => {
   })
 
   it("should handle navigation functions", () => {
-    const { result } = renderHook(() => usePopupState({ popupId: "test", initialValue: "" }))
+    const { result } = renderHook(() => usePopupState({ popupId: "test", initialValue: "" }), {
+      wrapper: withNuqsTestingAdapter(),
+    })
     act(() => {
       result.current.navigation.openPopup("foo")
     })
@@ -185,31 +201,42 @@ describe("usePopupState", () => {
   })
 
   it("should use correct parser config for string and array", () => {
-    const { result } = renderHook(() =>
-      usePopupState({ popupId: "test", initialValue: "abc", valueKey: "test-value" }),
+    const { result } = renderHook(
+      () => usePopupState({ popupId: "test", initialValue: "abc", valueKey: "test-value" }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     expect(result.current.value).toBe("abc")
-    const { result: arrResult } = renderHook(() =>
-      usePopupState({
-        popupId: "test",
-        initialValue: ["x"] as string[],
-        valueKey: "test-value",
-        isRange: true,
-      }),
+    const { result: arrResult } = renderHook(
+      () =>
+        usePopupState({
+          popupId: "test",
+          initialValue: ["x"] as string[],
+          valueKey: "test-value",
+          isRange: true,
+        }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     expect(arrResult.current.value).toEqual(["x"])
   })
 
   it("should call onValueChange for range only if value is truthy", () => {
     const onValueChange = vi.fn()
-    const { result } = renderHook(() =>
-      usePopupState({
-        popupId: "test",
-        initialValue: [] as string[],
-        valueKey: "test-value",
-        isRange: true,
-        onValueChange,
-      }),
+    const { result } = renderHook(
+      () =>
+        usePopupState({
+          popupId: "test",
+          initialValue: [] as string[],
+          valueKey: "test-value",
+          isRange: true,
+          onValueChange,
+        }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     act(() => {
       result.current.setValue([] as string[])
@@ -222,24 +249,32 @@ describe("usePopupState", () => {
   })
 
   it("should handle initialValue that is not string or array", () => {
-    const { result } = renderHook(() =>
-      usePopupState({
-        popupId: "test",
-        initialValue: 123 as unknown as string,
-        valueKey: "test-value",
-      }),
+    const { result } = renderHook(
+      () =>
+        usePopupState({
+          popupId: "test",
+          initialValue: 123 as unknown as string,
+          valueKey: "test-value",
+        }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     expect(result.current.value).toBe("")
   })
 
   it("should default to [] if isRange is true and initialValue is not an array", () => {
-    const { result } = renderHook(() =>
-      usePopupState({
-        popupId: "test",
-        initialValue: "not-an-array" as unknown as string[],
-        valueKey: "test-value",
-        isRange: true,
-      }),
+    const { result } = renderHook(
+      () =>
+        usePopupState({
+          popupId: "test",
+          initialValue: "not-an-array" as unknown as string[],
+          valueKey: "test-value",
+          isRange: true,
+        }),
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
     )
     expect(result.current.value).toEqual([])
   })
