@@ -16,7 +16,7 @@ type Story = StoryObj<typeof FAQ>
 
 const meta: Meta<typeof FAQ> = {
   component: FAQ,
-  title: "Generic Components / FAQ",
+  title: "Generic Components / FAQ / FAQ",
   argTypes: {
     title: {
       control: "text",
