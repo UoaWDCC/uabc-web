@@ -32,9 +32,7 @@ export default buildConfig({
     admin: "/payload/admin",
     api: "/payload/api",
   },
-  cors: {
-    origins: [process.env.NEXT_PUBLIC_URL],
-  },
+  cors: "*",
   admin: {
     user: Admin.slug,
     importMap: {

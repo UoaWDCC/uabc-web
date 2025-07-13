@@ -1,5 +1,6 @@
 import { GetFaqResponseSchema } from "@repo/shared"
-import { apiClient } from "../client"
+import { apiClient } from "@/lib/api/client"
+import { QueryKeys } from "@/services"
 
 /**
  * Retrieves FAQ data from the global API endpoint
@@ -8,6 +9,5 @@ import { apiClient } from "../client"
  * @throws When the API request fails
  */
 export const getFaq = async () => {
-  "use server"
-  return await apiClient.get("/api/globals/faq", GetFaqResponseSchema, ["faq"])
+  return await apiClient.get("/api/globals/faq", GetFaqResponseSchema, [QueryKeys.FAQ_QUERY_KEY])
 }

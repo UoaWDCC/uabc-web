@@ -1,5 +1,6 @@
 export * from "./auth"
 export * from "./faq"
+export * from "./game-session"
 export * from "./media"
 export * from "./payload"
 export * from "./query"

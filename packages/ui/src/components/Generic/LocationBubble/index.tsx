@@ -5,6 +5,7 @@ import {
   Center,
   LayoutGroup,
   Motion,
+  useBreakpointValue,
   useDisclosure,
   useMotionValue,
   useReducedMotion,
@@ -50,39 +51,52 @@ export const LocationBubble = ({
 
   const { open, onOpen, onClose } = useDisclosure()
 
+  const onHoverEnd = useBreakpointValue({
+    base: () => {},
+    md: () => {
+      if (hoverDebounce.current) {
+        clearTimeout(hoverDebounce.current)
+        hoverDebounce.current = null
+      }
+      setHovering(false)
+    },
+  })
+
+  const onHoverStart = useBreakpointValue({
+    base: () => {},
+    md: () => {
+      hoverDebounce.current = setTimeout(() => {
+        setHovering(true)
+      }, 100)
+    },
+  })
+
   const shouldReduceMotion = useReducedMotion()
   const fallback = useMotionValue(0)
   const animatedTime = useTime()
   const time = shouldReduceMotion ? fallback : animatedTime
-  const direction = useMotionValue(Math.random() > 0.5 ? 1 : -1)
-  const xRadius = useTransform(time, (t) => Math.cos(t / 2000) * 25)
-  const yRadius = useTransform(time, (t) => Math.sin(t / 2000) * 25)
-  const bubbleXValue = useTransform(
-    time,
-    (t) => Math.cos(t / 3500) * xRadius.get() * direction.get(),
+  const period = useMotionValue(
+    1900 + (locationTitle.split("").reduce((acc, char) => acc + 31 * char.charCodeAt(0), 0) % 200),
   )
+  const xRadius = useTransform(time, (t) => Math.cos(t / period.get() + period.get()) * 25)
+  const yRadius = useTransform(time, (t) => Math.sin(t / period.get() + period.get()) * 25)
+  const bubbleXValue = useTransform(time, (t) => Math.cos(t / 3500) * xRadius.get())
   const bubbleX = shouldReduceMotion ? fallback : bubbleXValue
-  const bubbleYValue = useTransform(
-    time,
-    (t) => Math.sin(t / 3500) * yRadius.get() * direction.get(),
-  )
+  const bubbleYValue = useTransform(time, (t) => Math.sin(t / 3500) * yRadius.get())
   const bubbleY = shouldReduceMotion ? fallback : bubbleYValue
 
   return (
     <>
-      <Box data-testid="location-bubble" height={468} position="relative" width={348}>
+      <Box data-testid="location-bubble" pointerEvents="none" position="relative">
         <LayoutGroup id={locationTitle}>
-          {hovering ? (
-            <Motion
-              data-testid="location-bubble-desktop-card-wrapper"
-              onHoverEnd={() => {
-                if (hoverDebounce.current) {
-                  clearTimeout(hoverDebounce.current)
-                  hoverDebounce.current = null
-                }
-                setHovering(false)
-              }}
-            >
+          <Motion
+            data-testid="location-bubble-hover-container"
+            onHoverEnd={onHoverEnd}
+            onHoverStart={onHoverStart}
+            pointerEvents="all"
+            width={hovering ? "332px" : "auto"}
+          >
+            {hovering ? (
               <LocationBubbleDesktopCard
                 buttonLink={buttonLink}
                 locationDetails={locationDetails}
@@ -90,38 +104,32 @@ export const LocationBubble = ({
                 locationTimes={locationTimes}
                 locationTitle={locationTitle}
               />
-            </Motion>
-          ) : (
-            <Center height="100%" width="100%">
-              <Motion
-                data-testid="location-bubble-circle-trigger"
-                onHoverEnd={() => {
-                  if (hoverDebounce.current) {
-                    clearTimeout(hoverDebounce.current)
-                    hoverDebounce.current = null
-                  }
-                  setHovering(false)
-                }}
-                onHoverStart={() => {
-                  hoverDebounce.current = setTimeout(() => {
-                    setHovering(true)
-                  }, 100)
-                }}
-                onTap={onOpen}
-                style={{
-                  x: bubbleX,
-                  y: bubbleY,
-                }}
-                whileTap={{
-                  scale: 0.9,
-                  rotateZ: 5,
-                  transition: { type: "spring", stiffness: 300, damping: 15 },
-                }}
-              >
-                <LocationBubbleCircle locationImage={locationImage} locationTitle={locationTitle} />
-              </Motion>
-            </Center>
-          )}
+            ) : (
+              <Center pointerEvents="none">
+                <Motion
+                  data-testid="location-bubble-circle-trigger"
+                  height="fit-content"
+                  onTap={onOpen}
+                  pointerEvents="auto"
+                  style={{
+                    x: bubbleX,
+                    y: bubbleY,
+                  }}
+                  whileTap={{
+                    scale: 0.9,
+                    rotateZ: 5,
+                    transition: { type: "spring", stiffness: 300, damping: 15 },
+                  }}
+                  width="fit-content"
+                >
+                  <LocationBubbleCircle
+                    locationImage={locationImage}
+                    locationTitle={locationTitle}
+                  />
+                </Motion>
+              </Center>
+            )}
+          </Motion>
         </LayoutGroup>
       </Box>
       <LocationBubbleMobileCard

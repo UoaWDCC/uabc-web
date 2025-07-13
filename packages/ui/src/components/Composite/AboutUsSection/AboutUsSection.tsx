@@ -13,7 +13,7 @@ export interface AboutUsSectionProps extends AboutUsCarouselProps {
 
 export const AboutUsSection = ({ cards, ...carouselProps }: AboutUsSectionProps) => {
   return (
-    <Container as={VStack} centerContent gap={{ base: "md", md: "xl" }} padding="calc(lg - sm)">
+    <Container as={VStack} centerContent gap={{ base: "lg", md: "xl" }}>
       <Heading.h2 fontSize={{ base: "2xl", md: "6xl" }} fontWeight="semibold" w="full">
         About Us
       </Heading.h2>
@@ -28,7 +28,7 @@ export const AboutUsSection = ({ cards, ...carouselProps }: AboutUsSectionProps)
           height="auto"
           width="full"
         />
-        <Flex flexDir={{ base: "column", md: "row" }} gap={{ base: "md", md: "xl" }}>
+        <Flex flexDir={{ base: "column", md: "row" }} gap={{ base: "lg", md: "xl" }}>
           {cards.map((card) => (
             <AboutUsCard key={card.title} {...card} />
           ))}
