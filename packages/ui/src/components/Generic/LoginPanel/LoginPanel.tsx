@@ -93,8 +93,8 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         startIcon={<LockIcon />}
         type={InputType.Password}
       />
-      <HStack color="gray.100">
-        <Checkbox label="Remember me" textAlign="start" />
+      <HStack color="gray.100" fontSize="sm">
+        <Checkbox label="Remember me" size="sm" textAlign="start" />
         <Spacer />
         <UILink
           _hover={{ color: "white" }}
@@ -136,8 +136,9 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         <IconButton
           aria-label="Google"
           colorScheme="secondary"
+          data-testid="google-logo"
           fullRounded
-          onClick={onClickGoogle}
+          onClick={onClickGoogle ?? noop}
           variant="gradient"
         >
           <GoogleLogo fontSize="2xl" />
@@ -155,7 +156,7 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         </IconButton>
       </Center>
 
-      <Center textAlign="center">
+      <Center fontSize="sm" textAlign="center">
         <Text color="muted">
           Don't have an account?&nbsp;
           <UILink
