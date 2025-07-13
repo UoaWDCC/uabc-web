@@ -63,7 +63,7 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
       p={{ base: "md", lg: "lg" }}
       w={{ base: "full", md: "md" }}
     >
-      <Center>
+      <Center py={{ base: "md", md: "unset" }}>
         {/* TODO: replace with correct logo */}
         <UabcLogo />
       </Center>
