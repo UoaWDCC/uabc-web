@@ -9,10 +9,10 @@ import { getNavigationBar } from "@/services/cms/navbar/NavigationBarService"
  *
  * @returns Server-side component to fetch and render the navigation bar section using Tanstack Query.
  */
-export const NavigationBarServerSection = () => {
+export const NavigationBarServerSection = async () => {
   const queryClient = getQueryClient()
 
-  queryClient.prefetchQuery({
+  await queryClient.prefetchQuery({
     queryKey: [QueryKeys.NAVIGATION_BAR_QUERY_KEY],
     queryFn: getNavigationBar,
   })
