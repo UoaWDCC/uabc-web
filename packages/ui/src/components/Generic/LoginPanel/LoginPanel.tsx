@@ -18,6 +18,7 @@ import {
 import Link from "next/link"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { UabcLogo } from "../../Icon"
+import { BreakLine } from "../../Primitive/BreakLine"
 
 /**
  * Props for {@link LoginPanel} component
@@ -47,9 +48,9 @@ export const LoginPanel = memo(({ onSubmit }: LoginPanelProps) => {
   return (
     <VStack
       as="form"
-      bgColor="secondary.800"
+      bgColor="secondary.900"
       borderRadius="3xl"
-      borderWidth="medium"
+      layerStyle="gradientBorder"
       onSubmit={handleSubmit(onSubmit ?? noop)}
       p="md"
       w="md"
@@ -89,7 +90,11 @@ export const LoginPanel = memo(({ onSubmit }: LoginPanelProps) => {
       <Button colorScheme="primary" loading={isSubmitting} type="submit">
         Sign In
       </Button>
-      <span>or separator goes here</span>
+      <BreakLine
+        label="or"
+        separatorProps1={{ border: 0, layerStyle: "fadeLeft" }}
+        separatorProps2={{ border: 0, layerStyle: "fadeRight" }}
+      />
       <span>Google and Apple icons go here</span>
       <Center>
         <Text color="gray.100" justifyItems="center">
@@ -99,45 +104,6 @@ export const LoginPanel = memo(({ onSubmit }: LoginPanelProps) => {
           </UILink>
         </Text>
       </Center>
-
-      {/* <Grid gap="md" templateColumns={{ base: "1fr", md: "1fr 1fr auto" }}>
-          <GridItem minW={0}>
-            <Select
-              data-testid="location-and-time"
-              errorMessage={errors.locationAndTimeId?.message}
-              icon={<CalendarClockIcon fontSize={24} />}
-              isError={!!errors.locationAndTimeId}
-              items={locationAndTimeOptions}
-              label="Location & Time"
-              registration={register("locationAndTimeId")}
-              stylised
-            />
-          </GridItem>
-          <GridItem minW={0}>
-            <Select
-              data-testid="skill-level"
-              errorMessage={errors.skillLevel?.message}
-              icon={<CircleGaugeIcon fontSize={24} />}
-              isError={!!errors.skillLevel}
-              items={skillLevelOptions}
-              label="Skill Level"
-              registration={register("skillLevel")}
-              stylised
-            />
-          </GridItem>
-          <GridItem w="full">
-            <Button
-              colorScheme="primary"
-              loading={isSubmitting}
-              size="lg"
-              type="submit"
-              variant="gradient"
-              w="full"
-            >
-              {submitLabel}
-            </Button>
-          </GridItem>
-        </Grid> */}
     </VStack>
   )
 })
