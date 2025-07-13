@@ -1,7 +1,7 @@
+import { Button, type ButtonProps } from "@repo/ui/components/Primitive"
 import { memo, useMemo } from "react"
 import type { ZodTypeAny } from "zod"
-import { Button, type ButtonProps } from "../../Primitive/Button"
-import { useCalendarSelectPopupContext, useStepNavigation } from "./CalendarSelectPopupContext"
+import { useCalendarSelectPopupContext, useStepNavigation } from "../CalendarSelectPopupContext"
 
 /**
  * Props for {@link NextButton} component

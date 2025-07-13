@@ -14,8 +14,6 @@ dayjs.extend(timezone)
 
 const NZ_TIMEZONE = "Pacific/Auckland"
 
-type PopupValueType<T extends boolean> = T extends true ? string[] : string
-
 /**
  * React hook for managing calendar popup state and date selection
  *
@@ -72,11 +70,11 @@ export function useCalendarSelectPopup<T extends boolean = false>(
     setValue,
     clearValue,
     navigation,
-  } = usePopupState<PopupValueType<T>>({
+  } = usePopupState({
     popupId,
     openValue,
     valueKey: dateParamKey,
-    initialValue: toPopupValue(initialDate, enableRange) as PopupValueType<T>,
+    initialValue: toPopupValue(initialDate, enableRange),
     isRange: enableRange,
     onOpen,
     onClose,
@@ -92,11 +90,11 @@ export function useCalendarSelectPopup<T extends boolean = false>(
   const setDate = useCallback(
     (date: DateValue<T> | null) => {
       if (date === null) {
-        setValue(toPopupValue(initialDate, enableRange) as PopupValueType<T>)
+        setValue(toPopupValue(initialDate, enableRange))
         return
       }
 
-      setValue(toPopupValue(date, enableRange) as PopupValueType<T>)
+      setValue(toPopupValue(date, enableRange))
 
       if (enableRange) {
         const [startDate, endDate] = date as [Date?, Date?]

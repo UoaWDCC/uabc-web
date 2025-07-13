@@ -141,7 +141,7 @@ describe("usePopupState", () => {
       usePopupState({ popupId: "test", initialValue: "", valueKey: "test-value", onValueChange }),
     )
     act(() => {
-      result.current.setValue(null)
+      result.current.setValue(null as unknown as string)
     })
     expect(onValueChange).not.toHaveBeenCalled()
     act(() => {
@@ -162,7 +162,7 @@ describe("usePopupState", () => {
       }),
     )
     act(() => {
-      result.current.setValue(null)
+      result.current.setValue(null as unknown as string[])
     })
     expect(onValueChange).not.toHaveBeenCalled()
     act(() => {

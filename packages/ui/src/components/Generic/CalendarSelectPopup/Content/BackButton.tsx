@@ -1,6 +1,6 @@
+import { Button, type ButtonProps } from "@repo/ui/components/Primitive"
 import { memo, useMemo } from "react"
-import { Button, type ButtonProps } from "../../Primitive/Button"
-import { useStepNavigation } from "./CalendarSelectPopupContext"
+import { useStepNavigation } from "../CalendarSelectPopupContext"
 
 /**
  * Props for {@link BackButton} component

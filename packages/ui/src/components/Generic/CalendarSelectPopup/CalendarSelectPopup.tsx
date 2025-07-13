@@ -148,7 +148,7 @@ export const CalendarSelectPopup = memo(
         colorScheme: "primary" as const,
         size: "lg" as const,
         type: "date" as const,
-        locale: "nz",
+        locale: "nz" as const,
         ...calendarProps,
         value:
           selectedDate === null
@@ -163,10 +163,10 @@ export const CalendarSelectPopup = memo(
 
     const resolvedDialogProps = useMemo(
       () => ({
-        size: "6xl",
-        minH: "3xl",
-        gap: "lg",
-        p: "lg",
+        size: "6xl" as const,
+        minH: "3xl" as const,
+        gap: "lg" as const,
+        p: "lg" as const,
         withCloseButton: allowClose,
         ...dialogProps,
         open: isOpen,

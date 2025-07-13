@@ -3,9 +3,14 @@ import { parseAsArrayOf, parseAsString, type UseQueryStatesKeysMap, useQueryStat
 import { useCallback, useMemo } from "react"
 
 /**
+ * Helper type for popup values based on range mode.
+ */
+type PopupValue<IsRange extends boolean> = IsRange extends true ? string[] : string
+
+/**
  * Options for configuring the usePopupState hook.
  */
-interface UsePopupStateOptions<T> {
+interface UsePopupStateOptions<IsRange extends boolean> {
   /**
    * Unique identifier for the popup (used as a query param key).
    */
@@ -18,15 +23,18 @@ interface UsePopupStateOptions<T> {
    * The key for the value in the query params. Defaults to `${popupId}-value`.
    */
   valueKey?: string
-  initialValue: T
+  /**
+   * Initial value for the popup state.
+   */
+  initialValue: PopupValue<IsRange>
   /**
    * If true, the value is treated as an array (range selection). Defaults to false.
    */
-  isRange?: boolean
+  isRange?: IsRange
   /**
    * Callback fired when the value changes.
    */
-  onValueChange?: (value: T) => void
+  onValueChange?: (value: PopupValue<IsRange>) => void
   /**
    * Callback fired when the popup is opened.
    */
@@ -40,7 +48,7 @@ interface UsePopupStateOptions<T> {
 /**
  * Return type for usePopupState hook.
  */
-export interface UsePopupStateReturn<T> {
+export interface UsePopupStateReturn<IsRange extends boolean> {
   /**
    * Whether the popup is open.
    */
@@ -48,7 +56,7 @@ export interface UsePopupStateReturn<T> {
   /**
    * The current value of the popup.
    */
-  value: T
+  value: PopupValue<IsRange>
   /**
    * Opens the popup.
    */
@@ -64,7 +72,7 @@ export interface UsePopupStateReturn<T> {
   /**
    * Sets the value of the popup.
    */
-  setValue: (value: T | null) => void
+  setValue: (value: PopupValue<IsRange>) => void
   /**
    * Clears the value of the popup.
    */
@@ -106,19 +114,24 @@ export interface UsePopupStateReturn<T> {
  * @remarks
  * This hook synchronizes popup state with URL query parameters, enabling deep linking and browser navigation support for popups.
  */
-export function usePopupState<T>({
-  popupId,
-  openValue = "open",
-  valueKey = `${popupId}-value`,
-  initialValue,
-  isRange = false,
-  onValueChange,
-  onOpen,
-  onClose,
-}: UsePopupStateOptions<T>): UsePopupStateReturn<T> {
+export function usePopupState<IsRange extends boolean = false>(
+  options: UsePopupStateOptions<IsRange>,
+): UsePopupStateReturn<IsRange> {
+  const {
+    popupId,
+    openValue = "open",
+    valueKey = `${popupId}-value`,
+    initialValue,
+    isRange = false as IsRange,
+    onValueChange,
+    onOpen,
+    onClose,
+  } = options
+
   const parserConfig = useMemo<UseQueryStatesKeysMap>(() => {
     const config: UseQueryStatesKeysMap = {}
-    config[popupId] = parseAsString.withDefault(isString(initialValue) ? initialValue : "")
+    config[popupId] = parseAsString.withDefault("")
+
     if (isRange) {
       config[valueKey] = parseAsArrayOf(parseAsString).withDefault(
         isArray(initialValue) ? initialValue : [],
@@ -134,7 +147,7 @@ export function usePopupState<T>({
   })
 
   const dialogState = searchParams[popupId]
-  const valueParam = searchParams[valueKey] as T
+  const valueParam = searchParams[valueKey] as PopupValue<IsRange>
   const isOpen = useMemo(() => dialogState === openValue, [dialogState, openValue])
 
   const open = useCallback(() => {
@@ -156,14 +169,20 @@ export function usePopupState<T>({
   }, [isOpen, open, close])
 
   const setValue = useCallback(
-    (value: T | null) => {
-      if (isRange) {
-        setSearchParams({ [valueKey]: value || [] })
-        if (value) onValueChange?.(value)
-      } else {
-        setSearchParams({ [valueKey]: value || null })
-        if (value) onValueChange?.(value)
+    (value: PopupValue<IsRange>) => {
+      setSearchParams({ [valueKey]: value })
+
+      // Don't call onValueChange for null values
+      if (value === null) {
+        return
       }
+
+      // Don't call onValueChange for empty strings in single mode
+      if (!isRange && value === "") {
+        return
+      }
+
+      onValueChange?.(value)
     },
     [setSearchParams, valueKey, onValueChange, isRange],
   )
@@ -172,7 +191,7 @@ export function usePopupState<T>({
     if (isRange) {
       setSearchParams({ [valueKey]: [] })
     } else {
-      setSearchParams({ [valueKey]: null })
+      setSearchParams({ [valueKey]: "" })
     }
   }, [setSearchParams, valueKey, isRange])
 

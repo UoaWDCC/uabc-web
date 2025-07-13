@@ -90,7 +90,7 @@ export const WithRangeDate: Story = {
 }
 
 export const WithNextNavigation: Story = {
-  render: (args) => {
+  render: () => {
     const dateSchema = z.date()
 
     const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0))
@@ -98,7 +98,6 @@ export const WithNextNavigation: Story = {
     return (
       <>
         <CalendarSelectPopup.Root
-          {...args}
           closeBehavior="close"
           currentStep={1}
           isOpen={step === 1}
@@ -121,7 +120,6 @@ export const WithNextNavigation: Story = {
         </CalendarSelectPopup.Root>
 
         <CalendarSelectPopup.Root
-          {...args}
           allowClose={true}
           calendarProps={{
             enableRange: true,
@@ -148,7 +146,6 @@ export const WithNextNavigation: Story = {
         </CalendarSelectPopup.Root>
 
         <CalendarSelectPopup.Root
-          {...args}
           allowClose={true}
           closeBehavior="close"
           currentStep={3}
@@ -185,5 +182,116 @@ export const WithNextNavigation: Story = {
       </>
     )
   },
-  args: {},
+}
+
+export const MultipleIndependentPopups: Story = {
+  render: () => (
+    <>
+      <CalendarSelectPopup.Root
+        calendarProps={{ enableRange: false }}
+        description="Choose the start date for the session."
+        onDateSelect={(date) => console.log("Session Start Date:", date)}
+        popupId="session-start"
+        showTrigger
+        title="Set Session Start Date"
+      >
+        <CalendarSelectPopup.Content>
+          <CalendarSelectPopup.Header subtitle="Pick a session start date" title="Session Start" />
+          <CalendarSelectPopup.Body>
+            <Button colorScheme="primary">Confirm</Button>
+          </CalendarSelectPopup.Body>
+        </CalendarSelectPopup.Content>
+      </CalendarSelectPopup.Root>
+
+      <CalendarSelectPopup.Root
+        calendarProps={{ enableRange: false }}
+        description="Choose the start date for the semester."
+        onDateSelect={(date) => console.log("Semester Start Date:", date)}
+        popupId="semester-start"
+        showTrigger
+        title="Set Semester Start Date"
+      >
+        <CalendarSelectPopup.Content>
+          <CalendarSelectPopup.Header
+            subtitle="Pick a semester start date"
+            title="Semester Start"
+          />
+          <CalendarSelectPopup.Body>
+            <Button colorScheme="secondary">Confirm</Button>
+          </CalendarSelectPopup.Body>
+        </CalendarSelectPopup.Content>
+      </CalendarSelectPopup.Root>
+    </>
+  ),
+}
+
+export const LimitSelectableDates: Story = {
+  render: (args) => (
+    <CalendarSelectPopup.Root
+      {...args}
+      calendarProps={{
+        minDate: new Date(new Date().getFullYear(), new Date().getMonth(), 5),
+        maxDate: new Date(new Date().getFullYear(), new Date().getMonth(), 20),
+      }}
+      onClose={() => console.log("Calendar closed")}
+      onDateSelect={(date) => console.log("Selected date:", date)}
+      onOpen={() => console.log("Calendar opened")}
+      showTrigger
+    >
+      <CalendarSelectPopup.Content>
+        <CalendarSelectPopup.Header
+          subtitle="Only dates between 5th and 20th are selectable."
+          title="Limit Selectable Dates"
+        />
+        <CalendarSelectPopup.Body>
+          <Button colorScheme="secondary" disabled>
+            Back
+          </Button>
+          <Button colorScheme="primary" disabled>
+            Next
+          </Button>
+        </CalendarSelectPopup.Body>
+      </CalendarSelectPopup.Content>
+    </CalendarSelectPopup.Root>
+  ),
+  args: {
+    title: "Select Date (Limited)",
+    popupId: "calendar-limited",
+    dateParamKey: "date-limited",
+  },
+}
+
+export const DisableSpecificDates: Story = {
+  render: (args) => (
+    <CalendarSelectPopup.Root
+      {...args}
+      calendarProps={{
+        excludeDate: (date: Date) => date.getDay() === 0 || date.getDay() === 6,
+      }}
+      onClose={() => console.log("Calendar closed")}
+      onDateSelect={(date) => console.log("Selected date:", date)}
+      onOpen={() => console.log("Calendar opened")}
+      showTrigger
+    >
+      <CalendarSelectPopup.Content>
+        <CalendarSelectPopup.Header
+          subtitle="Weekends are disabled."
+          title="Disable Specific Dates"
+        />
+        <CalendarSelectPopup.Body>
+          <Button colorScheme="secondary" disabled>
+            Back
+          </Button>
+          <Button colorScheme="primary" disabled>
+            Next
+          </Button>
+        </CalendarSelectPopup.Body>
+      </CalendarSelectPopup.Content>
+    </CalendarSelectPopup.Root>
+  ),
+  args: {
+    title: "Select Date (No Weekends)",
+    popupId: "calendar-disable-dates",
+    dateParamKey: "date-disable-dates",
+  },
 }
