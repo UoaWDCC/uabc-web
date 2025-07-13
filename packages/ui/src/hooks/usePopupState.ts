@@ -148,7 +148,7 @@ export function usePopupState<IsRange extends boolean = false>(
 
   const dialogState = searchParams[popupId]
   const valueParam = searchParams[valueKey] as PopupValue<IsRange>
-  const isOpen = useMemo(() => dialogState === openValue, [dialogState, openValue])
+  const isOpen = dialogState === openValue
 
   const open = useCallback(() => {
     setSearchParams({ [popupId]: openValue })
