@@ -243,7 +243,12 @@ describe("<CalendarSelectPopup />", () => {
   it("should provide context to children", async () => {
     const TestChild = () => {
       const { selectedDate } = useCalendarSelectPopupContext()
-      return <div>Date: {selectedDate?.toString() || "None"}</div>
+      const formattedDate = selectedDate
+        ? dayjs(selectedDate as Date)
+            .tz(NZ_TIMEZONE)
+            .format("ddd MMM DD YYYY")
+        : "None"
+      return <div>Date: {formattedDate}</div>
     }
     const initialDate = dayjs.tz("2024-01-01", "YYYY-MM-DD", NZ_TIMEZONE).toDate()
 

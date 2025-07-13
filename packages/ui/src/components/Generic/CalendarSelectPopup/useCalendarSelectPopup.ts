@@ -1,3 +1,5 @@
+import dayjs from "dayjs"
+import timezone from "dayjs/plugin/timezone"
 import { useCallback, useMemo } from "react"
 import { usePopupState } from "../../../hooks/usePopupState"
 import type {
@@ -7,6 +9,10 @@ import type {
   UseCalendarSelectPopupReturn,
 } from "./types"
 import { fromPopupValue, toPopupValue } from "./utils"
+
+dayjs.extend(timezone)
+
+const NZ_TIMEZONE = "Pacific/Auckland"
 
 type PopupValueType<T extends boolean> = T extends true ? string[] : string
 
@@ -109,7 +115,7 @@ export function useCalendarSelectPopup<T extends boolean = false>(
   }, [clearValue])
 
   const setToday = useCallback(() => {
-    const today = new Date()
+    const today = dayjs().tz(NZ_TIMEZONE).startOf("day").toDate()
     if (enableRange) {
       setDate([today, undefined] as unknown as DateValue<T>)
     } else {

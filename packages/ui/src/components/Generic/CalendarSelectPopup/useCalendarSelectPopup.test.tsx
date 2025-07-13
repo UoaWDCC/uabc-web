@@ -19,7 +19,7 @@ const createWrapper = () => {
 
 beforeAll(() => {
   vi.useFakeTimers()
-  vi.setSystemTime(new Date("2025-01-01T00:00:00.000Z"))
+  vi.setSystemTime(dayjs.tz("2025-01-01", "YYYY-MM-DD", NZ_TIMEZONE).toDate())
 })
 
 afterAll(() => {
@@ -174,9 +174,7 @@ describe("useCalendarSelectPopup", () => {
     })
 
     expect(singleResult.current.selectedDate).toBeInstanceOf(Date)
-    expect(singleResult.current.selectedDate?.getDate()).toBe(
-      dayjs().tz(NZ_TIMEZONE).toDate().getDate(),
-    )
+    expect(dayjs(singleResult.current.selectedDate).tz(NZ_TIMEZONE).date()).toBe(1)
 
     const { result: rangeResult } = renderHook(
       () =>
@@ -194,7 +192,7 @@ describe("useCalendarSelectPopup", () => {
 
     const [startDate, endDate] = rangeResult.current.selectedDate as [Date?, Date?]
     expect(startDate).toBeInstanceOf(Date)
-    expect(startDate?.getDate()).toBe(dayjs().tz(NZ_TIMEZONE).toDate().getDate())
+    expect(dayjs(startDate).tz(NZ_TIMEZONE).date()).toBe(1)
     expect(endDate).toBeUndefined()
   })
 
