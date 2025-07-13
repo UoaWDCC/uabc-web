@@ -16,6 +16,7 @@ import {
   VStack,
 } from "@yamada-ui/react"
 import Link from "next/link"
+import type { MouseEventHandler } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { UabcLogo } from "../../Icon"
 import { BreakLine } from "../../Primitive/BreakLine"
@@ -28,6 +29,12 @@ export interface LoginPanelProps {
    * Submit handler called when user submits the LoginPanel form.
    */
   onSubmit?: SubmitHandler<LoginDetails>
+  /**
+   * Handler called when user selects the Google icon button.
+   *
+   * TODO: change as necessary when implementing handler function.
+   */
+  onClickGoogle?: MouseEventHandler<HTMLButtonElement>
 }
 
 /**
@@ -36,10 +43,11 @@ export interface LoginPanelProps {
  * @param props LoginPanel component props
  * @returns A login panel component
  */
-export const LoginPanel = memo(({ onSubmit }: LoginPanelProps) => {
+export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) => {
   const {
     register,
     handleSubmit,
+
     formState: { errors, isSubmitting },
   } = useForm<LoginDetails>({
     resolver: zodResolver(LoginDetailsSchema),
@@ -60,8 +68,10 @@ export const LoginPanel = memo(({ onSubmit }: LoginPanelProps) => {
       </Center>
 
       <Center display={{ base: "none", md: "block" }} textAlign="center">
-        <Heading.h2>Welcome back</Heading.h2>
-        <Text>Please enter your details to sign in</Text>
+        <VStack>
+          <Heading.h2>Welcome back</Heading.h2>
+          <Text>Please enter your details to sign in</Text>
+        </VStack>
       </Center>
 
       <TextInput
@@ -82,15 +92,15 @@ export const LoginPanel = memo(({ onSubmit }: LoginPanelProps) => {
         startIcon={<LockIcon />}
         type={InputType.Password}
       />
-      <HStack>
+      <HStack color="gray.100">
         <Checkbox label="Remember me" textAlign="start" />
         <Spacer />
         <UILink
           as={Link}
-          fontWeight="bold"
+          color="gray.100"
+          fontWeight="semibold"
           href="/auth/forgot-password"
           textAlign="end"
-          textColor="white"
         >
           Forgot Password?
         </UILink>
@@ -105,12 +115,9 @@ export const LoginPanel = memo(({ onSubmit }: LoginPanelProps) => {
         separatorProps2={{ border: 0, layerStyle: "fadeRight" }}
       />
 
-      <Center gap={4}>
-        <IconButton as={Link} colorScheme="secondary" fullRounded href="" variant="gradient">
+      <Center>
+        <IconButton colorScheme="secondary" fullRounded onClick={onClickGoogle} variant="gradient">
           G
-        </IconButton>
-        <IconButton as={Link} colorScheme="secondary" fullRounded href="" variant="gradient">
-          A
         </IconButton>
       </Center>
 
@@ -119,7 +126,7 @@ export const LoginPanel = memo(({ onSubmit }: LoginPanelProps) => {
       <Center textAlign="center">
         <Text color="gray.100">
           Don't have an account?&nbsp;
-          <UILink as={Link} color="gray.100" fontWeight="bold" href="/auth/signup">
+          <UILink as={Link} color="gray.100" fontWeight="semibold" href="/auth/signup">
             Create Account
           </UILink>
         </Text>
