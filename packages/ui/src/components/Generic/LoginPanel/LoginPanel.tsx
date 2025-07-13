@@ -5,6 +5,7 @@ import { type LoginDetails, LoginDetailsSchema } from "@repo/shared/schemas"
 import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
+  Box,
   Center,
   Checkbox,
   HStack,
@@ -19,7 +20,6 @@ import Link from "next/link"
 import type { MouseEventHandler } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { GoogleLogo, UabcLogo } from "../../Icon"
-import { BreakLine } from "../../Primitive/BreakLine"
 
 /**
  * Props for {@link LoginPanel} component
@@ -60,7 +60,7 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
       borderRadius={{ base: undefined, md: "3xl" }}
       layerStyle={{ base: undefined, md: "gradientBorder" }}
       onSubmit={handleSubmit(onSubmit ?? noop)}
-      p="md"
+      p={{ base: "md", lg: "lg" }}
       w={{ base: "full", md: "md" }}
     >
       <Center>
@@ -110,16 +110,34 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         Sign In
       </Button>
 
-      <BreakLine
-        label="or"
-        separatorProps1={{ border: 0, layerStyle: "fadeLeft" }}
-        separatorProps2={{ border: 0, layerStyle: "fadeRight" }}
-      />
+      <Center position="relative">
+        <Text
+          bg="secondary.900"
+          color="muted"
+          display="inline-block"
+          fontSize="xs"
+          px="md"
+          textTransform="uppercase"
+          z={1}
+        >
+          or
+        </Text>
+
+        <Box
+          color="white"
+          layerStyle="fadeFromMiddle"
+          left="0"
+          position="absolute"
+          right="0"
+          w="full"
+        />
+      </Center>
 
       <Center gap={4}>
         <IconButton colorScheme="secondary" fullRounded onClick={onClickGoogle} variant="gradient">
           <GoogleLogo fontSize="2xl" />
         </IconButton>
+        {/* TODO: implement Apple auth or remove Apple icon button */}
         <IconButton
           colorScheme="secondary"
           disabled
@@ -130,8 +148,6 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
           <AppleIcon fontSize="2xl" />
         </IconButton>
       </Center>
-
-      <Spacer />
 
       <Center textAlign="center">
         <Text color="gray.100">

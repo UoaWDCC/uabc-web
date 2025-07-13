@@ -16,6 +16,18 @@ export const layerStyles: LayerStyles = {
       pointerEvents: "none",
     },
   },
+  fadeFromMiddle: {
+    position: "relative",
+    _before: {
+      content: '""',
+      position: "absolute",
+      inset: 0,
+      borderRadius: "inherit",
+      border: "1px solid transparent",
+      bg: "linear-gradient(90deg, rgba(255, 255, 255, 0.00) 0%, rgba(170, 170, 170, 1) 50%, rgba(255, 255, 255, 0.00) 100%) border-box",
+      pointerEvents: "none",
+    },
+  },
   fadeLeft: {
     position: "relative",
     _before: {

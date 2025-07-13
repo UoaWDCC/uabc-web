@@ -1,4 +1,4 @@
-import { HStack, Separator, type SeparatorProps, Text } from "@yamada-ui/react"
+import { HStack, Separator, type SeparatorProps, type StackProps, Text } from "@yamada-ui/react"
 import type { FC } from "react"
 
 /**
@@ -7,10 +7,8 @@ import type { FC } from "react"
 export interface BreakLineProps {
   /**
    * Label to display in the middle of the break line.
-   *
-   * @remarks {@link Separator}s are joined together if label not provided
    */
-  label?: string
+  label: string
   /**
    * Properties for {@link Separator} 1
    */
@@ -19,19 +17,29 @@ export interface BreakLineProps {
    * Properties for {@link Separator} 2
    */
   separatorProps2?: SeparatorProps
+
+  /**
+   * Properties for {@link HStack}
+   */
+  stackProps?: StackProps
 }
 
 /**
- * Horizontl break line component with optional label.
+ * Horizontal break line component with label.
  *
  * @param params BreakLine component props
  * @returns A break line component
  */
-export const BreakLine: FC<BreakLineProps> = ({ label, separatorProps1, separatorProps2 }) => {
+export const BreakLine: FC<BreakLineProps> = ({
+  label,
+  separatorProps1,
+  separatorProps2,
+  stackProps,
+}) => {
   return (
-    <HStack gap={!label ? 0 : undefined}>
+    <HStack {...stackProps}>
       <Separator {...separatorProps1} />
-      {label && <Text>{label}</Text>}
+      <Text>{label}</Text>
       <Separator {...separatorProps2} />
     </HStack>
   )

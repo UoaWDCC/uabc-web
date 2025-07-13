@@ -15,14 +15,6 @@ export default meta
 export const Default: Story = (args) => {
   return (
     <VStack>
-      <BreakLine {...args} />
-    </VStack>
-  )
-}
-
-export const WithLabel: Story = (args) => {
-  return (
-    <VStack>
       <BreakLine {...args} label="label" />
     </VStack>
   )
