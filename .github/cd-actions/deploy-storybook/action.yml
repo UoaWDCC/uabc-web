@@ -10,7 +10,7 @@ inputs:
     required: true
   GH_TOKEN:
     description: 'GitHub token'
-    required: true
+    required: false
 
 outputs:
   deployment-url:
