@@ -3,7 +3,7 @@ import type { User } from "../payload-types"
 import { MediaSchema } from "./media"
 
 // Payload User Schema
-const UserSchema = z.object({
+export const UserSchema = z.object({
   id: z.string(),
   firstName: z.string(),
   lastName: z.string().nullable().optional(),
