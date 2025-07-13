@@ -1,4 +1,4 @@
-import { QuerySchema } from "@repo/shared"
+import { PaginationQuerySchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
@@ -12,7 +12,7 @@ import GameSessionDataService from "@/data-layer/services/GameSessionDataService
 export const GET = async (req: NextRequest) => {
   try {
     const { searchParams } = new URL(req.url)
-    const result = QuerySchema.safeParse({
+    const result = PaginationQuerySchema.safeParse({
       limit: searchParams.get("limit") ?? 10,
       page: searchParams.get("page") ?? 1,
     })

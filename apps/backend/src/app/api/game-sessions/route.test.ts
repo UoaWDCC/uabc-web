@@ -26,7 +26,7 @@ describe("/api/game-sessions", async () => {
       expect(json.data.totalPages).toBeGreaterThanOrEqual(2)
     })
 
-    it("should use default pagination if params are missing", async () => {
+    it("should use default pagination if params are not specified", async () => {
       const req = createMockNextRequest("/api/game-sessions")
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.OK)
@@ -44,6 +44,15 @@ describe("/api/game-sessions", async () => {
       expect(json.details).toBeDefined()
     })
 
+    it("should return 400 if query params are invalid", async () => {
+      const req = createMockNextRequest("/api/game-sessions?limit=abc&page=def")
+      const res = await GET(req)
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      const json = await res.json()
+      expect(json.error).toBe("Invalid query parameters")
+      expect(json.details).toBeDefined()
+    })
+
     it("should handle errors and return 500 status", async () => {
       vi.spyOn(GameSessionDataService.prototype, "getPaginatedGameSessions").mockRejectedValueOnce(
         new Error("Database error"),
@@ -53,15 +62,6 @@ describe("/api/game-sessions", async () => {
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
-    })
-
-    it("should return 400 if query params are invalid", async () => {
-      const req = createMockNextRequest("/api/game-sessions?limit=abc&page=def")
-      const res = await GET(req)
-      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
-      const json = await res.json()
-      expect(json.error).toBe("Invalid query parameters")
-      expect(json.details).toBeDefined()
     })
   })
 })
