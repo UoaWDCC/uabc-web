@@ -1,9 +1,11 @@
-import { Footer, NavigationBar } from "@repo/ui/components/Generic"
+// import { Footer, NavigationBar } from "@repo/ui/components/Generic"
+import { Footer } from "@repo/ui/components/Generic"
 import { NuqsProvider, QueryProvider, UIProvider } from "@repo/ui/components/Provider"
-import { NAVIGATION_BAR_ADMIN_TEST_CONSTANTS } from "@repo/ui/test-config/mocks/NavigationBar.mock"
+// import { NAVIGATION_BAR_ADMIN_TEST_CONSTANTS } from "@repo/ui/test-config/mocks/NavigationBar.mock"
 import { ColorModeScript, Container } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import { NavigationBarServerSection } from "@/components/server/NavigationBarServerSection"
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -45,7 +47,7 @@ export default function RootLayout({
                 centerContent
                 paddingX="lg"
               >
-                <NavigationBar {...NAVIGATION_BAR_ADMIN_TEST_CONSTANTS} />
+                <NavigationBarServerSection />
                 {children}
               </Container>
               <Footer />
