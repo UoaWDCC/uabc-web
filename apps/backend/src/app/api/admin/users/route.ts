@@ -1,4 +1,4 @@
-import { CreateUserRequestSchema, QuerySchema } from "@repo/shared"
+import { CreateUserRequestSchema, PaginationQuerySchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { ZodError } from "zod"
@@ -16,7 +16,7 @@ class UsersRouteWrapper {
   static async GET(req: NextRequest) {
     try {
       const { searchParams } = new URL(req.url)
-      const result = QuerySchema.safeParse({
+      const result = PaginationQuerySchema.safeParse({
         limit: searchParams.get("limit") ?? 10,
         page: searchParams.get("page") ?? 1,
       })
