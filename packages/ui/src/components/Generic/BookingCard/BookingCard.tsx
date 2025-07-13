@@ -161,7 +161,7 @@ export const BookingCard = memo(
             </Text>
           </CardBody>
         </VStack>
-        {menuItems.length > 0 && (
+        {menuItems && menuItems.length > 0 && (
           <CardFooter pb="0" px="0">
             <Menu {...menuProps}>
               <MenuButton
