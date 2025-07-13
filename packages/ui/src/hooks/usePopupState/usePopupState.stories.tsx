@@ -276,10 +276,6 @@ const meta: Meta<typeof UsePopupStateDemo> = {
 
 export default meta
 
-/**
- * Basic usage of usePopupState hook with string value.
- * This demonstrates the fundamental popup state management functionality.
- */
 export const Basic: Story = {
   args: {
     popupId: "basic-popup",
@@ -287,10 +283,6 @@ export const Basic: Story = {
   },
 }
 
-/**
- * usePopupState with custom open value and value key.
- * Shows how to customize the query parameter keys and values.
- */
 export const CustomKeys: Story = {
   args: {
     popupId: "custom-popup",
@@ -300,10 +292,6 @@ export const CustomKeys: Story = {
   },
 }
 
-/**
- * Array/Range mode usage.
- * Demonstrates how to use the hook with array values for range selections.
- */
 export const ArrayMode: Story = {
   args: {
     popupId: "array-popup",
@@ -312,21 +300,13 @@ export const ArrayMode: Story = {
   },
 }
 
-/**
- * Multiple independent popups demonstration.
- * Shows how to manage multiple popups and navigation between them.
- */
 export const MultiplePopups: Story = {
   render: () => <MultiplePopupsDemo />,
 }
 
-/**
- * Modal-like popup demonstration.
- * Shows how to use the hook for modal-like interactions.
- */
 export const ModalState: Story = {
   render: () => {
-    const modalPopup = usePopupState<false>({
+    const modalPopup = usePopupState({
       popupId: "modal",
       initialValue: "",
       multiple: false,
