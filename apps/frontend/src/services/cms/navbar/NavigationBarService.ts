@@ -3,9 +3,9 @@ import { apiClient } from "@/lib/api/client"
 import { QueryKeys } from "@/services"
 
 /**
- * Retrieves FAQ data from the global API endpoint
+ * Retrieves Navigation Bar data from the global API endpoint
  *
- * @returns A promise that resolves to the FAQ response data
+ * @returns A promise that resolves to the Navigation Bar response data
  * @throws When the API request fails
  */
 export const getNavigationBar = async () => {
