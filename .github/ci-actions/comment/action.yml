@@ -26,7 +26,7 @@ runs:
         direction: last
 
     - name: Pre-comment
-      if: ${{ inputs.method == "pre" }}
+      if: ${{ inputs.method == 'pre' }}
       uses: peter-evans/create-or-update-comment@v3
       with:
         issue-number: ${{ github.event.pull_request.number }}
