@@ -47,7 +47,6 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
   const {
     register,
     handleSubmit,
-
     formState: { errors, isSubmitting },
   } = useForm<LoginDetails>({
     resolver: zodResolver(LoginDetailsSchema),
@@ -156,8 +155,8 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         </IconButton>
       </Center>
 
-      <Center fontSize="sm" textAlign="center">
-        <Text color="muted">
+      <Center color="gray.100" fontSize="sm" textAlign="center">
+        <Text>
           Don't have an account?&nbsp;
           <UILink
             _hover={{ color: "white" }}
