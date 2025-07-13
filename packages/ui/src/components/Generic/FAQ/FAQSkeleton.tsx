@@ -1,10 +1,10 @@
 import type { FAQ } from "@repo/ui/components/Generic"
+import { PlusIcon } from "@yamada-ui/lucide"
 import {
   Accordion,
   AccordionItem,
   AccordionLabel,
   For,
-  IconButton,
   Skeleton,
   Text,
   VStack,
@@ -37,23 +37,23 @@ export const FAQSkeleton = () => {
       <Accordion
         icon={
           <Skeleton borderRadius="md">
-            <IconButton />
+            <PlusIcon h="6" w="6" />
           </Skeleton>
         }
         pointerEvents="none"
         w="full"
       >
-        <For each={Array.from({ length: 3 })}>
-          {(_, index) => (
+        <For each={[1, 2, 3]}>
+          {(item, _) => (
             <AccordionItem
               _last={{
                 borderBottomWidth: "0",
               }}
-              key="faq-skeleton-item"
+              key={`faq-loading-item-${item}`}
             >
               <AccordionLabel fontSize="lg" p={{ base: "md", lg: "calc(lg - sm)" }}>
                 <Skeleton data-testid="faq-loading-item">
-                  <Text textOverflow="clip">Question {index + 1} Placeholder Text</Text>
+                  <Text textOverflow="clip">Question {item} Placeholder Text</Text>
                 </Skeleton>
               </AccordionLabel>
             </AccordionItem>
