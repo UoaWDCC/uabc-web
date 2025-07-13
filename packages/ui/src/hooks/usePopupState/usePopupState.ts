@@ -5,12 +5,12 @@ import { useCallback, useMemo } from "react"
 /**
  * Helper type for popup values based on range mode.
  */
-export type PopupValue<IsRange extends boolean> = IsRange extends true ? string[] : string
+export type PopupValue<Multiple extends boolean> = Multiple extends true ? string[] : string
 
 /**
  * Options for configuring the usePopupState hook.
  */
-interface UsePopupStateOptions<IsRange extends boolean> {
+interface UsePopupStateOptions<Multiple extends boolean> {
   /**
    * Unique identifier for the popup (used as a query param key).
    */
@@ -26,15 +26,15 @@ interface UsePopupStateOptions<IsRange extends boolean> {
   /**
    * Initial value for the popup state.
    */
-  initialValue: PopupValue<IsRange>
+  initialValue: PopupValue<Multiple>
   /**
-   * If true, the value is treated as an array (range selection). Defaults to false.
+   * If true, the value is treated as an array (multi-value selection). Defaults to false.
    */
-  isRange?: IsRange
+  multiple?: Multiple
   /**
    * Callback fired when the value changes.
    */
-  onValueChange?: (value: PopupValue<IsRange>) => void
+  onValueChange?: (value: PopupValue<Multiple>) => void
   /**
    * Callback fired when the popup is opened.
    */
@@ -48,7 +48,7 @@ interface UsePopupStateOptions<IsRange extends boolean> {
 /**
  * Return type for usePopupState hook.
  */
-export interface UsePopupStateReturn<IsRange extends boolean> {
+export interface UsePopupStateReturn<Multiple extends boolean> {
   /**
    * Whether the popup is open.
    */
@@ -56,7 +56,7 @@ export interface UsePopupStateReturn<IsRange extends boolean> {
   /**
    * The current value of the popup.
    */
-  value: PopupValue<IsRange>
+  value: PopupValue<Multiple>
   /**
    * Opens the popup.
    */
@@ -72,7 +72,7 @@ export interface UsePopupStateReturn<IsRange extends boolean> {
   /**
    * Sets the value of the popup.
    */
-  setValue: (value: PopupValue<IsRange>) => void
+  setValue: (value: PopupValue<Multiple>) => void
   /**
    * Clears the value of the popup.
    */
@@ -114,15 +114,15 @@ export interface UsePopupStateReturn<IsRange extends boolean> {
  * @remarks
  * This hook synchronizes popup state with URL query parameters, enabling deep linking and browser navigation support for popups.
  */
-export function usePopupState<IsRange extends boolean = false>(
-  options: UsePopupStateOptions<IsRange>,
-): UsePopupStateReturn<IsRange> {
+export function usePopupState<Multiple extends boolean = false>(
+  options: UsePopupStateOptions<Multiple>,
+): UsePopupStateReturn<Multiple> {
   const {
     popupId,
     openValue = "open",
     valueKey = `${popupId}-value`,
     initialValue,
-    isRange = false as IsRange,
+    multiple = false as Multiple,
     onValueChange,
     onOpen,
     onClose,
@@ -132,7 +132,7 @@ export function usePopupState<IsRange extends boolean = false>(
     const config: UseQueryStatesKeysMap = {}
     config[popupId] = parseAsString.withDefault("")
 
-    if (isRange) {
+    if (multiple) {
       config[valueKey] = parseAsArrayOf(parseAsString).withDefault(
         isArray(initialValue) ? initialValue : [],
       )
@@ -140,14 +140,14 @@ export function usePopupState<IsRange extends boolean = false>(
       config[valueKey] = parseAsString.withDefault(isString(initialValue) ? initialValue : "")
     }
     return config
-  }, [popupId, valueKey, isRange, initialValue])
+  }, [popupId, valueKey, multiple, initialValue])
 
   const [searchParams, setSearchParams] = useQueryStates(parserConfig, {
     clearOnDefault: true,
   })
 
   const dialogState = searchParams[popupId]
-  const valueParam = searchParams[valueKey] as PopupValue<IsRange>
+  const valueParam = searchParams[valueKey] as PopupValue<Multiple>
   const isOpen = dialogState === openValue
 
   const open = useCallback(() => {
@@ -169,7 +169,7 @@ export function usePopupState<IsRange extends boolean = false>(
   }, [isOpen, open, close])
 
   const setValue = useCallback(
-    (value: PopupValue<IsRange>) => {
+    (value: PopupValue<Multiple>) => {
       setSearchParams({ [valueKey]: value })
 
       // Don't call onValueChange for null values
@@ -178,22 +178,22 @@ export function usePopupState<IsRange extends boolean = false>(
       }
 
       // Don't call onValueChange for empty strings in single mode
-      if (!isRange && value === "") {
+      if (!multiple && value === "") {
         return
       }
 
       onValueChange?.(value)
     },
-    [setSearchParams, valueKey, onValueChange, isRange],
+    [setSearchParams, valueKey, onValueChange, multiple],
   )
 
   const clearValue = useCallback(() => {
-    if (isRange) {
+    if (multiple) {
       setSearchParams({ [valueKey]: [] })
     } else {
       setSearchParams({ [valueKey]: "" })
     }
-  }, [setSearchParams, valueKey, isRange])
+  }, [setSearchParams, valueKey, multiple])
 
   const navigation = useMemo(() => {
     const openPopup = (targetPopupId: string) => {

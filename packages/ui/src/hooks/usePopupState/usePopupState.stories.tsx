@@ -21,7 +21,7 @@ interface UsePopupStateStoryProps {
   openValue?: string
   valueKey?: string
   initialValue?: string
-  isRange?: boolean
+  multiple?: boolean
 }
 
 const UsePopupStateDemo = ({
@@ -29,19 +29,21 @@ const UsePopupStateDemo = ({
   openValue,
   valueKey,
   initialValue = "",
-  isRange = false,
+  multiple = false,
 }: UsePopupStateStoryProps) => {
-  const popup = usePopupState({
+  const parsedInitialValue = multiple
+    ? (initialValue
+        .split(",")
+        .map((v) => v.trim())
+        .filter(Boolean) as string[])
+    : initialValue
+
+  const popup = usePopupState<typeof multiple>({
     popupId,
     openValue,
     valueKey,
-    initialValue: isRange
-      ? initialValue
-          .split(",")
-          .map((v) => v.trim())
-          .filter(Boolean)
-      : initialValue,
-    isRange,
+    initialValue: parsedInitialValue,
+    multiple,
     onValueChange: (value) => console.log("Value changed:", value),
     onOpen: () => console.log("Popup opened"),
     onClose: () => console.log("Popup closed"),
@@ -85,7 +87,7 @@ const UsePopupStateDemo = ({
           <Button
             colorScheme="green"
             onClick={() => {
-              if (isRange) {
+              if (multiple) {
                 popup.setValue(
                   inputValue
                     .split(",")
@@ -105,7 +107,7 @@ const UsePopupStateDemo = ({
           </Button>
         </HStack>
 
-        {isRange && (
+        {multiple && (
           <Text color="muted" fontSize="sm">
             For array values, separate with commas (e.g., "item1, item2, item3")
           </Text>
@@ -265,9 +267,9 @@ const meta: Meta<typeof UsePopupStateDemo> = {
       control: "text",
       description: "Initial value for the popup state",
     },
-    isRange: {
+    multiple: {
       control: "boolean",
-      description: "If true, the value is treated as an array (range selection)",
+      description: "If true, the value is treated as an array (multi-value selection)",
     },
   },
 }
@@ -306,7 +308,7 @@ export const ArrayMode: Story = {
   args: {
     popupId: "array-popup",
     initialValue: "item1, item2, item3",
-    isRange: true,
+    multiple: true,
   },
 }
 
@@ -324,10 +326,10 @@ export const MultiplePopups: Story = {
  */
 export const ModalState: Story = {
   render: () => {
-    const modalPopup = usePopupState({
+    const modalPopup = usePopupState<false>({
       popupId: "modal",
       initialValue: "",
-      isRange: false,
+      multiple: false,
       onOpen: () => console.log("Modal opened"),
       onClose: () => console.log("Modal closed"),
     })

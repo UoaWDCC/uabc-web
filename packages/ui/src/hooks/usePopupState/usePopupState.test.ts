@@ -26,7 +26,7 @@ describe("usePopupState", () => {
           popupId: "test",
           initialValue: ["a", "b"],
           valueKey: "test-value",
-          isRange: true,
+          multiple: true,
         }),
       {
         wrapper: withNuqsTestingAdapter(),
@@ -124,7 +124,7 @@ describe("usePopupState", () => {
           popupId: "test",
           initialValue: [] as string[],
           valueKey: "test-value",
-          isRange: true,
+          multiple: true,
           onValueChange,
         }),
       {
@@ -168,7 +168,7 @@ describe("usePopupState", () => {
           popupId: "test",
           initialValue: [] as string[],
           valueKey: "test-value",
-          isRange: true,
+          multiple: true,
           onValueChange,
         }),
       {
@@ -214,7 +214,7 @@ describe("usePopupState", () => {
           popupId: "test",
           initialValue: ["x"] as string[],
           valueKey: "test-value",
-          isRange: true,
+          multiple: true,
         }),
       {
         wrapper: withNuqsTestingAdapter(),
@@ -231,7 +231,7 @@ describe("usePopupState", () => {
           popupId: "test",
           initialValue: [] as string[],
           valueKey: "test-value",
-          isRange: true,
+          multiple: true,
           onValueChange,
         }),
       {
@@ -263,14 +263,14 @@ describe("usePopupState", () => {
     expect(result.current.value).toBe("")
   })
 
-  it("should default to [] if isRange is true and initialValue is not an array", () => {
+  it("should default to [] if multiple is true and initialValue is not an array", () => {
     const { result } = renderHook(
       () =>
         usePopupState({
           popupId: "test",
           initialValue: "not-an-array" as unknown as string[],
           valueKey: "test-value",
-          isRange: true,
+          multiple: true,
         }),
       {
         wrapper: withNuqsTestingAdapter(),
