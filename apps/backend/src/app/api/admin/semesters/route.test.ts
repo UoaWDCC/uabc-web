@@ -1,5 +1,5 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
-import { StatusCodes } from "http-status-codes"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
@@ -57,6 +57,18 @@ describe("/api/admin/semesters", async () => {
       expect(json.details.fieldErrors.startDate[0]).toEqual(
         "Invalid date format, should be in ISO 8601 format",
       )
+    })
+
+    it("should return 500 for internal server error", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      vi.spyOn(SemesterDataService.prototype, "createSemester").mockRejectedValueOnce(
+        new Error("Database error"),
+      )
+      const res = await POST(createMockNextRequest("", "POST", semesterCreateMock))
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+
+      const json = await res.json()
+      expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
     })
   })
 })

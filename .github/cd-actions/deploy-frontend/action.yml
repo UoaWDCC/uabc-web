@@ -11,7 +11,7 @@ inputs:
     required: true
   GH_TOKEN:
     description: 'GitHub token'
-    required: true
+    required: false
   # Frontend secrets
   NEXT_PUBLIC_URL:
     description: 'Frontend URL'

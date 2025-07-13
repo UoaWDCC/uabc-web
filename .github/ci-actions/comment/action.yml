@@ -4,9 +4,12 @@ description: Leaves a comment with relevant preview information
 inputs:
   preview-storybook:
     description: The URL of the storybook preview
-    required: true
+    required: false
   preview-frontend:
     description: The URL of the frontend preview
+    required: false
+  method:
+    description: The method to use for creating or updating the comment
     required: true
 
 runs:
@@ -22,7 +25,8 @@ runs:
         body-includes: Preview Deployment Status
         direction: last
 
-    - name: Create or update comment
+    - name: Pre-comment
+      if: ${{ inputs.method == 'pre' }}
       uses: peter-evans/create-or-update-comment@v3
       with:
         issue-number: ${{ github.event.pull_request.number }}
@@ -31,8 +35,35 @@ runs:
         body: |
           ## Preview Deployment Status
 
-          ✅ Storybook deployment successful!
-          URL: ${{ inputs.preview-storybook }}
+          🔄 Storybook Preview: Deploying...
 
-          ✅ Frontend deployment successful!
-          URL: ${{ inputs.preview-frontend }}
+          🔄 Frontend Preview: Deploying...
+
+    - name: Create message
+      id: create-message
+      if: ${{ inputs.method == 'post' }}
+      shell: bash
+      run: |
+        message="${{ steps.find-comment.outputs.comment-body }}"
+
+        if [[ -n "${{ inputs.preview-storybook }}" ]]; then
+          message=$(echo "$message" | sed "s|🔄 Storybook Preview: Deploying...|✅ Storybook Preview: ${{ inputs.preview-storybook }}|")
+        fi
+
+        if [[ -n "${{ inputs.preview-frontend }}" ]]; then
+          message=$(echo "$message" | sed "s|🔄 Frontend Preview: Deploying...|✅ Frontend Preview: ${{ inputs.preview-frontend }}|")
+        fi
+
+        echo "message<<EOF" >> $GITHUB_OUTPUT
+        echo "$message" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Post-comment
+      if: ${{ inputs.method == 'post' }}
+      uses: peter-evans/create-or-update-comment@v3
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-id: ${{ steps.find-comment.outputs.comment-id }}
+        edit-mode: replace
+        body: |
+          ${{ steps.create-message.outputs.message }}
