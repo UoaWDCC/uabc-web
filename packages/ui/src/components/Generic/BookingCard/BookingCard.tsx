@@ -165,7 +165,7 @@ export const BookingCard = memo(
           <CardFooter pb="0" px="0">
             <Menu {...menuProps}>
               <MenuButton
-                aria-label="Edit"
+                aria-label="More options"
                 as={IconButton}
                 color={["black", "white"]}
                 h="12"
@@ -178,9 +178,9 @@ export const BookingCard = memo(
               />
               <Portal {...portalProps}>
                 <MenuList {...menuListProps}>
-                  {menuItems.map((item) => (
-                    <MenuItem key={item.label} {...menuItemProps} {...item}>
-                      {item.label}
+                  {menuItems.map(({ label, ...item }) => (
+                    <MenuItem key={label} {...menuItemProps} {...item}>
+                      {label}
                     </MenuItem>
                   ))}
                 </MenuList>
