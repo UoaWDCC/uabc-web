@@ -27,11 +27,11 @@ afterAll(() => {
 })
 
 describe("useCalendarSelectPopup", () => {
-  it("should initialize with default date", () => {
+  it("should initialize with null date by default", () => {
     const { result } = renderHook(() => useCalendarSelectPopup({ popupId: "test" }), {
       wrapper: createWrapper(),
     })
-    expect(result.current.selectedDate).toBeInstanceOf(Date)
+    expect(result.current.selectedDate).toBeNull()
   })
 
   it("should initialize with provided initial date", () => {
@@ -55,17 +55,31 @@ describe("useCalendarSelectPopup", () => {
     expect(result.current.selectedDate).toEqual(newDate)
   })
 
-  it("should clear the date", () => {
+  it("should clear the date to initialDate if provided", () => {
     const initialDate = dayjs.tz("2025-01-10", "YYYY-MM-DD", NZ_TIMEZONE).toDate()
     const { result } = renderHook(() => useCalendarSelectPopup({ popupId: "test", initialDate }), {
       wrapper: createWrapper(),
     })
 
     act(() => {
+      result.current.setDate(dayjs.tz("2025-02-10", "YYYY-MM-DD", NZ_TIMEZONE).toDate())
       result.current.clearDate()
     })
 
     expect(result.current.selectedDate).toEqual(initialDate)
+  })
+
+  it("should clear the date to null if no initialDate is provided", () => {
+    const { result } = renderHook(() => useCalendarSelectPopup({ popupId: "test" }), {
+      wrapper: createWrapper(),
+    })
+
+    act(() => {
+      result.current.setDate(dayjs.tz("2025-02-10", "YYYY-MM-DD", NZ_TIMEZONE).toDate())
+      result.current.clearDate()
+    })
+
+    expect(result.current.selectedDate).toBeNull()
   })
 
   it("should set date to today", () => {
@@ -196,7 +210,7 @@ describe("useCalendarSelectPopup", () => {
     expect(endDate).toBeUndefined()
   })
 
-  it("should handle setDate with null and trigger early return", () => {
+  it("should reset to initialDate when calling setDate(null)", () => {
     const onDateSelect = vi.fn()
     const initialDate = dayjs.tz("2025-01-01", "YYYY-MM-DD", NZ_TIMEZONE).toDate()
     const { result } = renderHook(
@@ -211,10 +225,13 @@ describe("useCalendarSelectPopup", () => {
     )
 
     act(() => {
+      result.current.setDate(dayjs.tz("2025-02-10", "YYYY-MM-DD", NZ_TIMEZONE).toDate())
+    })
+
+    act(() => {
       result.current.setDate(null)
     })
 
     expect(result.current.selectedDate).toEqual(initialDate)
-    expect(onDateSelect).not.toHaveBeenCalled()
   })
 })

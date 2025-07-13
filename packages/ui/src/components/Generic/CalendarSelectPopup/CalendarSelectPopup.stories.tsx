@@ -105,7 +105,6 @@ export const WithNextNavigation: Story = {
           onDateSelect={() => {}}
           onStepChange={setStep}
           popupId="calendar-step-1"
-          showTrigger={false}
           title="Step 1: Select Date"
           totalSteps={3}
         >

@@ -1,9 +1,19 @@
 import type { CalendarProps } from "@yamada-ui/calendar"
-import type { DialogProps } from "@yamada-ui/react"
+import type { ButtonProps, DialogProps } from "@yamada-ui/react"
 import type { ReactNode } from "react"
 
-export type DateValue<T extends boolean = false> = T extends true ? [Date?, Date?] : Date
+/**
+ * Date value type for calendar selection
+ * @param T - Whether range selection is enabled
+ * @returns Date value type
+ */
+export type DateValue<T extends boolean = false> = T extends true ? [Date?, Date?] : Date | null
 
+/**
+ * Extended calendar props for date selection
+ * @param T - Whether range selection is enabled
+ * @returns Extended calendar props
+ */
 export interface ExtendedCalendarProps<T extends boolean = false>
   extends Omit<CalendarProps, "value" | "onChange"> {
   /**
@@ -20,6 +30,9 @@ export interface ExtendedCalendarProps<T extends boolean = false>
   onChange?: (value: DateValue<T> | undefined) => void
 }
 
+/**
+ * Popup configuration interface
+ */
 export interface PopupConfig {
   /**
    * Unique identifier for this popup instance
@@ -46,8 +59,19 @@ export interface PopupConfig {
   dateParamKey?: string
 }
 
+/**
+ * Close behavior type for multi-step flows
+ * - "close": Close the entire popup flow
+ * - "back": Go back to previous step
+ * - "custom": Use custom onClose handler
+ */
 export type CloseBehavior = "close" | "back" | "custom"
 
+/**
+ * CalendarSelectPopup component props
+ * @param T - Whether range selection is enabled
+ * @returns CalendarSelectPopup component props
+ */
 export interface CalendarSelectPopupProps<T extends boolean = false> extends PopupConfig {
   /**
    * Override the internal open state management
@@ -87,9 +111,9 @@ export interface CalendarSelectPopupProps<T extends boolean = false> extends Pop
   onStepChange?: (step: number | null) => void
   /**
    * Initial date value when no date is selected
-   * @default new Date() for single date, [undefined, undefined] for range
+   * @default null for single date, [undefined, undefined] for range
    */
-  initialDate?: T extends true ? [Date?, Date?] : Date
+  initialDate?: DateValue<T>
   /**
    * Description to display in the dialog
    */
@@ -125,6 +149,10 @@ export interface CalendarSelectPopupProps<T extends boolean = false> extends Pop
    */
   trigger?: ReactNode
   /**
+   * Props to pass to the trigger element
+   */
+  triggerProps?: ButtonProps
+  /**
    * Custom content to display in the dialog
    */
   children?: ReactNode
@@ -134,6 +162,9 @@ export interface CalendarSelectPopupProps<T extends boolean = false> extends Pop
   dialogFooter?: ReactNode
 }
 
+/**
+ * Popup navigation utilities interface
+ */
 export interface PopupNavigationUtils {
   /**
    * Navigate to open a specific popup
@@ -156,6 +187,11 @@ export interface PopupNavigationUtils {
   switchPopup: (fromPopupId: string, toPopupId: string, options?: { replace?: boolean }) => void
 }
 
+/**
+ * Return type for useCalendarSelectPopup hook
+ * @param T - Whether range selection is enabled
+ * @returns UseCalendarSelectPopupReturn
+ */
 export interface UseCalendarSelectPopupReturn<T extends boolean = false> {
   /**
    * Whether the dialog is open
@@ -195,12 +231,17 @@ export interface UseCalendarSelectPopupReturn<T extends boolean = false> {
   navigation: PopupNavigationUtils
 }
 
+/**
+ * Options for useCalendarSelectPopup hook
+ * @param T - Whether range selection is enabled
+ * @returns UseCalendarSelectPopupOptions
+ */
 export interface UseCalendarSelectPopupOptions<T extends boolean = false> extends PopupConfig {
   /**
    * Initial date value when no date is selected
-   * @default new Date() for single date, [undefined, undefined] for range
+   * @default null for single date, [undefined, undefined] for range
    */
-  initialDate?: T extends true ? [Date?, Date?] : Date
+  initialDate?: DateValue<T>
   /**
    * Whether range selection is enabled
    */
@@ -219,6 +260,11 @@ export interface UseCalendarSelectPopupOptions<T extends boolean = false> extend
   onOpen?: () => void
 }
 
+/**
+ * Composite calendar popup props
+ * @param T - Whether range selection is enabled
+ * @returns CompositeCalendarPopupProps
+ */
 export interface CompositeCalendarPopupProps<T extends boolean = false>
   extends Omit<CalendarSelectPopupProps<T>, "popupId"> {
   /**

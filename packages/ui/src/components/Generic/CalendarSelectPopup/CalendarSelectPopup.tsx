@@ -95,6 +95,7 @@ export const CalendarSelectPopup = memo(
       title = "Select Date",
       dialogFooter,
       trigger,
+      triggerProps,
       children,
     } = props
 
@@ -149,9 +150,12 @@ export const CalendarSelectPopup = memo(
         type: "date" as const,
         locale: "nz",
         ...calendarProps,
-        value: calendarProps.enableRange
-          ? (selectedDate as [Date?, Date?] | undefined)
-          : (selectedDate as Date | undefined),
+        value:
+          selectedDate === null
+            ? undefined
+            : calendarProps.enableRange
+              ? (selectedDate as [Date?, Date?] | undefined)
+              : (selectedDate as Date | undefined),
         onChange: handleCalendarChange,
       }),
       [calendarProps, selectedDate, handleCalendarChange],
@@ -179,9 +183,10 @@ export const CalendarSelectPopup = memo(
           icon={<CalendarIcon />}
           onClick={open}
           variant="outline"
+          {...triggerProps}
         />
       ),
-      [open],
+      [open, triggerProps],
     )
 
     const stepNavigationContext = useMemo(

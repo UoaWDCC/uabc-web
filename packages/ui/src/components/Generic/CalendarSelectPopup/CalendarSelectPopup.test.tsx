@@ -17,6 +17,11 @@ const createWrapper = ({ children }: { children: ReactNode }) => (
   <NuqsAdapter>{children}</NuqsAdapter>
 )
 
+beforeEach(() => {
+  // reset serch params from nuqs
+  window.history.pushState({}, "", window.location.pathname)
+})
+
 describe("<CalendarSelectPopup />", () => {
   it("should be a valid React element", () => {
     expect(isValidElement(<CalendarSelectPopup.Root popupId="test" showTrigger />)).toBeTruthy()
@@ -265,6 +270,28 @@ describe("<CalendarSelectPopup />", () => {
     ).toBeInTheDocument()
   })
 
+  it("should provide null context to children by default", async () => {
+    const TestChild = () => {
+      const { selectedDate } = useCalendarSelectPopupContext()
+      const formattedDate = selectedDate
+        ? dayjs(selectedDate as Date)
+            .tz(NZ_TIMEZONE)
+            .format("ddd MMM DD YYYY")
+        : "None"
+      return <div>Date: {formattedDate}</div>
+    }
+
+    render(
+      <CalendarSelectPopup.Root isOpen popupId="test">
+        <TestChild />
+      </CalendarSelectPopup.Root>,
+      {
+        wrapper: createWrapper,
+      },
+    )
+    expect(screen.getByText("Date: None")).toBeInTheDocument()
+  })
+
   it("should select a single date", async () => {
     const onDateSelect = vi.fn()
     const { user } = render(
@@ -291,12 +318,17 @@ describe("<CalendarSelectPopup />", () => {
 
   it("should select a date range", async () => {
     const onDateSelect = vi.fn()
+    const initialDate: [undefined, undefined] = [undefined, undefined]
     const { user } = render(
       <CalendarSelectPopup.Root
         calendarProps={{ enableRange: true }}
+        initialDate={initialDate}
         onDateSelect={onDateSelect}
         popupId="test"
         showTrigger
+        triggerProps={{
+          children: "Custom Trigger",
+        }}
       />,
       {
         wrapper: createWrapper,
@@ -306,8 +338,8 @@ describe("<CalendarSelectPopup />", () => {
     await user.click(screen.getByRole("button", { name: /open calendar/i }))
 
     const dayButtons = screen.getAllByRole("button", { name: /^\d+$/ })
-    await user.click(dayButtons[0])
-    await user.click(dayButtons[dayButtons.length - 1])
+    await user.click(dayButtons[10])
+    await user.click(dayButtons[20])
     expect(onDateSelect).toHaveBeenCalledTimes(2)
     const [start, end] = onDateSelect.mock.calls[1][0]
     expect(start).toBeInstanceOf(Date)
@@ -329,6 +361,8 @@ describe("<CalendarSelectPopup />", () => {
         wrapper: createWrapper,
       },
     )
+
+    expect(screen.queryByText("Custom Body")).not.toBeInTheDocument()
 
     await user.click(screen.getByRole("button", { name: /open calendar/i }))
 

@@ -56,7 +56,7 @@ export function useCalendarSelectPopup<T extends boolean = false>(
     popupId,
     openValue = "open",
     dateParamKey = `${popupId}-date`,
-    initialDate = (options.enableRange ? [undefined, undefined] : new Date()) as DateValue<T>,
+    initialDate = (options.enableRange ? [undefined, undefined] : null) as DateValue<T>,
     enableRange = false as T,
     onDateSelect,
     onClose,
@@ -92,7 +92,7 @@ export function useCalendarSelectPopup<T extends boolean = false>(
   const setDate = useCallback(
     (date: DateValue<T> | null) => {
       if (date === null) {
-        setValue(null)
+        setValue(toPopupValue(initialDate, enableRange) as PopupValueType<T>)
         return
       }
 
@@ -107,7 +107,7 @@ export function useCalendarSelectPopup<T extends boolean = false>(
         onDateSelect?.(date)
       }
     },
-    [enableRange, onDateSelect, setValue],
+    [enableRange, onDateSelect, setValue, initialDate],
   )
 
   const clearDate = useCallback(() => {

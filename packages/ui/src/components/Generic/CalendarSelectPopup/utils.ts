@@ -93,18 +93,18 @@ export function isStringArray(val: unknown): val is string[] {
  * @param range - Whether this is a range selection.
  * @returns A string or string array representation for URL parameters.
  */
-export function toPopupValue(val: Date | [Date?, Date?], range: boolean): string | string[] {
+export function toPopupValue(val: Date | [Date?, Date?] | null, range: boolean): string | string[] {
   const formatDate = (date: Date) => dayjs(date).tz(NZ_TIMEZONE).format("YYYY-MM-DD")
 
   if (range) {
-    const arr = val as [Date?, Date?]
+    const arr = val as [Date?, Date?] | null
     return [
-      arr[0] instanceof Date ? formatDate(arr[0]) : "",
-      arr[1] instanceof Date ? formatDate(arr[1]) : "",
+      arr?.[0] instanceof Date ? formatDate(arr[0]) : "",
+      arr?.[1] instanceof Date ? formatDate(arr[1]) : "",
     ]
   }
 
-  const d = val as Date
+  const d = val as Date | null
   return d instanceof Date ? formatDate(d) : ""
 }
 
