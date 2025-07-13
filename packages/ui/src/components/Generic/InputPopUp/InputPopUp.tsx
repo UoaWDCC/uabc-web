@@ -100,7 +100,7 @@ export const InputPopUp = ({ buttonText, title, description }: InputPopUpProps) 
             <Button colorScheme="secondary" onClick={onClose} size="md" w="full">
               Cancel
             </Button>
-            <Button colorScheme="primary" onClick={handleConfirm} size="md" type="submit" w="full">
+            <Button colorScheme="primary" size="md" type="submit" w="full">
               Confirm
             </Button>
           </Stack>
