@@ -20,9 +20,11 @@ export default meta
 type Story = StoryFn<typeof InputPopUp>
 
 export const Default: Story = (args) => {
+  const { open, onOpen, onClose } = useDisclosure()
   return (
     <Box maxW={{ base: "none", md: "33%" }}>
-      <InputPopUp {...args} />
+      <Button onClick={onOpen}>Open</Button>
+      <InputPopUp onClose={onClose} open={open} {...args} />
     </Box>
   )
 }
