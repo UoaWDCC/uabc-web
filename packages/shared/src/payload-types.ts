@@ -850,7 +850,13 @@ export interface Navbar {
    * The logo displayed in the navbar.
    */
   logo: string | Media;
-  navItems: Link;
+  /**
+   * Navigation items (max 5).
+   */
+  navItems: {
+    link: Link;
+    id?: string | null;
+  }[];
   rightSideSingleButton: Link;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -908,7 +914,12 @@ export interface LinkGroupSelect<T extends boolean = true> {
  */
 export interface NavbarSelect<T extends boolean = true> {
   logo?: T;
-  navItems?: T | LinkSelect<T>;
+  navItems?:
+    | T
+    | {
+        link?: T | LinkSelect<T>;
+        id?: T;
+      };
   rightSideSingleButton?: T | LinkSelect<T>;
   updatedAt?: T;
   createdAt?: T;

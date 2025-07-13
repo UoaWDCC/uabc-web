@@ -15,7 +15,6 @@ export const Navbar: GlobalConfig = {
     {
       name: "navItems",
       type: "array",
-      interfaceName: "Link",
       required: true,
       maxRows: 5,
       defaultValue: [
@@ -42,20 +41,28 @@ export const Navbar: GlobalConfig = {
       ],
       fields: [
         {
-          name: "label",
-          type: "text",
+          name: "link",
+          type: "group",
+          interfaceName: "Link",
           required: true,
-          admin: {
-            description: "The text displayed for the navigation item.",
-          },
-        },
-        {
-          name: "url",
-          type: "text",
-          required: true,
-          admin: {
-            description: "The URL the navigation item points to.",
-          },
+          fields: [
+            {
+              name: "label",
+              type: "text",
+              required: true,
+              admin: {
+                description: "The text displayed for the navigation item.",
+              },
+            },
+            {
+              name: "url",
+              type: "text",
+              required: true,
+              admin: {
+                description: "The URL the navigation item points to.",
+              },
+            },
+          ],
         },
       ],
       admin: {
