@@ -28,6 +28,8 @@ export const CreateUserRequestSchema = z.object({
 export const UpdateUserRequestSchema =
   CreateUserRequestSchema.partial() satisfies z.ZodType<EditUserData>
 
+export type UpdateUserRequest = z.infer<typeof UpdateUserRequestSchema>
+
 export const GetAllUsersResponseSchema = z.object({
   data: z.array(UserSchema),
 })
