@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type LoginDetails, LoginDetailsSchema } from "@repo/shared/schemas"
-import { Button, Heading, InputType, TextInput } from "@repo/ui/components/Primitive"
+import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
 import { LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
   Center,
@@ -85,7 +85,13 @@ export const LoginPanel = memo(({ onSubmit }: LoginPanelProps) => {
       <HStack>
         <Checkbox label="Remember me" textAlign="start" />
         <Spacer />
-        <UILink as={Link} href="/auth/forgot-password" textAlign="end" textColor="white">
+        <UILink
+          as={Link}
+          fontWeight="bold"
+          href="/auth/forgot-password"
+          textAlign="end"
+          textColor="white"
+        >
           Forgot Password?
         </UILink>
       </HStack>
@@ -99,11 +105,21 @@ export const LoginPanel = memo(({ onSubmit }: LoginPanelProps) => {
         separatorProps2={{ border: 0, layerStyle: "fadeRight" }}
       />
 
-      <span>Google and Apple icons go here</span>
+      <Center gap={4}>
+        <IconButton as={Link} colorScheme="secondary" fullRounded href="" variant="gradient">
+          G
+        </IconButton>
+        <IconButton as={Link} colorScheme="secondary" fullRounded href="" variant="gradient">
+          A
+        </IconButton>
+      </Center>
+
+      <Spacer />
+
       <Center textAlign="center">
         <Text color="gray.100">
           Don't have an account?&nbsp;
-          <UILink as={Link} color="gray.100" fontWeight="bold" href="/auth/login">
+          <UILink as={Link} color="gray.100" fontWeight="bold" href="/auth/signup">
             Create Account
           </UILink>
         </Text>
