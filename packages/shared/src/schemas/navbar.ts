@@ -1,5 +1,5 @@
+import type { Navbar } from "@repo/shared/payload-types"
 import { z } from "zod"
-import type { Navbar } from "@/payload-types"
 import { LinkSchema, MediaSchema } from "."
 
 export const NavItemSchema = z.object({
