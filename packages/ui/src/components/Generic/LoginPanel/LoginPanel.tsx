@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type LoginDetails, LoginDetailsSchema } from "@repo/shared/schemas"
 import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
-import { LockIcon, MailIcon } from "@yamada-ui/lucide"
+import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
   Center,
   Checkbox,
@@ -18,7 +18,7 @@ import {
 import Link from "next/link"
 import type { MouseEventHandler } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
-import { UabcLogo } from "../../Icon"
+import { GoogleLogo, UabcLogo } from "../../Icon"
 import { BreakLine } from "../../Primitive/BreakLine"
 
 /**
@@ -64,6 +64,7 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
       w={{ base: "full", md: "md" }}
     >
       <Center>
+        {/* TODO: replace with correct logo */}
         <UabcLogo />
       </Center>
 
@@ -115,9 +116,18 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         separatorProps2={{ border: 0, layerStyle: "fadeRight" }}
       />
 
-      <Center>
+      <Center gap={4}>
         <IconButton colorScheme="secondary" fullRounded onClick={onClickGoogle} variant="gradient">
-          G
+          <GoogleLogo fontSize="2xl" />
+        </IconButton>
+        <IconButton
+          colorScheme="secondary"
+          disabled
+          fullRounded
+          onClick={onClickGoogle}
+          variant="gradient"
+        >
+          <AppleIcon fontSize="2xl" />
         </IconButton>
       </Center>
 
