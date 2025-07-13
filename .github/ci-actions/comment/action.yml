@@ -59,7 +59,7 @@ runs:
         echo "EOF" >> $GITHUB_OUTPUT
 
     - name: Post-comment
-      if: ${{ inputs.method == "post" }}
+      if: ${{ inputs.method == 'post' }}
       uses: peter-evans/create-or-update-comment@v3
       with:
         issue-number: ${{ github.event.pull_request.number }}
