@@ -1,3 +1,4 @@
+import type { PopupValue } from "@repo/ui/hooks/usePopupState"
 import { isString } from "@yamada-ui/react"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
@@ -93,7 +94,10 @@ export function isStringArray(val: unknown): val is string[] {
  * @param range - Whether this is a range selection.
  * @returns A string or string array representation for URL parameters.
  */
-export function toPopupValue(val: Date | [Date?, Date?] | null, range: boolean): string | string[] {
+export function toPopupValue<T extends boolean>(
+  val: Date | [Date?, Date?] | null,
+  range: T,
+): PopupValue<T> {
   const formatDate = (date: Date) => dayjs(date).tz(NZ_TIMEZONE).format("YYYY-MM-DD")
 
   if (range) {
@@ -101,11 +105,11 @@ export function toPopupValue(val: Date | [Date?, Date?] | null, range: boolean):
     return [
       arr?.[0] instanceof Date ? formatDate(arr[0]) : "",
       arr?.[1] instanceof Date ? formatDate(arr[1]) : "",
-    ]
+    ] as PopupValue<T>
   }
 
   const d = val as Date | null
-  return d instanceof Date ? formatDate(d) : ""
+  return (d instanceof Date ? formatDate(d) : "") as PopupValue<T>
 }
 
 /**

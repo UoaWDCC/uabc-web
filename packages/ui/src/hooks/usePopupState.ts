@@ -5,7 +5,7 @@ import { useCallback, useMemo } from "react"
 /**
  * Helper type for popup values based on range mode.
  */
-type PopupValue<IsRange extends boolean> = IsRange extends true ? string[] : string
+export type PopupValue<IsRange extends boolean> = IsRange extends true ? string[] : string
 
 /**
  * Options for configuring the usePopupState hook.
