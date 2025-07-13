@@ -4,6 +4,11 @@ import NavigationBarSection from "@/components/client/NavigationBarSection"
 import { QueryKeys } from "@/services"
 import { getNavigationBar } from "@/services/cms/navbar/NavigationBarService"
 
+/**
+ * Component to server-side fetch and render the navigation bar section using Tanstack Query.
+ *
+ * @returns Server-side component to fetch and render the navigation bar section using Tanstack Query.
+ */
 export const NavigationBarServerSection = () => {
   const queryClient = getQueryClient()
 
