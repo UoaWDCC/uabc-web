@@ -357,10 +357,10 @@ export const ModalState: Story = {
           </ModalHeader>
           <ModalBody>
             <TextInput
+              defaultValue={modalPopup.value}
               onChange={(e) => modalPopup.setValue(e.target.value)}
               placeholder="Enter data"
               size="sm"
-              value={modalPopup.value}
             />
           </ModalBody>
           <ModalFooter>
