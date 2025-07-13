@@ -15,64 +15,47 @@ export const Navbar: GlobalConfig = {
     {
       name: "navItems",
       type: "array",
+      interfaceName: "LinkArray",
       required: true,
       maxRows: 5,
       defaultValue: [
         {
-          link: {
-            label: "Book",
-            url: "/book",
-          },
+          label: "Book",
+          url: "/book",
         },
         {
-          link: {
-            label: "Events",
-            url: "/events",
-          },
+          label: "Events",
+          url: "/events",
         },
         {
-          link: {
-            label: "About",
-            url: "/about",
-          },
+          label: "About",
+          url: "/about",
         },
         {
-          link: {
-            label: "Contact",
-            url: "/contact",
-          },
+          label: "Contact",
+          url: "/contact",
         },
         {
-          link: {
-            label: "FAQ",
-            url: "/faq",
-          },
+          label: "FAQ",
+          url: "/faq",
         },
       ],
       fields: [
         {
-          name: "link",
-          type: "group",
-          interfaceName: "Link",
+          name: "label",
+          type: "text",
           required: true,
-          fields: [
-            {
-              name: "label",
-              type: "text",
-              required: true,
-              admin: {
-                description: "The text displayed for the navigation item.",
-              },
-            },
-            {
-              name: "url",
-              type: "text",
-              required: true,
-              admin: {
-                description: "The URL the navigation item points to.",
-              },
-            },
-          ],
+          admin: {
+            description: "The text displayed for the navigation item.",
+          },
+        },
+        {
+          name: "url",
+          type: "text",
+          required: true,
+          admin: {
+            description: "The URL the navigation item points to.",
+          },
         },
       ],
       admin: {

@@ -7,9 +7,9 @@ const mockNavbar: Navbar = {
   id: "1",
   logo: "logo.png",
   navItems: [
-    { id: "1", link: { label: "Home", url: "/" } },
-    { id: "2", link: { label: "About", url: "/about" } },
-    { id: "3", link: { label: "Contact", url: "/contact" } },
+    { label: "Home", url: "/" },
+    { label: "About", url: "/about" },
+    { label: "Contact", url: "/contact" },
   ],
   rightSideSingleButton: { label: "Login", url: "/login" },
 }

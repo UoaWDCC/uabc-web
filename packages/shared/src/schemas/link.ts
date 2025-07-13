@@ -5,3 +5,5 @@ export const LinkSchema = z.object({
   label: z.string(),
   url: z.string(),
 }) satisfies z.ZodType<Link>
+
+export const LinkArraySchema = z.array(LinkSchema).max(5) satisfies z.ZodType<Link[]>

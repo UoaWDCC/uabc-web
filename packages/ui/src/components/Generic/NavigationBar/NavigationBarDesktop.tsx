@@ -29,7 +29,7 @@ export const NavigationBarDesktop = ({
   const admin = user?.role === MembershipType.admin
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(() => {
-    const initialIndex = navItems.findIndex(({ link }) => link.url === currentPath)
+    const initialIndex = navItems.findIndex((item) => item.url === currentPath)
     return initialIndex !== -1 ? initialIndex : null
   })
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([])
@@ -44,7 +44,7 @@ export const NavigationBarDesktop = ({
   }
 
   const clearHover = () => {
-    const initialIndex = navItems.findIndex(({ link }) => link.url === currentPath)
+    const initialIndex = navItems.findIndex((item) => item.url === currentPath)
     setHoveredIndex(initialIndex !== -1 ? initialIndex : null)
   }
 
@@ -82,17 +82,18 @@ export const NavigationBarDesktop = ({
           <UabcLogo />
         </Box>
         <HStack as={Motion} data-testid="navbar-buttons-container" gap={0} onHoverEnd={clearHover}>
-          {navItems.map(({ link }, index) => (
-            <Motion key={link.label} onHoverStart={() => handleHover(index)}>
+          {navItems.map((item, index) => (
+            <Motion key={item.label} onHoverStart={() => handleHover(index)}>
               <NavigationBarButton
-                {...link}
                 hovering={hoveredIndex === index}
+                label={item.label}
                 ref={(el) => {
                   itemRefs.current[index] = el
-                  if (link.url === currentPath && !activeRef.current) {
+                  if (item.url === currentPath && !activeRef.current) {
                     activeRef.current = el
                   }
                 }}
+                url={item.url}
               />
             </Motion>
           ))}

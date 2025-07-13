@@ -39,13 +39,11 @@ export const NavigationBarMobile = ({
   const allNavItems = [
     ...(user
       ? [
-          ...(user.role === MembershipType.admin
-            ? [{ link: { label: "Admin", url: "/admin" } }]
-            : []),
-          { link: { label: "Profile", url: "/profile" } },
-          { link: { label: "Sign Out", url: "/auth/signout" } },
+          ...(user.role === MembershipType.admin ? [{ label: "Admin", url: "/admin" }] : []),
+          { label: "Profile", url: "/profile" },
+          { label: "Sign Out", url: "/auth/signout" },
         ]
-      : [{ link: rightSideSingleButton || { label: "Sign In", url: "/auth/signin" } }]),
+      : [rightSideSingleButton || { label: "Sign In", url: "/auth/signin" }]),
     ...navItems,
   ]
 
@@ -121,20 +119,20 @@ export const NavigationBarMobile = ({
         >
           <PopoverBody>
             <VStack gap="xs" minH="lg">
-              {allNavItems.map(({ link }) => (
+              {allNavItems.map((item) => (
                 <Text
                   _hover={{ bgColor: "secondary" }}
                   as={Link}
                   borderRadius="xl"
-                  color={currentPath === link.url ? "primary" : "white"}
+                  color={currentPath === item.url ? "primary" : "white"}
                   fontSize="xl"
                   fontWeight="semibold"
-                  href={link.url}
-                  key={link.label}
+                  href={item.url}
+                  key={item.label}
                   px="md"
                   py="sm"
                 >
-                  {link.label}
+                  {item.label}
                 </Text>
               ))}
             </VStack>

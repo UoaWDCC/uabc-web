@@ -1,11 +1,11 @@
 import { adminUserMock, casualUserMock, memberUserMock } from "@repo/shared/mocks"
 
 const navItemsMock = [
-  { id: "1", link: { label: "Book", url: "/book" } },
-  { id: "2", link: { label: "Events", url: "/events" } },
-  { id: "3", link: { label: "About", url: "/about" } },
-  { id: "4", link: { label: "Contact", url: "/contact" } },
-  { id: "5", link: { label: "FAQ", url: "/faq" } },
+  { label: "Book", url: "/book" },
+  { label: "Events", url: "/events" },
+  { label: "About", url: "/about" },
+  { label: "Contact", url: "/contact" },
+  { label: "FAQ", url: "/faq" },
 ]
 
 const rightSideSingleButtonMock = {
