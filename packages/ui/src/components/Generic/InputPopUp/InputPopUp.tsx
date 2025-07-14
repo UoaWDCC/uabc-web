@@ -119,7 +119,7 @@ export const InputPopUp: React.FC<InputPopUpProps> = ({
             {description}
           </Heading.h3>
 
-          <FormControl isInvalid={!!errors.name} w="full">
+          <FormControl invalid={!!errors.name} w="full">
             <Center w="full">
               <TextInput
                 id="name"
