@@ -1,7 +1,9 @@
 import z from "zod"
-import type { GameSessionSchedule } from "../payload-types"
+import type { GameSession, GameSessionSchedule } from "../payload-types"
 import {
+  type CreateGameSessionData,
   type CreateGameSessionScheduleData,
+  type UpdateGameSessionData,
   type UpdateGameSessionScheduleData,
   Weekday,
 } from "../types"
@@ -30,3 +32,27 @@ export const CreateGameSessionScheduleRequestSchema = z.object({
 
 export const UpdateGameSessionScheduleRequestSchema =
   CreateGameSessionScheduleRequestSchema.partial() satisfies z.ZodType<UpdateGameSessionScheduleData>
+
+export const GameSessionSchema = z.object({
+  id: z.string(),
+  gameSessionSchedule: z.union([z.string(), z.null(), GameSessionScheduleSchema]),
+  semester: z.union([z.string(), SemesterSchema]),
+  startTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  endTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  capacity: z.number(),
+  casualCapacity: z.number(),
+  updatedAt: z.string(),
+  createdAt: z.string(),
+}) satisfies z.ZodType<GameSession>
+
+export const CreateGameSessionRequestSchema = z.object({
+  semester: z.union([z.string(), SemesterSchema]),
+  day: z.nativeEnum(Weekday),
+  startTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  endTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  capacity: z.number(),
+  casualCapacity: z.number(),
+}) satisfies z.ZodType<CreateGameSessionData>
+
+export const UpdateGameSessionRequestSchema =
+  CreateGameSessionRequestSchema.partial() satisfies z.ZodType<UpdateGameSessionData>
