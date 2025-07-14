@@ -1,5 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/react"
 import { PropsTable } from "@storybook-config/components"
+import { useForm } from "react-hook-form"
 import { BookingTimesCardGroup } from "./BookingTimesCardGroup"
 
 const meta: Meta<typeof BookingTimesCardGroup> = {
@@ -33,6 +34,10 @@ const defaultData = [
 ]
 
 export const TypesAndStates: Story = (_args) => {
+  const { control } = useForm<{
+    bookingTimes: string
+  }>()
+
   const states = ["normal", "disabled", "error", "checked"]
 
   return (
@@ -44,12 +49,13 @@ export const TypesAndStates: Story = (_args) => {
 
         const items = defaultData.map((item) => ({
           ...item,
+          value: `${item.value}-${row}`,
           invalid: isError,
           disabled: isDisabled,
           checked: isChecked ? true : undefined,
         }))
 
-        return <BookingTimesCardGroup items={items} name="bookingTimes" />
+        return <BookingTimesCardGroup control={control} items={items} name="bookingTimes" />
       }}
     </PropsTable>
   )
