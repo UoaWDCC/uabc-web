@@ -144,7 +144,6 @@ export const TextInput = memo(
         errorMessage,
         formControlProps,
         registration,
-        autoComplete,
         rightElementProps,
         disabled,
         ...props
@@ -164,7 +163,6 @@ export const TextInput = memo(
         ...registration,
         ...props,
         ref: inputRef,
-        autoComplete,
       }
 
       return (

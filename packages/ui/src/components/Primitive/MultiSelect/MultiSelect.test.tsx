@@ -1,4 +1,4 @@
-import { render, screen } from "@repo/ui/test-utils"
+import { act, render, screen } from "@repo/ui/test-utils"
 import { Option } from "@yamada-ui/react"
 import { isValidElement } from "react"
 import * as MultiSelectModule from "./index"
@@ -68,7 +68,9 @@ describe("registration prop integration", () => {
       type: "change",
     })
     await user.click(multiSelectComponent)
-    multiSelectComponent.blur()
+    act(() => {
+      multiSelectComponent.blur()
+    })
     expect(mockOnBlur).toHaveBeenCalled()
     expect(mockRef).toHaveBeenCalled()
   })
@@ -87,7 +89,7 @@ describe("registration prop integration", () => {
         <Option value="1">Option 1</Option>
       </MultiSelect>,
     )
-    expect(componentRef.current).toBeInstanceOf(HTMLSelectElement)
+    expect(componentRef.current).toBeInstanceOf(HTMLDivElement)
   })
 
   it("falls back to component ref when registration ref is null", () => {
@@ -104,7 +106,7 @@ describe("registration prop integration", () => {
         <Option value="1">Option 1</Option>
       </MultiSelect>,
     )
-    expect(componentRef.current).toBeInstanceOf(HTMLSelectElement)
+    expect(componentRef.current).toBeInstanceOf(HTMLDivElement)
   })
 
   it("calls both component onChange and registration onChange when both are provided", async () => {

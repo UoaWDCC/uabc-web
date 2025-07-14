@@ -6,6 +6,7 @@ import {
   FormControl,
   type FormControlProps,
   HStack,
+  handlerAll,
   Label,
   memo,
   mergeRefs,
@@ -16,7 +17,7 @@ import type { ReactNode } from "react"
 import { forwardRef } from "react"
 import type { FieldPath, FieldValues, UseFormRegisterReturn } from "react-hook-form"
 
-export interface SelectProps extends UISelectProps {
+export interface SelectProps extends Omit<UISelectProps, "variant"> {
   /**
    * Label text of the Select component.
    *
@@ -42,7 +43,7 @@ export interface SelectProps extends UISelectProps {
    * component in the hero/home page, but Select will feel left out if it doesn't have its own
    * stylised version :(
    */
-  stylised?: boolean
+  variant?: "stylised" | UISelectProps["variant"]
   /**
    * Additional props for the FormControl wrapper.
    *
@@ -86,7 +87,7 @@ export const Select = memo(
         children,
         label = "Select option",
         icon,
-        stylised = false,
+        variant,
         formControlProps,
         registration,
         ...props
@@ -97,19 +98,24 @@ export const Select = memo(
 
       const { disabled } = formControlProps ?? {}
 
+      const stylised = variant === "stylised"
+
       const selectProps = {
-        variant: "gradient" as const,
+        variant,
+        ...props,
         name: registration?.name,
         onBlur: registration?.onBlur,
-        onChange: registration?.onChange
-          ? (value: string) => {
-              registration?.onChange?.({
-                target: { name: registration?.name || "", value },
-                type: "change",
-              })
-            }
-          : undefined,
-        ...props,
+        onChange: handlerAll(
+          props.onChange,
+          registration?.onChange
+            ? (value: string) => {
+                registration.onChange?.({
+                  target: { name: registration?.name || "", value },
+                  type: "change",
+                })
+              }
+            : undefined,
+        ),
         ref: selectRef,
       }
 
@@ -126,7 +132,6 @@ export const Select = memo(
             }}
           >
             <UISelect
-              bgGradient={stylised ? "heroGradient" : undefined}
               fieldProps={
                 icon
                   ? {

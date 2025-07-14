@@ -93,6 +93,9 @@ export const QuickBook = memo(
         <Grid gap="md" templateColumns={{ base: "1fr", md: "1fr 1fr auto" }}>
           <GridItem minW={0}>
             <Select
+              containerProps={{
+                rounded: "xl",
+              }}
               data-testid="location-and-time"
               formControlProps={{
                 errorMessage: errors.locationAndTimeId?.message,
@@ -103,11 +106,14 @@ export const QuickBook = memo(
               label="Location & Time"
               registration={register("locationAndTimeId")}
               rounded="xl"
-              stylised
+              variant="stylised"
             />
           </GridItem>
           <GridItem minW={0}>
             <Select
+              containerProps={{
+                rounded: "xl",
+              }}
               data-testid="skill-level"
               formControlProps={{
                 errorMessage: errors.skillLevel?.message,
@@ -118,7 +124,7 @@ export const QuickBook = memo(
               label="Skill Level"
               registration={register("skillLevel")}
               rounded="xl"
-              stylised
+              variant="stylised"
             />
           </GridItem>
           <GridItem w="full">

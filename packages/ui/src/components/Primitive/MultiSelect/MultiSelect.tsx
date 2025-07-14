@@ -6,6 +6,7 @@ import {
   FormControl,
   type FormControlProps,
   HStack,
+  handlerAll,
   Label,
   memo,
   mergeRefs,
@@ -17,7 +18,7 @@ import type { ReactNode } from "react"
 import { forwardRef } from "react"
 import type { FieldPath, FieldValues, UseFormRegisterReturn } from "react-hook-form"
 
-export interface MultiSelectProps extends UIMultiSelectProps {
+export interface MultiSelectProps extends Omit<UIMultiSelectProps, "variant"> {
   /**
    * Label text of the MultiSelect component.
    *
@@ -39,11 +40,11 @@ export interface MultiSelectProps extends UIMultiSelectProps {
   /**
    * Whether to have a background gradient and circle around the inline icon.
    *
-   * @remarks Same styling as in Select component. MultiSelect is not needed in the quick book
-   * component in the hero/home page, but MultiSelect will feel left out if it doesn't have its own
+   * @remarks Same styling as in Select component. Select is not needed in the quick book
+   * component in the hero/home page, but Select will feel left out if it doesn't have its own
    * stylised version :(
    */
-  stylised?: boolean
+  variant?: "stylised" | UIMultiSelectProps["variant"]
   /**
    * Additional props for the FormControl wrapper.
    *
@@ -81,13 +82,13 @@ export interface MultiSelectProps extends UIMultiSelectProps {
  * @see {@link https://yamada-ui.com/components/forms/multi-select Yamada UI Select Docs}
  */
 export const MultiSelect = memo(
-  forwardRef<HTMLSelectElement, MultiSelectProps>(
+  forwardRef<HTMLDivElement, MultiSelectProps>(
     (
       {
         children,
         label = "Select option(s)",
         icon,
-        stylised = false,
+        variant,
         formControlProps,
         registration,
         ...props
@@ -98,19 +99,24 @@ export const MultiSelect = memo(
 
       const { disabled } = formControlProps ?? {}
 
+      const stylised = variant === "stylised"
+
       const selectProps = {
-        variant: "gradient" as const,
+        variant,
         name: registration?.name,
         onBlur: registration?.onBlur,
-        onChange: registration?.onChange
-          ? (value: string[]) => {
-              registration?.onChange?.({
-                target: { name: registration?.name || "", value },
-                type: "change",
-              })
-            }
-          : undefined,
         ...props,
+        onChange: handlerAll(
+          props.onChange,
+          registration?.onChange
+            ? (value: string[]) => {
+                registration.onChange?.({
+                  target: { name: registration?.name || "", value },
+                  type: "change",
+                })
+              }
+            : undefined,
+        ),
         ref: selectRef,
       }
 
@@ -127,7 +133,6 @@ export const MultiSelect = memo(
             }}
           >
             <UIMultiSelect
-              bgGradient={stylised ? "heroGradient" : undefined}
               clearIconProps={{
                 pr: { md: "lg" },
               }}
