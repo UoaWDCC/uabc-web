@@ -61,11 +61,7 @@ export const Select = memo(
   forwardRef<HTMLSelectElement, SelectProps>(
     ({ children, label = "Select option", icon, variant, disabled, ...props }, ref) => {
       const stylised = variant === "stylised"
-      const selectProps = {
-        variant,
-        ...props,
-        ref,
-      }
+
       return (
         <Box
           position="relative"
@@ -87,8 +83,10 @@ export const Select = memo(
                 : { pl: { md: "6" } }
             }
             iconProps={icon ? { pr: { md: "lg" } } : { pr: { md: "6" } }}
+            ref={ref}
             size="lg"
-            {...selectProps}
+            variant={variant}
+            {...props}
           >
             {children}
           </UISelect>

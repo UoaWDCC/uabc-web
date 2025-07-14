@@ -85,18 +85,16 @@ export const TextInput = memo(
       const isPasswordType = type === InputType.Password
       const [isPasswordVisible, { toggle: togglePasswordVisibility }] = useBoolean(false)
 
-      const inputProps = {
-        disabled,
-        variant: "gradient" as const,
-        type: isPasswordType ? (isPasswordVisible ? "text" : "password") : type,
-        ...props,
-        ref,
-      }
-
       return (
         <InputGroup {...inputGroupProps}>
           {startIcon && <InputLeftElement>{startIcon}</InputLeftElement>}
-          <Input {...inputProps} />
+          <Input
+            disabled={disabled}
+            ref={ref}
+            type={isPasswordType ? (isPasswordVisible ? "text" : "password") : type}
+            variant="gradient"
+            {...props}
+          />
 
           {endIcon ? (
             <InputRightElement {...rightElementProps}>{endIcon}</InputRightElement>

@@ -62,11 +62,7 @@ export const MultiSelect = memo(
   forwardRef<HTMLDivElement, MultiSelectProps>(
     ({ children, label = "Select option(s)", icon, variant, disabled, ...props }, ref) => {
       const stylised = variant === "stylised"
-      const selectProps = {
-        variant,
-        ...props,
-        ref,
-      }
+
       return (
         <Box
           position="relative"
@@ -96,8 +92,10 @@ export const MultiSelect = memo(
                 : { pl: { md: "6" } }
             }
             iconProps={icon ? { pr: { md: "lg" } } : { pr: { md: "6" } }}
+            ref={ref}
             size="lg"
-            {...selectProps}
+            variant={variant}
+            {...props}
           >
             {children}
           </UIMultiSelect>
