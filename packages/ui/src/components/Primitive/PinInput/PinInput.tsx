@@ -20,8 +20,6 @@ import { forwardRef, memo } from "react"
  *   label="OTP Code"
  *   length={4}
  *   {...register("otp")}
- *   isError={!!errors.otp}
- *   errorMessage={errors.otp?.message}
  * />
  *
  * @example
@@ -30,8 +28,6 @@ import { forwardRef, memo } from "react"
  *   label="PIN"
  *   length={4}
  *   type={PinInputType.Number}
- *   isError={true}
- *   errorMessage="Invalid PIN"
  * />
  */
 export interface PinInputProps extends UIPinInputProps {}
