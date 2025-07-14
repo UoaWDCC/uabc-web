@@ -166,9 +166,10 @@ export const Button: ComponentStyle<"Button"> = {
     }),
     gradient: ({ colorScheme: c = "primary" }) => ({
       backdropFilter: "blur(15px)",
-      bgGradient: Object.keys(gradients).includes(`${c}Gradient`)
-        ? `${c}Gradient`
-        : `linear-gradient(270deg, ${c}.500 16.5%, ${c}.700 105%)`,
+      bgGradient:
+        `${c}Gradient` in gradients
+          ? `${c}Gradient`
+          : `linear-gradient(270deg, ${c}.500 16.5%, ${c}.700 105%)`,
       bgSize: "100% 100%",
       borderRadius: "12px",
       boxShadow:
