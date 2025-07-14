@@ -1,7 +1,7 @@
+import { Select } from "@repo/ui/components/Primitive"
 import { Option } from "@yamada-ui/react"
 import type { FC } from "react"
 import { memo } from "react"
-import { Select } from "../../../Primitive"
 import { useMemberManagement } from "../MemberManagementContext"
 
 export const FilterUniversitySelect: FC = memo(() => {

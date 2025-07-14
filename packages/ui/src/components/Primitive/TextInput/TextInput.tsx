@@ -20,7 +20,6 @@ import { type AutoCompleteType, InputType } from "./types"
  *
  * @remarks
  * Extends all the props from {@link UIInputProps} except `type`.
- * Provides additional customization for input fields with automatic React Hook Form integration.
  *
  * @example
  * // Basic usage
@@ -63,7 +62,7 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
 }
 
 /**
- * A clean, modern text input primitive with built-in React Hook Form support.
+ * A text input component with built-in password visibility toggle.
  *
  * @param props - Input component properties
  * @returns A memoized, forwarded input component

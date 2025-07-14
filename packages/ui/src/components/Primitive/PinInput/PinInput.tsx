@@ -33,7 +33,7 @@ import { forwardRef, memo } from "react"
 export interface PinInputProps extends UIPinInputProps {}
 
 /**
- * A clean, modern pin input component with built-in React Hook Form support.
+ * A pin input component.
  *
  * @param props - Pin input component properties
  * @returns A memoized, forwarded pin input component

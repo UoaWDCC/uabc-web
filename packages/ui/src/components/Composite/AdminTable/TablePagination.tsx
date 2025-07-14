@@ -1,7 +1,7 @@
+import { Select } from "@repo/ui/components/Primitive"
 import { Grid, GridItem, Option, Pagination } from "@yamada-ui/react"
 import type { FC } from "react"
 import { memo, useCallback } from "react"
-import { Select } from "../../Primitive"
 import { useMemberManagement } from "./MemberManagementContext"
 
 export const TablePagination: FC = memo(() => {
