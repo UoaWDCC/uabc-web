@@ -284,8 +284,16 @@ describe("<CalendarSelectPopup />", () => {
 
   it("should select a single date", async () => {
     const onDateSelect = vi.fn()
+    const fixedDate = dayjs.tz("2025-01-15", "YYYY-MM-DD", NZ_TIMEZONE).toDate()
+
     const { user } = render(
-      <CalendarSelectPopup.Root onDateSelect={onDateSelect} popupId="test" showTrigger />,
+      <CalendarSelectPopup.Root
+        calendarProps={{ month: fixedDate }}
+        initialDate={fixedDate}
+        onDateSelect={onDateSelect}
+        popupId="test"
+        showTrigger
+      />,
       {
         wrapper: withNuqsTestingAdapter(),
       },
@@ -293,17 +301,11 @@ describe("<CalendarSelectPopup />", () => {
 
     await user.click(screen.getByRole("button", { name: /open calendar/i }))
 
-    const today = dayjs().tz(NZ_TIMEZONE).toDate()
-    const day = today.getDate()
-
-    const dayButton = screen.getByRole("button", {
-      name: new RegExp(`^${day}$`),
-    })
-
+    const dayButton = screen.getByRole("button", { name: /^15$/ })
     await user.click(dayButton)
     expect(onDateSelect).toHaveBeenCalled()
     const selectedDate = onDateSelect.mock.calls[0][0]
-    expect(selectedDate.getDate()).toBe(day)
+    expect(selectedDate.getDate()).toBe(15)
   })
 
   it("should select a date range", async () => {
