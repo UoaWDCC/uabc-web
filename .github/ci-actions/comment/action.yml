@@ -59,7 +59,7 @@ runs:
         echo "EOF" >> $GITHUB_OUTPUT
 
     - name: Create Fail Message
-      if: ${{ inputs.method == 'check' }}
+      if: always()
       shell: bash
       run: |
         message=$(echo "$message" | sed "s|🔄 Storybook Preview: Deploying...|🚫 Storybook Preview: Failed|")
