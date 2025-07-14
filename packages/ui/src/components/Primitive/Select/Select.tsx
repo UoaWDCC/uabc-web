@@ -1,9 +1,10 @@
 "use client"
 
 import {
+  Box,
   Center,
-  type FC,
   FormControl,
+  type FormControlProps,
   HStack,
   Label,
   memo,
@@ -11,46 +12,20 @@ import {
   Select as UISelect,
   type SelectProps as UISelectProps,
 } from "@yamada-ui/react"
-import type { ReactNode, Ref } from "react"
+import type { ReactNode } from "react"
+import { forwardRef } from "react"
 import type { FieldPath, FieldValues, UseFormRegisterReturn } from "react-hook-form"
 
-/**
- * Props for {@link Select} component
- *
- *  @example
- * // With React Hook Form
- * <Select
- *    errorMessage={errors.locationAndTimeId?.message}
- *    icon={<CalendarClockIcon fontSize={24} />}
- *    isError={!!errors.locationAndTimeId}
- *    items={locationAndTimeOptions}
- *    label="Location & Time"
- *    registration={register("locationAndTimeId")}
- *    stylised
- * />
- *
- * @example
- * // Manual error handling
- * <Select
- *    errorMessage="Field is required"
- *    icon={<CalendarClockIcon fontSize={24} />}
- *    isError={true}
- *    items={locationAndTimeOptions}
- *    label="Location & Time"
- *    stylised
- * />
- */
 export interface SelectProps extends UISelectProps {
   /**
-   * Label text of the Select component.
+   * Label text of the MultiSelect component.
    *
    * @remarks
-   * The label is rendered within the Select component.
+   * The label is rendered within the MultiSelect component.
    *
    * @defaultValue "Select option"
    */
   label?: string
-
   /**
    * Icon rendered inline to the left of the label.
    *
@@ -60,34 +35,21 @@ export interface SelectProps extends UISelectProps {
    * @see {@link https://yamada-ui.com/components/media-and-icons/lucide Yamda UI Lucide Icon}
    */
   icon?: ReactNode
-
   /**
    * Whether to have a background gradient and circle around the inline icon.
    *
-   * @remarks To use in the quick book Select components in the hero/home page.
+   * @remarks Same styling as in Select component. MultiSelect is not needed in the quick book
+   * component in the hero/home page, but MultiSelect will feel left out if it doesn't have its own
+   * stylised version :(
    */
   stylised?: boolean
-
   /**
-   * Indicates whether the Select is in an error state.
+   * Additional props for the FormControl wrapper.
    *
    * @remarks
-   * When `true`, the input displays an error border and error message.
-   * Works seamlessly with React Hook Form validation.
-   *
-   * @defaultValue `false`
+   * Allows customization of the FormControl container.
    */
-  isError?: boolean
-
-  /**
-   * The error message displayed when the Select is in an error state.
-   *
-   * @remarks
-   * If not provided, no error message will be shown.
-   * Typically used with React Hook Form error messages.
-   */
-  errorMessage?: string
-
+  formControlProps?: FormControlProps
   /**
    * React Hook Form registration object.
    *
@@ -96,17 +58,16 @@ export interface SelectProps extends UISelectProps {
    * This automatically handles onChange, onBlur, name, and ref.
    *
    * @example
-   * <TextInput {...register("fieldName")} />
+   * <Select registration={register("fieldName")}/>
    */
   registration?: UseFormRegisterReturn<FieldPath<FieldValues>>
-
-  ref?: Ref<HTMLSelectElement>
 }
 
 /**
  * Select component for both mobile and desktop screens with left icon and label support.
  *
  * @param props Select component properties
+ * @param ref Ref to the underlying select element
  * @returns A select component
  *
  * @example
@@ -116,110 +77,100 @@ export interface SelectProps extends UISelectProps {
  *   <Option value="3">Option 3</Option>
  * </Select>
  *
- * @see {@link https://yamada-ui.com/components/forms/select Yamada UI Select Docs}
+ * @see {@link https://yamada-ui.com/components/forms/multi-select Yamada UI Select Docs}
  */
-export const Select: FC<SelectProps> = memo(
-  ({
-    children,
-    label = "Select option",
-    icon,
-    stylised = false,
-    isError,
-    errorMessage,
-    registration,
-    ref,
-    ...props
-  }) => {
-    const selectRef = mergeRefs(registration?.ref ?? null, ref)
-
-    const selectProps = {
-      name: registration?.name,
-      onBlur: registration?.onBlur,
-      onChange: (value: string) => {
-        registration?.onChange?.({
-          target: { name: registration?.name || "", value },
-          type: "change",
-        })
+export const Select = memo(
+  forwardRef<HTMLSelectElement, SelectProps>(
+    (
+      {
+        children,
+        label = "Select option",
+        icon,
+        stylised = false,
+        formControlProps,
+        registration,
+        ...props
       },
-      ...props,
-      ref: selectRef,
-    }
+      ref,
+    ) => {
+      const selectRef = mergeRefs(registration?.ref ?? null, ref)
 
-    return (
-      <FormControl
-        errorMessage={errorMessage}
-        invalid={isError}
-        position="relative"
-        sx={{
-          "&:not(:has(div[data-placeholder]))": {
-            label: {
-              visibility: "hidden",
-            },
-          },
-        }}
-      >
-        <UISelect
-          _focus={{
-            borderColor: isError ? ["danger.500", "danger.400"] : ["primary.500", "primary.400"],
-            boxShadow: isError
-              ? ["0 0 0 1px $colors.danger.500", "0 0 0 1px $colors.danger.400"]
-              : ["0 0 0 1px $colors.primary.500", "0 0 0 1px $colors.primary.400"],
-          }}
-          _hover={{
-            borderColor: isError ? ["danger.600", "danger.500"] : ["gray.400", "gray.500"],
-          }}
-          _invalid={{
-            borderColor: ["danger.500", "danger.400"],
-            _hover: {
-              borderColor: ["danger.600", "danger.500"],
-            },
-            _focus: {
-              borderColor: ["danger.500", "danger.400"],
-              boxShadow: ["0 0 0 1px $colors.danger.500", "0 0 0 1px $colors.danger.400"],
-            },
-          }}
-          bgGradient={stylised ? "heroGradient" : "transparent"}
-          fieldProps={{
-            pl: { base: "calc(lg + xs + md)", md: "calc(lg - sm - xs + xl)" },
-            pr: { base: "lg", md: "xl" },
-          }}
-          iconProps={{
-            pr: { md: "lg" },
-          }}
-          size="lg"
-          {...selectProps}
-        >
-          {children}
-        </UISelect>
-        <HStack
-          align="center"
-          bottom={isError && errorMessage ? "25%" : undefined}
-          gap={{ base: "xs", md: "sm" }}
-          mx="calc(md - xs)"
-          pl={{ md: "md" }}
-          pointerEvents="none"
-          position="absolute"
-          top={isError && errorMessage ? undefined : "50%"}
-          transform="translateY(-50%)"
-          z={1}
-        >
-          <Center
-            borderColor={stylised ? "gray.600" : "transparent"}
-            borderRadius="full"
-            borderWidth="thin"
-            h="fit-content"
-            p="xs"
-            w="fit-content"
+      const { disabled } = formControlProps ?? {}
+
+      const selectProps = {
+        variant: "gradient" as const,
+        name: registration?.name,
+        onBlur: registration?.onBlur,
+        onChange: registration?.onChange
+          ? (value: string) => {
+              registration?.onChange?.({
+                target: { name: registration?.name || "", value },
+                type: "change",
+              })
+            }
+          : undefined,
+        ...props,
+        ref: selectRef,
+      }
+
+      return (
+        <FormControl {...formControlProps}>
+          <Box
+            position="relative"
+            sx={{
+              "&:not(:has(div[data-placeholder]))": {
+                label: {
+                  visibility: "hidden",
+                },
+              },
+            }}
           >
-            {icon}
-          </Center>
-          <Label fontSize="lg" fontWeight="normal" mb={0}>
-            {label}
-          </Label>
-        </HStack>
-      </FormControl>
-    )
-  },
+            <UISelect
+              bgGradient={stylised ? "heroGradient" : undefined}
+              fieldProps={
+                icon
+                  ? {
+                      pl: { base: "calc(lg + xs + md)", md: "14" },
+                      pr: { base: "lg", md: "xl" },
+                    }
+                  : undefined
+              }
+              iconProps={icon ? { pr: { md: "lg" } } : undefined}
+              size="lg"
+              {...selectProps}
+            >
+              {children}
+            </UISelect>
+            <HStack
+              align="center"
+              gap={{ base: "xs", md: "sm" }}
+              opacity={disabled ? 0.4 : undefined}
+              pointerEvents="none"
+              position="absolute"
+              px="md"
+              top="50%"
+              transform="translateY(-50%)"
+              z={1}
+            >
+              <Center
+                borderColor="gray.600"
+                borderRadius="full"
+                borderWidth={stylised ? "thin" : "0"}
+                h="fit-content"
+                p="xs"
+                w="fit-content"
+              >
+                {icon}
+              </Center>
+              <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
+                {label}
+              </Label>
+            </HStack>
+          </Box>
+        </FormControl>
+      )
+    },
+  ),
 )
 
 Select.displayName = "Select"

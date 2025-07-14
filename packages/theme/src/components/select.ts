@@ -15,8 +15,7 @@ export const Select: ComponentMultiStyle<"Select"> = mergeMultiStyle(NativeSelec
     }),
     footer: {},
     header: {},
-    inner: ({ colorScheme: c = "secondary" }) => ({
-      bg: [`${c}.50`, `${c}.900`],
+    inner: ({ colorScheme: _c = "secondary" }) => ({
       rounded: "md",
     }),
     item: {

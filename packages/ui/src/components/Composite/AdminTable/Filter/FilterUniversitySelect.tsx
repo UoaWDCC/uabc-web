@@ -1,6 +1,7 @@
-import { Option, Select } from "@yamada-ui/react"
+import { Option } from "@yamada-ui/react"
 import type { FC } from "react"
 import { memo } from "react"
+import { Select } from "../../../Primitive"
 import { useMemberManagement } from "../MemberManagementContext"
 
 export const FilterUniversitySelect: FC = memo(() => {
@@ -11,7 +12,14 @@ export const FilterUniversitySelect: FC = memo(() => {
   }
 
   return (
-    <Select onChange={handleUniversityChange} size="md" value={universityFilter || "all"} w="xs">
+    <Select
+      formControlProps={{
+        w: "xs",
+      }}
+      onChange={handleUniversityChange}
+      size="md"
+      value={universityFilter || "all"}
+    >
       {availableUniversities.map((university) => (
         <Option key={university || "all"} value={university || "all"}>
           {university === "all" ? "All Universities" : university || "Unknown"}

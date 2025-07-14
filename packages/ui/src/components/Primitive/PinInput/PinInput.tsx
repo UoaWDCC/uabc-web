@@ -4,15 +4,13 @@ import {
   FormControl,
   type FormControlProps,
   handlerAll,
-  Label,
-  type LabelProps,
   mergeRefs,
   PinInput as UIPinInput,
   type PinInputProps as UIPinInputProps,
 } from "@yamada-ui/react"
 import { forwardRef, memo } from "react"
 import type { FieldPath, FieldValues, UseFormRegisterReturn } from "react-hook-form"
-import { PinInputSize, PinInputType, PinInputVariant } from "./types"
+import { PinInputType } from "./types"
 
 /**
  * Props for {@link PinInput}
@@ -47,58 +45,6 @@ import { PinInputSize, PinInputType, PinInputVariant } from "./types"
  */
 export interface PinInputProps extends Omit<UIPinInputProps, "children"> {
   /**
-   * Label text for the pin input field.
-   *
-   * @remarks
-   * If not provided, no label will be rendered.
-   * The label is rendered above the pin input field.
-   */
-  label?: string
-
-  /**
-   * Additional props for the Label component.
-   *
-   * @remarks
-   * Allows customization of the Label component styling and behavior.
-   */
-  labelProps?: LabelProps
-
-  /**
-   * The type of the pin input field.
-   *
-   * @remarks
-   * Supports number and alphanumeric input types.
-   *
-   * @defaultValue `PinInputType.Number`
-   */
-  type?: PinInputType
-
-  /**
-   * The size of the pin input field.
-   *
-   * @defaultValue `PinInputSize.MD`
-   */
-  size?: PinInputSize
-
-  /**
-   * The variant of the pin input field.
-   *
-   * @defaultValue `PinInputVariant.Outline`
-   */
-  variant?: PinInputVariant
-
-  /**
-   * Indicates whether the pin input field is in an error state.
-   *
-   * @remarks
-   * When `true`, the input displays an error border and error message.
-   * Works seamlessly with React Hook Form validation.
-   *
-   * @defaultValue `false`
-   */
-  isError?: boolean
-
-  /**
    * The error message displayed when the input is in an error state.
    *
    * @remarks
@@ -106,7 +52,6 @@ export interface PinInputProps extends Omit<UIPinInputProps, "children"> {
    * Typically used with React Hook Form error messages.
    */
   errorMessage?: string
-
   /**
    * Additional props for the FormControl wrapper.
    *
@@ -114,7 +59,6 @@ export interface PinInputProps extends Omit<UIPinInputProps, "children"> {
    * Allows customization of the FormControl container.
    */
   formControlProps?: FormControlProps
-
   /**
    * React Hook Form registration object.
    *
@@ -137,31 +81,17 @@ export interface PinInputProps extends Omit<UIPinInputProps, "children"> {
 export const PinInput = memo(
   forwardRef<HTMLDivElement, PinInputProps>(
     (
-      {
-        label,
-        labelProps,
-        type = PinInputType.Number,
-        size = PinInputSize.MD,
-        variant = PinInputVariant.Outline,
-        isError = false,
-        errorMessage,
-        formControlProps,
-        registration,
-        placeholder = "○",
-        ...props
-      }: PinInputProps,
+      { type = PinInputType.Number, formControlProps, registration, ...props }: PinInputProps,
       ref,
     ) => {
       const pinInputRef = mergeRefs(registration?.ref, ref)
 
       const pinInputProps = {
+        variant: "gradient" as const,
+        type,
         ...registration,
         ...props,
         ref: pinInputRef,
-        type,
-        size,
-        variant,
-        placeholder,
         onChange: handlerAll(
           props.onChange,
           registration?.onChange
@@ -171,18 +101,8 @@ export const PinInput = memo(
       }
 
       return (
-        <FormControl errorMessage={errorMessage} invalid={isError} {...formControlProps}>
-          {label && (
-            <Label
-              color={isError ? ["danger.500", "danger.400"] : ["gray.700", "gray.300"]}
-              fontSize="sm"
-              {...labelProps}
-            >
-              {label}
-            </Label>
-          )}
-
-          <UIPinInput invalid={isError} {...pinInputProps} />
+        <FormControl {...formControlProps}>
+          <UIPinInput {...pinInputProps} />
         </FormControl>
       )
     },

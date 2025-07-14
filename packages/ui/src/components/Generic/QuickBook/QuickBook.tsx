@@ -94,24 +94,30 @@ export const QuickBook = memo(
           <GridItem minW={0}>
             <Select
               data-testid="location-and-time"
-              errorMessage={errors.locationAndTimeId?.message}
+              formControlProps={{
+                errorMessage: errors.locationAndTimeId?.message,
+                invalid: !!errors.locationAndTimeId,
+              }}
               icon={<CalendarClockIcon fontSize={24} />}
-              isError={!!errors.locationAndTimeId}
               items={locationAndTimeOptions}
               label="Location & Time"
               registration={register("locationAndTimeId")}
+              rounded="xl"
               stylised
             />
           </GridItem>
           <GridItem minW={0}>
             <Select
               data-testid="skill-level"
-              errorMessage={errors.skillLevel?.message}
+              formControlProps={{
+                errorMessage: errors.skillLevel?.message,
+                invalid: !!errors.skillLevel,
+              }}
               icon={<CircleGaugeIcon fontSize={24} />}
-              isError={!!errors.skillLevel}
               items={skillLevelOptions}
               label="Skill Level"
               registration={register("skillLevel")}
+              rounded="xl"
               stylised
             />
           </GridItem>

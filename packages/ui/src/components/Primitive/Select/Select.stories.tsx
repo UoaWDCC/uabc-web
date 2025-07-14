@@ -42,6 +42,16 @@ export const Stylised: Story = (args) => {
   )
 }
 
+export const NoIcon: Story = (args) => {
+  return (
+    <Select {...args}>
+      <Option value="1">Option 1</Option>
+      <Option value="2">Option 2</Option>
+      <Option value="3">Option 3</Option>
+    </Select>
+  )
+}
+
 export const TypesAndStates: Story = (args) => {
   const states = ["normal", "disabled", "error"]
   const types = ["unstylised", "stylised"]
@@ -54,9 +64,11 @@ export const TypesAndStates: Story = (args) => {
         return (
           <Select
             disabled={isDisabled}
-            errorMessage={isError ? "This field has an error" : undefined}
+            formControlProps={{
+              errorMessage: isError ? "This field has an error" : undefined,
+              invalid: isError,
+            }}
             icon={<CalendarClockIcon fontSize={24} />}
-            isError={isError}
             key={key}
             stylised={stylised}
             {...args}

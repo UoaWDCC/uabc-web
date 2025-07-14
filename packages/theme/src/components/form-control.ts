@@ -29,6 +29,9 @@ export const FormControl: ComponentMultiStyle<"FormControl"> = {
       _disabled: {
         opacity: 0.4,
       },
+      _invalid: {
+        color: ["danger.500", "danger.400"],
+      },
     },
     requiredIndicator: {
       color: ["danger.500", "danger.400"],

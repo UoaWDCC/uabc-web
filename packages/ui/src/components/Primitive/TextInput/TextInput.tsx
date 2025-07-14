@@ -146,6 +146,7 @@ export const TextInput = memo(
         registration,
         autoComplete,
         rightElementProps,
+        disabled,
         ...props
       }: TextInputProps,
       ref,
@@ -156,6 +157,10 @@ export const TextInput = memo(
       const inputRef = mergeRefs(registration?.ref ?? null, ref)
 
       const inputProps = {
+        disabled,
+        variant: "gradient" as const,
+        invalid: isError,
+        type: isPasswordType ? (isPasswordVisible ? "text" : "password") : type,
         ...registration,
         ...props,
         ref: inputRef,
@@ -175,48 +180,19 @@ export const TextInput = memo(
 
           <InputGroup>
             {startIcon && <InputLeftElement>{startIcon}</InputLeftElement>}
-            <Input
-              _focus={{
-                borderColor: isError
-                  ? ["danger.500", "danger.400"]
-                  : ["primary.500", "primary.400"],
-                boxShadow: isError
-                  ? ["0 0 0 1px $colors.danger.500", "0 0 0 1px $colors.danger.400"]
-                  : ["0 0 0 1px $colors.primary.500", "0 0 0 1px $colors.primary.400"],
-              }}
-              _hover={{
-                borderColor: isError ? ["danger.600", "danger.500"] : ["gray.400", "gray.500"],
-              }}
-              _invalid={{
-                borderColor: ["danger.500", "danger.400"],
-                _hover: {
-                  borderColor: ["danger.600", "danger.500"],
-                },
-                _focus: {
-                  borderColor: ["danger.500", "danger.400"],
-                  boxShadow: ["0 0 0 1px $colors.danger.500", "0 0 0 1px $colors.danger.400"],
-                },
-              }}
-              bgGradient="secondaryGradient"
-              borderColor={isError ? ["danger.500", "danger.400"] : ["gray.300", "gray.600"]}
-              borderRadius="md"
-              borderWidth="1px"
-              fontSize="md"
-              h="10"
-              type={isPasswordType ? (isPasswordVisible ? "text" : "password") : type}
-              {...inputProps}
-            />
+            <Input {...inputProps} />
 
             {endIcon ? (
               <InputRightElement {...rightElementProps}>{endIcon}</InputRightElement>
             ) : isPasswordType ? (
-              <InputRightElement clickable {...rightElementProps}>
+              <InputRightElement clickable={!disabled} {...rightElementProps}>
                 <IconButton
                   _hover={{
                     color: ["gray.700", "gray.200"],
                   }}
                   aria-label={isPasswordVisible ? "Hide password" : "Show password"}
                   color={["gray.500", "gray.400"]}
+                  disabled={disabled}
                   icon={isPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
                   onClick={togglePasswordVisibility}
                   size="sm"
