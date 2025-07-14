@@ -45,14 +45,6 @@ import { PinInputType } from "./types"
  */
 export interface PinInputProps extends Omit<UIPinInputProps, "children"> {
   /**
-   * The error message displayed when the input is in an error state.
-   *
-   * @remarks
-   * If not provided, no error message will be shown.
-   * Typically used with React Hook Form error messages.
-   */
-  errorMessage?: string
-  /**
    * Additional props for the FormControl wrapper.
    *
    * @remarks

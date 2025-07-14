@@ -10,7 +10,7 @@ describe("<PinInput />", () => {
   })
 
   it("renders with basic props", () => {
-    render(<PinInput items={4} label="Verification Code" />)
+    render(<PinInput formControlProps={{ label: "Verification Code" }} items={4} />)
     expect(screen.getByText("Verification Code")).toBeInTheDocument()
   })
 
@@ -168,20 +168,6 @@ describe("<PinInput />", () => {
       fireEvent.change(input, { target: { value: "1" } })
 
       expect(componentOnChange).toHaveBeenCalled()
-    })
-  })
-
-  describe("Error handling", () => {
-    it("displays error message when isError is true", () => {
-      render(
-        <PinInput
-          errorMessage="Invalid verification code"
-          isError={true}
-          items={4}
-          label="OTP Code"
-        />,
-      )
-      expect(screen.getByText("Invalid verification code")).toBeInTheDocument()
     })
   })
 })
