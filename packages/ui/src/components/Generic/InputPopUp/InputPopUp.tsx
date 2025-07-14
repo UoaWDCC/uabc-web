@@ -113,7 +113,7 @@ export const InputPopUp: React.FC<InputPopUpProps> = ({
             {title}
           </Heading.h2>
         </DialogHeader>
-        <DialogBody gap={{ base: "6", md: "13" }} w="full">
+        <DialogBody gap={{ base: "6", md: "13" }} w="full" overflow="visible">
           <Heading.h3 fontWeight="light" size={{ sm: "lg", md: "2xl" }} textAlign="center" w="full">
             {description}
           </Heading.h3>
