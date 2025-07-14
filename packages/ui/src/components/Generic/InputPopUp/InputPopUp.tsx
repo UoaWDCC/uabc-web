@@ -103,8 +103,7 @@ export const InputPopUp: React.FC<InputPopUpProps> = ({
         size="3xl"
       >
         <DialogOverlay />
-        <DialogCloseButton bg="black" layerStyle="gradientBorder" rounded="full" size="sm" />
-        {/* <form noValidate onSubmit={handleSubmit(onSubmit)}> */}
+        <DialogCloseButton bg="black" layerStyle="gradientBorder" rounded="full" />
         <DialogHeader justifyContent="center" w="full">
           <Heading.h2
             fontSize={{ base: "3xl", md: "5xl" }}
