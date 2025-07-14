@@ -68,14 +68,13 @@ export default function Form2Page() {
     <Container as="main" centerContent>
       <Heading.h1>Booking Times Form</Heading.h1>
       <VStack as="form" maxW="4xl" onSubmit={handleSubmit(onSubmit)}>
-        <FormControl errorMessage={errors.name?.message} invalid={!!errors.name}>
-          <TextInput label="Name" placeholder="Your Name" {...register("name")} />
+        <FormControl errorMessage={errors.name?.message} invalid={!!errors.name} label="Name">
+          <TextInput placeholder="Your Name" {...register("name")} />
         </FormControl>
 
-        <FormControl errorMessage={errors.email?.message} invalid={!!errors.email}>
+        <FormControl errorMessage={errors.email?.message} invalid={!!errors.email} label="Email">
           <TextInput
             autoComplete={AutoCompleteType.Email}
-            label="Email"
             placeholder="test@example.com"
             type={InputType.Email}
             {...register("email")}

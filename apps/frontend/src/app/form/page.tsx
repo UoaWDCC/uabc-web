@@ -41,29 +41,31 @@ export default function FormPage() {
     <Container as="main" centerContent>
       <Heading.h1>Form Example</Heading.h1>
       <VStack as="form" maxW="3xl" onSubmit={handleSubmit(onSubmit)}>
-        <FormControl errorMessage={errors.name?.message} invalid={!!errors.name}>
-          <TextInput label="Name" placeholder="Badminton Club" {...register("name")} />
+        <FormControl errorMessage={errors.name?.message} invalid={!!errors.name} label="Name">
+          <TextInput placeholder="Badminton Club" {...register("name")} />
         </FormControl>
-        <FormControl errorMessage={errors.email?.message} invalid={!!errors.email}>
+        <FormControl errorMessage={errors.email?.message} invalid={!!errors.email} label="Email">
           <TextInput
             autoComplete={AutoCompleteType.Email}
-            label="Email"
             placeholder="test@example.com"
             type={InputType.Email}
             {...register("email")}
           />
         </FormControl>
-        <FormControl errorMessage={errors.password?.message} invalid={!!errors.password}>
+        <FormControl
+          errorMessage={errors.password?.message}
+          invalid={!!errors.password}
+          label="Password"
+        >
           <TextInput
             autoComplete={AutoCompleteType.CurrentPassword}
-            label="Password"
             placeholder="Enter your password"
             type={InputType.Password}
             {...register("password")}
           />
         </FormControl>
-        <FormControl errorMessage={errors.age?.message} invalid={!!errors.age}>
-          <TextInput label="Age" placeholder="20" type={InputType.Number} {...register("age")} />
+        <FormControl errorMessage={errors.age?.message} invalid={!!errors.age} label="Age">
+          <TextInput placeholder="20" type={InputType.Number} {...register("age")} />
         </FormControl>
 
         <Button
