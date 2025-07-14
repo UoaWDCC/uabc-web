@@ -1,7 +1,7 @@
+import { usePopupState } from "@repo/ui/hooks"
 import dayjs from "dayjs"
 import timezone from "dayjs/plugin/timezone"
 import { useCallback, useMemo } from "react"
-import { usePopupState } from "../../../hooks/usePopupState"
 import type {
   DateValue,
   PopupNavigationUtils,
@@ -75,7 +75,7 @@ export function useCalendarSelectPopup<T extends boolean = false>(
     openValue,
     valueKey: dateParamKey,
     initialValue: toPopupValue(initialDate, enableRange),
-    isRange: enableRange,
+    multiple: enableRange,
     onOpen,
     onClose,
   })
