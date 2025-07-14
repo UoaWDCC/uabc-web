@@ -51,13 +51,13 @@ export const ConfirmationPopUp = ({
 }: ConfirmationPopUpProps) => {
   const {
     label: primaryButtonLabel = "Confirm",
-    onClick: primaryButtonOnClick,
+    onClick: primaryButtonOnClick = onClose,
     ...primaryButtonProps
   } = primaryButton ?? { label: "Confirm" }
 
   const {
     label: secondaryButtonLabel = "Cancel",
-    onClick: secondaryButtonOnClick,
+    onClick: secondaryButtonOnClick = onClose,
     ...secondaryButtonProps
   } = secondaryButton ?? {}
 
@@ -97,7 +97,7 @@ export const ConfirmationPopUp = ({
           {(secondaryButton || !closeButton) && (
             <Button
               colorScheme="secondary"
-              onClick={secondaryButtonOnClick ?? onClose}
+              onClick={secondaryButtonOnClick}
               size="lg"
               {...secondaryButtonProps}
             >
@@ -106,7 +106,7 @@ export const ConfirmationPopUp = ({
           )}
           <Button
             colorScheme="primary"
-            onClick={primaryButtonOnClick ?? onClose}
+            onClick={primaryButtonOnClick}
             size="lg"
             {...primaryButtonProps}
           >
