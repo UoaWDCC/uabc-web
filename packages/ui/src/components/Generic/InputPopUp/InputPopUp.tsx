@@ -20,7 +20,8 @@ import { type SubmitHandler, useForm } from "react-hook-form"
 interface FormData {
   name: string
 }
-export interface InputPopUpProps {
+
+export interface InputPopUpProps extends DialogProps {
   /**
    * The title to display in the dialog header
    */
