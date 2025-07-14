@@ -10,7 +10,8 @@
     "./components/Generic": "./src/components/Generic/index.ts",
     "./components/Composite": "./src/components/Composite/index.ts",
     "./test-utils": "./src/test-utils/index.ts",
-    "./test-config/mocks/*": "./src/test-config/mocks/*"
+    "./test-config/mocks/*": "./src/test-config/mocks/*",
+    "./hooks/*": "./src/hooks/*"
   },
   "scripts": {
     "check-types": "tsc --noEmit",
