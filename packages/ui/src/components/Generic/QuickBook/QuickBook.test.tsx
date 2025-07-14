@@ -5,7 +5,6 @@ import { isValidElement } from "react"
 import * as QuickBookModule from "./index"
 import { QuickBook } from "./QuickBook"
 import { locationAndTimeOptionsMock } from "./QuickBook.mock"
-import type { UIQuickBookFormValues } from "./schema"
 
 describe("<QuickBook />", () => {
   it("should re-export the QuickBook component and check if QuickBook exists", () => {
@@ -26,7 +25,7 @@ describe("<QuickBook />", () => {
   })
 
   it("should call onSubmit when a user clicks the submit button", async () => {
-    const handleSubmit = vi.fn((data: UIQuickBookFormValues) => data)
+    const handleSubmit = vi.fn()
 
     const { user } = render(
       <QuickBook locationAndTimeOptions={locationAndTimeOptionsMock} onSubmit={handleSubmit} />,
