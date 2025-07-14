@@ -1,14 +1,9 @@
-import { CreateUserRequestSchema } from "@repo/shared"
+import { CreateUserRequestSchema, PaginationQuerySchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
-import { ZodError, z } from "zod"
+import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import UserDataService from "@/data-layer/services/UserDataService"
-
-const QuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(10),
-  page: z.coerce.number().int().min(1).default(1),
-})
 
 class UsersRouteWrapper {
   /**
@@ -21,7 +16,7 @@ class UsersRouteWrapper {
   static async GET(req: NextRequest) {
     try {
       const { searchParams } = new URL(req.url)
-      const result = QuerySchema.safeParse({
+      const result = PaginationQuerySchema.safeParse({
         limit: searchParams.get("limit") ?? 10,
         page: searchParams.get("page") ?? 1,
       })
