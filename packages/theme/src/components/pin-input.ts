@@ -5,7 +5,7 @@ import { Input } from "./input"
 export const PinInput: ComponentMultiStyle<"PinInput"> = mergeMultiStyle(Input, {
   baseStyle: {
     container: {
-      gap: "2",
+      gap: "sm",
     },
     field: {
       textAlign: "center",
@@ -49,28 +49,8 @@ export const PinInput: ComponentMultiStyle<"PinInput"> = mergeMultiStyle(Input, 
         h: "auto",
       },
     },
-    outline: {
-      field: {
-        bgGradient: "secondaryGradient",
-        borderColor: ["gray.300", "gray.600"],
-        _focus: {
-          borderColor: ["primary.500", "primary.400"],
-          boxShadow: ["0 0 0 1px $colors.primary.500", "0 0 0 1px $colors.primary.400"],
-        },
-        _hover: {
-          borderColor: ["gray.400", "gray.500"],
-        },
-        _invalid: {
-          borderColor: ["danger.500", "danger.400"],
-          _hover: {
-            borderColor: ["danger.600", "danger.500"],
-          },
-          _focus: {
-            borderColor: ["danger.500", "danger.400"],
-            boxShadow: ["0 0 0 1px $colors.danger.500", "0 0 0 1px $colors.danger.400"],
-          },
-        },
-      },
-    },
+  },
+  defaultProps: {
+    variant: "gradient",
   },
 })({ omit: ["addon", "sizes"] })
