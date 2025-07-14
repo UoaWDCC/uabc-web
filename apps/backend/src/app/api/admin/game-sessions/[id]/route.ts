@@ -1,6 +1,8 @@
+import { UpdateGameSessionRequestSchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
+import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 
@@ -33,6 +35,40 @@ class GameSessionRouteWrapper {
       )
     }
   }
+  /**
+   * PATCH method to update a gameSession.
+   *
+   * @param req The request object containing the request body
+   * @returns  The updated  {@link gameSession} document
+   */
+  @Security("jwt", ["admin"])
+  static async PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    try {
+      const { id } = await params
+      const parsedBody = UpdateGameSessionRequestSchema.parse(await req.json())
+      const gameSessionDataService = new GameSessionDataService()
+      const updatedgameSession = await gameSessionDataService.updateGameSession(id, parsedBody)
+      return NextResponse.json({ data: updatedgameSession }, { status: StatusCodes.OK })
+    } catch (error) {
+      if (error instanceof NotFound) {
+        return NextResponse.json(
+          { error: "Game Session not found" },
+          { status: StatusCodes.NOT_FOUND },
+        )
+      }
+      if (error instanceof ZodError) {
+        return NextResponse.json(
+          { error: "Invalid request body", details: error.flatten() },
+          { status: StatusCodes.BAD_REQUEST },
+        )
+      }
+      console.error(error)
+      return NextResponse.json(
+        { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
+        { status: StatusCodes.INTERNAL_SERVER_ERROR },
+      )
+    }
+  }
 }
 
-export const DELETE = GameSessionRouteWrapper.DELETE
+export const { DELETE, PATCH } = GameSessionRouteWrapper
