@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { BookingTimesCardGroup } from "@repo/ui/components/Generic"
 import { AutoCompleteType, Heading, InputType, TextInput } from "@repo/ui/components/Primitive"
-import { Button, Container, useNotice, VStack } from "@yamada-ui/react"
+import { Button, Container, FormControl, useNotice, VStack } from "@yamada-ui/react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -68,23 +68,18 @@ export default function Form2Page() {
     <Container as="main" centerContent>
       <Heading.h1>Booking Times Form</Heading.h1>
       <VStack as="form" maxW="4xl" onSubmit={handleSubmit(onSubmit)}>
-        <TextInput
-          errorMessage={errors.name?.message}
-          isError={!!errors.name}
-          label="Name"
-          placeholder="Your Name"
-          registration={register("name")}
-        />
+        <FormControl errorMessage={errors.name?.message} invalid={!!errors.name} label="Name">
+          <TextInput placeholder="Your Name" {...register("name")} />
+        </FormControl>
 
-        <TextInput
-          autoComplete={AutoCompleteType.Email}
-          errorMessage={errors.email?.message}
-          isError={!!errors.email}
-          label="Email"
-          placeholder="test@example.com"
-          registration={register("email")}
-          type={InputType.Email}
-        />
+        <FormControl errorMessage={errors.email?.message} invalid={!!errors.email} label="Email">
+          <TextInput
+            autoComplete={AutoCompleteType.Email}
+            placeholder="test@example.com"
+            type={InputType.Email}
+            {...register("email")}
+          />
+        </FormControl>
 
         <BookingTimesCardGroup
           control={control}

@@ -1,4 +1,5 @@
-import { Grid, GridItem, Option, Pagination, Select } from "@yamada-ui/react"
+import { Select } from "@repo/ui/components/Primitive"
+import { Grid, GridItem, Option, Pagination } from "@yamada-ui/react"
 import type { FC } from "react"
 import { memo, useCallback } from "react"
 import { useMemberManagement } from "./MemberManagementContext"
@@ -33,7 +34,7 @@ export const TablePagination: FC = memo(() => {
         />
       </GridItem>
       <GridItem display="grid" placeSelf="end">
-        <Select defaultValue={perPage.toString()} onChange={handlePerPageChange} w="32">
+        <Select defaultValue={perPage.toString()} onChange={handlePerPageChange} size="md" w="32">
           <Option value="10">10</Option>
           <Option value="20">20</Option>
           <Option value="50">50</Option>
