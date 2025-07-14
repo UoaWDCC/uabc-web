@@ -2,8 +2,7 @@ import { render, screen, waitFor } from "@repo/ui/test-utils"
 import dayjs from "dayjs"
 import timezone from "dayjs/plugin/timezone"
 import utc from "dayjs/plugin/utc"
-import { NuqsAdapter } from "nuqs/adapters/react"
-import type { ReactNode } from "react"
+import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { isValidElement } from "react"
 import { useCalendarSelectPopupContext } from "./CalendarSelectPopupContext"
 import * as CalendarSelectPopup from "./namespace"
@@ -13,18 +12,9 @@ dayjs.extend(timezone)
 
 const NZ_TIMEZONE = "Pacific/Auckland"
 
-const createWrapper = ({ children }: { children: ReactNode }) => (
-  <NuqsAdapter>{children}</NuqsAdapter>
-)
-
-beforeEach(() => {
-  // reset serch params from nuqs
-  window.history.pushState({}, "", window.location.pathname)
-})
-
 describe("<CalendarSelectPopup />", () => {
   it("should be a valid React element", () => {
-    expect(isValidElement(<CalendarSelectPopup.Root popupId="test" showTrigger />)).toBeTruthy()
+    expect(isValidElement(<CalendarSelectPopup.Root popupId="test" showTrigger />)).toBe(true)
   })
 
   it("should have correct displayName", () => {
@@ -33,7 +23,7 @@ describe("<CalendarSelectPopup />", () => {
 
   it("should render with external isOpen prop", () => {
     render(<CalendarSelectPopup.Root isOpen popupId="test" />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
     expect(screen.getByRole("dialog")).toBeInTheDocument()
   })
@@ -41,7 +31,7 @@ describe("<CalendarSelectPopup />", () => {
   it("should render with custom trigger", () => {
     const CustomTrigger = <button type="button">Custom Trigger</button>
     render(<CalendarSelectPopup.Root popupId="test" showTrigger trigger={CustomTrigger} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
     expect(screen.getByRole("button", { name: "Custom Trigger" })).toBeInTheDocument()
   })
@@ -55,7 +45,7 @@ describe("<CalendarSelectPopup />", () => {
         title="Custom Title"
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
     expect(screen.getByRole("heading", { name: "Custom Title" })).toBeInTheDocument()
@@ -64,7 +54,7 @@ describe("<CalendarSelectPopup />", () => {
 
   it("should render without close button when allowClose is false", () => {
     render(<CalendarSelectPopup.Root allowClose={false} isOpen popupId="test" />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
     expect(screen.queryByRole("button", { name: /close/i })).not.toBeInTheDocument()
   })
@@ -72,7 +62,7 @@ describe("<CalendarSelectPopup />", () => {
   it("should render with dialog footer", async () => {
     const footer = <div>Custom Footer</div>
     render(<CalendarSelectPopup.Root dialogFooter={footer} isOpen popupId="test" />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
     expect(
       await screen.findByText((content) => content.includes("Custom Footer")),
@@ -83,7 +73,7 @@ describe("<CalendarSelectPopup />", () => {
     render(
       <CalendarSelectPopup.Root dialogProps={{ size: "sm", p: "sm" }} isOpen popupId="test" />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
     expect(screen.getByRole("dialog")).toBeInTheDocument()
@@ -101,7 +91,7 @@ describe("<CalendarSelectPopup />", () => {
         totalSteps={3}
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -125,7 +115,7 @@ describe("<CalendarSelectPopup />", () => {
         totalSteps={3}
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -149,7 +139,7 @@ describe("<CalendarSelectPopup />", () => {
         totalSteps={3}
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -175,7 +165,7 @@ describe("<CalendarSelectPopup />", () => {
         totalSteps={3}
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -193,7 +183,7 @@ describe("<CalendarSelectPopup />", () => {
     render(
       <CalendarSelectPopup.Root allowClose={false} isOpen onClose={onClose} popupId="test" />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -206,7 +196,7 @@ describe("<CalendarSelectPopup />", () => {
     const { user } = render(
       <CalendarSelectPopup.Root onClose={onClose} onOpen={onOpen} popupId="test" showTrigger />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -239,7 +229,7 @@ describe("<CalendarSelectPopup />", () => {
         popupId="test"
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
     expect(screen.getByRole("dialog")).toBeInTheDocument()
@@ -262,7 +252,7 @@ describe("<CalendarSelectPopup />", () => {
         <TestChild />
       </CalendarSelectPopup.Root>,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
     expect(
@@ -286,7 +276,7 @@ describe("<CalendarSelectPopup />", () => {
         <TestChild />
       </CalendarSelectPopup.Root>,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
     expect(screen.getByText("Date: None")).toBeInTheDocument()
@@ -297,7 +287,7 @@ describe("<CalendarSelectPopup />", () => {
     const { user } = render(
       <CalendarSelectPopup.Root onDateSelect={onDateSelect} popupId="test" showTrigger />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -331,7 +321,7 @@ describe("<CalendarSelectPopup />", () => {
         }}
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -358,7 +348,7 @@ describe("<CalendarSelectPopup />", () => {
         </CalendarSelectPopup.Content>
       </CalendarSelectPopup.Root>,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -385,7 +375,7 @@ describe("<CalendarSelectPopup />", () => {
         showTrigger
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -405,7 +395,7 @@ describe("<CalendarSelectPopup />", () => {
         totalSteps={3}
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -419,7 +409,7 @@ describe("<CalendarSelectPopup />", () => {
 
   it("should use internal close when isOpen is not externally controlled", async () => {
     const { user } = render(<CalendarSelectPopup.Root popupId="test" showTrigger />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     await user.click(screen.getByRole("button", { name: /open calendar/i }))
