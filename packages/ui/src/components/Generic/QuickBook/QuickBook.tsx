@@ -6,7 +6,6 @@ import { CalendarClockIcon, CircleGaugeIcon } from "@yamada-ui/lucide"
 import { FormControl, Grid, GridItem, memo, noop, type SelectItem, VStack } from "@yamada-ui/react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 import { locationAndTimeOptionsMock } from "./QuickBook.mock"
-import type { UIQuickBookFormValues } from "./schema"
 
 /**
  * Props for {@link QuickBook} component
@@ -41,7 +40,10 @@ export interface QuickBookProps {
   /**
    * Submit handler called when user submits the QuickBook form.
    */
-  onSubmit?: SubmitHandler<UIQuickBookFormValues>
+  onSubmit?: SubmitHandler<{
+    locationAndTimeId: string
+    skillLevel: PlayLevel
+  }>
 }
 
 /**
@@ -74,7 +76,10 @@ export const QuickBook = memo(
       control,
       handleSubmit,
       formState: { errors, isSubmitting },
-    } = useForm<UIQuickBookFormValues>()
+    } = useForm<{
+      locationAndTimeId: string
+      skillLevel: PlayLevel
+    }>()
 
     return (
       <VStack
