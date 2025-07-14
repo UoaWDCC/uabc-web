@@ -34,7 +34,7 @@ export const Basic: Story = (args) => {
 
 export const Stylised: Story = (args) => {
   return (
-    <Select {...args} icon={<CalendarClockIcon fontSize={24} />} stylised>
+    <Select {...args} icon={<CalendarClockIcon fontSize={24} />} variant="stylised">
       <Option value="1">Option 1</Option>
       <Option value="2">Option 2</Option>
       <Option value="3">Option 3</Option>
@@ -70,7 +70,7 @@ export const TypesAndStates: Story = (args) => {
             }}
             icon={<CalendarClockIcon fontSize={24} />}
             key={key}
-            stylised={stylised}
+            variant={stylised ? "stylised" : undefined}
             {...args}
           >
             <Option value="1">Option 1</Option>

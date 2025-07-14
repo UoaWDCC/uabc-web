@@ -7,6 +7,7 @@ export const Select: ComponentMultiStyle<"Select"> = mergeMultiStyle(NativeSelec
   baseStyle: {
     container: ({ colorScheme: _c = "secondary" }) => ({
       borderRadius: "md",
+      bg: [`${_c}.50`, `${_c}.900`],
     }),
     content: ({ colorScheme: c = "secondary" }) => ({
       w: "100%",

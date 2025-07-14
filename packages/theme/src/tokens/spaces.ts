@@ -25,6 +25,8 @@ export const spaces: ThemeTokens = {
   14: "3.5rem",
   15: "3.75rem",
   16: "4rem",
+  17: "4.25rem",
+  18: "4.5rem",
   20: "5rem",
   24: "6rem",
   28: "7rem",

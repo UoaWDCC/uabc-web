@@ -134,7 +134,7 @@ export const MultiSelect = memo(
           >
             <UIMultiSelect
               clearIconProps={{
-                pr: { md: "lg" },
+                pr: { md: "6" },
               }}
               component={({ label, onRemove }) => (
                 <Tag color="white" colorScheme="secondary" onClose={onRemove} variant="outline">
@@ -144,12 +144,12 @@ export const MultiSelect = memo(
               fieldProps={
                 icon
                   ? {
-                      pl: { base: "calc(lg + xs + md)", md: "14" },
+                      pl: { base: "11", md: "17" },
                       pr: { base: "lg", md: "xl" },
                     }
-                  : undefined
+                  : { pl: { md: "6" } }
               }
-              iconProps={icon ? { pr: { md: "lg" } } : undefined}
+              iconProps={icon ? { pr: { md: "lg" } } : { pr: { md: "6" } }}
               size="lg"
               {...selectProps}
             >
@@ -158,10 +158,11 @@ export const MultiSelect = memo(
             <HStack
               align="center"
               gap={{ base: "xs", md: "sm" }}
+              mx={icon ? { md: "md" } : undefined}
               opacity={disabled ? 0.4 : undefined}
               pointerEvents="none"
               position="absolute"
-              px="md"
+              px={{ base: "sm", md: icon ? "3" : "sm" }}
               top="50%"
               transform="translateY(-50%)"
               z={1}
