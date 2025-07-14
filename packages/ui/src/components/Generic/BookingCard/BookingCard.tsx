@@ -127,8 +127,9 @@ export const BookingCard = memo(
         layerStyle="gradientBorder"
         maxW="xl"
         overflow="hidden"
-        p="3"
-        rounded="calc($radii.2xl + $spaces.3)"
+        px="md"
+        py="5"
+        rounded="md"
         variant="solid"
         w="full"
         {...cardProps}
@@ -140,7 +141,7 @@ export const BookingCard = memo(
           maxW="20"
           objectFit="cover"
           overflow="hidden"
-          rounded="2xl"
+          rounded="md"
           src="https://placehold.co/100x100"
           width={100}
           {...imageProps}
@@ -192,5 +193,3 @@ export const BookingCard = memo(
     )
   },
 )
-
-BookingCard.displayName = "BookingCard"

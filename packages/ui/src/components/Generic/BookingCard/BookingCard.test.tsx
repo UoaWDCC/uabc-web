@@ -27,10 +27,6 @@ describe("<BookingCard />", () => {
     expect(isValidElement(<BookingCardModule.BookingCard {...defaultProps} />)).toBeTruthy()
   })
 
-  it("should have correct displayName", () => {
-    expect(BookingCard.displayName).toBe("BookingCard")
-  })
-
   it("should render all main props correctly", () => {
     render(<BookingCard {...defaultProps} />)
     expect(screen.getByRole("heading", { level: 3, name: defaultProps.day })).toBeInTheDocument()
@@ -47,7 +43,7 @@ describe("<BookingCard />", () => {
 
   it("should call menu item onClick when clicked", async () => {
     const { user } = render(<BookingCard {...defaultProps} />)
-    const menuButton = screen.getByRole("button", { name: /edit/i })
+    const menuButton = screen.getByRole("button", { name: /more options/i })
     user.click(menuButton)
     const editItem = await screen.findByText("Edit")
     await user.click(editItem)
