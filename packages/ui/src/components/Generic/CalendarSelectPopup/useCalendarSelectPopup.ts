@@ -15,6 +15,13 @@ dayjs.extend(timezone)
 const NZ_TIMEZONE = "Pacific/Auckland"
 
 /**
+ * Utility to get the correct initial date value based on range mode.
+ */
+function getInitialDateValue<T extends boolean>(enableRange: T): DateValue<T> {
+  return (enableRange ? [undefined, undefined] : null) as DateValue<T>
+}
+
+/**
  * React hook for managing calendar popup state and date selection
  *
  * This hook provides comprehensive state management for calendar popups,
@@ -54,12 +61,27 @@ export function useCalendarSelectPopup<T extends boolean = false>(
     popupId,
     openValue = "open",
     dateParamKey = `${popupId}-date`,
-    initialDate = (options.enableRange ? [undefined, undefined] : null) as DateValue<T>,
+    initialDate = getInitialDateValue(options.enableRange as T),
     enableRange = false as T,
     onDateSelect,
     onClose,
     onOpen,
   } = options
+
+  const handleValueChange = useCallback(
+    (popupValue: string | string[]) => {
+      const date = fromPopupValue(popupValue, enableRange, initialDate)
+      if (enableRange) {
+        const [startDate, endDate] = date as [Date?, Date?]
+        if (startDate || endDate) {
+          onDateSelect?.(date)
+        }
+      } else if (date) {
+        onDateSelect?.(date)
+      }
+    },
+    [enableRange, onDateSelect, initialDate],
+  )
 
   const {
     isOpen,
@@ -78,11 +100,12 @@ export function useCalendarSelectPopup<T extends boolean = false>(
     multiple: enableRange,
     onOpen,
     onClose,
+    onValueChange: onDateSelect ? handleValueChange : undefined,
   })
 
   const selectedDate = useMemo(() => {
     if (dateParam == null) {
-      return (enableRange ? [undefined, undefined] : null) as DateValue<T> | null
+      return getInitialDateValue(enableRange)
     }
     return fromPopupValue(dateParam, enableRange, initialDate)
   }, [dateParam, enableRange, initialDate])
@@ -93,19 +116,9 @@ export function useCalendarSelectPopup<T extends boolean = false>(
         setValue(toPopupValue(initialDate, enableRange))
         return
       }
-
       setValue(toPopupValue(date, enableRange))
-
-      if (enableRange) {
-        const [startDate, endDate] = date as [Date?, Date?]
-        if (startDate || endDate) {
-          onDateSelect?.(date)
-        }
-      } else if (date) {
-        onDateSelect?.(date)
-      }
     },
-    [enableRange, onDateSelect, setValue, initialDate],
+    [enableRange, setValue, initialDate],
   )
 
   const clearDate = useCallback(() => {
