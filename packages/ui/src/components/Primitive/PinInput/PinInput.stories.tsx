@@ -36,11 +36,11 @@ const meta: Meta<typeof PinInput> = {
       },
     },
 
-    errorMessage: {
-      control: "text",
-      description: "The error message displayed when the pin input is in an error state",
+    formControlProps: {
+      control: "object",
+      description: "The form control props for the pin input",
       table: {
-        type: { summary: "string" },
+        type: { summary: "object" },
         defaultValue: { summary: "undefined" },
       },
     },
