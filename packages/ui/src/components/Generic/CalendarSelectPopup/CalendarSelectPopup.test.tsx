@@ -305,7 +305,7 @@ describe("<CalendarSelectPopup />", () => {
     await user.click(dayButton)
     expect(onDateSelect).toHaveBeenCalled()
     const selectedDate = onDateSelect.mock.calls[0][0]
-    expect(selectedDate.getDate()).toBe(15)
+    expect(dayjs(selectedDate).tz(NZ_TIMEZONE).date()).toBe(15)
   })
 
   it("should select a date range", async () => {
