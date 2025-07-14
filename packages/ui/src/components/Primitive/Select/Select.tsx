@@ -3,26 +3,21 @@
 import {
   Box,
   Center,
-  FormControl,
-  type FormControlProps,
   HStack,
-  handlerAll,
   Label,
   memo,
-  mergeRefs,
   Select as UISelect,
   type SelectProps as UISelectProps,
 } from "@yamada-ui/react"
 import type { ReactNode } from "react"
 import { forwardRef } from "react"
-import type { FieldPath, FieldValues, UseFormRegisterReturn } from "react-hook-form"
 
 export interface SelectProps extends Omit<UISelectProps, "variant"> {
   /**
    * Label text of the Select component.
    *
    * @remarks
-   * The label is rendered within the Select component.
+   * The label is rendered within the Select component if provided by the parent.
    *
    * @defaultValue "Select option"
    */
@@ -44,24 +39,6 @@ export interface SelectProps extends Omit<UISelectProps, "variant"> {
    * stylised version :(
    */
   variant?: "stylised" | UISelectProps["variant"]
-  /**
-   * Additional props for the FormControl wrapper.
-   *
-   * @remarks
-   * Allows customization of the FormControl container.
-   */
-  formControlProps?: FormControlProps
-  /**
-   * React Hook Form registration object.
-   *
-   * @remarks
-   * When using with React Hook Form, spread the register() result into this prop.
-   * This automatically handles onChange, onBlur, name, and ref.
-   *
-   * @example
-   * <Select registration={register("fieldName")}/>
-   */
-  registration?: UseFormRegisterReturn<FieldPath<FieldValues>>
 }
 
 /**
@@ -82,98 +59,66 @@ export interface SelectProps extends Omit<UISelectProps, "variant"> {
  */
 export const Select = memo(
   forwardRef<HTMLSelectElement, SelectProps>(
-    (
-      {
-        children,
-        label = "Select option",
-        icon,
-        variant,
-        formControlProps,
-        registration,
-        ...props
-      },
-      ref,
-    ) => {
-      const selectRef = mergeRefs(registration?.ref ?? null, ref)
-
-      const { disabled } = formControlProps ?? {}
-
+    ({ children, label = "Select option", icon, variant, disabled, ...props }, ref) => {
       const stylised = variant === "stylised"
-
       const selectProps = {
         variant,
         ...props,
-        name: registration?.name,
-        onBlur: registration?.onBlur,
-        onChange: handlerAll(
-          props.onChange,
-          registration?.onChange
-            ? (value: string) => {
-                registration.onChange?.({
-                  target: { name: registration?.name || "", value },
-                  type: "change",
-                })
-              }
-            : undefined,
-        ),
-        ref: selectRef,
+        ref,
       }
-
       return (
-        <FormControl {...formControlProps}>
-          <Box
-            position="relative"
-            sx={{
-              "&:not(:has(div[data-placeholder]))": {
-                label: {
-                  visibility: "hidden",
-                },
+        <Box
+          position="relative"
+          sx={{
+            "&:not(:has(div[data-placeholder]))": {
+              label: {
+                visibility: "hidden",
               },
-            }}
+            },
+          }}
+        >
+          <UISelect
+            fieldProps={
+              icon
+                ? {
+                    pl: { base: "11", md: "17" },
+                    pr: { base: "lg", md: "xl" },
+                  }
+                : { pl: { md: "6" } }
+            }
+            iconProps={icon ? { pr: { md: "lg" } } : { pr: { md: "6" } }}
+            size="lg"
+            {...selectProps}
           >
-            <UISelect
-              fieldProps={
-                icon
-                  ? {
-                      pl: { base: "11", md: "17" },
-                      pr: { base: "lg", md: "xl" },
-                    }
-                  : { pl: { md: "6" } }
-              }
-              iconProps={icon ? { pr: { md: "lg" } } : { pr: { md: "6" } }}
-              size="lg"
-              {...selectProps}
+            {children}
+          </UISelect>
+          <HStack
+            align="center"
+            gap={{ base: "xs", md: "sm" }}
+            mx={icon ? { md: "md" } : undefined}
+            pointerEvents="none"
+            position="absolute"
+            px={{ base: "sm", md: icon ? "3" : "sm" }}
+            top="50%"
+            transform="translateY(-50%)"
+            z={1}
+          >
+            <Center
+              borderColor="gray.600"
+              borderRadius="full"
+              borderWidth={stylised ? "thin" : "0"}
+              h="fit-content"
+              opacity={disabled ? 0.4 : 1}
+              p="xs"
+              w="fit-content"
             >
-              {children}
-            </UISelect>
-            <HStack
-              align="center"
-              gap={{ base: "xs", md: "sm" }}
-              mx={icon ? { md: "md" } : undefined}
-              opacity={disabled ? 0.4 : undefined}
-              pointerEvents="none"
-              position="absolute"
-              px={{ base: "sm", md: icon ? "3" : "sm" }}
-              top="50%"
-              transform="translateY(-50%)"
-              z={1}
-            >
-              <Center
-                borderColor="gray.600"
-                borderRadius="full"
-                borderWidth={stylised ? "thin" : "0"}
-                h="fit-content"
-                p="xs"
-                w="fit-content"
-              >
-                {icon}
-              </Center>
-              <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
-                {label}
-              </Label>
-            </HStack>
-          </Box>
-        </FormControl>
+              {icon}
+            </Center>
+            <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
+              {label}
+            </Label>
+          </HStack>
+        </Box>
       )
     },
   ),

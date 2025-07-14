@@ -50,4 +50,7 @@ export const PinInput: ComponentMultiStyle<"PinInput"> = mergeMultiStyle(Input, 
       },
     },
   },
+  defaultProps: {
+    variant: "gradient",
+  },
 })({ omit: ["addon", "sizes"] })

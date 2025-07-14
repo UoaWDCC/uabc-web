@@ -1,14 +1,12 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
 import { PlayLevel } from "@repo/shared"
 import { Button, Heading, Select } from "@repo/ui/components/Primitive"
 import { CalendarClockIcon, CircleGaugeIcon } from "@yamada-ui/lucide"
-import { Grid, GridItem, memo, noop, type SelectItem, VStack } from "@yamada-ui/react"
-import { type SubmitHandler, useForm } from "react-hook-form"
+import { FormControl, Grid, GridItem, memo, noop, type SelectItem, VStack } from "@yamada-ui/react"
+import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 import { locationAndTimeOptionsMock } from "./QuickBook.mock"
 import type { UIQuickBookFormValues } from "./schema"
-import { UIQuickBookFormSchema } from "./schema"
 
 /**
  * Props for {@link QuickBook} component
@@ -73,12 +71,10 @@ export const QuickBook = memo(
     onSubmit,
   }: QuickBookProps) => {
     const {
-      register,
+      control,
       handleSubmit,
       formState: { errors, isSubmitting },
-    } = useForm<UIQuickBookFormValues>({
-      resolver: zodResolver(UIQuickBookFormSchema),
-    })
+    } = useForm<UIQuickBookFormValues>()
 
     return (
       <VStack
@@ -92,40 +88,55 @@ export const QuickBook = memo(
         <Heading.h2 display={{ base: "none", md: "block" }}>{title}</Heading.h2>
         <Grid gap="md" templateColumns={{ base: "1fr", md: "1fr 1fr auto" }}>
           <GridItem minW={0}>
-            <Select
-              containerProps={{
-                rounded: "xl",
-              }}
-              data-testid="location-and-time"
-              formControlProps={{
-                errorMessage: errors.locationAndTimeId?.message,
-                invalid: !!errors.locationAndTimeId,
-              }}
-              icon={<CalendarClockIcon fontSize={24} />}
-              items={locationAndTimeOptions}
-              label="Location & Time"
-              registration={register("locationAndTimeId")}
-              rounded="xl"
-              variant="stylised"
-            />
+            <FormControl
+              errorMessage={errors.locationAndTimeId?.message}
+              invalid={!!errors.locationAndTimeId}
+            >
+              <Controller
+                control={control}
+                name="locationAndTimeId"
+                render={({ field }) => (
+                  <Select
+                    containerProps={{
+                      rounded: "xl",
+                    }}
+                    data-testid="location-and-time"
+                    icon={<CalendarClockIcon fontSize={24} />}
+                    items={locationAndTimeOptions}
+                    label="Location & Time"
+                    rounded="xl"
+                    variant="stylised"
+                    {...field}
+                  />
+                )}
+                rules={{ required: { value: true, message: "Please select a location and time." } }}
+              />
+            </FormControl>
           </GridItem>
           <GridItem minW={0}>
-            <Select
-              containerProps={{
-                rounded: "xl",
-              }}
-              data-testid="skill-level"
-              formControlProps={{
-                errorMessage: errors.skillLevel?.message,
-                invalid: !!errors.skillLevel,
-              }}
-              icon={<CircleGaugeIcon fontSize={24} />}
-              items={skillLevelOptions}
-              label="Skill Level"
-              registration={register("skillLevel")}
-              rounded="xl"
-              variant="stylised"
-            />
+            <FormControl errorMessage={errors.skillLevel?.message} invalid={!!errors.skillLevel}>
+              <Controller
+                control={control}
+                name="skillLevel"
+                render={({ field }) => (
+                  <Select
+                    containerProps={{
+                      rounded: "xl",
+                    }}
+                    data-testid="skill-level"
+                    icon={<CircleGaugeIcon fontSize={24} />}
+                    items={skillLevelOptions}
+                    label="Skill Level"
+                    rounded="xl"
+                    variant="stylised"
+                    {...field}
+                  />
+                )}
+                rules={{
+                  required: { value: true, message: "Please select your skill level." },
+                }}
+              />
+            </FormControl>
           </GridItem>
           <GridItem w="full">
             <Button

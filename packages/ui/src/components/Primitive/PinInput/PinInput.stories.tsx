@@ -1,5 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/react"
 import { PropsTable } from "@storybook-config/components"
+import { FormControl } from "@yamada-ui/react"
 import { PinInput } from "./PinInput"
 import { PIN_INPUT_TYPES, PinInputType } from "./types"
 
@@ -36,15 +37,6 @@ const meta: Meta<typeof PinInput> = {
       },
     },
 
-    formControlProps: {
-      control: "object",
-      description: "The form control props for the pin input",
-      table: {
-        type: { summary: "object" },
-        defaultValue: { summary: "undefined" },
-      },
-    },
-
     mask: {
       control: "boolean",
       description: "Whether to mask the input values (like password)",
@@ -68,13 +60,9 @@ export default meta
 
 export const Basic: Story = ({ type, ...args }) => {
   return (
-    <PinInput
-      formControlProps={{
-        label: "Verification Code",
-      }}
-      type={type || PinInputType.Number}
-      {...args}
-    />
+    <FormControl label="Verification Code">
+      <PinInput type={type || PinInputType.Number} {...args} />
+    </FormControl>
   )
 }
 
@@ -87,18 +75,15 @@ export const TypesAndStates: Story = (args) => {
         const isDisabled = column === "disabled"
         const isError = column === "error"
         return (
-          <PinInput
-            formControlProps={{
-              disabled: isDisabled,
-              errorMessage: isError ? "This field has an error" : undefined,
-              invalid: isError,
-              label: `${row} PIN`,
-            }}
-            items={4}
+          <FormControl
+            disabled={isDisabled}
+            errorMessage={isError ? "This field has an error" : undefined}
+            invalid={isError}
             key={key}
-            type={row}
-            {...args}
-          />
+            label={`${row} PIN`}
+          >
+            <PinInput disabled={isDisabled} items={4} type={row} {...args} />
+          </FormControl>
         )
       }}
     </PropsTable>
@@ -112,16 +97,9 @@ export const SizeVariations: Story = (args) => {
     <PropsTable columns={sizes} rows={PIN_INPUT_TYPES}>
       {(column, row, key) => {
         return (
-          <PinInput
-            formControlProps={{
-              label: `${row} ${column}`,
-            }}
-            items={4}
-            key={key}
-            size={column}
-            type={row}
-            {...args}
-          />
+          <FormControl key={key} label={`${row} ${column}`}>
+            <PinInput items={4} size={column} type={row} {...args} />
+          </FormControl>
         )
       }}
     </PropsTable>
@@ -136,15 +114,9 @@ export const LengthVariations: Story = (args) => {
     <PropsTable columns={types} rows={lengths.map(String)}>
       {(column, row, key) => {
         return (
-          <PinInput
-            formControlProps={{
-              label: `${row}-digit ${column}`,
-            }}
-            items={Number(row)}
-            key={key}
-            type={column}
-            {...args}
-          />
+          <FormControl key={key} label={`${row}-digit ${column}`}>
+            <PinInput items={Number(row)} type={column} {...args} />
+          </FormControl>
         )
       }}
     </PropsTable>

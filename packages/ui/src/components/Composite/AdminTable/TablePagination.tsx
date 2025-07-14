@@ -34,13 +34,7 @@ export const TablePagination: FC = memo(() => {
         />
       </GridItem>
       <GridItem display="grid" placeSelf="end">
-        <Select
-          defaultValue={perPage.toString()}
-          formControlProps={{
-            w: "32",
-          }}
-          onChange={handlePerPageChange}
-        >
+        <Select defaultValue={perPage.toString()} onChange={handlePerPageChange} size="md" w="32">
           <Option value="10">10</Option>
           <Option value="20">20</Option>
           <Option value="50">50</Option>

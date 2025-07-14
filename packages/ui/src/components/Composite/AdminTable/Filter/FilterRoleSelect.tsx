@@ -13,14 +13,7 @@ export const FilterRoleSelect: FC = memo(() => {
   }
 
   return (
-    <Select
-      formControlProps={{
-        w: "xs",
-      }}
-      onChange={handleRoleChange}
-      size="md"
-      value={roleFilter}
-    >
+    <Select onChange={handleRoleChange} size="md" value={roleFilter} w="xs">
       <Option value="all">All Roles</Option>
       <Option value="admin">Admin</Option>
       <Option value="member">Member</Option>

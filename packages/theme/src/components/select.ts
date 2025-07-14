@@ -89,4 +89,7 @@ export const Select: ComponentMultiStyle<"Select"> = mergeMultiStyle(NativeSelec
       }
     },
   },
+  defaultProps: {
+    variant: "gradient",
+  },
 })({ omit: ["button", "command"] })

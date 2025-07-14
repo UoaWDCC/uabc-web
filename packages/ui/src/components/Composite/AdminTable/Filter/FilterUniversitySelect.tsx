@@ -12,14 +12,7 @@ export const FilterUniversitySelect: FC = memo(() => {
   }
 
   return (
-    <Select
-      formControlProps={{
-        w: "xs",
-      }}
-      onChange={handleUniversityChange}
-      size="md"
-      value={universityFilter || "all"}
-    >
+    <Select onChange={handleUniversityChange} size="md" value={universityFilter || "all"} w="xs">
       {availableUniversities.map((university) => (
         <Option key={university || "all"} value={university || "all"}>
           {university === "all" ? "All Universities" : university || "Unknown"}
