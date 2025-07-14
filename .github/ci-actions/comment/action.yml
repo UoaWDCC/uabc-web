@@ -58,6 +58,17 @@ runs:
         echo "$message" >> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT
 
+    - name: Create Fail Message
+      if: always()
+      shell: bash
+      run: |
+        message=$(echo "$message" | sed "s|🔄 Storybook Preview: Deploying...|🚫 Storybook Preview: Failed|")
+        message=$(echo "$message" | sed "s|🔄 Frontend Preview: Deploying...|🚫 Frontend Preview: Failed|")
+
+        echo "message<<EOF" >> $GITHUB_OUTPUT
+        echo "$message" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
     - name: Post-comment
       if: ${{ inputs.method == 'post' }}
       uses: peter-evans/create-or-update-comment@v3
