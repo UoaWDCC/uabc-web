@@ -18,10 +18,10 @@ import type { FieldPath, FieldValues, UseFormRegisterReturn } from "react-hook-f
 
 export interface SelectProps extends UISelectProps {
   /**
-   * Label text of the MultiSelect component.
+   * Label text of the Select component.
    *
    * @remarks
-   * The label is rendered within the MultiSelect component.
+   * The label is rendered within the Select component.
    *
    * @defaultValue "Select option"
    */
@@ -38,8 +38,8 @@ export interface SelectProps extends UISelectProps {
   /**
    * Whether to have a background gradient and circle around the inline icon.
    *
-   * @remarks Same styling as in Select component. MultiSelect is not needed in the quick book
-   * component in the hero/home page, but MultiSelect will feel left out if it doesn't have its own
+   * @remarks Same styling as in Select component. Select is not needed in the quick book
+   * component in the hero/home page, but Select will feel left out if it doesn't have its own
    * stylised version :(
    */
   stylised?: boolean
@@ -77,7 +77,7 @@ export interface SelectProps extends UISelectProps {
  *   <Option value="3">Option 3</Option>
  * </Select>
  *
- * @see {@link https://yamada-ui.com/components/forms/multi-select Yamada UI Select Docs}
+ * @see {@link https://yamada-ui.com/components/forms/select Yamada UI Select Docs}
  */
 export const Select = memo(
   forwardRef<HTMLSelectElement, SelectProps>(
