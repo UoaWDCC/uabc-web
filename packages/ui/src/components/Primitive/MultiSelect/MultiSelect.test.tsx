@@ -141,11 +141,7 @@ describe("registration prop integration", () => {
       // biome-ignore lint/suspicious/noExplicitAny: testing
     } as any
     const { user } = render(
-      <MultiSelect
-        label="Label"
-        onChange={componentOnChange}
-        registration={mockRegistration as any}
-      >
+      <MultiSelect label="Label" onChange={componentOnChange} registration={mockRegistration}>
         <Option value="1">Option 1</Option>
       </MultiSelect>,
     )
