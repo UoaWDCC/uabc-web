@@ -7,6 +7,11 @@ import { FormControl, Grid, GridItem, memo, noop, type SelectItem, VStack } from
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 import { locationAndTimeOptionsMock } from "./QuickBook.mock"
 
+export type QuickBookFormValues = {
+  locationAndTimeId: string
+  skillLevel: PlayLevel
+}
+
 /**
  * Props for {@link QuickBook} component
  */
@@ -40,10 +45,7 @@ export interface QuickBookProps {
   /**
    * Submit handler called when user submits the QuickBook form.
    */
-  onSubmit?: SubmitHandler<{
-    locationAndTimeId: string
-    skillLevel: PlayLevel
-  }>
+  onSubmit?: SubmitHandler<QuickBookFormValues>
 }
 
 /**
@@ -76,10 +78,7 @@ export const QuickBook = memo(
       control,
       handleSubmit,
       formState: { errors, isSubmitting },
-    } = useForm<{
-      locationAndTimeId: string
-      skillLevel: PlayLevel
-    }>()
+    } = useForm<QuickBookFormValues>()
 
     return (
       <VStack

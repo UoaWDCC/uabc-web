@@ -3,7 +3,7 @@ import { PlayLevel } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as QuickBookModule from "./index"
-import { QuickBook } from "./QuickBook"
+import { QuickBook, type QuickBookFormValues } from "./QuickBook"
 import { locationAndTimeOptionsMock } from "./QuickBook.mock"
 
 describe("<QuickBook />", () => {
@@ -25,7 +25,7 @@ describe("<QuickBook />", () => {
   })
 
   it("should call onSubmit when a user clicks the submit button", async () => {
-    const handleSubmit = vi.fn()
+    const handleSubmit = vi.fn((data: QuickBookFormValues) => data)
 
     const { user } = render(
       <QuickBook locationAndTimeOptions={locationAndTimeOptionsMock} onSubmit={handleSubmit} />,
