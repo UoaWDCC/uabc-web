@@ -16,7 +16,7 @@ inputs:
     required: true
   output:
     description: The result of the preview-storybook/preview-frontend action
-    required: true
+    required: false
 
 runs:
   using: composite

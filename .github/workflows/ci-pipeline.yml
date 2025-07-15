@@ -188,6 +188,7 @@ jobs:
 
       - name: Comment Result
         uses: ./.github/ci-actions/comment/
+        if: always()
         with:
           method: post
           type: frontend
