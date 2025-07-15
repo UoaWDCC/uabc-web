@@ -1,0 +1,16 @@
+import type { Footer } from "@repo/shared/payload-types"
+import { GetFooterResponseSchema } from "@repo/shared/schemas"
+import { apiClient } from "@/lib/api/client"
+import { QueryKeys } from "@/services"
+
+/**
+ * Retrieves {@link Footer} data from the global API endpoint
+ *
+ * @returns A promise that resolves to the {@link Footer} response data
+ * @throws When the API request fails
+ */
+export const getFooter = async () => {
+  return await apiClient.get("/api/globals/footer", GetFooterResponseSchema, [
+    QueryKeys.FOOTER_QUERY_KEY,
+  ])
+}

@@ -1,8 +1,8 @@
-import { Footer } from "@repo/ui/components/Generic"
 import { NuqsProvider, QueryProvider, UIProvider } from "@repo/ui/components/Provider"
 import { ColorModeScript, Container } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import { FooterServerSection } from "@/components/server/FooterServerSection"
 import { NavigationBarServerSection } from "@/components/server/NavigationBarServerSection"
 
 const geistSans = Geist({
@@ -48,7 +48,7 @@ export default function RootLayout({
                 <NavigationBarServerSection />
                 {children}
               </Container>
-              <Footer />
+              <FooterServerSection />
             </UIProvider>
           </NuqsProvider>
         </QueryProvider>
