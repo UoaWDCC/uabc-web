@@ -142,7 +142,7 @@ jobs:
 
   preview-storybook:
     needs: [build-storybook]
-    if: always() && ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
+    if: ${{ always() && (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     name: Preview Storybook
     runs-on: ubuntu-latest
     outputs:
