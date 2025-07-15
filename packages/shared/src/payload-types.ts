@@ -36,6 +36,23 @@ export type FaqQuestion = {
   id?: string | null;
 }[];
 /**
+ * Navigation items (max 5).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkArray".
+ */
+export type LinkArray = {
+  /**
+   * The text displayed for the navigation item.
+   */
+  label: string;
+  /**
+   * The URL the navigation item points to.
+   */
+  url: string;
+  id?: string | null;
+}[];
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -842,10 +859,6 @@ export interface Footer {
    * Copyright notice for the club.
    */
   copyright: string;
-  /**
-   * Credits or acknowledgments for the site.
-   */
-  credits?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -858,7 +871,7 @@ export interface LinkGroup {
    * The title for the second group of links.
    */
   title: string;
-  links: Link;
+  links: LinkArray;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -870,7 +883,7 @@ export interface Navbar {
    * The logo displayed in the navbar.
    */
   logo: string | Media;
-  navItems: Link;
+  navItems: LinkArray;
   rightSideSingleButton: Link;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -909,7 +922,6 @@ export interface FooterSelect<T extends boolean = true> {
   linkGroup1?: T | LinkGroupSelect<T>;
   linkGroup2?: T | LinkGroupSelect<T>;
   copyright?: T;
-  credits?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -920,7 +932,16 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface LinkGroupSelect<T extends boolean = true> {
   title?: T;
-  links?: T | LinkSelect<T>;
+  links?: T | LinkArraySelect<T>;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkArray_select".
+ */
+export interface LinkArraySelect<T extends boolean = true> {
+  label?: T;
+  url?: T;
+  id?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -928,7 +949,7 @@ export interface LinkGroupSelect<T extends boolean = true> {
  */
 export interface NavbarSelect<T extends boolean = true> {
   logo?: T;
-  navItems?: T | LinkSelect<T>;
+  navItems?: T | LinkArraySelect<T>;
   rightSideSingleButton?: T | LinkSelect<T>;
   updatedAt?: T;
   createdAt?: T;

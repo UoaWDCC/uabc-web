@@ -16,13 +16,20 @@ const meta: Meta<typeof NavigationBar> = {
       control: "object",
       description: "Array of navigation items with label and path",
       table: {
-        type: { summary: "Array<{ label: string; path: string }>" },
+        type: { summary: "Array<{ id: string; link: { label: string; url: string } }>" },
       },
     },
     user: {
       control: "object",
       description: "User object containing user information",
       table: { type: { summary: "User | undefined" } },
+    },
+    rightSideSingleButton: {
+      control: "object",
+      description: "Button to display on the right side of the navigation bar",
+      table: {
+        type: { summary: "{ label: string; url: string }" },
+      },
     },
   },
   args: NAVIGATION_BAR_CASUAL_TEST_CONSTANTS,

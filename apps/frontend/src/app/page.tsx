@@ -3,7 +3,7 @@ import { LocationBubble, type LocationBubbleProps, QuickBook } from "@repo/ui/co
 import { locationAndTimeOptionsMock } from "@repo/ui/components/Generic/QuickBook/QuickBook.mock"
 import { Heading, Image } from "@repo/ui/components/Primitive"
 import { Bleed, Box, Center, Text, VStack } from "@yamada-ui/react"
-import { FaqSection } from "@/components/FaqSection"
+import { FaqSection } from "@/components/client/FaqSection"
 
 export default async function Home() {
   // TODO: replace mock data with real data

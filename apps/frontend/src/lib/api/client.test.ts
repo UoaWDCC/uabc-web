@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
 import { createApiClient } from "./client"
 
@@ -167,7 +168,7 @@ describe("ApiClient", () => {
           tags: ["tag1", "tag2"],
         },
       })
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
 
     it("should handle fetch with default empty tags", async () => {
@@ -183,7 +184,7 @@ describe("ApiClient", () => {
           tags: [],
         },
       })
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
 
     it("should return error when response is not ok", async () => {
@@ -237,7 +238,7 @@ describe("ApiClient", () => {
 
       const result = await client.get("/complex", complexSchema, ["complex"])
 
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
 
     it("should successfully fetch and parse data with revalidate", async () => {
@@ -257,7 +258,7 @@ describe("ApiClient", () => {
           revalidate: 60,
         },
       })
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
   })
 
@@ -281,7 +282,7 @@ describe("ApiClient", () => {
           next: { tags: ["postTag"] },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
     it("should return error when response is not ok", async () => {
       const testSchema = z.object({ message: z.string() })
@@ -315,7 +316,7 @@ describe("ApiClient", () => {
           next: { tags: ["postTag"], revalidate: false },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
   })
 
@@ -342,7 +343,7 @@ describe("ApiClient", () => {
           next: { tags: ["putTag"] },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
     it("should return error when response is not ok", async () => {
       const testSchema = z.object({ message: z.string() })
@@ -380,7 +381,7 @@ describe("ApiClient", () => {
           next: { tags: ["putTag"], revalidate: 120 },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
   })
 
@@ -407,7 +408,7 @@ describe("ApiClient", () => {
           next: { tags: ["patchTag"] },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
     it("should return error when response is not ok", async () => {
       const testSchema = z.object({ message: z.string() })
@@ -447,7 +448,7 @@ describe("ApiClient", () => {
           next: { tags: ["patchTag"], revalidate: 0 },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
   })
 
@@ -472,7 +473,7 @@ describe("ApiClient", () => {
           next: { tags: ["deleteTag"] },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
     it("should return error when response is not ok", async () => {
       const testSchema = z.object({ message: z.string() })
@@ -508,7 +509,7 @@ describe("ApiClient", () => {
           next: { tags: ["deleteTag"], revalidate: 10 },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
   })
 })

@@ -24,14 +24,14 @@ export const AllProps: Story = {
       credits: "Developed by Storybook",
     },
     links: {
-      custom1: {
+      linkGroup1: {
         title: "Story Links",
         links: [
           { label: "Story 1", url: "#" },
           { label: "Story 2", url: "#" },
         ],
       },
-      custom2: {
+      linkGroup2: {
         title: "Book Links",
         links: [
           { label: "Book 1", url: "#" },

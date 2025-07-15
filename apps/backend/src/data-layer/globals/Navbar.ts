@@ -15,7 +15,7 @@ export const Navbar: GlobalConfig = {
     {
       name: "navItems",
       type: "array",
-      interfaceName: "Link",
+      interfaceName: "LinkArray",
       required: true,
       maxRows: 5,
       defaultValue: [
