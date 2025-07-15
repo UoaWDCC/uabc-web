@@ -7,11 +7,11 @@ import type { Metadata } from "next"
 import { FaqSection } from "@/components/client/FaqSection"
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: "Home | UABC",
   description:
     "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
   openGraph: {
-    title: "Home",
+    title: "Home | UABC",
     description:
       "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
     url: "https://uabc.wddc.co.nz",
