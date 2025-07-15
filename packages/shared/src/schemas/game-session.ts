@@ -46,13 +46,10 @@ export const GameSessionSchema = z.object({
   createdAt: z.string(),
 }) satisfies z.ZodType<GameSession>
 
-export const CreateGameSessionRequestSchema = z.object({
-  semester: z.union([z.string(), SemesterSchema]),
-  day: z.nativeEnum(Weekday),
-  startTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  endTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  capacity: z.number(),
-  casualCapacity: z.number(),
+export const CreateGameSessionRequestSchema = GameSessionSchema.omit({
+  updatedAt: true,
+  createdAt: true,
+  id: true,
 }) satisfies z.ZodType<CreateGameSessionData>
 
 export const UpdateGameSessionRequestSchema =

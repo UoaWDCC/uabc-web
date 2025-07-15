@@ -24,7 +24,7 @@ class GameSessionRouteWrapper {
     } catch (error) {
       if (error instanceof NotFound) {
         return NextResponse.json(
-          { error: "Game Session not found" },
+          { error: "Game session not found" },
           { status: StatusCodes.NOT_FOUND },
         )
       }
@@ -52,7 +52,7 @@ class GameSessionRouteWrapper {
     } catch (error) {
       if (error instanceof NotFound) {
         return NextResponse.json(
-          { error: "Game Session not found" },
+          { error: "Game session not found" },
           { status: StatusCodes.NOT_FOUND },
         )
       }

@@ -67,9 +67,8 @@ describe("/api/admin/game-sessions/[id]", async () => {
   describe("PATCH", () => {
     it("should return a 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
       const res = await PATCH(createMockNextRequest("/api/admin/game-sessions", "PATCH"), {
-        params: Promise.resolve({ id: newGameSession.id }),
+        params: Promise.resolve({ id: "test" }),
       })
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
@@ -77,9 +76,8 @@ describe("/api/admin/game-sessions/[id]", async () => {
 
     it("should return a 401 if user is a member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
-      const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
       const res = await PATCH(createMockNextRequest("/api/admin/game-sessions", "PATCH"), {
-        params: Promise.resolve({ id: newGameSession.id }),
+        params: Promise.resolve({ id: "test" }),
       })
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
@@ -128,7 +126,7 @@ describe("/api/admin/game-sessions/[id]", async () => {
       )
       expect(res.status).toBe(StatusCodes.NOT_FOUND)
       const json = await res.json()
-      expect(json.error).toEqual("Game Session not found")
+      expect(json.error).toEqual("Game session not found")
     })
 
     it("should return a 500 error for internal server error", async () => {
