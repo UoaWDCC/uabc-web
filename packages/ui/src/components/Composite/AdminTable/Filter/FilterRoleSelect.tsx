@@ -1,5 +1,6 @@
 import type { User } from "@repo/shared/payload-types"
-import { Option, Select } from "@yamada-ui/react"
+import { Select } from "@repo/ui/components/Primitive"
+import { Option } from "@yamada-ui/react"
 import type { FC } from "react"
 import { memo } from "react"
 import { useMemberManagement } from "../MemberManagementContext"
