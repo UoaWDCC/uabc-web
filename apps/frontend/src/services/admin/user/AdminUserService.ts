@@ -4,7 +4,7 @@ import {
   GetUserResponseSchema,
   type PaginationQuery,
   type UpdateUserRequest,
-} from "@repo/shared/schemas"
+} from "@repo/shared"
 import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
 
