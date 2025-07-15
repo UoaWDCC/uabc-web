@@ -12,16 +12,37 @@ import {
 } from "@yamada-ui/react"
 
 /**
- * Props for the ConfirmationPopUp component.
+ * Props for the {@link ConfirmationPopUp} component.
  */
 export interface ConfirmationPopUpProps extends DialogProps {
+  /**
+   * Text to display in the confirmation pop-up title.
+   */
   title: string
+  /**
+   * Optional subtitle or additional information in the confirmation pop-up.
+   */
   subtitle?: string
+  /**
+   * Whether to show the close button in the confirmation pop-up.
+   */
   closeButton?: boolean
+  /**
+   * Configuration for the primary button on the right/top, including label and click handler.
+   */
   primaryButton?: ButtonProps & {
+    /**
+     * Label for the primary button.
+     */
     label?: string
   }
+  /**
+   * Configuration for the secondary button on the left/bottom, including label and click handler.
+   */
   secondaryButton?: ButtonProps & {
+    /**
+     * Label for the secondary button.
+     */
     label?: string
   }
 }
@@ -38,6 +59,16 @@ export interface ConfirmationPopUpProps extends DialogProps {
  * @param onClose Function to call when the dialog is closed.
  * @param props Additional props for the dialog component.
  * @returns A confirmation pop-up dialog with title, subtitle, and buttons for user actions.
+ * @example
+ * <ConfirmationPopUp
+ *  title="Delete Account"
+ *  subtitle="Are you sure you want to delete your account?"
+ *  closeButton={false}
+ *  primaryButton={{ label: "Delete", onClick: handleDelete }}
+ *  secondaryButton={{ label: "Cancel" }}
+ *  open={isOpen}
+ *  onClose={handleClose}
+ * />
  */
 export const ConfirmationPopUp = ({
   closeButton = true,
