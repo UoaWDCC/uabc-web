@@ -68,4 +68,5 @@ const AdminUserService = {
     if (status !== StatusCodes.NO_CONTENT) throw new Error("Failed to delete user")
   },
 } as const
+
 export default AdminUserService
