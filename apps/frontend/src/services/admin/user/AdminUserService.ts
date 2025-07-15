@@ -9,19 +9,19 @@ import { apiClient } from "@/lib/api/client"
 
 const AdminUserService = {
   /**
-   * The getUsers function fetches all users from the admin API.
+   * Fetches all users.
    *
    * @param query The pagination query parameters.
    * @returns A promise that resolves to an array of users.
    */
-  getUsers: async ({ limit = 100, page }: PaginationQuery) => {
+  getAllUsers: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
     const { data } = await apiClient.get(`/admin/users?${query}`, GetAllUsersResponseSchema)
     if (!data) throw new Error("Failed to fetch all users")
     return data
   },
   /**
-   * The getUser function fetches a user from the admin API.
+   * Fetches a specific user by ID.
    *
    * @param id The user ID.
    * @returns A promise that resolves to a user.
@@ -32,7 +32,7 @@ const AdminUserService = {
     return data
   },
   /**
-   * The updateUser function updates a user in the admin API.
+   * Updates a user by ID with partial user data.
    *
    * @param id The user ID.
    * @param data The user data to update.
@@ -48,7 +48,7 @@ const AdminUserService = {
     return updatedUser
   },
   /**
-   * The deleteUser function deletes a user from the admin API.
+   * Deletes a user by ID.
    *
    * @param id The user ID.
    * @returns A promise that resolves to a boolean indicating success.
