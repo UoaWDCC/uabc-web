@@ -33,7 +33,7 @@ export const metadata: Metadata = {
         alt: "UABC logo",
       },
     ],
-    locale: "en_NZ",
+    locale: "en-NZ",
     type: "website",
   },
 }
