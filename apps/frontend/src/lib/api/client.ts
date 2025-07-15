@@ -53,7 +53,7 @@ class ApiClient {
     schema: z.Schema<T>,
     tags: string[] = [],
     revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
         next: {
@@ -63,13 +63,17 @@ class ApiClient {
       })
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+        return {
+          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
+          isError: true,
+          status: response.status,
+        }
       }
 
       const data = await response.json()
-      return { data: schema.parse(data), isError: false }
+      return { data: schema.parse(data), isError: false, status: response.status }
     } catch (error) {
-      return { error: error as Error, isError: true }
+      return { error: error as Error, isError: true, status: null }
     }
   }
 
@@ -89,7 +93,7 @@ class ApiClient {
     schema: z.Schema<T>,
     tags: string[] = [],
     revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
         method: "POST",
@@ -101,12 +105,16 @@ class ApiClient {
         },
       })
       if (!response.ok) {
-        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+        return {
+          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
+          isError: true,
+          status: response.status,
+        }
       }
       const data = await response.json()
-      return { data: schema.parse(data), isError: false }
+      return { data: schema.parse(data), isError: false, status: response.status }
     } catch (error) {
-      return { error: error as Error, isError: true }
+      return { error: error as Error, isError: true, status: null }
     }
   }
 
@@ -126,7 +134,7 @@ class ApiClient {
     schema: z.Schema<T>,
     tags: string[] = [],
     revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
         method: "PUT",
@@ -138,12 +146,16 @@ class ApiClient {
         },
       })
       if (!response.ok) {
-        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+        return {
+          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
+          isError: true,
+          status: response.status,
+        }
       }
       const data = await response.json()
-      return { data: schema.parse(data), isError: false }
+      return { data: schema.parse(data), isError: false, status: response.status }
     } catch (error) {
-      return { error: error as Error, isError: true }
+      return { error: error as Error, isError: true, status: null }
     }
   }
 
@@ -163,7 +175,7 @@ class ApiClient {
     schema: z.Schema<T>,
     tags: string[] = [],
     revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
         method: "PATCH",
@@ -175,12 +187,16 @@ class ApiClient {
         },
       })
       if (!response.ok) {
-        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+        return {
+          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
+          isError: true,
+          status: response.status,
+        }
       }
       const data = await response.json()
-      return { data: schema.parse(data), isError: false }
+      return { data: schema.parse(data), isError: false, status: response.status }
     } catch (error) {
-      return { error: error as Error, isError: true }
+      return { error: error as Error, isError: true, status: null }
     }
   }
 
@@ -188,32 +204,36 @@ class ApiClient {
    * Performs a DELETE request to the specified path and validates the response using the provided zod schema.
    *
    * @param path The API endpoint path (relative to baseUrl).
-   * @param schema The zod schema to validate the response data.
+   * @param schema Optional zod schema to validate the response data.
    * @param tags Optional tags for caching or revalidation (used by Next.js fetch).
    * @param revalidate Optional revalidation time in seconds or false to disable revalidation.
    * @returns The validated response data or error.
    */
   public async delete<T>(
     path: string,
-    schema: z.Schema<T>,
-    tags: string[] = [],
+    schema?: z.Schema<T>,
+    tags?: string[],
     revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
         method: "DELETE",
         next: {
-          tags,
+          tags: tags ?? [],
           ...(revalidate !== undefined ? { revalidate } : {}),
         },
       })
       if (!response.ok) {
-        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+        return {
+          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
+          isError: true,
+          status: response.status,
+        }
       }
       const data = await response.json()
-      return { data: schema.parse(data), isError: false }
+      return { data: schema ? schema.parse(data) : data, isError: false, status: response.status }
     } catch (error) {
-      return { error: error as Error, isError: true }
+      return { error: error as Error, isError: true, status: null }
     }
   }
 }

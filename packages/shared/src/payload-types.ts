@@ -36,6 +36,23 @@ export type FaqQuestion = {
   id?: string | null;
 }[];
 /**
+ * Navigation items (max 5).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkArray".
+ */
+export type LinkArray = {
+  /**
+   * The text displayed for the navigation item.
+   */
+  label: string;
+  /**
+   * The URL the navigation item points to.
+   */
+  url: string;
+  id?: string | null;
+}[];
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -366,6 +383,14 @@ export interface Semester {
 export interface GameSessionSchedule {
   id: string;
   /**
+   * The name of the game session schedule, e.g. UoA Rec Centre
+   */
+  name: string;
+  /**
+   * The location of the game session schedule, e.g. 17 Symonds Street
+   */
+  location: string;
+  /**
    * The semester this game session schedule belongs to
    */
   semester: string | Semester;
@@ -406,6 +431,14 @@ export interface GameSession {
    * The semester this game session belongs to. This is required because a game session can't exist without a semester.
    */
   semester: string | Semester;
+  /**
+   * The name of the game session (in case this is a one off session), e.g. UoA Rec Centre
+   */
+  name?: string | null;
+  /**
+   * The location of the game session (in case this is a one off session), e.g. 17 Symonds Street
+   */
+  location?: string | null;
   /**
    * The start time of the game session
    */
@@ -687,6 +720,8 @@ export interface SemesterSelect<T extends boolean = true> {
  * via the `definition` "gameSessionSchedule_select".
  */
 export interface GameSessionScheduleSelect<T extends boolean = true> {
+  name?: T;
+  location?: T;
   semester?: T;
   day?: T;
   startTime?: T;
@@ -703,6 +738,8 @@ export interface GameSessionScheduleSelect<T extends boolean = true> {
 export interface GameSessionSelect<T extends boolean = true> {
   gameSessionSchedule?: T;
   semester?: T;
+  name?: T;
+  location?: T;
   startTime?: T;
   endTime?: T;
   capacity?: T;
@@ -850,7 +887,7 @@ export interface Navbar {
    * The logo displayed in the navbar.
    */
   logo: string | Media;
-  navItems: Link;
+  navItems: LinkArray;
   rightSideSingleButton: Link;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -908,11 +945,20 @@ export interface LinkGroupSelect<T extends boolean = true> {
  */
 export interface NavbarSelect<T extends boolean = true> {
   logo?: T;
-  navItems?: T | LinkSelect<T>;
+  navItems?: T | LinkArraySelect<T>;
   rightSideSingleButton?: T | LinkSelect<T>;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkArray_select".
+ */
+export interface LinkArraySelect<T extends boolean = true> {
+  label?: T;
+  url?: T;
+  id?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
