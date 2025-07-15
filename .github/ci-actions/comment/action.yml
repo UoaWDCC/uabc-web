@@ -61,7 +61,7 @@ runs:
         elif [[ "${{ inputs.type }}" == "storybook" ]]; then
           message=$(echo "$message" | sed "s|🔄 Storybook Preview: Deploying...|🚫 Storybook Preview: Failed|")
         
-        elif [[ "${{ inputs.type }}" == "storybook" ]]; then
+        elif [[ "${{ inputs.type }}" == "frontend" ]]; then
           message=$(echo "$message" | sed "s|🔄 Frontend Preview: Deploying...|🚫 Frontend Preview: Failed|")
         fi
 
