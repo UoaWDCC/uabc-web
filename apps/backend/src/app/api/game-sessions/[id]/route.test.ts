@@ -27,7 +27,7 @@ describe("/api/game-sessions/[id]", () => {
 
       expect(res.status).toBe(StatusCodes.NOT_FOUND)
       const data = await res.json()
-      expect(data.error).toBe("Game Session not found")
+      expect(data.error).toBe("Game session not found")
     })
 
     it("should handle errors and return 500 status", async () => {

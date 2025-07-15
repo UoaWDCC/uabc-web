@@ -23,6 +23,12 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
     },
+    "pages:build": {
+      "cache": true,
+      "dependsOn": ["^pages:build", "@repo/test-config#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".vercel/**"]
+    },
     "check-types": {
       "dependsOn": ["^check-types", "@repo/test-config#build", "@repo/shared#build"],
       "cache": true
@@ -53,7 +59,7 @@
     "storybook:build": {
       "cache": true,
       "dependsOn": ["^storybook:build", "@repo/test-config#build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", "!**/*.stories.{tsx,jsx,mdx}"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "packages/ui/**"],
       "outputs": ["storybook-static/**"]
     },
     "test": {

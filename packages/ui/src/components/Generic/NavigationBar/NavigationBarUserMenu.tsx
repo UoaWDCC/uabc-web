@@ -65,7 +65,7 @@ export const NavigationBarUserMenu = ({
             <Text fontSize="md">Profile</Text>
           </HStack>
         </MenuItem>
-        <MenuItem as={Link} data-testid="navbar-user-menu-signout-link" href="/signout">
+        <MenuItem as={Link} data-testid="navbar-user-menu-signout-link" href="/auth/signout">
           <HStack>
             <LogOutIcon />
             <Text>Sign Out</Text>

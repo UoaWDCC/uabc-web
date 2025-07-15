@@ -1,5 +1,5 @@
 "use client"
-import type { User } from "@repo/shared/payload-types"
+import type { Navbar, User } from "@repo/shared/payload-types"
 import { Center } from "@yamada-ui/react"
 import { NavigationBarDesktop } from "./NavigationBarDesktop"
 import { NavigationBarMobile } from "./NavigationBarMobile"
@@ -7,31 +7,29 @@ import { NavigationBarMobile } from "./NavigationBarMobile"
 /**
  * Props for the NavigationBar component.
  */
-export interface NavigationBarProps {
-  navItems: Array<{ label: string; path: string }>
+export interface NavigationBarProps extends Navbar {
   user?: User
 }
 
 /**
  * NavigationBar component renders a navigation bar with links to different pages, sized to match the viewport width.
  *
- * @param navItems Array of navigation items with label and path.
  * @param user Optional user object containing user information if signed in.
+ * @param props NavigationBar component properties including navigation items, right side button, and logo.
  * @returns A navigation bar with links to different pages, an admin link if the user is an admin, and a user menu if the user is signed in.
  */
-export const NavigationBar = ({ navItems, user }: NavigationBarProps) => {
+export const NavigationBar = ({ user, ...props }: NavigationBarProps) => {
   return (
     <Center
       height="fit-content"
-      marginBlockStart="lg"
-      padding="md"
+      paddingTop="md"
       position="sticky"
       top={0}
       width="full"
-      zIndex={1002}
+      zIndex={100}
     >
-      <NavigationBarDesktop navItems={navItems} user={user} />
-      <NavigationBarMobile navItems={navItems} user={user} />
+      <NavigationBarDesktop {...props} user={user} />
+      <NavigationBarMobile {...props} user={user} />
     </Center>
   )
 }

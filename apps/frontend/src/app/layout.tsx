@@ -1,8 +1,9 @@
 import { Footer } from "@repo/ui/components/Generic"
 import { NuqsProvider, QueryProvider, UIProvider } from "@repo/ui/components/Provider"
-import { ColorModeScript } from "@yamada-ui/react"
+import { ColorModeScript, Container } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import { NavigationBarServerSection } from "@/components/server/NavigationBarServerSection"
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -49,7 +50,22 @@ export default function RootLayout({
           <NuqsProvider>
             <ColorModeScript initialColorMode="dark" />
             <UIProvider>
-              {children}
+              <Container
+                bgColor="black"
+                bgGradient={{
+                  base: "repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 10vw), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 10vw)",
+                  md: "repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 8vw), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 8vw)",
+                  lg: "repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 6vw), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 6vw)",
+                  xl: "repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 5vw), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 5vw)",
+                  "2xl":
+                    "repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 4vw), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 4vw)",
+                }}
+                centerContent
+                paddingX="lg"
+              >
+                <NavigationBarServerSection />
+                {children}
+              </Container>
               <Footer />
             </UIProvider>
           </NuqsProvider>

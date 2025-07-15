@@ -12,6 +12,7 @@ export const frontendConfig = mergeConfig(baseConfig, {
         lines: 0,
         statements: 0,
       },
+      exclude: ["**/services/**"],
     },
   },
 })
