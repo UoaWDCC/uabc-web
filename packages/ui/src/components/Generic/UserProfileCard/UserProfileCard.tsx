@@ -10,11 +10,11 @@ import { UserProfileProvider, useUserProfile } from "./UserProfileContext"
 /**
  * Props for the UserProfileCard component.
  *
- * @template T - The tuple of fields for the form.
- * @property title - The card title.
- * @property fields - The array of field definitions.
- * @property defaultValues - Optional default values for the form.
- * @property onSave - Optional callback when the form is saved.
+ * @template T The tuple of fields for the form.
+ * @property title The card title.
+ * @property fields The array of field definitions.
+ * @property defaultValues Optional default values for the form.
+ * @property onSave Optional callback when the form is saved.
  */
 interface UserProfileCardProps<T extends readonly Field[]> extends Omit<CardProps, "onSubmit"> {
   title: string
@@ -26,8 +26,8 @@ interface UserProfileCardProps<T extends readonly Field[]> extends Omit<CardProp
 /**
  * UserProfileCard renders a user profile form card with edit and view modes.
  *
- * @template T - The tuple of fields for the form.
- * @param props - UserProfileCardProps
+ * @template T The tuple of fields for the form.
+ * @param props UserProfileCardProps
  */
 export const UserProfileCard = <T extends readonly Field[]>({
   title,
@@ -50,9 +50,9 @@ export const UserProfileCard = <T extends readonly Field[]>({
 /**
  * Props for the UserProfileContent component.
  *
- * @template T - The tuple of fields for the form.
- * @property title - The card title.
- * @property fields - The array of field definitions.
+ * @template T The tuple of fields for the form.
+ * @property title The card title.
+ * @property fields The array of field definitions.
  */
 interface UserProfileContentProps<T extends readonly Field[]> extends Omit<CardProps, "onSubmit"> {
   title: string
@@ -62,8 +62,8 @@ interface UserProfileContentProps<T extends readonly Field[]> extends Omit<CardP
 /**
  * UserProfileContent renders the main content of the user profile card, including the form and action buttons.
  *
- * @template T - The tuple of fields for the form.
- * @param props - UserProfileContentProps
+ * @template T The tuple of fields for the form.
+ * @param props UserProfileContentProps
  */
 const UserProfileContent = <T extends readonly Field[]>({
   title,

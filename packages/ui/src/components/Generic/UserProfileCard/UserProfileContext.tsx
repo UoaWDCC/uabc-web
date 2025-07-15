@@ -26,7 +26,7 @@ const UserProfileContext = createContext<unknown>(null)
 /**
  * Hook to access user profile context. Must be used within UserProfileProvider.
  *
- * @template T - The tuple of fields for the form.
+ * @template T The tuple of fields for the form.
  * @returns The user profile context value.
  * @throws If used outside of UserProfileProvider.
  */
@@ -41,11 +41,11 @@ export const useUserProfile = <T extends readonly Field[]>() => {
 /**
  * Props for the UserProfileProvider component.
  *
- * @template T - The tuple of fields for the form.
- * @property children - The child nodes to render within the provider.
- * @property fields - The array of field definitions.
- * @property defaultValues - Optional default values for the form.
- * @property onSave - Optional callback when the form is saved.
+ * @template T The tuple of fields for the form.
+ * @property children The child nodes to render within the provider.
+ * @property fields The array of field definitions.
+ * @property defaultValues Optional default values for the form.
+ * @property onSave Optional callback when the form is saved.
  */
 export interface UserProfileProviderProps<T extends readonly Field[]> {
   children: ReactNode
@@ -57,8 +57,8 @@ export interface UserProfileProviderProps<T extends readonly Field[]> {
 /**
  * Provides user profile context for editing and form state.
  *
- * @template T - The tuple of fields for the form.
- * @param props - UserProfileProviderProps
+ * @template T The tuple of fields for the form.
+ * @param props UserProfileProviderProps
  * @returns The provider component.
  */
 export const UserProfileProvider = <T extends readonly Field[]>({

@@ -8,8 +8,8 @@ import { useUserProfile } from "./UserProfileContext"
 /**
  * Props for the FieldGroup component.
  *
- * @template T - The tuple of fields for the form.
- * @property field - The field definition to render.
+ * @template T The tuple of fields for the form.
+ * @property field The field definition to render.
  */
 export interface FieldGroupProps<T extends readonly Field[]> {
   field: T[number]
@@ -18,8 +18,8 @@ export interface FieldGroupProps<T extends readonly Field[]> {
 /**
  * FieldGroup renders a form field with label, error, and appropriate input/preview.
  *
- * @template T - The tuple of fields for the form.
- * @param props - FieldGroupProps
+ * @template T The tuple of fields for the form.
+ * @param props FieldGroupProps
  */
 export const FieldGroup = <T extends readonly Field[]>({ field }: FieldGroupProps<T>) => {
   const { isEditing, form } = useUserProfile<T>()

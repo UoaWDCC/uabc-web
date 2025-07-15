@@ -8,8 +8,8 @@ import { getDisplayValue } from "./utils"
 /**
  * Props for the Preview component.
  *
- * @template T - The tuple of fields for the form.
- * @property field - The field definition to render.
+ * @template T The tuple of fields for the form.
+ * @property field The field definition to render.
  */
 export interface PreviewProps<T extends readonly Field[]> {
   field: T[number]
@@ -18,8 +18,8 @@ export interface PreviewProps<T extends readonly Field[]> {
 /**
  * Preview renders a read-only view of a field's value.
  *
- * @template T - The tuple of fields for the form.
- * @param props - PreviewProps
+ * @template T The tuple of fields for the form.
+ * @param props PreviewProps
  */
 export const Preview = <T extends readonly Field[]>({ field }: PreviewProps<T>) => {
   const { form, isEditing } = useUserProfile<T>()

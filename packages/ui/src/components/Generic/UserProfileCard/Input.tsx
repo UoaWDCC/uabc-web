@@ -7,8 +7,8 @@ import { useUserProfile } from "./UserProfileContext"
 /**
  * Props for the Input component.
  *
- * @template T - The tuple of fields for the form.
- * @property field - The field definition to render.
+ * @template T The tuple of fields for the form.
+ * @property field The field definition to render.
  */
 export interface InputProps<T extends readonly Field[]> {
   field: T[number]
@@ -17,8 +17,8 @@ export interface InputProps<T extends readonly Field[]> {
 /**
  * Input renders the editable input for a field, depending on its type.
  *
- * @template T - The tuple of fields for the form.
- * @param props - InputProps
+ * @template T The tuple of fields for the form.
+ * @param props InputProps
  */
 export const Input = <T extends readonly Field[]>({ field }: InputProps<T>) => {
   const { form, isEditing } = useUserProfile<T>()
