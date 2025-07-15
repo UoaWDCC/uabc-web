@@ -1,18 +1,15 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { type LoginDetails, LoginDetailsSchema } from "@repo/shared/schemas"
+import { type RegisterPanelDetails, RegisterPanelDetailsSchema } from "@repo/shared/schemas"
 import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
   Box,
   Center,
-  Checkbox,
   FormControl,
-  HStack,
   memo,
   noop,
-  Spacer,
   Text,
   Link as UILink,
   VStack,
@@ -23,13 +20,13 @@ import { type SubmitHandler, useForm } from "react-hook-form"
 import { GoogleLogo, UabcLogo } from "../../Icon"
 
 /**
- * Props for {@link LoginPanel} component
+ * Props for {@link RegisterPanel} component
  */
-export interface LoginPanelProps {
+export interface RegisterPanelProps {
   /**
-   * Submit handler called when user submits the LoginPanel form.
+   * Submit handler called when user submits the RegisterPanel form.
    */
-  onSubmit?: SubmitHandler<LoginDetails>
+  onSubmit?: SubmitHandler<RegisterPanelDetails>
   /**
    * Handler called when user selects the Google icon button.
    *
@@ -39,18 +36,18 @@ export interface LoginPanelProps {
 }
 
 /**
- * Login panel component for both mobile and desktop screens.
+ * Register panel component for both mobile and desktop screens.
  *
- * @param props LoginPanel component props
- * @returns A login panel component
+ * @param props RegisterPanel component props
+ * @returns A register panel component
  */
-export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) => {
+export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginDetails>({
-    resolver: zodResolver(LoginDetailsSchema),
+  } = useForm<RegisterPanelDetails>({
+    resolver: zodResolver(RegisterPanelDetailsSchema),
   })
 
   return (
@@ -70,8 +67,8 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
 
       <Center display={{ base: "none", md: "block" }} textAlign="center">
         <VStack>
-          <Heading.h2>Welcome back</Heading.h2>
-          <Text>Please enter your details to sign in</Text>
+          <Heading.h2>Welcome to UABC</Heading.h2>
+          <Text>Please enter your details to register</Text>
         </VStack>
       </Center>
 
@@ -93,21 +90,20 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
           {...register("password")}
         />
       </FormControl>
-      <HStack color="gray.100" fontSize="sm">
-        <Checkbox label="Remember me" size="sm" textAlign="start" />
-        <Spacer />
-        <UILink
-          _hover={{ color: "white" }}
-          as={Link}
-          color="gray.100"
-          href="/auth/forgot-password"
-          textDecoration="underline"
-        >
-          Forgot Password?
-        </UILink>
-      </HStack>
+      <FormControl
+        errorMessage={errors.confirmPassword?.message}
+        invalid={!!errors.confirmPassword}
+      >
+        <TextInput
+          data-testid="confirm-password"
+          placeholder="Confirm Password"
+          startIcon={<LockIcon />}
+          type={InputType.Password}
+          {...register("confirmPassword")}
+        />
+      </FormControl>
       <Button colorScheme="primary" loading={isSubmitting} type="submit">
-        Sign In
+        Register
       </Button>
 
       <Center position="relative">
@@ -158,15 +154,15 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
 
       <Center color="gray.100" fontSize="sm" textAlign="center">
         <Text>
-          Don't have an account?&nbsp;
+          Already have an account?&nbsp;
           <UILink
             _hover={{ color: "white" }}
             as={Link}
             color="gray.100"
-            href="/auth/signup"
+            href="/auth/signin"
             textDecoration="underline"
           >
-            Create Account
+            Sign in
           </UILink>
         </Text>
       </Center>
@@ -174,4 +170,4 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
   )
 })
 
-LoginPanel.displayName = "LoginPanel"
+RegisterPanel.displayName = "RegisterPanel"

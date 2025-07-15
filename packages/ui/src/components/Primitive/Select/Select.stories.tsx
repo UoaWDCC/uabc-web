@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@storybook/react"
 import { PropsTable } from "@storybook-config/components"
 import { CalendarClockIcon } from "@yamada-ui/lucide"
-import { Option } from "@yamada-ui/react"
+import { FormControl, Option } from "@yamada-ui/react"
 import { Select } from "./Select"
 
 type Story = StoryFn<typeof Select>
@@ -24,21 +24,37 @@ export default meta
 
 export const Basic: Story = (args) => {
   return (
-    <Select {...args} icon={<CalendarClockIcon fontSize={24} />}>
-      <Option value="1">Option 1</Option>
-      <Option value="2">Option 2</Option>
-      <Option value="3">Option 3</Option>
-    </Select>
+    <FormControl label={args.label || "Select option"}>
+      <Select {...args} icon={<CalendarClockIcon fontSize={24} />}>
+        <Option value="1">Option 1</Option>
+        <Option value="2">Option 2</Option>
+        <Option value="3">Option 3</Option>
+      </Select>
+    </FormControl>
   )
 }
 
 export const Stylised: Story = (args) => {
   return (
-    <Select {...args} icon={<CalendarClockIcon fontSize={24} />} stylised>
-      <Option value="1">Option 1</Option>
-      <Option value="2">Option 2</Option>
-      <Option value="3">Option 3</Option>
-    </Select>
+    <FormControl label={args.label || "Select option"}>
+      <Select {...args} icon={<CalendarClockIcon fontSize={24} />} variant="stylised">
+        <Option value="1">Option 1</Option>
+        <Option value="2">Option 2</Option>
+        <Option value="3">Option 3</Option>
+      </Select>
+    </FormControl>
+  )
+}
+
+export const NoIcon: Story = (args) => {
+  return (
+    <FormControl label={args.label || "Select option"}>
+      <Select {...args}>
+        <Option value="1">Option 1</Option>
+        <Option value="2">Option 2</Option>
+        <Option value="3">Option 3</Option>
+      </Select>
+    </FormControl>
   )
 }
 
@@ -52,19 +68,24 @@ export const TypesAndStates: Story = (args) => {
         const isError = column === "error"
         const stylised = row === "stylised"
         return (
-          <Select
+          <FormControl
             disabled={isDisabled}
             errorMessage={isError ? "This field has an error" : undefined}
-            icon={<CalendarClockIcon fontSize={24} />}
-            isError={isError}
+            invalid={isError}
             key={key}
-            stylised={stylised}
-            {...args}
+            label={row.charAt(0).toUpperCase() + row.slice(1) + " Select"}
           >
-            <Option value="1">Option 1</Option>
-            <Option value="2">Option 2</Option>
-            <Option value="3">Option 3</Option>
-          </Select>
+            <Select
+              disabled={isDisabled}
+              icon={<CalendarClockIcon fontSize={24} />}
+              variant={stylised ? "stylised" : undefined}
+              {...args}
+            >
+              <Option value="1">Option 1</Option>
+              <Option value="2">Option 2</Option>
+              <Option value="3">Option 3</Option>
+            </Select>
+          </FormControl>
         )
       }}
     </PropsTable>
