@@ -279,6 +279,7 @@ jobs:
           pnpm merge
 
       - name: Upload Coverage Artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: local-coverage
@@ -287,6 +288,7 @@ jobs:
   vitest-coverage:
     name: Vitest Coverage
     needs: [test]
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

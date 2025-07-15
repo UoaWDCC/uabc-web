@@ -95,13 +95,14 @@ export const LoginDetailsSchema = z.object({
    * The user's email address
    * @example straightzhao@gmail.com
    */
-  email: z.string().email(),
+  email: z.string().min(1, "Field is required").email(),
   /**
    * The user's password
    * @example 12345678
    */
-  password: z.string(),
+  password: z.string().min(1, "Field is required"),
 })
 
 export type JWTEncryptedUser = z.infer<typeof JWTEncryptedUserSchema>
 export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>
+export type LoginDetails = z.infer<typeof LoginDetailsSchema>
