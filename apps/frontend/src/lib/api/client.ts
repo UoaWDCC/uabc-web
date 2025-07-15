@@ -63,7 +63,11 @@ class ApiClient {
       })
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+        return {
+          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
+          isError: true,
+          status: response.status,
+        }
       }
 
       const data = await response.json()
@@ -101,7 +105,11 @@ class ApiClient {
         },
       })
       if (!response.ok) {
-        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+        return {
+          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
+          isError: true,
+          status: response.status,
+        }
       }
       const data = await response.json()
       return { data: schema.parse(data), isError: false, status: response.status }
@@ -126,7 +134,7 @@ class ApiClient {
     schema: z.Schema<T>,
     tags: string[] = [],
     revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
         method: "PUT",
@@ -138,12 +146,16 @@ class ApiClient {
         },
       })
       if (!response.ok) {
-        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+        return {
+          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
+          isError: true,
+          status: response.status,
+        }
       }
       const data = await response.json()
-      return { data: schema.parse(data), isError: false }
+      return { data: schema.parse(data), isError: false, status: response.status }
     } catch (error) {
-      return { error: error as Error, isError: true }
+      return { error: error as Error, isError: true, status: null }
     }
   }
 
@@ -175,7 +187,11 @@ class ApiClient {
         },
       })
       if (!response.ok) {
-        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+        return {
+          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
+          isError: true,
+          status: response.status,
+        }
       }
       const data = await response.json()
       return { data: schema.parse(data), isError: false, status: response.status }
@@ -208,7 +224,11 @@ class ApiClient {
         },
       })
       if (!response.ok) {
-        throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
+        return {
+          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
+          isError: true,
+          status: response.status,
+        }
       }
       const data = await response.json()
       return { data: schema ? schema.parse(data) : data, isError: false, status: response.status }
