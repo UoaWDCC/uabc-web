@@ -1,5 +1,6 @@
 import type { ComponentStyle } from "@yamada-ui/core"
 import { isAccessible, isGray, transparentizeColor } from "@yamada-ui/utils"
+import { gradients } from "../tokens/gradients"
 
 export const Button: ComponentStyle<"Button"> = {
   baseStyle: {
@@ -15,11 +16,6 @@ export const Button: ComponentStyle<"Button"> = {
     },
     _focus: {
       outline: "none",
-    },
-    _hover: {
-      _disabled: {
-        bg: ["initial", "initial"],
-      },
     },
     _readOnly: {
       cursor: "default",
@@ -50,6 +46,9 @@ export const Button: ComponentStyle<"Button"> = {
       },
       _hover: {
         bg: [`${c}.50`, transparentizeColor(`${c}.600`, 0.12)(t, m)],
+        _disabled: {
+          bg: ["initial", "initial"],
+        },
       },
       _invalid: {
         border: "1px solid",
@@ -77,6 +76,7 @@ export const Button: ComponentStyle<"Button"> = {
         textDecoration: "underline",
         _disabled: {
           textDecoration: "none",
+          bg: ["initial", "initial"],
         },
       },
       _ripple: {
@@ -108,6 +108,9 @@ export const Button: ComponentStyle<"Button"> = {
       },
       _hover: {
         bg: [`${c}.50`, transparentizeColor(`${c}.600`, 0.12)(t, m)],
+        _disabled: {
+          bg: ["initial", "initial"],
+        },
       },
       _invalid: {
         borderColor: ["$errorBorderColor", "$errorBorderColor"],
@@ -163,9 +166,15 @@ export const Button: ComponentStyle<"Button"> = {
         boxShadow: "0 0 0 1px $errorBorderColor",
       },
     }),
-    gradient: ({ colorScheme: c = "primary" }) => ({
+    gradient: ({
+      colorScheme: c = "primary",
+      errorBorderColor = ["danger.500", "danger.400"],
+    }) => ({
       backdropFilter: "blur(15px)",
-      bgGradient: `${c}Gradient`,
+      bgGradient:
+        `${c}Gradient` in gradients
+          ? `${c}Gradient`
+          : `linear-gradient(270deg, ${c}.500 16.5%, ${c}.700 105%)`,
       bgSize: "100% 100%",
       borderRadius: "12px",
       boxShadow:
@@ -173,8 +182,40 @@ export const Button: ComponentStyle<"Button"> = {
       color: "white",
       transition: "all 0.5s ease-in-out",
       layerStyle: "gradientBorder",
+      vars: [
+        {
+          name: "errorBorderColor",
+          token: "colors",
+          value: errorBorderColor,
+        },
+      ],
       _hover: {
         bgSize: "250% 100%",
+        _disabled: {
+          bgSize: "100% 100%",
+          bg: "transparent",
+          bgGradient:
+            `${c}Gradient` in gradients
+              ? `${c}Gradient`
+              : `linear-gradient(270deg, ${c}.500 16.5%, ${c}.700 105%)`,
+        },
+      },
+      _focusVisible: {
+        borderColor: "transparent",
+        boxShadow: "outline",
+      },
+      _active: {
+        bgSize: "300% 100%",
+      },
+      _disabled: {
+        opacity: 0.4,
+        cursor: "not-allowed",
+        boxShadow: "none",
+      },
+      _invalid: {
+        border: "1px solid",
+        borderColor: "$errorBorderColor",
+        boxShadow: "0 0 0 1px $errorBorderColor",
       },
     }),
     unstyled: {
@@ -186,6 +227,9 @@ export const Button: ComponentStyle<"Button"> = {
       p: 0,
       height: "initial",
       width: "initial",
+      _disabled: {
+        bg: "none",
+      },
       minW: "initial",
       _ripple: {
         display: "none",
