@@ -142,7 +142,7 @@ jobs:
 
   preview-storybook:
     needs: [build-storybook]
-    if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
+    if: always() && ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     name: Preview Storybook
     runs-on: ubuntu-latest
     outputs:
@@ -152,6 +152,7 @@ jobs:
 
       - name: Deploy Storybook
         id: preview-storybook
+        if: ${{ needs.build-storybook.result == 'success' }}
         uses: ./.github/cd-actions/deploy-storybook/
         with:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
