@@ -1,12 +1,12 @@
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import {
+  ButtonGroup,
   type ButtonProps,
   Dialog,
   DialogBody,
   DialogCloseButton,
   DialogFooter,
   type DialogProps,
-  Flex,
   Text,
   VStack,
 } from "@yamada-ui/react"
@@ -124,7 +124,7 @@ export const ConfirmationPopUp = ({
         </VStack>
       </DialogBody>
       <DialogFooter justifyContent="center" w="full">
-        <Flex align="center" direction={{ base: "column-reverse", md: "row" }} gap="md">
+        <ButtonGroup flexDirection={{ base: "column-reverse", md: "row" }} gap="md">
           {(secondaryButton || !closeButton) && (
             <Button
               colorScheme="secondary"
@@ -143,7 +143,7 @@ export const ConfirmationPopUp = ({
           >
             {primaryButtonLabel}
           </Button>
-        </Flex>
+        </ButtonGroup>
       </DialogFooter>
     </Dialog>
   )
