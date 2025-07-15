@@ -20,8 +20,7 @@ export const Footer = memo<FooterProps>(
   ({
     brand = {
       title: "UABC",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+      description: "The largest university badminton club in New Zealand!",
     },
     bottomProps = {
       copyrightName: "© 2025 University of Auckland Badminton Club.",
