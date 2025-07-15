@@ -27,7 +27,7 @@ export const FilterInput: FC = memo(() => {
           />
         )
       }
-      formControlProps={{
+      inputGroupProps={{
         w: "300px",
       }}
       onChange={(ev) => {
@@ -38,7 +38,6 @@ export const FilterInput: FC = memo(() => {
         clickable: true,
       }}
       value={filterValue}
-      w="300px"
     />
   )
 })

@@ -7,6 +7,22 @@ export const GameSessionSchedule: CollectionConfig = {
   access: {},
   fields: [
     {
+      name: "name",
+      type: "text",
+      required: true,
+      admin: {
+        description: "The name of the game session schedule, e.g. UoA Rec Centre",
+      },
+    },
+    {
+      name: "location",
+      type: "text",
+      required: true,
+      admin: {
+        description: "The location of the game session schedule, e.g. 17 Symonds Street",
+      },
+    },
+    {
       name: "semester",
       type: "relationship",
       relationTo: "semester",

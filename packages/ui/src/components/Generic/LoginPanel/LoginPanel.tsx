@@ -8,6 +8,7 @@ import {
   Box,
   Center,
   Checkbox,
+  FormControl,
   HStack,
   memo,
   noop,
@@ -74,24 +75,24 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         </VStack>
       </Center>
 
-      <TextInput
-        data-testid="email"
-        errorMessage={errors.email?.message}
-        isError={!!errors.email}
-        placeholder="Email Address"
-        registration={register("email")}
-        startIcon={<MailIcon />}
-        type={InputType.Email}
-      />
-      <TextInput
-        data-testid="password"
-        errorMessage={errors.password?.message}
-        isError={!!errors.password}
-        placeholder="Password"
-        registration={register("password")}
-        startIcon={<LockIcon />}
-        type={InputType.Password}
-      />
+      <FormControl errorMessage={errors.email?.message} invalid={!!errors.email}>
+        <TextInput
+          data-testid="email"
+          placeholder="Email Address"
+          startIcon={<MailIcon />}
+          type={InputType.Email}
+          {...register("email")}
+        />
+      </FormControl>
+      <FormControl errorMessage={errors.password?.message} invalid={!!errors.password}>
+        <TextInput
+          data-testid="password"
+          placeholder="Password"
+          startIcon={<LockIcon />}
+          type={InputType.Password}
+          {...register("password")}
+        />
+      </FormControl>
       <HStack color="gray.100" fontSize="sm">
         <Checkbox label="Remember me" size="sm" textAlign="start" />
         <Spacer />
