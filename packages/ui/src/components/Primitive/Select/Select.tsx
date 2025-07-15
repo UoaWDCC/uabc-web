@@ -64,11 +64,9 @@ export const Select = memo(
         <Box
           position="relative"
           sx={{
-            label: label && {
-              "&:not(:has(div[data-placeholder]))": {
-                label: {
-                  visibility: "hidden",
-                },
+            "&:not(:has(div[data-placeholder]))": {
+              label: {
+                visibility: "hidden",
               },
             },
           }}
