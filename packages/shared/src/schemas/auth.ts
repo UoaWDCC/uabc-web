@@ -3,7 +3,7 @@ import type { User } from "../payload-types"
 import { MediaSchema } from "./media"
 
 // Payload User Schema
-const UserSchema = z.object({
+export const UserSchema = z.object({
   id: z.string(),
   firstName: z.string(),
   lastName: z.string().nullable().optional(),
@@ -90,6 +90,37 @@ export const RegisterDetailsSchema = z.object({
     .regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/), // Special characters
 })
 
+export const RegisterPanelDetailsSchema = z
+  .object({
+    /**
+     * The user's email address
+     * @example straightzhao@gmail.com
+     */
+    email: z.string().email(),
+    /**
+     * The user's password (proper password scheme enforced)
+     * @example str@!ghtZh@069
+     */
+    password: z
+      .string()
+      .min(8, "Your password must be at least 8 characters")
+      .regex(/[A-Z]/, "Your password must include an uppercase letter")
+      .regex(/[a-z]/, "Your password must include a lowercase letter")
+      .regex(/[0-9]/, "Your password must include a number")
+      .regex(
+        /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
+        "Your password must include a special character",
+      ),
+    /**
+     * The string entered by the user to confirm their password
+     */
+    confirmPassword: z.string(),
+  })
+  .refine(({ password, confirmPassword }) => password === confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
+
 export const LoginDetailsSchema = z.object({
   /**
    * The user's email address
@@ -106,3 +137,4 @@ export const LoginDetailsSchema = z.object({
 export type JWTEncryptedUser = z.infer<typeof JWTEncryptedUserSchema>
 export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>
 export type LoginDetails = z.infer<typeof LoginDetailsSchema>
+export type RegisterPanelDetails = z.infer<typeof RegisterPanelDetailsSchema>

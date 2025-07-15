@@ -383,6 +383,14 @@ export interface Semester {
 export interface GameSessionSchedule {
   id: string;
   /**
+   * The name of the game session schedule, e.g. UoA Rec Centre
+   */
+  name: string;
+  /**
+   * The location of the game session schedule, e.g. 17 Symonds Street
+   */
+  location: string;
+  /**
    * The semester this game session schedule belongs to
    */
   semester: string | Semester;
@@ -423,6 +431,14 @@ export interface GameSession {
    * The semester this game session belongs to. This is required because a game session can't exist without a semester.
    */
   semester: string | Semester;
+  /**
+   * The name of the game session (in case this is a one off session), e.g. UoA Rec Centre
+   */
+  name?: string | null;
+  /**
+   * The location of the game session (in case this is a one off session), e.g. 17 Symonds Street
+   */
+  location?: string | null;
   /**
    * The start time of the game session
    */
@@ -704,6 +720,8 @@ export interface SemesterSelect<T extends boolean = true> {
  * via the `definition` "gameSessionSchedule_select".
  */
 export interface GameSessionScheduleSelect<T extends boolean = true> {
+  name?: T;
+  location?: T;
   semester?: T;
   day?: T;
   startTime?: T;
@@ -720,6 +738,8 @@ export interface GameSessionScheduleSelect<T extends boolean = true> {
 export interface GameSessionSelect<T extends boolean = true> {
   gameSessionSchedule?: T;
   semester?: T;
+  name?: T;
+  location?: T;
   startTime?: T;
   endTime?: T;
   capacity?: T;
