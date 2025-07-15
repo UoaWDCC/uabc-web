@@ -15,14 +15,16 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 })
 
+const title = "UABC | Home"
+const description =
+  "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people! Join our sessions or check our Instagram page for events!"
+
 export const metadata: Metadata = {
-  title: "UABC | Home",
-  description:
-    "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people! Join our sessions or check our Instagram page for events!",
+  title,
+  description,
   openGraph: {
-    title: "UABC | Home",
-    description:
-      "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people! Join our sessions or check our Instagram page for events!",
+    title,
+    description,
     url: "https://uabc.wddc.co.nz",
     siteName: "UABC",
     images: [
