@@ -21,7 +21,7 @@ export const Default: Story = {
 export const Custom: Story = {
   args: {
     links: {
-      custom1: {
+      linkGroup1: {
         title: "Custom Links",
         links: [
           { label: "Custom 1", url: "#" },
@@ -29,7 +29,7 @@ export const Custom: Story = {
           { label: "Custom 3", url: "#" },
         ],
       },
-      custom2: {
+      linkGroup2: {
         title: "More Links",
         links: [
           { label: "More 1", url: "#" },

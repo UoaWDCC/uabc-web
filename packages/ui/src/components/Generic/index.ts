@@ -1,5 +1,6 @@
 export * from "./AboutUsCard/AboutUsCard"
 export * from "./AdminTabBar"
+export * from "./BookingCard"
 export * from "./BookingTimesCardGroup"
 export * from "./FAQ"
 export * from "./Footer"
