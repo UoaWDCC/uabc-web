@@ -11,7 +11,6 @@ export const GameSessionScheduleSchema = z.object({
   id: z.string(),
   semester: z.union([z.string(), SemesterSchema]),
   day: z.nativeEnum(Weekday),
-  name: z.string(),
   location: z.string(),
   startTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   endTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
