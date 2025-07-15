@@ -31,9 +31,7 @@ export const FooterBottom = memo<FooterBottomProps>(
           gap={{ base: "xs", lg: "sm" }}
           textAlign={{ base: "center", lg: "left" }}
         >
-          <Text color="muted">
-            &copy; {new Date().getFullYear()} {copyrightName}.
-          </Text>
+          <Text color="muted">{copyrightName}</Text>
           <Text color="muted">All rights reserved.</Text>
         </VStack>
         <Spacer display={{ base: "none", lg: "flex" }} />
