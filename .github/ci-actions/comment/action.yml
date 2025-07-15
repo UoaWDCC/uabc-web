@@ -52,10 +52,10 @@ runs:
       run: |
         message="${{ steps.find-comment.outputs.comment-body }}"
 
-        if [[ -n "${{ inputs.preview-storybook }}" && "${{ inputs.output }}" != "failure" ]]; then
+        if [[ -n "${{ inputs.preview-storybook }}" && "${{ inputs.output }}" == "success" ]]; then
           message=$(echo "$message" | sed "s|🔄 Storybook Preview: Deploying...|✅ Storybook Preview: ${{ inputs.preview-storybook }}|")
 
-        elif [[ -n "${{ inputs.preview-frontend }}" && "${{ inputs.output }}" != "failure" ]]; then
+        elif [[ -n "${{ inputs.preview-frontend }}" && "${{ inputs.output }}" == "success" ]]; then
           message=$(echo "$message" | sed "s|🔄 Frontend Preview: Deploying...|✅ Frontend Preview: ${{ inputs.preview-frontend }}|")
         
         elif [[ "${{ inputs.type }}" == "storybook" ]]; then
