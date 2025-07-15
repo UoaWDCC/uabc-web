@@ -859,10 +859,6 @@ export interface Footer {
    * Copyright notice for the club.
    */
   copyright: string;
-  /**
-   * Credits or acknowledgments for the site.
-   */
-  credits?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -926,7 +922,6 @@ export interface FooterSelect<T extends boolean = true> {
   linkGroup1?: T | LinkGroupSelect<T>;
   linkGroup2?: T | LinkGroupSelect<T>;
   copyright?: T;
-  credits?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -51,7 +51,7 @@ export const FooterSection = () => {
 
   const bottomData = {
     copyrightName: footerResponseData.copyright,
-    credits: footerResponseData.credits,
+    credits: "Developed by the 2025 WDCC UABC Team.",
   }
 
   const brandData = {

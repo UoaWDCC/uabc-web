@@ -7,11 +7,11 @@ import { FooterSocialLinks } from "./FooterSocialLinks"
 export interface FooterBottomProps extends StackProps {
   socialLinks: SocialLink[]
   copyrightName: string
-  credits: string
+  credits?: string
 }
 
 export const FooterBottom = memo<FooterBottomProps>(
-  ({ socialLinks, copyrightName, credits, ...props }) => {
+  ({ socialLinks, copyrightName, credits = "Developed by the 2025 WDCC UABC Team", ...props }) => {
     return (
       <Stack
         as={Center}

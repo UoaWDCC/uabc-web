@@ -9,7 +9,6 @@ export const FooterSchema = z.object({
   description: z.string(),
   logo: MediaSchema,
   copyright: z.string(),
-  credits: z.string(),
   linkGroup1: LinkGroupSchema,
   linkGroup2: LinkGroupSchema,
   facebook: z.string(),
