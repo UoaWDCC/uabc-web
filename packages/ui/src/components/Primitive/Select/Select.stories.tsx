@@ -73,7 +73,7 @@ export const TypesAndStates: Story = (args) => {
             errorMessage={isError ? "This field has an error" : undefined}
             invalid={isError}
             key={key}
-            label={row.charAt(0).toUpperCase() + row.slice(1) + " Select"}
+            label={`${row.charAt(0).toUpperCase() + row.slice(1)} Select`}
           >
             <Select
               disabled={isDisabled}

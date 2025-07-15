@@ -18,8 +18,6 @@ export interface SelectProps extends Omit<UISelectProps, "variant"> {
    *
    * @remarks
    * The label is rendered within the Select component if provided by the parent.
-   *
-   * @defaultValue "Select option"
    */
   label?: string
   /**
@@ -59,16 +57,18 @@ export interface SelectProps extends Omit<UISelectProps, "variant"> {
  */
 export const Select = memo(
   forwardRef<HTMLSelectElement, SelectProps>(
-    ({ children, label = "Select option", icon, variant, disabled, ...props }, ref) => {
+    ({ children, label, icon, variant, disabled, ...props }, ref) => {
       const stylised = variant === "stylised"
 
       return (
         <Box
           position="relative"
           sx={{
-            "&:not(:has(div[data-placeholder]))": {
-              label: {
-                visibility: "hidden",
+            label: label && {
+              "&:not(:has(div[data-placeholder]))": {
+                label: {
+                  visibility: "hidden",
+                },
               },
             },
           }}
