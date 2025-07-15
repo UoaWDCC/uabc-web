@@ -4,6 +4,7 @@ import {
   type PaginationQuery,
   type UpdateUserRequest,
 } from "@repo/shared/schemas"
+import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
 
 const AdminUserService = {
@@ -53,9 +54,8 @@ const AdminUserService = {
    * @returns A promise that resolves to a boolean indicating success.
    */
   deleteUser: async (id: string) => {
-    const { data } = await apiClient.delete(`/admin/users/${id}`)
-    if (!data) throw new Error("Failed to delete user")
-    return data
+    const { status } = await apiClient.delete(`/admin/users/${id}`)
+    if (status !== StatusCodes.NO_CONTENT) throw new Error("Failed to delete user")
   },
 } as const
 export default AdminUserService

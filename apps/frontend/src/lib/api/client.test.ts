@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
 import { createApiClient } from "./client"
 
@@ -508,7 +509,7 @@ describe("ApiClient", () => {
           next: { tags: ["deleteTag"], revalidate: 10 },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false })
+      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
   })
 })
