@@ -53,7 +53,7 @@ class ApiClient {
     schema: z.Schema<T>,
     tags: string[] = [],
     revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
         next: {
@@ -67,9 +67,9 @@ class ApiClient {
       }
 
       const data = await response.json()
-      return { data: schema.parse(data), isError: false }
+      return { data: schema.parse(data), isError: false, status: response.status }
     } catch (error) {
-      return { error: error as Error, isError: true }
+      return { error: error as Error, isError: true, status: null }
     }
   }
 
@@ -89,7 +89,7 @@ class ApiClient {
     schema: z.Schema<T>,
     tags: string[] = [],
     revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean }> {
+  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
         method: "POST",
@@ -104,9 +104,9 @@ class ApiClient {
         throw new Error(`Failed to fetch ${path}: ${response.statusText}`)
       }
       const data = await response.json()
-      return { data: schema.parse(data), isError: false }
+      return { data: schema.parse(data), isError: false, status: response.status }
     } catch (error) {
-      return { error: error as Error, isError: true }
+      return { error: error as Error, isError: true, status: null }
     }
   }
 

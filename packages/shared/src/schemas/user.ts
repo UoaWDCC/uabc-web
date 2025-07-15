@@ -25,6 +25,8 @@ export const CreateUserRequestSchema = z.object({
   image: z.string().nullable().optional(),
 }) satisfies z.ZodType<CreateUserData>
 
+export type CreateUserRequest = z.infer<typeof CreateUserRequestSchema>
+
 export const UpdateUserRequestSchema =
   CreateUserRequestSchema.partial() satisfies z.ZodType<EditUserData>
 

@@ -1,4 +1,5 @@
 import {
+  type CreateUserRequest,
   GetAllUsersResponseSchema,
   GetUserResponseSchema,
   type PaginationQuery,
@@ -8,6 +9,15 @@ import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
 
 const AdminUserService = {
+  createUser: async (data: CreateUserRequest) => {
+    const { data: createdUser, status } = await apiClient.post(
+      "/admin/users",
+      data,
+      GetUserResponseSchema,
+    )
+    if (status !== StatusCodes.CREATED) throw new Error("Failed to create user")
+    return createdUser
+  },
   /**
    * Fetches all users.
    *
@@ -16,8 +26,8 @@ const AdminUserService = {
    */
   getAllUsers: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
-    const { data } = await apiClient.get(`/admin/users?${query}`, GetAllUsersResponseSchema)
-    if (!data) throw new Error("Failed to fetch all users")
+    const { data, status } = await apiClient.get(`/admin/users?${query}`, GetAllUsersResponseSchema)
+    if (status !== StatusCodes.OK) throw new Error("Failed to fetch all users")
     return data
   },
   /**
@@ -27,8 +37,8 @@ const AdminUserService = {
    * @returns A promise that resolves to a user.
    */
   getUser: async (id: string) => {
-    const { data } = await apiClient.get(`/admin/users/${id}`, GetUserResponseSchema)
-    if (!data) throw new Error("Failed to fetch user")
+    const { data, status } = await apiClient.get(`/admin/users/${id}`, GetUserResponseSchema)
+    if (status !== StatusCodes.OK) throw new Error("Failed to fetch user")
     return data
   },
   /**
@@ -39,12 +49,12 @@ const AdminUserService = {
    * @returns A promise that resolves to the updated user.
    */
   updateUser: async (id: string, data: UpdateUserRequest) => {
-    const { data: updatedUser } = await apiClient.patch(
+    const { data: updatedUser, status } = await apiClient.patch(
       `/admin/users/${id}`,
       data,
       GetUserResponseSchema,
     )
-    if (!updatedUser) throw new Error("Failed to update user")
+    if (status !== StatusCodes.OK) throw new Error("Failed to update user")
     return updatedUser
   },
   /**
