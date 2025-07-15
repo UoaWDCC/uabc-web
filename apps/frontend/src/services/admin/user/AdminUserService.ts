@@ -9,6 +9,12 @@ import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
 
 const AdminUserService = {
+  /**
+   * Creates a new user.
+   *
+   * @param data The user data to create.
+   * @returns The created user.
+   */
   createUser: async (data: CreateUserRequest) => {
     const { data: createdUser, status } = await apiClient.post(
       "/admin/users",
