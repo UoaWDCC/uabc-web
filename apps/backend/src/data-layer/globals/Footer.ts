@@ -77,7 +77,7 @@ export const Footer: GlobalConfig = {
           type: "array",
           required: true,
           maxRows: 5,
-          interfaceName: "Link",
+          interfaceName: "LinkArray",
           defaultValue: [
             {
               label: "Home",
@@ -133,7 +133,7 @@ export const Footer: GlobalConfig = {
           type: "array",
           required: true,
           maxRows: 5,
-          interfaceName: "Link",
+          interfaceName: "LinkArray",
           defaultValue: [
             {
               label: "About Us",

@@ -875,7 +875,7 @@ export interface LinkGroup {
    * The title for the second group of links.
    */
   title: string;
-  links: Link;
+  links: LinkArray;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -937,7 +937,16 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface LinkGroupSelect<T extends boolean = true> {
   title?: T;
-  links?: T | LinkSelect<T>;
+  links?: T | LinkArraySelect<T>;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkArray_select".
+ */
+export interface LinkArraySelect<T extends boolean = true> {
+  label?: T;
+  url?: T;
+  id?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -950,15 +959,6 @@ export interface NavbarSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "LinkArray_select".
- */
-export interface LinkArraySelect<T extends boolean = true> {
-  label?: T;
-  url?: T;
-  id?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

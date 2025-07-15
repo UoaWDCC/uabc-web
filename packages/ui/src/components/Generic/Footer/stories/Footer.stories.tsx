@@ -23,21 +23,19 @@ export const AllProps: Story = {
       copyrightName: "UABC Storybook",
       credits: "Developed by Storybook",
     },
-    links: {
-      custom1: {
-        title: "Story Links",
-        links: [
-          { label: "Story 1", url: "#" },
-          { label: "Story 2", url: "#" },
-        ],
-      },
-      custom2: {
-        title: "Book Links",
-        links: [
-          { label: "Book 1", url: "#" },
-          { label: "Book 2", url: "#" },
-        ],
-      },
+    linkGroup1: {
+      title: "Story Links",
+      links: [
+        { label: "Story 1", url: "#" },
+        { label: "Story 2", url: "#" },
+      ],
+    },
+    linkGroup2: {
+      title: "Book Links",
+      links: [
+        { label: "Book 1", url: "#" },
+        { label: "Book 2", url: "#" },
+      ],
     },
     decoration: undefined,
   },
