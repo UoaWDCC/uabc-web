@@ -24,20 +24,20 @@ const customProps = {
   ...requiredProps,
   subtitle: "Test Subtitle",
   closeButton: false,
-  primaryButton: {
+  confirmButton: {
     label: "Confirm!!",
   },
-  secondaryButton: {
+  cancelButton: {
     label: "Cancel!!",
   },
 }
 
 const customPropsWithOnClick = {
   ...requiredProps,
-  primaryButton: {
+  confirmButton: {
     onClick: () => console.log("Primary button clicked!"),
   },
-  secondaryButton: {
+  cancelButton: {
     onClick: () => console.log("Secondary button clicked!"),
   },
 }
@@ -83,15 +83,15 @@ describe("<ConfirmationPopUp />", () => {
     const { user } = render(<ConfirmationPopUpExample {...customPropsWithOnClick} />)
     await user.click(screen.getByText("Open Confirmation PopUp"))
 
-    const primaryButton = screen.getByRole("button", { name: "Confirm" })
-    const secondaryButton = screen.getByRole("button", { name: "Cancel" })
+    const confirmButton = screen.getByRole("button", { name: "Confirm" })
+    const cancelButton = screen.getByRole("button", { name: "Cancel" })
 
-    await user.click(primaryButton)
+    await user.click(confirmButton)
     expect(spy).toHaveBeenCalledWith("Primary button clicked!")
 
     spy.mockClear()
 
-    await user.click(secondaryButton)
+    await user.click(cancelButton)
     expect(spy).toHaveBeenCalledWith("Secondary button clicked!")
 
     spy.mockRestore()

@@ -28,20 +28,20 @@ export interface ConfirmationPopUpProps extends DialogProps {
    */
   closeButton?: boolean
   /**
-   * Configuration for the primary button on the right/top, including label and click handler.
+   * Configuration for the confirm button on the right/top, including label and click handler.
    */
-  primaryButton?: ButtonProps & {
+  confirmButton?: ButtonProps & {
     /**
-     * Label for the primary button.
+     * Label for the confirm button.
      */
     label?: string
   }
   /**
-   * Configuration for the secondary button on the left/bottom, including label and click handler.
+   * Configuration for the cancel button on the left/bottom, including label and click handler.
    */
-  secondaryButton?: ButtonProps & {
+  cancelButton?: ButtonProps & {
     /**
-     * Label for the secondary button.
+     * Label for the cancel button.
      */
     label?: string
   }
@@ -53,8 +53,8 @@ export interface ConfirmationPopUpProps extends DialogProps {
  * @param closeButton Whether to show the close button in the confirmation pop-up.
  * @param title The title of the confirmation pop-up.
  * @param subtitle Optional subtitle or additional information in the confirmation pop-up.
- * @param primaryButton Configuration for the primary button, including label and click handler.
- * @param secondaryButton Configuration for the secondary button, including label and click handler.
+ * @param confirmButton Configuration for the confirm button, including label and click handler.
+ * @param cancelButton Configuration for the cancel button, including label and click handler.
  * @param open Whether the dialog is open or not.
  * @param onClose Function to call when the dialog is closed.
  * @param props Additional props for the dialog component.
@@ -64,8 +64,8 @@ export interface ConfirmationPopUpProps extends DialogProps {
  *  title="Delete Account"
  *  subtitle="Are you sure you want to delete your account?"
  *  closeButton={false}
- *  primaryButton={{ label: "Delete", onClick: handleDelete }}
- *  secondaryButton={{ label: "Cancel" }}
+ *  confirmButton={{ label: "Delete", onClick: handleDelete }}
+ *  cancelButton={{ label: "Cancel" }}
  *  open={isOpen}
  *  onClose={handleClose}
  * />
@@ -74,23 +74,23 @@ export const ConfirmationPopUp = ({
   closeButton = true,
   title,
   subtitle,
-  primaryButton,
-  secondaryButton,
+  confirmButton,
+  cancelButton,
   open,
   onClose,
   ...props
 }: ConfirmationPopUpProps) => {
   const {
-    label: primaryButtonLabel = "Confirm",
-    onClick: primaryButtonOnClick = onClose,
-    ...primaryButtonProps
-  } = primaryButton ?? { label: "Confirm" }
+    label: confirmButtonLabel = "Confirm",
+    onClick: confirmButtonOnClick = onClose,
+    ...confirmButtonProps
+  } = confirmButton ?? { label: "Confirm" }
 
   const {
-    label: secondaryButtonLabel = "Cancel",
-    onClick: secondaryButtonOnClick = onClose,
-    ...secondaryButtonProps
-  } = secondaryButton ?? {}
+    label: cancelButtonLabel = "Cancel",
+    onClick: cancelButtonOnClick = onClose,
+    ...cancelButtonProps
+  } = cancelButton ?? {}
 
   return (
     <Dialog
@@ -125,23 +125,23 @@ export const ConfirmationPopUp = ({
       </DialogBody>
       <DialogFooter justifyContent="center" w="full">
         <ButtonGroup flexDirection={{ base: "column-reverse", md: "row" }} gap="md">
-          {(secondaryButton || !closeButton) && (
+          {(cancelButton || !closeButton) && (
             <Button
               colorScheme="secondary"
-              onClick={secondaryButtonOnClick}
+              onClick={cancelButtonOnClick}
               size="lg"
-              {...secondaryButtonProps}
+              {...cancelButtonProps}
             >
-              {secondaryButtonLabel}
+              {cancelButtonLabel}
             </Button>
           )}
           <Button
             colorScheme="primary"
-            onClick={primaryButtonOnClick}
+            onClick={confirmButtonOnClick}
             size="lg"
-            {...primaryButtonProps}
+            {...confirmButtonProps}
           >
-            {primaryButtonLabel}
+            {confirmButtonLabel}
           </Button>
         </ButtonGroup>
       </DialogFooter>

@@ -26,16 +26,16 @@ const meta: Meta<typeof ConfirmationPopUp> = {
         type: { summary: "boolean" },
       },
     },
-    primaryButton: {
+    confirmButton: {
       control: "object",
-      description: "Primary button configuration with label and click handler",
+      description: "Confirm button configuration with label and click handler",
       table: {
         type: { summary: "{ label: string; onClick?: () => void }" },
       },
     },
-    secondaryButton: {
+    cancelButton: {
       control: "object",
-      description: "Secondary button configuration with label and click handler",
+      description: "Cancel button configuration with label and click handler",
       table: {
         type: { summary: "{ label: string; onClick?: () => void }" },
       },
@@ -45,8 +45,8 @@ const meta: Meta<typeof ConfirmationPopUp> = {
     title: "Delete Account",
     subtitle: "Are you sure you want to delete account?",
     closeButton: true,
-    primaryButton: undefined,
-    secondaryButton: undefined,
+    confirmButton: undefined,
+    cancelButton: undefined,
     open: true,
     onClose: () => {},
   },
@@ -63,8 +63,8 @@ export const NoCloseButton: Story = {
   },
 }
 
-export const WithSecondaryButton: Story = {
+export const WithCancelButton: Story = {
   args: {
-    secondaryButton: {},
+    cancelButton: {},
   },
 }
