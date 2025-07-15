@@ -1,5 +1,6 @@
 import { Button, Heading, TextInput } from "@repo/ui/components/Primitive"
 import {
+  ButtonGroup,
   Center,
   Dialog,
   DialogBody,
@@ -9,7 +10,6 @@ import {
   DialogOverlay,
   type DialogProps,
   FormControl,
-  Stack,
 } from "@yamada-ui/react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
@@ -59,7 +59,6 @@ export const InputPopUp: React.FC<InputPopUpProps> = ({
   onConfirm,
   ...props
 }) => {
-  // const { open, onOpen, onClose } = useDisclosure()
   const {
     register,
     handleSubmit,
@@ -101,29 +100,34 @@ export const InputPopUp: React.FC<InputPopUpProps> = ({
         <Heading.h3 fontWeight="light" size={{ sm: "lg", md: "2xl" }} textAlign="center" w="full">
           {description}
         </Heading.h3>
-
-        <FormControl errorMessage={errors.name?.message} invalid={!!errors.name} w="full">
-          <Center w="full">
+        <Center w="full">
+          <FormControl
+            errorMessage={errors.name?.message}
+            invalid={!!errors.name}
+            w={{ base: "full", sm: "sm" }}
+          >
             <TextInput
               id="name"
-              mx="auto"
               placeholder={description.split(":")[0]}
               size="lg"
-              w={{ base: "full", sm: "sm" }}
               {...register("name", { required: "This field is required." })}
             />
-          </Center>
-        </FormControl>
+          </FormControl>
+        </Center>
       </DialogBody>
       <DialogFooter gap="6.5" w="full">
-        <Stack direction={{ base: "column", md: "row" }} gap={{ base: "4", md: "6.5" }} w="full">
+        <ButtonGroup
+          direction={{ base: "column", md: "row" }}
+          gap={{ base: "4", md: "6.5" }}
+          w="full"
+        >
           <Button colorScheme="secondary" onClick={props.onClose} size="md" w="full">
             Cancel
           </Button>
           <Button colorScheme="primary" isLoading={isSubmitting} size="md" type="submit" w="full">
             Confirm
           </Button>
-        </Stack>
+        </ButtonGroup>
       </DialogFooter>
     </Dialog>
   )
