@@ -165,7 +165,6 @@ jobs:
           method: post
           type: storybook
           preview-storybook: ${{ steps.preview-storybook.outputs.deployment-url }}
-          output: ${{ steps.preview-storybook.result }}
 
   preview-frontend:
     needs: [check_changes, setup]
@@ -194,7 +193,6 @@ jobs:
           method: post
           type: frontend
           preview-frontend: ${{ steps.preview-frontend.outputs.deployment-url }}
-          output: ${{ steps.preview-frontend.result }}
 
   typecheck:
     needs: [check_changes, setup]
