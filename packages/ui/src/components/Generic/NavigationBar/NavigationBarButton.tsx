@@ -8,7 +8,7 @@ import Link from "next/link"
  */
 interface NavigationBarButtonProps extends ButtonProps {
   label: string
-  path: string
+  url: string
   hovering?: boolean
 }
 
@@ -17,7 +17,7 @@ interface NavigationBarButtonProps extends ButtonProps {
  * It also displays a hover indicator when the button is hovered.
  *
  * @param label The label of the button.
- * @param path The path to navigate to when the button is clicked.
+ * @param url The url to navigate to when the button is clicked.
  * @param hovering Optional boolean to indicate if the hover indicator should be shown.
  * @param colorScheme Optional color scheme for the button.
  * @param props Additional props for the button component.
@@ -25,7 +25,7 @@ interface NavigationBarButtonProps extends ButtonProps {
  * @returns A button with a label and a link, with an optional hover indicator.
  */
 export const NavigationBarButton = forwardRef<NavigationBarButtonProps, "a">(
-  ({ label, path, hovering, colorScheme, ...props }, ref) => {
+  ({ label, url, hovering, colorScheme, ...props }, ref) => {
     return (
       <Box position="relative">
         <AnimatePresence>{hovering && <NavigationBarHoverIndicator />}</AnimatePresence>
@@ -34,7 +34,7 @@ export const NavigationBarButton = forwardRef<NavigationBarButtonProps, "a">(
           borderRadius="150px"
           colorScheme={colorScheme}
           fontSize="lg"
-          href={path}
+          href={url}
           position="relative"
           px="md"
           ref={ref}

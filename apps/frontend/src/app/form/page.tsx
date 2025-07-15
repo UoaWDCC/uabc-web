@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AutoCompleteType, Heading, InputType, TextInput } from "@repo/ui/components/Primitive"
-import { Button, Container, useNotice, VStack } from "@yamada-ui/react"
+import { Button, Container, FormControl, useNotice, VStack } from "@yamada-ui/react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -41,39 +41,32 @@ export default function FormPage() {
     <Container as="main" centerContent>
       <Heading.h1>Form Example</Heading.h1>
       <VStack as="form" maxW="3xl" onSubmit={handleSubmit(onSubmit)}>
-        <TextInput
-          errorMessage={errors.name?.message}
-          isError={!!errors.name}
-          label="Name"
-          placeholder="Badminton Club"
-          registration={register("name")}
-        />
-        <TextInput
-          autoComplete={AutoCompleteType.Email}
-          errorMessage={errors.email?.message}
-          isError={!!errors.email}
-          label="Email"
-          placeholder="test@example.com"
-          registration={register("email")}
-          type={InputType.Email}
-        />
-        <TextInput
-          autoComplete={AutoCompleteType.CurrentPassword}
+        <FormControl errorMessage={errors.name?.message} invalid={!!errors.name} label="Name">
+          <TextInput placeholder="Badminton Club" {...register("name")} />
+        </FormControl>
+        <FormControl errorMessage={errors.email?.message} invalid={!!errors.email} label="Email">
+          <TextInput
+            autoComplete={AutoCompleteType.Email}
+            placeholder="test@example.com"
+            type={InputType.Email}
+            {...register("email")}
+          />
+        </FormControl>
+        <FormControl
           errorMessage={errors.password?.message}
-          isError={!!errors.password}
+          invalid={!!errors.password}
           label="Password"
-          placeholder="Enter your password"
-          registration={register("password")}
-          type={InputType.Password}
-        />
-        <TextInput
-          errorMessage={errors.age?.message}
-          isError={!!errors.age}
-          label="Age"
-          placeholder="20"
-          registration={register("age")}
-          type={InputType.Number}
-        />
+        >
+          <TextInput
+            autoComplete={AutoCompleteType.CurrentPassword}
+            placeholder="Enter your password"
+            type={InputType.Password}
+            {...register("password")}
+          />
+        </FormControl>
+        <FormControl errorMessage={errors.age?.message} invalid={!!errors.age} label="Age">
+          <TextInput placeholder="20" type={InputType.Number} {...register("age")} />
+        </FormControl>
 
         <Button
           colorScheme="primary"
