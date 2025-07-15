@@ -25,10 +25,10 @@ const customProps = {
   subtitle: "Test Subtitle",
   closeButton: false,
   confirmButton: {
-    label: "Confirm!!",
+    children: "Confirm!!",
   },
   cancelButton: {
-    label: "Cancel!!",
+    children: "Cancel!!",
   },
 }
 

@@ -28,23 +28,13 @@ export interface ConfirmationPopUpProps extends DialogProps {
    */
   closeButton?: boolean
   /**
-   * Configuration for the confirm button on the right/top, including label and click handler.
+   * Configuration for the confirm button on the right/top, including children and click handler.
    */
-  confirmButton?: ButtonProps & {
-    /**
-     * Label for the confirm button.
-     */
-    label?: string
-  }
+  confirmButton?: ButtonProps
   /**
-   * Configuration for the cancel button on the left/bottom, including label and click handler.
+   * Configuration for the cancel button on the left/bottom, including children and click handler.
    */
-  cancelButton?: ButtonProps & {
-    /**
-     * Label for the cancel button.
-     */
-    label?: string
-  }
+  cancelButton?: ButtonProps
 }
 
 /**
@@ -53,8 +43,8 @@ export interface ConfirmationPopUpProps extends DialogProps {
  * @param closeButton Whether to show the close button in the confirmation pop-up.
  * @param title The title of the confirmation pop-up.
  * @param subtitle Optional subtitle or additional information in the confirmation pop-up.
- * @param confirmButton Configuration for the confirm button, including label and click handler.
- * @param cancelButton Configuration for the cancel button, including label and click handler.
+ * @param confirmButton Configuration for the confirm button, including children and click handler.
+ * @param cancelButton Configuration for the cancel button, including children and click handler.
  * @param open Whether the dialog is open or not.
  * @param onClose Function to call when the dialog is closed.
  * @param props Additional props for the dialog component.
@@ -64,8 +54,8 @@ export interface ConfirmationPopUpProps extends DialogProps {
  *  title="Delete Account"
  *  subtitle="Are you sure you want to delete your account?"
  *  closeButton={false}
- *  confirmButton={{ label: "Delete", onClick: handleDelete }}
- *  cancelButton={{ label: "Cancel" }}
+ *  confirmButton={{ children: "Delete", onClick: handleDelete }}
+ *  cancelButton={{ children: "Cancel" }}
  *  open={isOpen}
  *  onClose={handleClose}
  * />
@@ -81,13 +71,13 @@ export const ConfirmationPopUp = ({
   ...props
 }: ConfirmationPopUpProps) => {
   const {
-    label: confirmButtonLabel = "Confirm",
+    children: confirmButtonChildren = "Confirm",
     onClick: confirmButtonOnClick = onClose,
     ...confirmButtonProps
-  } = confirmButton ?? { label: "Confirm" }
+  } = confirmButton ?? { children: "Confirm" }
 
   const {
-    label: cancelButtonLabel = "Cancel",
+    children: cancelButtonChildren = "Cancel",
     onClick: cancelButtonOnClick = onClose,
     ...cancelButtonProps
   } = cancelButton ?? {}
@@ -132,7 +122,7 @@ export const ConfirmationPopUp = ({
               size="lg"
               {...cancelButtonProps}
             >
-              {cancelButtonLabel}
+              {cancelButtonChildren}
             </Button>
           )}
           <Button
@@ -141,7 +131,7 @@ export const ConfirmationPopUp = ({
             size="lg"
             {...confirmButtonProps}
           >
-            {confirmButtonLabel}
+            {confirmButtonChildren}
           </Button>
         </ButtonGroup>
       </DialogFooter>

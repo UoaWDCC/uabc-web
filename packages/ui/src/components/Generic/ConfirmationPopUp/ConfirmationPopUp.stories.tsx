@@ -28,16 +28,16 @@ const meta: Meta<typeof ConfirmationPopUp> = {
     },
     confirmButton: {
       control: "object",
-      description: "Confirm button configuration with label and click handler",
+      description: "Confirm button configuration with children and click handler",
       table: {
-        type: { summary: "{ label: string; onClick?: () => void }" },
+        type: { summary: "{ children: React.ReactNode; onClick?: () => void }" },
       },
     },
     cancelButton: {
       control: "object",
-      description: "Cancel button configuration with label and click handler",
+      description: "Cancel button configuration with children and click handler",
       table: {
-        type: { summary: "{ label: string; onClick?: () => void }" },
+        type: { summary: "{ children: React.ReactNode; onClick?: () => void }" },
       },
     },
   },
@@ -45,8 +45,8 @@ const meta: Meta<typeof ConfirmationPopUp> = {
     title: "Delete Account",
     subtitle: "Are you sure you want to delete account?",
     closeButton: true,
-    confirmButton: undefined,
-    cancelButton: undefined,
+    confirmButton: { children: "Delete" },
+    cancelButton: { children: "Cancel" },
     open: true,
     onClose: () => {},
   },
@@ -65,6 +65,6 @@ export const NoCloseButton: Story = {
 
 export const WithCancelButton: Story = {
   args: {
-    cancelButton: {},
+    cancelButton: { children: "Cancel" },
   },
 }
