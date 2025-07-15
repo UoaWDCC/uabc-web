@@ -15,7 +15,7 @@ export type SocialLink = Link & {
 // TODO: THESE WILL BE REPLACED WITH PAYLOAD
 
 export const MOCK_LINKS: Record<string, LinkGroup> = {
-  quick: {
+  linkGroup1: {
     title: "Quick Links",
     links: [
       {
@@ -32,7 +32,7 @@ export const MOCK_LINKS: Record<string, LinkGroup> = {
       },
     ],
   },
-  uabc: {
+  linkGroup2: {
     title: "UABC",
     links: [
       {

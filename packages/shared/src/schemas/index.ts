@@ -1,5 +1,6 @@
 export * from "./auth"
 export * from "./faq"
+export * from "./footer"
 export * from "./game-session"
 export * from "./link"
 export * from "./media"

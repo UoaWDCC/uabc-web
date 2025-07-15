@@ -77,7 +77,7 @@ export const Footer: GlobalConfig = {
           type: "array",
           required: true,
           maxRows: 5,
-          interfaceName: "Link",
+          interfaceName: "LinkArray",
           defaultValue: [
             {
               label: "Home",
@@ -133,7 +133,7 @@ export const Footer: GlobalConfig = {
           type: "array",
           required: true,
           maxRows: 5,
-          interfaceName: "Link",
+          interfaceName: "LinkArray",
           defaultValue: [
             {
               label: "About Us",
@@ -173,18 +173,9 @@ export const Footer: GlobalConfig = {
       name: "copyright",
       type: "textarea",
       required: true,
-      defaultValue: "© 2025 University of Auckland Badminton Club. \nAll rights reserved.",
+      defaultValue: "© 2025 University of Auckland Badminton Club",
       admin: {
         description: "Copyright notice for the club.",
-      },
-    },
-    {
-      name: "credits",
-      type: "textarea",
-      required: false,
-      defaultValue: "Developed by the 2025 WDCC UABC Team.",
-      admin: {
-        description: "Credits or acknowledgments for the site.",
       },
     },
   ],
