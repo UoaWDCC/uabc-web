@@ -1,5 +1,7 @@
 "use client"
 import { Footer } from "@repo/ui/components/Generic"
+import { LinkTreeIcon } from "@repo/ui/components/Icon"
+import { FacebookIcon, InstagramIcon } from "@yamada-ui/lucide"
 import { Text } from "@yamada-ui/react"
 import { useFooter } from "@/services/cms/footer/FooterQuery"
 
@@ -24,11 +26,45 @@ export const FooterSection = () => {
     return <Text>ERROR: Footer data missing id</Text>
   }
 
+  const socialLinksData = [
+    {
+      label: "LinkTree",
+      url: footerResponseData.linktree,
+      icon: LinkTreeIcon,
+    },
+    {
+      label: "Facebook",
+      url: footerResponseData.facebook,
+      icon: FacebookIcon,
+    },
+    {
+      label: "Instagram",
+      url: footerResponseData.instagram,
+      icon: InstagramIcon,
+    },
+  ]
+
+  const linksData = {
+    linkGroup1: footerResponseData.linkGroup1 ?? { title: "", links: [] },
+    linkGroup2: footerResponseData.linkGroup2 ?? { title: "", links: [] },
+  }
+
+  const bottomData = {
+    copyrightName: footerResponseData.copyright,
+    credits: footerResponseData.credits,
+  }
+
+  const brandData = {
+    title: footerResponseData.title,
+    description: footerResponseData.description,
+  }
+
   return (
     <Footer
-      {...footerResponseData}
-      linkGroup1={footerResponseData.linkGroup1 ?? undefined}
-      linkGroup2={footerResponseData.linkGroup2 ?? undefined}
+      bottomProps={bottomData}
+      brand={brandData}
+      links={linksData}
+      socialLinks={socialLinksData}
     />
   )
 }

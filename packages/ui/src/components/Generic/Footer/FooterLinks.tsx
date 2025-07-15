@@ -5,12 +5,10 @@ import { memo } from "react"
 import type { LinkGroup } from "./constants"
 
 export interface FooterLinksProps extends StackProps {
-  linkGroup1: LinkGroup
-  linkGroup2: LinkGroup
+  links: Record<string, LinkGroup>
 }
 
-export const FooterLinks = memo<FooterLinksProps>(({ linkGroup1, linkGroup2, ...props }) => {
-  const links = [linkGroup1, linkGroup2]
+export const FooterLinks = memo<FooterLinksProps>(({ links, ...props }) => {
   return (
     <Stack
       flexDir={{ base: "column", sm: "row" }}

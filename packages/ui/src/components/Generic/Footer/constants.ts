@@ -14,40 +14,41 @@ export type SocialLink = Link & {
 
 // TODO: THESE WILL BE REPLACED WITH PAYLOAD
 
-export const MOCK_LINK_GROUP_1: LinkGroup = {
-  title: "Quick Links",
-  links: [
-    {
-      label: "Home",
-      url: "/",
-    },
-    {
-      label: "Book a Court",
-      url: "/book",
-    },
-    {
-      label: "Events",
-      url: "/events",
-    },
-  ],
-}
-
-export const MOCK_LINK_GROUP_2: LinkGroup = {
-  title: "UABC",
-  links: [
-    {
-      label: "About Us",
-      url: "/about",
-    },
-    {
-      label: "Contact Us",
-      url: "/contact",
-    },
-    {
-      label: "FAQs",
-      url: "/faq",
-    },
-  ],
+export const MOCK_LINKS: Record<string, LinkGroup> = {
+  linkGroup1: {
+    title: "Quick Links",
+    links: [
+      {
+        label: "Home",
+        url: "/",
+      },
+      {
+        label: "Book a Court",
+        url: "/book",
+      },
+      {
+        label: "Events",
+        url: "/events",
+      },
+    ],
+  },
+  linkGroup2: {
+    title: "UABC",
+    links: [
+      {
+        label: "About Us",
+        url: "/about",
+      },
+      {
+        label: "Contact Us",
+        url: "/contact",
+      },
+      {
+        label: "FAQs",
+        url: "/faq",
+      },
+    ],
+  },
 }
 
 export const MOCK_SOCIAL_LINKS: SocialLink[] = [
