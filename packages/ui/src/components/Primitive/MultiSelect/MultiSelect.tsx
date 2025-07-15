@@ -119,9 +119,11 @@ export const MultiSelect = memo(
             >
               {icon}
             </Center>
-            <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
-              {label}
-            </Label>
+            {label && (
+              <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
+                {label}
+              </Label>
+            )}
           </HStack>
         </Box>
       )
