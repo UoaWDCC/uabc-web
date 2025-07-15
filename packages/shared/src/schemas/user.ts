@@ -8,6 +8,7 @@ import {
   University,
 } from "../types"
 import { UserSchema } from "./auth"
+import { MediaSchema } from "./media"
 
 export const CreateUserRequestSchema = z.object({
   firstName: z.string().min(1).max(30),
@@ -22,7 +23,7 @@ export const CreateUserRequestSchema = z.object({
   studentUpi: z.string().nullable().optional(),
   university: z.nativeEnum(University).nullable().optional(),
   remainingSessions: z.number().nullable().optional(),
-  image: z.string().nullable().optional(),
+  image: z.union([z.string(), MediaSchema]).nullable(),
 }) satisfies z.ZodType<CreateUserData>
 
 export type CreateUserRequest = z.infer<typeof CreateUserRequestSchema>
