@@ -15,10 +15,10 @@ export interface SessionCountIconProps extends IconProps {
 /**
  * A component that displays a session count icon with a number inside it.
  *
- * @param color - The color of the icon and text.
- * @param count - The number of sessions to display inside the icon.
- * @param fontSize - The font size of the tickets icon that surrounds the text.
- * @param props - Additional properties to pass to the icon
+ * @param color The color of the icon and text.
+ * @param count The number of sessions to display inside the icon.
+ * @param fontSize The font size of the tickets icon that surrounds the text.
+ * @param props Additional properties to pass to the icon
  * @returns A component that displays a session count icon with a number inside it.
  * @example
  * <SessionCountIcon count={5} fontSize="xs" />
