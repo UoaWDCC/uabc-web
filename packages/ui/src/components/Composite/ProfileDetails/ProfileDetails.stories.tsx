@@ -30,6 +30,7 @@ const exampleFields = [
     placeholder: "Enter your email",
     inputType: InputType.Email,
     required: true,
+    disabled: true,
   },
   {
     key: "phoneNumber",
