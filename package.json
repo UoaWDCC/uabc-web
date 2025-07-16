@@ -66,6 +66,7 @@
       "@swc/core",
       "core-js-pure",
       "esbuild",
+      "lefthook",
       "mongodb-memory-server",
       "sharp",
       "workerd"

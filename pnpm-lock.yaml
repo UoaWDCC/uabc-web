@@ -194,7 +194,7 @@ importers:
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
       nuqs:
         specifier: 2.4.3
-        version: 2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
+        version: 2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -321,7 +321,7 @@ importers:
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
       nuqs:
         specifier: 2.4.3
-        version: 2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
+        version: 2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -17542,7 +17542,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuqs@2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0):
+  nuqs@2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0):
     dependencies:
       mitt: 3.0.1
       react: 19.1.0
