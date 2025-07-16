@@ -15,8 +15,7 @@
     "test:watch": "cross-env NODE_ENV=test vitest",
     "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
     "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage",
-    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage",
-    "clean": "rm -rf node_modules .turbo dist coverage"
+    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
   },
   "dependencies": {
     "@payloadcms/db-mongodb": "3.45.0",
