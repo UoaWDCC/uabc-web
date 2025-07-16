@@ -51,6 +51,7 @@ export const BasicInfoForm1: FC<BasicInfoForm1Props> = memo(({ onSubmit }) => {
           <TextInput
             data-testid="first-name"
             placeholder="First name"
+            size="lg"
             startIcon={<FolderPenIcon />}
             type={InputType.Text}
             {...register("firstName")}
@@ -60,6 +61,7 @@ export const BasicInfoForm1: FC<BasicInfoForm1Props> = memo(({ onSubmit }) => {
           <TextInput
             data-testid="last-name"
             placeholder="Lastname"
+            size="lg"
             startIcon={<FolderPenIcon />}
             type={InputType.Text}
             {...register("lastName")}

@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { University } from "@repo/shared/types"
+import { University } from "@repo/shared"
 import { Button, Heading, InputType, Select, TextInput } from "@repo/ui/components/Primitive"
 import { UniversityIcon, UserIcon } from "@yamada-ui/lucide"
 import { FormControl, memo, noop, VStack } from "@yamada-ui/react"
@@ -28,7 +28,7 @@ const universityOptions = Object.values(University).map((value) => ({
 }))
 
 /**
- * Form component for the second basic info form of the register flow.
+ * Form component for the university info form of the register flow.
  *
  * @remarks No screen responsivity is implemented in this component; responsivity between mobile and
  * desktop screens should be implemented in the wrapper components
@@ -70,7 +70,6 @@ export const UniversityInfoForm: FC<UniversityInfoFormProps> = memo(({ onSubmit 
                 {...field}
               />
             )}
-            rules={{ required: { value: true, message: "Please select a university." } }}
           />
         </FormControl>
         <FormControl errorMessage={errors.studentId?.message} invalid={!!errors.studentId}>

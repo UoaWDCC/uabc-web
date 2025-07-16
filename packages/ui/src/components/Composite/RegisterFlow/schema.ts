@@ -1,4 +1,4 @@
-import { University } from "@repo/shared/types"
+import { Gender, PlayLevel, University } from "@repo/shared"
 import z from "zod"
 
 export const BasicInfoForm1Schema = z.object({
@@ -26,7 +26,11 @@ export const UniversityInfoFormSchema = z
      *
      * @see {@link University}
      */
-    university: z.nativeEnum(University),
+    university: z.nativeEnum(University, {
+      errorMap: () => ({
+        message: "Please select a University",
+      }),
+    }),
     /**
      * Student ID of the new user. Only required if user is from the UoA.
      * @example 610855188
@@ -72,6 +76,30 @@ export const UniversityInfoFormSchema = z
     }
   })
 
+export const AdditionalInfoFormSchema = z.object({
+  /**
+   * Gender of the new user
+   */
+  gender: z.nativeEnum(Gender, {
+    errorMap: () => ({
+      message: "Please select a gender",
+    }),
+  }),
+  /**
+   * Skill level of the new user
+   */
+  skillLevel: z.nativeEnum(PlayLevel, {
+    errorMap: () => ({
+      message: "Please select a skill level",
+    }),
+  }),
+  /**
+   * Dietary requirements of the new user
+   */
+  dietaryRequirements: z.string(),
+})
+
 export type BasicInfoForm1Values = z.infer<typeof BasicInfoForm1Schema>
 export type BasicInfoForm2Values = z.infer<typeof BasicInfoForm2Schema>
 export type UniversityInfoFormValues = z.infer<typeof UniversityInfoFormSchema>
+export type AdditionalInfoFormValues = z.infer<typeof AdditionalInfoFormSchema>

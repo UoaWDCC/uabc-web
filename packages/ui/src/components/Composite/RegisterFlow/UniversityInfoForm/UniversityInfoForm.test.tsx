@@ -1,9 +1,9 @@
-import { University } from "@repo/shared/types"
+import { University } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
-import * as UniversityInfoFormModule from "../index"
-import { UniversityInfoForm } from "../index"
 import type { UniversityInfoFormValues } from "../schema"
+import * as UniversityInfoFormModule from "./index"
+import { UniversityInfoForm } from "./index"
 
 describe("<UniversityInfoForm />", () => {
   it("should re-export the UniversityInfoForm component and check if UniversityInfoForm exists", () => {
@@ -82,7 +82,7 @@ describe("<UniversityInfoForm />", () => {
     expect(handleSubmit).not.toBeCalled()
   })
 
-  it("should not call onSubmit when text input values are invalid", async () => {
+  it("should not call onSubmit when student UPI is invalid", async () => {
     const handleSubmit = vi.fn((data: UniversityInfoFormValues) => data)
 
     const { user } = render(<UniversityInfoForm onSubmit={handleSubmit} />)

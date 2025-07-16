@@ -51,6 +51,7 @@ export const BasicInfoForm2: FC<BasicInfoForm2Props> = memo(({ onSubmit }) => {
           <TextInput
             data-testid="phone-number"
             placeholder="Phone number"
+            size="lg"
             startIcon={<PhoneIcon />}
             type={InputType.Tel}
             {...register("phoneNumber")}
