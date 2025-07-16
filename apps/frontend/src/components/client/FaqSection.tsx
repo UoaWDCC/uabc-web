@@ -22,7 +22,7 @@ export const FaqSection = () => {
   return (
     <FAQ
       items={faqData?.questions || []}
-      richTextProps={{ mediaBaseUrl: process.env.NEXT_PUBLIC_URL }}
+      richTextProps={{ mediaBaseUrl: process.env.NEXT_PUBLIC_API_URL }}
     />
   )
 }
