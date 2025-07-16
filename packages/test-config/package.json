@@ -11,7 +11,6 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "build": "tsc",
-    "clean": "rm -rf node_modules .turbo dist coverage",
     "merge": "node dist/scripts/merge-coverage.js"
   },
   "devDependencies": {
