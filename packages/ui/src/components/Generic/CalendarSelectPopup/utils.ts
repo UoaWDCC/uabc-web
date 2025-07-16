@@ -80,7 +80,7 @@ export function createCompositeProps<T extends boolean = false>(
 /**
  * Type guard to check if a value is a string array.
  *
- * @param val - The value to check.
+ * @param val The value to check.
  * @returns True if `val` is an array of strings.
  */
 export function isStringArray(val: unknown): val is string[] {
@@ -90,8 +90,8 @@ export function isStringArray(val: unknown): val is string[] {
 /**
  * Converts a date or date range to a URL-safe string representation in NZ timezone.
  *
- * @param val - The date or date range to convert.
- * @param range - Whether this is a range selection.
+ * @param val The date or date range to convert.
+ * @param range Whether this is a range selection.
  * @returns A string or string array representation for URL parameters.
  */
 export function toPopupValue<T extends boolean>(
@@ -115,9 +115,9 @@ export function toPopupValue<T extends boolean>(
 /**
  * Converts a string or string array from a URL parameter to a `Date` or date range in NZ timezone.
  *
- * @param param - The URL parameter value.
- * @param range - Whether this is a range selection.
- * @param initialDate - The initial date to fall back to if parsing fails.
+ * @param param The URL parameter value.
+ * @param range Whether this is a range selection.
+ * @param initialDate The initial date to fall back to if parsing fails.
  * @returns A `Date` object or a tuple of `Date` objects.
  */
 export function fromPopupValue<T extends boolean>(

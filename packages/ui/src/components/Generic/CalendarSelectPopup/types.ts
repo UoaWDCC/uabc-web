@@ -4,14 +4,14 @@ import type { ReactNode } from "react"
 
 /**
  * Date value type for calendar selection
- * @param T - Whether range selection is enabled
+ * @param T Whether range selection is enabled
  * @returns Date value type
  */
 export type DateValue<T extends boolean = false> = T extends true ? [Date?, Date?] : Date | null
 
 /**
  * Extended calendar props for date selection
- * @param T - Whether range selection is enabled
+ * @param T Whether range selection is enabled
  * @returns Extended calendar props
  */
 export interface ExtendedCalendarProps<T extends boolean = false>
@@ -69,7 +69,7 @@ export type CloseBehavior = "close" | "back" | "custom"
 
 /**
  * CalendarSelectPopup component props
- * @param T - Whether range selection is enabled
+ * @param T Whether range selection is enabled
  * @returns CalendarSelectPopup component props
  */
 export interface CalendarSelectPopupProps<T extends boolean = false> extends PopupConfig {
@@ -189,7 +189,7 @@ export interface PopupNavigationUtils {
 
 /**
  * Return type for useCalendarSelectPopup hook
- * @param T - Whether range selection is enabled
+ * @param T Whether range selection is enabled
  * @returns UseCalendarSelectPopupReturn
  */
 export interface UseCalendarSelectPopupReturn<T extends boolean = false> {
@@ -233,7 +233,7 @@ export interface UseCalendarSelectPopupReturn<T extends boolean = false> {
 
 /**
  * Options for useCalendarSelectPopup hook
- * @param T - Whether range selection is enabled
+ * @param T Whether range selection is enabled
  * @returns UseCalendarSelectPopupOptions
  */
 export interface UseCalendarSelectPopupOptions<T extends boolean = false> extends PopupConfig {
@@ -262,7 +262,7 @@ export interface UseCalendarSelectPopupOptions<T extends boolean = false> extend
 
 /**
  * Composite calendar popup props
- * @param T - Whether range selection is enabled
+ * @param T Whether range selection is enabled
  * @returns CompositeCalendarPopupProps
  */
 export interface CompositeCalendarPopupProps<T extends boolean = false>
