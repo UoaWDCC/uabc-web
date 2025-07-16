@@ -1,3 +1,5 @@
 export * from "./AboutUsSection"
+export * from "./AdditionalInfo"
 export * from "./AdminTable"
+export * from "./ProfileDetails"
 export * from "./UserPanel"

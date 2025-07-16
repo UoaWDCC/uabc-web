@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import type { ReactNode } from "react"
-import { defaultFields, defaultValues, ProfileDetails } from "./ProfileDetails"
+import { AdditionalInfo, defaultFields, defaultValues } from "./AdditionalInfo"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,58 +15,56 @@ const createWrapper = ({ children }: { children: ReactNode }) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 )
 
-describe("<ProfileDetails />", () => {
+describe("<AdditionalInfo />", () => {
   it("renders the card with title and fields", () => {
     render(
-      <ProfileDetails
+      <AdditionalInfo
         defaultValues={defaultValues}
         fields={defaultFields}
-        title="Profile Details"
+        title="Additional Info"
       />,
       {
         wrapper: createWrapper,
       },
     )
-    expect(screen.getByText("Profile Details")).toBeInTheDocument()
-    expect(screen.getByText("First Name")).toBeInTheDocument()
-    expect(screen.getByText("Last Name")).toBeInTheDocument()
-    expect(screen.getByText("Email Address")).toBeInTheDocument()
-    expect(screen.getByText("Phone Number")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("John")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("Doe")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("john.doe@example.com")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("0211234567")).toBeInTheDocument()
+    expect(screen.getByText("Additional Info")).toBeInTheDocument()
+    expect(screen.getByText("Gender")).toBeInTheDocument()
+    expect(screen.getByText("Play Level")).toBeInTheDocument()
+    expect(screen.getByText("Dietary Requirements")).toBeInTheDocument()
   })
 
   it("calls onSave when saving changes", async () => {
     const consoleLog = vi.fn()
     vi.spyOn(console, "log").mockImplementation(consoleLog)
     const { user } = render(
-      <ProfileDetails
+      <AdditionalInfo
         defaultValues={defaultValues}
         fields={defaultFields}
         onSave={async (data) => {
           consoleLog("onSave", data)
         }}
-        title="Profile Details"
+        title="Additional Info"
       />,
       {
         wrapper: createWrapper,
       },
     )
     await user.click(screen.getByRole("button", { name: /edit/i }))
-    const input = screen.getByPlaceholderText("Enter your first name")
-    await user.clear(input)
-    await user.type(input, "Jane")
+    const genderInput = screen.getByRole("combobox", { name: /gender/i })
+    await user.click(genderInput)
+    await user.click(screen.getByText("Female"))
+    const playLevelInput = screen.getByRole("combobox", { name: /play level/i })
+    await user.click(playLevelInput)
+    await user.click(screen.getByText("Intermediate"))
     await user.click(screen.getByRole("button", { name: /save changes/i }))
     await waitFor(() => {
-      expect(screen.getByDisplayValue("Jane")).toBeInTheDocument()
-      expect(screen.getByDisplayValue("Doe")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("Female")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("Intermediate")).toBeInTheDocument()
     })
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
-      firstName: "Jane",
-      lastName: "Doe",
-      phoneNumber: "0211234567",
+      gender: "female",
+      playLevel: "intermediate",
+      dietary: "",
     })
   })
 })

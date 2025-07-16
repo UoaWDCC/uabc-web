@@ -1,4 +1,4 @@
-import { casualUserMock } from "@repo/shared/mocks"
+import { Gender, PlayLevel } from "@repo/shared"
 import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"
 import { InputType } from "@repo/ui/components/Primitive"
@@ -8,7 +8,7 @@ import { useMutation } from "@tanstack/react-query"
  * The props for the ProfileDetails component.
  * @template T The tuple of fields for the form.
  */
-interface ProfileDetailsProps<T extends readonly Field[]> extends UserProfileCardProps<T> {}
+interface AdditionalInfoProps<T extends readonly Field[]> extends UserProfileCardProps<T> {}
 
 /**
  * ProfileDetails renders a user profile details card with asynchronous save handling.
@@ -16,10 +16,10 @@ interface ProfileDetailsProps<T extends readonly Field[]> extends UserProfileCar
  * @template T The tuple of fields for the form.
  * @param props ProfileDetailsProps
  */
-export const ProfileDetails = <T extends readonly Field[]>({
+export const AdditionalInfo = <T extends readonly Field[]>({
   onSave,
   ...props
-}: ProfileDetailsProps<T>) => {
+}: AdditionalInfoProps<T>) => {
   const mutation = useMutation({
     mutationFn: async (data: NullableFormData<T>) => {
       await onSave?.(data)
@@ -38,43 +38,45 @@ export const ProfileDetails = <T extends readonly Field[]>({
   )
 }
 
+const genderOptions = Object.entries(Gender).map(([key, value]) => ({
+  value,
+  label: key.charAt(0).toUpperCase() + key.slice(1),
+}))
+
+const playLevelOptions = Object.entries(PlayLevel).map(([key, value]) => ({
+  value,
+  label: key.charAt(0).toUpperCase() + key.slice(1),
+}))
+
 export const defaultFields = [
   {
-    key: "firstName",
-    type: "text",
-    label: "First Name",
-    placeholder: "Enter your first name",
+    key: "gender",
+    type: "select",
+    label: "Gender",
+    placeholder: "Enter your gender",
     inputType: InputType.Text,
     required: true,
+    items: genderOptions,
   },
   {
-    key: "lastName",
-    type: "text",
-    label: "Last Name",
-    placeholder: "Enter your last name",
+    key: "playLevel",
+    type: "select",
+    label: "Play Level",
+    placeholder: "Enter your play level",
     inputType: InputType.Text,
-  },
-  {
-    key: "email",
-    type: "text",
-    label: "Email Address",
-    placeholder: "Enter your email",
-    inputType: InputType.Email,
     required: true,
-    disabled: true,
+    items: playLevelOptions,
   },
   {
-    key: "phoneNumber",
+    key: "dietary",
     type: "text",
-    label: "Phone Number",
-    placeholder: "Enter your phone number",
-    inputType: InputType.Tel,
+    label: "Dietary Requirements",
+    placeholder: "Enter your dietary requirements",
+    inputType: InputType.Text,
   },
 ] as const
 
 export const defaultValues = {
-  firstName: casualUserMock.firstName,
-  lastName: casualUserMock.lastName,
-  email: casualUserMock.email,
-  phoneNumber: casualUserMock.phoneNumber,
-}
+  gender: Gender.male,
+  playLevel: PlayLevel.beginner,
+} as const
