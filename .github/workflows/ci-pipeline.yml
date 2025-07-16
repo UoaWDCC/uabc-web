@@ -18,6 +18,7 @@ concurrency:
 jobs:
   check_changes:
     name: Check Changes
+    needs: biome
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -42,7 +43,7 @@ jobs:
 
   setup:
     name: Setup
-    needs: check_changes
+    needs: [check_changes, biome]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
@@ -83,20 +84,6 @@ jobs:
             packages/*/node_modules
             apps/*/node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-
-  # run this regardless of changes
-  biome:
-    name: Biome
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Biome
-        uses: biomejs/setup-biome@v2
-
-      - name: Run Biome
-        run: biome ci . --error-on-warnings
 
   build-backend:
     needs: [setup, biome]
@@ -375,6 +362,20 @@ jobs:
         with:
           script: |
             core.setFailed('Your code generation for typings are not up to date. Run pnpm generate:types')
+
+  # run this regardless of changes
+  biome:
+    name: Biome
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+
+      - name: Run Biome
+        run: biome ci . --error-on-warnings
 
   verify:
     name: Verify
