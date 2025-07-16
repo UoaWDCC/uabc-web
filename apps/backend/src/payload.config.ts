@@ -2,6 +2,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 // storage-adapter-import-placeholder
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
+import { nodemailerAdapter } from "@payloadcms/email-nodemailer"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import type { Config } from "@repo/shared/payload-types"
 import { buildConfig } from "payload"
@@ -64,6 +65,18 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
     allowIDOnCreate: process.env.NODE_ENV === "test",
+  }),
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.SMTP_USER,
+    defaultFromName: "UABC",
+    transportOptions: {
+      host: process.env.SMTP_HOST,
+      port: 587,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    },
   }),
   sharp,
   plugins: [

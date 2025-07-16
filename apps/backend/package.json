@@ -15,18 +15,20 @@
     "test:watch": "cross-env NODE_ENV=test vitest",
     "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
     "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage",
-    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage",
-    "clean": "rm -rf node_modules .turbo dist coverage"
+    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
   },
   "dependencies": {
     "@payloadcms/db-mongodb": "3.45.0",
+    "@payloadcms/email-nodemailer": "3.45.0",
     "@payloadcms/next": "3.45.0",
     "@payloadcms/richtext-lexical": "3.45.0",
+    "@types/nodemailer": "6.4.17",
     "bcryptjs": "3.0.2",
     "googleapis": "150.0.1",
     "http-status-codes": "2.3.0",
     "jsonwebtoken": "9.0.2",
     "next": "15.3.5",
+    "nodemailer": "7.0.5",
     "payload": "3.45.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",

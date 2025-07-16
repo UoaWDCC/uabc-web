@@ -47,8 +47,8 @@ class GameSessionRouteWrapper {
       const { id } = await params
       const parsedBody = UpdateGameSessionRequestSchema.parse(await req.json())
       const gameSessionDataService = new GameSessionDataService()
-      const updatedgameSession = await gameSessionDataService.updateGameSession(id, parsedBody)
-      return NextResponse.json({ data: updatedgameSession }, { status: StatusCodes.OK })
+      const updatedGameSession = await gameSessionDataService.updateGameSession(id, parsedBody)
+      return NextResponse.json({ data: updatedGameSession }, { status: StatusCodes.OK })
     } catch (error) {
       if (error instanceof NotFound) {
         return NextResponse.json(
