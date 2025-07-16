@@ -16,6 +16,6 @@ describe("<SessionCountIcon />", () => {
 
   it("should render the SessionCountIcon with the tickets icon", () => {
     render(<SessionCountIcon count={10} />)
-    expect(screen.getByRole("img")).toBeInTheDocument()
+    expect(screen.getByTestId("session-count-tickets-icon")).toBeInTheDocument()
   })
 })
