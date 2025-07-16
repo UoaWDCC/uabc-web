@@ -14,7 +14,7 @@ describe("api/auth/logout", async () => {
       const response = await POST(req)
 
       expect(response.status).toBe(StatusCodes.OK)
-      expect(response.cookies.get(AUTH_COOKIE_NAME)?.value).length(0)
+      expect(cookieStore.get(AUTH_COOKIE_NAME)?.value).toBeUndefined()
       expect((await response.json()).message).toBe("Logged out successfully")
     })
   })
