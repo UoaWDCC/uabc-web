@@ -93,8 +93,8 @@ importers:
         specifier: 3.45.0
         version: 3.45.0(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))(socks@2.8.5)
       '@payloadcms/email-nodemailer':
-        specifier: ^3.47.0
-        version: 3.47.0(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))
+        specifier: 3.45.0
+        version: 3.45.0(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))
       '@payloadcms/next':
         specifier: 3.45.0
         version: 3.45.0(@types/react@19.1.5)(graphql@16.11.0)(monaco-editor@0.52.2)(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
@@ -102,7 +102,7 @@ importers:
         specifier: 3.45.0
         version: 3.45.0(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@payloadcms/next@3.45.0(@types/react@19.1.5)(graphql@16.11.0)(monaco-editor@0.52.2)(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3))(@types/react@19.1.5)(monaco-editor@0.52.2)(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(yjs@13.6.27)
       '@types/nodemailer':
-        specifier: ^6.4.17
+        specifier: 6.4.17
         version: 6.4.17
       bcryptjs:
         specifier: 3.0.2
@@ -120,7 +120,7 @@ importers:
         specifier: 15.3.5
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
       nodemailer:
-        specifier: ^7.0.5
+        specifier: 7.0.5
         version: 7.0.5
       payload:
         specifier: 3.45.0
@@ -2261,11 +2261,11 @@ packages:
     peerDependencies:
       payload: 3.45.0
 
-  '@payloadcms/email-nodemailer@3.47.0':
-    resolution: {integrity: sha512-jQbQTYJIBNHsDtQ0KkJQQyfPBBQW2r3VJOGHoGVqFycH/xddZNlwzD1G3D59+R/wi5iM006OR1Wj0uR/tknpxw==}
+  '@payloadcms/email-nodemailer@3.45.0':
+    resolution: {integrity: sha512-af78THkBPgfMT4HShOl8jrLlKhmrmmhnNTctHezlXC90lbjyEG7unaLl7vVRKKHRPXqsMG7XQ+I6X6nLJKh/zg==}
     engines: {node: ^18.20.2 || >=20.9.0}
     peerDependencies:
-      payload: 3.47.0
+      payload: 3.45.0
 
   '@payloadcms/graphql@3.45.0':
     resolution: {integrity: sha512-/doS3OzdZzK0k3jUVgnhQf0uakSFloy0eQ8a8YGVXzioCtdF4irDbDAVyVlae2z6sz0T/cC4BW2YvLvbt14WxQ==}
@@ -10698,7 +10698,7 @@ snapshots:
       - socks
       - supports-color
 
-  '@payloadcms/email-nodemailer@3.47.0(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))':
+  '@payloadcms/email-nodemailer@3.45.0(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))':
     dependencies:
       nodemailer: 6.9.16
       payload: 3.45.0(graphql@16.11.0)(typescript@5.8.3)
