@@ -26,12 +26,8 @@ export const CreateUserRequestSchema = z.object({
   image: z.union([z.string(), MediaSchema]).nullable(),
 }) satisfies z.ZodType<CreateUserData>
 
-export type CreateUserRequest = z.infer<typeof CreateUserRequestSchema>
-
 export const UpdateUserRequestSchema =
   CreateUserRequestSchema.partial() satisfies z.ZodType<EditUserData>
-
-export type UpdateUserRequest = z.infer<typeof UpdateUserRequestSchema>
 
 export const GetAllUsersResponseSchema = z.object({
   data: z.array(UserSchema),
