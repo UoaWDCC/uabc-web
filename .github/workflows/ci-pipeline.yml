@@ -41,7 +41,7 @@ jobs:
               !.env.example
 
   cspell:
-    name: CSpell
+    name: Spell Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
