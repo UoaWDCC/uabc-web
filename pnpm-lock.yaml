@@ -171,6 +171,9 @@ importers:
       '@repo/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@repo/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
