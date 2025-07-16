@@ -32,10 +32,10 @@ describe("<ProfileDetails />", () => {
     expect(screen.getByText("Last Name")).toBeInTheDocument()
     expect(screen.getByText("Email Address")).toBeInTheDocument()
     expect(screen.getByText("Phone Number")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("John")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("Doe")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("john.doe@example.com")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("0211234567")).toBeInTheDocument()
+    expect(screen.getByDisplayValue(defaultValues.firstName)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(defaultValues.lastName ?? "")).toBeInTheDocument()
+    expect(screen.getByDisplayValue(defaultValues.email)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(defaultValues.phoneNumber ?? "")).toBeInTheDocument()
   })
 
   it("calls onSave when saving changes", async () => {
