@@ -5,12 +5,11 @@ import {
   Center,
   HStack,
   Label,
-  memo,
   Select as UISelect,
   type SelectProps as UISelectProps,
 } from "@yamada-ui/react"
 import type { ReactNode } from "react"
-import { forwardRef } from "react"
+import { forwardRef, memo } from "react"
 
 export interface SelectProps extends Omit<UISelectProps, "variant"> {
   /**
@@ -18,8 +17,6 @@ export interface SelectProps extends Omit<UISelectProps, "variant"> {
    *
    * @remarks
    * The label is rendered within the Select component if provided by the parent.
-   *
-   * @defaultValue "Select option"
    */
   label?: string
   /**
@@ -59,7 +56,7 @@ export interface SelectProps extends Omit<UISelectProps, "variant"> {
  */
 export const Select = memo(
   forwardRef<HTMLSelectElement, SelectProps>(
-    ({ children, label = "Select option", icon, variant, disabled, ...props }, ref) => {
+    ({ children, label, icon, variant, disabled, ...props }, ref) => {
       const stylised = variant === "stylised"
 
       return (
@@ -112,9 +109,11 @@ export const Select = memo(
             >
               {icon}
             </Center>
-            <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
-              {label}
-            </Label>
+            {label && (
+              <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
+                {label}
+              </Label>
+            )}
           </HStack>
         </Box>
       )
