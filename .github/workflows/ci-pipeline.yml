@@ -58,6 +58,7 @@ jobs:
     name: Spell Check
     needs: [check_changes]
     runs-on: ubuntu-latest
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     steps:
       - uses: actions/checkout@v4
       - uses: streetsidesoftware/cspell-action@v7
@@ -74,7 +75,11 @@ jobs:
         id: cache-check
         uses: actions/cache@v4
         with:
-          path: node_modules
+          path: |
+            node_modules
+            */node_modules
+            packages/*/node_modules
+            apps/*/node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
           lookup-only: true
 
@@ -93,7 +98,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-check.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Save node_modules cache
         if: steps.cache-check.outputs.cache-hit != 'true'
@@ -253,7 +258,7 @@ jobs:
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Type Check
         run: pnpm turbo run check-types
@@ -297,7 +302,7 @@ jobs:
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Test with Coverage
         env:
@@ -364,7 +369,7 @@ jobs:
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Generate typing
         run: pnpm turbo run generate:types
