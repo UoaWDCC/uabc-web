@@ -17,5 +17,13 @@ describe("api/auth/logout", async () => {
       expect(cookieStore.get(AUTH_COOKIE_NAME)?.value).toBeUndefined()
       expect((await response.json()).message).toBe("Logged out successfully")
     })
+
+    it("return 401 if no token is provided", async () => {
+      const req = createMockNextRequest("/api/auth/logout", "POST")
+      const response = await POST(req)
+
+      expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect((await response.json()).error).toBe("No token provided")
+    })
   })
 })
