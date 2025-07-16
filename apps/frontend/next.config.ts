@@ -34,14 +34,6 @@ const config = (async () => {
     },
     // Need this to allow static site generation to work with SSG hosting
     trailingSlash: generateStatic,
-    rewrites: async () => {
-      return [
-        {
-          source: "/payload/api/media/:path*",
-          destination: `${process.env.NEXT_PUBLIC_API_URL}/payload/api/media/:path*`,
-        },
-      ]
-    },
   }
 
   return nextConfig

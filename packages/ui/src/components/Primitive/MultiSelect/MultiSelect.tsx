@@ -5,13 +5,12 @@ import {
   Center,
   HStack,
   Label,
-  memo,
   Tag,
   MultiSelect as UIMultiSelect,
   type MultiSelectProps as UIMultiSelectProps,
 } from "@yamada-ui/react"
 import type { ReactNode } from "react"
-import { forwardRef } from "react"
+import { forwardRef, memo } from "react"
 
 export interface MultiSelectProps extends Omit<UIMultiSelectProps, "variant"> {
   /**
@@ -19,10 +18,8 @@ export interface MultiSelectProps extends Omit<UIMultiSelectProps, "variant"> {
    *
    * @remarks
    * The label is rendered within the MultiSelect component if provided by the parent.
-   *
-   * @defaultValue "Select option(s)"
    */
-  label: string
+  label?: string
   /**
    * Icon rendered inline to the left of the label.
    *
@@ -60,7 +57,7 @@ export interface MultiSelectProps extends Omit<UIMultiSelectProps, "variant"> {
  */
 export const MultiSelect = memo(
   forwardRef<HTMLDivElement, MultiSelectProps>(
-    ({ children, label = "Select option(s)", icon, variant, disabled, ...props }, ref) => {
+    ({ children, label, icon, variant, disabled, ...props }, ref) => {
       const stylised = variant === "stylised"
 
       return (
@@ -121,9 +118,11 @@ export const MultiSelect = memo(
             >
               {icon}
             </Center>
-            <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
-              {label}
-            </Label>
+            {label && (
+              <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
+                {label}
+              </Label>
+            )}
           </HStack>
         </Box>
       )

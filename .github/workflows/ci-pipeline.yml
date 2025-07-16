@@ -292,6 +292,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Test with Coverage
+        env:
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
         run: |
           mkdir -p coverage
           pnpm test:coverage
