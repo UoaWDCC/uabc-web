@@ -8,7 +8,7 @@ import { useMutation } from "@tanstack/react-query"
  * The props for the ProfileDetails component.
  * @template T The tuple of fields for the form.
  */
-interface ProfileDetailsProps<T extends readonly Field[]> extends UserProfileCardProps<T> {}
+export interface ProfileDetailsProps<T extends readonly Field[]> extends UserProfileCardProps<T> {}
 
 /**
  * ProfileDetails renders a user profile details card with asynchronous save handling.

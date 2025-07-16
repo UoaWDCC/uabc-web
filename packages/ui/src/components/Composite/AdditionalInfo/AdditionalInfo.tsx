@@ -8,7 +8,7 @@ import { useMutation } from "@tanstack/react-query"
  * The props for the AdditionalInfo component.
  * @template T The tuple of fields for the form.
  */
-interface AdditionalInfoProps<T extends readonly Field[]> extends UserProfileCardProps<T> {}
+export interface AdditionalInfoProps<T extends readonly Field[]> extends UserProfileCardProps<T> {}
 
 /**
  * AdditionalInfo renders a user additional info card with asynchronous save handling.
