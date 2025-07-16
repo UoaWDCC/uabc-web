@@ -30,12 +30,7 @@ export const SessionCountIcon: FC<SessionCountIconProps> = memo(
   ({ color, count, children, fontSize = "2xl", ...props }) => {
     return (
       <Center color={color} position="relative">
-        <TicketsIcon
-          data-testid="session-count-tickets-icon"
-          fontSize={fontSize}
-          strokeWidth="2px"
-          {...props}
-        />
+        <TicketsIcon fontSize={fontSize} strokeWidth="2px" {...props} />
         <Text
           fontSize={`calc(${fontSize} / 3)`}
           paddingInlineEnd="20%"

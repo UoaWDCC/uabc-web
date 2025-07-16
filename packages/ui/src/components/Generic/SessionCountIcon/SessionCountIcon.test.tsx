@@ -19,7 +19,7 @@ describe("<SessionCountIcon />", () => {
   })
 
   it("should render the SessionCountIcon with the tickets icon", () => {
-    render(<SessionCountIcon>10</SessionCountIcon>)
+    render(<SessionCountIcon data-testid="session-count-tickets-icon">10</SessionCountIcon>)
     expect(screen.getByTestId("session-count-tickets-icon")).toBeInTheDocument()
   })
 })
