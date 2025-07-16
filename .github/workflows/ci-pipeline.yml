@@ -41,8 +41,6 @@ jobs:
               !.env.example
 
   cspell:
-    needs: check_changes
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: CSpell
     runs-on: ubuntu-latest
     steps:
