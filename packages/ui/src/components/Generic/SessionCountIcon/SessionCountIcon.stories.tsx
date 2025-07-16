@@ -8,25 +8,26 @@ const meta: Meta<typeof SessionCountIcon> = {
   title: "Generic Components / SessionCountIcon",
   component: SessionCountIcon,
   argTypes: {
-    count: {
-      control: "number",
-      description: "Number of sessions to display",
-    },
     color: {
       control: "color",
-      description: "Color of the session count text",
+      description: "Color of the session children text",
       table: { summary: { type: "string" } },
+    },
+    count: {
+      control: "number",
+      description: "Number of sessions to display. If not provided, the children will be used.",
+      table: { summary: { type: "number" } },
     },
     fontSize: {
       control: "select",
-      description: "Font size of the session count text",
+      description: "Font size of the session children text",
       table: { summary: { type: "string" } },
       options: fontSizes,
     },
   },
   args: {
-    count: 0,
     color: "white",
+    count: 0,
     fontSize: "9xl",
   },
 }
