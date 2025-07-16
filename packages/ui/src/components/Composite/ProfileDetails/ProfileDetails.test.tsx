@@ -61,12 +61,12 @@ describe("<ProfileDetails />", () => {
     await user.click(screen.getByRole("button", { name: /save changes/i }))
     await waitFor(() => {
       expect(screen.getByDisplayValue("Jane")).toBeInTheDocument()
-      expect(screen.getByDisplayValue("Doe")).toBeInTheDocument()
+      expect(screen.getByDisplayValue(defaultValues.lastName ?? "")).toBeInTheDocument()
     })
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
       firstName: "Jane",
-      lastName: "Doe",
-      phoneNumber: "0211234567",
+      lastName: defaultValues.lastName,
+      phoneNumber: defaultValues.phoneNumber,
     })
   })
 })
