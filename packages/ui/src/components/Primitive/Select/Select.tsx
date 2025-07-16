@@ -5,12 +5,11 @@ import {
   Center,
   HStack,
   Label,
-  memo,
   Select as UISelect,
   type SelectProps as UISelectProps,
 } from "@yamada-ui/react"
 import type { ReactNode } from "react"
-import { forwardRef } from "react"
+import { forwardRef, memo } from "react"
 
 export interface SelectProps extends Omit<UISelectProps, "variant"> {
   /**

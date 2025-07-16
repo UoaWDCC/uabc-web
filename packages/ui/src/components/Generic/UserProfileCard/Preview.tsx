@@ -32,7 +32,6 @@ export const Preview = <T extends readonly Field[]>({ field }: PreviewProps<T>) 
   if (field.type === "select") {
     return (
       <TextInput
-        disabled={field.disabled}
         placeholder={field.placeholder}
         readOnly
         value={getDisplayValue(field.items as SelectItem[], value as string)}
@@ -44,7 +43,6 @@ export const Preview = <T extends readonly Field[]>({ field }: PreviewProps<T>) 
   if (field.type === "multiselect") {
     return (
       <TextInput
-        disabled={field.disabled}
         placeholder={field.placeholder}
         readOnly
         value={getDisplayValue(field.items as SelectItem[], value as string[])}
@@ -54,12 +52,6 @@ export const Preview = <T extends readonly Field[]>({ field }: PreviewProps<T>) 
   }
 
   return (
-    <TextInput
-      disabled={field.disabled}
-      placeholder={field.placeholder}
-      readOnly
-      value={value as string}
-      variant="flushed"
-    />
+    <TextInput placeholder={field.placeholder} readOnly value={value as string} variant="flushed" />
   )
 }

@@ -92,12 +92,18 @@ importers:
       '@payloadcms/db-mongodb':
         specifier: 3.45.0
         version: 3.45.0(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))(socks@2.8.5)
+      '@payloadcms/email-nodemailer':
+        specifier: 3.45.0
+        version: 3.45.0(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))
       '@payloadcms/next':
         specifier: 3.45.0
         version: 3.45.0(@types/react@19.1.5)(graphql@16.11.0)(monaco-editor@0.52.2)(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
       '@payloadcms/richtext-lexical':
         specifier: 3.45.0
         version: 3.45.0(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@payloadcms/next@3.45.0(@types/react@19.1.5)(graphql@16.11.0)(monaco-editor@0.52.2)(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3))(@types/react@19.1.5)(monaco-editor@0.52.2)(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(yjs@13.6.27)
+      '@types/nodemailer':
+        specifier: 6.4.17
+        version: 6.4.17
       bcryptjs:
         specifier: 3.0.2
         version: 3.0.2
@@ -113,6 +119,9 @@ importers:
       next:
         specifier: 15.3.5
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
+      nodemailer:
+        specifier: 7.0.5
+        version: 7.0.5
       payload:
         specifier: 3.45.0
         version: 3.45.0(graphql@16.11.0)(typescript@5.8.3)
@@ -162,6 +171,9 @@ importers:
       '@repo/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@repo/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -182,7 +194,7 @@ importers:
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
       nuqs:
         specifier: 2.4.3
-        version: 2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
+        version: 2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -286,6 +298,9 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: 5.81.5
         version: 5.81.5(@tanstack/react-query@5.81.5(react@19.1.0))(react@19.1.0)
+      '@yamada-ui/calendar':
+        specifier: 1.8.17
+        version: 1.8.17(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@yamada-ui/carousel':
         specifier: 2.1.13
         version: 2.1.13(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -298,12 +313,15 @@ importers:
       '@yamada-ui/table':
         specifier: 1.3.14
         version: 1.3.14(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      dayjs:
+        specifier: 1.11.10
+        version: 1.11.10
       next:
         specifier: 15.3.5
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
       nuqs:
         specifier: 2.4.3
-        version: 2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
+        version: 2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -2252,6 +2270,12 @@ packages:
     peerDependencies:
       payload: 3.45.0
 
+  '@payloadcms/email-nodemailer@3.45.0':
+    resolution: {integrity: sha512-af78THkBPgfMT4HShOl8jrLlKhmrmmhnNTctHezlXC90lbjyEG7unaLl7vVRKKHRPXqsMG7XQ+I6X6nLJKh/zg==}
+    engines: {node: ^18.20.2 || >=20.9.0}
+    peerDependencies:
+      payload: 3.45.0
+
   '@payloadcms/graphql@3.45.0':
     resolution: {integrity: sha512-/doS3OzdZzK0k3jUVgnhQf0uakSFloy0eQ8a8YGVXzioCtdF4irDbDAVyVlae2z6sz0T/cC4BW2YvLvbt14WxQ==}
     hasBin: true
@@ -2818,6 +2842,9 @@ packages:
   '@types/node@22.15.21':
     resolution: {integrity: sha512-EV/37Td6c+MgKAbkcLG6vqZ2zEYHD7bvSrzqqs2RIhbA6w3x+Dqz8MZM3sP6kGTeLrdoOgKZe+Xja7tUB2DNkQ==}
 
+  '@types/nodemailer@6.4.17':
+    resolution: {integrity: sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==}
+
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
@@ -3078,6 +3105,11 @@ packages:
 
   '@yamada-ui/button@1.0.59':
     resolution: {integrity: sha512-GWxM5Rnsi3NbooyGRiB9sNwfLlNS99KfbW01rGXnOHaRJrPJpog14sYayZ7z/J4pLhoYPaXk/Gq0cCEi78W8cQ==}
+    peerDependencies:
+      react: '>=18'
+
+  '@yamada-ui/calendar@1.8.17':
+    resolution: {integrity: sha512-mrNC4M3r+uTgDNFYuet+sfLBP5vxghx18mAAhxJbAM3Rmuc5k6CFrxEd4vhznFKN01T5CONJJugvWnQL3GmcYQ==}
     peerDependencies:
       react: '>=18'
 
@@ -4572,6 +4604,12 @@ packages:
 
   dateformat@4.6.3:
     resolution: {integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==}
+
+  dayjs@1.11.10:
+    resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
+
+  dayjs@1.11.13:
+    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
   debug@4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
@@ -6716,6 +6754,14 @@ packages:
 
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
+
+  nodemailer@6.9.16:
+    resolution: {integrity: sha512-psAuZdTIRN08HKVd/E8ObdV6NO7NTBY3KsC30F7M4H1OnmLCUNaS56FpYxyb26zWLSyYF9Ozch9KYHhHegsiOQ==}
+    engines: {node: '>=6.0.0'}
+
+  nodemailer@7.0.5:
+    resolution: {integrity: sha512-nsrh2lO3j4GkLLXoeEksAMgAOqxOv6QumNRVQTJwKH4nuiww6iC2y7GyANs9kRAxCexg3+lTWM3PZ91iLlVjfg==}
+    engines: {node: '>=6.0.0'}
 
   nopt@8.1.0:
     resolution: {integrity: sha512-ieGu42u/Qsa4TFktmaKEwM6MQH0pOWnaB3htzh0JRtx84+Mebc0cbZYN5bC+6WTZ4+77xrL9Pn5m7CV6VIkV7A==}
@@ -10672,6 +10718,11 @@ snapshots:
       - socks
       - supports-color
 
+  '@payloadcms/email-nodemailer@3.45.0(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))':
+    dependencies:
+      nodemailer: 6.9.16
+      payload: 3.45.0(graphql@16.11.0)(typescript@5.8.3)
+
   '@payloadcms/graphql@3.45.0(graphql@16.11.0)(payload@3.45.0(graphql@16.11.0)(typescript@5.8.3))(typescript@5.8.3)':
     dependencies:
       graphql: 16.11.0
@@ -11365,6 +11416,10 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
+  '@types/nodemailer@6.4.17':
+    dependencies:
+      '@types/node': 22.15.21
+
   '@types/parse-json@4.0.2': {}
 
   '@types/react-dom@19.1.5(@types/react@19.1.5)':
@@ -11882,6 +11937,27 @@ snapshots:
       '@yamada-ui/loading': 1.1.33(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@yamada-ui/ripple': 1.0.53(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@yamada-ui/utils': 1.7.2(react@19.1.0)
+      react: 19.1.0
+    transitivePeerDependencies:
+      - '@emotion/is-prop-valid'
+      - '@types/react'
+      - react-dom
+      - supports-color
+
+  '@yamada-ui/calendar@1.8.17(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@yamada-ui/button': 1.0.59(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@yamada-ui/core': 1.17.3(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@yamada-ui/form-control': 2.1.15(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@yamada-ui/icon': 1.1.21(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@yamada-ui/popover': 1.5.4(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@yamada-ui/portal': 1.0.30(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@yamada-ui/use-clickable': 1.2.22(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@yamada-ui/use-controllable-state': 1.0.29(react@19.1.0)
+      '@yamada-ui/use-disclosure': 1.1.6(react@19.1.0)
+      '@yamada-ui/use-outside-click': 1.0.29(react@19.1.0)
+      '@yamada-ui/utils': 1.7.2(react@19.1.0)
+      dayjs: 1.11.13
       react: 19.1.0
     transitivePeerDependencies:
       - '@emotion/is-prop-valid'
@@ -14516,6 +14592,10 @@ snapshots:
 
   dateformat@4.6.3: {}
 
+  dayjs@1.11.10: {}
+
+  dayjs@1.11.13: {}
+
   debug@4.3.4:
     dependencies:
       ms: 2.1.2
@@ -16853,6 +16933,10 @@ snapshots:
 
   node-releases@2.0.19: {}
 
+  nodemailer@6.9.16: {}
+
+  nodemailer@7.0.5: {}
+
   nopt@8.1.0:
     dependencies:
       abbrev: 3.0.1
@@ -16867,7 +16951,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuqs@2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0):
+  nuqs@2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0):
     dependencies:
       mitt: 3.0.1
       react: 19.1.0

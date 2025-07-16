@@ -1,4 +1,11 @@
 import { NotFoundCard } from "@repo/ui/components/Generic/NotFoundCard"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Not Found",
+  description:
+    "The page you are looking for does not exist. Please check the URL or return to the homepage.",
+}
 
 /**
  * A 404 Not Found page component for when a page is not found at the specified route.

@@ -23,12 +23,12 @@ export interface FieldGroupProps<T extends readonly Field[]> {
  */
 export const FieldGroup = <T extends readonly Field[]>({ field }: FieldGroupProps<T>) => {
   const { isEditing, form } = useUserProfile<T>()
-  const error = form.formState.errors[field.key as Path<FormData<T>>]
+  const formError = form.formState.errors[field.key as Path<FormData<T>>]
 
   return (
     <FormControl
-      errorMessage={error?.message as string | undefined}
-      invalid={!!error}
+      errorMessage={formError?.message as string | undefined}
+      invalid={!!formError}
       label={field.label}
       labelProps={{ mb: isEditing ? "3" : "0", color: "muted" }}
     >
