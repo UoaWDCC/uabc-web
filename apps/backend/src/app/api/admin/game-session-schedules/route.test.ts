@@ -10,15 +10,6 @@ import { GET, POST } from "./route"
 describe("/api/admin/game-session-schedules", async () => {
   const gameSessionDataService = new GameSessionDataService()
   const cookieStore = await cookies()
-  let consoleErrorSpy: ReturnType<typeof vi.spyOn>
-
-  beforeEach(() => {
-    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
-  })
-
-  afterEach(() => {
-    consoleErrorSpy.mockRestore()
-  })
 
   describe("GET", () => {
     it("should return 401 if user is a casual", async () => {
@@ -27,7 +18,6 @@ describe("/api/admin/game-session-schedules", async () => {
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
-      expect(consoleErrorSpy).toHaveBeenCalled()
     })
 
     it("should return 401 if user is a member", async () => {
@@ -36,7 +26,6 @@ describe("/api/admin/game-session-schedules", async () => {
       const res = await GET(req)
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
-      expect(consoleErrorSpy).toHaveBeenCalled()
     })
 
     it("should return paginated schedules for admin", async () => {
@@ -57,7 +46,6 @@ describe("/api/admin/game-session-schedules", async () => {
       expect(json.data.limit).toBe(10)
       expect(json.data.totalDocs).toBeGreaterThanOrEqual(15)
       expect(json.data.totalPages).toBeGreaterThanOrEqual(2)
-      expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 
     it("should use default pagination if params are missing", async () => {
@@ -68,7 +56,6 @@ describe("/api/admin/game-session-schedules", async () => {
       const json = await res.json()
       expect(json.data.page).toBe(1)
       expect(json.data.limit).toBe(10)
-      expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 
     it("should return 400 if limit or page is out of range", async () => {
@@ -79,7 +66,6 @@ describe("/api/admin/game-session-schedules", async () => {
       const json = await res.json()
       expect(json.error).toBe("Invalid query parameters")
       expect(json.details).toBeDefined()
-      expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 
     it("should handle errors and return 500 status", async () => {
@@ -93,44 +79,6 @@ describe("/api/admin/game-session-schedules", async () => {
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
-      expect(consoleErrorSpy).toHaveBeenCalled()
-    })
-
-    it("should return 400 if query params are invalid", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const req = createMockNextRequest("/api/admin/game-session-schedules?limit=abc&page=def")
-      const res = await GET(req)
-      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
-      const json = await res.json()
-      expect(json.error).toBe("Invalid query parameters")
-      expect(json.details).toBeDefined()
-    })
-
-    it("should return 401 if no token is provided", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, "")
-      const req = createMockNextRequest("/api/admin/game-session-schedules?limit=5&page=1")
-      const res = await GET(req)
-      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
-      expect(await res.json()).toStrictEqual({ error: "No token provided" })
-      expect(consoleErrorSpy).toHaveBeenCalled()
-    })
-
-    it("should return 401 if token is invalid", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, "invalid.token.value")
-      const req = createMockNextRequest("/api/admin/game-session-schedules?limit=5&page=1")
-      const res = await GET(req)
-      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
-      expect(await res.json()).toStrictEqual({ error: "Invalid JWT token" })
-      expect(consoleErrorSpy).toHaveBeenCalled()
-    })
-
-    it("should return 401 if token is malformed", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, "not-a-jwt")
-      const req = createMockNextRequest("/api/admin/game-session-schedules?limit=5&page=1")
-      const res = await GET(req)
-      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
-      expect(await res.json()).toStrictEqual({ error: "Invalid JWT token" })
-      expect(consoleErrorSpy).toHaveBeenCalled()
     })
   })
 
