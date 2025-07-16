@@ -4,10 +4,13 @@ import { EyeIcon, EyeOffIcon } from "@yamada-ui/lucide"
 import {
   IconButton,
   Input,
+  type InputAddonProps,
   type InputElementProps,
   InputGroup,
   type InputGroupProps,
+  InputLeftAddon,
   InputLeftElement,
+  InputRightAddon,
   InputRightElement,
   type InputProps as UIInputProps,
   useBoolean,
@@ -46,15 +49,35 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
   /**
    * The icon to display on the left side of the input field.
    */
-  startIcon?: React.ReactNode
+  startElement?: React.ReactNode
   /**
    * The icon to display on the right side of the input field.
    */
-  endIcon?: React.ReactNode
+  endElement?: React.ReactNode
   /**
    * Additional props for the end icon.
    */
-  rightElementProps?: InputElementProps
+  endElementProps?: InputElementProps
+  /**
+   * Additional props for the start icon.
+   */
+  startElementProps?: InputElementProps
+  /**
+   * The addon to display on the left side of the input field.
+   */
+  startAddon?: React.ReactNode
+  /**
+   * Additional props for the start addon.
+   */
+  startAddonProps?: InputAddonProps
+  /**
+   * The addon to display on the right side of the input field.
+   */
+  endAddon?: React.ReactNode
+  /**
+   * Additional props for the end addon.
+   */
+  endAddonProps?: InputAddonProps
   /**
    * Additional props for the input group.
    */
@@ -72,9 +95,14 @@ export const TextInput = memo(
     (
       {
         type = InputType.Text,
-        startIcon,
-        endIcon,
-        rightElementProps,
+        startElement,
+        endElement,
+        startAddon,
+        endAddon,
+        startElementProps,
+        endElementProps,
+        startAddonProps,
+        endAddonProps,
         disabled,
         inputGroupProps,
         ...props
@@ -86,7 +114,10 @@ export const TextInput = memo(
 
       return (
         <InputGroup {...inputGroupProps}>
-          {startIcon && <InputLeftElement>{startIcon}</InputLeftElement>}
+          {startElement && (
+            <InputLeftElement {...startElementProps}>{startElement}</InputLeftElement>
+          )}
+          {startAddon && <InputLeftAddon {...startAddonProps}>{startAddon}</InputLeftAddon>}
           <Input
             disabled={disabled}
             ref={ref}
@@ -94,11 +125,10 @@ export const TextInput = memo(
             variant="gradient"
             {...props}
           />
-
-          {endIcon ? (
-            <InputRightElement {...rightElementProps}>{endIcon}</InputRightElement>
+          {endElement ? (
+            <InputRightElement {...endElementProps}>{endElement}</InputRightElement>
           ) : isPasswordType ? (
-            <InputRightElement clickable={!disabled} {...rightElementProps}>
+            <InputRightElement clickable={!disabled} {...endElementProps}>
               <IconButton
                 _hover={{
                   color: ["gray.700", "gray.200"],
@@ -113,6 +143,7 @@ export const TextInput = memo(
               />
             </InputRightElement>
           ) : null}
+          {endAddon && <InputRightAddon {...endAddonProps}>{endAddon}</InputRightAddon>}
         </InputGroup>
       )
     },
