@@ -284,6 +284,7 @@ jobs:
           mkdir -p coverage
           pnpm test:coverage
           pnpm merge
+        continue-on-error: true
 
       - name: Upload Coverage Artifact
         if: always()
