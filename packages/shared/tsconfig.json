@@ -7,9 +7,7 @@
     "noEmit": false,
     "declarationDir": "./dist/types",
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "paths": {}
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
