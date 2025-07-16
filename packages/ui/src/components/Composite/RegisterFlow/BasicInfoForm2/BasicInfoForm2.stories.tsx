@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { VStack } from "@yamada-ui/react"
-import { BasicInfoForm1 } from "../BasicInfoForm1"
+import { BasicInfoForm2 } from "./BasicInfoForm2"
 
 const meta = {
-  title: "Composite Components / RegisterFlow / BasicInfoForm1",
-  component: BasicInfoForm1,
+  title: "Composite Components / RegisterFlow / BasicInfoForm2",
+  component: BasicInfoForm2,
   decorators: [
     (Story) => (
       <VStack h="md">
@@ -12,9 +12,9 @@ const meta = {
       </VStack>
     ),
   ],
-} satisfies Meta<typeof BasicInfoForm1>
+} satisfies Meta<typeof BasicInfoForm2>
 
 export default meta
-type Story = StoryObj<typeof BasicInfoForm1>
+type Story = StoryObj<typeof BasicInfoForm2>
 
 export const Default: Story = {}

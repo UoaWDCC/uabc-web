@@ -7,7 +7,7 @@ import { UniversityIcon, UserIcon } from "@yamada-ui/lucide"
 import { FormControl, memo, noop, VStack } from "@yamada-ui/react"
 import type { FC } from "react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
-import { UniversityInfoFormSchema, type UniversityInfoFormValues } from "./schema"
+import { UniversityInfoFormSchema, type UniversityInfoFormValues } from "../schema"
 
 /**
  * Props for {@link UniversityInfoForm} component
@@ -56,7 +56,7 @@ export const UniversityInfoForm: FC<UniversityInfoFormProps> = memo(({ onSubmit 
       onSubmit={handleSubmit(onSubmit ?? noop)}
     >
       <VStack>
-        <Heading.h3>Enter your phone number</Heading.h3>
+        <Heading.h3>Enter your university details</Heading.h3>
         <FormControl errorMessage={errors.university?.message} invalid={!!errors.university}>
           <Controller
             control={control}

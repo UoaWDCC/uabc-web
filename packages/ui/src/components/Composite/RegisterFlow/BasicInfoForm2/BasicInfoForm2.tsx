@@ -6,7 +6,7 @@ import { PhoneIcon } from "@yamada-ui/lucide"
 import { FormControl, memo, noop, VStack } from "@yamada-ui/react"
 import type { FC } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
-import { BasicInfoForm2Schema, type BasicInfoForm2Values } from "./schema"
+import { BasicInfoForm2Schema, type BasicInfoForm2Values } from "../schema"
 
 /**
  * Props for {@link BasicInfoForm2} component

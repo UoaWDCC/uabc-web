@@ -1,9 +1,9 @@
 import { University } from "@repo/shared/types"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
-import * as UniversityInfoFormModule from "./index"
-import { UniversityInfoForm } from "./index"
-import type { UniversityInfoFormValues } from "./schema"
+import * as UniversityInfoFormModule from "../index"
+import { UniversityInfoForm } from "../index"
+import type { UniversityInfoFormValues } from "../schema"
 
 describe("<UniversityInfoForm />", () => {
   it("should re-export the UniversityInfoForm component and check if UniversityInfoForm exists", () => {
