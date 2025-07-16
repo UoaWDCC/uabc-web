@@ -5,13 +5,12 @@ import {
   Center,
   HStack,
   Label,
-  memo,
   Tag,
   MultiSelect as UIMultiSelect,
   type MultiSelectProps as UIMultiSelectProps,
 } from "@yamada-ui/react"
 import type { ReactNode } from "react"
-import { forwardRef } from "react"
+import { forwardRef, memo } from "react"
 
 export interface MultiSelectProps extends Omit<UIMultiSelectProps, "variant"> {
   /**
