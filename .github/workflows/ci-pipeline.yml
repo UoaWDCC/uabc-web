@@ -40,7 +40,6 @@ jobs:
               !.zed/**
               !.env.example
 
-  # run this regardless of changes
   biome:
     name: Biome
     needs: check_changes
