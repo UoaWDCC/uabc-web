@@ -189,7 +189,7 @@ jobs:
           preview-storybook: ${{ steps.preview-storybook.outputs.deployment-url }}
 
   preview-frontend:
-    needs: [build-frontend]
+    needs: [setup, cspell, biome]
     if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     name: Preview Frontend
     runs-on: ubuntu-latest
