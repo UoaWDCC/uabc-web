@@ -7,6 +7,7 @@ import type { Metadata } from "next"
 import { FaqSection } from "@/components/client/FaqSection"
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL),
   title: "Home | UABC",
   description:
     "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
@@ -20,7 +21,6 @@ export const metadata: Metadata = {
     type: "website",
   },
 }
-
 export default async function Home() {
   // TODO: replace mock data with real data
   const mockCards = [
