@@ -5,13 +5,29 @@ import { Heading, Image } from "@repo/ui/components/Primitive"
 import { Bleed, Box, Center, Text, VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { FaqSection } from "@/components/client/FaqSection"
-import { generateMetadata } from "@/lib/utils/metadata"
 
-export const metadata: Metadata = generateMetadata(
-  "Home | UABC",
-  "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
-  "/",
-)
+export const metadata: Metadata = {
+  title: "Home | UABC",
+  description:
+    "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
+  openGraph: {
+    title: "Home | UABC",
+    description:
+      "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
+    url: process.env.NEXT_PUBLIC_URL,
+    siteName: "UABC",
+    images: [
+      {
+        url: "/favicon.ico",
+        width: 32,
+        height: 32,
+        alt: "UABC logo",
+      },
+    ],
+    locale: "en-NZ",
+    type: "website",
+  },
+}
 
 export default async function Home() {
   // TODO: replace mock data with real data
