@@ -1,8 +1,8 @@
-import { defaultTheme } from "@repo/theme"
+import { tokens } from "@repo/theme"
 import type { Meta, StoryObj } from "@storybook/react"
 import { SessionCountIcon } from "./SessionCountIcon"
 
-const fontSizes = Object.keys(defaultTheme.fontSizes ?? {})
+const fontSizes = Object.keys(tokens.fontSizes)
 
 const meta: Meta<typeof SessionCountIcon> = {
   title: "Generic Components / SessionCountIcon",
