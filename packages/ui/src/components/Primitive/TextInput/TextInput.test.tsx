@@ -60,7 +60,9 @@ describe("<TextInput />", () => {
 
   it("renders endIcon when provided", () => {
     const endIcon = <span data-testid="end-icon">★</span>
-    render(<TextInput data-testid="input-with-end-icon" endIcon={endIcon} type={InputType.Text} />)
+    render(
+      <TextInput data-testid="input-with-end-icon" endElement={endIcon} type={InputType.Text} />,
+    )
 
     expect(screen.getByTestId("end-icon")).toBeInTheDocument()
     expect(screen.getByText("★")).toBeInTheDocument()
@@ -71,7 +73,7 @@ describe("<TextInput />", () => {
     render(
       <TextInput
         data-testid="password-with-end-icon"
-        endIcon={endIcon}
+        endElement={endIcon}
         type={InputType.Password}
       />,
     )
