@@ -33,7 +33,9 @@ const FIRST_NAMES = [
   "Uma",
   "Vince",
   "Wendy",
+  // cspell:disable-next-line
   "Xander",
+  // cspell:disable-next-line
   "Yara",
   "Zane",
   "Fay",

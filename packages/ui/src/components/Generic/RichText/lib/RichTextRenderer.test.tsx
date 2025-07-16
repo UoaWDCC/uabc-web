@@ -65,6 +65,7 @@ describe("RichTextRenderer", () => {
     expect(link).toHaveAttribute("href", "https://example.com")
 
     const image = screen.getByAltText("Test Image")
+    // cspell:disable-next-line
     expect(image).toHaveAttribute("src", "/_next/image?url=%2Ftest-image.jpg&w=640&q=75")
 
     expect(screen.getByRole("list")).toBeInTheDocument()
