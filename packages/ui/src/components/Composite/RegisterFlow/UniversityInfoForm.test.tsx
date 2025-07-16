@@ -51,7 +51,7 @@ describe("<UniversityInfoForm />", () => {
   it("should call onSubmit when a user clicks the submit button with a non-UoA university option and no other data", async () => {
     const handleSubmit = vi.fn((data: UniversityInfoFormValues) => data)
 
-    const { user } = render(<UniversityInfoForm />)
+    const { user } = render(<UniversityInfoForm onSubmit={handleSubmit} />)
 
     await user.click(screen.getByTestId("university"))
     await user.click(screen.getByText(University.aut))
@@ -59,7 +59,11 @@ describe("<UniversityInfoForm />", () => {
     const submitButton = screen.getByText("Continue")
     await user.click(submitButton)
 
-    expect(handleSubmit).toBeCalled()
+    expect(handleSubmit).toReturnWith({
+      university: University.aut,
+      studentId: "",
+      studentUpi: "",
+    })
   })
 
   it("should not call onSubmit when student ID is invalid", async () => {
