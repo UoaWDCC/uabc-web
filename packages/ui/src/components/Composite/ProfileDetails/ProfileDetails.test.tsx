@@ -73,7 +73,6 @@ describe("<ProfileDetails />", () => {
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
       firstName: "Jane",
       lastName: "Doe",
-      email: "john.doe@example.com",
       phoneNumber: "0211234567",
     })
   })
