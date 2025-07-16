@@ -330,7 +330,6 @@ jobs:
           pnpm merge
 
       - name: Upload Coverage Artifact
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: local-coverage
@@ -339,7 +338,6 @@ jobs:
   vitest-coverage:
     name: Vitest Coverage
     needs: [test]
-    if: always()
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -424,7 +422,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build-frontend, build-backend, build-storybook, biome, test, codegen, typecheck]
+    needs: [check_changes, build-frontend, build-backend, build-storybook, cspell, biome, test, codegen, typecheck]
     runs-on: ubuntu-latest
     if: >
       always() &&
