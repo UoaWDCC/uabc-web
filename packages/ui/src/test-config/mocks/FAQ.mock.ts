@@ -3,7 +3,7 @@ import type { UIFAQItem } from "@repo/ui/components/Generic"
 import { createSimpleTextEditorState } from "./RichText.mock"
 
 /**
- * Creates an FAQ item with the shared schema structure (questionTitle, description)
+ * Creates an FAQ item with the shared schema structure (questionTitle, description) testingtypo
  * Compatible with the shared SerializedEditorStateSchema
  */
 export const createSharedFAQItem = (
