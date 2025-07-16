@@ -14,7 +14,7 @@ describe("<BasicInfoForm1 />", () => {
     expect(BasicInfoForm1.displayName).toBe("BasicInfoForm1")
   })
 
-  it("should call onSubmit when a user clicks the submit button", async () => {
+  it("should call onSubmit when a user clicks the submit button with valid data", async () => {
     const handleSubmit = vi.fn((data: BasicInfoForm1Values) => data)
 
     const { user } = render(<BasicInfoForm1 onSubmit={handleSubmit} />)
