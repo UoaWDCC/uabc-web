@@ -242,6 +242,7 @@ describe("MemberManagementContext", () => {
       })
 
       act(() => {
+        // cspell:disable-next-line
         result.current.setFilterValue("nonexistentterm12345")
       })
 
