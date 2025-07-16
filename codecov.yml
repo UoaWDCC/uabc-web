@@ -1,0 +1,26 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 2%
+    patch:
+      default:
+        target: 80%
+        threshold: 2%
+
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
+
+ignore:
+  - "**/*.d.ts"
+  - "**/test/**"
+  - "**/*.test.*"
+  - "**/*.stories.*"
+  - "**/__mocks__/**"
+  - "**/node_modules/**"
+
+parsers:
+  javascript:
+    enable_partials: yes 

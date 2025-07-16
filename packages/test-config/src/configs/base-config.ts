@@ -8,7 +8,7 @@ export const baseConfig = defineConfig({
     globals: true,
     coverage: {
       reportOnFailure: true,
-      provider: "istanbul",
+      provider: "v8",
       thresholds: {
         branches: 60, // this is for overall vitest coverage report
         functions: 80,
