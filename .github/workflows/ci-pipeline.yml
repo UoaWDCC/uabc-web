@@ -107,7 +107,7 @@ jobs:
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
   build-backend:
-    needs: [setup]
+    needs: [setup, biome, cspell]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Backend
     runs-on: ubuntu-latest
@@ -125,7 +125,7 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
   build-frontend:
-    needs: [setup]
+    needs: [setup, biome, cspell]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Frontend
     runs-on: ubuntu-latest
@@ -139,7 +139,7 @@ jobs:
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
 
   build-storybook:
-    needs: [setup]
+    needs: [setup, biome, cspell]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Storybook
     runs-on: ubuntu-latest
