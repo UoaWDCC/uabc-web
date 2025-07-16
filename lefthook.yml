@@ -2,7 +2,6 @@ pre-push:
   parallel: true
   commands:
     biome:
-      glob: "**/*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
       run: pnpm exec biome check . --error-on-warnings
     cspell:
       glob: "**/*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc,md,yml,yaml}"
