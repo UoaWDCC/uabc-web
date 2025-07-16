@@ -47,19 +47,19 @@ export interface TextInputProps extends Omit<UIInputProps, "type"> {
    */
   autoComplete?: AutoCompleteType
   /**
-   * The icon to display on the left side of the input field.
+   * The element to display on the left side of the input field.
    */
   startElement?: React.ReactNode
   /**
-   * The icon to display on the right side of the input field.
+   * The element to display on the right side of the input field.
    */
   endElement?: React.ReactNode
   /**
-   * Additional props for the end icon.
+   * Additional props for the end element.
    */
   endElementProps?: InputElementProps
   /**
-   * Additional props for the start icon.
+   * Additional props for the start element.
    */
   startElementProps?: InputElementProps
   /**
