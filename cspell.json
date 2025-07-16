@@ -14,7 +14,8 @@
     "**/src/payload-types.ts",
     "**/.vscode/**",
     "apps/portal/**",
-    "importMap.js"
+    "importMap.js",
+    ".gitignore"
   ],
   "words": [
     "adipiscing",
@@ -119,6 +120,7 @@
     "WDCC",
     "workerd",
     "yamcha",
+    "yumemi",
     "zarbon",
     "zhao",
     "Zhao"
