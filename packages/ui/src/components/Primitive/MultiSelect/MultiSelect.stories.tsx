@@ -22,10 +22,11 @@ const meta: Meta<typeof MultiSelect> = {
 
 export default meta
 
-export const Basic: Story = (args) => {
+export const Basic: Story = ({ label, ...args }) => {
+  const labelStr = label?.length ? label : "Select option(s)"
   return (
-    <FormControl label={args.label || "Select option(s)"}>
-      <MultiSelect {...args} icon={<CalendarClockIcon fontSize={24} />}>
+    <FormControl label={labelStr}>
+      <MultiSelect label={labelStr} {...args} icon={<CalendarClockIcon fontSize={24} />}>
         <Option value="1">Option 1</Option>
         <Option value="2">Option 2</Option>
         <Option value="3">Option 3</Option>
@@ -34,10 +35,16 @@ export const Basic: Story = (args) => {
   )
 }
 
-export const Stylised: Story = (args) => {
+export const Stylised: Story = ({ label, ...args }) => {
+  const labelStr = label?.length ? label : "Select option(s)"
   return (
-    <FormControl label={args.label || "Select option(s)"}>
-      <MultiSelect {...args} icon={<CalendarClockIcon fontSize={24} />} variant="stylised">
+    <FormControl label={labelStr}>
+      <MultiSelect
+        label={labelStr}
+        {...args}
+        icon={<CalendarClockIcon fontSize={24} />}
+        variant="stylised"
+      >
         <Option value="1">Option 1</Option>
         <Option value="2">Option 2</Option>
         <Option value="3">Option 3</Option>
@@ -46,10 +53,11 @@ export const Stylised: Story = (args) => {
   )
 }
 
-export const NoIcon: Story = (args) => {
+export const NoIcon: Story = ({ label, ...args }) => {
+  const labelStr = label?.length ? label : "Select option(s)"
   return (
-    <FormControl label={args.label || "Select option(s)"}>
-      <MultiSelect {...args}>
+    <FormControl label={labelStr}>
+      <MultiSelect label={labelStr} {...args}>
         <Option value="1">Option 1</Option>
         <Option value="2">Option 2</Option>
         <Option value="3">Option 3</Option>
@@ -58,7 +66,8 @@ export const NoIcon: Story = (args) => {
   )
 }
 
-export const TypesAndStates: Story = (args) => {
+export const TypesAndStates: Story = ({ label, ...args }) => {
+  const labelStr = label?.length ? label : "Select option(s)"
   const states = ["normal", "disabled", "error"]
   const types = ["unstylised", "stylised"]
   return (
@@ -73,12 +82,13 @@ export const TypesAndStates: Story = (args) => {
             errorMessage={isError ? "This field has an error" : undefined}
             invalid={isError}
             key={key}
-            label={row.charAt(0).toUpperCase() + row.slice(1) + " MultiSelect"}
+            label={labelStr}
           >
             <MultiSelect
               {...args}
               disabled={isDisabled}
               icon={<CalendarClockIcon fontSize={24} />}
+              label={labelStr}
               variant={stylised ? "stylised" : undefined}
             >
               <Option value="1">Option 1</Option>
