@@ -23,6 +23,19 @@ declare global {
        * The public URL of the frontend
        */
       NEXT_PUBLIC_URL: string
+
+      /**
+       * The hostname of the SMTP server
+       */
+      SMTP_HOST: string
+      /**
+       * The SMTP user
+       */
+      SMTP_USER: string
+      /**
+       * The SMTP password
+       */
+      SMTP_PASS: string
     }
   }
 }
