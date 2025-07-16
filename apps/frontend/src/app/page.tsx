@@ -16,14 +16,6 @@ export const metadata: Metadata = {
       "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
     url: process.env.NEXT_PUBLIC_URL,
     siteName: "UABC",
-    images: [
-      {
-        url: "/favicon.ico",
-        width: 32,
-        height: 32,
-        alt: "UABC logo",
-      },
-    ],
     locale: "en-NZ",
     type: "website",
   },
