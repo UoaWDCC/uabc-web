@@ -54,8 +54,10 @@ export const Default: StoryFn = () => (
       phoneNumber: "0211234567",
     }}
     fields={exampleFields}
-    onSave={(data) => {
+    onSave={async (data) => {
       console.log("Form submitted:", data)
+
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       alert("Form submitted! Check console for details.")
     }}
     title="User Profile"
@@ -91,8 +93,10 @@ export const AdditionalFields: StoryFn = () => {
   return (
     <UserProfileCard
       fields={minimalFields}
-      onSave={(data) => {
+      onSave={async (data) => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
         console.log("Minimal form submitted:", data)
+        alert("Form submitted! Check console for details.")
       }}
       title="Additional Fields"
     />
@@ -136,7 +140,9 @@ export const WithGroupedSelectOptions: StoryFn = () => {
           label: "Wellington",
           items: [
             { value: "wellington-city", label: "Wellington City" },
+            // cspell:disable-next-line
             { value: "lower-hutt", label: "Lower Hutt" },
+            // cspell:disable-next-line
             { value: "upper-hutt", label: "Upper Hutt" },
           ],
         },
@@ -147,8 +153,10 @@ export const WithGroupedSelectOptions: StoryFn = () => {
   return (
     <UserProfileCard
       fields={groupedFields}
-      onSave={(data) => {
+      onSave={async (data) => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
         console.log("Grouped form submitted:", data)
+        alert("Form submitted! Check console for details.")
       }}
       title="Location Profile"
     />

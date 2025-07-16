@@ -14,13 +14,13 @@
     "test:watch": "cross-env NODE_ENV=test vitest",
     "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
     "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage",
-    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage",
-    "clean": "rm -rf node_modules .turbo dist coverage"
+    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
   },
   "dependencies": {
     "@hookform/resolvers": "5.1.1",
     "@repo/shared": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@repo/theme": "workspace:*",
     "@tanstack/react-query": "5.81.5",
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.7",

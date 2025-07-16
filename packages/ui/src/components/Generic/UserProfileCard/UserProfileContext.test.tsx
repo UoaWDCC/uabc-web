@@ -1,5 +1,5 @@
 import { InputType } from "@repo/ui/components/Primitive"
-import { renderHook } from "@repo/ui/test-utils"
+import { act, renderHook } from "@repo/ui/test-utils"
 import { UserProfileProvider, useUserProfile } from "./UserProfileContext"
 
 describe("UserProfileContext", () => {
@@ -29,5 +29,41 @@ describe("UserProfileContext", () => {
 
   it("throws if used outside provider", () => {
     expect(() => renderHook(() => useUserProfile<typeof fields>())).toThrow()
+  })
+
+  it("filters out disabled fields in saveChanges", async () => {
+    const testFields = [
+      {
+        key: "enabledField",
+        type: "text",
+        label: "Enabled Field",
+        inputType: InputType.Text,
+      },
+      {
+        key: "disabledField",
+        type: "text",
+        label: "Disabled Field",
+        inputType: InputType.Text,
+        disabled: true,
+      },
+    ] as const
+    const onSave = vi.fn()
+    const { result } = renderHook(() => useUserProfile<typeof testFields>(), {
+      wrapper: ({ children }) => (
+        <UserProfileProvider fields={testFields} onSave={onSave}>
+          {children}
+        </UserProfileProvider>
+      ),
+    })
+    await act(async () => {
+      await result.current.saveChanges({
+        enabledField: "enabled value",
+        disabledField: "should not be submitted",
+      })
+    })
+    expect(onSave).toHaveBeenCalledWith({ enabledField: "enabled value" })
+    expect(onSave).not.toHaveBeenCalledWith(
+      expect.objectContaining({ disabledField: expect.anything() }),
+    )
   })
 })

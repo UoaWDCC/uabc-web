@@ -1,10 +1,20 @@
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import { PenIcon, XIcon } from "@yamada-ui/lucide"
 import type { CardProps } from "@yamada-ui/react"
-import { ButtonGroup, Card, CardBody, CardFooter, CardHeader, Spacer } from "@yamada-ui/react"
+import {
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  HStack,
+  Spacer,
+  Text,
+  VStack,
+} from "@yamada-ui/react"
 import type { DefaultValues } from "react-hook-form"
 import { FieldGroup } from "./FieldGroup"
-import type { Field, FormData } from "./types"
+import type { Field, NullableFormData } from "./types"
 import { UserProfileProvider, useUserProfile } from "./UserProfileContext"
 
 /**
@@ -16,11 +26,12 @@ import { UserProfileProvider, useUserProfile } from "./UserProfileContext"
  * @property defaultValues Optional default values for the form.
  * @property onSave Optional callback when the form is saved.
  */
-interface UserProfileCardProps<T extends readonly Field[]> extends Omit<CardProps, "onSubmit"> {
+export interface UserProfileCardProps<T extends readonly Field[] = readonly Field[]>
+  extends Omit<CardProps, "onSubmit"> {
   title: string
   fields: T
-  defaultValues?: Partial<FormData<T>>
-  onSave?: (data: FormData<T>) => void
+  defaultValues?: Partial<NullableFormData<T>>
+  onSave?: (data: NullableFormData<T>) => Promise<void>
 }
 
 /**
@@ -38,7 +49,7 @@ export const UserProfileCard = <T extends readonly Field[]>({
 }: UserProfileCardProps<T>) => {
   return (
     <UserProfileProvider
-      defaultValues={defaultValues as DefaultValues<FormData<T>>}
+      defaultValues={defaultValues as DefaultValues<NullableFormData<T>>}
       fields={fields}
       onSave={onSave}
     >
@@ -70,7 +81,8 @@ const UserProfileContent = <T extends readonly Field[]>({
   fields,
   ...props
 }: UserProfileContentProps<T>) => {
-  const { isEditing, startEditing, cancelEditing, saveChanges, form } = useUserProfile<T>()
+  const { isEditing, startEditing, cancelEditing, saveChanges, form, errorMessage } =
+    useUserProfile<T>()
 
   return (
     <Card
@@ -83,13 +95,18 @@ const UserProfileContent = <T extends readonly Field[]>({
       {...props}
     >
       <CardHeader>
-        <Heading.h2 py="4">{title}</Heading.h2>
-        <Spacer />
-        {!isEditing && (
-          <Button minW="12" onClick={startEditing} startIcon={<PenIcon />}>
-            Edit
-          </Button>
-        )}
+        <VStack>
+          <HStack>
+            <Heading.h2 py="4">{title}</Heading.h2>
+            <Spacer />
+            {!isEditing && (
+              <Button minW="12" onClick={startEditing} startIcon={<PenIcon />}>
+                Edit
+              </Button>
+            )}
+          </HStack>
+          {errorMessage && <Text color={["danger.500", "danger.400"]}>{errorMessage}</Text>}
+        </VStack>
       </CardHeader>
       <CardBody>
         {fields.map((field) => (
@@ -103,7 +120,12 @@ const UserProfileContent = <T extends readonly Field[]>({
             <Button minW="12" onClick={cancelEditing} startIcon={<XIcon />}>
               Cancel
             </Button>
-            <Button colorScheme="primary" minW="12" type="submit">
+            <Button
+              colorScheme="primary"
+              loading={form.formState.isSubmitting}
+              minW="12"
+              type="submit"
+            >
               Save changes
             </Button>
           </ButtonGroup>

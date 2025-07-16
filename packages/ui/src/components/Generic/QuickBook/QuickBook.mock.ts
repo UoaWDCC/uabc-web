@@ -1,3 +1,4 @@
+// cspell:disable
 import type { SelectItem } from "@yamada-ui/react"
 
 export const locationAndTimeOptionsMock: SelectItem[] = [

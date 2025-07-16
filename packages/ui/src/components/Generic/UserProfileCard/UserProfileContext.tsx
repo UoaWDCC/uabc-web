@@ -1,24 +1,27 @@
+"use client"
 import { useBoolean } from "@yamada-ui/react"
-import { createContext, type ReactNode, useContext } from "react"
+import { createContext, type ReactNode, useContext, useState } from "react"
 import { type DefaultValues, type UseFormReturn, useForm } from "react-hook-form"
-import type { Field, FormData } from "./types"
+import type { Field, FormData, NullableFormData } from "./types"
 
 /**
  * Context value for user profile editing state and form.
  *
- * @template T - The tuple of fields for the form.
- * @property isEditing - Whether the form is in editing mode.
- * @property form - The react-hook-form instance for the form.
- * @property startEditing - Function to start editing mode.
- * @property cancelEditing - Function to cancel editing and reset the form.
- * @property saveChanges - Function to save changes and exit editing mode.
+ * @template T The tuple of fields for the form.
+ * @property isEditing Whether the form is in editing mode.
+ * @property form The react-hook-form instance for the form.
+ * @property startEditing Function to start editing mode.
+ * @property cancelEditing Function to cancel editing and reset the form.
+ * @property saveChanges Function to save changes and exit editing mode.
+ * @property error Error message to display.
  */
 export interface UserProfileContextValue<T extends readonly Field[]> {
   isEditing: boolean
   form: UseFormReturn<FormData<T>>
   startEditing: () => void
   cancelEditing: () => void
-  saveChanges: (data: FormData<T>) => void
+  saveChanges: (data: FormData<T>) => Promise<void>
+  errorMessage?: string | null
 }
 
 const UserProfileContext = createContext<unknown>(null)
@@ -50,8 +53,10 @@ export const useUserProfile = <T extends readonly Field[]>() => {
 export interface UserProfileProviderProps<T extends readonly Field[]> {
   children: ReactNode
   fields: T
-  defaultValues?: DefaultValues<FormData<T>>
-  onSave?: (data: FormData<T>) => void
+  defaultValues?: DefaultValues<NullableFormData<T>>
+  onSave?: (data: NullableFormData<T>) => Promise<void>
+  onSuccess?: () => void
+  onCancel?: () => void
 }
 
 /**
@@ -65,23 +70,46 @@ export const UserProfileProvider = <T extends readonly Field[]>({
   children,
   defaultValues,
   onSave,
+  onSuccess,
+  onCancel,
+  fields,
 }: UserProfileProviderProps<T>) => {
   const [isEditing, { on: startEditing, off: stopEditing }] = useBoolean()
-  const form = useForm<FormData<T>>({ defaultValues })
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const form = useForm<NullableFormData<T>>({ defaultValues })
 
   const cancelEditing = () => {
     form.reset()
     stopEditing()
+    setErrorMessage(null)
+    onCancel?.()
   }
 
-  const saveChanges = (data: FormData<T>) => {
-    onSave?.(data)
-    stopEditing()
+  const saveChanges = async (data: FormData<T>) => {
+    try {
+      const disabledKeys = fields.filter((f) => f.disabled).map((f) => f.key)
+      const filteredData = Object.fromEntries(
+        Object.entries(data).filter(([key]) => !disabledKeys.includes(key as T[number]["key"])),
+      ) as FormData<T>
+      await onSave?.(filteredData)
+      setErrorMessage(null)
+      stopEditing()
+      onSuccess?.()
+    } catch (err) {
+      setErrorMessage(err instanceof Error ? err.message : String(err))
+    }
   }
 
   return (
     <UserProfileContext.Provider
-      value={{ isEditing, form, startEditing, cancelEditing, saveChanges }}
+      value={{
+        isEditing,
+        form,
+        startEditing,
+        cancelEditing,
+        saveChanges,
+        errorMessage,
+      }}
     >
       {children}
     </UserProfileContext.Provider>
