@@ -53,8 +53,7 @@ describe("globals/footer", () => {
               },
             ],
           },
-          copyright: "© 2025 University of Auckland Badminton Club. \nAll rights reserved.",
-          credits: "Developed by the 2025 WDCC UABC Team.",
+          copyright: "© 2025 University of Auckland Badminton Club",
         },
       })
     })

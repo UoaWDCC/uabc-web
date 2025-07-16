@@ -24,21 +24,26 @@ import type { NavigationBarProps } from "./NavigationBar"
 /**
  * NavigationBar component renders a navigation bar with links to different pages for mobile devices.
  *
- * @param navItems Array of navigation items with label and path.
+ * @param navItems Array of navigation items with label and url.
+ * @param rightSideSingleButton Button that is displayed on the right side of the navigation bar for desktop view.
  * @param user Optional user object containing user information if signed in.
  * @returns A navigation bar with links to different pages, an admin link if the user is an admin, and a user menu if the user is signed in.
  */
-export const NavigationBarMobile = ({ navItems, user }: NavigationBarProps) => {
+export const NavigationBarMobile = ({
+  navItems,
+  rightSideSingleButton,
+  user,
+}: NavigationBarProps) => {
   const currentPath = usePathname()
 
   const allNavItems = [
     ...(user
       ? [
-          ...(user.role === MembershipType.admin ? [{ label: "Admin", path: "/admin" }] : []),
-          { label: "Profile", path: "/profile" },
-          { label: "Sign Out", path: "/signout" },
+          ...(user.role === MembershipType.admin ? [{ label: "Admin", url: "/admin" }] : []),
+          { label: "Profile", url: "/profile" },
+          { label: "Sign Out", url: "/auth/signout" },
         ]
-      : [{ label: "Sign In", path: "/login" }]),
+      : [rightSideSingleButton || { label: "Sign In", url: "/auth/signin" }]),
     ...navItems,
   ]
 
@@ -119,10 +124,10 @@ export const NavigationBarMobile = ({ navItems, user }: NavigationBarProps) => {
                   _hover={{ bgColor: "secondary" }}
                   as={Link}
                   borderRadius="xl"
-                  color={currentPath === item.path ? "primary" : "white"}
+                  color={currentPath === item.url ? "primary" : "white"}
                   fontSize="xl"
                   fontWeight="semibold"
-                  href={item.path}
+                  href={item.url}
                   key={item.label}
                   px="md"
                   py="sm"

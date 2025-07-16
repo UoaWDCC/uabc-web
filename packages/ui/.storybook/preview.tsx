@@ -50,6 +50,7 @@ const App: FC<AppProps> = ({ children, isDocs }) => {
             }
       }
       overflowX="auto"
+      overflowY="visible"
       p={{ base: "lg", md: "md" }}
     >
       {children}
