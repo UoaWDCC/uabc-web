@@ -154,3 +154,5 @@ node-compile-cache
 
 .vercel
 .wrangler
+
+.cspellcache

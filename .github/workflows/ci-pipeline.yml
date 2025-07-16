@@ -54,9 +54,16 @@ jobs:
       - name: Run Biome
         run: biome ci . --error-on-warnings
 
+  cspell:
+    name: Spell Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: streetsidesoftware/cspell-action@v7
+
   setup:
     name: Setup
-    needs: [check_changes, biome]
+    needs: [check_changes, cspell, biome]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
@@ -300,7 +307,6 @@ jobs:
           pnpm merge
 
       - name: Upload Coverage Artifact
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: local-coverage
@@ -308,8 +314,8 @@ jobs:
 
   vitest-coverage:
     name: Vitest Coverage
-    needs: test
     if: always()
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -380,7 +386,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [check_changes, build-frontend, build-backend, build-storybook, biome, test, codegen, typecheck]
+    needs: [check_changes, build-frontend, build-backend, build-storybook, cspell, biome, test, codegen, typecheck]
     runs-on: ubuntu-latest
     if: >
       always() &&

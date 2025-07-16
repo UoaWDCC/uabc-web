@@ -15,7 +15,6 @@
   },
   "scripts": {
     "check-types": "tsc --noEmit",
-    "clean": "rm -rf node_modules .turbo dist coverage",
     "storybook": "storybook dev -p 6006 -c .storybook",
     "storybook:build": "storybook build -c .storybook",
     "test": "cross-env NODE_ENV=test vitest run",
