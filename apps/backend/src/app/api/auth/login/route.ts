@@ -46,7 +46,9 @@ export const POST = async (req: NextRequest) => {
 
   const token = authService.signJWT({ user }, { expiresIn: TOKEN_EXPIRY_TIME })
   const response = NextResponse.json(
-    { message: "Login successful" },
+    {
+      data: token,
+    },
     { status: StatusCodes.CREATED },
   )
 
