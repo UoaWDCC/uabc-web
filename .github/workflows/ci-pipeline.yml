@@ -40,8 +40,23 @@ jobs:
               !.zed/**
               !.env.example
 
+  biome:
+    name: Biome
+    needs: [check_changes]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+
+      - name: Run Biome
+        run: biome ci . --error-on-warnings
+
   cspell:
     name: Spell Check
+    needs: [check_changes]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,7 +64,7 @@ jobs:
 
   setup:
     name: Setup
-    needs: [check_changes, cspell]
+    needs: [check_changes]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
@@ -92,7 +107,7 @@ jobs:
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
   build-backend:
-    needs: setup
+    needs: [setup, biome, cspell]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Backend
     runs-on: ubuntu-latest
@@ -110,7 +125,7 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
   build-frontend:
-    needs: [check_changes, setup]
+    needs: [setup, biome, cspell]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Frontend
     runs-on: ubuntu-latest
@@ -124,7 +139,7 @@ jobs:
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
 
   build-storybook:
-    needs: [check_changes, setup]
+    needs: [setup, biome, cspell]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Storybook
     runs-on: ubuntu-latest
@@ -136,7 +151,7 @@ jobs:
 
   pre-comment:
     name: Pre Comment
-    needs: [check_changes, setup]
+    needs: [setup]
     if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
@@ -174,7 +189,7 @@ jobs:
           preview-storybook: ${{ steps.preview-storybook.outputs.deployment-url }}
 
   preview-frontend:
-    needs: [check_changes, setup]
+    needs: [setup, cspell, biome]
     if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     name: Preview Frontend
     runs-on: ubuntu-latest
@@ -202,7 +217,7 @@ jobs:
           preview-frontend: ${{ steps.preview-frontend.outputs.deployment-url }}
 
   typecheck:
-    needs: [check_changes, setup]
+    needs: [setup, biome, cspell]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: TypeScript
     runs-on: ubuntu-latest
@@ -244,7 +259,7 @@ jobs:
         run: pnpm turbo run check-types
 
   test:
-    needs: [check_changes, setup]
+    needs: [setup, biome, cspell]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Test
     runs-on: ubuntu-latest
@@ -313,7 +328,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   codegen:
-    needs: [check_changes, setup]
+    needs: [setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Codegen
     runs-on: ubuntu-latest
@@ -369,23 +384,9 @@ jobs:
           script: |
             core.setFailed('Your code generation for typings are not up to date. Run pnpm generate:types')
 
-  # run this regardless of changes
-  biome:
-    name: Biome
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Biome
-        uses: biomejs/setup-biome@v2
-
-      - name: Run Biome
-        run: biome ci . --error-on-warnings
-
   verify:
     name: Verify
-    needs: [check_changes, build-frontend, build-backend, build-storybook, cspell, biome, test, codegen, typecheck]
+    needs: [build-frontend, build-backend, build-storybook, test, codegen, typecheck]
     runs-on: ubuntu-latest
     if: >
       always() &&
