@@ -46,4 +46,5 @@ const AdminSemesterService = {
     if (status !== StatusCodes.NO_CONTENT) throw new Error("Failed to delete semester")
   },
 } as const
+
 export default AdminSemesterService
