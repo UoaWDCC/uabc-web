@@ -6,19 +6,7 @@ import { FolderPenIcon } from "@yamada-ui/lucide"
 import { FormControl, memo, noop, VStack } from "@yamada-ui/react"
 import type { FC } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
-import z from "zod"
-
-export const BasicInfoForm1Schema = z.object({
-  /**
-   * First name of the new user.
-   */
-  firstName: z.string().min(1, "Field is required"),
-  /**
-   * Last name of the new user.
-   */
-  lastName: z.string().min(1, "Field is required"),
-})
-export type BasicInfoForm1Values = z.infer<typeof BasicInfoForm1Schema>
+import { BasicInfoForm1Schema, type BasicInfoForm1Values } from "./schema"
 
 /**
  * Props for {@link BasicInfoForm1} component

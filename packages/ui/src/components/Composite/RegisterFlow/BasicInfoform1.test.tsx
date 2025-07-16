@@ -1,7 +1,8 @@
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as BasicInfoForm1Module from "./index"
-import { BasicInfoForm1, type BasicInfoForm1Values } from "./index"
+import { BasicInfoForm1 } from "./index"
+import type { BasicInfoForm1Values } from "./schema"
 
 describe("<BasicInfoForm1 />", () => {
   it("should re-export the BasicInfoForm1 component and check if BasicInfoForm1 exists", () => {
