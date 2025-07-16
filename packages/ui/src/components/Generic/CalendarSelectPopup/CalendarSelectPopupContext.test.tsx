@@ -1,5 +1,4 @@
 import { render, screen } from "@repo/ui/test-utils"
-import { vi } from "vitest"
 import {
   CalendarSelectPopupContext,
   type CalendarSelectPopupContextValue,

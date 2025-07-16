@@ -1,8 +1,8 @@
+import { Button } from "@repo/ui/components/Primitive"
 import type { Meta, StoryObj } from "@storybook/react"
 import { parseAsInteger, useQueryState } from "nuqs"
 import { NuqsAdapter } from "nuqs/adapters/react"
 import { z } from "zod"
-import { Button } from "../../Primitive"
 import { CalendarSelectPopup } from "."
 
 type Story = StoryObj<typeof CalendarSelectPopup.Root>

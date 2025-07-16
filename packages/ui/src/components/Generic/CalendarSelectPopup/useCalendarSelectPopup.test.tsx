@@ -2,8 +2,7 @@ import { act, renderHook } from "@repo/ui/test-utils"
 import dayjs from "dayjs"
 import timezone from "dayjs/plugin/timezone"
 import utc from "dayjs/plugin/utc"
-import { NuqsAdapter } from "nuqs/adapters/react"
-import type { ReactNode } from "react"
+import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { vi } from "vitest"
 import { useCalendarSelectPopup } from "./useCalendarSelectPopup"
 
@@ -11,11 +10,6 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 
 const NZ_TIMEZONE = "Pacific/Auckland"
-
-const createWrapper = () => {
-  const Wrapper = ({ children }: { children: ReactNode }) => <NuqsAdapter>{children}</NuqsAdapter>
-  return Wrapper
-}
 
 beforeAll(() => {
   vi.useFakeTimers()
@@ -29,7 +23,7 @@ afterAll(() => {
 describe("useCalendarSelectPopup", () => {
   it("should initialize with null date by default", () => {
     const { result } = renderHook(() => useCalendarSelectPopup({ popupId: "test" }), {
-      wrapper: createWrapper(),
+      wrapper: withNuqsTestingAdapter(),
     })
     expect(result.current.selectedDate).toBeNull()
   })
@@ -37,14 +31,14 @@ describe("useCalendarSelectPopup", () => {
   it("should initialize with provided initial date", () => {
     const initialDate = dayjs.tz("2025-01-01", "YYYY-MM-DD", NZ_TIMEZONE).toDate()
     const { result } = renderHook(() => useCalendarSelectPopup({ popupId: "test", initialDate }), {
-      wrapper: createWrapper(),
+      wrapper: withNuqsTestingAdapter(),
     })
     expect(result.current.selectedDate).toEqual(initialDate)
   })
 
   it("should set and update the selected date", () => {
     const { result } = renderHook(() => useCalendarSelectPopup({ popupId: "test" }), {
-      wrapper: createWrapper(),
+      wrapper: withNuqsTestingAdapter(),
     })
     const newDate = dayjs.tz("2025-02-10", "YYYY-MM-DD", NZ_TIMEZONE).toDate()
 
@@ -58,7 +52,7 @@ describe("useCalendarSelectPopup", () => {
   it("should clear the date to initialDate if provided", () => {
     const initialDate = dayjs.tz("2025-01-10", "YYYY-MM-DD", NZ_TIMEZONE).toDate()
     const { result } = renderHook(() => useCalendarSelectPopup({ popupId: "test", initialDate }), {
-      wrapper: createWrapper(),
+      wrapper: withNuqsTestingAdapter(),
     })
 
     act(() => {
@@ -71,7 +65,7 @@ describe("useCalendarSelectPopup", () => {
 
   it("should clear the date to null if no initialDate is provided", () => {
     const { result } = renderHook(() => useCalendarSelectPopup({ popupId: "test" }), {
-      wrapper: createWrapper(),
+      wrapper: withNuqsTestingAdapter(),
     })
 
     act(() => {
@@ -84,7 +78,7 @@ describe("useCalendarSelectPopup", () => {
 
   it("should set date to today", () => {
     const { result } = renderHook(() => useCalendarSelectPopup({ popupId: "test" }), {
-      wrapper: createWrapper(),
+      wrapper: withNuqsTestingAdapter(),
     })
     const today = dayjs().tz(NZ_TIMEZONE).startOf("day").toDate()
 
@@ -103,7 +97,7 @@ describe("useCalendarSelectPopup", () => {
           enableRange: true,
           initialDate: [undefined, undefined],
         }),
-      { wrapper: createWrapper() },
+      { wrapper: withNuqsTestingAdapter() },
     )
 
     const startDate = dayjs.tz("2025-03-01", "YYYY-MM-DD", NZ_TIMEZONE).toDate()
@@ -118,7 +112,7 @@ describe("useCalendarSelectPopup", () => {
 
   it("should open, close, and toggle the popup", () => {
     const { result } = renderHook(() => useCalendarSelectPopup({ popupId: "test" }), {
-      wrapper: createWrapper(),
+      wrapper: withNuqsTestingAdapter(),
     })
 
     expect(result.current.isOpen).toBe(false)
@@ -142,7 +136,7 @@ describe("useCalendarSelectPopup", () => {
   it("should call onDateSelect callback", () => {
     const onDateSelect = vi.fn()
     const { result } = renderHook(() => useCalendarSelectPopup({ popupId: "test", onDateSelect }), {
-      wrapper: createWrapper(),
+      wrapper: withNuqsTestingAdapter(),
     })
     const newDate = dayjs.tz("2025-04-04", "YYYY-MM-DD", NZ_TIMEZONE).toDate()
 
@@ -163,7 +157,7 @@ describe("useCalendarSelectPopup", () => {
           initialDate: [undefined, undefined],
           onDateSelect,
         }),
-      { wrapper: createWrapper() },
+      { wrapper: withNuqsTestingAdapter() },
     )
 
     act(() => {
@@ -180,7 +174,7 @@ describe("useCalendarSelectPopup", () => {
           popupId: "test-single",
           enableRange: false,
         }),
-      { wrapper: createWrapper() },
+      { wrapper: withNuqsTestingAdapter() },
     )
 
     act(() => {
@@ -197,7 +191,7 @@ describe("useCalendarSelectPopup", () => {
           enableRange: true,
           initialDate: [undefined, undefined],
         }),
-      { wrapper: createWrapper() },
+      { wrapper: withNuqsTestingAdapter() },
     )
 
     act(() => {
@@ -221,7 +215,7 @@ describe("useCalendarSelectPopup", () => {
           onDateSelect,
           initialDate,
         }),
-      { wrapper: createWrapper() },
+      { wrapper: withNuqsTestingAdapter() },
     )
 
     act(() => {
