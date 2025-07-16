@@ -3,7 +3,7 @@ pre-push:
   commands:
     biome:
       glob: "**/*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-      run: pnpm exec biome check .
+      run: pnpm exec biome check . --error-on-warnings
     cspell:
       glob: "**/*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc,md,yml,yaml}"
       run: pnpm exec cspell {staged_files} --quiet
