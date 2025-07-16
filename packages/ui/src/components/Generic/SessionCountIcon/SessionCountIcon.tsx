@@ -1,0 +1,45 @@
+import { TicketsIcon } from "@yamada-ui/lucide"
+import { Center, type IconProps, Text } from "@yamada-ui/react"
+import { type FC, memo } from "react"
+
+/**
+ * Props for the {@link SessionCountIcon} component.
+ */
+export interface SessionCountIconProps extends IconProps {
+  /**
+   * The number to be displayed inside the icon.
+   */
+  count: number
+}
+
+/**
+ * A component that displays a session count icon with a number inside it.
+ *
+ * @param color - The color of the icon and text.
+ * @param count - The number of sessions to display inside the icon.
+ * @param fontSize - The font size of the tickets icon that surrounds the text.
+ * @param props - Additional properties to pass to the icon
+ * @returns A component that displays a session count icon with a number inside it.
+ * @example
+ * <SessionCountIcon count={5} fontSize="xs" />
+ */
+export const SessionCountIcon: FC<SessionCountIconProps> = memo(
+  ({ color, count, fontSize = "2xl", ...props }) => {
+    return (
+      <Center color={color} position="relative">
+        <TicketsIcon fontSize={fontSize} strokeWidth="2px" {...props} />
+        <Text
+          fontSize={`calc(${fontSize} / 3)`}
+          paddingInlineEnd="20%"
+          position="absolute"
+          textAlign="right"
+          top="60%"
+          transform="translateY(-50%)"
+          w="full"
+        >
+          {count}
+        </Text>
+      </Center>
+    )
+  },
+)
