@@ -18,7 +18,7 @@
     "payload": "turbo run payload",
     "lint": "biome check .",
     "prepare": "lefthook install",
-    "spell": "cspell \"**/*.{js,jsx,mjs,cjs,d.cts,d.mts,ts,tsx,md,json,yml,yaml}\" --quiet",
+    "spell": "cspell \"**/*.{js,jsx,mjs,cjs,d.cts,d.mts,ts,tsx,md,json,yml,yaml}\" --cache --cache-strategy=content --cache-location=.cspellcache",
     "start": "turbo run start",
     "storybook": "pnpm --prefix=packages/ui storybook",
     "storybook:build": "turbo run storybook:build",
