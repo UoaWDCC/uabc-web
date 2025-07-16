@@ -1,6 +1,6 @@
 import { z } from "zod"
 import type { Semester } from "../payload-types"
-import { Weekday } from "../types"
+import { type CreateSemesterData, type EditSemesterData, Weekday } from "../types"
 
 export const SemesterSchema = z.object({
   id: z.string(),
@@ -14,6 +14,21 @@ export const SemesterSchema = z.object({
   updatedAt: z.string(),
   createdAt: z.string(),
 }) satisfies z.ZodType<Semester>
+
+export const CreateSemesterRequestSchema = z.object({
+  name: z.string(),
+  startDate: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  endDate: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  breakStart: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  breakEnd: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  bookingOpenDay: z.nativeEnum(Weekday),
+  bookingOpenTime: z
+    .string()
+    .datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+}) satisfies z.ZodType<CreateSemesterData>
+
+export const UpdateSemesterRequestSchema =
+  CreateSemesterRequestSchema.partial() satisfies z.ZodType<EditSemesterData>
 
 export const GetSemesterResponseSchema = z.object({
   data: SemesterSchema,
