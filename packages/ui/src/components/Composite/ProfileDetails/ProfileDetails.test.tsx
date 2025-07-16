@@ -1,42 +1,7 @@
-import { InputType } from "@repo/ui/components/Primitive"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import type { ReactNode } from "react"
-import { ProfileDetails } from "./ProfileDetails"
-
-const exampleFields = [
-  {
-    key: "firstName",
-    type: "text",
-    label: "First Name",
-    placeholder: "Enter your first name",
-    inputType: InputType.Text,
-    required: true,
-  },
-  {
-    key: "lastName",
-    type: "text",
-    label: "Last Name",
-    placeholder: "Enter your last name",
-    inputType: InputType.Text,
-    required: true,
-  },
-  {
-    key: "email",
-    type: "text",
-    label: "Email Address",
-    placeholder: "Enter your email",
-    inputType: InputType.Email,
-    required: true,
-  },
-  {
-    key: "phoneNumber",
-    type: "text",
-    label: "Phone Number",
-    placeholder: "Enter your phone number",
-    inputType: InputType.Tel,
-  },
-] as const
+import { defaultFields, ProfileDetails } from "./ProfileDetails"
 
 const defaultValues = {
   firstName: "John",
@@ -62,7 +27,7 @@ describe("<ProfileDetails />", () => {
     render(
       <ProfileDetails
         defaultValues={defaultValues}
-        fields={exampleFields}
+        fields={defaultFields}
         title="Profile Details"
       />,
       {
@@ -86,7 +51,7 @@ describe("<ProfileDetails />", () => {
     const { user } = render(
       <ProfileDetails
         defaultValues={defaultValues}
-        fields={exampleFields}
+        fields={defaultFields}
         onSave={async (data) => {
           consoleLog("onSave", data)
         }}

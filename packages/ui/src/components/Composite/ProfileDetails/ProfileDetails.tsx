@@ -1,5 +1,6 @@
 import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"
+import { InputType } from "@repo/ui/components/Primitive"
 import { useMutation } from "@tanstack/react-query"
 
 /**
@@ -35,3 +36,37 @@ export const ProfileDetails = <T extends readonly Field[]>({
     />
   )
 }
+
+export const defaultFields = [
+  {
+    key: "firstName",
+    type: "text",
+    label: "First Name",
+    placeholder: "Enter your first name",
+    inputType: InputType.Text,
+    required: true,
+  },
+  {
+    key: "lastName",
+    type: "text",
+    label: "Last Name",
+    placeholder: "Enter your last name",
+    inputType: InputType.Text,
+  },
+  {
+    key: "email",
+    type: "text",
+    label: "Email Address",
+    placeholder: "Enter your email",
+    inputType: InputType.Email,
+    required: true,
+    disabled: true,
+  },
+  {
+    key: "phoneNumber",
+    type: "text",
+    label: "Phone Number",
+    placeholder: "Enter your phone number",
+    inputType: InputType.Tel,
+  },
+] as const
