@@ -5,16 +5,16 @@ import { InputType } from "@repo/ui/components/Primitive"
 import { useMutation } from "@tanstack/react-query"
 
 /**
- * The props for the ProfileDetails component.
+ * The props for the AdditionalInfo component.
  * @template T The tuple of fields for the form.
  */
 interface AdditionalInfoProps<T extends readonly Field[]> extends UserProfileCardProps<T> {}
 
 /**
- * ProfileDetails renders a user profile details card with asynchronous save handling.
+ * AdditionalInfo renders a user additional info card with asynchronous save handling.
  *
  * @template T The tuple of fields for the form.
- * @param props ProfileDetailsProps
+ * @param props AdditionalInfoProps
  */
 export const AdditionalInfo = <T extends readonly Field[]>({
   onSave,
