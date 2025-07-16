@@ -65,8 +65,8 @@ describe("<ProfileDetails />", () => {
     })
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
       firstName: "Jane",
-      lastName: defaultValues.lastName,
-      phoneNumber: defaultValues.phoneNumber,
+      lastName: defaultValues.lastName ?? "",
+      phoneNumber: defaultValues.phoneNumber ?? "",
     })
   })
 })
