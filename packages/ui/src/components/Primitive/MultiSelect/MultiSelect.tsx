@@ -26,7 +26,7 @@ export interface MultiSelectProps extends Omit<UIMultiSelectProps, "variant"> {
    * @warn This prop takes in any React Node but icons are expected.
    *
    * @see {@link https://yamada-ui.com/components/media-and-icons/icon Yamada UI Icon}
-   * @see {@link https://yamada-ui.com/components/media-and-icons/lucide Yamda UI Lucide Icon}
+   * @see {@link https://yamada-ui.com/components/media-and-icons/lucide Yamada UI Lucide Icon}
    */
   icon?: ReactNode
   /**

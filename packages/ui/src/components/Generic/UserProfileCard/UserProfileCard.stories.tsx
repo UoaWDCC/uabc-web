@@ -140,7 +140,9 @@ export const WithGroupedSelectOptions: StoryFn = () => {
           label: "Wellington",
           items: [
             { value: "wellington-city", label: "Wellington City" },
+            // cspell:disable-next-line
             { value: "lower-hutt", label: "Lower Hutt" },
+            // cspell:disable-next-line
             { value: "upper-hutt", label: "Upper Hutt" },
           ],
         },

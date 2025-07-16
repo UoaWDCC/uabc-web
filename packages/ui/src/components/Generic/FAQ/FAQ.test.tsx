@@ -129,7 +129,7 @@ describe("<FAQ />", () => {
 })
 
 describe("<FAQSkeleton />", () => {
-  it("should rexport the FAQSkeleton component", () => {
+  it("should re-export the FAQSkeleton component", () => {
     expect(FAQModule.FAQSkeleton).toBeDefined()
     expect(isValidElement(<FAQModule.FAQSkeleton />)).toBeTruthy()
   })
