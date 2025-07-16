@@ -1,9 +1,21 @@
+import { AUTH_COOKIE_NAME } from "@repo/shared"
 import { StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
+import { Security } from "@/business-layer/middleware/Security"
 
-export async function POST(req: NextRequest) {
-  const response = NextResponse.redirect(new URL("/", req.url), StatusCodes.SEE_OTHER)
-  response.cookies.delete("auth-token")
+class RouteWrapper {
+  @Security("jwt")
+  public static async POST(_req: NextRequest) {
+    const response = NextResponse.json(
+      { message: "Logged out successfully" },
+      {
+        status: StatusCodes.OK,
+      },
+    )
+    response.cookies.delete(AUTH_COOKIE_NAME)
 
-  return response
+    return response
+  }
 }
+
+export const { POST } = RouteWrapper
