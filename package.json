@@ -29,7 +29,7 @@
     "test:ui": "turbo run test:ui",
     "merge": "pnpm --filter=@repo/test-config build && pnpm --prefix=packages/test-config run merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
-    "postinstall": "node -e \"if (process.env.NODE_ENV !== 'production') require('child_process').execSync('pnpm theme', { stdio: 'inherit' })\"",
+    "postinstall": "pnpm theme",
     "commitlint": "commitlint --edit"
   },
   "dependencies": {

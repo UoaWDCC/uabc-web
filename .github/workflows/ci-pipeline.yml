@@ -78,7 +78,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-check.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Save node_modules cache
         if: steps.cache-check.outputs.cache-hit != 'true'
@@ -238,7 +238,7 @@ jobs:
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Type Check
         run: pnpm turbo run check-types
@@ -282,7 +282,7 @@ jobs:
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Test with Coverage
         env:
@@ -349,7 +349,7 @@ jobs:
 
       - name: Install dependencies if cache is not hit
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Generate typing
         run: pnpm turbo run generate:types
