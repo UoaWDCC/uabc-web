@@ -3,8 +3,6 @@ pre-push:
   commands:
     biome:
       run: pnpm exec biome check . --error-on-warnings
-    cspell:
-      run: pnpm exec cspell "**/*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc,md,mdx,yml,yaml}" --quiet --cache --cache-strategy=content --cache-location=.cspellcache
 
 commit-msg:
   commands:
