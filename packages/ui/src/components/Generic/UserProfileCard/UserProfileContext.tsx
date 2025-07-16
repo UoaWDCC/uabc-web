@@ -72,6 +72,7 @@ export const UserProfileProvider = <T extends readonly Field[]>({
   onSave,
   onSuccess,
   onCancel,
+  fields,
 }: UserProfileProviderProps<T>) => {
   const [isEditing, { on: startEditing, off: stopEditing }] = useBoolean()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -86,7 +87,11 @@ export const UserProfileProvider = <T extends readonly Field[]>({
 
   const saveChanges = async (data: FormData<T>) => {
     try {
-      await onSave?.(data)
+      const disabledKeys = fields.filter((f) => f.disabled).map((f) => f.key)
+      const filteredData = Object.fromEntries(
+        Object.entries(data).filter(([key]) => !disabledKeys.includes(key as T[number]["key"])),
+      ) as FormData<T>
+      await onSave?.(filteredData)
       setErrorMessage(null)
       stopEditing()
       onSuccess?.()
