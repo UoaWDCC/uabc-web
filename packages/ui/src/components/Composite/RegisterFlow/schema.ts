@@ -40,7 +40,7 @@ export const UniversityInfoFormSchema = z
     studentId: z.string().optional(),
     /**
      * UPI of the new user. Only required if user is from the UoA.
-     * @example szha069
+     * @example bond007
      */
     studentUpi: z.string().optional(),
   })

@@ -38,7 +38,7 @@ const skillLevelOptions = Object.values(PlayLevel).map((playLevel) => ({
 /**
  * Form component for the additional info form of the register flow.
  *
- * @remarks No screen responsivity is implemented in this component; responsivity between mobile and
+ * @remarks No screen responsiveness is implemented in this component; responsiveness between mobile and
  * desktop screens should be implemented in the wrapper components
  *
  * @param props AdditionalInfoForm component props

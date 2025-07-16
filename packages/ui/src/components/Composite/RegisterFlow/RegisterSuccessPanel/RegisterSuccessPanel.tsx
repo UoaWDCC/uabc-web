@@ -13,7 +13,7 @@ export type RegisterSuccessPanelValues = {
 /**
  * Final component of the register flow, with a button to navigate the user out.
  *
- * @remarks No screen responsivity is implemented in this component; responsivity between mobile and
+ * @remarks No screen responsiveness is implemented in this component; responsiveness between mobile and
  * desktop screens should be implemented in the wrapper components
  *
  * @param props RegisterSuccessPanel component props

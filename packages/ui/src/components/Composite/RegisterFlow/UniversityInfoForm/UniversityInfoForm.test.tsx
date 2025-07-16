@@ -31,7 +31,7 @@ describe("<UniversityInfoForm />", () => {
     const { user } = render(<UniversityInfoForm onSubmit={handleSubmit} />)
 
     const sampleStudentId = "610855188"
-    const sampleStudentUpi = "szha069"
+    const sampleStudentUpi = "bond007"
 
     await user.click(screen.getByTestId("university"))
     await user.click(screen.getByText(University.uoa))
@@ -74,7 +74,7 @@ describe("<UniversityInfoForm />", () => {
     await user.click(screen.getByTestId("university"))
     await user.click(screen.getByText(University.uoa))
     await user.type(screen.getByTestId("student-id"), "4612") // Not 9 digits
-    await user.type(screen.getByTestId("student-upi"), "szha069")
+    await user.type(screen.getByTestId("student-upi"), "bond007")
 
     const submitButton = screen.getByText("Continue")
     await user.click(submitButton)

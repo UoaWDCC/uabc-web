@@ -37,7 +37,7 @@ export interface CasualInfoFormProps {
 /**
  * Form component for casual member information confirmation in the register flow.
  *
- * @remarks No screen responsivity is implemented in this component; responsivity between mobile and
+ * @remarks No screen responsiveness is implemented in this component; responsiveness between mobile and
  * desktop screens should be implemented in the wrapper components
  *
  * @param props CasualInfoForm component props
@@ -72,7 +72,7 @@ export const CasualInfoForm: FC<CasualInfoFormProps> = memo(({ onSubmit }) => {
                 each={[
                   "Casual members can only attend 1 session a week.",
                   "It is $8 per session and is to be paid before attending to secure your spot. We will send you an email for this, please do not pay unless we reach out to you.",
-                  "We aim to prioritise members over casuals!…",
+                  "We aim to prioritize members over casuals!…",
                   "The number of casuals allowed per session may vary dependent on capacity.",
                 ]}
               >
