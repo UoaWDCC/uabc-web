@@ -1,5 +1,5 @@
 pre-push:
-  piped: true
+  parallel: true
   commands:
     biome:
       glob: "**/*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
