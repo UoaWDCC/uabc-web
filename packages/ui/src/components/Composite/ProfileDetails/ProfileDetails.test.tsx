@@ -6,10 +6,18 @@ import { ProfileDetails } from "./ProfileDetails"
 
 const exampleFields = [
   {
-    key: "fullName",
+    key: "firstName",
     type: "text",
-    label: "Full Name",
-    placeholder: "Enter your full name",
+    label: "First Name",
+    placeholder: "Enter your first name",
+    inputType: InputType.Text,
+    required: true,
+  },
+  {
+    key: "lastName",
+    type: "text",
+    label: "Last Name",
+    placeholder: "Enter your last name",
     inputType: InputType.Text,
     required: true,
   },
@@ -31,7 +39,8 @@ const exampleFields = [
 ] as const
 
 const defaultValues = {
-  fullName: "John Doe",
+  firstName: "John",
+  lastName: "Doe",
   email: "john.doe@example.com",
   phoneNumber: "0211234567",
 }
@@ -61,10 +70,12 @@ describe("<ProfileDetails />", () => {
       },
     )
     expect(screen.getByText("Profile Details")).toBeInTheDocument()
-    expect(screen.getByText("Full Name")).toBeInTheDocument()
+    expect(screen.getByText("First Name")).toBeInTheDocument()
+    expect(screen.getByText("Last Name")).toBeInTheDocument()
     expect(screen.getByText("Email Address")).toBeInTheDocument()
     expect(screen.getByText("Phone Number")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("John Doe")).toBeInTheDocument()
+    expect(screen.getByDisplayValue("John")).toBeInTheDocument()
+    expect(screen.getByDisplayValue("Doe")).toBeInTheDocument()
     expect(screen.getByDisplayValue("john.doe@example.com")).toBeInTheDocument()
     expect(screen.getByDisplayValue("0211234567")).toBeInTheDocument()
   })
@@ -86,16 +97,17 @@ describe("<ProfileDetails />", () => {
       },
     )
     await user.click(screen.getByRole("button", { name: /edit/i }))
-    const input = screen.getByPlaceholderText("Enter your full name")
+    const input = screen.getByPlaceholderText("Enter your first name")
     await user.clear(input)
-    await user.type(input, "Jane Smith")
+    await user.type(input, "Jane")
     await user.click(screen.getByRole("button", { name: /save changes/i }))
     await waitFor(() => {
-      expect(screen.getByDisplayValue("Jane Smith")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("Jane")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("Doe")).toBeInTheDocument()
     })
-    expect(screen.getByDisplayValue("Jane Smith")).toBeInTheDocument()
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
-      fullName: "Jane Smith",
+      firstName: "Jane",
+      lastName: "Doe",
       email: "john.doe@example.com",
       phoneNumber: "0211234567",
     })

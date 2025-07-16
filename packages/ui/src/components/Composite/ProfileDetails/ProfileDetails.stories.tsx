@@ -9,12 +9,19 @@ export default {
 
 const exampleFields = [
   {
-    key: "fullName",
+    key: "firstName",
     type: "text",
-    label: "Full Name",
-    placeholder: "Enter your full name",
+    label: "First Name",
+    placeholder: "Enter your first name",
     inputType: InputType.Text,
     required: true,
+  },
+  {
+    key: "lastName",
+    type: "text",
+    label: "Last Name",
+    placeholder: "Enter your last name",
+    inputType: InputType.Text,
   },
   {
     key: "email",
@@ -34,7 +41,8 @@ const exampleFields = [
 ] as const
 
 const defaultValues = {
-  fullName: `${casualUserMock.firstName} ${casualUserMock.lastName}`,
+  firstName: casualUserMock.firstName,
+  lastName: casualUserMock.lastName,
   email: casualUserMock.email,
   phoneNumber: casualUserMock.phoneNumber,
 }
