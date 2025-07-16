@@ -40,9 +40,18 @@ jobs:
               !.zed/**
               !.env.example
 
+  cspell:
+    needs: check_changes
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: CSpell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: streetsidesoftware/cspell-action@v7
+
   setup:
     name: Setup
-    needs: check_changes
+    needs: [check_changes, cspell]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
@@ -235,15 +244,6 @@ jobs:
 
       - name: Type Check
         run: pnpm turbo run check-types
-
-  cspell:
-    needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: CSpell
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: streetsidesoftware/cspell-action@v7
 
   test:
     needs: [check_changes, setup]
