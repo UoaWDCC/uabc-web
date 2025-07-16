@@ -84,8 +84,6 @@ const UserProfileContent = <T extends readonly Field[]>({
   const { isEditing, startEditing, cancelEditing, saveChanges, form, errorMessage } =
     useUserProfile<T>()
 
-  console.log(errorMessage)
-
   return (
     <Card
       as="form"

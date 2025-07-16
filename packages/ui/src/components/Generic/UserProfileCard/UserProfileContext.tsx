@@ -1,3 +1,4 @@
+"use client"
 import { useBoolean } from "@yamada-ui/react"
 import { createContext, type ReactNode, useContext, useState } from "react"
 import { type DefaultValues, type UseFormReturn, useForm } from "react-hook-form"
