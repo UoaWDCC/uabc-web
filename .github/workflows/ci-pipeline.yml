@@ -278,7 +278,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run cspell
-        run: pnpm cspell
+        run: pnpm spell
 
   test:
     needs: [check_changes, setup]
