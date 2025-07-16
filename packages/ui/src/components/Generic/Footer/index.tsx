@@ -20,11 +20,10 @@ export const Footer = memo<FooterProps>(
   ({
     brand = {
       title: "UABC",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+      description: "The largest university badminton club in New Zealand!",
     },
     bottomProps = {
-      copyrightName: "University of Auckland Badminton Club",
+      copyrightName: "© 2025 University of Auckland Badminton Club.",
       credits: "Developed by the 2025 WDCC UABC Team",
     },
     links = MOCK_LINKS,

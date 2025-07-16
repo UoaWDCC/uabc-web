@@ -25,6 +25,24 @@ export const GameSession: CollectionConfig = {
       },
     },
     {
+      name: "name",
+      type: "text",
+      required: false,
+      admin: {
+        description:
+          "The name of the game session (in case this is a one off session), e.g. UoA Rec Centre",
+      },
+    },
+    {
+      name: "location",
+      type: "text",
+      required: false,
+      admin: {
+        description:
+          "The location of the game session (in case this is a one off session), e.g. 17 Symonds Street",
+      },
+    },
+    {
       name: "startTime",
       type: "date",
       required: true,
