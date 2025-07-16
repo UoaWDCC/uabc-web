@@ -23,8 +23,6 @@ export const GameSessionScheduleSchema = z.object({
   createdAt: z.string(),
 }) satisfies z.ZodType<GameSessionScheduleType>
 
-export type GameSessionSchedule = z.infer<typeof GameSessionScheduleSchema>
-
 export const CreateGameSessionScheduleRequestSchema = GameSessionScheduleSchema.omit({
   updatedAt: true,
   createdAt: true,
