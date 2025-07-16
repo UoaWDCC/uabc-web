@@ -77,6 +77,7 @@ describe("api/auth/login", () => {
 
       const req = createMockNextRequest("/api/auth/login", "POST", {
         email: EMAIL_MOCK,
+        // cspell:disable-next-line
         password: "incorrect-passw0rd",
       })
       const response = await login(req)

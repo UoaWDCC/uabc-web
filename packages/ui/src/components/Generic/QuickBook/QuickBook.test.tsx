@@ -43,6 +43,7 @@ describe("<QuickBook />", () => {
     await user.click(submitButton)
 
     expect(handleSubmit).toReturnWith({
+      // cspell:disable-next-line
       locationAndTimeId: "lr66j8dobrqoodojr460p9jx",
       skillLevel: "beginner",
     })
