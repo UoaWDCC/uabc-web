@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { VStack } from "@yamada-ui/react"
-import { BasicInfoForm1 } from "./BasicInfoForm1"
+import { BasicInfoForm1 } from "../BasicInfoForm1"
 
 const meta = {
-  title: "Composite Components / BasicInfoForm1",
+  title: "Composite Components / RegisterFlow / BasicInfoForm1",
   component: BasicInfoForm1,
   decorators: [
     (Story) => (
