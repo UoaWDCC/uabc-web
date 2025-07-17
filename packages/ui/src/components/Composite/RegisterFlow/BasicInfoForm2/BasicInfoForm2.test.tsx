@@ -38,7 +38,7 @@ describe("<BasicInfoForm2 />", () => {
     const { user } = render(<BasicInfoForm2 onSubmit={handleSubmit} />)
 
     const phoneNumberInput = screen.getByTestId("phone-number")
-    await user.type(phoneNumberInput, "021 3")
+    await user.type(phoneNumberInput, "not-a-phone-number")
 
     const submitButton = screen.getByText("Continue")
     await user.click(submitButton)

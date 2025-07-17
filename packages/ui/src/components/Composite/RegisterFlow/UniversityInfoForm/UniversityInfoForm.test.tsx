@@ -73,7 +73,7 @@ describe("<UniversityInfoForm />", () => {
 
     await user.click(screen.getByTestId("university"))
     await user.click(screen.getByText(University.uoa))
-    await user.type(screen.getByTestId("student-id"), "4612") // Not 9 digits
+    await user.type(screen.getByTestId("student-id"), "1234567890") // More than 9 digits
     await user.type(screen.getByTestId("student-upi"), "bond007")
 
     const submitButton = screen.getByText("Continue")

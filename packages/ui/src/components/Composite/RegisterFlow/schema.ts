@@ -18,7 +18,7 @@ export const BasicInfoForm2Schema = z.object({
    *
    * @remarks Current regex tests that it is a string with at least 1 number in it
    */
-  phoneNumber: z.string().regex(/\d/, "Invalid phone number"),
+  phoneNumber: z.string().regex(/\d/, "Not a phone number"),
 })
 
 export const UniversityInfoFormSchema = z
@@ -70,7 +70,7 @@ export const UniversityInfoFormSchema = z
           path: ["studentUpi"],
           message: "Field is required",
         })
-      } else if (!/^[a-z]{3,4}[0-9]{4}$/.test(studentUpi)) {
+      } else if (!/^[a-z]{3,4}[0-9]{3}$/.test(studentUpi)) {
         ctx.addIssue({
           code: "custom",
           path: ["studentUpi"],
