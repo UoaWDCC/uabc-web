@@ -8,5 +8,5 @@ import type {
 
 export type CreateSemesterRequest = z.infer<typeof CreateSemesterRequestSchema>
 export type UpdateSemesterRequest = z.infer<typeof UpdateSemesterRequestSchema>
-export type SemesterResponse = z.infer<typeof GetSemesterResponseSchema>
-export type SemestersResponse = z.infer<typeof GetSemestersResponseSchema>
+export type GetSemesterResponse = z.infer<typeof GetSemesterResponseSchema>
+export type GetSemestersResponse = z.infer<typeof GetSemestersResponseSchema>
