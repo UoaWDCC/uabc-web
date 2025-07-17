@@ -28,6 +28,10 @@ interface BookingConfirmedPopupProps extends ModalProps {
    * The initial value of the popup.
    */
   initialValue?: MembershipType
+  /**
+   * The link text displayed in the popup.
+   */
+  linkText: string
 }
 
 /**
@@ -48,6 +52,7 @@ export const BookingConfirmedPopup: FC<BookingConfirmedPopupProps> = ({
   message,
   additionalMessage,
   initialValue = MembershipType.member,
+  linkText = "View Booking",
   ...props
 }) => {
   const { value, close, isOpen } = usePopupState({
@@ -67,7 +72,7 @@ export const BookingConfirmedPopup: FC<BookingConfirmedPopupProps> = ({
       </ModalBody>
       <ModalFooter alignItems="center" justifyContent="center">
         <Button as={Link} colorScheme="primary" href="/booking">
-          View Booking
+          {linkText}
         </Button>
       </ModalFooter>
     </Modal>
