@@ -13,7 +13,8 @@ export interface BookACourtProps {
  * @param buttonOnClick The function to call when a button is clicked.
  * @param guidelineOnClick The function to call when the guideline link is clicked.
  * @returns A component that displays buttons for different play levels.
- * @example <BookACourt />
+ * @example
+ * <BookACourt buttonOnClick={(level) => setLevel(level)} guidelineOnClick={onOpen} />
  */
 export const BookACourt = ({ buttonOnClick, guidelineOnClick }: BookACourtProps) => {
   return (
