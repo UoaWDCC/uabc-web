@@ -42,7 +42,7 @@ export const UniversityInfoFormSchema = z
     studentId: z.string().optional(),
     /**
      * UPI of the new user. Only required if user is from the UoA.
-     * 
+     *
      * @remarks Current regex tests that it is of the form xxx111 or xxxx111
      * @example bond007
      */
@@ -56,7 +56,7 @@ export const UniversityInfoFormSchema = z
           path: ["studentId"],
           message: "Field is required",
         })
-      } else if ((studentId.length > 9) || !/^\d+$/.test(studentId)) {
+      } else if (studentId.length > 9 || !/^\d+$/.test(studentId)) {
         ctx.addIssue({
           code: "custom",
           path: ["studentId"],
