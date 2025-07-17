@@ -32,6 +32,25 @@ export default class BookingDataService {
   }
 
   /**
+   * Searches for all {@link Booking} documents with the same game session ID.
+   *
+   * @param sessionId The ID of the game session to search bookings for
+   * @returns An array of {@link Booking} documents that match the game session ID
+   */
+  public async getBookingsBySessionId(sessionId: string): Promise<Booking[]> {
+    return (
+      await payload.find({
+        collection: "booking",
+        where: {
+          gameSession: {
+            equals: sessionId,
+          },
+        },
+      })
+    ).docs
+  }
+
+  /**
    * Finds all {@link Booking} documents.
    *
    * @param limit The maximum documents to be returned
