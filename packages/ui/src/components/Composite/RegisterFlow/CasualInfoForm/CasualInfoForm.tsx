@@ -72,11 +72,15 @@ export const CasualInfoForm: FC<CasualInfoFormProps> = memo(({ onSubmit }) => {
                 each={[
                   "Casual members can only attend 1 session a week.",
                   "It is $8 per session and is to be paid before attending to secure your spot. We will send you an email for this, please do not pay unless we reach out to you.",
-                  "We aim to prioritize members over casuals!…",
+                  "We aim to prioritize members over casuals!",
                   "The number of casuals allowed per session may vary dependent on capacity.",
                 ]}
               >
-                {(text, index) => <ListItem key={index}>{text}</ListItem>}
+                {(text, index) => (
+                  <ListItem key={index} textWrap="wrap">
+                    {text}
+                  </ListItem>
+                )}
               </For>
             </DecimalList>
           </CardBody>
