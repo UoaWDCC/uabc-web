@@ -15,6 +15,7 @@ describe("renderUploadNode", () => {
 
     const image = screen.getByRole("img")
     expect(image).toBeInTheDocument()
+    // cspell:disable-next-line
     expect(image).toHaveAttribute("src", "/_next/image?url=%2Ftest-image.jpg&w=640&q=75")
     expect(image).toHaveAttribute("alt", "Test Image")
   })
@@ -46,6 +47,7 @@ describe("renderUploadNode", () => {
     const image = screen.getByRole("img")
     expect(image).toHaveAttribute(
       "src",
+      // cspell:disable-next-line
       "/_next/image?url=https%3A%2F%2Fapi.example.com%2Ftest-image.jpg&w=640&q=75",
     )
   })

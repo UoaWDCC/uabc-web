@@ -37,7 +37,7 @@ runs:
           ${{ runner.os }}-node_modules-
 
     - name: Install dependencies if cache misses
-      run: NODE_ENV=production pnpm install --frozen-lockfile
+      run: NODE_ENV=production pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
 
     - name: Restore Next.js cache

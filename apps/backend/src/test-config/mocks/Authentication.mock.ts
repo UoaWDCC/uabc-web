@@ -6,6 +6,7 @@ export const FIRSTNAME_MOCK = "Straight"
 export const LASTNAME_MOCK = "Zhao"
 export const EMAIL_MOCK = "straight.zhao@example.com"
 export const PASSWORD_MOCK = "str@!ghtZh@069"
+// cspell:disable-next-line
 export const LOWERCASE_PASSWORD_MOCK = "alllowercaseletters"
 export const HASHED_PASSWORD_MOCK = "hashedPassword"
 export const REAL_HASHED_PASSWORD_MOCK =

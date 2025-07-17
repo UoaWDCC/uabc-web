@@ -15,7 +15,7 @@ export const FilterInput: FC = memo(() => {
 
   return (
     <TextInput
-      endIcon={
+      endElement={
         filterValue && (
           <IconButton
             aria-label="Reset filter"
@@ -27,6 +27,9 @@ export const FilterInput: FC = memo(() => {
           />
         )
       }
+      endElementProps={{
+        clickable: true,
+      }}
       inputGroupProps={{
         w: "300px",
       }}
@@ -34,9 +37,6 @@ export const FilterInput: FC = memo(() => {
         setFilterValue(ev.target.value)
       }}
       placeholder="Filter members..."
-      rightElementProps={{
-        clickable: true,
-      }}
       value={filterValue}
     />
   )
