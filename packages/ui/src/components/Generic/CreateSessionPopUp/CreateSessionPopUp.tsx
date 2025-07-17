@@ -1,4 +1,5 @@
-import { Button, Heading, TextInput } from "@repo/ui/components/Primitive"
+import { SessionType, Weekday } from "@repo/shared"
+import { Button, Heading, Select, TextInput } from "@repo/ui/components/Primitive"
 import { InputType } from "@repo/ui/components/Primitive/TextInput/types"
 import { ArrowLeftIcon, Clock3Icon, UserRoundIcon } from "@yamada-ui/lucide"
 import {
@@ -14,7 +15,6 @@ import {
   FormControl,
   Label,
   Option,
-  Select,
   VStack,
 } from "@yamada-ui/react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
@@ -67,24 +67,6 @@ export interface CreateSessionPopUpProps extends DialogProps {
   casualCapacity: number
 
   /**
-   * The list of weekday options for the session.
-   * Each option should have a label and value.
-   */
-  weekDay: {
-    label: string
-    value: string
-  }[]
-
-  /**
-   * The list of session type options.
-   * Each option should have a label and value.
-   */
-  sessionType: {
-    label: string
-    value: string
-  }[]
-
-  /**
    * The function to call when the form is submitted
    */
   onConfirm: (value: FormData) => void
@@ -117,15 +99,7 @@ export interface CreateSessionPopUpProps extends DialogProps {
   *   endTime={new Date()}
   *   memberCapacity={20}
   *   casualCapacity={10}
-  *   weekDay={[
-  *     { label: "Monday", value: "monday" },
-  *     { label: "Tuesday", value: "tuesday" },
-  *     // ...other days
-  *   ]}
-  *   sessionType={[
-  *     { label: "Member", value: "member" },
-  *     { label: "Casual", value: "casual" },
-  *   ]}
+  *   inputPlaceholder="Enter Number"
   *   onConfirm={(value) => {
   *     // handle the confirmed value
   *     console.log("Session name:", value)
@@ -136,8 +110,7 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
   title,
   description,
   onConfirm,
-  sessionType,
-  weekDay,
+
   startTime,
   endTime,
   memberCapacity,
@@ -151,6 +124,7 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
     handleSubmit,
     reset,
     watch,
+
     formState: { errors, isSubmitting },
   } = useForm<FormData>()
 
@@ -212,19 +186,14 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
                 name="sessionType"
                 render={({ field }) => (
                   <Select
-                    bgGradient="secondaryGradient"
-                    fontSize="md"
-                    h="10"
                     id="sessionType"
                     onChange={field.onChange}
                     placeholder="Select Session Type"
-                    rounded="md"
-                    size="lg"
                     value={field.value}
                   >
-                    {sessionType.map((option) => (
-                      <Option key={option.value} value={option.value}>
-                        {option.label}
+                    {Object.values(SessionType).map((option) => (
+                      <Option key={option} value={option}>
+                        {option}
                       </Option>
                     ))}
                   </Select>
@@ -243,19 +212,14 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
                 name="weekDay"
                 render={({ field }) => (
                   <Select
-                    bgGradient="secondaryGradient"
-                    fontSize="md"
-                    h="10"
                     id="weekDay"
                     onChange={field.onChange}
                     placeholder="Select Weekday"
-                    rounded="md"
-                    size="lg"
                     value={field.value}
                   >
-                    {weekDay.map((option) => (
-                      <Option key={option.value} value={option.value}>
-                        {option.label}
+                    {Object.values(Weekday).map((option) => (
+                      <Option key={option} value={option}>
+                        {option}
                       </Option>
                     ))}
                   </Select>
@@ -268,10 +232,12 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
               invalid={!!errors.startTime}
               w="full"
             >
+              <Label color={["gray.700", "gray.300"]} fontSize="sm">
+                Select Start Time
+              </Label>
               <TextInput
-                endIcon={<Clock3Icon fontSize={24} />}
+                endElement={<Clock3Icon fontSize={24} />}
                 id="startTime"
-                label="Select Start Time"
                 placeholder={description.split(":")[0]}
                 size="lg"
                 type={InputType.Time}
@@ -279,10 +245,12 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
               />
             </FormControl>
             <FormControl errorMessage={errors.endTime?.message} invalid={!!errors.endTime} w="full">
+              <Label color={["gray.700", "gray.300"]} fontSize="sm">
+                Select End Time
+              </Label>
               <TextInput
-                endIcon={<Clock3Icon fontSize={24} />}
+                endElement={<Clock3Icon fontSize={24} />}
                 id="endTime"
-                label="Select End Time"
                 placeholder={description.split(":")[0]}
                 size="lg"
                 type={InputType.Time}
@@ -306,10 +274,12 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
               invalid={!!errors.memberCapacity}
               w="full"
             >
+              <Label color={["gray.700", "gray.300"]} fontSize="sm">
+                Member Capacity
+              </Label>
               <TextInput
-                endIcon={<UserRoundIcon fontSize={24} />}
+                endElement={<UserRoundIcon fontSize={24} />}
                 id="memberCapacity"
-                label="Member Capacity"
                 placeholder={inputPlaceholder}
                 size="lg"
                 type={InputType.Number}
@@ -325,10 +295,12 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
               invalid={!!errors.casualCapacity}
               w="full"
             >
+              <Label color={["gray.700", "gray.300"]} fontSize="sm">
+                Casual Capacity
+              </Label>
               <TextInput
-                endIcon={<UserRoundIcon fontSize={24} />}
+                endElement={<UserRoundIcon fontSize={24} />}
                 id="casualCapacity"
-                label="Casual Capacity"
                 placeholder={inputPlaceholder}
                 size="lg"
                 type={InputType.Number}
@@ -348,9 +320,6 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
           gap={{ base: "4", md: "6.5" }}
           w="full"
         >
-          <Button colorScheme="primary" isLoading={isSubmitting} size="lg" type="submit" w="full">
-            Confirm
-          </Button>
           <Button
             colorScheme="secondary"
             leftIcon={<ArrowLeftIcon />}
@@ -359,6 +328,9 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
             w="full"
           >
             Back
+          </Button>
+          <Button colorScheme="primary" isLoading={isSubmitting} size="lg" type="submit" w="full">
+            Confirm
           </Button>
         </ButtonGroup>
       </DialogFooter>

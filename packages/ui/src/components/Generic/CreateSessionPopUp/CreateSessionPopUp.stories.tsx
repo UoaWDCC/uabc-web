@@ -8,24 +8,21 @@ const meta: Meta<CreateSessionPopUpProps> = {
   argTypes: {
     title: { control: "text", description: "The dialog header title" },
     description: { control: "text", description: "The dialog body description" },
+    startTime: { control: "date", description: "Default start time" },
+    endTime: { control: "date", description: "Default end time" },
+    memberCapacity: { control: "number", description: "Default member capacity" },
+    casualCapacity: { control: "number", description: "Default casual capacity" },
+    inputPlaceholder: { control: "text", description: "Placeholder for input fields" },
     onConfirm: { action: "confirmed" },
   },
   args: {
     title: "Create New Session",
     description: "Fill in the details below to create a new session.",
-    weekDay: [
-      { label: "Monday", value: "monday" },
-      { label: "Tuesday", value: "tuesday" },
-      { label: "Wednesday", value: "wednesday" },
-      { label: "Thursday", value: "thursday" },
-      { label: "Friday", value: "friday" },
-      { label: "Saturday", value: "saturday" },
-      { label: "Sunday", value: "sunday" },
-    ],
-    sessionType: [
-      { label: "Member", value: "member" },
-      { label: "Casual", value: "casual" },
-    ],
+    startTime: new Date(),
+    endTime: new Date(),
+    memberCapacity: 20,
+    casualCapacity: 10,
+    inputPlaceholder: "Enter number",
   },
 }
 
@@ -34,19 +31,7 @@ type Story = StoryFn<typeof CreateSessionPopUp>
 
 export const Default: Story = () => {
   const { open, onOpen, onClose } = useDisclosure()
-  const weekDayOptions = [
-    { label: "Monday", value: "monday" },
-    { label: "Tuesday", value: "tuesday" },
-    { label: "Wednesday", value: "wednesday" },
-    { label: "Thursday", value: "thursday" },
-    { label: "Friday", value: "friday" },
-    { label: "Saturday", value: "saturday" },
-    { label: "Sunday", value: "sunday" },
-  ]
-  const sessionTypeOptions = [
-    { label: "Member", value: "member" },
-    { label: "Casual", value: "casual" },
-  ]
+
   return (
     <Box maxW={{ base: "none", md: "33%" }}>
       <Button onClick={onOpen}>Open</Button>
@@ -59,10 +44,8 @@ export const Default: Story = () => {
         onClose={onClose}
         onConfirm={(val) => console.log("Confirmed:", val)}
         open={open}
-        sessionType={sessionTypeOptions}
         startTime={new Date()}
         title="Create New Session"
-        weekDay={weekDayOptions}
       />
     </Box>
   )
