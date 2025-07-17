@@ -2,6 +2,9 @@ import { GetSemesterResponseSchema, GetSemestersResponseSchema } from "@repo/sha
 import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
 
+/**
+ * Service for managing semester data.
+ */
 const SemesterService = {
   /**
    * Retrieve a specific semester by its ID.
