@@ -1,10 +1,10 @@
+import z from "zod"
+import type { GameSessionSchedule as GameSessionScheduleType } from "../payload-types"
 import {
   type CreateGameSessionScheduleData,
   type UpdateGameSessionScheduleData,
   Weekday,
-} from "src/types"
-import z from "zod"
-import type { GameSessionSchedule as GameSessionScheduleType } from "../payload-types"
+} from "../types"
 import { SemesterSchema } from "./semester"
 
 export const GameSessionScheduleSchema = z.object({
