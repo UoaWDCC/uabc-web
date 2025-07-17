@@ -18,7 +18,7 @@ export interface BookACourtProps {
 export const BookACourt = ({ guidelineOnClick }: BookACourtProps) => {
   return (
     <VStack alignItems="center" gap={{ base: "md", md: "lg" }} h="full">
-      <Text color="gray.500" fontSize={{ base: "lg", md: "xl" }}>
+      <Text color="muted" fontSize={{ base: "lg", md: "xl" }}>
         I am...
       </Text>
       <ButtonGroup
@@ -46,7 +46,7 @@ export const BookACourt = ({ guidelineOnClick }: BookACourtProps) => {
       </ButtonGroup>
       <Spacer />
       <Button
-        color="gray.500"
+        color="muted"
         fontSize={{ base: "lg", md: "xl" }}
         fontWeight="medium"
         onClick={guidelineOnClick}
