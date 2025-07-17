@@ -16,14 +16,9 @@ export const BasicInfoForm2Schema = z.object({
   /**
    * Phone number of the new user.
    *
-   * @remarks Current regex tests that the string contains 8 - 10 digits, with any whitespace allowed.
-   *
-   * @example 021 345 6789
-   * @example 21 345 6789
-   * @example 1 345 6789
-   * @example 0213456789
+   * @remarks Current regex tests that it is a string with at least 1 number in it
    */
-  phoneNumber: z.string().regex(/^(?:\d\s*){8,10}$/, "Invalid phone number"),
+  phoneNumber: z.string().regex(/\d/, "Invalid phone number"),
 })
 
 export const UniversityInfoFormSchema = z
@@ -42,11 +37,13 @@ export const UniversityInfoFormSchema = z
      * Student ID of the new user. Only required if user is from the UoA.
      * @example 610855188
      *
-     * @remarks The UoA defines a student ID as a string of numbers of length 7 or 9.
+     * @remarks Current regex tests that it is a string of numbers at most 9 digits long.
      */
     studentId: z.string().optional(),
     /**
      * UPI of the new user. Only required if user is from the UoA.
+     * 
+     * @remarks Current regex tests that it is of the form xxx111 or xxxx111
      * @example bond007
      */
     studentUpi: z.string().optional(),
@@ -59,7 +56,7 @@ export const UniversityInfoFormSchema = z
           path: ["studentId"],
           message: "Field is required",
         })
-      } else if ((studentId.length !== 9 && studentId.length !== 7) || !/^\d+$/.test(studentId)) {
+      } else if ((studentId.length > 9) || !/^\d+$/.test(studentId)) {
         ctx.addIssue({
           code: "custom",
           path: ["studentId"],
@@ -73,7 +70,7 @@ export const UniversityInfoFormSchema = z
           path: ["studentUpi"],
           message: "Field is required",
         })
-      } else if (!/^[a-z]{4}[0-9]{3}$/.test(studentUpi)) {
+      } else if (!/^[a-z]{3,4}[0-9]{4}$/.test(studentUpi)) {
         ctx.addIssue({
           code: "custom",
           path: ["studentUpi"],
