@@ -1,7 +1,7 @@
+import type { AdditionalInfoFormValues } from "@repo/shared"
 import { Gender, PlayLevel } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
-import type { AdditionalInfoFormValues } from "../schema"
 import * as AdditionalInfoFormModule from "./index"
 import { AdditionalInfoForm } from "./index"
 

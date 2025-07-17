@@ -1,12 +1,12 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { BasicInfoForm1Schema, type BasicInfoForm1Values } from "@repo/shared"
 import { Button, Heading, InputType, TextInput } from "@repo/ui/components/Primitive"
 import { FolderPenIcon } from "@yamada-ui/lucide"
 import { FormControl, memo, noop, VStack } from "@yamada-ui/react"
 import type { FC } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
-import { BasicInfoForm1Schema, type BasicInfoForm1Values } from "../schema"
 
 /**
  * Props for {@link BasicInfoForm1} component

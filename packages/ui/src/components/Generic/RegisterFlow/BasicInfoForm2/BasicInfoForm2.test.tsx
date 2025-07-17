@@ -1,6 +1,6 @@
+import type { BasicInfoForm2Values } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
-import type { BasicInfoForm2Values } from "../schema"
 import * as BasicInfoForm2Module from "./index"
 import { BasicInfoForm2 } from "./index"
 

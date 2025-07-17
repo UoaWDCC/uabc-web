@@ -1,13 +1,17 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Gender, PlayLevel } from "@repo/shared"
+import {
+  AdditionalInfoFormSchema,
+  type AdditionalInfoFormValues,
+  Gender,
+  PlayLevel,
+} from "@repo/shared"
 import { Button, Heading, InputType, Select, TextInput } from "@repo/ui/components/Primitive"
 import { BeanOffIcon, IdCardIcon, VenusAndMarsIcon } from "@yamada-ui/lucide"
 import { FormControl, memo, noop, VStack } from "@yamada-ui/react"
 import type { FC } from "react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
-import { AdditionalInfoFormSchema, type AdditionalInfoFormValues } from "../schema"
 
 /**
  * Props for {@link AdditionalInfoForm} component

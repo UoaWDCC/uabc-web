@@ -1,7 +1,7 @@
+import type { UniversityInfoFormValues } from "@repo/shared"
 import { University } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
-import type { UniversityInfoFormValues } from "../schema"
 import * as UniversityInfoFormModule from "./index"
 import { UniversityInfoForm } from "./index"
 

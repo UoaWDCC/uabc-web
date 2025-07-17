@@ -1,13 +1,12 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { University } from "@repo/shared"
+import { University, UniversityInfoFormSchema, type UniversityInfoFormValues } from "@repo/shared"
 import { Button, Heading, InputType, Select, TextInput } from "@repo/ui/components/Primitive"
 import { UniversityIcon, UserIcon } from "@yamada-ui/lucide"
 import { FormControl, memo, noop, VStack } from "@yamada-ui/react"
 import type { FC } from "react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
-import { UniversityInfoFormSchema, type UniversityInfoFormValues } from "../schema"
 
 /**
  * Props for {@link UniversityInfoForm} component

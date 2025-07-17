@@ -6,10 +6,6 @@ import { Center, memo, Text, VStack } from "@yamada-ui/react"
 import Link from "next/link"
 import type { FC } from "react"
 
-export type RegisterSuccessPanelValues = {
-  agree: boolean
-}
-
 /**
  * Final component of the register flow, with a button to navigate the user out.
  *
