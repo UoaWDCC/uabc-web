@@ -1,4 +1,6 @@
 export * from "./AdditionalInfoForm"
 export * from "./BasicInfoForm1"
 export * from "./BasicInfoForm2"
+export * from "./CasualInfoForm"
+export * from "./RegisterSuccessPanel"
 export * from "./UniversityInfoForm"
