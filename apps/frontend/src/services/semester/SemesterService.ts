@@ -11,7 +11,7 @@ const SemesterService = {
    */
   getSemester: async (id: string) => {
     const { data: semester, status } = await apiClient.get(
-      `/api/semester/${id}`,
+      `/api/semesters/${id}`,
       GetSemesterResponseSchema,
     )
     if (status !== StatusCodes.OK) throw new Error(`Failed to retrieve semester with id: ${id}`)
