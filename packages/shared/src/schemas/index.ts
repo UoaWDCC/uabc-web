@@ -1,4 +1,5 @@
 export * from "./auth"
+export * from "./booking"
 export * from "./faq"
 export * from "./footer"
 export * from "./game-session"
