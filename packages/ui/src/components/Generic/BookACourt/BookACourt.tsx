@@ -17,7 +17,7 @@ export interface BookACourtProps {
  */
 export const BookACourt = ({ buttonOnClick, guidelineOnClick }: BookACourtProps) => {
   return (
-    <VStack alignItems="center" gap={{ base: "sm", md: "lg" }} h="full">
+    <VStack alignItems="center" gap={{ base: "md", md: "lg" }} h="full">
       <Text color="gray.500" fontSize={{ base: "lg", md: "xl" }}>
         I am...
       </Text>
