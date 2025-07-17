@@ -4,7 +4,6 @@ import {
   Box,
   Center,
   HStack,
-  Label,
   Select as UISelect,
   type SelectProps as UISelectProps,
 } from "@yamada-ui/react"
@@ -17,6 +16,7 @@ export interface SelectProps extends Omit<UISelectProps, "variant"> {
    *
    * @remarks
    * The label is rendered within the Select component if provided by the parent.
+   * @deprecated This prop is not used in the Select component.
    */
   label?: string
   /**
@@ -60,17 +60,20 @@ export const Select = memo(
       const stylised = variant === "stylised"
 
       return (
-        <Box
-          position="relative"
-          sx={{
-            "&:not(:has(div[data-placeholder]))": {
-              label: {
-                visibility: "hidden",
+        <Box position="relative">
+          <UISelect
+            data-has-icon={!!icon}
+            placeholder={label}
+            ref={ref}
+            size="lg"
+            sx={{
+              "&[data-placeholder]": {
+                color: ["black", "white"],
               },
-            },
-          }}
-        >
-          <UISelect data-has-icon={!!icon} ref={ref} size="lg" variant={variant} {...props}>
+            }}
+            variant={variant}
+            {...props}
+          >
             {children}
           </UISelect>
           <HStack
@@ -102,11 +105,6 @@ export const Select = memo(
               >
                 {icon}
               </Center>
-            )}
-            {label && (
-              <Label fontWeight="normal" lineClamp={1} mb={0}>
-                {label}
-              </Label>
             )}
           </HStack>
         </Box>

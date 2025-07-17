@@ -4,7 +4,6 @@ import {
   Box,
   Center,
   HStack,
-  Label,
   Tag,
   MultiSelect as UIMultiSelect,
   type MultiSelectProps as UIMultiSelectProps,
@@ -18,6 +17,7 @@ export interface MultiSelectProps extends Omit<UIMultiSelectProps, "variant"> {
    *
    * @remarks
    * The label is rendered within the MultiSelect component if provided by the parent.
+   * @deprecated This prop is not used in the MultiSelect component.
    */
   label?: string
   /**
@@ -55,20 +55,11 @@ export interface MultiSelectProps extends Omit<UIMultiSelectProps, "variant"> {
  */
 export const MultiSelect = memo(
   forwardRef<HTMLDivElement, MultiSelectProps>(
-    ({ children, label, icon, variant, disabled, ...props }, ref) => {
+    ({ children, icon, label, variant, disabled, ...props }, ref) => {
       const stylised = variant === "stylised"
 
       return (
-        <Box
-          position="relative"
-          sx={{
-            "&:not(:has(div[data-placeholder]))": {
-              label: {
-                visibility: "hidden",
-              },
-            },
-          }}
-        >
+        <Box position="relative">
           <UIMultiSelect
             component={({ label, onRemove }) => (
               <Tag color="white" colorScheme="secondary" onClose={onRemove} variant="outline">
@@ -76,23 +67,29 @@ export const MultiSelect = memo(
               </Tag>
             )}
             data-has-icon={!!icon}
+            placeholder={label}
             ref={ref}
             size="lg"
+            sx={{
+              "&[data-placeholder]": {
+                color: ["black", "white"],
+              },
+            }}
             variant={variant}
             {...props}
           >
             {children}
           </UIMultiSelect>
-          <HStack
-            align="center"
-            gap="0"
-            pointerEvents="none"
-            position="absolute"
-            top="50%"
-            transform="translateY(-50%)"
-            z={1}
-          >
-            {icon && (
+          {icon && (
+            <HStack
+              align="center"
+              gap="0"
+              pointerEvents="none"
+              position="absolute"
+              top="50%"
+              transform="translateY(-50%)"
+              z={1}
+            >
               <Center
                 _before={{
                   content: "''",
@@ -112,13 +109,8 @@ export const MultiSelect = memo(
               >
                 {icon}
               </Center>
-            )}
-            {label && (
-              <Label fontWeight="normal" lineClamp={1} mb={0}>
-                {label}
-              </Label>
-            )}
-          </HStack>
+            </HStack>
+          )}
         </Box>
       )
     },
