@@ -32,6 +32,7 @@ function createActionsColumn<TData>(
     return (
       <Menu lazy>
         <MenuButton
+          aria-label="Actions"
           as={IconButton}
           icon={<EllipsisVerticalIcon />}
           onClick={handleMenuClick}

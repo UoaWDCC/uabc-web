@@ -1,4 +1,5 @@
 import { render, screen } from "@repo/ui/test-utils"
+import userEvent from "@testing-library/user-event"
 import type { Column } from "@yamada-ui/table"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { ManagementTable } from "./ManagementTable"
@@ -28,13 +29,33 @@ describe("ManagementTable", () => {
         emptyStateText="No data"
         rowId="id"
       />,
-      {
-        wrapper: withNuqsTestingAdapter(),
-      },
+      { wrapper: withNuqsTestingAdapter() },
     )
     expect(screen.getByText("ID")).toBeInTheDocument()
     expect(screen.getByText("Name")).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /actions/i })).not.toBeInTheDocument()
+  })
+
+  it("should render with actions column and handle menu actions", async () => {
+    const onClick = vi.fn()
+    render(
+      <ManagementTable
+        actions={[{ text: "Edit", onClick }]}
+        columns={columns}
+        columnsConfig={columnsConfig}
+        data={data}
+        emptyStateColumnKey="id"
+        emptyStateText="No data"
+        rowId="id"
+      />,
+      { wrapper: withNuqsTestingAdapter() },
+    )
+    const user = userEvent.setup()
+    const menuButtons = screen.getAllByRole("button", { name: /actions/i })
+    await user.click(menuButtons[0])
+    const menuItem = await screen.findByText("Edit")
+    await user.click(menuItem)
+    expect(onClick).toHaveBeenCalledWith(data[0])
   })
 
   it("should render with empty data and show empty state", () => {
@@ -47,9 +68,7 @@ describe("ManagementTable", () => {
         emptyStateText="No data found"
         rowId="id"
       />,
-      {
-        wrapper: withNuqsTestingAdapter(),
-      },
+      { wrapper: withNuqsTestingAdapter() },
     )
     expect(screen.getByText("No data found")).toBeInTheDocument()
   })
@@ -64,11 +83,8 @@ describe("ManagementTable", () => {
         emptyStateText="No data"
         rowId="id"
       />,
-      {
-        wrapper: withNuqsTestingAdapter(),
-      },
+      { wrapper: withNuqsTestingAdapter() },
     )
-    // Should still render table (with no columns)
     expect(screen.getByRole("table")).toBeInTheDocument()
   })
 
@@ -82,11 +98,8 @@ describe("ManagementTable", () => {
         emptyStateText="No data"
         rowId="id"
       />,
-      {
-        wrapper: withNuqsTestingAdapter(),
-      },
+      { wrapper: withNuqsTestingAdapter() },
     )
-    // Should still render table (with no columns)
     expect(screen.getByRole("table")).toBeInTheDocument()
   })
 
@@ -100,9 +113,55 @@ describe("ManagementTable", () => {
         emptyStateText="No data"
         rowId="id"
       />,
-      {
-        wrapper: withNuqsTestingAdapter(),
-      },
+      { wrapper: withNuqsTestingAdapter() },
+    )
+    expect(screen.getByRole("table")).toBeInTheDocument()
+  })
+
+  it("should add actions column key if actions prop is present", () => {
+    render(
+      <ManagementTable
+        actions={[{ text: "Edit", onClick: vi.fn() }]}
+        columns={columns}
+        columnsConfig={columnsConfig}
+        data={data}
+        emptyStateColumnKey="id"
+        emptyStateText="No data"
+        rowId="id"
+      />,
+      { wrapper: withNuqsTestingAdapter() },
+    )
+    expect(screen.getAllByRole("button", { name: /actions/i })).toHaveLength(2)
+  })
+
+  it("should pass providerProps.isLoading to ManagementTableProvider", () => {
+    render(
+      <ManagementTable
+        columns={columns}
+        columnsConfig={columnsConfig}
+        data={data}
+        emptyStateColumnKey="id"
+        emptyStateText="No data"
+        providerProps={{ isLoading: true }}
+        rowId="id"
+      />,
+      { wrapper: withNuqsTestingAdapter() },
+    )
+    expect(screen.getByRole("table")).toBeInTheDocument()
+  })
+
+  it("should render with filterConfigs prop", () => {
+    render(
+      <ManagementTable
+        columns={columns}
+        columnsConfig={columnsConfig}
+        data={data}
+        emptyStateColumnKey="id"
+        emptyStateText="No data"
+        filterConfigs={[]}
+        rowId="id"
+      />,
+      { wrapper: withNuqsTestingAdapter() },
     )
     expect(screen.getByRole("table")).toBeInTheDocument()
   })
