@@ -13,17 +13,21 @@ import type { FC } from "react"
  */
 interface BookingConfirmedPopupProps extends ModalProps {
   /**
-   * The value of the popup.
+   * The title text displayed in the popup.
    */
   title: string
   /**
-   * The message of the popup.
+   * The message text displayed in the popup.
    */
   message: string
   /**
-   * The additional message of the popup.
+   * The additional message text displayed in the popup.
    */
   additionalMessage: string
+  /**
+   * The initial value of the popup.
+   */
+  initialValue?: MembershipType
 }
 
 /**
@@ -43,11 +47,12 @@ export const BookingConfirmedPopup: FC<BookingConfirmedPopupProps> = ({
   title,
   message,
   additionalMessage,
+  initialValue = MembershipType.member,
   ...props
 }) => {
   const { value, close, isOpen } = usePopupState({
     popupId: "booking-confirmed-popup",
-    initialValue: MembershipType.member,
+    initialValue,
   })
 
   return (
