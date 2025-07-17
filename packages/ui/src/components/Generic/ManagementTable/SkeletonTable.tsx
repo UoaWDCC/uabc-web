@@ -3,6 +3,7 @@ import {
   Checkbox,
   Loading,
   NativeTable,
+  Skeleton,
   TableContainer,
   Tbody,
   Td,
@@ -23,15 +24,21 @@ export const SkeletonTable: FC = memo(() => {
                 <Checkbox disabled />
               </Center>
             </Th>
-            <Th w="200px">Name</Th>
-            <Th>Email</Th>
+            <Th w="200px">
+              <Skeleton>Name</Skeleton>
+            </Th>
+            <Th>
+              <Skeleton>Email</Skeleton>
+            </Th>
             <Th textAlign="center" w="120px">
-              Role
+              <Skeleton>Role</Skeleton>
             </Th>
             <Th textAlign="center" w="150px">
-              Remaining
+              <Skeleton>Remaining</Skeleton>
             </Th>
-            <Th w="150px">University</Th>
+            <Th w="150px">
+              <Skeleton>University</Skeleton>
+            </Th>
             <Th textAlign="center" w="4" />
           </Tr>
         </Thead>

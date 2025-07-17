@@ -66,22 +66,22 @@ const mockColumns: Column<(typeof mockData)[number]>[] = [
   {
     accessorKey: "name",
     header: "Name",
-    cell: ({ getValue }) => <span>{getValue<string>()}</span>,
+    cell: ({ getValue }) => <>{getValue<string>()}</>,
   },
   {
     accessorKey: "email",
     header: "Email",
-    cell: ({ getValue }) => <span>{getValue<string>()}</span>,
+    cell: ({ getValue }) => <>{getValue<string>()}</>,
   },
   {
     accessorKey: "role",
     header: "Role",
-    cell: ({ getValue }) => <span>{getValue<string>()}</span>,
+    cell: ({ getValue }) => <>{getValue<string>()}</>,
   },
   {
     accessorKey: "university",
     header: "University",
-    cell: ({ getValue }) => <span>{getValue<string>()}</span>,
+    cell: ({ getValue }) => <>{getValue<string>()}</>,
   },
 ]
 
@@ -115,7 +115,6 @@ export const Default: Story = {
       emptyStateColumnKey="name"
       emptyStateText="No users found."
       rowId="id"
-      searchInFields={["name", "email"]}
     />
   ),
 }
@@ -148,7 +147,6 @@ export const WithActionCell: Story = {
       emptyStateColumnKey="name"
       emptyStateText="No users found."
       rowId="id"
-      searchInFields={["name", "email"]}
     />
   ),
 }
@@ -195,7 +193,9 @@ export const Advanced: Story = {
             { label: "Member", value: "member" },
           ],
           label: "All",
-          onChange: () => {},
+          onChange: () => {
+            console.log("onChange")
+          },
         },
         {
           key: "university",
@@ -209,10 +209,10 @@ export const Advanced: Story = {
             { label: "Massey University", value: "massey-university" },
           ],
           label: "University",
+          w: "md",
         },
       ]}
       rowId="id"
-      searchInFields={["name", "email"]}
     />
   ),
 }

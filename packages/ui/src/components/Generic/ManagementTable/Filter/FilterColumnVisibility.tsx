@@ -16,7 +16,7 @@ export const FilterColumnVisibility = <TData,>({ columns }: { columns: ColumnCon
   const { visibleColumns, toggleColumn } = useManagementTable()
 
   return (
-    <Popover>
+    <Popover lazy>
       <PopoverTrigger>
         <IconButton aria-label="Toggle column visibility" icon={<FilterIcon />} size="sm" />
       </PopoverTrigger>

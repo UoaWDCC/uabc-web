@@ -18,7 +18,6 @@ export type ManagementTableProps<TData> = {
   actions?: Array<{ text: string; onClick: (row: TData) => void }>
   providerProps?: Partial<ManagementTableProviderProps<TData, readonly FilterBarConfig<TData>[]>>
   filterConfigs?: readonly FilterBarConfig<TData>[]
-  searchInFields?: (keyof TData)[]
   emptyStateText: string
   emptyStateColumnKey: keyof TData
 }
@@ -31,7 +30,7 @@ function createActionsColumn<TData>(
       e.stopPropagation()
     }
     return (
-      <Menu>
+      <Menu lazy>
         <MenuButton
           as={IconButton}
           icon={<EllipsisVerticalIcon />}
@@ -81,7 +80,6 @@ export function ManagementTable<TData>({
   actions,
   providerProps,
   filterConfigs = [],
-  searchInFields,
   emptyStateText,
   emptyStateColumnKey,
 }: ManagementTableProps<TData>) {
@@ -107,7 +105,6 @@ export function ManagementTable<TData>({
       filterConfigs={filterConfigs}
       isLoading={providerProps?.isLoading ?? false}
       rowId={rowId}
-      searchInFields={searchInFields}
       {...providerProps}
     >
       <Filter columnsConfig={columnsConfig} filterConfigs={filterConfigs} />

@@ -84,7 +84,6 @@ export type ManagementTableProviderProps<
   onCurrentPageChange?: (page: number) => void
   onPerPageChange?: (perPage: number) => void
   totalItems?: number
-  searchInFields?: (keyof TData)[]
 }
 
 const ManagementTableContext = createContext<unknown>(null)
@@ -108,7 +107,6 @@ export const ManagementTableProvider = <
   onCurrentPageChange,
   onPerPageChange,
   totalItems,
-  searchInFields: searchInFieldsProp,
   allColumnKeys,
 }: ManagementTableProviderProps<TData, TConfigs>) => {
   const [searchParams, setSearchParams] = useQueryStates(
@@ -134,7 +132,7 @@ export const ManagementTableProvider = <
 
   const [isSelectionMode, setSelectionMode] = useState(false)
 
-  const [searchInFields, setSearchFields] = useState<(keyof TData)[]>(searchInFieldsProp ?? [])
+  const [searchInFields, setSearchFields] = useState<(keyof TData)[]>([])
 
   const [fieldFilters, setFieldFilters] = useState<FieldFiltersFromConfig<TData, TConfigs>>(
     {} as FieldFiltersFromConfig<TData, TConfigs>,
@@ -250,8 +248,11 @@ export const ManagementTableProvider = <
       setSearchParams({
         columns: columns.length === allColumnKeys.length ? null : columns,
       })
+      if (onVisibleColumnsChange) {
+        onVisibleColumnsChange(columns)
+      }
     },
-    [setSearchParams, allColumnKeys.length],
+    [setSearchParams, allColumnKeys.length, onVisibleColumnsChange],
   )
 
   const toggleColumn = useCallback(

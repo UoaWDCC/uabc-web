@@ -2,18 +2,8 @@ import { XIcon } from "@yamada-ui/lucide"
 import { IconButton } from "@yamada-ui/react"
 import { TextInput } from "../../../Primitive"
 import { useManagementTable } from "../MemberManagementContext"
-import type { FieldFiltersFromConfig, FilterBarConfig } from "./index"
-
-export type FilterInputProps<
-  TData,
-  TConfigs extends readonly FilterBarConfig<TData>[] = FilterBarConfig<TData>[],
-> = {
-  filterKey?: keyof FieldFiltersFromConfig<TData, TConfigs>
-  label?: string
-  placeholder?: string
-  filterConfigs?: TConfigs
-  searchKeys?: Array<keyof TData>
-}
+import { BaseFilterControl } from "./BaseFilterControl"
+import type { FieldFiltersFromConfig, FilterBarConfig, FilterInputProps } from "./types"
 
 export function FilterInput<
   TData,
@@ -34,44 +24,54 @@ export function FilterInput<
       : ""
 
   return (
-    <TextInput
-      endElement={
-        value && (
-          <IconButton
-            aria-label="Reset filter"
-            colorScheme="secondary"
-            icon={<XIcon />}
-            onClick={() => {
-              if (searchKeys) {
-                clearFilter()
-              } else if (filterKey) {
-                clearFieldFilter(filterKey)
-              }
-            }}
-            rounded="md"
-            size="xs"
-          />
-        )
-      }
-      endElementProps={{
-        clickable: true,
-      }}
-      inputGroupProps={{
-        w: "300px",
-      }}
-      onChange={(ev) => {
+    <BaseFilterControl<TData, TConfigs, string>
+      filterKey={filterKey as keyof FieldFiltersFromConfig<TData, TConfigs>}
+      onChange={(val) => {
         if (searchKeys) {
-          setFilterValue(ev.target.value, Array.isArray(searchKeys) ? searchKeys : [searchKeys])
+          setFilterValue(val, Array.isArray(searchKeys) ? searchKeys : [searchKeys])
         } else if (filterKey) {
           setFieldFilter(
             filterKey,
-            ev.target.value as FieldFiltersFromConfig<TData, TConfigs>[typeof filterKey],
+            val as FieldFiltersFromConfig<TData, TConfigs>[typeof filterKey],
           )
         }
       }}
-      placeholder={placeholder || label || "Filter..."}
+      onClear={() => {
+        if (searchKeys) {
+          clearFilter()
+        } else if (filterKey) {
+          clearFieldFilter(filterKey)
+        }
+      }}
       value={value}
-    />
+    >
+      {({ value, onChange, onClear }) => (
+        <TextInput
+          endElement={
+            value && (
+              <IconButton
+                aria-label="Reset filter"
+                colorScheme="secondary"
+                icon={<XIcon />}
+                onClick={onClear}
+                rounded="md"
+                size="xs"
+              />
+            )
+          }
+          endElementProps={{
+            clickable: true,
+          }}
+          inputGroupProps={{
+            w: "300px",
+            minW: "200px",
+          }}
+          onChange={(ev) => onChange(ev.target.value)}
+          placeholder={placeholder || label || "Filter..."}
+          value={value}
+        />
+      )}
+    </BaseFilterControl>
   )
 }
 

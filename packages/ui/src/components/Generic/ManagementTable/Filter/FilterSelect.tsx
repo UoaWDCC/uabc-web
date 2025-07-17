@@ -1,19 +1,12 @@
-import { Select, type SelectProps } from "@repo/ui/components/Primitive"
+import { Select } from "@repo/ui/components/Primitive"
 import { useManagementTable } from "../MemberManagementContext"
-import type { FieldFiltersFromConfig, FilterBarConfig } from "./index"
-
-export type SelectItem = { label: string; value: Lowercase<string> }
-
-export type FilterSelectProps<TData, TConfigs extends readonly FilterBarConfig<TData>[]> = Omit<
-  SelectProps,
-  "items" | "onChange"
-> & {
-  items: SelectItem[]
-  onChange?: (value: string) => void
-  filterKey: keyof FieldFiltersFromConfig<TData, TConfigs>
-  label?: string
-  filterConfigs?: TConfigs
-}
+import { BaseFilterControl } from "./BaseFilterControl"
+import type {
+  FieldFiltersFromConfig,
+  FilterBarConfig,
+  FilterSelectProps,
+  SelectItem,
+} from "./types"
 
 export const FilterSelect = <
   TData,
@@ -26,27 +19,36 @@ export const FilterSelect = <
   filterConfigs,
   ...props
 }: FilterSelectProps<TData, TConfigs>) => {
-  // Use the strictly typed context
   const { fieldFilters, setFieldFilter, clearFieldFilter } = useManagementTable<TData, TConfigs>()
-
-  const handleChange = (value: string) => {
-    if (value === "all") {
-      clearFieldFilter(filterKey)
-    } else {
-      setFieldFilter(filterKey, value as FieldFiltersFromConfig<TData, TConfigs>[typeof filterKey])
-    }
-    onChange?.(value)
-  }
+  const value = (fieldFilters[filterKey] as string) ?? "all"
 
   return (
-    <Select
-      aria-label={label}
-      items={[{ label: "All", value: "all" as unknown as SelectItem["value"] }, ...items]}
-      onChange={handleChange}
-      size="sm"
-      value={(fieldFilters[filterKey] as string) ?? "all"}
-      w="xs"
-      {...props}
-    />
+    <BaseFilterControl<TData, TConfigs, string>
+      filterKey={filterKey}
+      onChange={(val: string) => {
+        if (val === "all") {
+          clearFieldFilter(filterKey)
+        } else {
+          setFieldFilter(
+            filterKey,
+            val as FieldFiltersFromConfig<TData, TConfigs>[typeof filterKey],
+          )
+        }
+        onChange?.(val)
+      }}
+      onClear={() => clearFieldFilter(filterKey)}
+      value={value}
+    >
+      {({ value, onChange }: { value: string; onChange: (val: string) => void }) => (
+        <Select
+          aria-label={label}
+          items={[{ label: "All", value: "all" as SelectItem["value"] }, ...items]}
+          onChange={onChange}
+          size="sm"
+          value={value}
+          {...props}
+        />
+      )}
+    </BaseFilterControl>
   )
 }

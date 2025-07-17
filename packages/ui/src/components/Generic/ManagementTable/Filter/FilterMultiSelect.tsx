@@ -1,18 +1,7 @@
-import { MultiSelect, type MultiSelectProps } from "@repo/ui/components/Primitive"
+import { MultiSelect } from "@repo/ui/components/Primitive"
 import { useManagementTable } from "../MemberManagementContext"
-import type { FieldFiltersFromConfig, FilterBarConfig } from "./index"
-
-export type MultiSelectItem = { label: string; value: Lowercase<string> }
-
-export type FilterMultiSelectProps<
-  TData,
-  TConfigs extends readonly FilterBarConfig<TData>[] = FilterBarConfig<TData>[],
-> = Omit<MultiSelectProps, "items" | "onChange"> & {
-  items: MultiSelectItem[]
-  onChange?: (value: string[]) => void
-  filterKey: keyof FieldFiltersFromConfig<TData, TConfigs>
-  filterConfigs?: TConfigs
-}
+import { BaseFilterControl } from "./BaseFilterControl"
+import type { FieldFiltersFromConfig, FilterBarConfig, FilterMultiSelectProps } from "./types"
 
 export const FilterMultiSelect = <
   TData,
@@ -25,17 +14,30 @@ export const FilterMultiSelect = <
   ...props
 }: FilterMultiSelectProps<TData, TConfigs>) => {
   const { fieldFilters, setFieldFilter } = useManagementTable<TData, TConfigs>()
-  const value = Array.isArray(fieldFilters[filterKey]) ? fieldFilters[filterKey] : []
-
-  const handleChange = (val: string[]) => {
-    setFieldFilter(
-      filterKey,
-      val as unknown as FieldFiltersFromConfig<TData, TConfigs>[typeof filterKey],
-    )
-    onChange?.(val)
-  }
+  const value = Array.isArray(fieldFilters[filterKey]) ? (fieldFilters[filterKey] as string[]) : []
 
   return (
-    <MultiSelect items={items} onChange={handleChange} size="sm" value={value} w="xs" {...props} />
+    <BaseFilterControl<TData, TConfigs, string[]>
+      filterKey={filterKey}
+      onChange={(val: string[]) => {
+        setFieldFilter(filterKey, val as FieldFiltersFromConfig<TData, TConfigs>[typeof filterKey])
+        onChange?.(val)
+      }}
+      onClear={() =>
+        setFieldFilter(filterKey, [] as FieldFiltersFromConfig<TData, TConfigs>[typeof filterKey])
+      }
+      value={value}
+    >
+      {({ value, onChange }: { value: string[]; onChange: (val: string[]) => void }) => (
+        <MultiSelect
+          items={items}
+          minW="md"
+          onChange={onChange}
+          size="sm"
+          value={value}
+          {...props}
+        />
+      )}
+    </BaseFilterControl>
   )
 }
