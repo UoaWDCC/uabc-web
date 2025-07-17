@@ -78,7 +78,7 @@ export const UniversityInfoForm: FC<UniversityInfoFormProps> = memo(({ onSubmit 
             disabled={watch("university") !== University.uoa}
             placeholder="Student ID"
             size="lg"
-            startIcon={<UserIcon />}
+            startElement={<UserIcon />}
             type={InputType.Number}
             {...register("studentId")}
           />
@@ -89,7 +89,7 @@ export const UniversityInfoForm: FC<UniversityInfoFormProps> = memo(({ onSubmit 
             disabled={watch("university") !== University.uoa}
             placeholder="UPI"
             size="lg"
-            startIcon={<UserIcon />}
+            startElement={<UserIcon />}
             type={InputType.Text}
             {...register("studentUpi")}
           />

@@ -102,7 +102,7 @@ export const AdditionalInfoForm: FC<AdditionalInfoFormProps> = memo(({ onSubmit 
             data-testid="dietary-requirements"
             placeholder="Dietary requirements"
             size="lg"
-            startIcon={<BeanOffIcon />}
+            startElement={<BeanOffIcon />}
             type={InputType.Text}
             {...register("dietaryRequirements")}
           />

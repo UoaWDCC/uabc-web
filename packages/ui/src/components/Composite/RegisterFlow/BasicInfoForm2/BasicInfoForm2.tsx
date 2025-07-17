@@ -52,7 +52,7 @@ export const BasicInfoForm2: FC<BasicInfoForm2Props> = memo(({ onSubmit }) => {
             data-testid="phone-number"
             placeholder="Phone number"
             size="lg"
-            startIcon={<PhoneIcon />}
+            startAddon={"+64"}
             type={InputType.Tel}
             {...register("phoneNumber")}
           />
