@@ -4,6 +4,7 @@ import { HStack, Spacer, VStack } from "@yamada-ui/react"
 import type { MultiSelectProps } from "../../../Primitive/MultiSelect/MultiSelect"
 import type { SelectProps } from "../../../Primitive/Select/Select"
 import type { TextInputProps } from "../../../Primitive/TextInput/TextInput"
+import type { ColumnConfig } from "../types"
 import { FilterActions } from "./FilterActions"
 import { FilterColumnVisibility } from "./FilterColumnVisibility"
 import { FilterInput } from "./FilterInput"
@@ -49,12 +50,6 @@ export type FieldFiltersFromConfig<TData, TConfigs extends readonly FilterBarCon
   [K in TConfigs[number] as K["key"] extends string
     ? K["key"]
     : never]: K["type"] extends "multiselect" ? string[] : string
-}
-
-export type ColumnConfig<TData> = {
-  key: keyof TData
-  label: string
-  required?: boolean
 }
 
 export type FilterProps<TData, TConfigs extends readonly FilterBarConfig<TData>[]> = {

@@ -10,14 +10,9 @@ import {
   VStack,
 } from "@yamada-ui/react"
 import { useManagementTable } from "../MemberManagementContext"
+import type { ColumnConfig } from "../types"
 
-export type ColumnConfig<T> = {
-  key: keyof T
-  label: string
-  required?: boolean
-}
-
-export const FilterColumnVisibility = <T,>({ columns }: { columns: ColumnConfig<T>[] }) => {
+export const FilterColumnVisibility = <TData,>({ columns }: { columns: ColumnConfig<TData>[] }) => {
   const { visibleColumns, toggleColumn } = useManagementTable()
 
   return (

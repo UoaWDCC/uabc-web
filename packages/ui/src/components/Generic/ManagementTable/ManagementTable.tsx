@@ -8,12 +8,7 @@ import { Filter, type FilterBarConfig } from "./Filter"
 import type { ManagementTableProviderProps } from "./MemberManagementContext"
 import { ManagementTableProvider } from "./MemberManagementContext"
 import { PagingTable } from "./PagingTable"
-
-export type ColumnConfig<TData> = {
-  key: keyof TData
-  label: string
-  required?: boolean
-}
+import type { ColumnConfig } from "./types"
 
 export type ManagementTableProps<TData> = {
   data: TData[]
