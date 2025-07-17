@@ -17,18 +17,11 @@ export default async function authenticate(securityName: "jwt", scopes?: string[
     try {
       let token: string = cookieStore.get(AUTH_COOKIE_NAME)?.value || ""
 
-      // Enable header based auth when NODE_ENV set the test mode
-      if (process.env.NODE_ENV !== "production") {
-        const authHeader = headersList.get("authorization") || ""
-        if (!token && !authHeader.startsWith("Bearer ")) {
-          throw new UnauthorizedAuthError("No token provided")
-        }
-        if (!token) token = authHeader.split(" ")[1] // Gets part after Bearer
-      }
-
-      if (!token) {
+      const authHeader = headersList.get("authorization") || ""
+      if (!token && !authHeader.startsWith("Bearer ")) {
         throw new UnauthorizedAuthError("No token provided")
       }
+      if (!token) token = authHeader.split(" ")[1] // Gets part after Bearer
 
       const authService = new AuthService()
       const decodedToken = authService.getData(token, JWTEncryptedUserSchema)

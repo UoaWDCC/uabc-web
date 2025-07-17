@@ -3,8 +3,24 @@ import { LocationBubble, type LocationBubbleProps, QuickBook } from "@repo/ui/co
 import { locationAndTimeOptionsMock } from "@repo/ui/components/Generic/QuickBook/QuickBook.mock"
 import { Heading, Image } from "@repo/ui/components/Primitive"
 import { Bleed, Box, Center, Text, VStack } from "@yamada-ui/react"
-import { FaqSection } from "@/components/FaqSection"
+import type { Metadata } from "next"
+import { FaqSection } from "@/components/client/FaqSection"
 
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL),
+  title: "Home | UABC",
+  description:
+    "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
+  openGraph: {
+    title: "Home | UABC",
+    description:
+      "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
+    url: process.env.NEXT_PUBLIC_URL,
+    siteName: "UABC",
+    locale: "en-NZ",
+    type: "website",
+  },
+}
 export default async function Home() {
   // TODO: replace mock data with real data
   const mockCards = [

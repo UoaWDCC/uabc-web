@@ -19,7 +19,7 @@ describe("api/auth/login", () => {
   describe("POST", async () => {
     const cookieStore = await cookies()
 
-    it("sets JWT token to cookies on success auth", async () => {
+    it("sets JWT token to cookies and returns it on success auth", async () => {
       const authDataService = new AuthDataService()
       const userDataService = new UserDataService()
 
@@ -34,6 +34,7 @@ describe("api/auth/login", () => {
       const response = await login(req)
 
       expect(compareSpy).toHaveBeenCalledWith(PASSWORD_MOCK, REAL_HASHED_PASSWORD_MOCK)
+      expect((await response.json()).data).toBeDefined()
       expect(response.status).toBe(StatusCodes.CREATED)
 
       const token = cookieStore.get(AUTH_COOKIE_NAME)?.value
@@ -76,6 +77,7 @@ describe("api/auth/login", () => {
 
       const req = createMockNextRequest("/api/auth/login", "POST", {
         email: EMAIL_MOCK,
+        // cspell:disable-next-line
         password: "incorrect-passw0rd",
       })
       const response = await login(req)

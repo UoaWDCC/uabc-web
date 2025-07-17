@@ -1,0 +1,22 @@
+pre-push:
+  parallel: true
+  commands:
+    biome:
+      run: pnpm exec biome check . --error-on-warnings
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm exec commitlint --edit $1
+
+post-merge:
+  commands:
+    pnpm:
+      glob: "{package.json,pnpm-lock.yaml}"
+      run: pnpm install
+
+pre-commit:
+  parallel: true
+  commands:
+    cspell:
+      run: pnpm exec cspell {staged_files} --cache --cache-strategy=content --cache-location=.cspellcache

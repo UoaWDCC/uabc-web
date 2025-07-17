@@ -1,53 +1,49 @@
 "use client"
 
 import {
+  Box,
   Center,
-  type FC,
-  FormControl,
   HStack,
   Label,
-  memo,
   Tag,
   MultiSelect as UIMultiSelect,
   type MultiSelectProps as UIMultiSelectProps,
 } from "@yamada-ui/react"
 import type { ReactNode } from "react"
+import { forwardRef, memo } from "react"
 
-export interface MultiSelectProps extends UIMultiSelectProps {
+export interface MultiSelectProps extends Omit<UIMultiSelectProps, "variant"> {
   /**
    * Label text of the MultiSelect component.
    *
    * @remarks
-   * The label is rendered within the MultiSelect component.
-   *
-   * @defaultValue "Select option(s)"
+   * The label is rendered within the MultiSelect component if provided by the parent.
    */
   label?: string
-
   /**
    * Icon rendered inline to the left of the label.
    *
    * @warn This prop takes in any React Node but icons are expected.
    *
    * @see {@link https://yamada-ui.com/components/media-and-icons/icon Yamada UI Icon}
-   * @see {@link https://yamada-ui.com/components/media-and-icons/lucide Yamda UI Lucide Icon}
+   * @see {@link https://yamada-ui.com/components/media-and-icons/lucide Yamada UI Lucide Icon}
    */
   icon?: ReactNode
-
   /**
    * Whether to have a background gradient and circle around the inline icon.
    *
-   * @remarks Same styling as in Select component. MultiSelect is not needed in the quick book
-   * component in the hero/home page, but MultiSelect will feel left out if it doesn't have its own
+   * @remarks Same styling as in Select component. Select is not needed in the quick book
+   * component in the hero/home page, but Select will feel left out if it doesn't have its own
    * stylised version :(
    */
-  stylised?: boolean
+  variant?: "stylised" | UIMultiSelectProps["variant"]
 }
 
 /**
  * Multi select component for both mobile and desktop screens with left icon and label support.
  *
  * @param props MultiSelect component properties
+ * @param ref Ref to the underlying select element
  * @returns A multi select component
  *
  * @example
@@ -59,66 +55,79 @@ export interface MultiSelectProps extends UIMultiSelectProps {
  *
  * @see {@link https://yamada-ui.com/components/forms/multi-select Yamada UI Select Docs}
  */
-export const MultiSelect: FC<MultiSelectProps> = memo(
-  ({ children, label = "Select option(s)", icon, stylised = false, ...props }) => {
-    return (
-      <FormControl
-        position="relative"
-        sx={{
-          "&:not(:has(div[data-placeholder]))": {
-            label: {
-              visibility: "hidden",
+export const MultiSelect = memo(
+  forwardRef<HTMLDivElement, MultiSelectProps>(
+    ({ children, label, icon, variant, disabled, ...props }, ref) => {
+      const stylised = variant === "stylised"
+
+      return (
+        <Box
+          position="relative"
+          sx={{
+            "&:not(:has(div[data-placeholder]))": {
+              label: {
+                visibility: "hidden",
+              },
             },
-          },
-        }}
-      >
-        <UIMultiSelect
-          bgGradient={stylised ? "heroGradient" : undefined}
-          clearIconProps={{
-            pr: { md: "lg" },
           }}
-          component={({ label, onRemove }) => (
-            <Tag color="white" colorScheme="secondary" onClose={onRemove} variant="outline">
-              {label}
-            </Tag>
-          )}
-          fieldProps={{ pl: { base: "calc(lg + xs + md)", md: "calc(lg - sm - xs + xl)" } }}
-          iconProps={{
-            pr: { md: "lg" },
-          }}
-          size="lg"
-          {...props}
         >
-          {children}
-        </UIMultiSelect>
-        <HStack
-          align="center"
-          gap={{ base: "xs", md: "sm" }}
-          mx="calc(md - xs)"
-          pl={{ md: "md" }}
-          pointerEvents="none"
-          position="absolute"
-          top="50%"
-          transform="translateY(-50%)"
-          z={1}
-        >
-          <Center
-            borderColor={stylised ? "gray.600" : "transparent"}
-            borderRadius="full"
-            borderWidth="thin"
-            h="fit-content"
-            p="xs"
-            w="fit-content"
+          <UIMultiSelect
+            clearIconProps={{
+              pr: { md: "6" },
+            }}
+            component={({ label, onRemove }) => (
+              <Tag color="white" colorScheme="secondary" onClose={onRemove} variant="outline">
+                {label}
+              </Tag>
+            )}
+            fieldProps={
+              icon
+                ? {
+                    pl: { base: "11", md: "17" },
+                    pr: { base: "lg", md: "xl" },
+                  }
+                : { pl: { md: "6" } }
+            }
+            iconProps={icon ? { pr: { md: "lg" } } : { pr: { md: "6" } }}
+            ref={ref}
+            size="lg"
+            variant={variant}
+            {...props}
           >
-            {icon}
-          </Center>
-          <Label fontSize="lg" fontWeight="normal" mb={0}>
-            {label}
-          </Label>
-        </HStack>
-      </FormControl>
-    )
-  },
+            {children}
+          </UIMultiSelect>
+          <HStack
+            align="center"
+            gap={{ base: "xs", md: "sm" }}
+            mx={icon ? { md: "md" } : undefined}
+            pointerEvents="none"
+            position="absolute"
+            px={{ base: "sm", md: icon ? "3" : "sm" }}
+            top="50%"
+            transform="translateY(-50%)"
+            z={1}
+          >
+            <Center
+              borderColor="gray.600"
+              borderRadius="full"
+              borderWidth={stylised ? "thin" : "0"}
+              h="fit-content"
+              opacity={disabled ? 0.4 : 1}
+              p="xs"
+              w="fit-content"
+            >
+              {icon}
+            </Center>
+            {label && (
+              <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
+                {label}
+              </Label>
+            )}
+          </HStack>
+        </Box>
+      )
+    },
+  ),
 )
 
 MultiSelect.displayName = "MultiSelect"

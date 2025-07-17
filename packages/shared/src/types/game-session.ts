@@ -1,12 +1,4 @@
-import type { PlayLevel } from "./enums"
+import type z from "zod"
+import type { GameSessionScheduleSchema } from "../schemas"
 
-export interface CartGameSession {
-  id: number
-  weekday: string
-  startTime: string
-  endTime: string
-  locationName: string
-  locationAddress: string
-  isFull: boolean
-  playLevel?: PlayLevel
-}
+export type GameSessionSchedule = z.infer<typeof GameSessionScheduleSchema>
