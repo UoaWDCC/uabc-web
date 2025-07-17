@@ -1,5 +1,4 @@
 import { render, screen } from "@repo/ui/test-utils"
-import userEvent from "@testing-library/user-event"
 import type { Column } from "@yamada-ui/table"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { ManagementTable } from "./ManagementTable"
@@ -38,7 +37,7 @@ describe("ManagementTable", () => {
 
   it("should render with actions column and handle menu actions", async () => {
     const onClick = vi.fn()
-    render(
+    const { user } = render(
       <ManagementTable
         actions={[{ text: "Edit", onClick }]}
         columns={columns}
@@ -50,7 +49,6 @@ describe("ManagementTable", () => {
       />,
       { wrapper: withNuqsTestingAdapter() },
     )
-    const user = userEvent.setup()
     const menuButtons = screen.getAllByRole("button", { name: /actions/i })
     await user.click(menuButtons[0])
     const menuItem = await screen.findByText("Edit")
