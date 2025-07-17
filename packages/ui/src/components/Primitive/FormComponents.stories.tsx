@@ -26,30 +26,18 @@ export const Default: Story = () => {
       <MultiSelect items={items} placeholder="Select an option" />
 
       <TextInput placeholder="Enter text" startElement={<Clock10Icon />} />
-      <Select
-        icon={<Clock10Icon />}
-        items={items}
-        label="Select an option"
-        placeholder="Select an option"
-      />
-      <MultiSelect
-        icon={<Clock10Icon />}
-        items={items}
-        label="Select an option"
-        placeholder="Select an option"
-      />
+      <Select icon={<Clock10Icon />} items={items} placeholder="Select an option" />
+      <MultiSelect icon={<Clock10Icon />} items={items} placeholder="Select an option" />
 
       <Select
         icon={<Clock10Icon />}
         items={items}
-        label="Select an option"
         placeholder="Select an option"
         variant="stylised"
       />
       <MultiSelect
         icon={<Clock10Icon />}
         items={items}
-        label="Select an option"
         placeholder="Select an option"
         variant="stylised"
       />
