@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Heading, InputType, TextInput } from "@repo/ui/components/Primitive"
-import { PhoneIcon } from "@yamada-ui/lucide"
 import { FormControl, memo, noop, VStack } from "@yamada-ui/react"
 import type { FC } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
