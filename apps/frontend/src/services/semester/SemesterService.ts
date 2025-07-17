@@ -1,4 +1,9 @@
-import { GetSemesterResponseSchema, GetSemestersResponseSchema } from "@repo/shared"
+import {
+  type GetSemesterResponse,
+  GetSemesterResponseSchema,
+  type GetSemestersResponse,
+  GetSemestersResponseSchema,
+} from "@repo/shared"
 import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
 
@@ -12,7 +17,7 @@ const SemesterService = {
    * @param id The ID of the semester to retrieve.
    * @returns The semester data for the given semester ID.
    */
-  getSemester: async (id: string) => {
+  getSemester: async (id: string): Promise<GetSemesterResponse | undefined> => {
     const { data: semester, status } = await apiClient.get(
       `/api/semesters/${id}`,
       GetSemesterResponseSchema,
@@ -26,7 +31,7 @@ const SemesterService = {
    *
    * @returns A list of all semesters.
    */
-  getSemesters: async () => {
+  getSemesters: async (): Promise<GetSemestersResponse | undefined> => {
     const { data: semesters, status } = await apiClient.get(
       "/api/semesters",
       GetSemestersResponseSchema,
