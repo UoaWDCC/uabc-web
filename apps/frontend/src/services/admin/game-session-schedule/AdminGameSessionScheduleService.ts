@@ -1,9 +1,9 @@
 import {
-  CreateGameSessionScheduleRequest,
+  type CreateGameSessionScheduleRequest,
   GetAllGameSessionSchedulesResponseSchema,
   GetGameSessionScheduleResponseSchema,
-  UpdateGameSessionScheduleRequest,
   type PaginationQuery,
+  type UpdateGameSessionScheduleRequest,
 } from "@repo/shared"
 import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
@@ -32,7 +32,10 @@ const AdminGameSessionScheduleService = {
    */
   getAllGameSessionSchedules: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
-    const { data, status } = await apiClient.get(`/admin/game-session-schedules?${query}`, GetAllGameSessionSchedulesResponseSchema)
+    const { data, status } = await apiClient.get(
+      `/admin/game-session-schedules?${query}`,
+      GetAllGameSessionSchedulesResponseSchema,
+    )
     if (status !== StatusCodes.OK) throw new Error("Failed to fetch all game session schedules")
     return data
   },
@@ -43,7 +46,10 @@ const AdminGameSessionScheduleService = {
    * @returns A promise that resolves to a game session schedule.
    */
   getGameSessionSchedule: async (id: string) => {
-    const { data, status } = await apiClient.get(`/admin/game-session-schedules/${id}`, GetGameSessionScheduleResponseSchema)
+    const { data, status } = await apiClient.get(
+      `/admin/game-session-schedules/${id}`,
+      GetGameSessionScheduleResponseSchema,
+    )
     if (status !== StatusCodes.OK) throw new Error("Failed to fetch game session schedule")
     return data
   },
