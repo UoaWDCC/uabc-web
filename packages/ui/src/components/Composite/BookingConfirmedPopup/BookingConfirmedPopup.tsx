@@ -31,7 +31,7 @@ interface BookingConfirmedPopupProps extends ModalProps {
   /**
    * The link text displayed in the popup.
    */
-  linkText: string
+  linkText?: string
 }
 
 /**
