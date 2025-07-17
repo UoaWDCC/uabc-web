@@ -1,6 +1,6 @@
 import { z } from "zod"
-import type { GameSession, User } from "@/payload-types"
-import { type CreateBookingData, PlayLevel } from "@/types"
+import type { GameSession, User } from "../payload-types"
+import { type CreateBookingData, PlayLevel } from "../types"
 
 export const BookingSchema = z.object({
   user: z.union([z.string(), z.custom<User>()]),
