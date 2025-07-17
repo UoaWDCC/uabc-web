@@ -1,21 +1,23 @@
 import { PlayLevel } from "@repo/shared/types"
 import { Button } from "@repo/ui/components/Primitive"
-import { For, Text, VStack } from "@yamada-ui/react"
+import { For, Spacer, Text, VStack } from "@yamada-ui/react"
 
 export interface BookACourtProps {
-  onClick: (level: PlayLevel) => void
+  buttonOnClick: (level: PlayLevel) => void
+  guidelineOnClick: () => void
 }
 
 /**
  * A component for choosing a play level when booking a court.
  *
- * @param onClick The function to call when a button is clicked.
+ * @param buttonOnClick The function to call when a button is clicked.
+ * @param guidelineOnClick The function to call when the guideline link is clicked.
  * @returns A component that displays buttons for different play levels.
  * @example <BookACourt />
  */
-export const BookACourt = ({ onClick }: BookACourtProps) => {
+export const BookACourt = ({ buttonOnClick, guidelineOnClick }: BookACourtProps) => {
   return (
-    <VStack alignItems="center" gap={{ base: "sm", md: "lg" }}>
+    <VStack alignItems="center" gap={{ base: "sm", md: "lg" }} h="full">
       <Text color="gray.500" fontSize={{ base: "lg", md: "xl" }}>
         I am...
       </Text>
@@ -25,7 +27,7 @@ export const BookACourt = ({ onClick }: BookACourtProps) => {
             colorScheme="primary"
             key={level}
             maxW="md"
-            onClick={() => onClick(level)}
+            onClick={() => buttonOnClick(level)}
             size="lg"
             variant="solid"
             w="full"
@@ -34,6 +36,17 @@ export const BookACourt = ({ onClick }: BookACourtProps) => {
           </Button>
         )}
       </For>
+      <Spacer />
+      <Button
+        color="gray.500"
+        fontSize={{ base: "lg", md: "xl" }}
+        fontWeight="medium"
+        onClick={guidelineOnClick}
+        textDecoration="underline"
+        variant="link"
+      >
+        Check-In Form Guidelines
+      </Button>
     </VStack>
   )
 }
