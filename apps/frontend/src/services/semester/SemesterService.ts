@@ -1,4 +1,4 @@
-import { GetSemesterResponseSchema, GetSemestersResponseSchema } from "@repo/shared/schemas"
+import { GetSemesterResponseSchema, GetSemestersResponseSchema } from "@repo/shared"
 import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
 
