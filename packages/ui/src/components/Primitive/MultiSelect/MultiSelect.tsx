@@ -67,6 +67,7 @@ export const MultiSelect = memo(
               </Tag>
             )}
             data-has-icon={!!icon}
+            lazy
             placeholder={label}
             ref={ref}
             size="lg"

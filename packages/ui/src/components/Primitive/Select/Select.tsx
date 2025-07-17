@@ -63,6 +63,7 @@ export const Select = memo(
         <Box position="relative">
           <UISelect
             data-has-icon={!!icon}
+            lazy
             placeholder={label}
             ref={ref}
             size="lg"
