@@ -4,9 +4,21 @@ import { ManagementTable } from "./Table"
 import { TablePagination } from "./TablePagination"
 
 type PagingTableProps<TData> = {
+  /**
+   * The columns to display in the table.
+   */
   columns: Column<TData>[]
+  /**
+   * The key of the row ID property in the data.
+   */
   rowId: keyof TData
+  /**
+   * The text to display when there is no data.
+   */
   emptyStateText: string
+  /**
+   * The column key to use for the empty state cell.
+   */
   emptyStateColumnKey: keyof TData
 }
 

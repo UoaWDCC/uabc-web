@@ -4,6 +4,9 @@ import { ButtonGroup } from "@yamada-ui/react"
 import { type FC, memo } from "react"
 import { useManagementTable } from "../MemberManagementContext"
 
+/**
+ * Action buttons for the filter bar, including add and export actions.
+ */
 export const FilterActions: FC = memo(() => {
   const { selectedRows, filteredData } = useManagementTable()
 

@@ -3,6 +3,9 @@ import { useManagementTable } from "../MemberManagementContext"
 import { BaseFilterControl } from "./BaseFilterControl"
 import type { FieldFiltersFromConfig, FilterBarConfig, FilterMultiSelectProps } from "./types"
 
+/**
+ * Multi-select dropdown filter for ManagementTable. Allows selecting multiple values.
+ */
 export const FilterMultiSelect = <
   TData,
   TConfigs extends readonly FilterBarConfig<TData>[] = FilterBarConfig<TData>[],

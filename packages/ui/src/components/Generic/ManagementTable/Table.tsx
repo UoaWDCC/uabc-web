@@ -8,9 +8,21 @@ import type { FilterBarConfig } from "./Filter"
 import { useManagementTable } from "./MemberManagementContext"
 
 export type ManagementTableProps<TData> = {
+  /**
+   * The columns to display in the table.
+   */
   columns: Column<TData>[]
+  /**
+   * The key of the row ID property in the data.
+   */
   rowId: keyof TData
+  /**
+   * The text to display when there is no data.
+   */
   emptyStateText: string
+  /**
+   * The column key to use for the empty state cell.
+   */
   emptyStateColumnKey: keyof TData
 }
 

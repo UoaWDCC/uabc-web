@@ -11,14 +11,41 @@ import { PagingTable } from "./PagingTable"
 import type { ColumnConfig } from "./types"
 
 export type ManagementTableProps<TData> = {
+  /**
+   * The data to display in the table.
+   */
   data: TData[]
+  /**
+   * The columns to display in the table.
+   */
   columns: Column<TData>[]
+  /**
+   * The column configuration for the table.
+   */
   columnsConfig: ColumnConfig<TData>[]
+  /**
+   * The key of the row ID property in the data.
+   */
   rowId: keyof TData
+  /**
+   * Optional actions to display in the actions column.
+   */
   actions?: Array<{ text: string; onClick: (row: TData) => void }>
+  /**
+   * Optional provider props for the ManagementTableProvider.
+   */
   providerProps?: Partial<ManagementTableProviderProps<TData, readonly FilterBarConfig<TData>[]>>
+  /**
+   * Optional filter configurations for the filter bar.
+   */
   filterConfigs?: readonly FilterBarConfig<TData>[]
+  /**
+   * The text to display when there is no data.
+   */
   emptyStateText: string
+  /**
+   * The column key to use for the empty state cell.
+   */
   emptyStateColumnKey: keyof TData
 }
 

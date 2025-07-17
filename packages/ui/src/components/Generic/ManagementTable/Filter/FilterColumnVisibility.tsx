@@ -12,6 +12,9 @@ import {
 import { useManagementTable } from "../MemberManagementContext"
 import type { ColumnConfig } from "../types"
 
+/**
+ * Popover control for toggling column visibility in the table.
+ */
 export const FilterColumnVisibility = <TData,>({ columns }: { columns: ColumnConfig<TData>[] }) => {
   const { visibleColumns, toggleColumn } = useManagementTable()
 

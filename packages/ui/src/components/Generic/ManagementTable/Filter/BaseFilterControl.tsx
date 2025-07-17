@@ -1,5 +1,8 @@
 import type { BaseFilterControlProps, FilterBarConfig } from "./types"
 
+/**
+ * Base component for filter controls. Handles value, change, and clear logic for filter UI.
+ */
 export function BaseFilterControl<
   TData,
   TConfigs extends readonly FilterBarConfig<TData>[] = FilterBarConfig<TData>[],

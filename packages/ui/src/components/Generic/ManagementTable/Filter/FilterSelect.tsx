@@ -8,6 +8,9 @@ import type {
   SelectItem,
 } from "./types"
 
+/**
+ * Select dropdown filter for ManagementTable. Supports clearing and custom items.
+ */
 export const FilterSelect = <
   TData,
   TConfigs extends readonly FilterBarConfig<TData>[] = FilterBarConfig<TData>[],

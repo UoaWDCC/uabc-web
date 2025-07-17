@@ -1,10 +1,13 @@
+import { TextInput } from "@repo/ui/components/Primitive"
 import { XIcon } from "@yamada-ui/lucide"
 import { IconButton } from "@yamada-ui/react"
-import { TextInput } from "../../../Primitive"
 import { useManagementTable } from "../MemberManagementContext"
 import { BaseFilterControl } from "./BaseFilterControl"
 import type { FieldFiltersFromConfig, FilterBarConfig, FilterInputProps } from "./types"
 
+/**
+ * Text input filter for ManagementTable. Supports both field and multi-field search.
+ */
 export function FilterInput<
   TData,
   TConfigs extends readonly FilterBarConfig<TData>[] = FilterBarConfig<TData>[],

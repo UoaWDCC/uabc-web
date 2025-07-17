@@ -14,20 +14,32 @@ import type {
   FilterTextConfig,
 } from "./types"
 
+/**
+ * Checks if a filter config is a text filter.
+ */
 function isTextConfig<TData>(config: FilterBarConfig<TData>): config is FilterTextConfig<TData> {
   return config.type === "text"
 }
+/**
+ * Checks if a filter config is a select filter.
+ */
 function isSelectConfig<TData>(
   config: FilterBarConfig<TData>,
 ): config is FilterSelectConfig<TData> {
   return config.type === "select"
 }
+/**
+ * Checks if a filter config is a multiselect filter.
+ */
 function isMultiSelectConfig<TData>(
   config: FilterBarConfig<TData>,
 ): config is FilterMultiSelectConfig<TData> {
   return config.type === "multiselect"
 }
 
+/**
+ * Renders the filter bar with up to three filter controls and actions.
+ */
 export const Filter = <
   TData,
   TConfigs extends readonly FilterBarConfig<TData>[] = FilterBarConfig<TData>[],
@@ -37,7 +49,6 @@ export const Filter = <
 }: FilterProps<TData, TConfigs>) => {
   return (
     <VStack gap="md" w="full">
-      {/* Main filter row */}
       <Stack flexDirection={{ base: "column", xl: "row" }} gap="md" w="full">
         <Wrap gap="md" minW={0} order={{ base: 2, xl: 1 }} w="full">
           {filterConfigs.slice(0, 3).map((config) => {
