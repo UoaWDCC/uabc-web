@@ -1,0 +1,63 @@
+"use client"
+
+import { Heading, Image } from "@repo/ui/components/Primitive"
+import { DiscList, ListItem, Text, VStack } from "@yamada-ui/react"
+import { useAuth } from "@/context/AuthContext"
+
+export default function UserPage() {
+  const { user, loading, error } = useAuth()
+
+  if (loading) {
+    return <Text>Loading user info...</Text>
+  }
+
+  if (error) {
+    return <Text>Error: {error}</Text>
+  }
+
+  if (!user) {
+    return <Text>No user is currently logged in.</Text>
+  }
+
+  return (
+    <VStack>
+      <Heading.h2>User Info</Heading.h2>
+      <DiscList>
+        <ListItem>
+          <Text as="strong">ID:</Text> {user.id}
+        </ListItem>
+        <ListItem>
+          <Text as="strong">Email:</Text> {user.email}
+        </ListItem>
+        <ListItem>
+          <Text as="strong">First Name:</Text> {user.firstName}
+        </ListItem>
+        <ListItem>
+          <Text as="strong">Last Name:</Text> {user.lastName ?? "-"}
+        </ListItem>
+        <ListItem>
+          <Text as="strong">Role:</Text> {user.role}
+        </ListItem>
+        {user.remainingSessions !== undefined && (
+          <ListItem>
+            <Text as="strong">Remaining Sessions:</Text> {user.remainingSessions ?? "-"}
+          </ListItem>
+        )}
+        {user.image && (
+          <ListItem>
+            <Text as="strong">Image:</Text>{" "}
+            {user.image.url && (
+              <Image alt="User" src={user.image.url} style={{ maxWidth: 80, borderRadius: 8 }} />
+            )}
+          </ListItem>
+        )}
+        <ListItem>
+          <Text as="strong">Created At:</Text> {user.createdAt}
+        </ListItem>
+        <ListItem>
+          <Text as="strong">Updated At:</Text> {user.updatedAt}
+        </ListItem>
+      </DiscList>
+    </VStack>
+  )
+}

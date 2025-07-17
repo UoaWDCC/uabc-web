@@ -1,3 +1,4 @@
+"use client"
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import { PenIcon, XIcon } from "@yamada-ui/lucide"
 import type { CardProps } from "@yamada-ui/react"
