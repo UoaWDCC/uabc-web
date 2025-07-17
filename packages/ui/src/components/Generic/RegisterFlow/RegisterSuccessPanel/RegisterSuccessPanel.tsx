@@ -1,8 +1,7 @@
 "use client"
 
 import { Button, Heading } from "@repo/ui/components/Primitive"
-import { CheckIcon } from "@yamada-ui/lucide"
-import { Center, memo, Text, VStack } from "@yamada-ui/react"
+import { Alert, AlertDescription, AlertIcon, AlertTitle, memo, VStack } from "@yamada-ui/react"
 import Link from "next/link"
 import type { FC } from "react"
 
@@ -18,22 +17,20 @@ import type { FC } from "react"
 export const RegisterSuccessPanel: FC = memo(() => {
   return (
     <VStack bgColor="inherit" gap="lg" h="full">
-      <Center
-        borderColor="white"
-        borderRadius="full"
-        borderWidth="thick"
-        p="sm"
-        placeSelf="center"
-        w="fit-content"
+      <Alert
+        alignItems="center"
+        flexDir="column"
+        h="2xs"
+        justifyContent="center"
+        status="success"
+        textAlign="center"
       >
-        <CheckIcon fontSize="9xl" />
-      </Center>
-      <VStack>
-        <Heading.h2 textAlign="center">Success!</Heading.h2>
-        <Text color="muted" textAlign="center">
+        <AlertIcon boxSize="80px" />
+        <AlertTitle as={Heading.h3}>Success!</AlertTitle>
+        <AlertDescription textWrap="wrap">
           Your account has been created. Welcome to UABC!
-        </Text>
-      </VStack>
+        </AlertDescription>
+      </Alert>
 
       {/* TODO: use correct href for profile dashboard */}
       <Button as={Link} colorScheme="primary" href="/">

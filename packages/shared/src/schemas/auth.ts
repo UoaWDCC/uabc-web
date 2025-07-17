@@ -1,6 +1,6 @@
-import { Gender, PlayLevel, University } from "@repo/shared"
 import z from "zod"
 import type { User } from "../payload-types"
+import { Gender, PlayLevel, University } from "../types"
 import { MediaSchema } from "./media"
 
 // Payload User Schema
