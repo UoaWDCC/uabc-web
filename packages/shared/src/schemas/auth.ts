@@ -132,9 +132,9 @@ export const LoginDetailsSchema = z.object({
    * @example 12345678
    */
   password: z.string().min(1, "Field is required"),
+  /**
+   * Whether to remember the user's login session
+   * @example true
+   */
+  rememberMe: z.boolean(),
 })
-
-export type JWTEncryptedUser = z.infer<typeof JWTEncryptedUserSchema>
-export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>
-export type LoginDetails = z.infer<typeof LoginDetailsSchema>
-export type RegisterPanelDetails = z.infer<typeof RegisterPanelDetailsSchema>
