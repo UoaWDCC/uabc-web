@@ -66,18 +66,21 @@ export default buildConfig({
     url: process.env.DATABASE_URI || "",
     allowIDOnCreate: process.env.NODE_ENV === "test",
   }),
-  email: nodemailerAdapter({
-    defaultFromAddress: process.env.SMTP_USER,
-    defaultFromName: "UABC",
-    transportOptions: {
-      host: process.env.SMTP_HOST,
-      port: 587,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    },
-  }),
+  email:
+    process.env.NODE_ENV === "production"
+      ? nodemailerAdapter({
+          defaultFromAddress: process.env.SMTP_USER,
+          defaultFromName: "UABC",
+          transportOptions: {
+            host: process.env.SMTP_HOST,
+            port: 587,
+            auth: {
+              user: process.env.SMTP_USER,
+              pass: process.env.SMTP_PASS,
+            },
+          },
+        })
+      : undefined,
   sharp,
   plugins: [
     // storage-adapter-placeholder
