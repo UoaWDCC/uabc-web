@@ -79,7 +79,7 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         <TextInput
           data-testid="email"
           placeholder="Email Address"
-          startIcon={<MailIcon />}
+          startElement={<MailIcon />}
           type={InputType.Email}
           {...register("email")}
         />
@@ -88,7 +88,7 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         <TextInput
           data-testid="password"
           placeholder="Password"
-          startIcon={<LockIcon />}
+          startElement={<LockIcon />}
           type={InputType.Password}
           {...register("password")}
         />

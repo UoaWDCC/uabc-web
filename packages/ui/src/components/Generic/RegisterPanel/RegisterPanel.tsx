@@ -76,7 +76,7 @@ export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelPro
         <TextInput
           data-testid="email"
           placeholder="Email Address"
-          startIcon={<MailIcon />}
+          startElement={<MailIcon />}
           type={InputType.Email}
           {...register("email")}
         />
@@ -85,7 +85,7 @@ export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelPro
         <TextInput
           data-testid="password"
           placeholder="Password"
-          startIcon={<LockIcon />}
+          startElement={<LockIcon />}
           type={InputType.Password}
           {...register("password")}
         />
@@ -97,7 +97,7 @@ export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelPro
         <TextInput
           data-testid="confirm-password"
           placeholder="Confirm Password"
-          startIcon={<LockIcon />}
+          startElement={<LockIcon />}
           type={InputType.Password}
           {...register("confirmPassword")}
         />
