@@ -55,7 +55,7 @@ export interface SelectProps extends Omit<UISelectProps, "variant"> {
  * @see {@link https://yamada-ui.com/components/forms/select Yamada UI Select Docs}
  */
 export const Select = memo(
-  forwardRef<HTMLSelectElement, SelectProps>(
+  forwardRef<HTMLDivElement, SelectProps>(
     ({ children, label, icon, variant, disabled, ...props }, ref) => {
       const stylised = variant === "stylised"
 
@@ -70,47 +70,41 @@ export const Select = memo(
             },
           }}
         >
-          <UISelect
-            fieldProps={
-              icon
-                ? {
-                    pl: { base: "11", md: "17" },
-                    pr: { base: "lg", md: "xl" },
-                  }
-                : { pl: { md: "6" } }
-            }
-            iconProps={icon ? { pr: { md: "lg" } } : { pr: { md: "6" } }}
-            ref={ref}
-            size="lg"
-            variant={variant}
-            {...props}
-          >
+          <UISelect data-has-icon={!!icon} ref={ref} size="lg" variant={variant} {...props}>
             {children}
           </UISelect>
           <HStack
             align="center"
-            gap={{ base: "xs", md: "sm" }}
-            mx={icon ? { md: "md" } : undefined}
+            gap="0"
             pointerEvents="none"
             position="absolute"
-            px={{ base: "sm", md: icon ? "3" : "sm" }}
             top="50%"
             transform="translateY(-50%)"
             z={1}
           >
-            <Center
-              borderColor="gray.600"
-              borderRadius="full"
-              borderWidth={stylised ? "thin" : "0"}
-              h="fit-content"
-              opacity={disabled ? 0.4 : 1}
-              p="xs"
-              w="fit-content"
-            >
-              {icon}
-            </Center>
+            {icon && (
+              <Center
+                _before={{
+                  content: "''",
+                  position: "absolute",
+                  inset: 0,
+                  rounded: "full",
+                  outline: stylised ? "1px solid" : "none",
+                  outlineColor: "gray.600",
+                  outlineOffset: "-8px",
+                }}
+                fontSize="lg"
+                h="6xs"
+                opacity={disabled ? 0.4 : 1}
+                position="relative"
+                rounded="full"
+                w="6xs"
+              >
+                {icon}
+              </Center>
+            )}
             {label && (
-              <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
+              <Label fontWeight="normal" lineClamp={1} mb={0}>
                 {label}
               </Label>
             )}
