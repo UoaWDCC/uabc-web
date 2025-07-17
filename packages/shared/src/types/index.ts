@@ -1,5 +1,6 @@
 export * from "./auth"
 export * from "./collections"
+export * from "./game-session"
 export * from "./enums"
 export * from "./payload"
 export * from "./query"
