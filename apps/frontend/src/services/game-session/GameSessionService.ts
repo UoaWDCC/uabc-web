@@ -1,4 +1,8 @@
-import { GetGameSessionResponseSchema, type PaginationQuery } from "@repo/shared"
+import {
+  GetAllGameSessionsResponseSchema,
+  GetGameSessionResponseSchema,
+  type PaginationQuery,
+} from "@repo/shared"
 import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
 
@@ -28,7 +32,7 @@ const GameSessionService = {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
     const { data, status } = await apiClient.get(
       `/api/game-sessions?${query}`,
-      GetGameSessionResponseSchema,
+      GetAllGameSessionsResponseSchema,
     )
     if (status !== StatusCodes.OK) throw new Error("Failed to retrieve all game sessions")
     return data

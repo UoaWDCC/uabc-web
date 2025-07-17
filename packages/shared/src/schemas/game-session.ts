@@ -28,3 +28,7 @@ export const UpdateGameSessionRequestSchema =
 export const GetGameSessionResponseSchema = z.object({
   data: GameSessionSchema,
 })
+
+export const GetAllGameSessionsResponseSchema = z.object({
+  data: z.array(GameSessionSchema),
+})
