@@ -15,8 +15,15 @@ export const BasicInfoForm1Schema = z.object({
 export const BasicInfoForm2Schema = z.object({
   /**
    * Phone number of the new user.
+   * 
+   * @remarks Current regex tests that the string contains 8 - 10 digits, with any whitespace allowed.
+   * 
+   * @example 021 345 6789
+   * @example 21 345 6789
+   * @example 1 345 6789
+   * @example 0213456789
    */
-  phoneNumber: z.string().regex(/[0-9]/), // TODO: improve this enforcement
+  phoneNumber: z.string().regex(/^(?:\d\s*){8,10}$/, "Invalid phone number")
 })
 
 export const UniversityInfoFormSchema = z

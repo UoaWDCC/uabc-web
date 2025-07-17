@@ -49,7 +49,7 @@ export const BasicInfoForm2: FC<BasicInfoForm2Props> = memo(({ onSubmit }) => {
         <FormControl errorMessage={errors.phoneNumber?.message} invalid={!!errors.phoneNumber}>
           <TextInput
             data-testid="phone-number"
-            placeholder="Phone number"
+            placeholder="12 345 6789"
             size="lg"
             startAddon={"+64"}
             type={InputType.Tel}
