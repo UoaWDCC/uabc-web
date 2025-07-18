@@ -1,5 +1,4 @@
 import { casualUserMock, mockBookings } from "@repo/shared/mocks"
-import { MembershipType } from "@repo/shared/types"
 import {
   AdditionalInfo,
   AdditionalInfoFields,
@@ -14,10 +13,12 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL),
   title: "User Profile | UABC",
-  description: "TODO",
+  description:
+    "Edit your profile details and view your bookings at UABC, New Zealand's largest student badminton club.",
   openGraph: {
     title: "User Profile | UABC",
-    description: "TODO",
+    description:
+      "Edit your profile details and view your bookings at UABC, New Zealand's largest student badminton club.",
     url: process.env.NEXT_PUBLIC_URL,
     siteName: "UABC",
     locale: "en-NZ",
@@ -36,9 +37,9 @@ export default async function Profile() {
             email={user.email}
             h="full"
             name={`${user.firstName} ${user.lastName}`}
-            phone={user.phoneNumber ?? "-"}
+            phone={user.phoneNumber ?? "--"}
             sessionsLeft={user.remainingSessions ?? 0}
-            status={MembershipType.member}
+            status={user.role}
           />
         </GridItem>
         <GridItem>
