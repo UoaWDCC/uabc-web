@@ -6,6 +6,9 @@ import { toKebabCase } from "@yamada-ui/react"
 import { memo } from "react"
 import { columns, type UserData } from "./Columns"
 
+/**
+ * A table for admin to manage users.
+ */
 export const AdminTable = memo(({ data }: { data: UserData[] }) => {
   return (
     <ManagementTable
