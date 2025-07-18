@@ -12,9 +12,12 @@ describe("/api/admin/users/[id]/bookings", async () => {
   const cookieStore = await cookies()
   const bookingDataService = new BookingDataService()
 
+  beforeEach(() => {
+    cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+  })
+
   describe("GET", () => {
     it("should return all bookings for a specific user", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const booking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
         user: casualUserMock,
@@ -37,8 +40,6 @@ describe("/api/admin/users/[id]/bookings", async () => {
     })
 
     it("should return empty if there are no bookings for the specific user", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-
       const response = await GET(
         createMockNextRequest(`/api/admin/users/${CASUAL_USER_UID}/bookings`),
         {
@@ -52,8 +53,6 @@ describe("/api/admin/users/[id]/bookings", async () => {
     })
 
     it("should return 500 and manage any unexpected errors ", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
       vi.spyOn(BookingDataService.prototype, "getAllBookingsByUserId").mockRejectedValueOnce(
         new Error("Database error"),
@@ -70,9 +69,8 @@ describe("/api/admin/users/[id]/bookings", async () => {
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(consoleErrorSpy).toHaveBeenCalled()
-    
-      consoleErrorSpy.mockRestore()
 
+      consoleErrorSpy.mockRestore()
     })
   })
 })
