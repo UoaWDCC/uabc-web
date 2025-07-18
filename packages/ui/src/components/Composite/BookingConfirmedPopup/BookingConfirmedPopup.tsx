@@ -66,7 +66,7 @@ export const BookingConfirmedPopup: FC<BookingConfirmedPopupProps> = ({
         <StickerIcon boxSize="2xs" />
         <Heading.h2 fontSize="3xl">{title}</Heading.h2>
       </ModalHeader>
-      <ModalBody textAlign="center">
+      <ModalBody alignItems="center" textAlign="center">
         <Text>{message}</Text>
         {value === MembershipType.casual && additionalMessage && <Text>{additionalMessage}</Text>}
       </ModalBody>
