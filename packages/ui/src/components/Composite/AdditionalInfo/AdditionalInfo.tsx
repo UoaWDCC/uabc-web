@@ -77,8 +77,3 @@ export const defaultFields = [
     inputType: InputType.Text,
   },
 ] as const
-
-export const defaultValues = {
-  gender: Gender.male,
-  playLevel: PlayLevel.beginner,
-} as const
