@@ -3,5 +3,6 @@ import { apiClient } from "@/lib/api/client"
 import { QueryKeys } from "@/services"
 
 export const getTos = async () => {
+  "use server"
   return await apiClient.get("/api/globals/tos", GetTosResponseSchema, [QueryKeys.TOS_QUERY_KEY])
 }
