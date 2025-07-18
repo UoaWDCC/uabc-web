@@ -3,11 +3,11 @@ import { VStack } from "@yamada-ui/react"
 import { AdditionalInfoForm } from "./AdditionalInfoForm"
 
 const meta = {
-  title: "Composite Components / RegisterFlow / AdditionalInfoForm",
+  title: "Generic Components / RegisterFlow / AdditionalInfoForm",
   component: AdditionalInfoForm,
   decorators: [
     (Story) => (
-      <VStack h="md">
+      <VStack h="lg">
         <Story />
       </VStack>
     ),

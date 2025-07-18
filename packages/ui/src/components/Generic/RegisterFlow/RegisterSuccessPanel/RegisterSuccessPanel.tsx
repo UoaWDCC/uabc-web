@@ -19,6 +19,7 @@ export const RegisterSuccessPanel: FC = memo(() => {
     <VStack bgColor="inherit" gap="lg" h="full">
       <Alert
         alignItems="center"
+        border={0}
         flexDir="column"
         h="2xs"
         justifyContent="center"

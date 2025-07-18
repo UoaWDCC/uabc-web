@@ -3,7 +3,7 @@ import { VStack } from "@yamada-ui/react"
 import { RegisterSuccessPanel } from "./RegisterSuccessPanel"
 
 const meta = {
-  title: "Composite Components / RegisterFlow / RegisterSuccessPanel",
+  title: "Generic Components / RegisterFlow / RegisterSuccessPanel",
   component: RegisterSuccessPanel,
   decorators: [
     (Story) => (

@@ -3,7 +3,7 @@ import { VStack } from "@yamada-ui/react"
 import { BasicInfoForm1 } from "./BasicInfoForm1"
 
 const meta = {
-  title: "Composite Components / RegisterFlow / BasicInfoForm1",
+  title: "Generic Components / RegisterFlow / BasicInfoForm1",
   component: BasicInfoForm1,
   decorators: [
     (Story) => (
