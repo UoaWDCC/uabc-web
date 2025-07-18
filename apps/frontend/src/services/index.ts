@@ -7,4 +7,5 @@ export enum QueryKeys {
   NAVIGATION_BAR_QUERY_KEY = "navbar",
   GAME_SESSION_QUERY_KEY = "gameSession",
   USER_QUERY_KEY = "user",
+  SEMESTER_QUERY_KEY = "semester",
 }
