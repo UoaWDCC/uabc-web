@@ -9,3 +9,32 @@ vi.mock("@repo/ui/components/Primitive/Image", () => ({
     <img data-testid="custom-image" {...props} />
   ),
 }))
+
+vi.mock("react", async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    use: (promise: Promise<unknown>) => {
+      let result: unknown
+      let error: unknown
+      let done = false
+      promise.then(
+        (data) => {
+          result = data
+          done = true
+        },
+        (err) => {
+          error = err
+          done = true
+        },
+      )
+      if (!done) {
+        throw promise
+      }
+      if (error) {
+        throw error
+      }
+      return result
+    },
+  }
+})
