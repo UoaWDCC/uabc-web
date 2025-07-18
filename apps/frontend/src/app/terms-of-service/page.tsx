@@ -14,8 +14,6 @@ export const metadata: Metadata = {
 export default function TermsOfServiceContent() {
   const tos = use(getTos())
 
-  console.log(tos)
-
   const data = tos.data
 
   if (!data?.data) {
