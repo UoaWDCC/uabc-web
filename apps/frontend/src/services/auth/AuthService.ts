@@ -11,7 +11,7 @@ const AuthService = {
    */
   login: async (email: string, password: string) => {
     const { data } = await apiClient.post(
-      "api/auth/login",
+      "/api/auth/login",
       { email, password },
       LoginResponseSchema,
     )

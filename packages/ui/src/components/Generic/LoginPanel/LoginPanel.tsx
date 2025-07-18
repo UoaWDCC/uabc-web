@@ -30,11 +30,9 @@ export interface LoginPanelProps {
    */
   onSubmit?: (args: LoginDetails) => Promise<LoginResponse>
   /**
-   * Handler called when user selects the Google icon button.
-   *
-   * TODO: change as necessary when implementing handler function.
+   * Href for the google icon button.
    */
-  onClickGoogle?: string
+  googleHref: string
 }
 
 /**
@@ -43,7 +41,7 @@ export interface LoginPanelProps {
  * @param props LoginPanel component props
  * @returns A login panel component
  */
-export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) => {
+export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
   const {
     register,
     handleSubmit,
@@ -152,7 +150,7 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
           colorScheme="secondary"
           data-testid="google-logo"
           fullRounded
-          href={onClickGoogle ?? "/"}
+          href={googleHref}
           variant="gradient"
         >
           <GoogleLogo fontSize="2xl" />

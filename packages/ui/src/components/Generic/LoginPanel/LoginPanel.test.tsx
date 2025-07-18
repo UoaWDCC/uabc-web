@@ -8,7 +8,7 @@ import { LoginPanel } from "./LoginPanel"
 describe("<LoginPanel />", () => {
   it("should re-export the LoginPanel component and check if LoginPanel exists", () => {
     expect(LoginPanelModule.LoginPanel).toBeDefined()
-    expect(isValidElement(<LoginPanelModule.LoginPanel />)).toBeTruthy()
+    expect(isValidElement(<LoginPanelModule.LoginPanel googleHref="/" />)).toBeTruthy()
   })
 
   it("should have correct displayName", () => {
@@ -20,7 +20,7 @@ describe("<LoginPanel />", () => {
       return Promise.resolve({ data: "token" } as LoginResponse)
     })
 
-    const { user } = render(<LoginPanel onSubmit={handleSubmit} />)
+    const { user } = render(<LoginPanel googleHref="/" onSubmit={handleSubmit} />)
 
     const sampleEmail = "straightzhao@gmail.com"
     const samplePassword = "str@!ghtZh@069"
@@ -42,7 +42,7 @@ describe("<LoginPanel />", () => {
       return Promise.resolve({ error: "Error" } as LoginResponse)
     })
 
-    const { user } = render(<LoginPanel onSubmit={handleSubmit} />)
+    const { user } = render(<LoginPanel googleHref="/" onSubmit={handleSubmit} />)
 
     const emailInput = screen.getByTestId("email")
     await user.type(emailInput, "invalid-email")
@@ -55,9 +55,9 @@ describe("<LoginPanel />", () => {
 
   it("should render the Google icon button as a link with the correct href", async () => {
     const googleUrl = "/"
-    render(<LoginPanel onClickGoogle={googleUrl} />)
+    render(<LoginPanel googleHref={googleUrl} />)
 
     const googleIconButton = screen.getByTestId("google-logo")
-    expect(googleIconButton.closest("a")).toHaveAttribute("href", googleUrl)
+    expect(googleIconButton).toHaveAttribute("href", googleUrl)
   })
 })

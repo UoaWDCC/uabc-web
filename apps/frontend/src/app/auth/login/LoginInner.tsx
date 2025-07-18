@@ -8,7 +8,7 @@ export default function LoginInner() {
   return (
     <Container as="main" centerContent>
       <LoginPanel
-        onClickGoogle={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
+        googleHref={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
         onSubmit={handleLogin}
       />
     </Container>
