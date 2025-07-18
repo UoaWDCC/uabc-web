@@ -42,12 +42,12 @@ export const AdditionalInfo = <T extends readonly Field[]>({
 
 const genderOptions = Object.entries(Gender).map(([key, value]) => ({
   value: key,
-  label: value.charAt(0).toUpperCase() + value.slice(1),
+  label: value,
 }))
 
 const playLevelOptions = Object.entries(PlayLevel).map(([key, value]) => ({
   value: key,
-  label: value.charAt(0).toUpperCase() + value.slice(1),
+  label: value,
 }))
 
 export const defaultFields = [
