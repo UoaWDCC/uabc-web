@@ -2,7 +2,7 @@ import { render, screen } from "@/test-config/test-utils"
 import About from "./page"
 
 describe("<About />", () => {
-  it("should export the Events component", () => {
+  it("should export the About component", () => {
     expect(About).toBeDefined()
     expect(About).toBeTruthy()
   })

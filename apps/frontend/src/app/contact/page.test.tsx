@@ -1,8 +1,8 @@
 import { render, screen } from "@/test-config/test-utils"
 import Contact from "./page"
 
-describe("<About />", () => {
-  it("should export the Events component", () => {
+describe("<Contact />", () => {
+  it("should export the Contact component", () => {
     expect(Contact).toBeDefined()
     expect(Contact).toBeTruthy()
   })
