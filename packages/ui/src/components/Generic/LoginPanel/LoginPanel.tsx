@@ -164,7 +164,6 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
           colorScheme="secondary"
           disabled
           fullRounded
-          href={onClickGoogle ?? "/"}
           variant="gradient"
         >
           <AppleIcon fontSize="2xl" />
