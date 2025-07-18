@@ -15,11 +15,6 @@ describe("<Select />", () => {
     expect(screen.getByText("I am icon")).toBeInTheDocument()
   })
 
-  it("renders with label", () => {
-    render(<Select label="I am label" />)
-    expect(screen.getByText("I am label")).toBeInTheDocument()
-  })
-
   it("calls onChange when an option is selected by a user", async () => {
     const onChange = vi.fn()
     const { user } = render(

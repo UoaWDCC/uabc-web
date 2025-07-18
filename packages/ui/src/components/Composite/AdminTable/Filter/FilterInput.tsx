@@ -37,7 +37,9 @@ export const FilterInput: FC = memo(() => {
         setFilterValue(ev.target.value)
       }}
       placeholder="Filter members..."
+      size="md"
       value={filterValue}
+      w="300px"
     />
   )
 })

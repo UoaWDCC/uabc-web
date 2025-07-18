@@ -24,3 +24,11 @@ export const CreateGameSessionRequestSchema = GameSessionSchema.omit({
 
 export const UpdateGameSessionRequestSchema =
   CreateGameSessionRequestSchema.partial() satisfies z.ZodType<UpdateGameSessionData>
+
+export const GetGameSessionResponseSchema = z.object({
+  data: GameSessionSchema,
+})
+
+export const GetAllGameSessionsResponseSchema = z.object({
+  data: z.array(GameSessionSchema),
+})
