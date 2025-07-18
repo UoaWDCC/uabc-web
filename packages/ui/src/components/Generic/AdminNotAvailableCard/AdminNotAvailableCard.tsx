@@ -17,9 +17,9 @@ export const AdminNotAvailableCard = () => {
       p="sm"
     >
       <CardHeader>
-        <Heading color="primary" fontSize="2xl" fontWeight="bold" textAlign="center">
+        <Heading.h2 color="primary" fontSize="2xl" fontWeight="bold" textAlign="center">
           Admin View Not Available on Mobile
-        </Heading>
+        </Heading.h2>
       </CardHeader>
       <CardBody>
         <Text fontSize="sm" textAlign="center">
