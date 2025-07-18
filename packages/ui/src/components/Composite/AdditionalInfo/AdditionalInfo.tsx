@@ -5,6 +5,7 @@ import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"
 import { InputType } from "@repo/ui/components/Primitive"
 import { useMutation } from "@tanstack/react-query"
+import { toKebabCase, toTitleCase } from "@yamada-ui/react"
 
 /**
  * The props for the AdditionalInfo component.
@@ -40,13 +41,13 @@ export const AdditionalInfo = <T extends readonly Field[]>({
   )
 }
 
-const genderOptions = Object.entries(Gender).map(([key, value]) => ({
-  value: key,
+const genderOptions = Object.values(Gender).map((value) => ({
+  value,
   label: value.charAt(0).toUpperCase() + value.slice(1),
 }))
 
-const playLevelOptions = Object.entries(PlayLevel).map(([key, value]) => ({
-  value: key,
+const playLevelOptions = Object.values(PlayLevel).map((value) => ({
+  value,
   label: value.charAt(0).toUpperCase() + value.slice(1),
 }))
 

@@ -51,7 +51,7 @@ describe("<Profile />", () => {
     render(await Profile(), { wrapper: wrapper })
     expect(screen.getByText("Additional Info")).toBeInTheDocument()
     expect(screen.getByText("Non-binary")).toBeInTheDocument()
-    expect(screen.getByText("Casual")).toBeInTheDocument()
+    expect(screen.getByText("Beginner")).toBeInTheDocument()
     expect(screen.getByText(casualUserMock.dietaryRequirements as string)).toBeInTheDocument()
   })
 })
