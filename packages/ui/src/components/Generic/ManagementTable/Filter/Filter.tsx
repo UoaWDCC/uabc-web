@@ -51,7 +51,7 @@ export const Filter = <
     <VStack gap="md" w="full">
       <Stack flexDirection={{ base: "column", xl: "row" }} gap="md" w="full">
         <Wrap gap="md" minW={0} order={{ base: 2, xl: 1 }} w="full">
-          {filterConfigs.slice(0, 3).map((config) => {
+          {filterConfigs.map((config) => {
             if (isTextConfig(config)) {
               const textConfig = config as FilterTextConfig<TData>
               return (

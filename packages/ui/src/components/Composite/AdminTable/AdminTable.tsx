@@ -1,18 +1,10 @@
 "use client"
 
+import { MembershipType, PlayLevel, University } from "@repo/shared"
 import { ManagementTable } from "@repo/ui/components/Generic"
+import { toKebabCase } from "@yamada-ui/react"
 import { memo } from "react"
-import { columns } from "./Columns"
-
-type UserData = {
-  id: string
-  name: string
-  email: string
-  role: string
-  remaining: string
-  university: string
-  joined: string
-}
+import { columns, type UserData } from "./Columns"
 
 export const AdminTable = memo(({ data }: { data: UserData[] }) => {
   return (
@@ -33,9 +25,10 @@ export const AdminTable = memo(({ data }: { data: UserData[] }) => {
       ]}
       columns={columns}
       columnsConfig={[
-        { key: "name", label: "Name" },
+        { key: "name", label: "Name", required: true },
         { key: "email", label: "Email" },
         { key: "role", label: "Role" },
+        { key: "level", label: "Play Level" },
         { key: "remaining", label: "Remaining" },
         { key: "university", label: "University" },
         { key: "joined", label: "Joined" },
@@ -53,9 +46,10 @@ export const AdminTable = memo(({ data }: { data: UserData[] }) => {
           key: "role",
           type: "multiselect",
           items: [
-            { label: "Admin", value: "admin" },
-            { label: "Casual", value: "casual" },
-            { label: "Member", value: "member" },
+            ...Object.values(MembershipType).map((role) => ({
+              label: role,
+              value: toKebabCase(role) as Lowercase<string>,
+            })),
           ],
           label: "All",
           onChange: () => {
@@ -66,14 +60,24 @@ export const AdminTable = memo(({ data }: { data: UserData[] }) => {
           key: "university",
           type: "multiselect",
           items: [
-            { label: "University of Auckland", value: "university-of-auckland" },
-            {
-              label: "Auckland University of Technology",
-              value: "auckland-university-of-technology",
-            },
-            { label: "Massey University", value: "massey-university" },
+            ...Object.values(University).map((university) => ({
+              label: university,
+              value: toKebabCase(university) as Lowercase<string>,
+            })),
           ],
           label: "University",
+          w: "md",
+        },
+        {
+          key: "level",
+          type: "multiselect",
+          items: [
+            ...Object.values(PlayLevel).map((level) => ({
+              label: level,
+              value: toKebabCase(level) as Lowercase<string>,
+            })),
+          ],
+          label: "Play Level",
           w: "md",
         },
       ]}

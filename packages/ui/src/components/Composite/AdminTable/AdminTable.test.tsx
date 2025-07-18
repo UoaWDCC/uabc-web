@@ -1,3 +1,4 @@
+import { PlayLevel } from "@repo/shared"
 import { isValidElement } from "react"
 import { AdminTable } from "./AdminTable"
 
@@ -10,6 +11,27 @@ const mockData = [
     remaining: "10",
     university: "University of Auckland",
     joined: "2021-01-01",
+    level: PlayLevel.beginner,
+  },
+  {
+    id: "2",
+    name: "Bob Smith",
+    email: "bob@example.com",
+    role: "member",
+    remaining: "10",
+    university: "University of Auckland",
+    joined: "2021-01-01",
+    level: PlayLevel.advanced,
+  },
+  {
+    id: "3",
+    name: "Charlie Smith",
+    email: "charlie@example.com",
+    role: "member",
+    remaining: "10",
+    university: "University of Auckland",
+    joined: "2021-01-01",
+    level: PlayLevel.intermediate,
   },
 ]
 

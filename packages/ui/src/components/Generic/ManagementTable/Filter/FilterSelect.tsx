@@ -47,6 +47,7 @@ export const FilterSelect = <
           aria-label={label}
           items={[{ label: "All", value: "all" as SelectItem["value"] }, ...items]}
           onChange={onChange}
+          placeholder={label}
           size="sm"
           value={value}
           {...props}
