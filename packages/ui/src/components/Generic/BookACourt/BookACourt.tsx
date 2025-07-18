@@ -1,21 +1,15 @@
 import { PlayLevel } from "@repo/shared/types"
 import { Button } from "@repo/ui/components/Primitive"
-import { ButtonGroup, For, Spacer, Text, VStack } from "@yamada-ui/react"
-import Link from "next/link"
-
-export interface BookACourtProps {
-  guidelineOnClick: () => void
-}
+import { ButtonGroup, For, Link, Spacer, Text, VStack } from "@yamada-ui/react"
+import NextLink from "next/link"
 
 /**
  * A component for choosing a play level when booking a court.
  *
- * @param guidelineOnClick The function to call when the guideline link is clicked.
  * @returns A component that displays buttons for different play levels.
- * @example
- * <BookACourt guidelineOnClick={onOpen} />
+ * @example <BookACourt />
  */
-export const BookACourt = ({ guidelineOnClick }: BookACourtProps) => {
+export const BookACourt = () => {
   return (
     <VStack alignItems="center" flex={1} gap={{ base: "md", md: "lg" }}>
       <Text color="muted" fontSize={{ base: "lg", md: "xl" }}>
@@ -31,7 +25,7 @@ export const BookACourt = ({ guidelineOnClick }: BookACourtProps) => {
         <For each={Object.values(PlayLevel)}>
           {(level) => (
             <Button
-              as={Link}
+              as={NextLink}
               colorScheme="primary"
               // TODO: ensure this is the correct path for booking
               href={`/book?playLevel=${level}`}
@@ -45,16 +39,17 @@ export const BookACourt = ({ guidelineOnClick }: BookACourtProps) => {
         </For>
       </ButtonGroup>
       <Spacer />
-      <Button
+      <Link
         color="muted"
         fontSize={{ base: "lg", md: "xl" }}
         fontWeight="medium"
-        onClick={guidelineOnClick}
+        // TODO: ensure this is the correct path for tos
+        href="/terms-of-service"
         textDecoration="underline"
         variant="link"
       >
         Check-In Form Guidelines
-      </Button>
+      </Link>
     </VStack>
   )
 }
