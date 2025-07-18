@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Heading,
   IconButton,
@@ -125,7 +127,6 @@ export const BookingCard = memo(
         flexDirection="row"
         h="fit-content"
         layerStyle="gradientBorder"
-        maxW="xl"
         overflow="hidden"
         px="md"
         py="5"
