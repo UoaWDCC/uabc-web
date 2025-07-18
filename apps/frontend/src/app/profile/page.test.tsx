@@ -27,10 +27,8 @@ describe("<Profile />", () => {
 
   it("should render the user panel and profile details properly given the user is casualUserMock", async () => {
     render(await Profile(), { wrapper: wrapper })
-    expect(
-      screen.getByText(`${casualUserMock.firstName} ${casualUserMock.lastName}`),
-    ).toBeInTheDocument()
-    expect(screen.getByText(casualUserMock.role)).toBeInTheDocument()
+    expect(screen.getByText("straight zhao")).toBeInTheDocument()
+    expect(screen.getByText("Casual")).toBeInTheDocument()
     expect(screen.getByText(casualUserMock.phoneNumber ?? "--")).toBeInTheDocument()
     expect(
       screen.getByText(`Sessions left: ${casualUserMock.remainingSessions ?? 0}`),

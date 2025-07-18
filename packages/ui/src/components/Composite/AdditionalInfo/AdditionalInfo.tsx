@@ -5,7 +5,6 @@ import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"
 import { InputType } from "@repo/ui/components/Primitive"
 import { useMutation } from "@tanstack/react-query"
-import { toKebabCase, toTitleCase } from "@yamada-ui/react"
 
 /**
  * The props for the AdditionalInfo component.
