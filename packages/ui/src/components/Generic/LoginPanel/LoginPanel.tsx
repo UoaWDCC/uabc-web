@@ -143,7 +143,6 @@ export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
           aria-label="Google"
           as="a"
           colorScheme="secondary"
-          data-testid="google-logo"
           fullRounded
           href={googleHref}
           variant="gradient"

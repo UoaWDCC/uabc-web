@@ -57,7 +57,7 @@ describe("<LoginPanel />", () => {
     const googleUrl = "/"
     render(<LoginPanel googleHref={googleUrl} />)
 
-    const googleIconButton = screen.getByTestId("google-logo")
+    const googleIconButton = screen.getByLabelText("Google")
     expect(googleIconButton).toHaveAttribute("href", googleUrl)
   })
 })
