@@ -8,37 +8,17 @@ describe("globals/tos", () => {
 
       expect(json).toStrictEqual({
         data: {
-          title: "Terms of Service",
-          subtitle: "Want to play? Read here!",
           checkInRules: {
             title: "Check-In Rules",
-            rules: {
-              root: {
-                type: "root",
-                children: [],
-              },
-            },
-          },
-          sessionRules: {
-            title: "At a session? Follow these!",
-            rules: {
-              root: {
-                type: "root",
-                children: [],
-              },
-            },
           },
           disclaimer: {
             title: "Disclaimer",
-            disclaimer: {
-              root: {
-                type: "root",
-                children: [],
-              },
-            },
           },
-          updatedAt: null,
-          createdAt: null,
+          sessionRules: {
+            title: "At a session? Follow these!",
+          },
+          subtitle: "Want to play? Read here!",
+          title: "Terms of Service",
         },
       })
     })
