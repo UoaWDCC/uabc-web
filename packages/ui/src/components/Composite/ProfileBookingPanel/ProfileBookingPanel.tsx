@@ -17,7 +17,7 @@ export interface ProfileBookingPanelProps extends StackProps {
   /**
    * Props for the {@link BookingCard} components
    */
-  bookingCardProps: BookingCardProps
+  bookingCardProps?: BookingCardProps
 }
 
 /**

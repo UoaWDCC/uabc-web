@@ -27,9 +27,11 @@ import {
   VStack,
 } from "@yamada-ui/react"
 import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone"
 import { memo } from "react"
 
+dayjs.extend(utc)
 dayjs.extend(timezone)
 
 const NZ_TIMEZONE = "Pacific/Auckland"
