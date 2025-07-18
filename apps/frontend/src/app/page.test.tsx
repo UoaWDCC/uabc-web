@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { StatusCodes } from "http-status-codes"
 import { getFaq } from "@/services/cms/faq/FaqService"
 import { render, screen, waitFor } from "@/test-config/test-utils"
 import Home from "./page"
@@ -43,6 +44,7 @@ describe("<Home />", () => {
         },
       },
       isError: false,
+      status: StatusCodes.OK,
     })
     vi.clearAllMocks()
   })
