@@ -28,9 +28,9 @@ describe("<TermsOfServiceContent />", () => {
     })
 
     expect(
-      screen.getByText("Failed to load Terms of Service. Please contact the administrator."),
+      await screen.findByText("Failed to load Terms of Service. Please contact the administrator."),
     ).toBeInTheDocument()
-    expect(screen.getByText("Terms of Service")).toBeInTheDocument()
+    expect(await screen.findByText("Terms of Service")).toBeInTheDocument()
   })
 
   it("should render all sections with correct content", async () => {
@@ -63,12 +63,14 @@ describe("<TermsOfServiceContent />", () => {
       render(<TermsOfServiceContent />)
     })
 
-    expect(screen.getByRole("heading", { name: "Terms of Service Title" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Subtitle for TOS" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Check-In Rules" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Session Rules" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Disclaimer" })).toBeInTheDocument()
-    expect(screen.getByText("Plain text")).toBeInTheDocument()
-    expect(screen.getByText("Main Heading")).toBeInTheDocument()
+    expect(
+      await screen.findByRole("heading", { name: "Terms of Service Title" }),
+    ).toBeInTheDocument()
+    expect(await screen.findByRole("heading", { name: "Subtitle for TOS" })).toBeInTheDocument()
+    expect(await screen.findByRole("heading", { name: "Check-In Rules" })).toBeInTheDocument()
+    expect(await screen.findByRole("heading", { name: "Session Rules" })).toBeInTheDocument()
+    expect(await screen.findByRole("heading", { name: "Disclaimer" })).toBeInTheDocument()
+    expect(await screen.findByText("Plain text")).toBeInTheDocument()
+    expect(await screen.findByText("Main Heading")).toBeInTheDocument()
   })
 })
