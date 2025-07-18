@@ -1,4 +1,5 @@
 import { basicEditorState, complexEditorState } from "@repo/ui/test-config/mocks/RichText.mock"
+import { isValidElement } from "react"
 import { act } from "react-dom/test-utils"
 import { getTos } from "@/services/cms/tos/TosService"
 import { render, screen } from "@/test-config/test-utils"
@@ -15,8 +16,9 @@ describe("<TermsOfServiceContent />", () => {
     vi.clearAllMocks()
   })
 
-  it("should display loading state initially", () => {
+  it("should be valid react component", () => {
     expect(TermsOfServiceContent).toBeDefined()
+    expect(isValidElement(<TermsOfServiceContent />)).toBe(true)
   })
 
   it("should display error state if no data", async () => {
