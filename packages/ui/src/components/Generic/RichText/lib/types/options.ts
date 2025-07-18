@@ -4,8 +4,8 @@ import type {
   HeadingProps,
   ImageProps,
   LinkProps,
-  ListProps,
   ListItemProps,
+  ListProps,
   TextProps,
 } from "@yamada-ui/react"
 import type React from "react"
