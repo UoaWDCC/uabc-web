@@ -8,6 +8,7 @@ import AuthService from "./AuthService"
  * @returns The authentication response.
  */
 export async function handleLogin(loginDetails: LoginDetails): Promise<LoginResponse> {
+  "use client"
   try {
     const response = await AuthService.login(loginDetails.email, loginDetails.password)
     return { data: response?.data, message: response?.message, error: response?.error }
