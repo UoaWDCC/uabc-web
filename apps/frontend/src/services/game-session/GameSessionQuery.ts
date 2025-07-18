@@ -13,9 +13,7 @@ const GameSessionQuery = {
   useGetAllGameSessions: (query: PaginationQuery) => {
     return useQuery({
       queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY],
-      queryFn: () => {
-        return GameSessionService.getAllGameSessions(query)
-      },
+      queryFn: () => GameSessionService.getAllGameSessions(query),
     })
   },
 } as const
