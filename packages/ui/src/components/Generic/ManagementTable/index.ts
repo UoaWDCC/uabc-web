@@ -1,5 +1,5 @@
+export { ManagementTable, type ManagementTableProps } from "./ManagementTable"
 export { useManagementTable } from "./MemberManagementContext"
 export { PagingTable } from "./PagingTable"
 export { SkeletonTable } from "./SkeletonTable"
-export { ManagementTable, type ManagementTableProps } from "./Table"
 export type { ColumnConfig } from "./types"

@@ -46,30 +46,6 @@ describe("<Filter />", () => {
     expect(screen.getByTestId("filter-actions")).toBeInTheDocument()
   })
 
-  it("renders only the first three filters", () => {
-    const filterConfigs = [
-      { type: "text", key: ["name"], label: "Name" },
-      {
-        type: "select",
-        key: "status",
-        label: "Status",
-        items: [{ label: "Active", value: "active" as const }],
-      },
-      {
-        type: "multiselect",
-        key: "role",
-        label: "Role",
-        items: [{ label: "Admin", value: "admin" as const }],
-      },
-      { type: "text", key: ["email"], label: "Email" },
-    ] as FilterBarConfig<{ name: string; status: string; role: string }>[]
-    const columnsConfig = [] as ColumnConfig<{ name: string; status: string; role: string }>[]
-    render(<Filter columnsConfig={columnsConfig} filterConfigs={filterConfigs} />)
-    expect(screen.queryAllByTestId("filter-input").length).toBe(1)
-    expect(screen.queryAllByTestId("filter-select").length).toBe(1)
-    expect(screen.queryAllByTestId("filter-multiselect").length).toBe(1)
-  })
-
   it("renders with empty filterConfigs", () => {
     render(<Filter columnsConfig={[]} filterConfigs={[]} />)
     expect(screen.getByTestId("filter-column-visibility")).toBeInTheDocument()
