@@ -110,7 +110,6 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
   title,
   description,
   onConfirm,
-
   startTime,
   endTime,
   memberCapacity,
@@ -124,7 +123,6 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
     handleSubmit,
     reset,
     watch,
-
     formState: { errors, isSubmitting },
   } = useForm<FormData>()
 
@@ -207,6 +205,9 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
               position="relative"
               w="full"
             >
+              <Label color={["gray.700", "gray.300"]} fontSize="sm">
+                Select Weekday
+              </Label>
               <Controller
                 control={control}
                 name="weekDay"

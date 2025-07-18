@@ -39,5 +39,5 @@ export enum University {
 }
 export enum SessionType {
   ongoing = "Ongoing",
-  oneOff = "One-off",
+  oneOff = "One off",
 }
