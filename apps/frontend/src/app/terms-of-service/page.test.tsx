@@ -7,6 +7,14 @@ vi.mock("@/services/cms/tos/TosService", () => ({
   getTos: vi.fn(),
 }))
 
+vi.mock("react", async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    use: vi.fn(),
+  }
+})
+
 const mockedGetTos = vi.mocked(getTos)
 
 describe("<TermsOfServiceContent />", () => {
