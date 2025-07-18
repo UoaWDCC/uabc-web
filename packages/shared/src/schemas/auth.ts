@@ -254,11 +254,7 @@ export const LoginResponseSchema = CommonResponse.extend({
   data: z.string().optional(),
 })
 
-export type JWTEncryptedUser = z.infer<typeof JWTEncryptedUserSchema>
-export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>
-export type RegisterPanelDetails = z.infer<typeof RegisterPanelDetailsSchema>
 export type BasicInfoForm1Values = z.infer<typeof BasicInfoForm1Schema>
 export type BasicInfoForm2Values = z.infer<typeof BasicInfoForm2Schema>
 export type UniversityInfoFormValues = z.infer<typeof UniversityInfoFormSchema>
 export type AdditionalInfoFormValues = z.infer<typeof AdditionalInfoFormSchema>
-export type LoginDetails = z.infer<typeof LoginDetailsSchema>
