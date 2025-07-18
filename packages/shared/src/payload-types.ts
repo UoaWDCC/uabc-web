@@ -53,81 +53,6 @@ export type LinkArray = {
   id?: string | null;
 }[];
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CheckInRule".
- */
-export type CheckInRule = {
-  /**
-   * A check-in rule.
-   */
-  rule: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-}[];
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "SessionRule".
- */
-export type SessionRule = {
-  /**
-   * A session rule.
-   */
-  rule: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-}[];
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "DisclaimerItem".
- */
-export type DisclaimerItem = {
-  /**
-   * A disclaimer item.
-   */
-  item: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-}[];
-/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -223,13 +148,13 @@ export interface Config {
     faq: Faq;
     footer: Footer;
     navbar: Navbar;
-    tos: To;
+    termsOfService: TermsOfService;
   };
   globalsSelect: {
     faq: FaqSelect<false> | FaqSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
-    tos: TosSelect<false> | TosSelect<true>;
+    termsOfService: TermsOfServiceSelect<false> | TermsOfServiceSelect<true>;
   };
   locale: null;
   user: Admin & {
@@ -967,25 +892,12 @@ export interface Navbar {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tos".
+ * via the `definition` "termsOfService".
  */
-export interface To {
+export interface TermsOfService {
   id: string;
   /**
    * The title for the Terms of Service section.
-   */
-  title: string;
-  codeOfConduct: CodeOfConduct;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeOfConduct".
- */
-export interface CodeOfConduct {
-  /**
-   * The title for the Code of Conduct section.
    */
   title: string;
   /**
@@ -995,6 +907,8 @@ export interface CodeOfConduct {
   checkInRules: CheckInRules;
   sessionRules: SessionRules;
   disclaimer: Disclaimer;
+  updatedAt?: string | null;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1005,7 +919,24 @@ export interface CheckInRules {
    * The title for the check-in rules section.
    */
   title: string;
-  rules: CheckInRule;
+  /**
+   * The rules for the check-in.
+   */
+  rules: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1016,7 +947,24 @@ export interface SessionRules {
    * The title for the session rules section.
    */
   title: string;
-  rules: SessionRule;
+  /**
+   * The rules for the session.
+   */
+  rules: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1027,7 +975,24 @@ export interface Disclaimer {
    * The title for the disclaimer section.
    */
   title: string;
-  items: DisclaimerItem;
+  /**
+   * The disclaimer text.
+   */
+  disclaimer: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1098,25 +1063,17 @@ export interface NavbarSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tos_select".
+ * via the `definition` "termsOfService_select".
  */
-export interface TosSelect<T extends boolean = true> {
-  title?: T;
-  codeOfConduct?: T | CodeOfConductSelect<T>;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeOfConduct_select".
- */
-export interface CodeOfConductSelect<T extends boolean = true> {
+export interface TermsOfServiceSelect<T extends boolean = true> {
   title?: T;
   subtitle?: T;
   checkInRules?: T | CheckInRulesSelect<T>;
   sessionRules?: T | SessionRulesSelect<T>;
   disclaimer?: T | DisclaimerSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1124,15 +1081,7 @@ export interface CodeOfConductSelect<T extends boolean = true> {
  */
 export interface CheckInRulesSelect<T extends boolean = true> {
   title?: T;
-  rules?: T | CheckInRuleSelect<T>;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CheckInRule_select".
- */
-export interface CheckInRuleSelect<T extends boolean = true> {
-  rule?: T;
-  id?: T;
+  rules?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1140,15 +1089,7 @@ export interface CheckInRuleSelect<T extends boolean = true> {
  */
 export interface SessionRulesSelect<T extends boolean = true> {
   title?: T;
-  rules?: T | SessionRuleSelect<T>;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "SessionRule_select".
- */
-export interface SessionRuleSelect<T extends boolean = true> {
-  rule?: T;
-  id?: T;
+  rules?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1156,15 +1097,7 @@ export interface SessionRuleSelect<T extends boolean = true> {
  */
 export interface DisclaimerSelect<T extends boolean = true> {
   title?: T;
-  items?: T | DisclaimerItemSelect<T>;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "DisclaimerItem_select".
- */
-export interface DisclaimerItemSelect<T extends boolean = true> {
-  item?: T;
-  id?: T;
+  disclaimer?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -1,7 +1,7 @@
 import { z } from "zod"
-import type { Footer } from "../payload-types"
-import { LinkGroupSchema } from "./link"
-import { MediaSchema } from "./media"
+import type { Footer } from "../../payload-types"
+import { LinkGroupSchema } from "../link"
+import { MediaSchema } from "../media"
 
 export const FooterSchema = z.object({
   id: z.string(),
