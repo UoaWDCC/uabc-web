@@ -22,11 +22,7 @@ describe("globals/tos", () => {
             },
             disclaimer: {
               title: "Disclaimer",
-              items: [
-                {
-                  item: "UABC does not accept liability for any injuries or lost property. Members understand the potential risks of attending sessions and are liable for all consequences.",
-                },
-              ],
+              items: [],
             },
           },
         },
