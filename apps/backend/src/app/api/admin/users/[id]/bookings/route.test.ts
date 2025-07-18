@@ -1,0 +1,65 @@
+import BookingDataService from "@/data-layer/services/BookingDataService"
+import { createMockNextRequest } from "@/test-config/backend-utils"
+import { adminToken, casualToken } from "@/test-config/vitest.setup"
+import { AUTH_COOKIE_NAME } from "@repo/shared"
+import { cookies } from "next/headers"
+import { GET } from "../route"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
+import { admin } from "googleapis/build/src/apis/admin"
+import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
+import { CASUAL_USER_UID, casualUserMock } from "@repo/shared/mocks"
+
+describe("/api/admin/users/[id]/bookings", async () => {
+    const cookieStore = await cookies()
+    const bookingDataService = new BookingDataService()
+    
+    describe("GET", () => {
+        it("should return all bookings for a specific user", async () => {
+            cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+            const booking1 = await bookingDataService.createBooking({
+                ...bookingCreateMock,
+                user: casualUserMock,
+            })
+            const booking2 = await bookingDataService.createBooking({
+                ...bookingCreateMock,
+                user: casualUserMock,
+            })
+
+            const response = await GET(createMockNextRequest(`/api/admin/users/${CASUAL_USER_UID}/bookings`), {
+                params: Promise.resolve({ id: CASUAL_USER_UID }),
+            })
+            const json = await response.json()
+
+            expect(response.status).toBe(StatusCodes.OK)
+            expect(json.data).toEqual(expect.arrayContaining([booking1, booking2]))
+        })
+
+        it("should return empty if there are no bookings for the specific user"), async () => {
+            cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+            const response = await GET(createMockNextRequest(`/api/admin/users/${CASUAL_USER_UID}/bookings`), {
+                params: Promise.resolve({ id: "CASUAL_USER_UID" }),
+            })
+            const json = await response.json()
+
+            expect(response.status).toBe(StatusCodes.OK)
+            expect(json.data).toStrictEqual([])
+        }
+
+        it("should return 500 and manage any unexpected errors "), async () => {
+            cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+            const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+            vi.spyOn(BookingDataService.prototype, "getAllBookingsByUserId").mockRejectedValueOnce(new Error("Database error"))
+
+            const response = await GET(createMockNextRequest("/api/admin/users/placeholder-id/bookings"), {
+                params: Promise.resolve({ id: "placeholder-id" }),
+            })
+            const json = await response.json()
+
+            expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+            expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+            expect(consoleErrorSpy).toHaveBeenCalled()
+        }
+    })
+})
