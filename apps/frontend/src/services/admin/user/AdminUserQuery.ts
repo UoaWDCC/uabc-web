@@ -13,7 +13,10 @@ const AdminUserQuery = {
   useGetAllUsers: (query: PaginationQuery) => {
     return useQuery({
       queryKey: [QueryKeys.USER_QUERY_KEY],
-      queryFn: () => AdminUserService.getAllUsers(query),
+      queryFn: async () => {
+        const response = await AdminUserService.getAllUsers(query)
+        return response?.data ?? []
+      },
     })
   },
 } as const

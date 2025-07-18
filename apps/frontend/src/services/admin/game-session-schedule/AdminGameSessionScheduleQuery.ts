@@ -13,7 +13,10 @@ const AdminGameSessionScheduleQuery = {
   useGetAllGameSessionSchedules: (query: PaginationQuery) => {
     return useQuery({
       queryKey: [QueryKeys.GAME_SESSION_SCHEDULE_QUERY_KEY],
-      queryFn: () => AdminGameSessionScheduleService.getAllGameSessionSchedules(query),
+      queryFn: async () => {
+        const response = await AdminGameSessionScheduleService.getAllGameSessionSchedules(query)
+        return response?.data ?? []
+      },
     })
   },
 } as const
