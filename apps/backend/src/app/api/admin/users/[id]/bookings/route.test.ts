@@ -42,7 +42,7 @@ describe("/api/admin/users/[id]/bookings", async () => {
       const response = await GET(
         createMockNextRequest(`/api/admin/users/${CASUAL_USER_UID}/bookings`),
         {
-          params: Promise.resolve({ id: "CASUAL_USER_UID" }),
+          params: Promise.resolve({ id: CASUAL_USER_UID }),
         },
       )
       const json = await response.json()
@@ -70,6 +70,9 @@ describe("/api/admin/users/[id]/bookings", async () => {
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(consoleErrorSpy).toHaveBeenCalled()
+    
+      consoleErrorSpy.mockRestore()
+
     })
   })
 })
