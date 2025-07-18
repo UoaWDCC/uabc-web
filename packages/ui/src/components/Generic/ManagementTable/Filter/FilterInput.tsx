@@ -11,7 +11,7 @@ import type { FieldFiltersFromConfig, FilterBarConfig, FilterInputProps } from "
 export function FilterInput<
   TData,
   TConfigs extends readonly FilterBarConfig<TData>[] = FilterBarConfig<TData>[],
->({ filterKey, label, placeholder, searchKeys }: FilterInputProps<TData, TConfigs>) {
+>({ filterKey, label, placeholder, searchKeys, ...props }: FilterInputProps<TData, TConfigs>) {
   const {
     fieldFilters,
     setFieldFilter,
@@ -71,7 +71,9 @@ export function FilterInput<
           }}
           onChange={(ev) => onChange(ev.target.value)}
           placeholder={placeholder || label || "Filter..."}
+          size="md"
           value={value}
+          {...props}
         />
       )}
     </BaseFilterControl>
