@@ -1,5 +1,4 @@
 import { LoginResponseSchema } from "@repo/shared"
-import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
 
 const AuthService = {
@@ -11,12 +10,11 @@ const AuthService = {
    * @returns The user token if login is successful
    */
   login: async (email: string, password: string) => {
-    const { data, error, status } = await apiClient.post(
+    const { data } = await apiClient.post(
       "api/auth/login",
       { email, password },
       LoginResponseSchema,
     )
-    if (status !== StatusCodes.OK) throw error
     return data
   },
 } as const
