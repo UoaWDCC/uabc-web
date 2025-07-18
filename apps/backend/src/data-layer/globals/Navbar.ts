@@ -72,7 +72,7 @@ export const Navbar: GlobalConfig = {
           name: "label",
           type: "text",
           required: true,
-          defaultValue: "Sign in",
+          defaultValue: "Log in",
           admin: {
             description: "The text displayed for the sign in button.",
           },
@@ -81,7 +81,7 @@ export const Navbar: GlobalConfig = {
           name: "url",
           type: "text",
           required: true,
-          defaultValue: "/auth/sign-in",
+          defaultValue: "/auth/login",
           admin: {
             description: "The URL the sign in button points to.",
           },
