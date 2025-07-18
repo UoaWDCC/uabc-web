@@ -6,6 +6,7 @@ export enum QueryKeys {
   FOOTER_QUERY_KEY = "footer",
   NAVIGATION_BAR_QUERY_KEY = "navbar",
   GAME_SESSION_QUERY_KEY = "gameSession",
+  GAME_SESSION_SCHEDULE_QUERY_KEY = "gameSessionSchedule",
   USER_QUERY_KEY = "user",
   SEMESTER_QUERY_KEY = "semester",
 }
