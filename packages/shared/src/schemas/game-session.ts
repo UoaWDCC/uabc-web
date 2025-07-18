@@ -6,7 +6,10 @@ import { SemesterSchema } from "./semester"
 
 export const GameSessionSchema = z.object({
   id: z.string(),
-  gameSessionSchedule: z.union([z.string(), z.null(), GameSessionScheduleSchema]),
+  gameSessionSchedule: z
+    .union([z.string(), z.null(), GameSessionScheduleSchema])
+    .optional()
+    .nullable(),
   semester: z.union([z.string(), SemesterSchema]),
   startTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   endTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
@@ -30,5 +33,16 @@ export const GetGameSessionResponseSchema = z.object({
 })
 
 export const GetAllGameSessionsResponseSchema = z.object({
-  data: z.array(GameSessionSchema),
+  data: z.object({
+    docs: z.array(GameSessionSchema),
+    totalDocs: z.number(),
+    limit: z.number(),
+    totalPages: z.number(),
+    page: z.number(),
+    pagingCounter: z.number(),
+    hasPrevPage: z.boolean(),
+    hasNextPage: z.boolean(),
+    prevPage: z.number().nullable(),
+    nextPage: z.number().nullable(),
+  }),
 })

@@ -30,7 +30,18 @@ export const UpdateUserRequestSchema =
   CreateUserRequestSchema.partial() satisfies z.ZodType<EditUserData>
 
 export const GetAllUsersResponseSchema = z.object({
-  data: z.array(UserSchema),
+  data: z.object({
+    docs: z.array(UserSchema),
+    totalDocs: z.number(),
+    limit: z.number(),
+    totalPages: z.number(),
+    page: z.number(),
+    pagingCounter: z.number(),
+    hasPrevPage: z.boolean(),
+    hasNextPage: z.boolean(),
+    prevPage: z.number().nullable(),
+    nextPage: z.number().nullable(),
+  }),
 })
 
 export const GetUserResponseSchema = z.object({

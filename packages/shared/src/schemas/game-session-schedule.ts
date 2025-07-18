@@ -28,7 +28,18 @@ export const CreateGameSessionScheduleRequestSchema = GameSessionScheduleSchema.
 }) satisfies z.ZodType<CreateGameSessionScheduleData>
 
 export const GetAllGameSessionSchedulesResponseSchema = z.object({
-  data: z.array(GameSessionScheduleSchema),
+  data: z.object({
+    docs: z.array(GameSessionScheduleSchema).optional().nullable(),
+    totalDocs: z.number(),
+    limit: z.number(),
+    totalPages: z.number(),
+    page: z.number(),
+    pagingCounter: z.number(),
+    hasPrevPage: z.boolean(),
+    hasNextPage: z.boolean(),
+    prevPage: z.number().nullable(),
+    nextPage: z.number().nullable(),
+  }),
 })
 
 export const GetGameSessionScheduleResponseSchema = z.object({
