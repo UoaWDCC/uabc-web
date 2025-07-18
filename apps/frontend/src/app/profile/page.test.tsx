@@ -1,5 +1,5 @@
 import { bookingsMock, casualUserMock } from "@repo/shared/mocks"
-import { render } from "@repo/ui/test-utils"
+import { render, screen } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import Profile from "./page"
 
@@ -27,7 +27,9 @@ describe("<Profile />", () => {
 
   it("should render the user panel and profile details properly given the user is casualUserMock", async () => {
     const { getAllByText } = render(await Profile(), { wrapper: wrapper })
-    expect(`${casualUserMock.firstName} ${casualUserMock.lastName}`).toBeInTheDocument()
+    expect(
+      screen.getByText(`${casualUserMock.firstName} ${casualUserMock.lastName}`),
+    ).toBeInTheDocument()
     expect(casualUserMock.role).toBeInTheDocument()
     expect(casualUserMock.phoneNumber ?? "--").toBeInTheDocument()
     expect(`Sessions left: ${casualUserMock.remainingSessions ?? 0}`).toBeInTheDocument()
@@ -39,13 +41,13 @@ describe("<Profile />", () => {
 
   it("should render the profile booking panel", async () => {
     const { getAllByTestId } = render(await Profile(), { wrapper: wrapper })
-    expect("Your Bookings").toBeInTheDocument()
+    expect(screen.getByText("Your Bookings")).toBeInTheDocument()
     expect(getAllByTestId("booking-card")).toHaveLength(bookingsMock.length)
   })
 
   it("should render the additional info properly given the user is casualUserMock", async () => {
     render(await Profile(), { wrapper: wrapper })
-    expect("Additional Info").toBeInTheDocument()
+    expect(screen.getByText("Additional Info")).toBeInTheDocument()
     expect(casualUserMock.gender).toBeInTheDocument()
     expect(casualUserMock.playLevel).toBeInTheDocument()
     expect(casualUserMock.dietaryRequirements).toBeInTheDocument()
