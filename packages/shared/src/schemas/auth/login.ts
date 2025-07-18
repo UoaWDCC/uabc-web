@@ -1,4 +1,5 @@
 import z from "zod"
+import { CommonResponse } from "../response"
 import { UserSchema } from "../user"
 
 export const JWTEncryptedUserSchema = z.object({
@@ -42,4 +43,32 @@ export const UserInfoResponseSchema = z.object({
    * @example aucklanduni.ac.nz
    */
   hd: z.string(),
+})
+
+export const LoginRequestBodySchema = z.object({
+  /**
+   * The user's email address
+   * @example straightzhao@gmail.com
+   */
+  email: z.string().min(1, "Field is required").email(),
+  /**
+   * The user's password
+   * @example 12345678
+   */
+  password: z.string().min(1, "Field is required"),
+})
+
+export const LoginResponseSchema = CommonResponse.extend({
+  /**
+   * The user's JWT token
+   */
+  data: z.string().optional(),
+})
+
+export const LoginFormDataSchema = LoginRequestBodySchema.extend({
+  /**
+   * Whether to remember the user's login session
+   * @example true
+   */
+  rememberMe: z.boolean(),
 })

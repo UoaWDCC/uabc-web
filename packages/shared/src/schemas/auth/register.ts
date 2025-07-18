@@ -1,8 +1,6 @@
 import z from "zod"
 import { Gender, PlayLevel, University } from "../../types"
-import { CommonResponse } from "../response"
 
-// TODO: sort out discrepancy between this schema and RegisterPanelDetailsSchema
 export const RegisterDetailsSchema = z.object({
   /**
    * The user's first name
@@ -32,7 +30,7 @@ export const RegisterDetailsSchema = z.object({
     .regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/), // Special characters
 })
 
-export const RegisterPanelDetailsSchema = z
+export const RegisterFormDataSchema = z
   .object({
     /**
      * The user's email address
@@ -163,32 +161,4 @@ export const AdditionalInfoFormSchema = z.object({
    * Dietary requirements of the new user
    */
   dietaryRequirements: z.string(),
-})
-
-export const LoginRequestBodySchema = z.object({
-  /**
-   * The user's email address
-   * @example straightzhao@gmail.com
-   */
-  email: z.string().min(1, "Field is required").email(),
-  /**
-   * The user's password
-   * @example 12345678
-   */
-  password: z.string().min(1, "Field is required"),
-})
-
-export const LoginFormDataSchema = LoginRequestBodySchema.extend({
-  /**
-   * Whether to remember the user's login session
-   * @example true
-   */
-  rememberMe: z.boolean(),
-})
-
-export const LoginResponseSchema = CommonResponse.extend({
-  /**
-   * The user's JWT token
-   */
-  data: z.string().optional(),
 })
