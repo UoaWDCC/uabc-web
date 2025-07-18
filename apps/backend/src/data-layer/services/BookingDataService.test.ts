@@ -1,4 +1,5 @@
 import type { EditBookingData } from "@repo/shared"
+import { casualUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import { payload } from "../adapters/Payload"
 import BookingDataService from "./BookingDataService"
@@ -30,6 +31,31 @@ describe("bookingDataService", () => {
       await expect(() =>
         bookingDataService.getBookingById("Not a Booking ID"),
       ).rejects.toThrowError("Not Found")
+    })
+  })
+
+  describe("getAllBookingsByUserId", () => {
+    it("should find all bookings by userID", async () => {
+      const createdBooking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: casualUserMock,
+      })
+      const createdBooking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: casualUserMock,
+      })
+
+      const fetchedBookings = await bookingDataService.getAllBookingsByUserId(casualUserMock.id)
+
+      expect(fetchedBookings.length).toStrictEqual(2)
+      expect(fetchedBookings).toStrictEqual(
+        expect.arrayContaining([createdBooking1, createdBooking2]),
+      )
+    })
+
+    it("should return null if there are no bookings by userID", async () => {
+      const fetchedBooking = await bookingDataService.getAllBookingsByUserId("")
+      expect(fetchedBooking).rejects.toThrow("Not Found")
     })
   })
 
