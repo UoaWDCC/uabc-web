@@ -27,8 +27,8 @@ import {
   VStack,
 } from "@yamada-ui/react"
 import dayjs from "dayjs"
-import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone"
+import utc from "dayjs/plugin/utc"
 import { memo } from "react"
 
 dayjs.extend(utc)
