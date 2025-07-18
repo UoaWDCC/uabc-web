@@ -35,8 +35,8 @@ describe("<Profile />", () => {
     ).toBeInTheDocument()
 
     expect(screen.getByText("Profile Details")).toBeInTheDocument()
-    expect(screen.getAllByText(casualUserMock.firstName)).toHaveLength(3) // found in user panel, first name and email
-    expect(screen.getByText(casualUserMock.email)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(casualUserMock.firstName)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(casualUserMock.email)).toBeInTheDocument()
   })
 
   it("should render the profile booking panel", async () => {
@@ -48,8 +48,10 @@ describe("<Profile />", () => {
   it("should render the additional info properly given the user is casualUserMock", async () => {
     render(await Profile(), { wrapper: wrapper })
     expect(screen.getByText("Additional Info")).toBeInTheDocument()
-    expect(screen.getByText("Non-binary")).toBeInTheDocument()
-    expect(screen.getByText("Beginner")).toBeInTheDocument()
-    expect(screen.getByText(casualUserMock.dietaryRequirements as string)).toBeInTheDocument()
+    expect(screen.getByDisplayValue("Non-binary")).toBeInTheDocument()
+    expect(screen.getByDisplayValue("Beginner")).toBeInTheDocument()
+    expect(
+      screen.getByDisplayValue(casualUserMock.dietaryRequirements as string),
+    ).toBeInTheDocument()
   })
 })
