@@ -50,8 +50,8 @@ describe("<Profile />", () => {
   it("should render the additional info properly given the user is casualUserMock", async () => {
     render(await Profile(), { wrapper: wrapper })
     expect(screen.getByText("Additional Info")).toBeInTheDocument()
-    expect(screen.getByText(casualUserMock.gender as string)).toBeInTheDocument()
-    expect(screen.getByText(casualUserMock.playLevel as string)).toBeInTheDocument()
+    expect(screen.getByText("Non-binary")).toBeInTheDocument()
+    expect(screen.getByText("Casual")).toBeInTheDocument()
     expect(screen.getByText(casualUserMock.dietaryRequirements as string)).toBeInTheDocument()
   })
 })
