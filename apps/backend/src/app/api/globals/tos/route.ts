@@ -8,16 +8,8 @@ export const GET = async () => {
     slug: "tos",
   })
 
-  console.log(tos)
-
-  // return NextResponse.json(
-  //   {
-  //     data: tos,
-  //   },
-  //   { status: StatusCodes.OK },
-  // )
-
   const parseResult = TosSchema.safeParse(tos)
+
   if (!parseResult.success) {
     return NextResponse.json(
       { error: "Invalid TOS data", issues: parseResult.error.issues },
