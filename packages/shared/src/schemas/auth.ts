@@ -1,6 +1,7 @@
 import z from "zod"
 import type { User } from "../payload-types"
 import { MediaSchema } from "./media"
+import { CommonResponse } from "./response"
 
 // Payload User Schema
 export const UserSchema = z.object({
@@ -132,9 +133,16 @@ export const LoginDetailsSchema = z.object({
    * @example 12345678
    */
   password: z.string().min(1, "Field is required"),
+  // /**
+  //  * Whether to remember the user's login session
+  //  * @example true
+  //  */
+  // rememberMe: z.boolean(),
+})
+
+export const LoginResponseSchema = CommonResponse.extend({
   /**
-   * Whether to remember the user's login session
-   * @example true
+   * The user's JWT token
    */
-  rememberMe: z.boolean(),
+  data: z.string().optional(),
 })
