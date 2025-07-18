@@ -36,8 +36,8 @@ describe("globals/navbar", () => {
             },
           ],
           rightSideSingleButton: {
-            label: "Sign in",
-            url: "/auth/sign-in",
+            label: "Log in",
+            url: "/auth/login",
           },
         },
       })
