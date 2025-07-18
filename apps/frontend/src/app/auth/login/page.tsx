@@ -1,12 +1,12 @@
-"use client"
 import { LoginPanel } from "@repo/ui/components/Generic"
 import { Container } from "@yamada-ui/react"
+import type { Metadata } from "next"
 import { handleLogin } from "@/services/auth/AuthHandlers"
 
-// export const metadata: Metadata = {
-//   title: "Login",
-//   description: "Login to your account",
-// }
+export const metadata: Metadata = {
+  title: "Login",
+  description: "Login to your account",
+}
 
 export default function login() {
   return (
