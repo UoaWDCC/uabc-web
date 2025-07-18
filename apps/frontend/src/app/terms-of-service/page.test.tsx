@@ -1,4 +1,5 @@
 import { basicEditorState, complexEditorState } from "@repo/ui/test-config/mocks/RichText.mock"
+import { act } from "react-dom/test-utils"
 import { getTos } from "@/services/cms/tos/TosService"
 import { render, screen } from "@/test-config/test-utils"
 import TermsOfServiceContent from "./page"
@@ -21,7 +22,9 @@ describe("<TermsOfServiceContent />", () => {
   it("should display error state if no data", async () => {
     mockedGetTos.mockResolvedValue({ data: undefined })
 
-    render(<TermsOfServiceContent />)
+    await act(async () => {
+      render(<TermsOfServiceContent />)
+    })
 
     expect(
       screen.getByText("Failed to load Terms of Service. Please contact the administrator."),
@@ -53,7 +56,9 @@ describe("<TermsOfServiceContent />", () => {
       },
     })
 
-    render(<TermsOfServiceContent />)
+    await act(async () => {
+      render(<TermsOfServiceContent />)
+    })
 
     expect(screen.getByRole("heading", { name: "Terms of Service Title" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Subtitle for TOS" })).toBeInTheDocument()
