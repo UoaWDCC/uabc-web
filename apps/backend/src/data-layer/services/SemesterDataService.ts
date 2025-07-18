@@ -1,6 +1,8 @@
 import type { CreateSemesterData, EditSemesterData } from "@repo/shared"
 import type { Semester } from "@repo/shared/payload-types"
 import { payload } from "@/data-layer/adapters/Payload"
+import BookingDataService from "./BookingDataService"
+import GameSessionDataService from "./GameSessionDataService"
 
 export default class SemesterDataService {
   /**
@@ -64,6 +66,13 @@ export default class SemesterDataService {
    * @returns The deleted {@link Semester} document if successful, otherwise throws a {@link NotFound} error
    */
   public async deleteSemester(id: string): Promise<Semester> {
+    const gameSessionDataService = new GameSessionDataService()
+    const bookingDataService = new BookingDataService()
+
+    await gameSessionDataService.deleteGameSessionsBySemesterId(id)
+    await gameSessionDataService.deleteGameSessionSchedulesBySemesterId(id)
+    await bookingDataService.deleteBookingsBySemesterId(id)
+
     return await payload.delete({
       collection: "semester",
       id,
