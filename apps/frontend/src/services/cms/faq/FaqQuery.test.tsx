@@ -40,7 +40,7 @@ describe("useFaq", () => {
       updatedAt: new Date().toISOString(),
     }
 
-    mockedGetFaq.mockResolvedValue({ data: { data: mockFaq }, isError: false })
+    mockedGetFaq.mockResolvedValue({ data: { data: mockFaq }, isError: false, status: 200 })
 
     const { result } = renderHook(() => useFaq(), { wrapper })
 
@@ -53,7 +53,7 @@ describe("useFaq", () => {
   })
 
   it("should return null when service returns no data", async () => {
-    mockedGetFaq.mockResolvedValue({ data: undefined, isError: false })
+    mockedGetFaq.mockResolvedValue({ data: undefined, isError: false, status: 200 })
 
     const { result } = renderHook(() => useFaq(), { wrapper })
 

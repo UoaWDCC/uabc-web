@@ -34,6 +34,7 @@ describe("<FaqSection />", async () => {
         },
       },
       isError: false,
+      status: 200,
     })
     vi.clearAllMocks()
   })
@@ -78,6 +79,7 @@ describe("<FaqSection />", async () => {
         },
       },
       isError: false,
+      status: 200,
     })
 
     render(

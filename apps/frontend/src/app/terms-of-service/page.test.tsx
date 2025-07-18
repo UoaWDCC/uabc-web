@@ -1,8 +1,7 @@
 import { basicEditorState, complexEditorState } from "@repo/ui/test-config/mocks/RichText.mock"
 import { isValidElement } from "react"
-import { act } from "react-dom/test-utils"
 import { getTos } from "@/services/cms/tos/TosService"
-import { render, screen } from "@/test-config/test-utils"
+import { act, render, screen } from "@/test-config/test-utils"
 import TermsOfServiceContent from "./page"
 
 vi.mock("@/services/cms/tos/TosService", () => ({
@@ -22,7 +21,7 @@ describe("<TermsOfServiceContent />", () => {
   })
 
   it("should display error state if no data", async () => {
-    mockedGetTos.mockResolvedValue({ data: undefined })
+    mockedGetTos.mockResolvedValue({ data: undefined, isError: true, status: 500 })
 
     await act(async () => {
       render(<TermsOfServiceContent />)
@@ -56,6 +55,8 @@ describe("<TermsOfServiceContent />", () => {
           createdAt: "2024-07-17T00:00:00.000Z",
         },
       },
+      isError: false,
+      status: 200,
     })
 
     await act(async () => {

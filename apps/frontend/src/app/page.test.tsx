@@ -43,6 +43,7 @@ describe("<Home />", () => {
         },
       },
       isError: false,
+      status: 200,
     })
     vi.clearAllMocks()
   })
