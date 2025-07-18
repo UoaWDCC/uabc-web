@@ -27,4 +27,12 @@ export const bookingsMock: Booking[] = [
     updatedAt: new Date(2025, 0, 1).toISOString(),
     createdAt: new Date(2025, 0, 1).toISOString(),
   },
+  {
+    id: "ccaf8f75ceb9f059773d4777",
+    user: casualUserMock,
+    gameSession: gameSessionMock,
+    playerLevel: "beginner",
+    updatedAt: new Date(2025, 0, 1).toISOString(),
+    createdAt: new Date(2025, 0, 1).toISOString(),
+  },
 ]

@@ -1,5 +1,5 @@
 import type { GameSession } from "../payload-types"
-import { gameSessionScheduleMock } from "./gameSessionSchedule.mock"
+import { gameSessionScheduleMock } from "./GameSessionSchedule.mock"
 import { semesterMock } from "./Semester.mock"
 
 export const gameSessionMock: GameSession = {

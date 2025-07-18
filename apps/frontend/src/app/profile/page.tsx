@@ -34,7 +34,6 @@ export default async function Profile() {
         <GridItem>
           <UserPanel
             email={user.email}
-            h="full"
             name={`${user.firstName} ${user.lastName}`}
             phone={user.phoneNumber ?? "--"}
             sessionsLeft={user.remainingSessions ?? 0}
