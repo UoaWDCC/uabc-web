@@ -10,6 +10,8 @@ describe("<About />", () => {
   it("should render the about page with under construction message", () => {
     render(<About />)
     expect(screen.getByText("Feature is Under Construction 🔧")).toBeInTheDocument()
-    expect(screen.getByText("Our team is busy working on this page.")).toBeInTheDocument()
+    expect(
+      screen.getByText("Our team is busy working on this page. Check back later!"),
+    ).toBeInTheDocument()
   })
 })
