@@ -4,7 +4,6 @@ import Events from "./page"
 describe("<Events />", () => {
   it("should export the Events component", () => {
     expect(Events).toBeDefined()
-    expect(Events).toBeTruthy()
   })
 
   it("should render the events page with under construction message", () => {

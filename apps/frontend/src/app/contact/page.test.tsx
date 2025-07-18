@@ -4,7 +4,6 @@ import Contact from "./page"
 describe("<Contact />", () => {
   it("should export the Contact component", () => {
     expect(Contact).toBeDefined()
-    expect(Contact).toBeTruthy()
   })
 
   it("should render the contact page with under construction message", () => {

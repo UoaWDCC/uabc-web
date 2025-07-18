@@ -4,7 +4,6 @@ import About from "./page"
 describe("<About />", () => {
   it("should export the About component", () => {
     expect(About).toBeDefined()
-    expect(About).toBeTruthy()
   })
 
   it("should render the about page with under construction message", () => {
