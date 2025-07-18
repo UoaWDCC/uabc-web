@@ -1,14 +1,7 @@
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import type { ReactNode } from "react"
-import { defaultFields, ProfileDetails } from "./ProfileDetails"
-
-const defaultValues = {
-  firstName: "John",
-  lastName: "Doe",
-  email: "john.doe@example.com",
-  phoneNumber: "0211234567",
-}
+import { defaultFields, defaultValues, ProfileDetails } from "./ProfileDetails"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,10 +32,10 @@ describe("<ProfileDetails />", () => {
     expect(screen.getByText("Last Name")).toBeInTheDocument()
     expect(screen.getByText("Email Address")).toBeInTheDocument()
     expect(screen.getByText("Phone Number")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("John")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("Doe")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("john.doe@example.com")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("0211234567")).toBeInTheDocument()
+    expect(screen.getByDisplayValue(defaultValues.firstName)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(defaultValues.lastName ?? "")).toBeInTheDocument()
+    expect(screen.getByDisplayValue(defaultValues.email)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(defaultValues.phoneNumber ?? "")).toBeInTheDocument()
   })
 
   it("calls onSave when saving changes", async () => {
@@ -68,12 +61,12 @@ describe("<ProfileDetails />", () => {
     await user.click(screen.getByRole("button", { name: /save changes/i }))
     await waitFor(() => {
       expect(screen.getByDisplayValue("Jane")).toBeInTheDocument()
-      expect(screen.getByDisplayValue("Doe")).toBeInTheDocument()
+      expect(screen.getByDisplayValue(defaultValues.lastName ?? "")).toBeInTheDocument()
     })
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
       firstName: "Jane",
-      lastName: "Doe",
-      phoneNumber: "0211234567",
+      lastName: defaultValues.lastName ?? "",
+      phoneNumber: defaultValues.phoneNumber ?? "",
     })
   })
 })
