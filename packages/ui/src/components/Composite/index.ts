@@ -1,3 +1,6 @@
 export * from "./AboutUsSection"
+export * from "./AdditionalInfo"
 export * from "./AdminTable"
+export * from "./BookingConfirmedPopup"
+export * from "./ProfileDetails"
 export * from "./UserPanel"
