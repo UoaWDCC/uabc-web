@@ -89,7 +89,22 @@ export const Select: ComponentMultiStyle<"Select"> = mergeMultiStyle(NativeSelec
       }
     },
   },
+
+  sizes: {
+    lg: {
+      field: {
+        "&[data-has-icon='true']": {
+          pl: "$sizes.12",
+          pr: "4",
+        },
+      },
+      icon: {
+        pr: "$sizes.2",
+      },
+    },
+  },
   defaultProps: {
+    size: "lg",
     variant: "gradient",
   },
 })({ omit: ["button", "command"] })
