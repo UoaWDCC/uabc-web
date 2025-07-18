@@ -1,6 +1,7 @@
 export * from "./AboutUsCard/AboutUsCard"
 export * from "./AdminNotAvailableCard"
 export * from "./AdminTabBar"
+export * from "./BookACourt"
 export * from "./BookingCard"
 export * from "./BookingTimesCardGroup"
 export * from "./CalendarSelectPopup"
