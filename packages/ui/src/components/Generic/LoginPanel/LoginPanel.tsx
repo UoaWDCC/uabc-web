@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { type LoginDetails, LoginDetailsSchema, type LoginResponse } from "@repo/shared"
+import { type LoginForm, LoginFormSchema, type LoginResponse } from "@repo/shared"
 import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
@@ -28,7 +28,7 @@ export interface LoginPanelProps {
   /**
    * Submit handler called when user submits the LoginPanel form.
    */
-  onSubmit?: (args: LoginDetails) => Promise<LoginResponse>
+  onSubmit?: (args: LoginForm) => Promise<LoginResponse>
   /**
    * Href for the google icon button.
    */
@@ -46,13 +46,13 @@ export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginDetails>({
-    resolver: zodResolver(LoginDetailsSchema),
+  } = useForm<LoginForm>({
+    resolver: zodResolver(LoginFormSchema),
   })
 
   const [error, setError] = useState("")
 
-  const handleLogin = async (data: LoginDetails) => {
+  const handleLogin = async (data: LoginForm) => {
     const submitData = await onSubmit?.(data)
     console.log(submitData)
     setError(submitData?.error || "")
@@ -100,12 +100,7 @@ export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
       </FormControl>
       {error && <Text color={["danger.500", "danger.400"]}>{error}</Text>}
       <HStack color="gray.100" fontSize="sm">
-        <Checkbox
-          label="Remember me"
-          size="sm"
-          textAlign="start"
-          // {...register("rememberMe")}
-        />
+        <Checkbox label="Remember me" size="sm" textAlign="start" {...register("rememberMe")} />
         <Spacer />
         <UILink
           _hover={{ color: "white" }}

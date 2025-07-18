@@ -1,7 +1,8 @@
 import type z from "zod"
 import type {
   JWTEncryptedUserSchema,
-  LoginDetailsSchema,
+  LoginFormSchema,
+  LoginRequestBodySchema,
   LoginResponseSchema,
   RegisterPanelDetailsSchema,
   UserInfoResponseSchema,
@@ -13,6 +14,7 @@ export const TOKEN_EXPIRY_TIME = "1h"
 
 export type JWTEncryptedUser = z.infer<typeof JWTEncryptedUserSchema>
 export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>
-export type LoginDetails = z.infer<typeof LoginDetailsSchema>
+export type LoginRequestBody = z.infer<typeof LoginRequestBodySchema>
 export type RegisterPanelDetails = z.infer<typeof RegisterPanelDetailsSchema>
 export type LoginResponse = z.infer<typeof LoginResponseSchema>
+export type LoginForm = z.infer<typeof LoginFormSchema>

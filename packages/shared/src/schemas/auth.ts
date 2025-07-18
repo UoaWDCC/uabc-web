@@ -122,7 +122,7 @@ export const RegisterPanelDetailsSchema = z
     path: ["confirmPassword"],
   })
 
-export const LoginDetailsSchema = z.object({
+export const LoginRequestBodySchema = z.object({
   /**
    * The user's email address
    * @example straightzhao@gmail.com
@@ -133,11 +133,14 @@ export const LoginDetailsSchema = z.object({
    * @example 12345678
    */
   password: z.string().min(1, "Field is required"),
-  // /**
-  //  * Whether to remember the user's login session
-  //  * @example true
-  //  */
-  // rememberMe: z.boolean(),
+})
+
+export const LoginFormSchema = LoginRequestBodySchema.extend({
+  /**
+   * Whether to remember the user's login session
+   * @example true
+   */
+  rememberMe: z.boolean(),
 })
 
 export const LoginResponseSchema = CommonResponse.extend({

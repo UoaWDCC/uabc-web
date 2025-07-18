@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom"
-import type { LoginDetails, LoginResponse } from "@repo/shared"
+import type { LoginRequestBody, LoginResponse } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as LoginPanelModule from "./index"
@@ -16,7 +16,7 @@ describe("<LoginPanel />", () => {
   })
 
   it("should call onSubmit when a user clicks the submit button", async () => {
-    const handleSubmit = vi.fn((_data: LoginDetails) => {
+    const handleSubmit = vi.fn((_data: LoginRequestBody) => {
       return Promise.resolve({ data: "token" } as LoginResponse)
     })
 
@@ -38,7 +38,7 @@ describe("<LoginPanel />", () => {
   })
 
   it("should not call onSubmit when text input values are invalid", async () => {
-    const handleSubmit = vi.fn((_data: LoginDetails) => {
+    const handleSubmit = vi.fn((_data: LoginRequestBody) => {
       return Promise.resolve({ error: "Error" } as LoginResponse)
     })
 
