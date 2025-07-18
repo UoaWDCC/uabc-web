@@ -28,7 +28,7 @@ export interface LoginPanelProps {
   /**
    * Submit handler called when user submits the LoginPanel form.
    */
-  onSubmit: (args: LoginDetails) => Promise<LoginResponse>
+  onSubmit?: (args: LoginDetails) => Promise<LoginResponse>
   /**
    * Handler called when user selects the Google icon button.
    *
@@ -55,7 +55,7 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
   const [error, setError] = useState("")
 
   const handleLogin = async (data: LoginDetails) => {
-    const submitData = await onSubmit(data)
+    const submitData = await onSubmit?.(data)
     console.log(submitData)
     setError(submitData?.error || "")
   }

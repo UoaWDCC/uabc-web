@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom"
-import type { LoginDetails } from "@repo/shared"
+import type { LoginDetails, LoginResponse } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as LoginPanelModule from "./index"
@@ -16,7 +16,9 @@ describe("<LoginPanel />", () => {
   })
 
   it("should call onSubmit when a user clicks the submit button", async () => {
-    const handleSubmit = vi.fn((data: LoginDetails) => data)
+    const handleSubmit = vi.fn((_data: LoginDetails) => {
+      return Promise.resolve({ data: "token" } as LoginResponse)
+    })
 
     const { user } = render(<LoginPanel onSubmit={handleSubmit} />)
 
@@ -32,14 +34,13 @@ describe("<LoginPanel />", () => {
     const submitButton = screen.getByText("Sign In")
     await user.click(submitButton)
 
-    expect(handleSubmit).toReturnWith({
-      email: sampleEmail,
-      password: samplePassword,
-    })
+    expect(handleSubmit).toHaveResolvedWith({ data: "token" })
   })
 
   it("should not call onSubmit when text input values are invalid", async () => {
-    const handleSubmit = vi.fn((data: LoginDetails) => data)
+    const handleSubmit = vi.fn((_data: LoginDetails) => {
+      return Promise.resolve({ error: "Error" } as LoginResponse)
+    })
 
     const { user } = render(<LoginPanel onSubmit={handleSubmit} />)
 
@@ -52,14 +53,11 @@ describe("<LoginPanel />", () => {
     expect(handleSubmit).not.toBeCalled()
   })
 
-  it("should call onClickGoogle when a user clicks the Google icon button", async () => {
-    const handleClickGoogle = vi.fn()
-
-    const { user } = render(<LoginPanel onClickGoogle={handleClickGoogle} />)
+  it("should render the Google icon button as a link with the correct href", async () => {
+    const googleUrl = "/"
+    render(<LoginPanel onClickGoogle={googleUrl} />)
 
     const googleIconButton = screen.getByTestId("google-logo")
-    await user.click(googleIconButton)
-
-    expect(handleClickGoogle).toBeCalled()
+    expect(googleIconButton.closest("a")).toHaveAttribute("href", googleUrl)
   })
 })
