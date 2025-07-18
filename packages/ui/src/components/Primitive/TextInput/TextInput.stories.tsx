@@ -3,14 +3,12 @@ import { PropsTable } from "@storybook-config/components"
 import {
   CalendarIcon,
   CreditCardIcon,
-  DollarSignIcon,
   MailIcon,
-  MapPinIcon,
   PhoneIcon,
   SearchIcon,
   UserIcon,
 } from "@yamada-ui/lucide"
-import { FormControl, VStack } from "@yamada-ui/react"
+import { FormControl } from "@yamada-ui/react"
 import { TextInput } from "./TextInput"
 import { INPUT_TYPES, InputType } from "./types"
 
@@ -64,97 +62,146 @@ export const WithPlaceholder: Story = ({ type, ...args }) => {
   )
 }
 
-export const WithStartIcon: Story = ({ type, ...args }) => {
+const icons = [
+  {
+    icon: <UserIcon />,
+    label: "Enter your full name",
+  },
+  {
+    icon: <MailIcon />,
+    label: "Enter your email",
+  },
+  {
+    icon: <SearchIcon />,
+    label: "Search for anything...",
+  },
+  {
+    icon: <PhoneIcon />,
+    label: "Enter your phone number",
+  },
+  {
+    icon: "+64",
+    label: "+64 21 123 4567",
+  },
+  {
+    icon: <CreditCardIcon />,
+    label: "Enter your card number",
+  },
+  {
+    icon: <CalendarIcon />,
+    label: "Enter date",
+  },
+]
+
+export const WithStartElement: Story = ({ type, ...args }) => {
   return (
-    <VStack>
-      <TextInput
-        placeholder="Enter your full name"
-        startIcon={<UserIcon />}
-        type={InputType.Text}
-        {...args}
-      />
-      <TextInput
-        placeholder="Enter your email"
-        startIcon={<MailIcon />}
-        type={InputType.Email}
-        {...args}
-      />
-      <TextInput
-        placeholder="Search for anything..."
-        startIcon={<SearchIcon />}
-        type={InputType.Search}
-        {...args}
-      />
-      <TextInput
-        placeholder="Enter your phone number"
-        startIcon={<PhoneIcon />}
-        type={InputType.Tel}
-        {...args}
-      />
-      <TextInput
-        placeholder="Enter your address"
-        startIcon={<MapPinIcon />}
-        type={InputType.Text}
-        {...args}
-      />
-      <TextInput
-        placeholder="Enter card number"
-        startIcon={<CreditCardIcon />}
-        type={InputType.Text}
-        {...args}
-      />
-      <TextInput
-        placeholder="Enter amount"
-        startIcon={<DollarSignIcon />}
-        type={InputType.Number}
-        {...args}
-      />
-      <TextInput startIcon={<CalendarIcon />} type={InputType.Date} {...args} />
-    </VStack>
+    <PropsTable
+      rows={[
+        InputType.Text,
+        InputType.Email,
+        InputType.Search,
+        InputType.Tel,
+        InputType.Number,
+        InputType.Date,
+      ]}
+      variant="column"
+    >
+      {(_, row: InputType, _key: string, _colIndex: number, index: number) => {
+        return (
+          <TextInput
+            key={index}
+            placeholder={icons[index].label}
+            startElement={icons[index].icon}
+            type={row as InputType}
+            {...args}
+          />
+        )
+      }}
+    </PropsTable>
   )
 }
 
-export const WithEndIcon: Story = ({ type, ...args }) => {
+export const WithEndElement: Story = ({ type, ...args }) => {
   return (
-    <VStack>
-      <TextInput
-        endIcon={<SearchIcon />}
-        placeholder="Search..."
-        type={InputType.Search}
-        {...args}
-      />
-      <TextInput endIcon={<CalendarIcon />} type={InputType.Date} {...args} />
-      <TextInput
-        endIcon={<DollarSignIcon />}
-        placeholder="Enter amount"
-        type={InputType.Number}
-        {...args}
-      />
-      <TextInput
-        endIcon={<CreditCardIcon />}
-        placeholder="Enter card number"
-        type={InputType.Text}
-        {...args}
-      />
-      <TextInput
-        endIcon={<PhoneIcon />}
-        placeholder="Enter your phone number"
-        type={InputType.Tel}
-        {...args}
-      />
-      <TextInput
-        endIcon={<MapPinIcon />}
-        placeholder="Enter your address"
-        type={InputType.Text}
-        {...args}
-      />
-      <TextInput
-        endIcon={<MailIcon />}
-        placeholder="Enter your email"
-        type={InputType.Email}
-        {...args}
-      />
-    </VStack>
+    <PropsTable
+      rows={[
+        InputType.Text,
+        InputType.Email,
+        InputType.Search,
+        InputType.Tel,
+        InputType.Number,
+        InputType.Date,
+      ]}
+      variant="column"
+    >
+      {(_, row: InputType, _key: string, _colIndex: number, index: number) => {
+        return (
+          <TextInput
+            endElement={icons[index].icon}
+            key={index}
+            placeholder={icons[index].label}
+            type={row as InputType}
+            {...args}
+          />
+        )
+      }}
+    </PropsTable>
+  )
+}
+
+export const WithStartAddon: Story = ({ type, ...args }) => {
+  return (
+    <PropsTable
+      rows={[
+        InputType.Text,
+        InputType.Email,
+        InputType.Search,
+        InputType.Tel,
+        InputType.Number,
+        InputType.Date,
+      ]}
+      variant="column"
+    >
+      {(_, row: InputType, _key: string, _colIndex: number, index: number) => {
+        return (
+          <TextInput
+            key={index}
+            placeholder={icons[index].label}
+            startAddon={icons[index].icon}
+            type={row as InputType}
+            {...args}
+          />
+        )
+      }}
+    </PropsTable>
+  )
+}
+
+export const WithEndAddon: Story = ({ type, ...args }) => {
+  return (
+    <PropsTable
+      rows={[
+        InputType.Text,
+        InputType.Email,
+        InputType.Search,
+        InputType.Tel,
+        InputType.Number,
+        InputType.Date,
+      ]}
+      variant="column"
+    >
+      {(_, row: InputType, _key: string, _colIndex: number, index: number) => {
+        return (
+          <TextInput
+            endAddon={icons[index].icon}
+            key={index}
+            placeholder={icons[index].label}
+            type={row as InputType}
+            {...args}
+          />
+        )
+      }}
+    </PropsTable>
   )
 }
 
@@ -209,10 +256,10 @@ export const IconVariations: Story = (args) => {
 
         return (
           <TextInput
-            endIcon={hasEndIcon ? getIcon(row) : undefined}
+            endElement={hasEndIcon ? getIcon(row) : undefined}
             key={key}
             placeholder={`Enter ${row}`}
-            startIcon={hasStartIcon ? getIcon(row) : undefined}
+            startElement={hasStartIcon ? getIcon(row) : undefined}
             type={row}
             {...args}
           />

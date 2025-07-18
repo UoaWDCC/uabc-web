@@ -6,7 +6,7 @@ export const Input: ComponentMultiStyle<"Input"> = {
   baseStyle: {
     container: {},
     element: {
-      color: ["blackAlpha.600", "whiteAlpha.700"],
+      color: ["black", "white"],
     },
     field: {
       appearance: "none",
