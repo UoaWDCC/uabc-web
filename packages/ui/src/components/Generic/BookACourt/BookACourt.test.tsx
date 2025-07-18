@@ -22,7 +22,7 @@ describe("<BookACourt />", () => {
     })
   })
 
-  it("should render guideline link call guidelineOnClick when the guideline link is clicked", async () => {
+  it("should render guideline link call guidelineOnClick when the guideline link is clicked", () => {
     render(<BookACourt />)
 
     const guidelineLink = screen.getByRole("link", { name: "Check-In Form Guidelines" })
