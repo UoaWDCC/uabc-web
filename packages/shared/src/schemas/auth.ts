@@ -1,6 +1,5 @@
 import z from "zod"
 import type { User } from "../payload-types"
-import { Gender, MembershipType } from "../types"
 import { MediaSchema } from "./media"
 
 // Payload User Schema
@@ -10,9 +9,13 @@ export const UserSchema = z.object({
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
   // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
-  role: z.nativeEnum(MembershipType),
-  gender: z.nativeEnum(Gender),
-  dietaryRequirements: z.string().optional(),
+  role: z.enum(["admin", "member", "casual"]),
+  playLevel: z.enum(["beginner", "intermediate", "advanced"]).nullable().optional(),
+  gender: z
+    .enum(["male", "female", "non-binary", "other", "prefer-not-to-answer"])
+    .nullable()
+    .optional(),
+  dietaryRequirements: z.string().nullable().optional(),
   remainingSessions: z.number().nullable().optional(),
   image: z.union([z.string(), MediaSchema]).nullable().optional(),
   updatedAt: z.string(),
