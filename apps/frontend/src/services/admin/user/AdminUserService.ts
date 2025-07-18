@@ -17,7 +17,7 @@ const AdminUserService = {
    */
   createUser: async (data: CreateUserRequest) => {
     const { data: createdUser, status } = await apiClient.post(
-      "/admin/users",
+      "/api/admin/users",
       data,
       GetUserResponseSchema,
     )
@@ -32,7 +32,10 @@ const AdminUserService = {
    */
   getAllUsers: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
-    const { data, status } = await apiClient.get(`/admin/users?${query}`, GetAllUsersResponseSchema)
+    const { data, status } = await apiClient.get(
+      `/api/admin/users?${query}`,
+      GetAllUsersResponseSchema,
+    )
     if (status !== StatusCodes.OK) throw new Error("Failed to fetch all users")
     return data
   },
@@ -43,7 +46,7 @@ const AdminUserService = {
    * @returns A promise that resolves to a user.
    */
   getUser: async (id: string) => {
-    const { data, status } = await apiClient.get(`/admin/users/${id}`, GetUserResponseSchema)
+    const { data, status } = await apiClient.get(`/api/admin/users/${id}`, GetUserResponseSchema)
     if (status !== StatusCodes.OK) throw new Error("Failed to fetch user")
     return data
   },
@@ -56,7 +59,7 @@ const AdminUserService = {
    */
   updateUser: async (id: string, data: UpdateUserRequest) => {
     const { data: updatedUser, status } = await apiClient.patch(
-      `/admin/users/${id}`,
+      `/api/admin/users/${id}`,
       data,
       GetUserResponseSchema,
     )
@@ -70,7 +73,7 @@ const AdminUserService = {
    * @returns A promise that resolves to a boolean indicating success.
    */
   deleteUser: async (id: string) => {
-    const { status } = await apiClient.delete(`/admin/users/${id}`)
+    const { status } = await apiClient.delete(`/api/admin/users/${id}`)
     if (status !== StatusCodes.NO_CONTENT) throw new Error("Failed to delete user")
   },
 } as const
