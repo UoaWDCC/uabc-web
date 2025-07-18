@@ -11,5 +11,7 @@ export const BookingSchema = z.object({
 export type BookingType = z.infer<typeof BookingSchema>
 export type CreateBookingWithoutUserData = Omit<BookingType, "user">
 
-export const CreateBookingRequestBodySchema = BookingSchema.omit({ user: true}) satisfies z.ZodType<CreateBookingWithoutUserData>
+export const CreateBookingRequestBodySchema = BookingSchema.omit({
+  user: true,
+}) satisfies z.ZodType<CreateBookingWithoutUserData>
 export type CreateBookingRequestBodyType = z.infer<typeof CreateBookingRequestBodySchema>

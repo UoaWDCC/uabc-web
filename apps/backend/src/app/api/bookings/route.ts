@@ -57,7 +57,10 @@ class RouteWrapper {
 
         await userDataService.updateUser(req.user.id, {
           remainingSessions: newRemainingSessions,
-          role: newRemainingSessions === 0 && req.user.role === MembershipType.member ? MembershipType.casual : req.user.role,
+          role:
+            newRemainingSessions === 0 && req.user.role === MembershipType.member
+              ? MembershipType.casual
+              : req.user.role,
         })
       }
 

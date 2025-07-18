@@ -25,7 +25,7 @@ describe("/ap/bookings", async () => {
 
     it("should return a 200 with booking if user is admin", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const req = createMockNextRequest("/api/bookings", "POST" )
+      const req = createMockNextRequest("/api/bookings", "POST")
       const res = await POST(req)
       expect(res.status).toBe(StatusCodes.OK)
       expect((await res.json()).data).toBeDefined()
