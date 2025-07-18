@@ -92,6 +92,7 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
           type={InputType.Password}
           {...register("password")}
         />
+        {error ?? <Text color="red.">{error}</Text>}
       </FormControl>
       <HStack color="gray.100" fontSize="sm">
         <Checkbox label="Remember me" size="sm" textAlign="start" />
