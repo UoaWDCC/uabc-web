@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { RegisterFormDataSchema, type RegisterFormData } from "@repo/shared"
+import { type RegisterFormData, RegisterFormDataSchema } from "@repo/shared"
 import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
