@@ -9,7 +9,6 @@ describe("<Events />", () => {
   it("should render the events page with under construction message", () => {
     render(<Events />)
     expect(screen.getByText("Feature is Under Construction 🔧")).toBeInTheDocument()
-    expect(screen.getByText("Feature is Under Construction 🔧")).toBeInTheDocument()
     expect(
       screen.getByText("Our team is busy working on this page. Check back later!"),
     ).toBeInTheDocument()
