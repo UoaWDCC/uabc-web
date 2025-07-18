@@ -59,18 +59,18 @@ describe("<AdditionalInfo />", () => {
     await user.click(screen.getByRole("button", { name: /edit/i }))
     const genderInput = screen.getByRole("combobox", { name: /gender/i })
     await user.click(genderInput)
-    await user.click(screen.getByText("Female"))
+    await user.click(screen.getByText(casualUserMock.gender ?? ""))
     const playLevelInput = screen.getByRole("combobox", { name: /play level/i })
     await user.click(playLevelInput)
-    await user.click(screen.getByText("Intermediate"))
+    await user.click(screen.getByText(casualUserMock.playLevel ?? ""))
     await user.click(screen.getByRole("button", { name: /save changes/i }))
     await waitFor(() => {
-      expect(screen.getByDisplayValue("Female")).toBeInTheDocument()
-      expect(screen.getByDisplayValue("Intermediate")).toBeInTheDocument()
+      expect(screen.getByDisplayValue(casualUserMock.gender ?? "")).toBeInTheDocument()
+      expect(screen.getByDisplayValue(casualUserMock.playLevel ?? "")).toBeInTheDocument()
     })
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
-      gender: "female",
-      playLevel: "intermediate",
+      gender: casualUserMock.gender,
+      playLevel: casualUserMock.playLevel,
       dietary: "",
     })
   })

@@ -57,7 +57,6 @@ export const defaultFields = [
     label: "Gender",
     placeholder: "Enter your gender",
     inputType: InputType.Text,
-    required: true,
     items: genderOptions,
   },
   {
@@ -66,7 +65,6 @@ export const defaultFields = [
     label: "Play Level",
     placeholder: "Enter your play level",
     inputType: InputType.Text,
-    required: true,
     items: playLevelOptions,
   },
   {
