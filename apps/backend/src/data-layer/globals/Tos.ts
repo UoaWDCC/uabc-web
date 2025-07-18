@@ -1,7 +1,7 @@
 import type { GlobalConfig } from "payload"
 
 export const Tos: GlobalConfig = {
-  slug: "tos",
+  slug: "termsOfService",
   fields: [
     {
       name: "title",

@@ -148,13 +148,13 @@ export interface Config {
     faq: Faq;
     footer: Footer;
     navbar: Navbar;
-    tos: To;
+    termsOfService: TermsOfService;
   };
   globalsSelect: {
     faq: FaqSelect<false> | FaqSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
-    tos: TosSelect<false> | TosSelect<true>;
+    termsOfService: TermsOfServiceSelect<false> | TermsOfServiceSelect<true>;
   };
   locale: null;
   user: Admin & {
@@ -892,9 +892,9 @@ export interface Navbar {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tos".
+ * via the `definition` "termsOfService".
  */
-export interface To {
+export interface TermsOfService {
   id: string;
   /**
    * The title for the Terms of Service section.
@@ -1063,9 +1063,9 @@ export interface NavbarSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tos_select".
+ * via the `definition` "termsOfService_select".
  */
-export interface TosSelect<T extends boolean = true> {
+export interface TermsOfServiceSelect<T extends boolean = true> {
   title?: T;
   subtitle?: T;
   checkInRules?: T | CheckInRulesSelect<T>;

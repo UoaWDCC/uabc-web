@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { StatusCodes } from "http-status-codes"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { getFaq } from "@/services/cms/faq/FaqService"
 import { render, screen, waitFor } from "@/test-config/test-utils"
@@ -34,7 +35,7 @@ describe("<FaqSection />", async () => {
         },
       },
       isError: false,
-      status: 200,
+      status: StatusCodes.OK,
     })
     vi.clearAllMocks()
   })
@@ -79,7 +80,7 @@ describe("<FaqSection />", async () => {
         },
       },
       isError: false,
-      status: 200,
+      status: StatusCodes.OK,
     })
 
     render(
