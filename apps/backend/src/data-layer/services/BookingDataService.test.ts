@@ -53,10 +53,9 @@ describe("bookingDataService", () => {
       )
     })
 
-    it("should return null if there are no bookings by userID", async () => {
-      await expect(bookingDataService.getAllBookingsByUserId("No bookings userID")).rejects.toThrow(
-        "Not Found",
-      )
+    it("should return empty array if there are no bookings by userID", async () => {
+      const fetchedBooking = bookingDataService.getAllBookingsByUserId("No bookings userID")
+      expect(fetchedBooking).toStrictEqual([])
     })
   })
 
