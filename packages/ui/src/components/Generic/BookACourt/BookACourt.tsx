@@ -40,6 +40,7 @@ export const BookACourt = () => {
       </ButtonGroup>
       <Spacer />
       <Link
+        as={NextLink}
         color="muted"
         fontSize={{ base: "lg", md: "xl" }}
         fontWeight="medium"
