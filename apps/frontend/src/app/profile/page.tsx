@@ -1,6 +1,11 @@
 import { casualUserMock, mockBookings } from "@repo/shared/mocks"
 import { MembershipType } from "@repo/shared/types"
-import { ProfileBookingPanel, UserPanel } from "@repo/ui/components/Composite"
+import {
+  defaultFields,
+  ProfileBookingPanel,
+  ProfileDetails,
+  UserPanel,
+} from "@repo/ui/components/Composite"
 import { Grid, GridItem, VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
 
@@ -22,11 +27,12 @@ export default async function Profile() {
   const user = casualUserMock
 
   return (
-    <VStack gap="2xl" maxW="1220px">
+    <VStack gap="xl" maxW="1220px">
       <Grid gap="2xl" templateColumns="0.5fr 1fr">
         <GridItem>
           <UserPanel
             email={user.email}
+            h="full"
             name={`${user.firstName} ${user.lastName}`}
             phone={user.phoneNumber ?? "-"}
             sessionsLeft={user.remainingSessions ?? 0}
@@ -34,9 +40,13 @@ export default async function Profile() {
           />
         </GridItem>
         <GridItem>
-          <ProfileBookingPanel bookings={mockBookings} />
+          <ProfileBookingPanel bookings={mockBookings} h="full" />
         </GridItem>
       </Grid>
+
+      <ProfileDetails fields={defaultFields} title={"Profile Details"} w="full" />
+
+      <ProfileDetails fields={defaultFields} title={"Profile Details"} w="full" />
     </VStack>
   )
 }

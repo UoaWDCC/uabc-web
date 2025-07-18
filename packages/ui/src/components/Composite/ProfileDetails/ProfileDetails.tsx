@@ -1,3 +1,5 @@
+"use client"
+
 import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"
 import { InputType } from "@repo/ui/components/Primitive"

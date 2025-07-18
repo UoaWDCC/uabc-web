@@ -1,4 +1,5 @@
 export * from "./AboutUsSection"
 export * from "./AdminTable"
 export * from "./ProfileBookingPanel"
+export * from "./ProfileDetails"
 export * from "./UserPanel"
