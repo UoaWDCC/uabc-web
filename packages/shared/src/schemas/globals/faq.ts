@@ -1,6 +1,6 @@
 import { z } from "zod"
-import type { Faq, FaqQuestion } from "../payload-types"
-import { SerializedEditorStateSchema } from "./payload"
+import type { Faq, FaqQuestion } from "../../payload-types"
+import { SerializedEditorStateSchema } from "../payload"
 
 const FaqQuestionArraySchema = z.array(
   z.object({
