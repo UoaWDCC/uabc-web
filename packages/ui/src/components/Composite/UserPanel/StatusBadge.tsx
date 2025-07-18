@@ -34,7 +34,7 @@ export interface StatusBadgeProps {
 export const StatusBadge: FC<StatusBadgeProps> = memo(({ status }) => (
   <HStack as={Center} color={["primary.600", "primary.300"]} gap="xs">
     <StatusIcon status={status} />
-    <Text>{status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()}</Text>
+    <Text>{status}</Text>
   </HStack>
 ))
 

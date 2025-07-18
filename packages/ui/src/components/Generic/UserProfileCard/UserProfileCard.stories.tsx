@@ -36,14 +36,14 @@ const exampleFields = [
   },
 ] as const
 
-const genderOptions = Object.entries(Gender).map(([key, value]) => ({
+const genderOptions = Object.values(Gender).map((value) => ({
   value,
-  label: key.charAt(0).toUpperCase() + key.slice(1),
+  label: value,
 }))
 
-const playLevelOptions = Object.entries(PlayLevel).map(([key, value]) => ({
+const playLevelOptions = Object.values(PlayLevel).map((value) => ({
   value,
-  label: key.charAt(0).toUpperCase() + key.slice(1),
+  label: value,
 }))
 
 export const Default: StoryFn = () => (

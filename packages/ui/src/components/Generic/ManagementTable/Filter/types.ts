@@ -77,7 +77,7 @@ export type FilterMultiSelectConfig<TData> = {
   /**
    * Items to display in the multiselect dropdown.
    */
-  items: { label: string; value: Lowercase<string> }[]
+  items: { label: string; value: string }[]
   /**
    * Optional callback when the value changes.
    */
