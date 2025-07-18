@@ -135,7 +135,7 @@ export const LoginRequestBodySchema = z.object({
   password: z.string().min(1, "Field is required"),
 })
 
-export const LoginFormSchema = LoginRequestBodySchema.extend({
+export const LoginFormDataSchema = LoginRequestBodySchema.extend({
   /**
    * Whether to remember the user's login session
    * @example true

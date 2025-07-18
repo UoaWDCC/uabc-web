@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { type LoginForm, LoginFormSchema, type LoginResponse } from "@repo/shared"
+import { type LoginFormData, LoginFormDataSchema, type LoginResponse } from "@repo/shared"
 import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
@@ -28,7 +28,7 @@ export interface LoginPanelProps {
   /**
    * Submit handler called when user submits the LoginPanel form.
    */
-  onSubmit?: (args: LoginForm) => Promise<LoginResponse>
+  onSubmit?: (args: LoginFormData) => Promise<LoginResponse>
   /**
    * Href for the google icon button.
    */
@@ -46,13 +46,13 @@ export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginForm>({
-    resolver: zodResolver(LoginFormSchema),
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(LoginFormDataSchema),
   })
 
   const [error, setError] = useState("")
 
-  const handleLogin = async (data: LoginForm) => {
+  const handleLogin = async (data: LoginFormData) => {
     const submitData = await onSubmit?.(data)
     console.log(submitData)
     setError(submitData?.error || "")

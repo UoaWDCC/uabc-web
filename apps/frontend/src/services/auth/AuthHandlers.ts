@@ -1,6 +1,6 @@
 "use client"
 
-import type { LoginDetails, LoginResponse } from "@repo/shared"
+import type { LoginFormData, LoginResponse } from "@repo/shared"
 import AuthService from "./AuthService"
 
 /**
@@ -9,7 +9,7 @@ import AuthService from "./AuthService"
  * @param data The login details.
  * @returns The authentication response.
  */
-export async function handleLogin(loginDetails: LoginDetails): Promise<LoginResponse> {
+export async function handleLogin(loginDetails: LoginFormData): Promise<LoginResponse> {
   try {
     const response = await AuthService.login(loginDetails.email, loginDetails.password)
     return { data: response?.data, message: response?.message, error: response?.error }

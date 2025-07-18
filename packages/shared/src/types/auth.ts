@@ -1,7 +1,7 @@
 import type z from "zod"
 import type {
   JWTEncryptedUserSchema,
-  LoginFormSchema,
+  LoginFormDataSchema,
   LoginRequestBodySchema,
   LoginResponseSchema,
   RegisterPanelDetailsSchema,
@@ -17,4 +17,4 @@ export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>
 export type LoginRequestBody = z.infer<typeof LoginRequestBodySchema>
 export type RegisterPanelDetails = z.infer<typeof RegisterPanelDetailsSchema>
 export type LoginResponse = z.infer<typeof LoginResponseSchema>
-export type LoginForm = z.infer<typeof LoginFormSchema>
+export type LoginFormData = z.infer<typeof LoginFormDataSchema>
