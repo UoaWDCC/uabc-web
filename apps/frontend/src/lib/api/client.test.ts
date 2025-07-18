@@ -292,7 +292,7 @@ describe("ApiClient", () => {
       const result = await client.post("/test", { foo: "bar" }, testSchema)
       expect(result.isError).toBe(true)
       expect(result.error).toBeInstanceOf(Error)
-      expect(result.error?.message).toBe("Failed to fetch /test: Bad Request")
+      expect(result.error?.message).toBe("Unexpected end of JSON input")
     })
     it("should return error when schema validation fails", async () => {
       const testSchema = z.object({ message: z.string(), id: z.number() })

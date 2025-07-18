@@ -1,7 +1,8 @@
 "use client"
 
 import { Button, type ButtonProps, Heading } from "@repo/ui/components/Primitive"
-import { Card, CardBody, CardHeader, Link, Text } from "@yamada-ui/react"
+import { Card, CardBody, CardHeader, Text } from "@yamada-ui/react"
+import NextLink from "next/link"
 
 /**
  * Props for {@link UnderConstructionCard} component
@@ -70,7 +71,7 @@ export const UnderConstructionCard = ({
         <Text fontSize={{ base: "sm", md: "md" }} textAlign="center" whiteSpace="break-spaces">
           {description}
         </Text>
-        <Button as={Link} colorScheme="primary" href="/" placeSelf="center" {...buttonProps}>
+        <Button as={NextLink} colorScheme="primary" href="/" placeSelf="center" {...buttonProps}>
           {returnLabel}
         </Button>
       </CardBody>

@@ -104,15 +104,8 @@ class ApiClient {
           ...(revalidate !== undefined ? { revalidate } : {}),
         },
       })
-      if (!response.ok) {
-        return {
-          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
-          isError: true,
-          status: response.status,
-        }
-      }
       const data = await response.json()
-      return { data: schema.parse(data), isError: false, status: response.status }
+      return { data: schema.parse(data), isError: !response.ok, status: response.status }
     } catch (error) {
       return { error: error as Error, isError: true, status: null }
     }

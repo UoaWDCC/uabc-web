@@ -156,3 +156,5 @@ node-compile-cache
 .wrangler
 
 .cspellcache
+
+.wt_hook.fish

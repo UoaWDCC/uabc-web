@@ -2,6 +2,7 @@ import z from "zod"
 import type { User } from "../payload-types"
 import { Gender, PlayLevel, University } from "../types"
 import { MediaSchema } from "./media"
+import { CommonResponse } from "./response"
 
 // Payload User Schema
 export const UserSchema = z.object({
@@ -225,7 +226,7 @@ export const AdditionalInfoFormSchema = z.object({
   dietaryRequirements: z.string(),
 })
 
-export const LoginDetailsSchema = z.object({
+export const LoginRequestBodySchema = z.object({
   /**
    * The user's email address
    * @example straightzhao@gmail.com
@@ -236,6 +237,21 @@ export const LoginDetailsSchema = z.object({
    * @example 12345678
    */
   password: z.string().min(1, "Field is required"),
+})
+
+export const LoginFormDataSchema = LoginRequestBodySchema.extend({
+  /**
+   * Whether to remember the user's login session
+   * @example true
+   */
+  rememberMe: z.boolean(),
+})
+
+export const LoginResponseSchema = CommonResponse.extend({
+  /**
+   * The user's JWT token
+   */
+  data: z.string().optional(),
 })
 
 export type JWTEncryptedUser = z.infer<typeof JWTEncryptedUserSchema>
