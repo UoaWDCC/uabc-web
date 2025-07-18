@@ -34,7 +34,7 @@ describe("bookingDataService", () => {
     })
   })
 
-  describe("getBookingByUserId", () => {
+  describe("getAllBookingsByUserId", () => {
     it("should find all bookings by userID", async () => {
       const createdBooking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
@@ -45,7 +45,7 @@ describe("bookingDataService", () => {
         user: casualUserMock,
       })
 
-      const fetchedBookings = await bookingDataService.getAllBookingByUserId(casualUserMock.id)
+      const fetchedBookings = await bookingDataService.getAllBookingsByUserId(casualUserMock.id)
 
       expect(fetchedBookings.length).toStrictEqual(2)
       expect(fetchedBookings).toStrictEqual(
@@ -54,7 +54,7 @@ describe("bookingDataService", () => {
     })
 
     it("should return null if there are no bookings by userID", async () => {
-      const fetchedBooking = await bookingDataService.getAllBookingByUserId("")
+      const fetchedBooking = await bookingDataService.getAllBookingsByUserId("")
       expect(fetchedBooking).rejects.toThrow("Not Found")
     })
   })

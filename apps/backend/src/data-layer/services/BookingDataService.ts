@@ -37,7 +37,7 @@ export default class BookingDataService {
    * @param userId The ID of the user whose {@link Booking} you find
    * @returns the {@link Booking} if successful
    */
-  public async getBookingByUserId(userId: string): Promise<Booking[]> {
+  public async getAllBookingsByUserId(userId: string): Promise<Booking[]> {
     return (
       await payload.find({
         collection: "booking",

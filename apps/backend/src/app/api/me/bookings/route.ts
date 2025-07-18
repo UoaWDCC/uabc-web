@@ -9,7 +9,7 @@ class RouteWrapper {
   static async GET(req: NextRequest & { user: User }) {
     try {
       const bookingDataService = new BookingDataService()
-      const bookings = await bookingDataService.getBookingById(req.user.id)
+      const bookings = await bookingDataService.getAllBookingsByUserId(req.user.id)
 
       return NextResponse.json({ data: bookings })
     } catch (error) {
