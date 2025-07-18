@@ -1,4 +1,4 @@
-import { casualUserMock, mockBookings } from "@repo/shared/mocks"
+import { bookingsMock, casualUserMock } from "@repo/shared/mocks"
 import type { MembershipType } from "@repo/shared/types"
 import {
   AdditionalInfo,
@@ -42,7 +42,7 @@ export default async function Profile() {
           />
         </GridItem>
         <GridItem>
-          <ProfileBookingPanel bookings={mockBookings} h="full" />
+          <ProfileBookingPanel bookings={bookingsMock} h="full" />
         </GridItem>
       </Grid>
 

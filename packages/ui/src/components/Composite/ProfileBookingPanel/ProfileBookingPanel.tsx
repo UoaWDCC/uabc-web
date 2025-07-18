@@ -46,6 +46,7 @@ export const ProfileBookingPanel: FC<ProfileBookingPanelProps> = memo(({ booking
         return (
           <BookingCard
             address={location ?? (gameSessionSchedule as GameSessionSchedule).location}
+            data-testid="booking-card"
             day={(gameSessionSchedule as GameSessionSchedule).day}
             endTime={endTime}
             imageProps={{

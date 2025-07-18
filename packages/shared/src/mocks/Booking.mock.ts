@@ -2,7 +2,7 @@ import type { Booking } from "../payload-types"
 import { gameSessionMock } from "./GameSession.mock"
 import { casualUserMock } from "./User.mock"
 
-export const mockBookings: Booking[] = [
+export const bookingsMock: Booking[] = [
   {
     id: "ccaf8f75ceb9f059773d4774",
     user: casualUserMock,
