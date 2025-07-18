@@ -105,7 +105,7 @@ class ApiClient {
         },
       })
       const data = await response.json()
-      return { data: schema.parse(data), isError: response.ok, status: response.status }
+      return { data: schema.parse(data), isError: !response.ok, status: response.status }
     } catch (error) {
       return { error: error as Error, isError: true, status: null }
     }
