@@ -125,9 +125,9 @@ export const UserPanel: FC<UserPanelProps> = ({
 }) => {
   return (
     <Card
-      bg={["gray.50", "gray.950"]}
+      bg={["secondary.50", "secondary.900"]}
       layerStyle="gradientBorder"
-      p="lg"
+      p="md"
       rounded="2xl"
       size="lg"
       {...props}

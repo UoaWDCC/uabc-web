@@ -1,3 +1,5 @@
+"use client"
+
 import { Gender, PlayLevel } from "@repo/shared"
 import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"

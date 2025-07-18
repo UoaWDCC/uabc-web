@@ -13,7 +13,7 @@ export interface ProfileBookingPanelProps extends StackProps {
 export const ProfileBookingPanel: FC<ProfileBookingPanelProps> = memo(({ bookings, ...props }) => {
   return (
     <VStack
-      bg={["gray.50", "gray.950"]}
+      bg={["secondary.50", "secondary.900"]}
       layerStyle="gradientBorder"
       p="xl"
       rounded="2xl"
@@ -38,7 +38,10 @@ export const ProfileBookingPanel: FC<ProfileBookingPanelProps> = memo(({ booking
             }}
             key={id}
             location={name ?? (gameSessionSchedule as GameSessionSchedule).name}
-            menuItems={[]} // TODO: implement menu items
+            menuItems={[
+              { label: "Edit", onClick: () => alert("Edit clicked"), color: "primary" },
+              { label: "Delete", onClick: () => alert("Delete clicked"), color: "danger" },
+            ]}
             startTime={startTime}
           />
         )

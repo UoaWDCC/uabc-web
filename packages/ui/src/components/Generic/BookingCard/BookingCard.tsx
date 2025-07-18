@@ -26,7 +26,13 @@ import {
   Text,
   VStack,
 } from "@yamada-ui/react"
+import dayjs from "dayjs"
+import timezone from "dayjs/plugin/timezone"
 import { memo } from "react"
+
+dayjs.extend(timezone)
+
+const NZ_TIMEZONE = "Pacific/Auckland"
 
 type MenuItemType = MenuItemProps & {
   label: string
@@ -159,7 +165,9 @@ export const BookingCard = memo(
               {location} - {address}
             </Text>
             <Text lineClamp={1}>
-              {startTime} - {endTime}
+              {dayjs(startTime).tz(NZ_TIMEZONE).format("h:mm A")}
+              &nbsp;-&nbsp;
+              {dayjs(endTime).tz(NZ_TIMEZONE).format("h:mm A D MMM YYYY")}
             </Text>
           </CardBody>
         </VStack>
