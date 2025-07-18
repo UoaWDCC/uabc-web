@@ -46,7 +46,7 @@ describe("/api/me/bookings", async () => {
 
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
       const mockGetBookings = vi
-        .spyOn(BookingDataService.prototype, "getBookingById")
+        .spyOn(BookingDataService.prototype, "getAllBookingsByUserId")
         .mockRejectedValueOnce(new Error("Database error"))
 
       const response = await GET(createMockNextRequest("/api/me/bookings"))
@@ -56,6 +56,9 @@ describe("/api/me/bookings", async () => {
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(consoleErrorSpy).toHaveBeenCalled()
       expect(mockGetBookings).toHaveBeenCalled()
+
+      consoleErrorSpy.mockRestore()
+      mockGetBookings.mockRestore()
     })
   })
 })
