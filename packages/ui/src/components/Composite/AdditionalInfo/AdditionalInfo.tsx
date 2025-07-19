@@ -1,4 +1,7 @@
+"use client"
+
 import { Gender, PlayLevel } from "@repo/shared"
+import { casualUserMock } from "@repo/shared/mocks"
 import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"
 import { InputType } from "@repo/ui/components/Primitive"
@@ -38,14 +41,14 @@ export const AdditionalInfo = <T extends readonly Field[]>({
   )
 }
 
-const genderOptions = Object.entries(Gender).map(([key, value]) => ({
+const genderOptions = Object.values(Gender).map((value) => ({
   value,
-  label: key.charAt(0).toUpperCase() + key.slice(1),
+  label: value,
 }))
 
-const playLevelOptions = Object.entries(PlayLevel).map(([key, value]) => ({
+const playLevelOptions = Object.values(PlayLevel).map((value) => ({
   value,
-  label: key.charAt(0).toUpperCase() + key.slice(1),
+  label: value,
 }))
 
 export const defaultFields = [
@@ -55,7 +58,6 @@ export const defaultFields = [
     label: "Gender",
     placeholder: "Enter your gender",
     inputType: InputType.Text,
-    required: true,
     items: genderOptions,
   },
   {
@@ -64,11 +66,10 @@ export const defaultFields = [
     label: "Play Level",
     placeholder: "Enter your play level",
     inputType: InputType.Text,
-    required: true,
     items: playLevelOptions,
   },
   {
-    key: "dietary",
+    key: "dietaryRequirements",
     type: "text",
     label: "Dietary Requirements",
     placeholder: "Enter your dietary requirements",
@@ -77,6 +78,7 @@ export const defaultFields = [
 ] as const
 
 export const defaultValues = {
-  gender: Gender.male,
-  playLevel: PlayLevel.beginner,
+  gender: casualUserMock.gender ?? Gender.male,
+  playLevel: casualUserMock.playLevel ?? PlayLevel.beginner,
+  dietaryRequirements: casualUserMock.dietaryRequirements,
 } as const

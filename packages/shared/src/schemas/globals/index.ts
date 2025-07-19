@@ -1,0 +1,4 @@
+export * from "./faq"
+export * from "./footer"
+export * from "./navbar"
+export * from "./terms-of-service"

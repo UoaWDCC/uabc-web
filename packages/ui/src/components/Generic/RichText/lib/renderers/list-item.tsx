@@ -48,5 +48,9 @@ export const renderListItemNode = (
 ): React.ReactNode => {
   const { children } = node
 
-  return <ListItem key={key}>{children ? renderInlineNodes(children, options) : null}</ListItem>
+  return (
+    <ListItem key={key} {...options.listItemProps}>
+      {children ? renderInlineNodes(children, options) : null}
+    </ListItem>
+  )
 }

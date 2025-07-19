@@ -2,7 +2,6 @@
 
 import { MembershipType, PlayLevel, University } from "@repo/shared"
 import { ManagementTable } from "@repo/ui/components/Generic"
-import { toKebabCase } from "@yamada-ui/react"
 import { memo } from "react"
 import { columns, type UserData } from "./Columns"
 
@@ -51,7 +50,7 @@ export const AdminTable = memo(({ data }: { data: UserData[] }) => {
           items: [
             ...Object.values(MembershipType).map((role) => ({
               label: role,
-              value: toKebabCase(role) as Lowercase<string>,
+              value: role,
             })),
           ],
           label: "All",
@@ -65,7 +64,7 @@ export const AdminTable = memo(({ data }: { data: UserData[] }) => {
           items: [
             ...Object.values(University).map((university) => ({
               label: university,
-              value: toKebabCase(university) as Lowercase<string>,
+              value: university,
             })),
           ],
           label: "University",
@@ -77,7 +76,7 @@ export const AdminTable = memo(({ data }: { data: UserData[] }) => {
           items: [
             ...Object.values(PlayLevel).map((level) => ({
               label: level,
-              value: toKebabCase(level) as Lowercase<string>,
+              value: level,
             })),
           ],
           label: "Play Level",

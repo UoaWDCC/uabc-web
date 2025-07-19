@@ -61,14 +61,14 @@ export const renderListNode = (
 
   if (tag === ListType.UNORDERED) {
     return (
-      <DiscList key={key}>
+      <DiscList key={key} {...options.listProps}>
         <For each={children}>{(child) => renderNode(child, options)}</For>
       </DiscList>
     )
   }
 
   return (
-    <DecimalList key={key}>
+    <DecimalList key={key} {...options.listProps}>
       <For each={children}>{(child) => renderNode(child, options)}</For>
     </DecimalList>
   )
