@@ -15,7 +15,7 @@ export interface BookConfirmProps {
    * The total number of sessions the user can book, if a member.
    * If a casual member, this will be undefined.
    */
-  sessionCount: BookConfirmProps["casual"] extends true ? undefined : number
+  sessionCount?: number
   /**
    * Callback function to call when the user confirms the booking.
    */
@@ -60,7 +60,7 @@ export interface BookConfirmProps {
  */
 export const BookConfirm = ({
   bookings,
-  sessionCount,
+  sessionCount = 0,
   onConfirm,
   casual = false,
 }: BookConfirmProps) => {
