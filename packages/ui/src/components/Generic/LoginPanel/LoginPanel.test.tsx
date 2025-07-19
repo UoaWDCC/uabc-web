@@ -15,7 +15,7 @@ describe("<LoginPanel />", () => {
     expect(LoginPanel.displayName).toBe("LoginPanel")
   })
 
-  it("should call onSubmit when a user clicks the submit button", async () => {
+  it("should call onSubmit when a user clicks the submit button with valid data", async () => {
     const handleSubmit = vi.fn((_data: LoginRequestBody) => {
       return Promise.resolve({ data: "token" } as LoginResponse)
     })
