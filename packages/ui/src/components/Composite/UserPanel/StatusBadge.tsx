@@ -26,7 +26,7 @@ export interface StatusBadgeProps {
  *
  * @example
  * // Member status badge
- * <StatusBadge status="member" />
+ * <StatusBadge status="Member" />
  *
  * @example
  * // Casual status badge

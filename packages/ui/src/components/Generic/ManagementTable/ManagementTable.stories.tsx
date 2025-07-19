@@ -8,7 +8,7 @@ const mockData = [
     id: "1",
     name: "Alice",
     email: "alice@example.com",
-    role: "admin",
+    role: "Admin",
     university: "University of Auckland",
   },
   {
@@ -22,7 +22,7 @@ const mockData = [
     id: "3",
     name: "Charlie",
     email: "charlie@example.com",
-    role: "member",
+    role: "Member",
     university: "Massey University",
   },
   {
@@ -36,7 +36,7 @@ const mockData = [
     id: "5",
     name: "Eve",
     email: "eve@example.com",
-    role: "member",
+    role: "Member",
     university: "Auckland University of Technology",
   },
   {
@@ -50,7 +50,7 @@ const mockData = [
     id: "7",
     name: "Grace",
     email: "grace@example.com",
-    role: "member",
+    role: "Member",
     university: "University of Auckland",
   },
   {
@@ -188,9 +188,9 @@ export const Advanced: Story = {
           key: "role",
           type: "multiselect",
           items: [
-            { label: "Admin", value: "admin" },
+            { label: "Admin", value: "Admin" },
             { label: "Casual", value: "Casual" },
-            { label: "Member", value: "member" },
+            { label: "Member", value: "Member" },
           ],
           label: "All",
           onChange: () => {

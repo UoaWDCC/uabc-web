@@ -5,7 +5,7 @@ import { ManagementTableProvider, useManagementTable } from "./MemberManagementC
 
 type Row = { id: string; name: string; role?: string; status?: string }
 const mockData: Row[] = [
-  { id: "1", name: "Alice", role: "admin", status: "active" },
+  { id: "1", name: "Alice", role: "Admin", status: "active" },
   { id: "2", name: "Bob", role: "user", status: "inactive" },
   { id: "3", name: "Charlie", role: "user", status: "active" },
 ]
@@ -15,7 +15,7 @@ const filterConfigs = [
     type: "multiselect" as const,
     key: "role" as keyof Row,
     label: "Role",
-    items: [{ label: "Admin", value: "admin" as Lowercase<string> }],
+    items: [{ label: "Admin", value: "Admin" as Lowercase<string> }],
   },
 ]
 
@@ -163,9 +163,9 @@ describe("<ManagementTableContext />", () => {
       wrapper: createWrapper,
     })
     act(() => {
-      result.current.setFieldFilter("role", ["admin"])
+      result.current.setFieldFilter("role", ["Admin"])
     })
-    expect(result.current.fieldFilters.role).toEqual(["admin"])
+    expect(result.current.fieldFilters.role).toEqual(["Admin"])
     act(() => {
       result.current.clearFieldFilter("role")
     })

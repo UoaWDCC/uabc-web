@@ -32,7 +32,7 @@ export const adminUserMock: User = {
   firstName: "straight",
   lastName: "zhao",
   email: "straight.zhao@admin.com",
-  role: MembershipType.admin,
+  role: MembershipType.ADMIN,
   remainingSessions: 6,
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),
