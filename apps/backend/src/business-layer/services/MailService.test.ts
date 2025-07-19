@@ -11,7 +11,7 @@ describe("MailService", () => {
       const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 
       const email = "test@example.com"
-      const code = 123456
+      const code = "123456"
 
       const result = await MailService.sendEmailVerificationCode(email, code)
 
@@ -28,7 +28,7 @@ describe("MailService", () => {
       vi.spyOn(payload, "sendEmail").mockRejectedValueOnce(error)
 
       await expect(
-        MailService.sendEmailVerificationCode("fail@example.com", 111111),
+        MailService.sendEmailVerificationCode("fail@example.com", "111111"),
       ).rejects.toThrow("Send failed")
     })
   })
