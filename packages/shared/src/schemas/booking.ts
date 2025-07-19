@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { type CreateBookingData, PlayLevel } from "../types"
-import { UserSchema } from "./auth"
 import { GameSessionSchema } from "./game-session"
+import { UserSchema } from "./user"
 
 export const BookingSchema = z.object({
   user: z.union([z.string(), UserSchema]),
