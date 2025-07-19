@@ -12,11 +12,14 @@ import { createContext, type ReactNode, useContext, useSyncExternalStore } from 
 import { tokenStore } from "@/lib/token-store"
 import AuthService from "@/services/auth/AuthService"
 
-interface AuthContextValue {
+type AuthState = {
   user: User | null
   isLoading: boolean
   isPending: boolean
   error: string | null
+}
+
+type AuthActions = {
   login: UseMutationResult<
     {
       message?: string | undefined
@@ -24,31 +27,36 @@ interface AuthContextValue {
       error?: string | undefined
     },
     Error,
-    {
-      email: string
-      password: string
-      rememberMe: boolean
-    },
+    LoginFormData,
     unknown
   >
   logout: UseMutationResult<void, Error, void, unknown>
 }
 
+type AuthContextValue = AuthState & AuthActions
+
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
+/**
+ * Authentication context provider that manages user authentication state
+ * and provides login/logout functionality using React Query for data fetching
+ * and mutations.
+ */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const token = useSyncExternalStore(tokenStore.subscribe, tokenStore.getSnapshot, () => null)
-  const setToken = tokenStore.setToken
-
   const queryClient = useQueryClient()
 
-  const { data, isLoading, error, isPending } = useQuery<User | null, Error>({
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery<User | null, Error>({
     queryKey: ["auth", "me"],
     queryFn: async (): Promise<User | null> => {
-      if (token) {
-        return await AuthService.getUserFromToken(token)
+      if (!token) {
+        return null
       }
-      return null
+      return await AuthService.getUserFromToken(token)
     },
     staleTime: 1000 * 60 * 5,
     refetchOnMount: true,
@@ -56,19 +64,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   })
 
   const login = useMutation({
-    mutationFn: async ({ email, password }: LoginFormData) => {
-      return await AuthService.login(email, password)
+    mutationFn: async (credentials: LoginFormData) => {
+      return await AuthService.login(credentials.email, credentials.password)
     },
     onSuccess: async (data) => {
       if (data.data) {
-        setToken(data.data)
+        tokenStore.setToken(data.data)
         await queryClient.invalidateQueries({ queryKey: ["auth", "me"] })
       } else {
-        throw new Error(data.error)
+        throw new Error(data.error || "Login failed")
       }
     },
     onError: (error) => {
-      console.error(error)
+      console.error("Login error:", error)
     },
   })
 
@@ -77,33 +85,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return await AuthService.logout()
     },
     onSuccess: async () => {
-      setToken(null)
+      tokenStore.setToken(null)
       await queryClient.invalidateQueries({ queryKey: ["auth", "me"] })
     },
     onError: (error) => {
-      console.error(error)
+      console.error("Logout error:", error)
     },
   })
 
-  const isActuallyLoading = isLoading && !!token
-  const isActuallyPending = isPending && !!token
+  const authState: AuthState = {
+    user: user ?? null,
+    isLoading: typeof window === "undefined" || (isLoading && !!token),
+    isPending: login.isPending || logout.isPending,
+    error: error ? error.message : null,
+  }
+
+  const authActions: AuthActions = {
+    login,
+    logout,
+  }
 
   return (
-    <AuthContext.Provider
-      value={{
-        user: data ?? null,
-        isLoading: isActuallyLoading,
-        isPending: isActuallyPending,
-        error: error ? error.message : null,
-        login,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ ...authState, ...authActions }}>{children}</AuthContext.Provider>
   )
 }
 
+/**
+ * Hook to access authentication context
+ * @returns Authentication context value with user state and login/logout actions
+ * @throws Error if used outside of AuthProvider
+ */
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {

@@ -6,9 +6,9 @@ import Link from "next/link"
 import { useAuth } from "@/context/AuthContext"
 
 export default function UserPage() {
-  const { user, isLoading, isPending, error } = useAuth()
+  const { user, isLoading, error } = useAuth()
 
-  if (isLoading || isPending) {
+  if (isLoading) {
     return (
       <Center minH="50vh">
         <Loading boxSize="sm" />
