@@ -1,1 +1,1 @@
-export * from "./tos"
+export * from "./terms-of-service"
