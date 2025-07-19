@@ -29,7 +29,7 @@ class RouteWrapper {
         return NextResponse.json(
           { error: "No remaining sessions" },
           { status: StatusCodes.FORBIDDEN },
-        )
+        ) 
 
       if (
         (userData.role === MembershipType.casual &&
@@ -39,6 +39,16 @@ class RouteWrapper {
         return NextResponse.json(
           { error: "Session is full for the selected user role" },
           { status: StatusCodes.FORBIDDEN },
+        )
+
+      if (
+        (await bookingDataService.getBookingsBySessionId(gameSession.id)).filter(
+          (b) => (typeof b.user === "string" ? b.user : b.user.id) === userData.id,
+        ).length > 0
+      )
+        return NextResponse.json(
+          { error: "Session already booked" },
+          { status: StatusCodes.CONFLICT },
         )
 
       const newBooking = await bookingDataService.createBooking({
