@@ -60,10 +60,10 @@ describe("<AdditionalInfo />", () => {
     await user.click(screen.getByRole("button", { name: /edit/i }))
     const genderInput = screen.getByRole("combobox", { name: /gender/i })
     await user.click(genderInput)
-    await user.click(screen.getByText(userMock.gender))
+    await user.click(screen.getByRole("option", { name: userMock.gender }))
     const playLevelInput = screen.getByRole("combobox", { name: /play level/i })
     await user.click(playLevelInput)
-    await user.click(screen.getByText(userMock.playLevel))
+    await user.click(screen.getByRole("option", { name: userMock.playLevel }))
     await user.click(screen.getByRole("button", { name: /save changes/i }))
     await waitFor(() => {
       expect(screen.getByDisplayValue(userMock.gender)).toBeInTheDocument()

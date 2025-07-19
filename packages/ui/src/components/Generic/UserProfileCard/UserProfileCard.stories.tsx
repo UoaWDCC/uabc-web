@@ -75,7 +75,7 @@ export const AdditionalFields: StoryFn = () => {
       items: genderOptions,
     },
     {
-      key: "level",
+      key: "playLevel",
       type: "select",
       label: "Play Level",
       placeholder: "Select your play level",
@@ -92,6 +92,10 @@ export const AdditionalFields: StoryFn = () => {
 
   return (
     <UserProfileCard
+      defaultValues={{
+        gender: Gender.male,
+        playLevel: PlayLevel.beginner,
+      }}
       fields={minimalFields}
       onSave={async (data) => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
