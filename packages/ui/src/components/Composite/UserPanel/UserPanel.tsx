@@ -1,4 +1,4 @@
-import type { Media, User } from "@repo/shared/payload-types"
+import type { User } from "@repo/shared/payload-types"
 import { ShuttleIcon } from "@repo/ui/components/Icon"
 import { PencilIcon } from "@yamada-ui/lucide"
 import {
@@ -19,15 +19,7 @@ import {
 import type { FC } from "react"
 import { InfoField } from "./InfoField"
 import { StatusBadge } from "./StatusBadge"
-
-/**
- * Extracts the URL from an image property that can be either a string or Media object
- */
-const getImageUrl = (image: string | Media | null | undefined): string | undefined => {
-  if (!image) return undefined
-  if (typeof image === "string") return image
-  return image.url ?? undefined
-}
+import { getImageUrl } from "./UserPanelUtils"
 
 /**
  * Props for {@link UserPanel} component
