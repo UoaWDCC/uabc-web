@@ -169,7 +169,7 @@ export const BookingCard = memo(
             <Text lineClamp={1}>
               {/* Formats the time range in the format: h:mm A - h:mm A D MMM YYYY */}
               {dayjs(startTime).tz(NZ_TIMEZONE).format("h:mm A")}
-              &nbsp;-&nbsp;
+              {" - "}
               {dayjs(endTime).tz(NZ_TIMEZONE).format("h:mm A D MMM YYYY")}
             </Text>
           </CardBody>

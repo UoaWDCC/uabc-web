@@ -27,9 +27,9 @@ describe("<Profile />", () => {
 
   it("should render the user panel and profile details properly given the user is casualUserMock", async () => {
     render(await Profile(), { wrapper: wrapper })
-    expect(screen.getByText("straight zhao")).toBeInTheDocument()
-    expect(screen.getByText("Casual")).toBeInTheDocument()
-    expect(screen.getByText(casualUserMock.phoneNumber ?? "--")).toBeInTheDocument()
+    expect(screen.getByText(`${casualUserMock.firstName} ${casualUserMock.lastName}`)).toBeInTheDocument()
+    expect(screen.getByText(casualUserMock.role)).toBeInTheDocument()
+    expect(screen.getByText(casualUserMock.phoneNumber ?? "N/A")).toBeInTheDocument()
     expect(
       screen.getByText(`Sessions left: ${casualUserMock.remainingSessions ?? 0}`),
     ).toBeInTheDocument()
@@ -48,8 +48,8 @@ describe("<Profile />", () => {
   it("should render the additional info properly given the user is casualUserMock", async () => {
     render(await Profile(), { wrapper: wrapper })
     expect(screen.getByText("Additional Info")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("Non-binary")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("Beginner")).toBeInTheDocument()
+    expect(screen.getByDisplayValue(casualUserMock.gender)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(casualUserMock.playLevel)).toBeInTheDocument()
     expect(
       screen.getByDisplayValue(casualUserMock.dietaryRequirements as string),
     ).toBeInTheDocument()
