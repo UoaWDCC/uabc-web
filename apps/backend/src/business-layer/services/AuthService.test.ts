@@ -66,4 +66,19 @@ describe("AuthService", () => {
       expect(cookieJWT?.value as string).toEqual(JWT_TOKEN_MOCK)
     })
   })
+
+  describe("generateVerificationCode", () => {
+    it("should generate a 6-digit numeric code as a string", async () => {
+      const code = await AuthService.generateVerificationCode()
+      expect(typeof code).toBe("string")
+      expect(code).toHaveLength(6)
+      expect(code).toMatch(/^\d{6}$/)
+    })
+
+    it("should generate different codes on subsequent calls", async () => {
+      const code1 = await AuthService.generateVerificationCode()
+      const code2 = await AuthService.generateVerificationCode()
+      expect(code1).not.toBe(code2)
+    })
+  })
 })

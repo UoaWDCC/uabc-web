@@ -112,5 +112,13 @@ export const User: CollectionConfig = {
         description: "The image of the user",
       },
     },
+    {
+      name: "emailVerificationCode",
+      type: "text",
+      required: false,
+      admin: {
+        description: "The email verification token of the user",
+      },
+    },
   ],
 }
