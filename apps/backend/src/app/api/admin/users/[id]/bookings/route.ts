@@ -1,5 +1,6 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
+import { NotFound } from "payload"
 import { Security } from "@/business-layer/middleware/Security"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 
@@ -44,6 +45,9 @@ class BookingsRouteWrapper {
 
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
+      if (error instanceof NotFound) {
+        return NextResponse.json({ error: "No booking found" }, { status: StatusCodes.NOT_FOUND })
+      }
       console.error(error)
       return NextResponse.json(
         { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },

@@ -141,7 +141,7 @@ describe("/api/admin/users/[id]/bookings", async () => {
         new Error("Database error"),
       )
 
-      const response = await GET(
+      const response = await DELETE(
         createMockNextRequest("/api/admin/users/placeholder-id/bookings"),
         {
           params: Promise.resolve({ id: "placeholder-id" }),
