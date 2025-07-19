@@ -1,4 +1,4 @@
-import { MembershipType } from "@repo/shared"
+import { adminUserMock, casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import type { Meta, StoryObj } from "@storybook/react"
 import { UserPanel } from "./UserPanel"
 
@@ -9,24 +9,11 @@ const meta: Meta<typeof UserPanel> = {
     layout: "centered",
   },
   argTypes: {
-    status: {
-      control: { type: "select" },
-      options: ["Member", "Casual"],
+    user: {
+      control: { type: "object" },
     },
-    sessionsLeft: {
-      control: { type: "number", min: 0 },
-    },
-    name: {
-      control: { type: "text" },
-    },
-    email: {
-      control: { type: "text" },
-    },
-    phone: {
-      control: { type: "text" },
-    },
-    avatarSrc: {
-      control: { type: "text" },
+    iconButtonProps: {
+      control: { type: "object" },
     },
   },
 }
@@ -36,40 +23,24 @@ type Story = StoryObj<typeof UserPanel>
 
 export const Default: Story = {
   args: {
-    name: "Stitch Pelekai",
-    status: MembershipType.member,
-    email: "spel626@aucklanduni.ac.nz",
-    phone: "021 234 5678",
-    sessionsLeft: 7,
+    user: memberUserMock,
   },
 }
 
 export const Member: Story = {
   args: {
-    name: "Stitch Pelekai",
-    status: MembershipType.member,
-    email: "spel626@aucklanduni.ac.nz",
-    phone: "021 234 5678",
-    sessionsLeft: 7,
+    user: memberUserMock,
   },
 }
 
 export const Casual: Story = {
   args: {
-    name: "Stitch Pelekai",
-    status: MembershipType.casual,
-    email: "spel626@aucklanduni.ac.nz",
-    phone: "021 234 5678",
-    sessionsLeft: 0,
+    user: casualUserMock,
   },
 }
 
 export const Admin: Story = {
   args: {
-    name: "Stitch Pelekai",
-    status: MembershipType.admin,
-    email: "spel626@aucklanduni.ac.nz",
-    phone: "021 234 5678",
-    sessionsLeft: 0,
+    user: adminUserMock,
   },
 }

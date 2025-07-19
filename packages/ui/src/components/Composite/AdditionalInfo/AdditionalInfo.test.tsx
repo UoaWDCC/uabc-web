@@ -1,3 +1,5 @@
+import { Gender, PlayLevel } from "@repo/shared"
+import { casualUserMock } from "@repo/shared/mocks"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import type { ReactNode } from "react"
@@ -10,6 +12,12 @@ const queryClient = new QueryClient({
     },
   },
 })
+
+const userMock = {
+  ...casualUserMock,
+  gender: casualUserMock.gender ?? Gender.male,
+  playLevel: casualUserMock.playLevel ?? PlayLevel.beginner,
+}
 
 const createWrapper = ({ children }: { children: ReactNode }) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
@@ -52,19 +60,19 @@ describe("<AdditionalInfo />", () => {
     await user.click(screen.getByRole("button", { name: /edit/i }))
     const genderInput = screen.getByRole("combobox", { name: /gender/i })
     await user.click(genderInput)
-    await user.click(screen.getByText("Female"))
+    await user.click(screen.getByRole("option", { name: userMock.gender }))
     const playLevelInput = screen.getByRole("combobox", { name: /play level/i })
     await user.click(playLevelInput)
-    await user.click(screen.getByText("Intermediate"))
+    await user.click(screen.getByRole("option", { name: userMock.playLevel }))
     await user.click(screen.getByRole("button", { name: /save changes/i }))
     await waitFor(() => {
-      expect(screen.getByDisplayValue("Female")).toBeInTheDocument()
-      expect(screen.getByDisplayValue("Intermediate")).toBeInTheDocument()
+      expect(screen.getByDisplayValue(userMock.gender)).toBeInTheDocument()
+      expect(screen.getByDisplayValue(userMock.playLevel)).toBeInTheDocument()
     })
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
-      gender: "female",
-      playLevel: "intermediate",
-      dietary: "",
+      gender: userMock.gender,
+      playLevel: userMock.playLevel,
+      dietaryRequirements: userMock.dietaryRequirements ?? "",
     })
   })
 })

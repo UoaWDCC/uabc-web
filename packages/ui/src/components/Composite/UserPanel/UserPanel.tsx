@@ -1,4 +1,4 @@
-import type { MembershipType } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { ShuttleIcon } from "@repo/ui/components/Icon"
 import { PencilIcon } from "@yamada-ui/lucide"
 import {
@@ -19,59 +19,16 @@ import {
 import type { FC } from "react"
 import { InfoField } from "./InfoField"
 import { StatusBadge } from "./StatusBadge"
+import { getImageUrl } from "./UserPanelUtils"
 
 /**
  * Props for {@link UserPanel} component
  */
 export interface UserPanelProps extends CardProps {
   /**
-   * User's profile image URL
-   *
-   * @remarks
-   * If not provided, the avatar will display the user's initials.
-   * Should be a valid image URL or data URI.
+   * The user to display
    */
-  avatarSrc?: string
-  /**
-   * User's display name
-   *
-   * @remarks
-   * This is the primary identifier displayed prominently in the panel.
-   * Used for avatar fallback if no image is provided.
-   */
-  name: string
-  /**
-   * User's membership status
-   *
-   * @remarks
-   * Determines the status badge and icon displayed.
-   * Affects the visual styling of the status indicator.
-   */
-  status: MembershipType
-  /**
-   * User's email address
-   *
-   * @remarks
-   * Displayed in the info section of the panel.
-   * Should be a valid email format for proper display.
-   */
-  email: string
-  /**
-   * User's phone number
-   *
-   * @remarks
-   * Displayed in the info section of the panel.
-   * Should be formatted for readability.
-   */
-  phone: string
-  /**
-   * Number of sessions remaining
-   *
-   * @remarks
-   * Displayed in the footer with a shuttle icon.
-   * Represents the user's remaining session count.
-   */
-  sessionsLeft: number
+  user: User
   /**
    * Props for the edit icon button
    *
@@ -113,16 +70,8 @@ export interface UserPanelProps extends CardProps {
  *   }}
  * />
  */
-export const UserPanel: FC<UserPanelProps> = ({
-  avatarSrc,
-  name,
-  status,
-  email,
-  phone,
-  sessionsLeft,
-  iconButtonProps,
-  ...props
-}) => {
+export const UserPanel: FC<UserPanelProps> = ({ user, iconButtonProps, ...props }) => {
+  const { firstName, lastName, role, email, phoneNumber, remainingSessions, image } = user
   return (
     <Card
       bg={["secondary.50", "secondary.900"]}
@@ -134,7 +83,7 @@ export const UserPanel: FC<UserPanelProps> = ({
     >
       <CardHeader as={Center} flexDir="column" textAlign="center">
         <Box position="relative">
-          <Avatar name={name} size="xl" src={avatarSrc} />
+          <Avatar name={firstName} size="xl" src={getImageUrl(image)} />
           <Float offset={[4, 4]} placement="end-end">
             <IconButton
               aria-label="Edit"
@@ -146,17 +95,19 @@ export const UserPanel: FC<UserPanelProps> = ({
           </Float>
         </Box>
         <VStack gap="xs">
-          <Text fontSize="xl">{name}</Text>
-          <StatusBadge status={status} />
+          <Text fontSize="xl">
+            {firstName} {lastName}
+          </Text>
+          <StatusBadge status={role} />
         </VStack>
       </CardHeader>
       <CardBody alignItems="center" gap="md">
         <InfoField label="Email" value={email} />
-        <InfoField label="Phone" value={phone} />
+        <InfoField label="Phone" value={phoneNumber} />
       </CardBody>
       <CardFooter gap="sm" justifyContent="center">
         <ShuttleIcon fontSize="sm" />
-        <Text fontSize="sm">Sessions left: {sessionsLeft}</Text>
+        <Text fontSize="sm">Sessions left: {remainingSessions}</Text>
       </CardFooter>
     </Card>
   )
