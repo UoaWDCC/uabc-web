@@ -23,11 +23,32 @@ describe("/api/auth/verification-code", () => {
     const req = createMockNextRequest("/api/auth/verification-code", "POST", { email })
     const res = await POST(req)
 
-    expect(await userDataService.getUserByEmail(email)).toBeDefined()
+    const user = await userDataService.getUserByEmail(email)
+    expect(user.emailVerificationCode).toBe(code)
     expect(sendEmailMock).toHaveBeenCalledWith(email, code)
-    // No explicit response, so expect undefined or void
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ message: "Verification code sent" })
+  })
+
+  it("should modify the verification code if a user already exists", async () => {
+    const code = "123456"
+    const code2 = "234567"
+    vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(code)
+    vi.spyOn(MailService, "sendEmailVerificationCode").mockResolvedValue({ success: true })
+
+    const res = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
+
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ message: "Verification code sent" })
+    let user = await userDataService.getUserByEmail(email)
+    expect(user.emailVerificationCode).toBe(code)
+
+    vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(code2)
+    const res2 = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
+    expect(res2.status).toBe(200)
+    expect(await res2.json()).toEqual({ message: "Verification code sent" })
+    user = await userDataService.getUserByEmail(email)
+    expect(user.emailVerificationCode).toBe(code2)
   })
 
   it("should return 400 for invalid request body", async () => {

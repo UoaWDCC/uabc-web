@@ -14,12 +14,20 @@ export const POST = async (req: NextRequest) => {
     const { email } = VerificationCodeRequestSchema.parse(body)
 
     const code = await AuthService.generateVerificationCode()
-    await userDataService.createUser({
-      firstName: email,
-      email,
-      emailVerificationCode: code,
-      role: MembershipType.casual,
-    })
+
+    try {
+      const user = await userDataService.getUserByEmail(email)
+      await userDataService.updateUser(user.id, {
+        emailVerificationCode: code,
+      })
+    } catch {
+      await userDataService.createUser({
+        firstName: email,
+        email,
+        emailVerificationCode: code,
+        role: MembershipType.casual,
+      })
+    }
 
     await MailService.sendEmailVerificationCode(email, code)
     return NextResponse.json({ message: "Verification code sent" })
