@@ -32,8 +32,7 @@ export const FieldGroup = <T extends readonly Field[]>({ field }: FieldGroupProp
       label={field.label}
       labelProps={{ mb: isEditing ? "3" : "0", color: "muted" }}
     >
-      <Preview field={field} />
-      <Input field={field} />
+      {isEditing ? <Input field={field} /> : <Preview field={field} />}
     </FormControl>
   )
 }
