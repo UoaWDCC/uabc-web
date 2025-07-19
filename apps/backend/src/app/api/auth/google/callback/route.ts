@@ -99,7 +99,7 @@ export const GET = async (req: NextRequest) => {
       user = await userService.createUser({
         firstName: given_name,
         lastName: family_name,
-        role: MembershipType.casual,
+        role: MembershipType.CASUAL,
         email,
       })
     } else {

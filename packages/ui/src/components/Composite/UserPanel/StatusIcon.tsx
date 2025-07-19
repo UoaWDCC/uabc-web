@@ -37,10 +37,10 @@ export interface StatusIconProps extends IconProps {
  * <StatusIcon status="Member" color="green.500" />
  */
 export const StatusIcon: FC<StatusIconProps> = memo(({ status, ...props }) => {
-  if (status === MembershipType.member) {
+  if (status === MembershipType.MEMBER) {
     return <BadgeCheckIcon {...props} />
   }
-  if (status === MembershipType.casual) {
+  if (status === MembershipType.CASUAL) {
     return <CircleUserRoundIcon {...props} />
   }
   return <ShieldCheckIcon {...props} />

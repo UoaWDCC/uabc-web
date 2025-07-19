@@ -92,7 +92,7 @@ describe("/api/admin/users/[id]", async () => {
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
       expect(json.data.id).toBe(CASUAL_USER_UID)
-      expect(json.data.role).toBe("casual")
+      expect(json.data.role).toBe("Casual")
       expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 
