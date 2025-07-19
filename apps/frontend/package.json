@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "check-types": "tsc --noEmit",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --turbopack --port=3001",
     "build": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation next build",
     "start": "next start --port=3001",

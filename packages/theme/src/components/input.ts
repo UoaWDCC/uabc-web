@@ -297,7 +297,7 @@ export const Input: ComponentMultiStyle<"Input"> = {
   },
 
   defaultProps: {
-    size: "md",
+    size: "lg",
     variant: "outline",
   },
 }

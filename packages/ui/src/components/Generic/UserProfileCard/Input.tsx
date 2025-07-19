@@ -1,3 +1,5 @@
+"use client"
+
 import { InputType, MultiSelect, Select, TextInput } from "@repo/ui/components/Primitive"
 import type { SelectItem } from "@yamada-ui/react"
 import { Controller, type Path } from "react-hook-form"

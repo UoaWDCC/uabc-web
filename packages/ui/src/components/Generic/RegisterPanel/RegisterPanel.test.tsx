@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom"
-import type { LoginDetails } from "@repo/shared"
+import type { LoginRequestBody } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as RegisterPanelModule from "./index"
@@ -16,7 +16,7 @@ describe("<RegisterPanel />", () => {
   })
 
   it("should call onSubmit when a user clicks the submit button", async () => {
-    const handleSubmit = vi.fn((data: LoginDetails) => data)
+    const handleSubmit = vi.fn((data: LoginRequestBody) => data)
 
     const { user } = render(<RegisterPanel onSubmit={handleSubmit} />)
 
@@ -43,7 +43,7 @@ describe("<RegisterPanel />", () => {
   })
 
   it("should not call onSubmit when text input values are invalid", async () => {
-    const handleSubmit = vi.fn((data: LoginDetails) => data)
+    const handleSubmit = vi.fn((data: LoginRequestBody) => data)
 
     const { user } = render(<RegisterPanel onSubmit={handleSubmit} />)
 
@@ -57,7 +57,7 @@ describe("<RegisterPanel />", () => {
   })
 
   it("should not call onSubmit if email and password are valid but confirmPassword does not match", async () => {
-    const handleSubmit = vi.fn((data: LoginDetails) => data)
+    const handleSubmit = vi.fn((data: LoginRequestBody) => data)
 
     const { user } = render(<RegisterPanel onSubmit={handleSubmit} />)
 

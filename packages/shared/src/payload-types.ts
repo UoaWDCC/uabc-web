@@ -148,11 +148,13 @@ export interface Config {
     faq: Faq;
     footer: Footer;
     navbar: Navbar;
+    termsOfService: TermsOfService;
   };
   globalsSelect: {
     faq: FaqSelect<false> | FaqSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
+    termsOfService: TermsOfServiceSelect<false> | TermsOfServiceSelect<true>;
   };
   locale: null;
   user: Admin & {
@@ -890,6 +892,110 @@ export interface Navbar {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "termsOfService".
+ */
+export interface TermsOfService {
+  id: string;
+  /**
+   * The title for the Terms of Service section.
+   */
+  title: string;
+  /**
+   * The subtitle for the Code of Conduct section.
+   */
+  subtitle: string;
+  checkInRules: CheckInRules;
+  sessionRules: SessionRules;
+  disclaimer: Disclaimer;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CheckInRules".
+ */
+export interface CheckInRules {
+  /**
+   * The title for the check-in rules section.
+   */
+  title: string;
+  /**
+   * The rules for the check-in.
+   */
+  rules: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SessionRules".
+ */
+export interface SessionRules {
+  /**
+   * The title for the session rules section.
+   */
+  title: string;
+  /**
+   * The rules for the session.
+   */
+  rules: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Disclaimer".
+ */
+export interface Disclaimer {
+  /**
+   * The title for the disclaimer section.
+   */
+  title: string;
+  /**
+   * The disclaimer text.
+   */
+  disclaimer: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faq_select".
  */
 export interface FaqSelect<T extends boolean = true> {
@@ -954,6 +1060,44 @@ export interface NavbarSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "termsOfService_select".
+ */
+export interface TermsOfServiceSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  checkInRules?: T | CheckInRulesSelect<T>;
+  sessionRules?: T | SessionRulesSelect<T>;
+  disclaimer?: T | DisclaimerSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CheckInRules_select".
+ */
+export interface CheckInRulesSelect<T extends boolean = true> {
+  title?: T;
+  rules?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SessionRules_select".
+ */
+export interface SessionRulesSelect<T extends boolean = true> {
+  title?: T;
+  rules?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Disclaimer_select".
+ */
+export interface DisclaimerSelect<T extends boolean = true> {
+  title?: T;
+  disclaimer?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
