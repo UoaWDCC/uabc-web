@@ -1,4 +1,5 @@
 import { z } from "zod"
+import type { User } from "../payload-types"
 import {
   type CreateUserData,
   type EditUserData,
@@ -7,9 +8,21 @@ import {
   PlayLevel,
   University,
 } from "../types"
-import { UserSchema } from "./auth"
 import { MediaSchema } from "./media"
 import { GetAllWithPaginationDataSchema } from "./query"
+
+export const UserSchema = z.object({
+  id: z.string(),
+  firstName: z.string(),
+  lastName: z.string().nullable().optional(),
+  email: z.string().email(),
+  // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
+  role: z.enum(["admin", "member", "casual"]),
+  remainingSessions: z.number().nullable().optional(),
+  image: z.union([z.string(), MediaSchema]).nullable().optional(),
+  updatedAt: z.string(),
+  createdAt: z.string(),
+}) satisfies z.ZodType<User>
 
 export const CreateUserRequestSchema = z.object({
   firstName: z.string().min(1).max(30),

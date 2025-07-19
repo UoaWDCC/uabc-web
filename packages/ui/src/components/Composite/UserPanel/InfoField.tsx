@@ -20,7 +20,7 @@ export interface InfoFieldProps {
    * Displayed below the label in the primary text color.
    * Can be any string content including formatted text.
    */
-  value: string
+  value?: string | null
 }
 
 /**
@@ -54,7 +54,7 @@ export const InfoField: FC<InfoFieldProps> = memo(({ label, value }) => (
     <Text color="muted" fontSize="sm">
       {label}
     </Text>
-    <Text>{value}</Text>
+    <Text>{value ?? "N/A"}</Text>
   </VStack>
 ))
 
