@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server"
 import type z from "zod"
+import type { User } from "../../payload-types"
 import type {
   JWTEncryptedUserSchema,
   LoginFormDataSchema,
@@ -7,7 +8,6 @@ import type {
   LoginResponseSchema,
   UserInfoResponseSchema,
 } from "../../schemas"
-import type { User } from "../payload-types"
 
 export const AUTH_COOKIE_NAME = "auth_token"
 export const STATE_COOKIE_NAME = "state"
