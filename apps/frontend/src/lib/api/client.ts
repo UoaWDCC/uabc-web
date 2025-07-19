@@ -58,7 +58,14 @@ class ApiClient {
   ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
-        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          ...options?.headers,
+        },
+        next: {
+          tags: options?.tags ?? [],
+          ...(options?.revalidate !== undefined ? { revalidate: options.revalidate } : {}),
+        },
       })
 
       if (!response.ok) {
