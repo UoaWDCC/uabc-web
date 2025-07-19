@@ -2,6 +2,7 @@ import z from "zod"
 import type { GameSession } from "../payload-types"
 import type { CreateGameSessionData, UpdateGameSessionData } from "../types"
 import { GameSessionScheduleSchema } from "./game-session-schedule"
+import { GetAllWithPaginationDataSchema } from "./query"
 import { SemesterSchema } from "./semester"
 
 export const GameSessionSchema = z.object({
@@ -33,16 +34,7 @@ export const GetGameSessionResponseSchema = z.object({
 })
 
 export const GetAllGameSessionsResponseSchema = z.object({
-  data: z.object({
-    docs: z.array(GameSessionSchema),
-    totalDocs: z.number(),
-    limit: z.number(),
-    totalPages: z.number(),
-    page: z.number(),
-    pagingCounter: z.number(),
-    hasPrevPage: z.boolean(),
-    hasNextPage: z.boolean(),
-    prevPage: z.number().nullable(),
-    nextPage: z.number().nullable(),
+  data: GetAllWithPaginationDataSchema.extend({
+    docs: z.array(GameSessionSchema).optional().nullable(),
   }),
 })

@@ -9,6 +9,7 @@ import {
 } from "../types"
 import { UserSchema } from "./auth"
 import { MediaSchema } from "./media"
+import { GetAllWithPaginationDataSchema } from "./query"
 
 export const CreateUserRequestSchema = z.object({
   firstName: z.string().min(1).max(30),
@@ -30,17 +31,8 @@ export const UpdateUserRequestSchema =
   CreateUserRequestSchema.partial() satisfies z.ZodType<EditUserData>
 
 export const GetAllUsersResponseSchema = z.object({
-  data: z.object({
-    docs: z.array(UserSchema),
-    totalDocs: z.number(),
-    limit: z.number(),
-    totalPages: z.number(),
-    page: z.number(),
-    pagingCounter: z.number(),
-    hasPrevPage: z.boolean(),
-    hasNextPage: z.boolean(),
-    prevPage: z.number().nullable(),
-    nextPage: z.number().nullable(),
+  data: GetAllWithPaginationDataSchema.extend({
+    docs: z.array(UserSchema).optional().nullable(),
   }),
 })
 
