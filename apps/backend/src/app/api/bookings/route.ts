@@ -1,9 +1,4 @@
-import {
-  CreateBookingRequestBodySchema,
-  type CreateBookingRequestBodyType,
-  MembershipType,
-  type RequestWithUser,
-} from "@repo/shared"
+import { CreateBookingRequestBodySchema, MembershipType, type RequestWithUser } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { NextResponse } from "next/server"
 import { ZodError } from "zod"
@@ -20,9 +15,7 @@ class RouteWrapper {
     const bookingDataService = new BookingDataService()
 
     try {
-      const parsedBody: CreateBookingRequestBodyType = CreateBookingRequestBodySchema.parse(
-        await req.json(),
-      )
+      const parsedBody = CreateBookingRequestBodySchema.parse(await req.json())
 
       const gameSession =
         typeof parsedBody.gameSession === "string"
