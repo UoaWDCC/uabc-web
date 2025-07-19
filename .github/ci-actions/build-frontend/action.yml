@@ -8,6 +8,12 @@ inputs:
   NEXT_PUBLIC_API_URL:
     description: "The public API URL for the workspace."
     required: true
+  NODE_ENV:
+    description: "The node environment."
+    required: false
+  APP_INDEX_MODE:
+    description: "The app index mode."
+    required: false
 
 runs:
   using: composite
@@ -37,7 +43,7 @@ runs:
           ${{ runner.os }}-node_modules-
 
     - name: Install dependencies if cache misses
-      run: NODE_ENV=production pnpm install --frozen-lockfile --ignore-scripts
+      run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
 
     - name: Restore Next.js cache
@@ -54,4 +60,6 @@ runs:
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
+        NODE_ENV: ${{ inputs.NODE_ENV }}
+        APP_INDEX_MODE: ${{ inputs.APP_INDEX_MODE }}
       run: pnpm build --filter frontend

@@ -19,6 +19,12 @@ inputs:
   NEXT_PUBLIC_API_URL:
     description: 'Backend API URL'
     required: true
+  NODE_ENV:
+    description: 'Node environment'
+    required: false
+  APP_INDEX_MODE:
+    description: 'App index mode'
+    required: false
   # Additional variables
   project-name:
     description: 'Project name'
@@ -58,7 +64,7 @@ runs:
           ${{ runner.os }}-node_modules-
 
     - name: Install dependencies if cache misses
-      run: NODE_ENV=production pnpm install --frozen-lockfile
+      run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
 
     - name: Create Cloudflare static Next build
@@ -66,6 +72,8 @@ runs:
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
+        NODE_ENV: ${{ inputs.NODE_ENV }}
+        APP_INDEX_MODE: ${{ inputs.APP_INDEX_MODE }}
       shell: bash
 
     - name: Publish frontend to cloudflare

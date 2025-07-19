@@ -1,6 +1,7 @@
 import type { ImgHTMLAttributes } from "react"
 
 vi.stubEnv("NEXT_PUBLIC_API_URL", "http://localhost:3000")
+vi.stubEnv("NEXT_PUBLIC_URL", "http://localhost:3001")
 
 vi.mock("@repo/ui/components/Primitive/Image", () => ({
   Image: (props: ImgHTMLAttributes<HTMLImageElement>) => (
