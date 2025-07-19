@@ -23,7 +23,7 @@ import { StatusBadge } from "./StatusBadge"
 /**
  * Extracts the URL from an image property that can be either a string or Media object
  */
-const getImageUrl = (image: Media): string | undefined => {
+const getImageUrl = (image: string | Media | null | undefined): string | undefined => {
   if (!image) return undefined
   if (typeof image === "string") return image
   return image.url ?? undefined
