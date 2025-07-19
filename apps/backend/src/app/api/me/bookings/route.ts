@@ -23,4 +23,3 @@ class RouteWrapper {
 }
 
 export const { GET } = RouteWrapper
-// why cant i export this as a function, why do i need to make it a constant?
