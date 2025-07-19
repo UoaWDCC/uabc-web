@@ -12,9 +12,10 @@ import { MediaSchema } from "./media"
 
 export const UserSchema = z.object({
   id: z.string(),
-  firstName: z.string(),
+  firstName: z.string().nullable().optional(),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
+  emailVerificationCode: z.string().nullable().optional(),
   // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
   role: z.enum(["admin", "member", "casual"]),
   remainingSessions: z.number().nullable().optional(),

@@ -157,3 +157,11 @@ export const AdditionalInfoFormSchema = z.object({
    */
   dietaryRequirements: z.string(),
 })
+
+export const VerificationCodeRequestSchema = z.object({
+  /**
+   * The user's email address
+   * @example straightzhao@gmail.com
+   */
+  email: z.string().email(),
+})
