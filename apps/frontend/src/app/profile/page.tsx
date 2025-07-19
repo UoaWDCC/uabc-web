@@ -52,8 +52,8 @@ export default async function Profile() {
 
       <AdditionalInfo
         defaultValues={{
-          gender: user.gender ?? undefined,
-          playLevel: user.playLevel ?? undefined,
+          gender: user.gender,
+          playLevel: user.playLevel,
           dietaryRequirements: user.dietaryRequirements,
         }}
         fields={AdditionalInfoFields}
