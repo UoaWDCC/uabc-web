@@ -12,7 +12,7 @@ import { MediaSchema } from "./media"
 
 export const UserSchema = z.object({
   id: z.string(),
-  firstName: z.string().nullable().optional(),
+  firstName: z.string(),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
   emailVerificationCode: z.string().nullable().optional(),
