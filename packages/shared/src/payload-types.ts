@@ -185,7 +185,7 @@ export interface AdminAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Admin".
+ * via the `definition` "admin".
  */
 export interface Admin {
   id: string;
