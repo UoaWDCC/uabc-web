@@ -6,8 +6,7 @@ import BookingDataService from "@/data-layer/services/BookingDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
-import { DELETE } from "../route"
-import { GET } from "./route"
+import { DELETE, GET } from "./route"
 
 describe("/api/admin/users/[id]/bookings", async () => {
   const cookieStore = await cookies()
