@@ -29,7 +29,7 @@ class RouteWrapper {
         return NextResponse.json(
           { error: "No remaining sessions" },
           { status: StatusCodes.FORBIDDEN },
-        ) 
+        )
 
       if (
         (userData.role === MembershipType.casual &&

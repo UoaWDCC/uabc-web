@@ -5,18 +5,18 @@ import {
   MembershipType,
   PlayLevel,
 } from "@repo/shared"
+import { userCreateMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
+import AuthService from "@/business-layer/services/AuthService"
+import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
+import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
+import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { POST } from "./route"
-import UserDataService from "@/data-layer/services/UserDataService"
-import AuthService from "@/business-layer/services/AuthService"
-import { userCreateMock } from "@repo/shared/mocks"
-import BookingDataService from "@/data-layer/services/BookingDataService"
-import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 
 describe("/api/bookings", async () => {
   const cookieStore = await cookies()
@@ -51,7 +51,7 @@ describe("/api/bookings", async () => {
       expect(res.status).toBe(StatusCodes.CREATED)
       const data = (await res.json()).data
       expect(data.id).toBeDefined()
-      expect((await bookingDataService.getBookingById(data.id))).toBeDefined()
+      expect(await bookingDataService.getBookingById(data.id)).toBeDefined()
 
       if (tokenData) {
         const user = await userDataService.getUserById(tokenData.user.id)
