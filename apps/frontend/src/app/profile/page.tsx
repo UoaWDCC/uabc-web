@@ -1,5 +1,4 @@
 import { bookingsMock, casualUserMock } from "@repo/shared/mocks"
-import type { MembershipType } from "@repo/shared/types"
 import {
   AdditionalInfo,
   AdditionalInfoFields,
@@ -33,11 +32,7 @@ export default async function Profile() {
       <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }}>
         <GridItem>
           <UserPanel
-            email={user.email}
-            name={`${user.firstName} ${user.lastName}`}
-            phone={user.phoneNumber ?? "--"}
-            sessionsLeft={user.remainingSessions ?? 0}
-            status={user.role as MembershipType}
+            user={user}
           />
         </GridItem>
         <GridItem>
@@ -61,7 +56,7 @@ export default async function Profile() {
         defaultValues={{
           gender: user.gender ?? undefined,
           playLevel: user.playLevel ?? undefined,
-          dietary: user.dietaryRequirements,
+          dietaryRequirements: user.dietaryRequirements,
         }}
         fields={AdditionalInfoFields}
         title="Additional Info"
