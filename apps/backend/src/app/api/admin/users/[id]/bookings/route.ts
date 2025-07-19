@@ -7,14 +7,13 @@ class BookingsRouteWrapper {
   /**
    * GET method to fetch bookings for a specific user
    *
-   * @param req the request object
+   * @param _req the request object
    * @param params route parameters with the userID
    * @returns the user's bookings if found, otherwise error response
    */
   @Security("jwt", ["admin"])
   static async GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-      // getting the id value of the params and putting it into the variable id
       const { id } = await params
       const bookingDataService = new BookingDataService()
       const bookings = await bookingDataService.getAllBookingsByUserId(id)

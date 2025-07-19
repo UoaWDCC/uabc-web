@@ -1,23 +1,21 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
-import { CASUAL_USER_UID, casualUserMock } from "@repo/shared/mocks"
+import { casualUserMock, MEMBER_USER_UID } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 import { adminToken } from "@/test-config/vitest.setup"
-import { GET } from "../route"
+import { GET } from "./route"
 
 describe("/api/admin/users/[id]/bookings", async () => {
   const cookieStore = await cookies()
   const bookingDataService = new BookingDataService()
 
-  beforeEach(() => {
-    cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-  })
-
   describe("GET", () => {
     it("should return all bookings for a specific user", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       const booking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
         user: casualUserMock,
@@ -28,9 +26,9 @@ describe("/api/admin/users/[id]/bookings", async () => {
       })
 
       const response = await GET(
-        createMockNextRequest(`/api/admin/users/${CASUAL_USER_UID}/bookings`),
+        createMockNextRequest(`/api/admin/users/${MEMBER_USER_UID}/bookings`),
         {
-          params: Promise.resolve({ id: CASUAL_USER_UID }),
+          params: Promise.resolve({ id: MEMBER_USER_UID }),
         },
       )
       const json = await response.json()
@@ -40,10 +38,12 @@ describe("/api/admin/users/[id]/bookings", async () => {
     })
 
     it("should return empty if there are no bookings for the specific user", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       const response = await GET(
-        createMockNextRequest(`/api/admin/users/${CASUAL_USER_UID}/bookings`),
+        createMockNextRequest(`/api/admin/users/${MEMBER_USER_UID}/bookings`),
         {
-          params: Promise.resolve({ id: CASUAL_USER_UID }),
+          params: Promise.resolve({ id: MEMBER_USER_UID }),
         },
       )
       const json = await response.json()
@@ -53,6 +53,8 @@ describe("/api/admin/users/[id]/bookings", async () => {
     })
 
     it("should return 500 and manage any unexpected errors ", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
       vi.spyOn(BookingDataService.prototype, "getAllBookingsByUserId").mockRejectedValueOnce(
         new Error("Database error"),
