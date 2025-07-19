@@ -1,5 +1,5 @@
 import type { PaginationQuery } from "@repo/shared"
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { QueryKeys } from "@/services"
 import AdminUserService from "./AdminUserService"
 
@@ -11,12 +11,18 @@ const AdminUserQuery = {
    * @returns A query hook that fetches all users.
    */
   useGetAllUsers: (query: PaginationQuery) => {
-    return useQuery({
+    return useInfiniteQuery({
       queryKey: [QueryKeys.USER_QUERY_KEY],
-      queryFn: async () => {
-        const response = await AdminUserService.getAllUsers(query)
-        return response?.data ?? []
+      initialPageParam: 1,
+      queryFn: async ({ pageParam }) => {
+        const response = await AdminUserService.getAllUsers({
+          ...query,
+          page: pageParam,
+        })
+        return response
       },
+      getNextPageParam: (lastPage) => lastPage?.data?.nextPage ?? undefined,
+      getPreviousPageParam: (firstPage) => firstPage?.data?.prevPage ?? undefined,
     })
   },
 } as const
