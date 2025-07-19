@@ -69,7 +69,7 @@ export const defaultFields = [
     items: playLevelOptions,
   },
   {
-    key: "dietary",
+    key: "dietaryRequirements",
     type: "text",
     label: "Dietary Requirements",
     placeholder: "Enter your dietary requirements",
