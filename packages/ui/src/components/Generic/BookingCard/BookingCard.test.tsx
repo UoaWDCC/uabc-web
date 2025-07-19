@@ -1,7 +1,15 @@
 import { render, screen } from "@repo/ui/test-utils"
+import dayjs from "dayjs"
+import timezone from "dayjs/plugin/timezone"
+import utc from "dayjs/plugin/utc"
 import { isValidElement } from "react"
 import { BookingCard } from "./BookingCard"
 import * as BookingCardModule from "./index"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+const NZ_TIMEZONE = "Pacific/Auckland"
 
 const defaultProps = {
   day: "Saturday",
@@ -34,7 +42,9 @@ describe("<BookingCard />", () => {
       screen.getByText(`${defaultProps.location} - ${defaultProps.address}`),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(`${defaultProps.startTime} - ${defaultProps.endTime}`),
+      screen.getByText(
+        `${dayjs(defaultProps.startTime).tz(NZ_TIMEZONE).format("h:mm A")} - ${dayjs(defaultProps.endTime).tz(NZ_TIMEZONE).format("h:mm A D MMM YYYY")}`,
+      ),
     ).toBeInTheDocument()
     expect(screen.getByAltText(defaultProps.imageProps.alt)).toBeInTheDocument()
     expect(screen.getByText("Edit")).toBeInTheDocument()

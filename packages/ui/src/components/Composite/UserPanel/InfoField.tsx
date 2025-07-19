@@ -43,13 +43,16 @@ export interface InfoFieldProps {
  */
 export const InfoField: FC<InfoFieldProps> = memo(({ label, value }) => (
   <VStack
+    alignSelf="center"
     border="2px solid"
     borderColor={["blackAlpha.200", "whiteAlpha.300"]}
     gap="xs"
-    minW="sm"
+    maxW="md"
+    minW={0}
     px="md"
     py="sm"
     rounded="lg"
+    w="full"
   >
     <Text color="muted" fontSize="sm">
       {label}
