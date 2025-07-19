@@ -1,13 +1,14 @@
 "use client"
 
 import { Heading, Image } from "@repo/ui/components/Primitive"
-import { Center, DiscList, ListItem, Loading, Text, VStack } from "@yamada-ui/react"
+import { Button, Center, DiscList, ListItem, Loading, Text, VStack } from "@yamada-ui/react"
+import Link from "next/link"
 import { useAuth } from "@/context/AuthContext"
 
 export default function UserPage() {
-  const { user, loading, error } = useAuth()
+  const { user, isLoading, isPending, error } = useAuth()
 
-  if (loading) {
+  if (isLoading || isPending) {
     return (
       <Center minH="50vh">
         <Loading boxSize="sm" />
@@ -20,7 +21,16 @@ export default function UserPage() {
   }
 
   if (!user) {
-    return <Text>No user is currently logged in.</Text>
+    return (
+      <Center minH="50vh">
+        <VStack>
+          <Text>No user is currently logged in.</Text>
+          <Button as={Link} colorScheme="primary" href="/login">
+            Go to Login
+          </Button>
+        </VStack>
+      </Center>
+    )
   }
 
   return (

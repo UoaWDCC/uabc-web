@@ -1,6 +1,6 @@
 "use client"
 
-import { AUTH_COOKIE_NAME, type LoginFormData } from "@repo/shared"
+import type { LoginFormData } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import {
   type UseMutationResult,
@@ -8,13 +8,14 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
-import { useLocalStorage } from "@yamada-ui/react"
-import { createContext, type ReactNode, useContext } from "react"
+import { createContext, type ReactNode, useContext, useSyncExternalStore } from "react"
+import { tokenStore } from "@/lib/token-store"
 import AuthService from "@/services/auth/AuthService"
 
 interface AuthContextValue {
   user: User | null
-  loading: boolean
+  isLoading: boolean
+  isPending: boolean
   error: string | null
   login: UseMutationResult<
     {
@@ -36,14 +37,12 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken, removeToken] = useLocalStorage<string>({
-    key: AUTH_COOKIE_NAME,
-    defaultValue: "",
-  })
+  const token = useSyncExternalStore(tokenStore.subscribe, tokenStore.getSnapshot, () => null)
+  const setToken = tokenStore.setToken
 
   const queryClient = useQueryClient()
 
-  const { data, isLoading, error, isFetching } = useQuery<User | null, Error>({
+  const { data, isLoading, error, isPending } = useQuery<User | null, Error>({
     queryKey: ["auth", "me"],
     queryFn: async (): Promise<User | null> => {
       if (token) {
@@ -52,8 +51,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return null
     },
     staleTime: 1000 * 60 * 5,
-    enabled: !!token,
     refetchOnMount: true,
+    enabled: !!token,
   })
 
   const login = useMutation({
@@ -78,7 +77,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return await AuthService.logout()
     },
     onSuccess: async () => {
-      removeToken()
+      setToken(null)
       await queryClient.invalidateQueries({ queryKey: ["auth", "me"] })
     },
     onError: (error) => {
@@ -86,13 +85,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
   })
 
-  const loading = isLoading || isFetching || (token === "" && !data)
+  const isActuallyLoading = isLoading && !!token
+  const isActuallyPending = isPending && !!token
 
   return (
     <AuthContext.Provider
       value={{
         user: data ?? null,
-        loading,
+        isLoading: isActuallyLoading,
+        isPending: isActuallyPending,
         error: error ? error.message : null,
         login,
         logout,
