@@ -164,6 +164,9 @@ describe("ApiClient", () => {
       const result = await client.get("/test", testSchema, { tags: ["tag1", "tag2"] })
 
       expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
+        headers: {
+          "Content-Type": "application/json",
+        },
         next: {
           tags: ["tag1", "tag2"],
         },
@@ -180,6 +183,9 @@ describe("ApiClient", () => {
       const result = await client.get("/test", testSchema)
 
       expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
+        headers: {
+          "Content-Type": "application/json",
+        },
         next: {
           tags: [],
         },
@@ -253,6 +259,9 @@ describe("ApiClient", () => {
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
       const result = await client.get("/test", testSchema, { tags: ["tag1"], revalidate: 60 })
       expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
+        headers: {
+          "Content-Type": "application/json",
+        },
         next: {
           tags: ["tag1"],
           revalidate: 60,
