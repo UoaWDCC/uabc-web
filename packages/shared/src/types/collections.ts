@@ -64,3 +64,8 @@ export type EditSemesterData = Partial<CreateSemesterData>
  * Type for partially editing user data
  */
 export type EditUserData = Partial<CreateUserData>
+
+/**
+ * Type for partially editing user data without fields a user is not allowed to modify
+ */
+export type EditSelfData = Omit<EditUserData, "email" | "remainingSessions" | "role">
