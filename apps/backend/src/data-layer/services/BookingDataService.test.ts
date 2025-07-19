@@ -152,12 +152,12 @@ describe("bookingDataService", () => {
       await expect(bookingDataService.deleteBookingsByUserId(memberUserMock.id)).rejects.toThrow(
         "Not Found",
       )
+    })
 
-      it("should throw a Not Found error when there are no bookings to delete", async () => {
-        await expect(
-          bookingDataService.deleteBookingsByUserId("Not an userId with a booking"),
-        ).rejects.toThrowError("Not Found")
-      })
+    it("should throw a Not Found error when there are no bookings to delete", async () => {
+      await expect(
+        bookingDataService.deleteBookingsByUserId("Not an userId with a booking"),
+      ).rejects.toThrowError("Not Found")
     })
   })
 })

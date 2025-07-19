@@ -124,7 +124,10 @@ describe("/api/admin/users/[id]/bookings", async () => {
 
     it("should delete booking if user is an admin", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const booking = await bookingDataService.createBooking(bookingCreateMock)
+      const booking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: memberUserMock,
+      })
       const response = await DELETE(
         createMockNextRequest(`/api/admin/users/${MEMBER_USER_UID}/bookings`, "DELETE"),
         {
