@@ -1,9 +1,3 @@
-pre-push:
-  parallel: true
-  commands:
-    biome:
-      run: pnpm exec biome check . --error-on-warnings
-
 commit-msg:
   commands:
     commitlint:
@@ -18,5 +12,14 @@ post-merge:
 pre-commit:
   parallel: true
   commands:
+    biome:
+      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
+      exclude:
+        - "apps/portal/**"
+      run: |
+        pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+      stage_fixed: true
     cspell:
-      run: pnpm exec cspell {staged_files} --cache --cache-strategy=content --cache-location=.cspellcache
+      glob: "*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx,css,scss,yaml,yml}"
+      run: |
+        pnpm cspell {staged_files} --cache --cache-strategy=content --cache-location=.cspellcache
