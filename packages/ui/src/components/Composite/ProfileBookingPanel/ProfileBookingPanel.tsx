@@ -23,7 +23,7 @@ export interface ProfileBookingPanelProps extends StackProps {
 /**
  * ProfileBookingPanel component for displaying bookings in the user profile page.
  *
- * @params Props for the ProfileBookingPanel component
+ * @param Props for the ProfileBookingPanel component
  * @returns The ProfileBookingPanel component
  *
  * @example
