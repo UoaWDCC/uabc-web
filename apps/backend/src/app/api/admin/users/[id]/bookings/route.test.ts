@@ -24,7 +24,7 @@ describe("/api/admin/users/[id]/bookings", async () => {
       )
       const json = await response.json()
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
-      expect(json.data).toStrictEqual({ error: "No scope" })
+      expect(json).toStrictEqual({ error: "No scope" })
     })
 
     it("should return 401 if user is a member", async () => {
@@ -38,7 +38,7 @@ describe("/api/admin/users/[id]/bookings", async () => {
       )
       const json = await response.json()
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
-      expect(json.data).toStrictEqual({ error: "No scope" })
+      expect(json).toStrictEqual({ error: "No scope" })
     })
 
     it("should return all bookings for a specific user", async () => {
