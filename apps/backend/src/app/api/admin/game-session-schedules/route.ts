@@ -13,7 +13,7 @@ class GameSessionSchedulesRouteWrapper {
    * @param req The request object containing the request body.
    * @returns All {@link GameSessionSchedule} documents, otherwise an appropriate error response.
    */
-  @Security("jwt", ["Admin"])
+  @Security("jwt", ["ADMIN"])
   static async GET(req: NextRequest) {
     try {
       const { searchParams } = new URL(req.url)
@@ -55,7 +55,7 @@ class GameSessionSchedulesRouteWrapper {
    * @param req The request object containing the request body.
    * @returns The created {@link GameSessionSchedule} document, otherwise an appropriate error response.
    */
-  @Security("jwt", ["Admin"])
+  @Security("jwt", ["ADMIN"])
   static async POST(req: NextRequest) {
     try {
       const parsedBody = CreateGameSessionScheduleRequestSchema.parse(await req.json())

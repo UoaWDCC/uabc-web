@@ -12,7 +12,7 @@ class UsersRouteWrapper {
    * @param req The request object containing query parameters for pagination
    * @returns Paginated user data with proper metadata
    */
-  @Security("jwt", ["Admin"])
+  @Security("jwt", ["ADMIN"])
   static async GET(req: NextRequest) {
     try {
       const { searchParams } = new URL(req.url)
@@ -45,7 +45,7 @@ class UsersRouteWrapper {
    * @param req The request object containing the request body
    * @returns The created {@link User} document.
    */
-  @Security("jwt", ["Admin"])
+  @Security("jwt", ["ADMIN"])
   static async POST(req: NextRequest) {
     try {
       const parsedBody = CreateUserRequestSchema.parse(await req.json())

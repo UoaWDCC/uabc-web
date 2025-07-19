@@ -14,7 +14,7 @@ class SemesterRouteWrapper {
    * @param req The request object containing the request body
    * @returns The created {@link Semester} document.
    */
-  @Security("jwt", ["Admin"])
+  @Security("jwt", ["ADMIN"])
   static async POST(req: NextRequest) {
     try {
       const parsedBody = CreateSemesterRequestSchema.parse(await req.json())

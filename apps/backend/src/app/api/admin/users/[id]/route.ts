@@ -14,7 +14,7 @@ class UserRouteWrapper {
    * @param params The route parameters containing the user ID
    * @returns The user data if found, otherwise appropriate error response
    */
-  @Security("jwt", ["Admin"])
+  @Security("jwt", ["ADMIN"])
   static async GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
@@ -41,7 +41,7 @@ class UserRouteWrapper {
    * @param params The route parameters containing the User ID
    * @returns The updated User document
    */
-  @Security("jwt", ["Admin"])
+  @Security("jwt", ["ADMIN"])
   static async PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
@@ -74,7 +74,7 @@ class UserRouteWrapper {
    * @param params The route parameters containing the user ID
    * @returns No content response if successful, otherwise appropriate error response
    */
-  @Security("jwt", ["Admin"])
+  @Security("jwt", ["ADMIN"])
   static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
