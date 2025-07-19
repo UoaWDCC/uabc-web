@@ -32,6 +32,25 @@ export default class BookingDataService {
   }
 
   /**
+   * Finds all {@link Booking} documents by a {@link User}'s id
+   *
+   * @param userId The ID of the user whose {@link Booking} you find
+   * @returns the {@link Booking} if successful
+   */
+  public async getAllBookingsByUserId(userId: string): Promise<Booking[]> {
+    return (
+      await payload.find({
+        collection: "booking",
+        where: {
+          user: {
+            equals: userId,
+          },
+        },
+      })
+    ).docs
+  }
+
+  /**
    * Finds all {@link Booking} documents.
    *
    * @param limit The maximum documents to be returned
