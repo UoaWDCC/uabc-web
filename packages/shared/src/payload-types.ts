@@ -301,7 +301,7 @@ export interface User {
   /**
    * The role of the user
    */
-  role: 'member' | 'casual' | 'admin';
+  role: 'Member' | 'Casual' | 'Admin';
   /**
    * The phone number of the user
    */

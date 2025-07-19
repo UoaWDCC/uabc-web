@@ -26,7 +26,7 @@ describe("<FilterMultiSelect />", () => {
       setFieldFilter,
     })
     const items = [
-      { label: "Admin", value: "admin" as const },
+      { label: "Admin", value: "Admin" as const },
       { label: "User", value: "user" as const },
     ]
     const { user, rerender } = render(
@@ -36,18 +36,18 @@ describe("<FilterMultiSelect />", () => {
     await user.click(select)
     const adminOption = screen.getByText("Admin")
     await user.click(adminOption)
-    expect(setFieldFilter).toHaveBeenCalledWith("role", ["admin"])
+    expect(setFieldFilter).toHaveBeenCalledWith("role", ["Admin"])
     mockUseManagementTable.mockReturnValue({
-      fieldFilters: { role: ["admin"] },
+      fieldFilters: { role: ["Admin"] },
       setFieldFilter,
     })
     rerender(<FilterMultiSelect filterKey={"role" as never} items={items} />)
     await user.click(select)
     const userOption = screen.getByText("User")
     await user.click(userOption)
-    expect(setFieldFilter).toHaveBeenCalledWith("role", ["admin", "user"])
+    expect(setFieldFilter).toHaveBeenCalledWith("role", ["Admin", "user"])
     mockUseManagementTable.mockReturnValue({
-      fieldFilters: { role: ["admin", "user"] },
+      fieldFilters: { role: ["Admin", "user"] },
       setFieldFilter,
     })
     rerender(<FilterMultiSelect filterKey={"role" as never} items={items} />)
@@ -62,7 +62,7 @@ describe("<FilterMultiSelect />", () => {
       setFieldFilter: vi.fn(),
     })
     const items = [
-      { label: "Admin", value: "admin" as const },
+      { label: "Admin", value: "Admin" as const },
       { label: "User", value: "user" as const },
     ]
     render(<FilterMultiSelect filterKey={"role" as never} items={items} />)

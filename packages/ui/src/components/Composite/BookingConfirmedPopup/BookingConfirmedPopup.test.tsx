@@ -36,7 +36,7 @@ describe("<BookingConfirmedPopup />", () => {
       wrapper: withNuqsTestingAdapter({
         searchParams: {
           "booking-confirmed-popup": "open",
-          "booking-confirmed-popup-value": MembershipType.casual,
+          "booking-confirmed-popup-value": MembershipType.CASUAL,
         },
       }),
     })

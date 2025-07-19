@@ -80,7 +80,7 @@ describe("/api/admin/users/[id]", async () => {
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
       expect(json.data.id).toBe(ADMIN_USER_UID)
-      expect(json.data.role).toBe("admin")
+      expect(json.data.role).toBe("Admin")
       expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 
@@ -92,7 +92,7 @@ describe("/api/admin/users/[id]", async () => {
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
       expect(json.data.id).toBe(CASUAL_USER_UID)
-      expect(json.data.role).toBe("casual")
+      expect(json.data.role).toBe("Casual")
       expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 
@@ -104,7 +104,7 @@ describe("/api/admin/users/[id]", async () => {
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
       expect(json.data.id).toBe(MEMBER_USER_UID)
-      expect(json.data.role).toBe("member")
+      expect(json.data.role).toBe("Member")
       expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 

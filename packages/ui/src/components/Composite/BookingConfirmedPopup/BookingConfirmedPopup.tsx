@@ -51,7 +51,7 @@ export const BookingConfirmedPopup: FC<BookingConfirmedPopupProps> = ({
   title,
   message,
   additionalMessage,
-  initialValue = MembershipType.member,
+  initialValue = MembershipType.MEMBER,
   linkText = "View Booking",
   ...props
 }) => {
@@ -68,7 +68,7 @@ export const BookingConfirmedPopup: FC<BookingConfirmedPopupProps> = ({
       </ModalHeader>
       <ModalBody alignItems="center" textAlign="center">
         <Text>{message}</Text>
-        {value === MembershipType.casual && additionalMessage && <Text>{additionalMessage}</Text>}
+        {value === MembershipType.CASUAL && additionalMessage && <Text>{additionalMessage}</Text>}
       </ModalBody>
       <ModalFooter alignItems="center" justifyContent="center">
         <Button as={Link} colorScheme="primary" href="/booking">

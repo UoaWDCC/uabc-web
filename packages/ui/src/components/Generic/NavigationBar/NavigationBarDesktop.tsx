@@ -26,7 +26,7 @@ export const NavigationBarDesktop = ({
 
   const fullName = `${user?.firstName} ${user?.lastName}`.trim()
   const src = typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""
-  const admin = user?.role === MembershipType.admin
+  const admin = user?.role === MembershipType.ADMIN
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(() => {
     const initialIndex = navItems.findIndex((item) => item.url === currentPath)

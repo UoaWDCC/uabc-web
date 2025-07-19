@@ -1,7 +1,7 @@
 export enum MembershipType {
-  member = "member",
-  casual = "casual",
-  admin = "admin",
+  MEMBER = "Member",
+  CASUAL = "Casual",
+  ADMIN = "Admin",
 }
 
 export enum Weekday {

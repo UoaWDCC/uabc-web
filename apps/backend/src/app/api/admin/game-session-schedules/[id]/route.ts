@@ -14,7 +14,7 @@ class RouteWrapper {
    * @param params route parameters containing the GameSessionSchedule ID
    * @returns OK code and the game session schedule data
    */
-  @Security("jwt", ["admin"])
+  @Security("jwt", ["ADMIN"])
   static async GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
@@ -43,7 +43,7 @@ class RouteWrapper {
    * @param params Route parameters containing the GameSessionSchedule ID.
    * @returns The updated {@link GameSessionSchedule} document, otherwise an appropriate error response.
    */
-  @Security("jwt", ["admin"])
+  @Security("jwt", ["ADMIN"])
   static async PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const parsedBody = UpdateGameSessionScheduleRequestSchema.parse(await req.json())
@@ -81,7 +81,7 @@ class RouteWrapper {
    * @param params Route parameters containing the GameSessionSchedule ID
    * @returns No content status code
    */
-  @Security("jwt", ["admin"])
+  @Security("jwt", ["ADMIN"])
   static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
