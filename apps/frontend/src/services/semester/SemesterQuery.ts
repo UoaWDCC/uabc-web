@@ -11,10 +11,7 @@ const SemesterQuery = {
   useGetSemesters: () => {
     return useQuery({
       queryKey: [QueryKeys.SEMESTER_QUERY_KEY],
-      queryFn: async () => {
-        const response = await SemesterService.getSemesters()
-        return response?.data ?? []
-      },
+      queryFn: SemesterService.getSemesters,
     })
   },
 } as const
