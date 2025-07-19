@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server"
-import type { User } from "../payload-types"
 import type z from "zod"
+import type { User } from "../payload-types"
 import type {
   JWTEncryptedUserSchema,
   LoginFormDataSchema,
