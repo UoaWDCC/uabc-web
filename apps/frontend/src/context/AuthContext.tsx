@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const queryClient = useQueryClient()
 
-  const { data, isLoading, error } = useQuery<User | null, Error>({
+  const { data, isLoading, error, isFetching } = useQuery<User | null, Error>({
     queryKey: ["auth", "me"],
     queryFn: async (): Promise<User | null> => {
       if (token) {
@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
     staleTime: 1000 * 60 * 5,
     enabled: !!token,
+    refetchOnMount: true,
   })
 
   const login = useMutation({
@@ -85,11 +86,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
   })
 
+  const loading = isLoading || isFetching || (token === "" && !data)
+
   return (
     <AuthContext.Provider
       value={{
         user: data ?? null,
-        loading: isLoading,
+        loading,
         error: error ? error.message : null,
         login,
         logout,

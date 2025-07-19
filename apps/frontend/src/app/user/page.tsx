@@ -1,14 +1,18 @@
 "use client"
 
 import { Heading, Image } from "@repo/ui/components/Primitive"
-import { DiscList, ListItem, Text, VStack } from "@yamada-ui/react"
+import { Center, DiscList, ListItem, Loading, Text, VStack } from "@yamada-ui/react"
 import { useAuth } from "@/context/AuthContext"
 
 export default function UserPage() {
   const { user, loading, error } = useAuth()
 
   if (loading) {
-    return <Text>Loading user info...</Text>
+    return (
+      <Center minH="50vh">
+        <Loading boxSize="sm" />
+      </Center>
+    )
   }
 
   if (error) {

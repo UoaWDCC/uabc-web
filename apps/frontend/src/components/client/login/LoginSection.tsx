@@ -2,6 +2,7 @@
 
 import type { LoginFormData, LoginResponse } from "@repo/shared"
 import { LoginPanel } from "@repo/ui/components/Generic"
+import { useQueryClient } from "@tanstack/react-query"
 import { useNotice } from "@yamada-ui/react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
@@ -9,6 +10,7 @@ import { useAuth } from "@/context/AuthContext"
 export const LoginSection = () => {
   const { login } = useAuth()
   const router = useRouter()
+  const queryClient = useQueryClient()
   const notice = useNotice()
 
   const handleLogin = async (data: LoginFormData): Promise<LoginResponse> => {
@@ -21,7 +23,8 @@ export const LoginSection = () => {
           description: "You are now logged in",
           status: "success",
         })
-        router.push("/")
+        await queryClient.prefetchQuery({ queryKey: ["auth", "me"] })
+        router.push("/user")
       } else {
         notice({
           title: "Login failed",
