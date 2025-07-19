@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { type RegisterPanelDetails, RegisterPanelDetailsSchema } from "@repo/shared"
+import { type RegisterFormData, RegisterFormDataSchema } from "@repo/shared"
 import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
@@ -26,7 +26,7 @@ export interface RegisterPanelProps {
   /**
    * Submit handler called when user submits the RegisterPanel form.
    */
-  onSubmit?: SubmitHandler<RegisterPanelDetails>
+  onSubmit?: SubmitHandler<RegisterFormData>
   /**
    * Handler called when user selects the Google icon button.
    *
@@ -46,8 +46,8 @@ export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelPro
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterPanelDetails>({
-    resolver: zodResolver(RegisterPanelDetailsSchema),
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(RegisterFormDataSchema),
   })
 
   return (

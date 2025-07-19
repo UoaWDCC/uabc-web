@@ -15,7 +15,7 @@ describe("<RegisterPanel />", () => {
     expect(RegisterPanel.displayName).toBe("RegisterPanel")
   })
 
-  it("should call onSubmit when a user clicks the submit button", async () => {
+  it("should call onSubmit when a user clicks the submit button with valid data", async () => {
     const handleSubmit = vi.fn((data: LoginRequestBody) => data)
 
     const { user } = render(<RegisterPanel onSubmit={handleSubmit} />)
