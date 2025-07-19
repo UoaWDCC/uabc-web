@@ -9,5 +9,7 @@ import { QueryKeys } from "@/services"
  * @throws When the API request fails
  */
 export const getFaq = async () => {
-  return await apiClient.get("/api/globals/faq", GetFaqResponseSchema, [QueryKeys.FAQ_QUERY_KEY])
+  return await apiClient.get("/api/globals/faq", GetFaqResponseSchema, {
+    tags: [QueryKeys.FAQ_QUERY_KEY],
+  })
 }

@@ -10,7 +10,7 @@ import { QueryKeys } from "@/services"
  * @throws When the API request fails
  */
 export const getFooter = async () => {
-  return await apiClient.get("/api/globals/footer", GetFooterResponseSchema, [
-    QueryKeys.FOOTER_QUERY_KEY,
-  ])
+  return await apiClient.get("/api/globals/footer", GetFooterResponseSchema, {
+    tags: [QueryKeys.FOOTER_QUERY_KEY],
+  })
 }

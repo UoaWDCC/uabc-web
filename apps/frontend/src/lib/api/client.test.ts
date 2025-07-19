@@ -161,7 +161,7 @@ describe("ApiClient", () => {
 
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
 
-      const result = await client.get("/test", testSchema, ["tag1", "tag2"])
+      const result = await client.get("/test", testSchema, { tags: ["tag1", "tag2"] })
 
       expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
         next: {
@@ -236,7 +236,7 @@ describe("ApiClient", () => {
 
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
 
-      const result = await client.get("/complex", complexSchema, ["complex"])
+      const result = await client.get("/complex", complexSchema, { tags: ["complex"] })
 
       expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
@@ -251,7 +251,7 @@ describe("ApiClient", () => {
         data: ["item1", "item2"],
       }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.get("/test", testSchema, ["tag1"], 60)
+      const result = await client.get("/test", testSchema, { tags: ["tag1"], revalidate: 60 })
       expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
         next: {
           tags: ["tag1"],
@@ -272,7 +272,7 @@ describe("ApiClient", () => {
       const testSchema = z.object({ message: z.string(), id: z.number() })
       const mockResponse = { message: "created", id: 1 }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.post("/test", { foo: "bar" }, testSchema, ["postTag"])
+      const result = await client.post("/test", { foo: "bar" }, testSchema, { tags: ["postTag"] })
       expect(mockFetch).toHaveBeenCalledWith(
         "https://api.example.com/test",
         expect.objectContaining({
@@ -306,7 +306,10 @@ describe("ApiClient", () => {
       const testSchema = z.object({ message: z.string(), id: z.number() })
       const mockResponse = { message: "created", id: 1 }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.post("/test", { foo: "bar" }, testSchema, ["postTag"], false)
+      const result = await client.post("/test", { foo: "bar" }, testSchema, {
+        tags: ["postTag"],
+        revalidate: false,
+      })
       expect(mockFetch).toHaveBeenCalledWith(
         "https://api.example.com/test",
         expect.objectContaining({

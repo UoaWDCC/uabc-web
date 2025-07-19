@@ -46,8 +46,12 @@ export default function UserPage() {
         {user.image && (
           <ListItem>
             <Text as="strong">Image:</Text>{" "}
-            {user.image.url && (
-              <Image alt="User" src={user.image.url} style={{ maxWidth: 80, borderRadius: 8 }} />
+            {typeof user.image === "string" ? (
+              <Image alt="User" src={user.image} style={{ maxWidth: 80, borderRadius: 8 }} />
+            ) : (
+              user.image.url && (
+                <Image alt="User" src={user.image.url} style={{ maxWidth: 80, borderRadius: 8 }} />
+              )
             )}
           </ListItem>
         )}
