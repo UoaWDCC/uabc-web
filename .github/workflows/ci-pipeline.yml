@@ -142,6 +142,7 @@ jobs:
         with:
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          NODE_ENV: preview
 
   build-storybook:
     needs: [setup, biome, cspell]
