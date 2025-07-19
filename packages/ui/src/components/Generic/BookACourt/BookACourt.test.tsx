@@ -15,7 +15,7 @@ describe("<BookACourt />", () => {
 
     Object.values(PlayLevel).forEach((level) => {
       const levelLink = screen.getByRole("link", {
-        name: level.charAt(0).toUpperCase() + level.slice(1),
+        name: level,
       })
       expect(levelLink).toBeInTheDocument()
       expect(levelLink).toHaveAttribute("href", `/book?playLevel=${level}`)
