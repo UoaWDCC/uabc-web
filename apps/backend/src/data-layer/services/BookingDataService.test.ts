@@ -35,7 +35,7 @@ describe("bookingDataService", () => {
   })
 
   describe("getAllBookingsByUserId", () => {
-    it("should find all bookings by userID", async () => {
+    it("should find all bookings by userId", async () => {
       const createdBooking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
         user: casualUserMock,
@@ -53,8 +53,8 @@ describe("bookingDataService", () => {
       )
     })
 
-    it("should return empty array if there are no bookings by userID", async () => {
-      const fetchedBooking = await bookingDataService.getAllBookingsByUserId("No bookings userID")
+    it("should return empty array if there are no bookings by userId", async () => {
+      const fetchedBooking = await bookingDataService.getAllBookingsByUserId("No bookings userId")
       expect(fetchedBooking).toStrictEqual([])
     })
   })
