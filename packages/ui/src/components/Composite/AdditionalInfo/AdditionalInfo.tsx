@@ -77,10 +77,8 @@ export const defaultFields = [
   },
 ] as const
 
-console.log(casualUserMock)
-
 export const defaultValues = {
-  gender: casualUserMock.gender,
-  playLevel: casualUserMock.playLevel,
+  gender: casualUserMock.gender ?? Gender.male,
+  playLevel: casualUserMock.playLevel ?? PlayLevel.beginner,
   dietaryRequirements: casualUserMock.dietaryRequirements,
 } as const
