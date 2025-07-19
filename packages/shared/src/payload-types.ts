@@ -292,7 +292,7 @@ export interface User {
   /**
    * The first name of the user
    */
-  firstName: string;
+  firstName?: string | null;
   /**
    * The last name of the user
    */
@@ -338,6 +338,10 @@ export interface User {
    * The image of the user
    */
   image?: (string | null) | Media;
+  /**
+   * The email verification token of the user
+   */
+  emailVerificationCode?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -681,6 +685,7 @@ export interface UserSelect<T extends boolean = true> {
   university?: T;
   remainingSessions?: T;
   image?: T;
+  emailVerificationCode?: T;
   updatedAt?: T;
   createdAt?: T;
 }

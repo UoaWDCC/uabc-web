@@ -6,13 +6,14 @@ import { CommonResponse } from "./response"
 // Payload User Schema
 export const UserSchema = z.object({
   id: z.string(),
-  firstName: z.string(),
+  firstName: z.string().nullable().optional(),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
   // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
   role: z.enum(["admin", "member", "casual"]),
   remainingSessions: z.number().nullable().optional(),
   image: z.union([z.string(), MediaSchema]).nullable().optional(),
+  emailVerificationCode: z.string().nullable().optional(),
   updatedAt: z.string(),
   createdAt: z.string(),
 }) satisfies z.ZodType<User>
@@ -64,15 +65,10 @@ export const UserInfoResponseSchema = z.object({
 
 export const RegisterDetailsSchema = z.object({
   /**
-   * The user's first name
-   * @example John
+   * The user's email verification code
+   * @example 123456
    */
-  firstName: z.string().min(1).max(30),
-  /**
-   * The user's last name
-   * @example Doe
-   */
-  lastName: z.string().min(1).max(30),
+  emailVerificationCode: z.string().min(6).max(6),
   /**
    * The user's email address
    * @example straightzhao@gmail.com

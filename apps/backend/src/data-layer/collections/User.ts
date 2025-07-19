@@ -7,7 +7,7 @@ export const User: CollectionConfig = {
     {
       name: "firstName",
       type: "text",
-      required: true,
+      required: false,
       admin: {
         description: "The first name of the user",
       },
@@ -110,6 +110,14 @@ export const User: CollectionConfig = {
       required: false,
       admin: {
         description: "The image of the user",
+      },
+    },
+    {
+      name: "emailVerificationCode",
+      type: "text",
+      required: false,
+      admin: {
+        description: "The email verification token of the user",
       },
     },
   ],
