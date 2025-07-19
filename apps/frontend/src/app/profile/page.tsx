@@ -31,9 +31,7 @@ export default async function Profile() {
     <VStack gap="xl" maxW="1220px">
       <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }}>
         <GridItem>
-          <UserPanel
-            user={user}
-          />
+          <UserPanel user={user} />
         </GridItem>
         <GridItem>
           <ProfileBookingPanel bookings={bookingsMock} />
