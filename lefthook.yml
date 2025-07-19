@@ -13,7 +13,6 @@ pre-commit:
   parallel: true
   commands:
     biome:
-      # priority: 1
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
       exclude:
         - "apps/portal/**"
@@ -21,7 +20,6 @@ pre-commit:
         pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
       stage_fixed: true
     cspell:
-      # priority: 2
       glob: "*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx,css,scss,yaml,yml}"
       run: |
         pnpm cspell {staged_files} --cache --cache-strategy=content --cache-location=.cspellcache
