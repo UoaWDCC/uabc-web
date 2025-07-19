@@ -18,7 +18,7 @@ export const globalStyle: UIStyle = {
     overflowX: "hidden",
     transitionDuration: "normal",
     transitionProperty: "background-color",
-    textWrap: "balance",
+    textWrap: "pretty",
     display: "grid",
     gridTemplateColumns: "1fr",
     gridTemplateRows: "1fr auto",

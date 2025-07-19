@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import { richTextRenderer } from "./lib/RichTextRenderer"
 import type { RichTextProps, RichTextRendererOptions } from "./lib/types"
@@ -65,6 +66,8 @@ export const RichText: React.FC<RichTextProps> = React.memo(
     linkProps,
     imageProps,
     codeProps,
+    listProps,
+    listItemProps,
     mediaBaseUrl,
     customComponents,
   }) => {
@@ -75,10 +78,22 @@ export const RichText: React.FC<RichTextProps> = React.memo(
         linkProps,
         imageProps,
         codeProps,
+        listProps,
+        listItemProps,
         mediaBaseUrl,
         customComponents,
       }),
-      [textProps, headingProps, linkProps, imageProps, codeProps, mediaBaseUrl, customComponents],
+      [
+        textProps,
+        headingProps,
+        linkProps,
+        imageProps,
+        codeProps,
+        listProps,
+        listItemProps,
+        mediaBaseUrl,
+        customComponents,
+      ],
     )
 
     const content = React.useMemo(() => {

@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom"
-import type { LoginDetails } from "@repo/shared"
+import type { LoginRequestBody, LoginResponse } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as LoginPanelModule from "./index"
@@ -8,7 +8,7 @@ import { LoginPanel } from "./LoginPanel"
 describe("<LoginPanel />", () => {
   it("should re-export the LoginPanel component and check if LoginPanel exists", () => {
     expect(LoginPanelModule.LoginPanel).toBeDefined()
-    expect(isValidElement(<LoginPanelModule.LoginPanel />)).toBeTruthy()
+    expect(isValidElement(<LoginPanelModule.LoginPanel googleHref="/" />)).toBeTruthy()
   })
 
   it("should have correct displayName", () => {
@@ -16,9 +16,11 @@ describe("<LoginPanel />", () => {
   })
 
   it("should call onSubmit when a user clicks the submit button", async () => {
-    const handleSubmit = vi.fn((data: LoginDetails) => data)
+    const handleSubmit = vi.fn((_data: LoginRequestBody) => {
+      return Promise.resolve({ data: "token" } as LoginResponse)
+    })
 
-    const { user } = render(<LoginPanel onSubmit={handleSubmit} />)
+    const { user } = render(<LoginPanel googleHref="/" onSubmit={handleSubmit} />)
 
     const sampleEmail = "straightzhao@gmail.com"
     const samplePassword = "str@!ghtZh@069"
@@ -32,16 +34,15 @@ describe("<LoginPanel />", () => {
     const submitButton = screen.getByText("Sign In")
     await user.click(submitButton)
 
-    expect(handleSubmit).toReturnWith({
-      email: sampleEmail,
-      password: samplePassword,
-    })
+    expect(handleSubmit).toHaveResolvedWith({ data: "token" })
   })
 
   it("should not call onSubmit when text input values are invalid", async () => {
-    const handleSubmit = vi.fn((data: LoginDetails) => data)
+    const handleSubmit = vi.fn((_data: LoginRequestBody) => {
+      return Promise.resolve({ error: "Error" } as LoginResponse)
+    })
 
-    const { user } = render(<LoginPanel onSubmit={handleSubmit} />)
+    const { user } = render(<LoginPanel googleHref="/" onSubmit={handleSubmit} />)
 
     const emailInput = screen.getByTestId("email")
     await user.type(emailInput, "invalid-email")
@@ -52,14 +53,11 @@ describe("<LoginPanel />", () => {
     expect(handleSubmit).not.toBeCalled()
   })
 
-  it("should call onClickGoogle when a user clicks the Google icon button", async () => {
-    const handleClickGoogle = vi.fn()
+  it("should render the Google icon button as a link with the correct href", async () => {
+    const googleUrl = "/"
+    render(<LoginPanel googleHref={googleUrl} />)
 
-    const { user } = render(<LoginPanel onClickGoogle={handleClickGoogle} />)
-
-    const googleIconButton = screen.getByTestId("google-logo")
-    await user.click(googleIconButton)
-
-    expect(handleClickGoogle).toBeCalled()
+    const googleIconButton = screen.getByLabelText("Google")
+    expect(googleIconButton).toHaveAttribute("href", googleUrl)
   })
 })

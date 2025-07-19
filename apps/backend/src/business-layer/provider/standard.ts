@@ -1,4 +1,4 @@
-import { LoginDetailsSchema } from "@repo/shared"
+import { LoginRequestBodySchema } from "@repo/shared"
 import bcrypt from "bcryptjs"
 
 export default class StandardSecurity {
@@ -35,7 +35,7 @@ export default class StandardSecurity {
    * @returns True if the data is valid, false otherwise
    */
   static async validateLoginDetails(email: string, password: string): Promise<boolean> {
-    const parse = await LoginDetailsSchema.safeParseAsync({
+    const parse = await LoginRequestBodySchema.safeParseAsync({
       email,
       password,
     })

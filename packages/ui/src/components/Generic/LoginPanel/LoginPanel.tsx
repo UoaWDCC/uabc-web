@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { type LoginDetails, LoginDetailsSchema } from "@repo/shared/schemas"
+import { type LoginFormData, LoginFormDataSchema, type LoginResponse } from "@repo/shared"
 import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
@@ -11,15 +11,14 @@ import {
   FormControl,
   HStack,
   memo,
-  noop,
   Spacer,
   Text,
   Link as UILink,
   VStack,
 } from "@yamada-ui/react"
 import Link from "next/link"
-import type { MouseEventHandler } from "react"
-import { type SubmitHandler, useForm } from "react-hook-form"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
 import { GoogleLogo, UabcLogo } from "../../Icon"
 
 /**
@@ -29,13 +28,11 @@ export interface LoginPanelProps {
   /**
    * Submit handler called when user submits the LoginPanel form.
    */
-  onSubmit?: SubmitHandler<LoginDetails>
+  onSubmit?: (args: LoginFormData) => Promise<LoginResponse>
   /**
-   * Handler called when user selects the Google icon button.
-   *
-   * TODO: change as necessary when implementing handler function.
+   * Href for the google icon button.
    */
-  onClickGoogle?: MouseEventHandler<HTMLButtonElement>
+  googleHref: string
 }
 
 /**
@@ -44,14 +41,22 @@ export interface LoginPanelProps {
  * @param props LoginPanel component props
  * @returns A login panel component
  */
-export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) => {
+export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginDetails>({
-    resolver: zodResolver(LoginDetailsSchema),
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(LoginFormDataSchema),
   })
+
+  const [error, setError] = useState("")
+
+  const handleLogin = async (data: LoginFormData) => {
+    const submitData = await onSubmit?.(data)
+    console.log(submitData)
+    setError(submitData?.error || "")
+  }
 
   return (
     <VStack
@@ -59,7 +64,7 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
       bgColor="secondary.900"
       borderRadius={{ base: undefined, md: "3xl" }}
       layerStyle={{ base: undefined, md: "gradientBorder" }}
-      onSubmit={handleSubmit(onSubmit ?? noop)}
+      onSubmit={handleSubmit(handleLogin)}
       p={{ base: "md", lg: "lg" }}
       w={{ base: "full", md: "md" }}
     >
@@ -93,8 +98,9 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
           {...register("password")}
         />
       </FormControl>
+      {error && <Text color={["danger.500", "danger.400"]}>{error}</Text>}
       <HStack color="gray.100" fontSize="sm">
-        <Checkbox label="Remember me" size="sm" textAlign="start" />
+        <Checkbox label="Remember me" size="sm" textAlign="start" {...register("rememberMe")} />
         <Spacer />
         <UILink
           _hover={{ color: "white" }}
@@ -135,10 +141,10 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
       <Center gap={4}>
         <IconButton
           aria-label="Google"
+          as="a"
           colorScheme="secondary"
-          data-testid="google-logo"
           fullRounded
-          onClick={onClickGoogle ?? noop}
+          href={googleHref}
           variant="gradient"
         >
           <GoogleLogo fontSize="2xl" />
@@ -146,10 +152,10 @@ export const LoginPanel = memo(({ onSubmit, onClickGoogle }: LoginPanelProps) =>
         {/* TODO: implement Apple auth or remove Apple icon button */}
         <IconButton
           aria-label="Apple"
+          as="a"
           colorScheme="secondary"
           disabled
           fullRounded
-          onClick={onClickGoogle}
           variant="gradient"
         >
           <AppleIcon fontSize="2xl" />

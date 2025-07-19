@@ -1,5 +1,13 @@
 import type { SerializedEditorState, SerializedLexicalNode } from "@repo/shared"
-import type { CodeProps, HeadingProps, ImageProps, LinkProps, TextProps } from "@yamada-ui/react"
+import type {
+  CodeProps,
+  HeadingProps,
+  ImageProps,
+  LinkProps,
+  ListItemProps,
+  ListProps,
+  TextProps,
+} from "@yamada-ui/react"
 import type React from "react"
 
 export interface RichTextRendererOptions {
@@ -8,6 +16,8 @@ export interface RichTextRendererOptions {
   linkProps?: Partial<LinkProps>
   imageProps?: Partial<ImageProps>
   codeProps?: Partial<CodeProps>
+  listProps?: Partial<ListProps>
+  listItemProps?: Partial<ListItemProps>
   /**
    * Base URL for resolving relative media URLs from the backend
    * @example "https://api.example.com" or process.env.NEXT_PUBLIC_API_URL

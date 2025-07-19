@@ -4,7 +4,6 @@ import {
   Box,
   Center,
   HStack,
-  Label,
   Select as UISelect,
   type SelectProps as UISelectProps,
 } from "@yamada-ui/react"
@@ -17,6 +16,7 @@ export interface SelectProps extends Omit<UISelectProps, "variant"> {
    *
    * @remarks
    * The label is rendered within the Select component if provided by the parent.
+   * @deprecated This prop is not used in the Select component.
    */
   label?: string
   /**
@@ -55,33 +55,22 @@ export interface SelectProps extends Omit<UISelectProps, "variant"> {
  * @see {@link https://yamada-ui.com/components/forms/select Yamada UI Select Docs}
  */
 export const Select = memo(
-  forwardRef<HTMLSelectElement, SelectProps>(
+  forwardRef<HTMLDivElement, SelectProps>(
     ({ children, label, icon, variant, disabled, ...props }, ref) => {
       const stylised = variant === "stylised"
 
       return (
-        <Box
-          position="relative"
-          sx={{
-            "&:not(:has(div[data-placeholder]))": {
-              label: {
-                visibility: "hidden",
-              },
-            },
-          }}
-        >
+        <Box position="relative">
           <UISelect
-            fieldProps={
-              icon
-                ? {
-                    pl: { base: "11", md: "17" },
-                    pr: { base: "lg", md: "xl" },
-                  }
-                : { pl: { md: "6" } }
-            }
-            iconProps={icon ? { pr: { md: "lg" } } : { pr: { md: "6" } }}
+            data-has-icon={!!icon}
+            placeholder={label}
             ref={ref}
             size="lg"
+            sx={{
+              "&[data-placeholder]": {
+                color: ["black", "white"],
+              },
+            }}
             variant={variant}
             {...props}
           >
@@ -89,30 +78,33 @@ export const Select = memo(
           </UISelect>
           <HStack
             align="center"
-            gap={{ base: "xs", md: "sm" }}
-            mx={icon ? { md: "md" } : undefined}
+            gap="0"
             pointerEvents="none"
             position="absolute"
-            px={{ base: "sm", md: icon ? "3" : "sm" }}
             top="50%"
             transform="translateY(-50%)"
             z={1}
           >
-            <Center
-              borderColor="gray.600"
-              borderRadius="full"
-              borderWidth={stylised ? "thin" : "0"}
-              h="fit-content"
-              opacity={disabled ? 0.4 : 1}
-              p="xs"
-              w="fit-content"
-            >
-              {icon}
-            </Center>
-            {label && (
-              <Label fontSize="lg" fontWeight="normal" lineClamp={1} mb={0}>
-                {label}
-              </Label>
+            {icon && (
+              <Center
+                _before={{
+                  content: "''",
+                  position: "absolute",
+                  inset: 0,
+                  rounded: "full",
+                  outline: stylised ? "1px solid" : "none",
+                  outlineColor: "gray.600",
+                  outlineOffset: "-8px",
+                }}
+                fontSize="lg"
+                h="6xs"
+                opacity={disabled ? 0.4 : 1}
+                position="relative"
+                rounded="full"
+                w="6xs"
+              >
+                {icon}
+              </Center>
             )}
           </HStack>
         </Box>
