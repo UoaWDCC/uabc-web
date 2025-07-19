@@ -46,17 +46,6 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
-  robots: {
-    index: process.env.NODE_ENV === "production",
-    follow: process.env.NODE_ENV === "production",
-    googleBot: {
-      index: process.env.NODE_ENV === "production",
-      follow: process.env.NODE_ENV === "production",
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
 }
 
 export default function RootLayout({
