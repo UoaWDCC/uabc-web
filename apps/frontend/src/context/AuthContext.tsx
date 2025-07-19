@@ -1,77 +1,89 @@
 "use client"
 
+import { AUTH_COOKIE_NAME, type LoginFormData } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { createContext, type ReactNode, useCallback, useContext } from "react"
+import {
+  type UseMutationResult,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query"
+import { useLocalStorage } from "@yamada-ui/react"
+import { createContext, type ReactNode, useContext } from "react"
 import AuthService from "@/services/auth/AuthService"
 
 interface AuthContextValue {
   user: User | null
   loading: boolean
   error: string | null
-  login: (email: string, password: string) => Promise<void>
-  logout: () => Promise<void>
-  refresh: () => Promise<void>
-  loginLoading: boolean
-  logoutLoading: boolean
-  loginError: string | null
-  logoutError: string | null
+  login: UseMutationResult<
+    {
+      message?: string | undefined
+      data?: string | undefined
+      error?: string | undefined
+    },
+    Error,
+    {
+      email: string
+      password: string
+      rememberMe: boolean
+    },
+    unknown
+  >
+  logout: UseMutationResult<void, Error, void, unknown>
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [token, setToken, removeToken] = useLocalStorage<string>({
+    key: AUTH_COOKIE_NAME,
+    defaultValue: "",
+  })
+
   const queryClient = useQueryClient()
 
-  const { data, isLoading, error, refetch } = useQuery<User | null, Error>({
+  const { data, isLoading, error } = useQuery<User | null, Error>({
     queryKey: ["auth", "me"],
-    queryFn: async () => {
-      return await AuthService.getMe()
+    queryFn: async (): Promise<User | null> => {
+      if (token) {
+        return await AuthService.getUserFromToken(token)
+      }
+      return null
     },
     staleTime: 1000 * 60 * 5,
-    retry: false,
+    enabled: !!token,
   })
 
-  const {
-    mutateAsync: login,
-    isLoading: loginLoading,
-    error: loginErrorObj,
-  } = useMutation<void, Error, { email: string; password: string }>({
-    mutationFn: async ({ email, password }) => {
-      await AuthService.login(email, password)
+  const login = useMutation({
+    mutationFn: async ({ email, password }: LoginFormData) => {
+      return await AuthService.login(email, password)
     },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["auth", "me"] })
+    onSuccess: async (data) => {
+      if (data.data) {
+        setToken(data.data)
+        await queryClient.invalidateQueries({ queryKey: ["auth", "me"] })
+      } else {
+        throw new Error(data.error)
+      }
+    },
+    onError: (error) => {
+      console.error(error)
     },
   })
 
-  const {
-    mutateAsync: logout,
-    isLoading: logoutLoading,
-    error: logoutErrorObj,
-  } = useMutation<void, Error>({
+  const logout = useMutation({
     mutationFn: async () => {
-      await AuthService.logout()
+      return await AuthService.logout()
     },
     onSuccess: async () => {
+      removeToken()
       await queryClient.invalidateQueries({ queryKey: ["auth", "me"] })
     },
-  })
-
-  const loginHandler = useCallback(
-    async (email: string, password: string) => {
-      await login({ email, password })
+    onError: (error) => {
+      console.error(error)
     },
-    [login],
-  )
-
-  const logoutHandler = useCallback(async () => {
-    await logout()
-  }, [logout])
-
-  const refresh = useCallback(async () => {
-    await refetch()
-  }, [refetch])
+  })
 
   return (
     <AuthContext.Provider
@@ -79,13 +91,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user: data ?? null,
         loading: isLoading,
         error: error ? error.message : null,
-        login: loginHandler,
-        logout: logoutHandler,
-        refresh,
-        loginLoading,
-        logoutLoading,
-        loginError: loginErrorObj ? loginErrorObj.message : null,
-        logoutError: logoutErrorObj ? logoutErrorObj.message : null,
+        login,
+        logout,
       }}
     >
       {children}

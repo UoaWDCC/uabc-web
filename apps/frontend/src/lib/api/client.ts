@@ -44,22 +44,21 @@ class ApiClient {
    *
    * @param path The API endpoint path (relative to baseUrl).
    * @param schema The zod schema to validate the response data.
-   * @param tags Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param revalidate Optional revalidation time in seconds or false to disable revalidation.
+   * @param options Optional request options including headers, tags, and revalidation settings.
    * @returns The validated response data or error.
    */
   public async get<T>(
     path: string,
     schema: z.Schema<T>,
-    tags: string[] = [],
-    revalidate?: number | false,
+    options?: {
+      headers?: Record<string, string>
+      tags?: string[]
+      revalidate?: number | false
+    },
   ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
-        next: {
-          tags,
-          ...(revalidate !== undefined ? { revalidate } : {}),
-        },
+        ...options,
       })
 
       if (!response.ok) {
@@ -71,6 +70,7 @@ class ApiClient {
       }
 
       const data = await response.json()
+
       return { data: schema.parse(data), isError: false, status: response.status }
     } catch (error) {
       return { error: error as Error, isError: true, status: null }
@@ -83,25 +83,30 @@ class ApiClient {
    * @param path The API endpoint path (relative to baseUrl).
    * @param body The request body to send.
    * @param schema The zod schema to validate the response data.
-   * @param tags Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param revalidate Optional revalidation time in seconds or false to disable revalidation.
+   * @param options Optional request options including headers, tags, and revalidation settings.
    * @returns The validated response data or error.
    */
   public async post<T>(
     path: string,
     body: unknown,
     schema: z.Schema<T>,
-    tags: string[] = [],
-    revalidate?: number | false,
+    options?: {
+      headers?: Record<string, string>
+      tags?: string[]
+      revalidate?: number | false
+    },
   ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...options?.headers,
+        },
         body: JSON.stringify(body),
         next: {
-          tags,
-          ...(revalidate !== undefined ? { revalidate } : {}),
+          tags: options?.tags ?? [],
+          ...(options?.revalidate !== undefined ? { revalidate: options.revalidate } : {}),
         },
       })
       const data = await response.json()
