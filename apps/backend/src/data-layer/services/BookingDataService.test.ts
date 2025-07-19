@@ -1,5 +1,5 @@
 import type { EditBookingData } from "@repo/shared"
-import { casualUserMock } from "@repo/shared/mocks"
+import { casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import { payload } from "../adapters/Payload"
 import BookingDataService from "./BookingDataService"
@@ -134,6 +134,30 @@ describe("bookingDataService", () => {
       await expect(() => bookingDataService.deleteBooking("Not a booking ID")).rejects.toThrowError(
         "Not Found",
       )
+    })
+  })
+
+  describe("deleteBookingsByUserId", () => {
+    it("should delete bookings from a specific user successfully", async () => {
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: memberUserMock,
+      })
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: memberUserMock,
+      })
+      await bookingDataService.deleteBookingsByUserId(memberUserMock.id)
+
+      await expect(bookingDataService.deleteBookingsByUserId(memberUserMock.id)).rejects.toThrow(
+        "Not Found",
+      )
+
+      it("should throw a Not Found error when there are no bookings to delete", async () => {
+        await expect(
+          bookingDataService.deleteBookingsByUserId("Not an userId with a booking"),
+        ).rejects.toThrowError("Not Found")
+      })
     })
   })
 })

@@ -88,4 +88,38 @@ export default class BookingDataService {
       id,
     })
   }
+
+  /**
+   * Deletes a {@link Booking} by UserId.
+   * @param userId is the ID of the whose {@link Booking} you delete.
+   * @returns the deleted {@link Booking} if successful
+   */
+  public async deleteBookingsByUserId(userId: string): Promise<Booking[]> {
+    return (
+      await payload.delete({
+        collection: "booking",
+        where: {
+          user: {
+            equals: userId,
+          },
+        },
+      })
+    ).docs
+    //
+    //   // won't this delete all bookings by a user then - i think it needs to delete only one booking at a time
+    // }
+
+    // public async deleteBookingByUserId(id: string, userId: string): Promise<Booking> {
+    //   const booking = await this.getBookingById(id)
+
+    //   if ((booking.user === userId)) {
+    //     return await payload.delete({
+    //       collection: "booking",
+    //       id,
+    //     })
+    //   }
+    // }
+    //
+    // the above deletes a booking for a specific user, but isn't this redundant then? as we can just use delete a booking by it's id
+  }
 }

@@ -6,6 +6,7 @@ import BookingDataService from "@/data-layer/services/BookingDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
+import { DELETE } from "../route"
 import { GET } from "./route"
 
 describe("/api/admin/users/[id]/bookings", async () => {
@@ -15,7 +16,6 @@ describe("/api/admin/users/[id]/bookings", async () => {
   describe("GET", () => {
     it("should return 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-
       const response = await GET(
         createMockNextRequest(`/api/admin/users/${CASUAL_USER_UID}/bookings`),
         {
@@ -29,7 +29,6 @@ describe("/api/admin/users/[id]/bookings", async () => {
 
     it("should return 401 if user is a member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
-
       const response = await GET(
         createMockNextRequest(`/api/admin/users/${MEMBER_USER_UID}/bookings`),
         {
@@ -43,7 +42,6 @@ describe("/api/admin/users/[id]/bookings", async () => {
 
     it("should return all bookings for a specific user", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-
       const booking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
         user: memberUserMock,
@@ -52,7 +50,6 @@ describe("/api/admin/users/[id]/bookings", async () => {
         ...bookingCreateMock,
         user: memberUserMock,
       })
-
       const response = await GET(
         createMockNextRequest(`/api/admin/users/${MEMBER_USER_UID}/bookings`),
         {
@@ -60,14 +57,12 @@ describe("/api/admin/users/[id]/bookings", async () => {
         },
       )
       const json = await response.json()
-
       expect(response.status).toBe(StatusCodes.OK)
       expect(json.data).toEqual(expect.arrayContaining([booking1, booking2]))
     })
 
     it("should return empty if there are no bookings for the specific user", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-
       const response = await GET(
         createMockNextRequest(`/api/admin/users/${MEMBER_USER_UID}/bookings`),
         {
@@ -75,14 +70,12 @@ describe("/api/admin/users/[id]/bookings", async () => {
         },
       )
       const json = await response.json()
-
       expect(response.status).toBe(StatusCodes.OK)
       expect(json.data).toStrictEqual([])
     })
 
     it("should return 500 and manage any unexpected errors ", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
       vi.spyOn(BookingDataService.prototype, "getAllBookingsByUserId").mockRejectedValueOnce(
         new Error("Database error"),
@@ -95,7 +88,67 @@ describe("/api/admin/users/[id]/bookings", async () => {
         },
       )
       const json = await response.json()
+      expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+      expect(consoleErrorSpy).toHaveBeenCalled()
 
+      consoleErrorSpy.mockRestore()
+    })
+  })
+
+  describe("DELETE", () => {
+    it("should return 401 if user is a casual", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+      const response = await DELETE(
+        createMockNextRequest(`/api/admin/users/${CASUAL_USER_UID}/bookings`, "DELETE"),
+        {
+          params: Promise.resolve({ id: CASUAL_USER_UID }),
+        },
+      )
+      const json = await response.json()
+      expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(json).toStrictEqual({ error: "No scope" })
+    })
+
+    it("should return 401 if user is a member", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+      const response = await DELETE(
+        createMockNextRequest(`/api/admin/users/${MEMBER_USER_UID}/bookings`, "DELETE"),
+        {
+          params: Promise.resolve({ id: MEMBER_USER_UID }),
+        },
+      )
+      const json = await response.json()
+      expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(json).toStrictEqual({ error: "No scope" })
+    })
+
+    it("should delete booking if user is an admin", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const booking = await bookingDataService.createBooking(bookingCreateMock)
+      const response = await DELETE(
+        createMockNextRequest(`/api/admin/users/${MEMBER_USER_UID}/bookings`, "DELETE"),
+        {
+          params: Promise.resolve({ id: MEMBER_USER_UID }),
+        },
+      )
+      expect(response.status).toBe(StatusCodes.NO_CONTENT)
+      await expect(bookingDataService.getBookingById(booking.id)).rejects.toThrow("Not Found")
+    })
+    it("should return 500 if internal server errors occur", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+      vi.spyOn(BookingDataService.prototype, "deleteBookingsByUserId").mockRejectedValueOnce(
+        new Error("Database error"),
+      )
+
+      const response = await GET(
+        createMockNextRequest("/api/admin/users/placeholder-id/bookings"),
+        {
+          params: Promise.resolve({ id: "placeholder-id" }),
+        },
+      )
+      const json = await response.json()
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(consoleErrorSpy).toHaveBeenCalled()
