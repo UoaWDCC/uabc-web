@@ -96,7 +96,7 @@ export default class BookingDataService {
    */
   public async deleteBookingsByUserId(userId: string): Promise<Booking[]> {
     if ((await this.getAllBookingsByUserId(userId)).length === 0) {
-      throw new Error("No bookings found for this userId")
+      throw new Error("Not Found")
     }
     return (
       await payload.delete({

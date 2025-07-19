@@ -41,7 +41,7 @@ class BookingsRouteWrapper {
     try {
       const { id } = await params
       const bookingDataService = new BookingDataService()
-      await bookingDataService.deleteBooking(id)
+      await bookingDataService.deleteBookingsByUserId(id)
 
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
