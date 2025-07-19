@@ -5,5 +5,7 @@ import { QueryKeys } from "@/services"
 
 export const getTos = cache(async () => {
   "use server"
-  return await apiClient.get("/api/globals/tos", GetTosResponseSchema, [QueryKeys.TOS_QUERY_KEY])
+  return await apiClient.get("/api/globals/tos", GetTosResponseSchema, {
+    tags: [QueryKeys.TOS_QUERY_KEY],
+  })
 })

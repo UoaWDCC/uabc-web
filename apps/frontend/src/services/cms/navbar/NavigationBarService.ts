@@ -9,7 +9,7 @@ import { QueryKeys } from "@/services"
  * @throws When the API request fails
  */
 export const getNavigationBar = async () => {
-  return await apiClient.get("/api/globals/navbar", GetNavbarResponseSchema, [
-    QueryKeys.NAVIGATION_BAR_QUERY_KEY,
-  ])
+  return await apiClient.get("/api/globals/navbar", GetNavbarResponseSchema, {
+    tags: [QueryKeys.NAVIGATION_BAR_QUERY_KEY],
+  })
 }
