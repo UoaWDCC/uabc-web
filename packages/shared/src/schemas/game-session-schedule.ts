@@ -1,10 +1,7 @@
 import z from "zod"
+import { Weekday } from "../enums"
 import type { GameSessionSchedule as GameSessionScheduleType } from "../payload-types"
-import {
-  type CreateGameSessionScheduleData,
-  type UpdateGameSessionScheduleData,
-  Weekday,
-} from "../types"
+import type { CreateGameSessionScheduleData, UpdateGameSessionScheduleData } from "../types"
 import { SemesterSchema } from "./semester"
 
 export const GameSessionScheduleSchema = z.object({

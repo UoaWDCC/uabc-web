@@ -1,12 +1,6 @@
 import { z } from "zod"
-import {
-  type CreateUserData,
-  type EditUserData,
-  Gender,
-  MembershipType,
-  PlayLevel,
-  University,
-} from "../types"
+import { Gender, MembershipType, PlayLevel, University } from "../enums"
+import type { CreateUserData, EditUserData } from "../types"
 import { UserSchema } from "./auth"
 import { MediaSchema } from "./media"
 

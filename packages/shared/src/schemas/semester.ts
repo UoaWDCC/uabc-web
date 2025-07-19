@@ -1,6 +1,7 @@
 import { z } from "zod"
+import { Weekday } from "../enums"
 import type { Semester } from "../payload-types"
-import { type CreateSemesterData, type EditSemesterData, Weekday } from "../types"
+import type { CreateSemesterData, EditSemesterData } from "../types"
 
 export const SemesterSchema = z.object({
   id: z.string(),

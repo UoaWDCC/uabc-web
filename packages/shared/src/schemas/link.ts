@@ -1,5 +1,5 @@
-import type { Link, LinkGroup } from "@repo/shared/payload-types"
 import { z } from "zod"
+import type { Link, LinkGroup } from "../payload-types"
 
 export const LinkSchema = z.object({
   label: z.string(),
