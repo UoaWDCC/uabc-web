@@ -43,7 +43,7 @@ export const CreateUserRequestSchema = z.object({
 export const UpdateUserRequestSchema =
   CreateUserRequestSchema.partial() satisfies z.ZodType<EditUserData>
 
-export const UpdateSelfRequestSchema = UpdateUserRequestSchema.omit({
+export const UpdateSelfRequestSchema = UpdateUserRequestSchema.strict().omit({
   email: true,
   remainingSessions: true,
   role: true,
