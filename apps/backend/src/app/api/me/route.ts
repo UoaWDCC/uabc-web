@@ -57,4 +57,4 @@ class RouteWrapper {
   }
 }
 
-export const { GET } = RouteWrapper
+export const { GET, PATCH } = RouteWrapper
