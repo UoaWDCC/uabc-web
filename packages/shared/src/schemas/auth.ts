@@ -149,3 +149,11 @@ export const LoginResponseSchema = CommonResponse.extend({
    */
   data: z.string().optional(),
 })
+
+export const VerificationCodeRequestSchema = z.object({
+  /**
+   * The user's email address
+   * @example straightzhao@gmail.com
+   */
+  email: z.string().email(),
+})
