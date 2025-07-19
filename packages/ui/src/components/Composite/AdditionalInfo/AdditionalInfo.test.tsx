@@ -72,7 +72,7 @@ describe("<AdditionalInfo />", () => {
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
       gender: userMock.gender,
       playLevel: userMock.playLevel,
-      dietary: userMock.dietaryRequirements,
+      dietaryRequirements: userMock.dietaryRequirements ?? "",
     })
   })
 })
