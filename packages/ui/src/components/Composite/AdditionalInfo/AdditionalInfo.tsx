@@ -1,6 +1,7 @@
 "use client"
 
 import { Gender, PlayLevel } from "@repo/shared"
+import { casualUserMock } from "@repo/shared/mocks"
 import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"
 import { InputType } from "@repo/ui/components/Primitive"
@@ -75,3 +76,11 @@ export const defaultFields = [
     inputType: InputType.Text,
   },
 ] as const
+
+console.log(casualUserMock)
+
+export const defaultValues = {
+  gender: casualUserMock.gender,
+  playLevel: casualUserMock.playLevel,
+  dietaryRequirements: casualUserMock.dietaryRequirements,
+} as const

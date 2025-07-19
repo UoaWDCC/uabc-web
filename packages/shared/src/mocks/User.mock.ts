@@ -1,5 +1,5 @@
 import type { User } from "@repo/shared/payload-types"
-import { type CreateUserData, MembershipType } from "../types"
+import { type CreateUserData, Gender, MembershipType, PlayLevel } from "../types"
 
 export const CASUAL_USER_UID = "000000000000000000000001"
 export const MEMBER_USER_UID = "000000000000000000000002"
@@ -14,6 +14,8 @@ export const casualUserMock: User = {
   remainingSessions: 4,
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),
+  gender: Gender.male,
+  playLevel: PlayLevel.advanced,
 }
 
 export const memberUserMock: User = {

@@ -2,13 +2,7 @@ import { casualUserMock } from "@repo/shared/mocks"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import type { ReactNode } from "react"
-import { AdditionalInfo, defaultFields } from "./AdditionalInfo"
-
-export const defaultValues = {
-  gender: casualUserMock.gender,
-  playLevel: casualUserMock.playLevel,
-  dietaryRequirements: casualUserMock.dietaryRequirements,
-} as const
+import { AdditionalInfo, defaultFields, defaultValues } from "./AdditionalInfo"
 
 const queryClient = new QueryClient({
   defaultOptions: {
