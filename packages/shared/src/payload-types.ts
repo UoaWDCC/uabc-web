@@ -292,7 +292,7 @@ export interface User {
   /**
    * The first name of the user
    */
-  firstName?: string | null;
+  firstName: string;
   /**
    * The last name of the user
    */

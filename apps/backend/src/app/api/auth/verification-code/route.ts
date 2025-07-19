@@ -15,6 +15,7 @@ export const POST = async (req: NextRequest) => {
 
     const code = await AuthService.generateVerificationCode()
     await userDataService.createUser({
+      firstName: email,
       email,
       emailVerificationCode: code,
       role: MembershipType.casual,

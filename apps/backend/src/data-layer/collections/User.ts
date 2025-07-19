@@ -7,7 +7,7 @@ export const User: CollectionConfig = {
     {
       name: "firstName",
       type: "text",
-      required: false,
+      required: true,
       admin: {
         description: "The first name of the user",
       },

@@ -17,6 +17,7 @@ describe("tests /api/auth/register", () => {
 
   it("should register a new user", async () => {
     await userDataService.createUser({
+      firstName: registerBody.email,
       email: registerBody.email,
       emailVerificationCode: registerBody.emailVerificationCode,
       role: MembershipType.casual,
@@ -38,6 +39,7 @@ describe("tests /api/auth/register", () => {
 
   it("should return a 400 if a user submits an incorrect verification code", async () => {
     await userDataService.createUser({
+      firstName: registerBody.email,
       email: registerBody.email,
       emailVerificationCode: "333555",
       role: MembershipType.casual,
@@ -59,6 +61,7 @@ describe("tests /api/auth/register", () => {
 
   it("should return a 409 conflict if user already exists", async () => {
     await userDataService.createUser({
+      firstName: registerBody.email,
       email: registerBody.email,
       emailVerificationCode: registerBody.emailVerificationCode,
       role: MembershipType.casual,
