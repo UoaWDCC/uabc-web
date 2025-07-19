@@ -1,3 +1,4 @@
+import { LoginResponseSchema } from "@repo/shared"
 import { UserSchema } from "@repo/shared/schemas/auth"
 import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
@@ -24,7 +25,7 @@ const AuthService = {
     const { data, status, error } = await apiClient.post(
       "/api/auth/login",
       { email, password },
-      UserSchema,
+      LoginResponseSchema,
     )
     if (status !== StatusCodes.CREATED) throw error || new Error("Login failed")
     return data

@@ -20,6 +20,7 @@ describe("<UserProfileCard />", () => {
       placeholder: "Enter your email",
       inputType: InputType.Email,
       required: true,
+      disabled: true,
     },
   ] as const
 
@@ -68,8 +69,8 @@ describe("<UserProfileCard />", () => {
     await user.clear(input)
     await user.type(input, "Jane Smith")
     await user.click(screen.getByRole("button", { name: /save changes/i }))
-    expect(onSave).toHaveBeenCalledWith(
-      expect.objectContaining({ fullName: "Jane Smith", email: "john@example.com" }),
-    )
+    expect(onSave).toHaveBeenCalledWith({
+      fullName: "Jane Smith",
+    })
   })
 })
