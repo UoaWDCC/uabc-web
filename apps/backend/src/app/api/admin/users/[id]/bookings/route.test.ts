@@ -1,5 +1,5 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
-import { casualUserMock, MEMBER_USER_UID } from "@repo/shared/mocks"
+import { MEMBER_USER_UID, memberUserMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import BookingDataService from "@/data-layer/services/BookingDataService"
@@ -18,11 +18,11 @@ describe("/api/admin/users/[id]/bookings", async () => {
 
       const booking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
-        user: casualUserMock,
+        user: memberUserMock,
       })
       const booking2 = await bookingDataService.createBooking({
         ...bookingCreateMock,
-        user: casualUserMock,
+        user: memberUserMock,
       })
 
       const response = await GET(
