@@ -16,7 +16,7 @@
       "!**/importMap.js",
       "!**/.vercel"
     ],
-    "ignoreUnknown": false
+    "ignoreUnknown": true
   },
   "formatter": {
     "attributePosition": "auto",
@@ -44,6 +44,10 @@
   },
   "linter": {
     "enabled": true,
+    "domains": {
+      "next": "all",
+      "react": "all"
+    },
     "rules": {
       "correctness": {
         "noUnusedVariables": "error",
