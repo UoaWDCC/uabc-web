@@ -51,7 +51,7 @@ export type FilterSelectConfig<TData> = {
   /**
    * Items to display in the select dropdown.
    */
-  items: { label: string; value: Lowercase<string> }[]
+  items: { label: string; value: string }[]
   /**
    * Optional callback when the value changes.
    */
@@ -156,9 +156,9 @@ export type MultiSelectItem = {
    */
   label: string
   /**
-   * The value for the item (lowercase string).
+   * The value for the item.
    */
-  value: Lowercase<string>
+  value: string
 }
 
 /**
@@ -195,9 +195,9 @@ export type SelectItem = {
    */
   label: string
   /**
-   * The value for the item (lowercase string).
+   * The value for the item.
    */
-  value: Lowercase<string>
+  value: string
 }
 
 /**
