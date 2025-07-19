@@ -9,4 +9,5 @@ export enum QueryKeys {
   GAME_SESSION_SCHEDULE_QUERY_KEY = "gameSessionSchedule",
   USER_QUERY_KEY = "user",
   SEMESTER_QUERY_KEY = "semester",
+  TOS_QUERY_KEY = "tos",
 }
