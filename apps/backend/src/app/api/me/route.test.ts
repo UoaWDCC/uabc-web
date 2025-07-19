@@ -68,34 +68,40 @@ describe("api/me", async () => {
       expect((await response.json()).error).toEqual("Invalid request body")
     })
 
-    it("should return 403 if request body contains email", async () => {
+    it("should return 400 if request body contains email", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
       const response = await PATCH(
         createMockNextRequest("/api/me", "PATCH", {
           email: "new-email@gmail.com",
         }),
       )
-      expect(response.status).toBe(StatusCodes.FORBIDDEN)
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+
+      expect((await response.json()).error).toEqual("Invalid request body")
     })
 
-    it("should return 403 if request body contains remaining sessions", async () => {
+    it("should return 400 if request body contains remaining sessions", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
       const response = await PATCH(
         createMockNextRequest("/api/me", "PATCH", {
           remainingSessions: 99999,
         }),
       )
-      expect(response.status).toBe(StatusCodes.FORBIDDEN)
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+
+      expect((await response.json()).error).toEqual("Invalid request body")
     })
 
-    it("should return 403 if request body contains role", async () => {
+    it("should return 400 if request body contains role", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
       const response = await PATCH(
         createMockNextRequest("/api/me", "PATCH", {
           role: MembershipType.admin,
         }),
       )
-      expect(response.status).toBe(StatusCodes.FORBIDDEN)
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+
+      expect((await response.json()).error).toEqual("Invalid request body")
     })
 
     it("should return 500 and log error if an unexpected error occurs", async () => {

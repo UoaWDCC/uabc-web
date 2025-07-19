@@ -1,4 +1,4 @@
-import { UpdateUserRequestSchema } from "@repo/shared"
+import { UpdateSelfRequestSchema } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import type { NextRequest } from "next/server"
@@ -28,15 +28,7 @@ class RouteWrapper {
   @Security("jwt")
   static async PATCH(req: NextRequest & { user: User }) {
     try {
-      const parsedBody = UpdateUserRequestSchema.parse(await req.json())
-
-      // Forbid the user from updating their own email, remaining sessions or membership type.
-      if (parsedBody.email || parsedBody.remainingSessions || parsedBody.role) {
-        return NextResponse.json(
-          { error: getReasonPhrase(StatusCodes.FORBIDDEN) },
-          { status: StatusCodes.FORBIDDEN },
-        )
-      }
+      const parsedBody = UpdateSelfRequestSchema.parse(await req.json())
 
       const userDataService = new UserDataService()
       const updatedUser = await userDataService.updateUser(req.user.id, parsedBody)

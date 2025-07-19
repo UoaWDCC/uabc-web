@@ -2,6 +2,7 @@ import { z } from "zod"
 import type { User } from "../payload-types"
 import {
   type CreateUserData,
+  type EditSelfData,
   type EditUserData,
   Gender,
   MembershipType,
@@ -41,6 +42,12 @@ export const CreateUserRequestSchema = z.object({
 
 export const UpdateUserRequestSchema =
   CreateUserRequestSchema.partial() satisfies z.ZodType<EditUserData>
+
+export const UpdateSelfRequestSchema = UpdateUserRequestSchema.omit({
+  email: true,
+  remainingSessions: true,
+  role: true,
+}) satisfies z.ZodType<EditSelfData>
 
 export const GetAllUsersResponseSchema = z.object({
   data: z.array(UserSchema),
