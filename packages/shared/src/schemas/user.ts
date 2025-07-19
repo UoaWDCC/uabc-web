@@ -9,6 +9,7 @@ import {
   University,
 } from "../types"
 import { MediaSchema } from "./media"
+import { GetAllWithPaginationDataSchema } from "./query"
 
 export const UserSchema = z.object({
   id: z.string(),
@@ -43,7 +44,9 @@ export const UpdateUserRequestSchema =
   CreateUserRequestSchema.partial() satisfies z.ZodType<EditUserData>
 
 export const GetAllUsersResponseSchema = z.object({
-  data: z.array(UserSchema),
+  data: GetAllWithPaginationDataSchema.extend({
+    docs: z.array(UserSchema).optional().nullable(),
+  }),
 })
 
 export const GetUserResponseSchema = z.object({

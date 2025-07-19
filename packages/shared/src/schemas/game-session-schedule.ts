@@ -5,6 +5,7 @@ import {
   type UpdateGameSessionScheduleData,
   Weekday,
 } from "../types"
+import { GetAllWithPaginationDataSchema } from "./query"
 import { SemesterSchema } from "./semester"
 
 export const GameSessionScheduleSchema = z.object({
@@ -28,7 +29,9 @@ export const CreateGameSessionScheduleRequestSchema = GameSessionScheduleSchema.
 }) satisfies z.ZodType<CreateGameSessionScheduleData>
 
 export const GetAllGameSessionSchedulesResponseSchema = z.object({
-  data: z.array(GameSessionScheduleSchema),
+  data: GetAllWithPaginationDataSchema.extend({
+    docs: z.array(GameSessionScheduleSchema).optional().nullable(),
+  }),
 })
 
 export const GetGameSessionScheduleResponseSchema = z.object({

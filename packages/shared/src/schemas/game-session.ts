@@ -2,11 +2,15 @@ import z from "zod"
 import type { GameSession } from "../payload-types"
 import type { CreateGameSessionData, UpdateGameSessionData } from "../types"
 import { GameSessionScheduleSchema } from "./game-session-schedule"
+import { GetAllWithPaginationDataSchema } from "./query"
 import { SemesterSchema } from "./semester"
 
 export const GameSessionSchema = z.object({
   id: z.string(),
-  gameSessionSchedule: z.union([z.string(), z.null(), GameSessionScheduleSchema]),
+  gameSessionSchedule: z
+    .union([z.string(), z.null(), GameSessionScheduleSchema])
+    .optional()
+    .nullable(),
   semester: z.union([z.string(), SemesterSchema]),
   startTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   endTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
@@ -30,5 +34,7 @@ export const GetGameSessionResponseSchema = z.object({
 })
 
 export const GetAllGameSessionsResponseSchema = z.object({
-  data: z.array(GameSessionSchema),
+  data: GetAllWithPaginationDataSchema.extend({
+    docs: z.array(GameSessionSchema).optional().nullable(),
+  }),
 })
