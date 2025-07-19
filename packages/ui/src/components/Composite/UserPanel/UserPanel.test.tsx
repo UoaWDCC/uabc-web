@@ -1,20 +1,12 @@
-import { MembershipType } from "@repo/shared"
+import { memberUserMock } from "@repo/shared/mocks"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import { UserPanel } from "./UserPanel"
 
-const defaultProps = {
-  name: "Stitch Pelekai",
-  status: MembershipType.member,
-  email: "spel626@aucklanduni.ac.nz",
-  phone: "021 234 5678",
-  sessionsLeft: 7,
-}
-
 describe("UserPanel", () => {
   it("should re-export the Select component and check if Select exists", () => {
     expect(UserPanel).toBeDefined()
-    expect(isValidElement(<UserPanel {...defaultProps} />)).toBeTruthy()
+    expect(isValidElement(<UserPanel user={memberUserMock} />)).toBeTruthy()
   })
 
   it("should have correct displayName", () => {
@@ -22,12 +14,16 @@ describe("UserPanel", () => {
   })
 
   it("renders user information correctly", () => {
-    render(<UserPanel {...defaultProps} />)
+    render(<UserPanel user={memberUserMock} />)
 
-    expect(screen.getByText("Stitch Pelekai")).toBeInTheDocument()
-    expect(screen.getByText("Member")).toBeInTheDocument()
-    expect(screen.getByText("spel626@aucklanduni.ac.nz")).toBeInTheDocument()
-    expect(screen.getByText("021 234 5678")).toBeInTheDocument()
-    expect(screen.getByText("Sessions left: 7")).toBeInTheDocument()
+    expect(
+      screen.getByText(`${memberUserMock.firstName} ${memberUserMock.lastName}`),
+    ).toBeInTheDocument()
+    expect(screen.getByText(memberUserMock.role)).toBeInTheDocument()
+    expect(screen.getByText(memberUserMock.email)).toBeInTheDocument()
+    expect(screen.getByText(memberUserMock.phoneNumber ?? "N/A")).toBeInTheDocument()
+    expect(
+      screen.getByText(`Sessions left: ${memberUserMock.remainingSessions}`),
+    ).toBeInTheDocument()
   })
 })

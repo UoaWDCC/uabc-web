@@ -33,7 +33,7 @@ export const BookACourt = () => {
               maxW="md"
               w="full"
             >
-              {level.charAt(0).toUpperCase() + level.slice(1)}
+              {level}
             </Button>
           )}
         </For>
