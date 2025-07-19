@@ -3,19 +3,19 @@ import type { MetadataRoute } from "next"
 export const dynamic = "force-static"
 
 export default function robots(): MetadataRoute.Robots {
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.APP_INDEX_MODE === "NOINDEX") {
     return {
       rules: {
         userAgent: "*",
-        allow: "/",
+        disallow: "/",
       },
-      sitemap: `${process.env.NEXT_PUBLIC_URL}/sitemap.xml`,
     }
   }
   return {
     rules: {
       userAgent: "*",
-      disallow: "/",
+      allow: "/",
     },
+    sitemap: `${process.env.NEXT_PUBLIC_URL}/sitemap.xml`,
   }
 }

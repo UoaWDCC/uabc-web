@@ -88,6 +88,7 @@ jobs:
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
           NODE_ENV: staging
           project-name: uabc
+          APP_INDEX_MODE: NOINDEX
 
   deploy-to-production:
     name: Deploy UABC Production App

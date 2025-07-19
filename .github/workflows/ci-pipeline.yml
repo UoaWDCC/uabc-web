@@ -213,6 +213,7 @@ jobs:
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
           NODE_ENV: preview
+          APP_INDEX_MODE: NOINDEX
           project-name: uabc
 
       - name: Comment Result
