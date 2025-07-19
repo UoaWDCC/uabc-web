@@ -127,7 +127,7 @@ export const UserPanel: FC<UserPanelProps> = ({
     <Card
       bg={["secondary.50", "secondary.900"]}
       layerStyle="gradientBorder"
-      p="md"
+      p={{ base: "md", md: "0", lg: "md" }}
       rounded="2xl"
       size="lg"
       {...props}
@@ -150,7 +150,7 @@ export const UserPanel: FC<UserPanelProps> = ({
           <StatusBadge status={status} />
         </VStack>
       </CardHeader>
-      <CardBody gap="md">
+      <CardBody alignItems="center" gap="md">
         <InfoField label="Email" value={email} />
         <InfoField label="Phone" value={phone} />
       </CardBody>
