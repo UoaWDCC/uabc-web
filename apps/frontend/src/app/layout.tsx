@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   description:
     "University of Auckland Badminton Club - Join our community of badminton enthusiasts. Book sessions, join events, and connect with fellow players.",
   keywords: ["badminton", "university", "auckland", "sports", "club", "booking", "events"],
-  authors: [{ name: "UABC Web Team" }],
-  creator: "UABC Web Team",
+  authors: [{ name: "2025 WDCC UABC Team" }],
+  creator: "2025 WDCC UABC Team",
   publisher: "University of Auckland Badminton Club",
   openGraph: {
     title: {
