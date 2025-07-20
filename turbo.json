@@ -11,20 +11,7 @@
       "dependsOn": ["^build"],
       "env": ["TURBO_TEAM", "TURBO_TOKEN"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
-    },
-    "backend#build": {
-      "dependsOn": ["@repo/test-config#build"],
-      "env": [
-        "DATABASE_URI",
-        "PAYLOAD_SECRET",
-        "GOOGLE_CLIENT_ID",
-        "GOOGLE_CLIENT_SECRET",
-        "JWT_SECRET",
-        "SMTP_HOST",
-        "SMTP_USER",
-        "SMTP_PASS"
-      ]
+      "outputs": ["dist/**", ".next/**", "public/dist/**"]
     },
     "pages:build": {
       "cache": true,
