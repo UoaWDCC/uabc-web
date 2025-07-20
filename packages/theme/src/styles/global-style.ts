@@ -22,7 +22,7 @@ export const globalStyle: UIStyle = {
     display: "grid",
     gridTemplateColumns: "1fr",
     gridTemplateRows: "1fr auto",
-    minH: "max(100dvh, 8xl)",
+    minH: { base: "100dvh", lg: "max(100dvh, 8xl)" },
   },
   _dark: {
     "*::placeholder, *[data-placeholder]": {

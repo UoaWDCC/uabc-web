@@ -34,22 +34,24 @@ export const Footer = memo<FooterProps>(
     return (
       <VStack
         as="footer"
-        bg={["blackAlpha.50", "whiteAlpha.50"]}
+        bg={["gray.50", "gray.950"]}
         display="grid"
         gap="xl"
         overflow="clip"
         placeItems="center"
         px={{ base: "lg", lg: "24" }}
         py={{ base: "3xl", md: "24" }}
+        w="full"
+        zIndex={1}
         {...props}
       >
-        <HStack justifyContent="center" maxW="9xl" position="relative" w="full">
+        <HStack justifyContent="center" maxW="8xl" position="relative" w="full">
           <FooterBrand {...brand} socialLinks={socialLinks} />
           <FooterLinks links={links} />
           {decoration}
         </HStack>
-        <Separator />
-        <FooterBottom {...bottomProps} socialLinks={socialLinks} />
+        <Separator maxW="8xl" />
+        <FooterBottom maxW="8xl" {...bottomProps} socialLinks={socialLinks} />
       </VStack>
     )
   },

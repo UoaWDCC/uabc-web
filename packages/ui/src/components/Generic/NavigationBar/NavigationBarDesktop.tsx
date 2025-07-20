@@ -84,7 +84,6 @@ export const NavigationBarDesktop = ({
       boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.10)"
       display={{ base: "none", md: "flex" }}
       gap={0}
-      maxWidth="1220px"
       position="relative"
       px="lg"
       py="md"
