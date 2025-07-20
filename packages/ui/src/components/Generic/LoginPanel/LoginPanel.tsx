@@ -2,10 +2,18 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type LoginFormData, LoginFormDataSchema, type LoginResponse } from "@repo/shared"
-import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
+import {
+  AutoCompleteType,
+  Button,
+  Heading,
+  IconButton,
+  InputType,
+  TextInput,
+} from "@repo/ui/components/Primitive"
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
   Box,
+  ButtonGroup,
   Center,
   Checkbox,
   FormControl,
@@ -13,11 +21,11 @@ import {
   memo,
   Spacer,
   Text,
+  Tooltip,
   Link as UILink,
   VStack,
 } from "@yamada-ui/react"
 import Link from "next/link"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { GoogleLogo, UabcLogo } from "../../Icon"
 
@@ -26,6 +34,10 @@ import { GoogleLogo, UabcLogo } from "../../Icon"
  */
 export interface LoginPanelProps {
   /**
+   * Error message to display.
+   */
+  errorMessage?: string
+  /**
    * Submit handler called when user submits the LoginPanel form.
    */
   onSubmit?: (args: LoginFormData) => Promise<LoginResponse>
@@ -33,6 +45,10 @@ export interface LoginPanelProps {
    * Href for the google icon button.
    */
   googleHref: string
+  /**
+   * External loading state. If provided, overrides internal form submission state.
+   */
+  isLoading?: boolean
 }
 
 /**
@@ -41,7 +57,7 @@ export interface LoginPanelProps {
  * @param props LoginPanel component props
  * @returns A login panel component
  */
-export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
+export const LoginPanel = memo(({ errorMessage, onSubmit, isLoading }: LoginPanelProps) => {
   const {
     register,
     handleSubmit,
@@ -50,13 +66,11 @@ export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
     resolver: zodResolver(LoginFormDataSchema),
   })
 
-  const [error, setError] = useState("")
-
   const handleLogin = async (data: LoginFormData) => {
-    const submitData = await onSubmit?.(data)
-    console.log(submitData)
-    setError(submitData?.error || "")
+    await onSubmit?.(data)
   }
+
+  const isButtonLoading = isLoading ?? isSubmitting
 
   return (
     <VStack
@@ -82,6 +96,7 @@ export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
 
       <FormControl errorMessage={errors.email?.message} invalid={!!errors.email}>
         <TextInput
+          autoComplete={AutoCompleteType.Email}
           data-testid="email"
           placeholder="Email Address"
           startElement={<MailIcon />}
@@ -91,6 +106,7 @@ export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
       </FormControl>
       <FormControl errorMessage={errors.password?.message} invalid={!!errors.password}>
         <TextInput
+          autoComplete={AutoCompleteType.CurrentPassword}
           data-testid="password"
           placeholder="Password"
           startElement={<LockIcon />}
@@ -98,7 +114,7 @@ export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
           {...register("password")}
         />
       </FormControl>
-      {error && <Text color={["danger.500", "danger.400"]}>{error}</Text>}
+      {errorMessage && <Text color={["danger.500", "danger.400"]}>{errorMessage}</Text>}
       <HStack color="gray.100" fontSize="sm">
         <Checkbox label="Remember me" size="sm" textAlign="start" {...register("rememberMe")} />
         <Spacer />
@@ -112,7 +128,7 @@ export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
           Forgot Password?
         </UILink>
       </HStack>
-      <Button colorScheme="primary" loading={isSubmitting} type="submit">
+      <Button colorScheme="primary" loading={isButtonLoading} type="submit">
         Sign In
       </Button>
 
@@ -138,28 +154,32 @@ export const LoginPanel = memo(({ onSubmit, googleHref }: LoginPanelProps) => {
         />
       </Center>
 
-      <Center gap={4}>
-        <IconButton
-          aria-label="Google"
-          as="a"
-          colorScheme="secondary"
-          fullRounded
-          href={googleHref}
-          variant="gradient"
-        >
-          <GoogleLogo fontSize="2xl" />
-        </IconButton>
-        {/* TODO: implement Apple auth or remove Apple icon button */}
-        <IconButton
-          aria-label="Apple"
-          as="a"
-          colorScheme="secondary"
-          disabled
-          fullRounded
-          variant="gradient"
-        >
-          <AppleIcon fontSize="2xl" />
-        </IconButton>
+      <Center>
+        <ButtonGroup gap="sm">
+          <Tooltip label="Not ready yet" placement="top">
+            <IconButton
+              aria-label="Google"
+              colorScheme="secondary"
+              disabled
+              fullRounded
+              variant="gradient"
+            >
+              <GoogleLogo fontSize="2xl" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip label="Not ready yet" placement="top">
+            {/* TODO: implement Apple auth or remove Apple icon button */}
+            <IconButton
+              aria-label="Apple"
+              colorScheme="secondary"
+              disabled
+              fullRounded
+              variant="gradient"
+            >
+              <AppleIcon fontSize="2xl" />
+            </IconButton>
+          </Tooltip>
+        </ButtonGroup>
       </Center>
 
       <Center color="gray.100" fontSize="sm" textAlign="center">

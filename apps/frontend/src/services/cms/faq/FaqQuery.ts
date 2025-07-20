@@ -13,7 +13,7 @@ export function useFaq() {
   return useQuery({
     queryKey: [QueryKeys.FAQ_QUERY_KEY],
     queryFn: async () => {
-      const { data } = await getFaq()
+      const data = await getFaq()
       return data?.data ?? null
     },
   })

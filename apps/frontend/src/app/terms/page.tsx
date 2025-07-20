@@ -14,9 +14,9 @@ export const metadata: Metadata = {
 export default function TermsOfServiceContent() {
   const tos = use(getTos())
 
-  const data = tos.data
+  const data = tos?.data
 
-  if (!data?.data) {
+  if (!data) {
     return (
       <EmptyState
         description="Failed to load Terms of Service. Please contact the administrator."
@@ -25,7 +25,7 @@ export default function TermsOfServiceContent() {
     )
   }
 
-  const { title, subtitle, checkInRules, sessionRules, disclaimer } = data.data
+  const { title, subtitle, checkInRules, sessionRules, disclaimer } = data
 
   return (
     <VStack gap="lg" maxW="8xl">

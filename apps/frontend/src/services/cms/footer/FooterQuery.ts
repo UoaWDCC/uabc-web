@@ -11,6 +11,9 @@ import { getFooter } from "./FooterService"
 export const useFooter = () => {
   return useSuspenseQuery({
     queryKey: [QueryKeys.FOOTER_QUERY_KEY],
-    queryFn: getFooter,
+    queryFn: async () => {
+      const data = await getFooter()
+      return data?.data ?? null
+    },
   })
 }
