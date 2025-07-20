@@ -17,15 +17,35 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL),
   title: {
     template: "%s | UABC",
     default: "UABC",
   },
+  description:
+    "University of Auckland Badminton Club - Join our community of badminton enthusiasts. Book sessions, join events, and connect with fellow players.",
+  keywords: [
+    "badminton",
+    "university",
+    "auckland",
+    "sports",
+    "club",
+    "booking",
+    "events",
+    "uoa",
+    "universityofauckland",
+  ],
+  authors: [{ name: "2025 WDCC UABC Team" }],
+  creator: "2025 WDCC UABC Team",
+  publisher: "University of Auckland Badminton Club",
   openGraph: {
-    title: {
-      template: "%s | UABC",
-      default: "UABC",
-    },
+    url: process.env.NEXT_PUBLIC_URL,
+    siteName: "UABC",
+    locale: "en_NZ",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 }
 
