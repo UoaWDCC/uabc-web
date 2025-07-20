@@ -53,6 +53,7 @@ describe("/api/admin/bookings/[id]", async () => {
     })
 
     it("should return 404 if booking is non existent", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const response = await DELETE(
         createMockNextRequest("/api/admin/bookings/nonexistent-id", "DELETE"),
         {
