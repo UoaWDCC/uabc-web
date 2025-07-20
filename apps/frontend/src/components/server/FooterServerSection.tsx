@@ -24,7 +24,7 @@ export const FooterServerSection = () => {
   const brandData = {
     logo: logoUrl
       ? {
-          url: logoUrl,
+          src: logoUrl,
           alt: footerResponseData.logo?.alt ?? "",
           width: footerResponseData.logo?.width ?? 200,
           height: footerResponseData.logo?.height ?? 200,

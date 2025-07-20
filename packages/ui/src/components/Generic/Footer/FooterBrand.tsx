@@ -1,18 +1,14 @@
 import { UabcLogo } from "@repo/ui/components/Icon"
-import { Heading, Image } from "@repo/ui/components/Primitive"
+import { Heading, type ImageProps } from "@repo/ui/components/Primitive"
 import type { StackProps } from "@yamada-ui/react"
 import { HStack, Text, VStack } from "@yamada-ui/react"
 import { memo } from "react"
 import type { SocialLink } from "./constants"
+import { FooterImage } from "./FooterImage"
 import { FooterSocialLinks } from "./FooterSocialLinks"
 
 export interface FooterBrandProps extends StackProps {
-  logo?: {
-    url: string
-    alt: string
-    width: number
-    height: number
-  }
+  logo?: Pick<ImageProps, "src" | "alt" | "width" | "height">
   title: string
   description: string
   socialLinks: SocialLink[]
@@ -24,18 +20,7 @@ export const FooterBrand = memo<FooterBrandProps>(
       <VStack display={{ base: "none", md: "flex" }} gap="lg" {...props}>
         <VStack gap="xs">
           <HStack alignItems="center">
-            {logo?.url ? (
-              <Image
-                alt={logo.alt}
-                h="12"
-                height={logo.height}
-                src={logo.url}
-                w="12"
-                width={logo.width}
-              />
-            ) : (
-              <UabcLogo />
-            )}
+            {logo?.src ? <FooterImage {...logo} /> : <UabcLogo />}
             <Heading.h2 fontSize="6xl" fontWeight="semibold">
               {title}
             </Heading.h2>

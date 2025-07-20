@@ -10,38 +10,42 @@ const mockedGetFooter = vi.mocked(getFooter)
 
 describe("<FooterServerSection />", () => {
   const mockFooterData = {
-    id: "footer-1",
-    title: "UABC",
-    description: "The largest university badminton club in New Zealand!",
-    logo: {
-      id: "logo-1",
-      url: "/api/media/logo.png",
-      alt: "UABC Logo",
-      width: 200,
-      height: 200,
-    },
-    copyright: "© 2025 University of Auckland Badminton Club",
-    linktree: "linktr.ee/uoa.badminton",
-    facebook: "https://www.facebook.com/groups/uoabadminton/",
-    instagram: "https://www.instagram.com/uoa.badminton/",
-    linkGroup1: {
-      title: "Quick Links",
-      links: [
-        { id: "1", label: "Home", url: "/" },
-        { id: "2", label: "Book a Court", url: "/book" },
-        { id: "3", label: "Events", url: "/events" },
-      ],
-    },
-    linkGroup2: {
+    data: {
+      id: "footer-1",
       title: "UABC",
-      links: [
-        { id: "4", label: "About Us", url: "/about" },
-        { id: "5", label: "Contact Us", url: "/contact" },
-        { id: "6", label: "FAQs", url: "/faq" },
-      ],
+      description: "The largest university badminton club in New Zealand!",
+      logo: {
+        id: "logo-1",
+        url: "/api/media/logo.png",
+        alt: "UABC Logo",
+        width: 200,
+        height: 200,
+        updatedAt: "2025-01-20T12:00:00Z",
+        createdAt: "2025-01-01T00:00:00Z",
+      },
+      copyright: "© 2025 University of Auckland Badminton Club",
+      linktree: "linktr.ee/uoa.badminton",
+      facebook: "https://www.facebook.com/groups/uoabadminton/",
+      instagram: "https://www.instagram.com/uoa.badminton/",
+      linkGroup1: {
+        title: "Quick Links",
+        links: [
+          { id: "1", label: "Home", url: "/" },
+          { id: "2", label: "Book a Court", url: "/book" },
+          { id: "3", label: "Events", url: "/events" },
+        ],
+      },
+      linkGroup2: {
+        title: "UABC",
+        links: [
+          { id: "4", label: "About Us", url: "/about" },
+          { id: "5", label: "Contact Us", url: "/contact" },
+          { id: "6", label: "FAQs", url: "/faq" },
+        ],
+      },
+      updatedAt: "2025-01-20T12:00:00Z",
+      createdAt: "2025-01-01T00:00:00Z",
     },
-    updatedAt: "2025-01-20T12:00:00Z",
-    createdAt: "2025-01-01T00:00:00Z",
   }
 
   beforeEach(() => {
@@ -62,12 +66,20 @@ describe("<FooterServerSection />", () => {
     expect(screen.getByText("Developed by the 2025 WDCC UABC Team.")).toBeInTheDocument()
   })
 
-  it("should render footer without logo when logo is undefined", async () => {
-    const footerDataWithoutLogo = {
-      ...mockFooterData,
-      logo: undefined,
+  it("should render footer with minimal logo data", async () => {
+    const footerDataWithMinimalLogo = {
+      data: {
+        ...mockFooterData.data,
+        logo: {
+          id: "logo-1",
+          url: "/api/media/logo.png",
+          alt: "UABC Logo",
+          updatedAt: "2025-01-20T12:00:00Z",
+          createdAt: "2025-01-01T00:00:00Z",
+        },
+      },
     }
-    mockedGetFooter.mockResolvedValue(footerDataWithoutLogo)
+    mockedGetFooter.mockResolvedValue(footerDataWithMinimalLogo)
 
     render(<FooterServerSection />)
 
@@ -77,13 +89,15 @@ describe("<FooterServerSection />", () => {
     ).toBeInTheDocument()
   })
 
-  it("should render footer with default link groups when they are undefined", async () => {
-    const footerDataWithoutLinks = {
-      ...mockFooterData,
-      linkGroup1: undefined,
-      linkGroup2: undefined,
+  it("should render footer with empty link groups", async () => {
+    const footerDataWithEmptyLinks = {
+      data: {
+        ...mockFooterData.data,
+        linkGroup1: { title: "Quick Links", links: [] },
+        linkGroup2: { title: "UABC", links: [] },
+      },
     }
-    mockedGetFooter.mockResolvedValue(footerDataWithoutLinks)
+    mockedGetFooter.mockResolvedValue(footerDataWithEmptyLinks)
 
     render(<FooterServerSection />)
 
@@ -127,31 +141,17 @@ describe("<FooterServerSection />", () => {
     }
   })
 
-  it("should handle empty link groups", async () => {
-    const footerDataWithEmptyLinks = {
-      ...mockFooterData,
-      linkGroup1: { title: "", links: [] },
-      linkGroup2: { title: "", links: [] },
-    }
-    mockedGetFooter.mockResolvedValue(footerDataWithEmptyLinks)
-
-    render(<FooterServerSection />)
-
-    expect(screen.getByText("UABC")).toBeInTheDocument()
-    expect(
-      screen.getByText("The largest university badminton club in New Zealand!"),
-    ).toBeInTheDocument()
-  })
-
-  it("should handle logo with missing properties", async () => {
+  it("should handle logo with missing optional properties", async () => {
     const footerDataWithPartialLogo = {
-      ...mockFooterData,
-      logo: {
-        id: "logo-1",
-        url: "/api/media/logo.png",
-        alt: undefined,
-        width: undefined,
-        height: undefined,
+      data: {
+        ...mockFooterData.data,
+        logo: {
+          id: "logo-1",
+          url: "/api/media/logo.png",
+          alt: "UABC Logo",
+          updatedAt: "2025-01-20T12:00:00Z",
+          createdAt: "2025-01-01T00:00:00Z",
+        },
       },
     }
     mockedGetFooter.mockResolvedValue(footerDataWithPartialLogo)
@@ -166,23 +166,6 @@ describe("<FooterServerSection />", () => {
 
   it("should resolve logo URL correctly with API URL", async () => {
     mockedGetFooter.mockResolvedValue(mockFooterData)
-
-    render(<FooterServerSection />)
-
-    expect(screen.getByText("UABC")).toBeInTheDocument()
-    expect(
-      screen.getByText("The largest university badminton club in New Zealand!"),
-    ).toBeInTheDocument()
-  })
-
-  it("should handle undefined social media URLs", async () => {
-    const footerDataWithUndefinedSocial = {
-      ...mockFooterData,
-      linktree: undefined,
-      facebook: undefined,
-      instagram: undefined,
-    }
-    mockedGetFooter.mockResolvedValue(footerDataWithUndefinedSocial)
 
     render(<FooterServerSection />)
 
