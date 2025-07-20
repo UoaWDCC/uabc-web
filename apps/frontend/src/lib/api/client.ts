@@ -51,11 +51,13 @@ class ApiClient {
   public async get<T>(
     path: string,
     schema: z.Schema<T>,
+    headers?: Record<string, string>,
     tags: string[] = [],
     revalidate?: number | false,
   ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
     try {
       const response = await fetch(this.joinUrl(path), {
+        headers,
         next: {
           tags,
           ...(revalidate !== undefined ? { revalidate } : {}),

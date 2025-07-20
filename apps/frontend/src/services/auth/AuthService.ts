@@ -1,4 +1,6 @@
-import { LoginResponseSchema } from "@repo/shared"
+import { GetUserResponseSchema, LoginResponseSchema } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
+import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
 
 const AuthService = {
@@ -16,6 +18,23 @@ const AuthService = {
       LoginResponseSchema,
     )
     return data
+  },
+  /**
+   * Gets user information from a JWT token by making a request to the backend.
+   *
+   * @param token The JWT token to get user info for.
+   * @returns The user information or null if token is invalid.
+   */
+  getUserFromToken: async (token: string): Promise<User | null> => {
+    try {
+      const { data, status, error } = await apiClient.get("/api/me", GetUserResponseSchema, {
+        Authorization: `Bearer ${token}`,
+      })
+      if (status !== StatusCodes.OK || !data || error) return null
+      return data.data ?? null
+    } catch (_) {
+      return null
+    }
   },
 } as const
 
