@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Heading,
   IconButton,
@@ -24,7 +26,15 @@ import {
   Text,
   VStack,
 } from "@yamada-ui/react"
+import dayjs from "dayjs"
+import timezone from "dayjs/plugin/timezone"
+import utc from "dayjs/plugin/utc"
 import { memo } from "react"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+const NZ_TIMEZONE = "Pacific/Auckland"
 
 type MenuItemType = MenuItemProps & {
   label: string
@@ -125,7 +135,6 @@ export const BookingCard = memo(
         flexDirection="row"
         h="fit-content"
         layerStyle="gradientBorder"
-        maxW="xl"
         overflow="hidden"
         px="md"
         py="5"
@@ -158,7 +167,10 @@ export const BookingCard = memo(
               {location} - {address}
             </Text>
             <Text lineClamp={1}>
-              {startTime} - {endTime}
+              {/* Formats the time range in the format: h:mm A - h:mm A D MMM YYYY */}
+              {dayjs(startTime).tz(NZ_TIMEZONE).format("h:mm A")}
+              {" - "}
+              {dayjs(endTime).tz(NZ_TIMEZONE).format("h:mm A D MMM YYYY")}
             </Text>
           </CardBody>
         </VStack>

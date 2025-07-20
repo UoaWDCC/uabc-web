@@ -74,8 +74,9 @@ export const UserPanel: FC<UserPanelProps> = ({ user, iconButtonProps, ...props 
   const { firstName, lastName, role, email, phoneNumber, remainingSessions, image } = user
   return (
     <Card
-      bg={["gray.50", "gray.950"]}
+      bg={["secondary.50", "secondary.900"]}
       layerStyle="gradientBorder"
+      p={{ base: "md", md: "0", lg: "md" }}
       rounded="2xl"
       size="lg"
       {...props}
@@ -100,7 +101,7 @@ export const UserPanel: FC<UserPanelProps> = ({ user, iconButtonProps, ...props 
           <StatusBadge status={role} />
         </VStack>
       </CardHeader>
-      <CardBody gap="md">
+      <CardBody alignItems="center" gap="md">
         <InfoField label="Email" value={email} />
         <InfoField label="Phone" value={phoneNumber} />
       </CardBody>
