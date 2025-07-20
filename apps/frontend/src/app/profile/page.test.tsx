@@ -1,6 +1,7 @@
 import { bookingsMock, casualUserMock } from "@repo/shared/mocks"
 import { render, screen } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { AuthProvider } from "@/context/AuthContext"
 import Profile from "./page"
 
 // TODO: rewrite tests after proper auth is implemented
@@ -17,7 +18,9 @@ describe("<Profile />", () => {
       },
     })
     wrapper = ({ children }: { children: React.ReactNode }) => (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>{children}</AuthProvider>
+      </QueryClientProvider>
     )
   })
 

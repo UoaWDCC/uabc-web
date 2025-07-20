@@ -118,10 +118,10 @@ class ApiClient {
         data: parsedData,
         status: response.status,
       }
-    } catch (error) {
+    } catch {
       return {
         success: false,
-        error: error instanceof Error ? error : new Error("Invalid response format"),
+        error: new Error("Invalid response format"),
         status: response.status,
       }
     }
