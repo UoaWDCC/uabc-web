@@ -1,7 +1,7 @@
 import type { EditBookingData } from "@repo/shared"
 import { casualUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
-import { generateMockMongoID } from "@/test-config/mocks/MongoDB.mock"
+import { generateMockMongoDBObjectID } from "@/test-config/mocks/MongoDB.mock"
 import { payload } from "../adapters/Payload"
 import BookingDataService from "./BookingDataService"
 
@@ -170,8 +170,8 @@ describe("bookingDataService", () => {
 
     it("should handle deletion of non-existent bookings", async () => {
       const deletedBookings = await bookingDataService.deleteBookings([
-        generateMockMongoID(),
-        generateMockMongoID(),
+        generateMockMongoDBObjectID(),
+        generateMockMongoDBObjectID(),
       ])
 
       expect(deletedBookings).toEqual([])
@@ -181,7 +181,7 @@ describe("bookingDataService", () => {
   describe("getBookingsByUserId", () => {
     it("should find all bookings for a specific user", async () => {
       // Create bookings with the same userId
-      const userId = generateMockMongoID()
+      const userId = generateMockMongoDBObjectID()
       const bookingWithUser1 = {
         ...bookingCreateMock,
         user: userId,
@@ -208,7 +208,7 @@ describe("bookingDataService", () => {
     })
 
     it("should respect pagination parameters", async () => {
-      const userId = generateMockMongoID()
+      const userId = generateMockMongoDBObjectID()
       const bookingWithUser1 = {
         ...bookingCreateMock,
         user: userId,
