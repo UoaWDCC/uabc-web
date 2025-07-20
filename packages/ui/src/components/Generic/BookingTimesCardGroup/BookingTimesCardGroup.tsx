@@ -136,11 +136,11 @@ export const BookingTimesCardGroup = memo(
                       <HStack flexWrap="wrap" gap="2xs" width="fit-content">
                         <IconWithText
                           icon={<UserIcon />}
-                          label={item.memberAttendees + " members Attendees"}
+                          label={`${item.memberAttendees} members Attendees`}
                         />
                         <IconWithText
                           icon={<UserIcon />}
-                          label={item.casualAttendees + " casuals Attendees"}
+                          label={`${item.casualAttendees} casuals Attendees`}
                         />
                       </HStack>
                     </VStack>
