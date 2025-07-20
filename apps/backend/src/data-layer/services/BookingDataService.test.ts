@@ -34,6 +34,24 @@ describe("bookingDataService", () => {
     })
   })
 
+  describe("getBookingBySessionId", () => {
+    it("should fetch bookings by session ID", async () => {
+      const createdBooking = await bookingDataService.createBooking(bookingCreateMock)
+
+      const fetchedBooking = await bookingDataService.getBookingsBySessionId(
+        typeof createdBooking.gameSession === "string"
+          ? createdBooking.gameSession
+          : createdBooking.gameSession.id,
+      )
+      expect(fetchedBooking.length).toEqual(1)
+      expect(fetchedBooking).toEqual([createdBooking])
+    })
+
+    it("should return an empty array when a booking is not found by ID", async () => {
+      expect(await bookingDataService.getBookingsBySessionId("Not a valid session ID")).toEqual([])
+    })
+  })
+
   describe("getAllBookingsByUserId", () => {
     it("should find all bookings by userId", async () => {
       const createdBooking1 = await bookingDataService.createBooking({
