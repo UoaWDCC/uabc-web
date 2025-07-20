@@ -4,9 +4,9 @@ import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
-import UserDataService from "@/data-layer/services/UserDataService"
-import BookingDataService from "@/data-layer/services/BookingDataService"
 import { payload } from "@/data-layer/adapters/Payload"
+import BookingDataService from "@/data-layer/services/BookingDataService"
+import UserDataService from "@/data-layer/services/UserDataService"
 
 class UserRouteWrapper {
   /**
@@ -82,6 +82,8 @@ class UserRouteWrapper {
     { params }: { params: Promise<{ id: string; deleteRelatedBookings?: boolean }> },
   ) {
     const { id, deleteRelatedBookings } = await params
+
+    // This will only be undefined if deleteRelatedBookings is false OR transaction support is not enabled
     const cascadeDeleteTransactionID = await UserRouteWrapper.getTransactionId(
       !!deleteRelatedBookings,
     )
