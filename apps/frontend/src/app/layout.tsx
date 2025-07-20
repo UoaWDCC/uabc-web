@@ -66,7 +66,9 @@ export default function RootLayout({
               as="main"
               flex="1"
               flexDirection="column"
+              justifyContent={{ base: "flex-center", lg: "center" }}
               maxW="8xl"
+              minH={{ base: "100dvh", lg: "unset" }}
               placeSelf="center"
               px="md"
               py="lg"

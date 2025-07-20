@@ -74,19 +74,19 @@ export const LoginPanel = memo(({ errorMessage, onSubmit, isLoading }: LoginPane
 
   return (
     <VStack
-      _before={{
-        content: '""',
-        position: "fixed",
-        inset: 0,
-        bg: "gray.900",
-        zIndex: -1,
-      }}
+      //_before={{
+      //content: '""',
+      //position: "fixed",
+      //inset: 0,
+      //bg: "gray.900",
+      //zIndex: -1,
+      //}}
       as="form"
       bg="gray.900"
-      layerStyle={{ md: "gradientBorder" }}
+      layerStyle="gradientBorder"
       onSubmit={handleSubmit(handleLogin)}
       px={{ base: "md", lg: "lg" }}
-      py={{ base: "0", lg: "lg" }}
+      py={{ base: "md", lg: "lg" }}
       rounded="3xl"
       w={{ base: "full", md: "md" }}
     >
