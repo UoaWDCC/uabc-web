@@ -106,7 +106,6 @@ class UserRouteWrapper {
       if (error instanceof NotFound) {
         return NextResponse.json({ error: "User not found" }, { status: StatusCodes.NOT_FOUND })
       }
-
       console.error(error)
       return NextResponse.json(
         { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
