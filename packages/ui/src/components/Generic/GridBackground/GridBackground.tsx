@@ -2,6 +2,15 @@ import { Box } from "@yamada-ui/react"
 
 export const GridBackground = () => {
   return (
-    <Box inset={0} layerStyle="grid" minH="100dvh" position="fixed" top="0" w="full" zIndex={-1} />
+    <Box
+      bottom="0"
+      layerStyle="grid"
+      left="0"
+      minH="100dvh"
+      position="fixed"
+      right="0"
+      top="0"
+      zIndex={-1}
+    />
   )
 }

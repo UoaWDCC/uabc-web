@@ -82,9 +82,7 @@ export default async function Home() {
           people! Join our sessions or check our Instagram page for events! 🏸
         </Text>
       </VStack>
-      <Box zIndex={2}>
-        <QuickBook locationAndTimeOptions={locationAndTimeOptionsMock} />
-      </Box>
+      <QuickBook locationAndTimeOptions={locationAndTimeOptionsMock} />
       <Bleed as={Center} blockStart={{ base: "4xl", md: "3xl" }} inline="full">
         <Box h="full" maxH="1150px" overflowY="clip" position="relative" w="full">
           <Image
@@ -100,6 +98,7 @@ export default async function Home() {
             src="https://images.unsplash.com/photo-1599391398131-cd12dfc6c24e?q=80&w=1311&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             w="100%"
             width={400}
+            z={-1}
           />
           <Box
             left="25%"

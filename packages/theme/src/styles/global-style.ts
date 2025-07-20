@@ -15,7 +15,6 @@ export const globalStyle: UIStyle = {
     color: ["black", "white"],
     fontFamily: "body",
     lineHeight: "base",
-    overflowX: "hidden",
     transitionDuration: "normal",
     transitionProperty: "background-color",
     textWrap: "pretty",
@@ -23,6 +22,7 @@ export const globalStyle: UIStyle = {
     gridTemplateColumns: "1fr",
     gridTemplateRows: "1fr auto",
     minH: { base: "100dvh", lg: "max(100dvh, 8xl)" },
+    overflowX: "clip",
   },
   _dark: {
     "*::placeholder, *[data-placeholder]": {
