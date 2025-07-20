@@ -5,9 +5,9 @@ import { use } from "react"
 import { getFooter } from "@/services/cms/footer/FooterService"
 
 /**
- * Server-side component to fetch and render the footer section using Tanstack Query.
+ * Server-side component to fetch and render the footer section.
  *
- * @returns A hydrated footer section component.
+ * @returns A footer section component.
  */
 export const FooterServerSection = () => {
   const { data: footerResponseData } = use(getFooter())
