@@ -187,4 +187,24 @@ describe("ApiClient GET method", () => {
       },
     })
   })
+
+  it("should handle error response with invalid format gracefully", async () => {
+    const testSchema = z.object({ message: z.string() })
+    const invalidErrorResponse = { invalidField: "This is not a valid error response" }
+
+    mockFetch.mockResolvedValueOnce(
+      new Response(JSON.stringify(invalidErrorResponse), {
+        status: 500,
+        statusText: "Internal Server Error",
+      }),
+    )
+
+    const result = await client.get("/test", testSchema)
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error.message).toBe("HTTP 500: Internal Server Error")
+      expect(result.status).toBe(500)
+    }
+  })
 })
