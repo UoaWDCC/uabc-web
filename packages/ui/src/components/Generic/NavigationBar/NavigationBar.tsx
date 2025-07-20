@@ -7,7 +7,7 @@ import { NavigationBarMobile } from "./NavigationBarMobile"
 /**
  * Props for the NavigationBar component.
  */
-export interface NavigationBarProps extends Navbar {
+export interface NavigationBarProps extends Omit<Navbar, "id"> {
   user?: User
 }
 
