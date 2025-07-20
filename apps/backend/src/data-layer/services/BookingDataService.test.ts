@@ -1,10 +1,13 @@
 import type { EditBookingData } from "@repo/shared"
 import { casualUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
+import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { payload } from "../adapters/Payload"
 import BookingDataService from "./BookingDataService"
+import GameSessionDataService from "./GameSessionDataService"
 
 const bookingDataService = new BookingDataService()
+const gameSessionDataService = new GameSessionDataService()
 
 describe("bookingDataService", () => {
   describe("createBooking", () => {
@@ -36,19 +39,22 @@ describe("bookingDataService", () => {
 
   describe("getBookingBySessionId", () => {
     it("should fetch bookings by session ID", async () => {
-      const createdBooking = await bookingDataService.createBooking(bookingCreateMock)
+      const createdGameSession =
+        await gameSessionDataService.createGameSession(gameSessionCreateMock)
+      const createdBooking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: createdGameSession.id,
+      })
 
-      const fetchedBooking = await bookingDataService.getBookingsBySessionId(
-        typeof createdBooking.gameSession === "string"
-          ? createdBooking.gameSession
-          : createdBooking.gameSession.id,
-      )
+      const fetchedBooking = await bookingDataService.getBookingsBySessionId(createdGameSession.id)
       expect(fetchedBooking.length).toEqual(1)
       expect(fetchedBooking).toEqual([createdBooking])
     })
 
     it("should return an empty array when a booking is not found for session ID", async () => {
-      expect(await bookingDataService.getBookingsBySessionId("Not a valid session ID")).toEqual([])
+      expect(
+        await bookingDataService.getBookingsBySessionId("Not a valid session ID"),
+      ).toStrictEqual([])
     })
   })
 
@@ -73,6 +79,39 @@ describe("bookingDataService", () => {
 
     it("should return empty array if there are no bookings by userId", async () => {
       const fetchedBooking = await bookingDataService.getAllBookingsByUserId("No bookings userId")
+      expect(fetchedBooking).toStrictEqual([])
+    })
+  })
+
+  describe("getUserBookingsBySessionId", () => {
+    it("should find all bookings by userId and sessionId", async () => {
+      const createdBooking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: casualUserMock,
+      })
+      const createdBooking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: casualUserMock,
+      })
+
+      const fetchedBookings = await bookingDataService.getUserBookingsBySessionId(
+        casualUserMock.id,
+        typeof createdBooking1.gameSession === "string"
+          ? createdBooking1.gameSession
+          : createdBooking1.gameSession.id,
+      )
+
+      expect(fetchedBookings.length).toStrictEqual(2)
+      expect(fetchedBookings).toStrictEqual(
+        expect.arrayContaining([createdBooking1, createdBooking2]),
+      )
+    })
+
+    it("should return empty array if there are no bookings by userId and sessionId", async () => {
+      const fetchedBooking = await bookingDataService.getUserBookingsBySessionId(
+        "No bookings userId",
+        "No bookings sessionId",
+      )
       expect(fetchedBooking).toStrictEqual([])
     })
   })

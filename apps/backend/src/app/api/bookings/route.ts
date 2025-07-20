@@ -25,7 +25,7 @@ class RouteWrapper {
       // Refetch user data as JWT stored data could be outdated
       const userData = await userDataService.getUserById(req.user.id)
 
-      if (userData.remainingSessions === 0)
+      if (!userData.remainingSessions || userData.remainingSessions <= -1)
         return NextResponse.json(
           { error: "No remaining sessions" },
           { status: StatusCodes.FORBIDDEN },
@@ -42,9 +42,8 @@ class RouteWrapper {
         )
 
       if (
-        (await bookingDataService.getBookingsBySessionId(gameSession.id)).filter(
-          (b) => (typeof b.user === "string" ? b.user : b.user.id) === userData.id,
-        ).length > 0
+        (await bookingDataService.getUserBookingsBySessionId(userData.id, gameSession.id)).length >
+        0
       )
         return NextResponse.json(
           { error: "Session already booked" },
@@ -56,14 +55,12 @@ class RouteWrapper {
         user: userData,
       })
 
-      if (userData.remainingSessions) {
-        const newRemainingSessions = userData.remainingSessions - 1
-        // Demote user to casual if session count is lower than or equal to 0
-        await userDataService.updateUser(req.user.id, {
-          remainingSessions: newRemainingSessions,
-          role: newRemainingSessions <= 0 ? MembershipType.casual : req.user.role,
-        })
-      }
+      const newRemainingSessions = userData.remainingSessions - 1
+      // Demote user to casual if session count is lower than or equal to 0
+      await userDataService.updateUser(req.user.id, {
+        remainingSessions: newRemainingSessions,
+        role: newRemainingSessions <= 0 ? MembershipType.casual : req.user.role,
+      })
 
       return NextResponse.json({ data: newBooking }, { status: StatusCodes.CREATED })
     } catch (error) {

@@ -1,14 +1,12 @@
 import {
   AUTH_COOKIE_NAME,
   type CreateBookingRequestBodyType,
-  JWTEncryptedUserSchema,
   MembershipType,
   PlayLevel,
 } from "@repo/shared"
-import { userCreateMock } from "@repo/shared/mocks"
+import { casualUserMock, memberUserMock, userCreateMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
-import AuthService from "@/business-layer/services/AuthService"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
@@ -23,7 +21,6 @@ describe("/api/bookings", async () => {
   const bookingDataService = new BookingDataService()
   const gameSessionDataService = new GameSessionDataService()
   const userDataService = new UserDataService()
-  const authService = new AuthService()
 
   describe("POST", () => {
     it("should return a 401 if token is missing", async () => {
@@ -33,13 +30,10 @@ describe("/api/bookings", async () => {
       expect(await res.json()).toStrictEqual({ error: "No token provided" })
     })
 
-    it("should return a 200 if the booking is valid", async () => {
+    it("should return a 201 if the booking is valid", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
       const gameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
-      const tokenData = authService.getData(memberToken, JWTEncryptedUserSchema)
-      expect(tokenData).toBeDefined()
-
-      const remainingSessions = tokenData?.user.remainingSessions ?? 0
+      const remainingSessions = memberUserMock.remainingSessions ?? 0
       const newRemainingSessions = remainingSessions - 1
 
       const req = createMockNextRequest("/api/bookings", "POST", {
@@ -53,13 +47,11 @@ describe("/api/bookings", async () => {
       expect(data.id).toBeDefined()
       expect(await bookingDataService.getBookingById(data.id)).toBeDefined()
 
-      if (tokenData) {
-        const user = await userDataService.getUserById(tokenData.user.id)
-        expect(user.remainingSessions).toBe(newRemainingSessions)
+      const user = await userDataService.getUserById(memberUserMock.id)
+      expect(user.remainingSessions).toBe(newRemainingSessions)
 
-        if (newRemainingSessions <= 0) {
-          expect(user.role).toBe(MembershipType.casual)
-        }
+      if (newRemainingSessions <= 0) {
+        expect(user.role).toBe(MembershipType.casual)
       }
     })
 
@@ -69,6 +61,7 @@ describe("/api/bookings", async () => {
       await bookingDataService.createBooking({
         ...bookingCreateMock,
         gameSession: gameSession.id,
+        user: casualUserMock,
       })
 
       const req = createMockNextRequest("/api/bookings", "POST", {
@@ -84,19 +77,14 @@ describe("/api/bookings", async () => {
     it("should return a 403 if the user has no remaining sessions", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
       const gameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
-      const tokenData = authService.getData(casualToken, JWTEncryptedUserSchema)
-      expect(tokenData).toBeDefined()
-
       const req = createMockNextRequest("/api/bookings", "POST", {
         gameSession,
         playerLevel: PlayLevel.beginner,
       } satisfies CreateBookingRequestBodyType)
 
-      if (tokenData) {
-        await userDataService.updateUser(tokenData.user.id, {
-          remainingSessions: 0,
-        })
-      }
+      await userDataService.updateUser(casualUserMock.id, {
+        remainingSessions: -1,
+      })
 
       const res = await POST(req)
 
@@ -105,7 +93,7 @@ describe("/api/bookings", async () => {
     })
   })
 
-  it("should a 403 if the user is a casual and has exceeded booking capacity", async () => {
+  it("should return a 403 if the user is a casual and has exceeded booking capacity", async () => {
     cookieStore.set(AUTH_COOKIE_NAME, casualToken)
     const gameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
     await bookingDataService.createBooking({
