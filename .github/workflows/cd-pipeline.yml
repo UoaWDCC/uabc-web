@@ -74,7 +74,7 @@ jobs:
 
   deploy-backend-production:
     name: Deploy Backend Production
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'backend-production')
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'backend-production'
     environment:
       name: backend-production
       url: https://server.uoabadminton.co.nz/
@@ -102,13 +102,13 @@ jobs:
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
           TURBO_TEAM: ${{ vars.TURBO_TEAM }}
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-          SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          # SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          # SMTP_USER: ${{ secrets.SMTP_USER }}
+          # SMTP_PASS: ${{ secrets.SMTP_PASS }}
 
   deploy-frontend-production:
     name: Deploy Frontend Production
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'frontend-production')
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'frontend-production'
     environment:
       name: frontend-production
       url: https://uoabadminton.co.nz/
