@@ -25,7 +25,7 @@ class RouteWrapper {
       // Refetch user data as JWT stored data could be outdated
       const userData = await userDataService.getUserById(req.user.id)
 
-      if (!userData.remainingSessions || userData.remainingSessions <= -1)
+      if ((userData.remainingSessions ?? 0) <= -1)
         return NextResponse.json(
           { error: "No remaining sessions" },
           { status: StatusCodes.FORBIDDEN },
@@ -55,7 +55,7 @@ class RouteWrapper {
         user: userData,
       })
 
-      const newRemainingSessions = userData.remainingSessions - 1
+      const newRemainingSessions = (userData.remainingSessions ?? 0) - 1
       // Demote user to casual if session count is lower than or equal to 0
       await userDataService.updateUser(req.user.id, {
         remainingSessions: newRemainingSessions,

@@ -58,9 +58,25 @@ export default class BookingDataService {
    * @returns An array of {@link Booking} documents that match the game session ID and user ID
    */
   public async getUserBookingsBySessionId(userId: string, sessionId: string): Promise<Booking[]> {
-    return (await this.getBookingsBySessionId(sessionId)).filter(
-      (b) => (typeof b.user === "string" ? b.user : b.user.id) === userId,
-    )
+    return (
+      await payload.find({
+        collection: "booking",
+        where: {
+          and: [
+            {
+              gameSession: {
+                equals: sessionId,
+              },
+            },
+            {
+              user: {
+                equals: userId,
+              },
+            },
+          ],
+        },
+      })
+    ).docs
   }
 
   /**
