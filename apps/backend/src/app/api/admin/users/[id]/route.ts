@@ -126,9 +126,21 @@ class UserRouteWrapper {
     transactionID?: string | number,
   ): Promise<void> {
     const bookingDataService = new BookingDataService()
-    const relatedBookings = await bookingDataService.getBookingsByUserId(userId, transactionID)
+    // relatedBookings may be paginated, so we need to fetch all of them
+    let relatedBookings = await bookingDataService.getBookingsByUserId(userId, transactionID)
 
     const relatedBookingIds = relatedBookings.docs.map((booking) => booking.id)
+
+    // Check if there are more pages of bookings for the user
+    while (relatedBookings.hasNextPage) {
+      relatedBookings = await bookingDataService.getBookingsByUserId(
+        userId,
+        transactionID,
+        100,
+        relatedBookings.nextPage || undefined,
+      )
+      relatedBookingIds.push(...relatedBookings.docs.map((booking) => booking.id))
+    }
     await bookingDataService.deleteBookings(relatedBookingIds, transactionID)
   }
 }
