@@ -1,5 +1,5 @@
-import type { AboutUsInfo } from "src/payload-types"
 import z from "zod"
+import type { AboutUsInfo } from "../../payload-types"
 
 export const AboutUsInfoItemSchema = z.object({
   title: z.string(),
