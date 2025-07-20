@@ -53,7 +53,7 @@ runs:
       shell: bash
       id: backend-secrets
       run: >
-        flyctl inputs set --config apps/backend/${{ inputs.FLY_CONFIG_PATH }}
+        flyctl secrets set --config apps/backend/${{ inputs.FLY_CONFIG_PATH }}
         DATABASE_URI=${{ inputs.DATABASE_URI }}
         JWT_SECRET=${{ inputs.JWT_SECRET }}
         PAYLOAD_SECRET=${{ inputs.PAYLOAD_SECRET }}
