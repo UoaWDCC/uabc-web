@@ -114,6 +114,13 @@ class UserRouteWrapper {
     }
   }
 
+  /**
+   * Retrieves a transaction ID for cascading deletes if related bookings should be deleted.
+   * @param shouldDeleteRelated indicates whether related bookings should be deleted
+   * @private
+   *
+   * @remarks it should be noted that this method will return undefined if the `deleteRelatedBookings` parameter is false or if transaction support is not enabled in Payload.
+   */
   private static async getTransactionId(
     shouldDeleteRelated: boolean,
   ): Promise<string | number | undefined> {
@@ -121,6 +128,12 @@ class UserRouteWrapper {
     return (await payload.db.beginTransaction()) ?? undefined
   }
 
+  /**
+   * Deletes all bookings related to a user.
+   * @param userId the ID of the user whose bookings are to be deleted
+   * @param transactionID an optional transaction ID for the request, useful for tracing
+   * @private
+   */
   private static async deleteRelatedBookingsForUser(
     userId: string,
     transactionID?: string | number,
@@ -139,6 +152,7 @@ class UserRouteWrapper {
         100,
         relatedBookings.nextPage || undefined,
       )
+      // IMPORTANT: this must come after the previous line, to avoid repeating the same bookings
       relatedBookingIds.push(...relatedBookings.docs.map((booking) => booking.id))
     }
     await bookingDataService.deleteBookings(relatedBookingIds, transactionID)
