@@ -1,0 +1,19 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["@repo/test-config#build"],
+      "env": [
+        "DATABASE_URI",
+        "PAYLOAD_SECRET",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "JWT_SECRET",
+        "SMTP_HOST",
+        "SMTP_USER",
+        "SMTP_PASS"
+      ]
+    }
+  }
+}

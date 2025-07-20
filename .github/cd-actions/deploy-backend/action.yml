@@ -1,0 +1,94 @@
+name: Deploy Backend
+description: Deploys backend
+
+inputs:
+  # Deployment config
+  FLY_API_TOKEN:
+    description: The Fly API token
+    required: true
+  FLY_CONFIG_PATH:
+    description: The path to the Fly.toml file
+    required: true
+  # Secrets
+  DATABASE_URI:
+    description: The database URI
+    required: true
+  JWT_SECRET:
+    description: The JWT Secret
+    required: true
+  PAYLOAD_SECRET:
+    description: The payload secret
+    required: true
+  GOOGLE_CLIENT_ID:
+    description: The Google client ID
+    required: true
+  GOOGLE_CLIENT_SECRET:
+    description: The Google client secret
+    required: true
+  NEXT_PUBLIC_URL:
+    description: The Next.js public URL
+    required: true
+  TURBO_TEAM:
+    description: The Turbo team
+    required: true
+  TURBO_TOKEN:
+    description: The Turbo token
+    required: true
+  SMTP_HOST:
+    description: The SMTP host
+    required: false
+  SMTP_USER:
+    description: The SMTP user
+    required: false
+  SMTP_PASS:
+    description: The SMTP password
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Set Backend Secrets
+      env:
+        FLY_API_TOKEN: ${{ inputs.FLY_API_TOKEN }}
+      shell: bash
+      id: backend-secrets
+      run: >
+        flyctl secrets set --config apps/backend/${{ inputs.FLY_CONFIG_PATH }}
+        DATABASE_URI=${{ inputs.DATABASE_URI }}
+        JWT_SECRET=${{ inputs.JWT_SECRET }}
+        PAYLOAD_SECRET=${{ inputs.PAYLOAD_SECRET }}
+        GOOGLE_CLIENT_ID=${{ inputs.GOOGLE_CLIENT_ID }}
+        GOOGLE_CLIENT_SECRET=${{ inputs.GOOGLE_CLIENT_SECRET }}
+        NEXT_PUBLIC_URL=${{ inputs.NEXT_PUBLIC_URL }}
+        TURBO_TEAM=${{ inputs.TURBO_TEAM }}
+        TURBO_TOKEN=${{ inputs.TURBO_TOKEN }}
+        NEXT_PUBLIC_URL=${{ inputs.NEXT_PUBLIC_URL }}
+        SMTP_HOST="${{ inputs.SMTP_HOST }}"
+        SMTP_USER="${{ inputs.SMTP_USER }}"
+        SMTP_PASS="${{ inputs.SMTP_PASS }}"
+
+    - name: Deploy Backend Secrets
+      env:
+        FLY_API_TOKEN: ${{ inputs.FLY_API_TOKEN }}
+      shell: bash
+      id: backend-secrets-deploy
+      run: flyctl secrets deploy --config apps/backend/${{ inputs.FLY_CONFIG_PATH }}
+
+    - name: Deploy Backend
+      env:
+        FLY_API_TOKEN: ${{ inputs.FLY_API_TOKEN }}
+      shell: bash
+      id: deploy-backend
+      run: >
+        flyctl deploy --remote-only --config apps/backend/${{ inputs.FLY_CONFIG_PATH }}
+        --build-arg DATABASE_URI="${{ inputs.DATABASE_URI }}"
+        --build-arg JWT_SECRET="${{ inputs.JWT_SECRET }}"
+        --build-arg PAYLOAD_SECRET="${{ inputs.PAYLOAD_SECRET }}"
+        --build-arg GOOGLE_CLIENT_ID="${{ inputs.GOOGLE_CLIENT_ID }}"
+        --build-arg GOOGLE_CLIENT_SECRET="${{ inputs.GOOGLE_CLIENT_SECRET }}"
+        --build-arg NEXT_PUBLIC_URL="${{ inputs.NEXT_PUBLIC_URL }}"
+        --build-arg TURBO_TEAM="${{ inputs.TURBO_TEAM }}"
+        --build-arg TURBO_TOKEN="${{ inputs.TURBO_TOKEN }}"
+        --build-arg SMTP_HOST="${{ inputs.SMTP_HOST }}"
+        --build-arg SMTP_USER="${{ inputs.SMTP_USER }}"
+        --build-arg SMTP_PASS="${{ inputs.SMTP_PASS }}"
