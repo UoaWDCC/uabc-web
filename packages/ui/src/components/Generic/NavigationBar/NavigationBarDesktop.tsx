@@ -4,7 +4,7 @@ import { UabcLogo } from "@repo/ui/components/Icon"
 import { Box, HStack, Motion, Spacer } from "@yamada-ui/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 import type { NavigationBarProps } from "./NavigationBar"
 import { NavigationBarButton } from "./NavigationBarButton"
 import { NavigationBarUserMenu } from "./NavigationBarUserMenu"
@@ -23,44 +23,13 @@ export const NavigationBarDesktop = ({
   user,
 }: NavigationBarProps) => {
   const currentPath = usePathname()
-  useEffect(() => {
-    const initialIndex = navItems.findIndex((item) => item.url === currentPath)
-    setInitialIndex(initialIndex)
-    setHoveredIndex(initialIndex !== -1 ? initialIndex : null)
-    if (initialIndex !== -1) {
-      activeRef.current = itemRefs.current[initialIndex]
-    }
-  }, [currentPath, navItems])
 
   const fullName = `${user?.firstName} ${user?.lastName}`.trim()
   const src = typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""
   const admin = user?.role === MembershipType.admin
 
-  const [initialIndex, setInitialIndex] = useState<number | null>(() => {
-    const initialIndex = navItems.findIndex((item) => item.url === currentPath)
-    return initialIndex !== -1 ? initialIndex : null
-  })
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(initialIndex)
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([])
   const activeRef = useRef<HTMLAnchorElement | null>(null)
-
-  const handleHover = (index: number) => {
-    setHoveredIndex(index)
-    const el = itemRefs.current[index]
-    if (el) {
-      activeRef.current = el
-    }
-  }
-
-  const clearHover = () => {
-    setHoveredIndex(initialIndex)
-    activeRef.current = initialIndex ? itemRefs.current[initialIndex] : null
-  }
-
-  const clearIndicator = () => {
-    setHoveredIndex(null)
-    activeRef.current = null
-  }
 
   return (
     <HStack
@@ -91,23 +60,14 @@ export const NavigationBarDesktop = ({
       zIndex={1001}
     >
       <HStack as={Motion} gap={0}>
-        <Box
-          as={Link}
-          borderRadius="50%"
-          href="/"
-          onClick={clearIndicator}
-          padding="sm"
-          position="relative"
-        >
+        <Box as={Link} borderRadius="50%" href="/" padding="sm" position="relative">
           <UabcLogo />
         </Box>
-        <HStack as={Motion} data-testid="navbar-buttons-container" gap={0} onHoverEnd={clearHover}>
+        <HStack as={Motion} data-testid="navbar-buttons-container" gap={0}>
           {navItems.map((item, index) => (
-            <Motion key={item.label} onHoverStart={() => handleHover(index)}>
+            <Motion key={item.label}>
               <NavigationBarButton
-                hovering={hoveredIndex === index}
                 label={item.label}
-                onClick={() => setInitialIndex(index)}
                 ref={(el) => {
                   itemRefs.current[index] = el
                   if (item.url === currentPath && !activeRef.current) {
@@ -125,11 +85,7 @@ export const NavigationBarDesktop = ({
         {user ? (
           <NavigationBarUserMenu admin={admin} avatarProps={{ name: fullName, src: src }} />
         ) : (
-          <NavigationBarButton
-            colorScheme="primary"
-            onClick={clearIndicator}
-            {...rightSideSingleButton}
-          />
+          <NavigationBarButton colorScheme="primary" {...rightSideSingleButton} />
         )}
       </Box>
     </HStack>

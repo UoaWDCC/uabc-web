@@ -27,6 +27,7 @@ export const NavigationBar = ({ user, ...props }: NavigationBarProps) => {
       placeSelf="center"
       position="sticky"
       pt="lg"
+      px="md"
       top="0"
       width="full"
       zIndex={100}

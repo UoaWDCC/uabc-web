@@ -101,7 +101,7 @@ export default async function Home() {
   }
 
   return (
-    <VStack gap="2xl">
+    <VStack gap="2xl" layerStyle="wrapper">
       <GridBackground />
       <VStack
         align="center"
