@@ -1,12 +1,10 @@
-import { AboutUsSection } from "@repo/ui/components/Composite/AboutUsSection"
 import { LocationBubble, type LocationBubbleProps, QuickBook } from "@repo/ui/components/Generic"
 import { locationAndTimeOptionsMock } from "@repo/ui/components/Generic/QuickBook/QuickBook.mock"
 import { Heading, Image } from "@repo/ui/components/Primitive"
 import { Bleed, Box, Center, Text, VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
-import { use } from "react"
 import { FaqSection } from "@/components/client/FaqSection"
-import { getAboutUsInfo } from "@/services/cms/about-us-info/AboutUsInfoService"
+import { AboutUsServerSection } from "@/components/server/AboutUsServerSection"
 
 export const metadata: Metadata = {
   title: "Home | UABC",
@@ -15,32 +13,6 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
-  const { data: aboutUsItems } = use(getAboutUsInfo())
-
-  const mockItems = [
-    {
-      src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
-      alt: "Mountain Lake",
-      width: 600,
-      height: 400,
-      emoji: "😄",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=600",
-      alt: "Forest Path",
-      width: 600,
-      height: 400,
-      emoji: "😁",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=600",
-      alt: "Desert Dunes",
-      width: 600,
-      height: 400,
-      emoji: "😆",
-    },
-  ]
-
   const mockBubble1: LocationBubbleProps = {
     locationImage: {
       src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
@@ -151,7 +123,7 @@ export default function Home() {
           </Box>
         </Box>
       </Bleed>
-      <AboutUsSection cards={aboutUsItems.items} items={mockItems} />
+      <AboutUsServerSection />
       <FaqSection />
     </VStack>
   )
