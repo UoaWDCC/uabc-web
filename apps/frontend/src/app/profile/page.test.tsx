@@ -15,9 +15,24 @@ vi.mock("next/navigation", () => ({
     forward: vi.fn(),
     prefetch: vi.fn(),
   }),
+  redirect: vi.fn(),
 }))
 
-// TODO: rewrite tests after proper auth is implemented
+vi.mock("@/context/AuthContext", () => ({
+  useAuth: () => ({
+    user: casualUserMock,
+    isLoading: false,
+    isPending: false,
+    error: null,
+    login: {
+      mutateAsync: vi.fn(),
+      isPending: false,
+      error: null,
+    },
+  }),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}))
+
 describe("<Profile />", () => {
   let queryClient: QueryClient
   let wrapper: ({ children }: { children: React.ReactNode }) => React.JSX.Element
