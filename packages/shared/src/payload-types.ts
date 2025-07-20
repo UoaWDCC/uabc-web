@@ -53,6 +53,21 @@ export type LinkArray = {
   id?: string | null;
 }[];
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutUsInfoItems".
+ */
+export type AboutUsInfoItems = {
+  /**
+   * The heading displayed for about us info items, e.g. Who We Are.
+   */
+  heading: string;
+  /**
+   * The content displayed for about us info items.
+   */
+  description: string;
+  id?: string | null;
+}[];
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1007,17 +1022,7 @@ export interface Disclaimer {
  */
 export interface AboutUsInfo {
   id: string;
-  info: {
-    /**
-     * The heading displayed for about us info items, e.g. Who We Are.
-     */
-    heading: string;
-    /**
-     * The content displayed for about us info items.
-     */
-    description: string;
-    id?: string | null;
-  }[];
+  items: AboutUsInfoItems;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1131,16 +1136,19 @@ export interface DisclaimerSelect<T extends boolean = true> {
  * via the `definition` "aboutUsInfo_select".
  */
 export interface AboutUsInfoSelect<T extends boolean = true> {
-  info?:
-    | T
-    | {
-        heading?: T;
-        description?: T;
-        id?: T;
-      };
+  items?: T | AboutUsInfoItemsSelect<T>;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutUsInfoItems_select".
+ */
+export interface AboutUsInfoItemsSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  id?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

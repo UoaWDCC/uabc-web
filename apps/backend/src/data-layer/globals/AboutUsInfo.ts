@@ -4,8 +4,9 @@ export const AboutUsInfo: GlobalConfig = {
   slug: "aboutUsInfo",
   fields: [
     {
-      name: "info",
+      name: "items",
       type: "array",
+      interfaceName: "AboutUsInfoItems",
       minRows: 3,
       maxRows: 3,
       required: true,
