@@ -6,7 +6,7 @@ import { MediaSchema } from "../media"
 export const FooterSchema = z.object({
   title: z.string(),
   description: z.string(),
-  logo: MediaSchema,
+  logo: z.union([z.string(), MediaSchema]),
   copyright: z.string(),
   linkGroup1: LinkGroupSchema,
   linkGroup2: LinkGroupSchema,
