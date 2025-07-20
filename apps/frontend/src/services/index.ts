@@ -6,4 +6,5 @@ export enum QueryKeys {
   FOOTER_QUERY_KEY = "footer",
   NAVIGATION_BAR_QUERY_KEY = "navbar",
   TOS_QUERY_KEY = "tos",
+  ABOUT_US_INFO_QUERY_KEY = "about-us-info",
 }
