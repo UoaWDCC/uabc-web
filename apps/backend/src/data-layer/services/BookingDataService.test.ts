@@ -47,7 +47,7 @@ describe("bookingDataService", () => {
       expect(fetchedBooking).toEqual([createdBooking])
     })
 
-    it("should return an empty array when a booking is not found by ID", async () => {
+    it("should return an empty array when a booking is not found for session ID", async () => {
       expect(await bookingDataService.getBookingsBySessionId("Not a valid session ID")).toEqual([])
     })
   })
