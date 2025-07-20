@@ -5,6 +5,8 @@ import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import UserDataService from "@/data-layer/services/UserDataService"
+import BookingDataService from "@/data-layer/services/BookingDataService"
+import { payload } from "@/data-layer/adapters/Payload"
 
 class UserRouteWrapper {
   /**
@@ -75,23 +77,58 @@ class UserRouteWrapper {
    * @returns No content response if successful, otherwise appropriate error response
    */
   @Security("jwt", ["admin"])
-  static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  static async DELETE(
+    _req: NextRequest,
+    { params }: { params: Promise<{ id: string; deleteRelatedBookings?: boolean }> },
+  ) {
+    const { id, deleteRelatedBookings } = await params
+    const cascadeDeleteTransactionID = await UserRouteWrapper.getTransactionId(
+      !!deleteRelatedBookings,
+    )
+
     try {
-      const { id } = await params
       const userDataService = new UserDataService()
-      await userDataService.deleteUser(id)
+      if (deleteRelatedBookings) {
+        await UserRouteWrapper.deleteRelatedBookingsForUser(id, cascadeDeleteTransactionID)
+      }
+      await userDataService.deleteUser(id, cascadeDeleteTransactionID)
+
+      // If deleteRelatedBookings delete was initiated, commit the transaction
+      if (cascadeDeleteTransactionID) await payload.db.commitTransaction(cascadeDeleteTransactionID)
 
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
+      if (cascadeDeleteTransactionID) {
+        await payload.db.rollbackTransaction(cascadeDeleteTransactionID)
+      }
       if (error instanceof NotFound) {
         return NextResponse.json({ error: "User not found" }, { status: StatusCodes.NOT_FOUND })
       }
+
       console.error(error)
       return NextResponse.json(
         { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
         { status: StatusCodes.INTERNAL_SERVER_ERROR },
       )
     }
+  }
+
+  private static async getTransactionId(
+    shouldDeleteRelated: boolean,
+  ): Promise<string | number | undefined> {
+    if (!shouldDeleteRelated) return undefined
+    return (await payload.db.beginTransaction()) ?? undefined
+  }
+
+  private static async deleteRelatedBookingsForUser(
+    userId: string,
+    transactionID?: string | number,
+  ): Promise<void> {
+    const bookingDataService = new BookingDataService()
+    const relatedBookings = await bookingDataService.getBookingsByUserId(userId, transactionID)
+
+    const relatedBookingIds = relatedBookings.docs.map((booking) => booking.id)
+    await bookingDataService.deleteBookings(relatedBookingIds, transactionID)
   }
 }
 

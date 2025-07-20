@@ -13,6 +13,9 @@ import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { DELETE, GET, PATCH } from "./route"
+import BookingDataService from "@/data-layer/services/BookingDataService"
+import { payload } from "@/data-layer/adapters/Payload"
+import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 
 describe("/api/admin/users/[id]", async () => {
   const userDataService = new UserDataService()
@@ -245,6 +248,150 @@ describe("/api/admin/users/[id]", async () => {
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
       expect(json.error).toEqual("Internal Server Error")
+    })
+  })
+  describe("DELETE with cascade", () => {
+    const bookingDataService = new BookingDataService()
+    const userDataService = new UserDataService()
+
+    it("should delete user and related bookings when deleteRelatedBookings is true", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const newUser = await userDataService.createUser(userCreateMock)
+      const booking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: newUser.id,
+      })
+      const booking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: newUser.id,
+      })
+
+      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
+        params: Promise.resolve({
+          id: newUser.id,
+          deleteRelatedBookings: true,
+        }),
+      })
+
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+
+      // Verify user is deleted
+      await expect(userDataService.getUserById(newUser.id)).rejects.toThrow(
+        getReasonPhrase(StatusCodes.NOT_FOUND),
+      )
+
+      // Verify bookings are deleted
+      await expect(bookingDataService.getBookingById(booking1.id)).rejects.toThrow(
+        getReasonPhrase(StatusCodes.NOT_FOUND),
+      )
+      await expect(bookingDataService.getBookingById(booking2.id)).rejects.toThrow(
+        getReasonPhrase(StatusCodes.NOT_FOUND),
+      )
+    })
+
+    it("should only delete user (and not bookings) when deleteRelatedBookings is false", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const newUser = await userDataService.createUser(userCreateMock)
+      const booking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: newUser.id,
+      })
+      const booking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: newUser.id,
+      })
+
+      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
+        params: Promise.resolve({
+          id: newUser.id,
+          deleteRelatedBookings: false,
+        }),
+      })
+
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+
+      await expect(userDataService.getUserById(newUser.id)).rejects.toThrow(
+        getReasonPhrase(StatusCodes.NOT_FOUND),
+      )
+
+      const existingBooking1 = await bookingDataService.getBookingById(booking1.id)
+      const existingBooking2 = await bookingDataService.getBookingById(booking2.id)
+      expect(existingBooking1).toBeDefined()
+      expect(existingBooking2).toBeDefined()
+    })
+
+    it("should rollback transaction if error occurs during cascade delete", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      // Create a user and some bookings
+      const newUser = await userDataService.createUser(userCreateMock)
+      const booking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: newUser.id,
+      })
+
+      // Mock deleteBookings to throw an error
+      const mockDeleteBookings = vi
+        .spyOn(BookingDataService.prototype, "deleteBookings")
+        .mockRejectedValueOnce(new Error("Delete failed"))
+
+      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
+        params: Promise.resolve({
+          id: newUser.id,
+          deleteRelatedBookings: true,
+        }),
+      })
+
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      expect(await res.json()).toStrictEqual({
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+      })
+
+      // Verify user and booking still exist (transaction rolled back)
+      const existingUser = await userDataService.getUserById(newUser.id)
+      const existingBooking = await bookingDataService.getBookingById(booking.id)
+      expect(existingUser).toBeDefined()
+      expect(existingBooking).toBeDefined()
+
+      mockDeleteBookings.mockRestore()
+    })
+
+    it("should handle transaction management correctly", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      // In a test environment beginTransaction does not return a transaction ID
+      vi.spyOn(payload.db, "beginTransaction").mockResolvedValue("transaction-id")
+      vi.spyOn(payload.db, "commitTransaction").mockResolvedValue(undefined)
+      vi.spyOn(payload.db, "rollbackTransaction").mockResolvedValue(undefined)
+
+      // Spy on transaction methods
+      const beginTransactionSpy = vi.spyOn(payload.db, "beginTransaction")
+      const commitTransactionSpy = vi.spyOn(payload.db, "commitTransaction")
+      const rollbackTransactionSpy = vi.spyOn(payload.db, "rollbackTransaction")
+
+      const newUser = await userDataService.createUser(userCreateMock)
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: newUser.id,
+      })
+
+      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
+        params: Promise.resolve({
+          id: newUser.id,
+          deleteRelatedBookings: true,
+        }),
+      })
+
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+      expect(beginTransactionSpy).toHaveBeenCalled()
+      expect(commitTransactionSpy).toHaveBeenCalled()
+      expect(rollbackTransactionSpy).not.toHaveBeenCalled()
+
+      beginTransactionSpy.mockRestore()
+      commitTransactionSpy.mockRestore()
+      rollbackTransactionSpy.mockRestore()
     })
   })
 })

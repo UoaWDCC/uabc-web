@@ -89,12 +89,16 @@ export default class UserDataService {
    * Deletes a {@link User} document
    *
    * @param id The ID of the {@link User} to delete
+   * @param transactionID An optional transaction ID for the request, useful for tracking purposes
    * @returns The deleted {@link User} document if successful, otherwise throws a {@link NotFound} error
    */
-  public async deleteUser(id: string): Promise<User> {
+  public async deleteUser(id: string, transactionID?: string | number): Promise<User> {
     return await payload.delete({
       collection: "user",
       id,
+      req: {
+        transactionID,
+      },
     })
   }
 }
