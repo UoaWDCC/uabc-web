@@ -88,8 +88,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const authState: AuthState = {
     user: user ?? null,
-    isLoading: isLoading || isPending || login.isPending,
-    isPending: login.isPending,
+    isLoading: isLoading || login.isPending,
+    isPending: isPending || login.isPending,
     error: error ? error.message : null,
   }
 

@@ -15,11 +15,9 @@ import { memo } from "react"
 import { useAuth } from "@/context/AuthContext"
 
 export const ProfileSection = memo(() => {
-  const { user, isLoading } = useAuth()
+  const { user, isLoading, isPending } = useAuth()
 
-  console.log(isLoading)
-
-  if (isLoading) {
+  if (isLoading || isPending) {
     return (
       <Center minH="50vh">
         <Loading boxSize="sm" />
