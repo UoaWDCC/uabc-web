@@ -19,7 +19,7 @@ jobs:
     name: Deploy Backend Staging
     if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'backend-staging')
     environment:
-      name: staging
+      name: backend-staging
       url: https://staging-server.uoabadminton.co.nz
     runs-on: ubuntu-latest
     concurrency:
@@ -50,7 +50,7 @@ jobs:
     name: Deploy Frontend Staging
     if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'frontend-staging')
     environment:
-      name: staging
+      name: frontend-staging
       url: https://staging.uoabadminton.co.nz/
     runs-on: ubuntu-latest
     concurrency:
@@ -76,7 +76,7 @@ jobs:
     name: Deploy Backend Production
     if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'backend-production')
     environment:
-      name: production
+      name: backend-production
       url: https://server.uoabadminton.co.nz/
     runs-on: ubuntu-latest
     concurrency:
@@ -110,7 +110,7 @@ jobs:
     name: Deploy Frontend Production
     if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'frontend-production')
     environment:
-      name: staging
+      name: frontend-staging
       url: https://uoabadminton.co.nz/
     runs-on: ubuntu-latest
     concurrency:
