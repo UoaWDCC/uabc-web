@@ -3,7 +3,7 @@ import {
   cleanupTestEnvironment,
   consoleSpy,
   setupTestEnvironment,
-} from "../../../test-config/localStorage-test-utils"
+} from "@/test-config/localStorage-test-utils"
 import { createLocalStorageManager } from "../localStorageManager"
 
 describe("LocalStorageManager Subscription", () => {

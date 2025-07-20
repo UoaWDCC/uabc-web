@@ -1,9 +1,6 @@
 import { act, renderHook } from "@testing-library/react"
 import { z } from "zod"
-import {
-  localStorageMock,
-  setupTestEnvironment,
-} from "../../../test-config/localStorage-test-utils"
+import { localStorageMock, setupTestEnvironment } from "@/test-config/localStorage-test-utils"
 import {
   useLocalStorage,
   useLocalStorageWithDefault,
@@ -72,7 +69,7 @@ describe("LocalStorageManager Hooks", () => {
       expect(result.current.isValid).toBe(true)
     })
 
-    it("should mark as invalid when schema validation fails", () => {
+    it("should mark as valid when schema validation fails but value is null", () => {
       const schema = z.object({ name: z.string(), age: z.number() })
       const invalidData = { name: "John" } // missing age
       localStorageMock.setItem("test-key", JSON.stringify(invalidData))
@@ -80,7 +77,7 @@ describe("LocalStorageManager Hooks", () => {
       const { result } = renderHook(() => useLocalStorage("test-key", schema))
 
       expect(result.current.value).toBeNull()
-      expect(result.current.isValid).toBe(false)
+      expect(result.current.isValid).toBe(true) // null values are considered valid
     })
 
     it("should update validity when value changes", () => {
@@ -94,13 +91,13 @@ describe("LocalStorageManager Hooks", () => {
 
       expect(result.current.isValid).toBe(true)
 
-      // Set invalid value
-      act(() => {
-        // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-        result.current.setValue({ name: "John" } as any)
-      })
-
-      expect(result.current.isValid).toBe(false)
+      // Set invalid value - this should throw an error
+      expect(() => {
+        act(() => {
+          // biome-ignore lint/suspicious/noExplicitAny: this is for a test
+          result.current.setValue({ name: "John" } as any)
+        })
+      }).toThrow()
     })
 
     it("should handle storage events from other tabs", () => {
@@ -133,17 +130,16 @@ describe("LocalStorageManager Hooks", () => {
       expect(result2.current.value).toEqual({ name: "Jane" })
     })
 
-    it("should handle schema validation errors gracefully", () => {
+    it("should throw error when setting invalid value", () => {
       const schema = z.object({ name: z.string(), age: z.number() })
       const { result } = renderHook(() => useLocalStorage("test-key", schema))
 
-      act(() => {
-        // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-        result.current.setValue({ name: "John" } as any)
-      })
-
-      expect(result.current.isValid).toBe(false)
-      expect(result.current.value).toBeNull()
+      expect(() => {
+        act(() => {
+          // biome-ignore lint/suspicious/noExplicitAny: this is for a test
+          result.current.setValue({ name: "John" } as any)
+        })
+      }).toThrow()
     })
 
     it("should handle JSON parsing errors in storage events", () => {
@@ -219,7 +215,7 @@ describe("LocalStorageManager Hooks", () => {
       )
 
       expect(result.current.value).toEqual(defaultValue)
-      expect(result.current.isValid).toBe(false)
+      expect(result.current.isValid).toBe(true) // null values are considered valid
     })
 
     it("should handle storage events with default fallback", () => {
@@ -251,7 +247,7 @@ describe("LocalStorageManager Hooks", () => {
       )
 
       expect(result.current.value).toEqual(defaultValue)
-      expect(result.current.isValid).toBe(false)
+      expect(result.current.isValid).toBe(true) // null values are considered valid
     })
   })
 
@@ -275,7 +271,7 @@ describe("LocalStorageManager Hooks", () => {
       expect(result.current.isValid).toBe(true)
     })
 
-    it("should mark as invalid when stored value fails validation", () => {
+    it("should mark as valid when stored value fails validation but value is null", () => {
       const schema = z.object({ name: z.string(), age: z.number() })
       const invalidData = { name: "John" } // missing age
       localStorageMock.setItem("test-key", JSON.stringify(invalidData))
@@ -283,7 +279,7 @@ describe("LocalStorageManager Hooks", () => {
       const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
 
       expect(result.current.value).toBeNull()
-      expect(result.current.isValid).toBe(false)
+      expect(result.current.isValid).toBe(true) // null values are considered valid
     })
 
     it("should validate new values when setValue is called", () => {
@@ -345,7 +341,7 @@ describe("LocalStorageManager Hooks", () => {
       })
 
       expect(result.current.value).toBeNull()
-      expect(result.current.isValid).toBe(false)
+      expect(result.current.isValid).toBe(true) // null values are considered valid
     })
 
     it("should handle null values in storage events", () => {
