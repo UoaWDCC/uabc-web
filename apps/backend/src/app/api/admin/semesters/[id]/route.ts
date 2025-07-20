@@ -13,7 +13,7 @@ class SemesterRouteWrapper {
    * @param req The request object containing the request body
    * @returns No content status code
    */
-  @Security("jwt", ["admin"])
+  @Security("jwt", ["ADMIN"])
   static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
@@ -37,7 +37,7 @@ class SemesterRouteWrapper {
    * @param params The route parameters containing the Semester ID
    * @returns The updated {@link Semester} document
    */
-  @Security("jwt", ["admin"])
+  @Security("jwt", ["ADMIN"])
   static async PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params

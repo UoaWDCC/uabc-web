@@ -17,7 +17,7 @@ export const UserSchema = z.object({
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
   // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
-  role: z.enum(["admin", "member", "casual"]),
+  role: z.enum(["Admin", "Member", "Casual"]),
   remainingSessions: z.number().nullable().optional(),
   image: z.union([z.string(), MediaSchema]).nullable().optional(),
   updatedAt: z.string(),

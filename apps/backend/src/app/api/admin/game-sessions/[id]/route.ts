@@ -14,7 +14,7 @@ class GameSessionRouteWrapper {
    * @param params route parameters containing the GameSession ID
    * @returns No content status code
    */
-  @Security("jwt", ["admin"])
+  @Security("jwt", ["ADMIN"])
   static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
@@ -41,7 +41,7 @@ class GameSessionRouteWrapper {
    * @param req The request object containing the request body
    * @returns  The updated  {@link gameSession} document
    */
-  @Security("jwt", ["admin"])
+  @Security("jwt", ["ADMIN"])
   static async PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params

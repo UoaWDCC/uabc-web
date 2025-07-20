@@ -26,11 +26,11 @@ export interface StatusBadgeProps {
  *
  * @example
  * // Member status badge
- * <StatusBadge status="member" />
+ * <StatusBadge status="Member" />
  *
  * @example
  * // Casual status badge
- * <StatusBadge status="casual" />
+ * <StatusBadge status="Casual" />
  */
 export const StatusBadge: FC<StatusBadgeProps> = memo(({ status }) => (
   <HStack as={Center} color={["primary.600", "primary.300"]} gap="xs">

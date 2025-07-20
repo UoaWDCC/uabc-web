@@ -34,7 +34,7 @@ describe("<Filter />", () => {
         type: "multiselect",
         key: "role",
         label: "Role",
-        items: [{ label: "Admin", value: "admin" as const }],
+        items: [{ label: "Admin", value: "Admin" as const }],
       },
     ] as FilterBarConfig<{ name: string; status: string; role: string }>[]
     const columnsConfig = [] as ColumnConfig<{ name: string; status: string; role: string }>[]

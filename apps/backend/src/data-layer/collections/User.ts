@@ -31,7 +31,7 @@ export const User: CollectionConfig = {
       type: "select",
       required: true,
       options: Object.values(MembershipType),
-      defaultValue: MembershipType.casual,
+      defaultValue: MembershipType.CASUAL,
       admin: {
         description: "The role of the user",
       },
