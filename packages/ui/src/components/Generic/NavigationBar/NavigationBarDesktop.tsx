@@ -3,8 +3,7 @@ import { MembershipType } from "@repo/shared"
 import { UabcLogo } from "@repo/ui/components/Icon"
 import { Box, HStack, Motion, Spacer } from "@yamada-ui/react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useRef } from "react"
+import { memo, useMemo } from "react"
 import type { NavigationBarProps } from "./NavigationBar"
 import { NavigationBarButton } from "./NavigationBarButton"
 import { NavigationBarUserMenu } from "./NavigationBarUserMenu"
@@ -22,14 +21,12 @@ export const NavigationBarDesktop = ({
   rightSideSingleButton,
   user,
 }: NavigationBarProps) => {
-  const currentPath = usePathname()
-
-  const fullName = `${user?.firstName} ${user?.lastName}`.trim()
-  const src = typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""
-  const admin = user?.role === MembershipType.admin
-
-  const itemRefs = useRef<(HTMLAnchorElement | null)[]>([])
-  const activeRef = useRef<HTMLAnchorElement | null>(null)
+  const fullName = useMemo(() => `${user?.firstName} ${user?.lastName}`.trim(), [user])
+  const src = useMemo(
+    () => (typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""),
+    [user],
+  )
+  const admin = useMemo(() => user?.role === MembershipType.admin, [user])
 
   return (
     <HStack
@@ -63,22 +60,7 @@ export const NavigationBarDesktop = ({
         <Box as={Link} borderRadius="50%" href="/" padding="sm" position="relative">
           <UabcLogo />
         </Box>
-        <HStack as={Motion} data-testid="navbar-buttons-container" gap={0}>
-          {navItems.map((item, index) => (
-            <Motion key={item.label}>
-              <NavigationBarButton
-                label={item.label}
-                ref={(el) => {
-                  itemRefs.current[index] = el
-                  if (item.url === currentPath && !activeRef.current) {
-                    activeRef.current = el
-                  }
-                }}
-                url={item.url}
-              />
-            </Motion>
-          ))}
-        </HStack>
+        <NavItems navItems={navItems} />
       </HStack>
       <Spacer />
       <Box>
@@ -91,3 +73,17 @@ export const NavigationBarDesktop = ({
     </HStack>
   )
 }
+
+const NavItems = memo(({ navItems }: { navItems: NavigationBarProps["navItems"] }) => {
+  return (
+    <HStack as={Motion} data-testid="navbar-buttons-container" gap={0}>
+      {navItems.map((item) => (
+        <Motion key={item.label}>
+          <NavigationBarButton label={item.label} url={item.url} />
+        </Motion>
+      ))}
+    </HStack>
+  )
+})
+
+NavItems.displayName = "NavItems"
