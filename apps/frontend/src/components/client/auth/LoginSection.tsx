@@ -17,7 +17,7 @@ export const LoginSection = () => {
     try {
       const response = await login.mutateAsync(data)
 
-      if (response?.data) {
+      if (response.success && response.data?.data) {
         notice({
           title: "Login successful",
           description: "You are now logged in",
@@ -25,14 +25,17 @@ export const LoginSection = () => {
         })
         await queryClient.prefetchQuery({ queryKey: ["auth", "me"] })
         router.push("/profile")
-      } else {
-        notice({
-          title: "Login failed",
-          description: response?.error,
-          status: "error",
-        })
+        return response.data
       }
-      return response ?? { error: "Login failed" }
+      const errorMessage = response.success
+        ? response.data?.error
+        : response.error?.message || "Login failed"
+      notice({
+        title: "Login failed",
+        description: errorMessage,
+        status: "error",
+      })
+      return { error: errorMessage }
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "Login failed",

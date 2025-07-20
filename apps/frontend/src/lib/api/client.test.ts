@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
-import { createApiClient } from "./client"
+import { ApiClient, createApiClient } from "./client"
 
 // Mock fetch globally
 global.fetch = vi.fn()
@@ -161,14 +161,24 @@ describe("ApiClient", () => {
 
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
 
-      const result = await client.get("/test", testSchema, ["tag1", "tag2"])
+      const result = await client.get("/test", testSchema, {
+        tags: ["tag1", "tag2"],
+      })
 
       expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
         next: {
           tags: ["tag1", "tag2"],
         },
       })
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
+      expect(result).toEqual({
+        success: true,
+        data: mockResponse,
+        status: StatusCodes.OK,
+      })
     })
 
     it("should handle fetch with default empty tags", async () => {
@@ -180,11 +190,19 @@ describe("ApiClient", () => {
       const result = await client.get("/test", testSchema)
 
       expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
         next: {
           tags: [],
         },
       })
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
+      expect(result).toEqual({
+        success: true,
+        data: mockResponse,
+        status: StatusCodes.OK,
+      })
     })
 
     it("should return error when response is not ok", async () => {
@@ -193,9 +211,12 @@ describe("ApiClient", () => {
       mockFetch.mockResolvedValueOnce(new Response(null, { status: 404, statusText: "Not Found" }))
 
       const result = await client.get("/test", testSchema)
-      expect(result.isError).toBe(true)
-      expect(result.error).toBeInstanceOf(Error)
-      expect(result.error?.message).toBe("Failed to fetch /test: Not Found")
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBeInstanceOf(Error)
+        expect(result.error.message).toBe("HTTP 404: Not Found")
+        expect(result.status).toBe(404)
+      }
     })
 
     it("should return error when schema validation fails", async () => {
@@ -209,56 +230,47 @@ describe("ApiClient", () => {
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
 
       const result = await client.get("/test", testSchema)
-      expect(result.isError).toBe(true)
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBeInstanceOf(Error)
+        expect(result.error.message).toBe("Invalid response format")
+      }
     })
 
-    it("should handle different response types with complex schemas", async () => {
-      const complexSchema = z.object({
-        id: z.number(),
-        name: z.string(),
-        tags: z.array(z.string()),
-        metadata: z.object({
-          created: z.string(),
-          updated: z.string(),
-        }),
-      })
+    it("should handle network errors", async () => {
+      const testSchema = z.object({ message: z.string() })
 
-      const mockResponse = {
-        id: 1,
-        name: "Test Item",
-        tags: ["test", "item"],
-        metadata: {
-          created: "2023-01-01",
-          updated: "2023-01-02",
-        },
+      mockFetch.mockRejectedValueOnce(new Error("Network error"))
+
+      const result = await client.get("/test", testSchema)
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBeInstanceOf(Error)
+        expect(result.error.message).toBe("Network error")
+        expect(result.status).toBe(null)
       }
+    })
+
+    it("should handle custom headers", async () => {
+      const testSchema = z.object({ message: z.string() })
+      const mockResponse = { message: "success" }
 
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
 
-      const result = await client.get("/complex", complexSchema, ["complex"])
-
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
-    })
-
-    it("should successfully fetch and parse data with revalidate", async () => {
-      const testSchema = z.object({
-        message: z.string(),
-        data: z.array(z.string()),
+      await client.get("/test", testSchema, {
+        headers: { Authorization: "Bearer token" },
       })
-      const mockResponse = {
-        message: "success",
-        data: ["item1", "item2"],
-      }
-      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.get("/test", testSchema, ["tag1"], 60)
+
       expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer token",
+        },
         next: {
-          tags: ["tag1"],
-          revalidate: 60,
+          tags: [],
         },
       })
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
     })
   })
 
@@ -268,11 +280,14 @@ describe("ApiClient", () => {
       vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
       client = createApiClient()
     })
+
     it("should successfully post and parse data", async () => {
       const testSchema = z.object({ message: z.string(), id: z.number() })
       const mockResponse = { message: "created", id: 1 }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.post("/test", { foo: "bar" }, testSchema, ["postTag"])
+      const result = await client.post("/test", { foo: "bar" }, testSchema, {
+        tags: ["postTag"],
+      })
       expect(mockFetch).toHaveBeenCalledWith(
         "https://api.example.com/test",
         expect.objectContaining({
@@ -282,41 +297,36 @@ describe("ApiClient", () => {
           next: { tags: ["postTag"] },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
+      expect(result).toEqual({
+        success: true,
+        data: mockResponse,
+        status: StatusCodes.OK,
+      })
     })
+
     it("should return error when response is not ok", async () => {
       const testSchema = z.object({ message: z.string() })
       mockFetch.mockResolvedValueOnce(
         new Response(null, { status: 400, statusText: "Bad Request" }),
       )
       const result = await client.post("/test", { foo: "bar" }, testSchema)
-      expect(result.isError).toBe(true)
-      expect(result.error).toBeInstanceOf(Error)
-      expect(result.error?.message).toBe("Unexpected end of JSON input")
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBeInstanceOf(Error)
+        expect(result.error.message).toBe("HTTP 400: Bad Request")
+      }
     })
+
     it("should return error when schema validation fails", async () => {
       const testSchema = z.object({ message: z.string(), id: z.number() })
-      const invalidResponse = { message: "created" }
+      const invalidResponse = { message: "created" } // missing id
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
       const result = await client.post("/test", { foo: "bar" }, testSchema)
-      expect(result.isError).toBe(true)
-      expect(result.error).toBeInstanceOf(Error)
-    })
-    it("should successfully post and parse data with revalidate", async () => {
-      const testSchema = z.object({ message: z.string(), id: z.number() })
-      const mockResponse = { message: "created", id: 1 }
-      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.post("/test", { foo: "bar" }, testSchema, ["postTag"], false)
-      expect(mockFetch).toHaveBeenCalledWith(
-        "https://api.example.com/test",
-        expect.objectContaining({
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ foo: "bar" }),
-          next: { tags: ["postTag"], revalidate: false },
-        }),
-      )
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBeInstanceOf(Error)
+        expect(result.error.message).toBe("Invalid response format")
+      }
     })
   })
 
@@ -326,6 +336,7 @@ describe("ApiClient", () => {
       vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
       client = createApiClient()
     })
+
     it("should successfully put and parse data", async () => {
       const testSchema = z.object({
         message: z.string(),
@@ -333,7 +344,9 @@ describe("ApiClient", () => {
       })
       const mockResponse = { message: "updated", updated: true }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.put("/test", { foo: "bar" }, testSchema, ["putTag"])
+      const result = await client.put("/test", { foo: "bar" }, testSchema, {
+        tags: ["putTag"],
+      })
       expect(mockFetch).toHaveBeenCalledWith(
         "https://api.example.com/test",
         expect.objectContaining({
@@ -343,45 +356,37 @@ describe("ApiClient", () => {
           next: { tags: ["putTag"] },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
+      expect(result).toEqual({
+        success: true,
+        data: mockResponse,
+        status: StatusCodes.OK,
+      })
     })
+
     it("should return error when response is not ok", async () => {
       const testSchema = z.object({ message: z.string() })
       mockFetch.mockResolvedValueOnce(new Response(null, { status: 404, statusText: "Not Found" }))
       const result = await client.put("/test", { foo: "bar" }, testSchema)
-      expect(result.isError).toBe(true)
-      expect(result.error).toBeInstanceOf(Error)
-      expect(result.error?.message).toBe("Failed to fetch /test: Not Found")
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBeInstanceOf(Error)
+        expect(result.error.message).toBe("HTTP 404: Not Found")
+      }
     })
+
     it("should return error when schema validation fails", async () => {
       const testSchema = z.object({
         message: z.string(),
         updated: z.boolean(),
       })
-      const invalidResponse = { message: "updated" }
+      const invalidResponse = { message: "updated" } // missing updated field
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
       const result = await client.put("/test", { foo: "bar" }, testSchema)
-      expect(result.isError).toBe(true)
-      expect(result.error).toBeInstanceOf(Error)
-    })
-    it("should successfully put and parse data with revalidate", async () => {
-      const testSchema = z.object({
-        message: z.string(),
-        updated: z.boolean(),
-      })
-      const mockResponse = { message: "updated", updated: true }
-      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.put("/test", { foo: "bar" }, testSchema, ["putTag"], 120)
-      expect(mockFetch).toHaveBeenCalledWith(
-        "https://api.example.com/test",
-        expect.objectContaining({
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ foo: "bar" }),
-          next: { tags: ["putTag"], revalidate: 120 },
-        }),
-      )
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBeInstanceOf(Error)
+        expect(result.error.message).toBe("Invalid response format")
+      }
     })
   })
 
@@ -391,6 +396,7 @@ describe("ApiClient", () => {
       vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
       client = createApiClient()
     })
+
     it("should successfully patch and parse data", async () => {
       const testSchema = z.object({
         message: z.string(),
@@ -398,7 +404,9 @@ describe("ApiClient", () => {
       })
       const mockResponse = { message: "patched", patched: true }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.patch("/test", { foo: "bar" }, testSchema, ["patchTag"])
+      const result = await client.patch("/test", { foo: "bar" }, testSchema, {
+        tags: ["patchTag"],
+      })
       expect(mockFetch).toHaveBeenCalledWith(
         "https://api.example.com/test",
         expect.objectContaining({
@@ -408,47 +416,39 @@ describe("ApiClient", () => {
           next: { tags: ["patchTag"] },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
+      expect(result).toEqual({
+        success: true,
+        data: mockResponse,
+        status: StatusCodes.OK,
+      })
     })
+
     it("should return error when response is not ok", async () => {
       const testSchema = z.object({ message: z.string() })
       mockFetch.mockResolvedValueOnce(
         new Response(null, { status: 500, statusText: "Internal Server Error" }),
       )
       const result = await client.patch("/test", { foo: "bar" }, testSchema)
-      expect(result.isError).toBe(true)
-      expect(result.error).toBeInstanceOf(Error)
-      expect(result.error?.message).toBe("Failed to fetch /test: Internal Server Error")
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBeInstanceOf(Error)
+        expect(result.error.message).toBe("HTTP 500: Internal Server Error")
+      }
     })
+
     it("should return error when schema validation fails", async () => {
       const testSchema = z.object({
         message: z.string(),
         patched: z.boolean(),
       })
-      const invalidResponse = { message: "patched" }
+      const invalidResponse = { message: "patched" } // missing patched field
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
       const result = await client.patch("/test", { foo: "bar" }, testSchema)
-      expect(result.isError).toBe(true)
-      expect(result.error).toBeInstanceOf(Error)
-    })
-    it("should successfully patch and parse data with revalidate", async () => {
-      const testSchema = z.object({
-        message: z.string(),
-        patched: z.boolean(),
-      })
-      const mockResponse = { message: "patched", patched: true }
-      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.patch("/test", { foo: "bar" }, testSchema, ["patchTag"], 0)
-      expect(mockFetch).toHaveBeenCalledWith(
-        "https://api.example.com/test",
-        expect.objectContaining({
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ foo: "bar" }),
-          next: { tags: ["patchTag"], revalidate: 0 },
-        }),
-      )
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBeInstanceOf(Error)
+        expect(result.error.message).toBe("Invalid response format")
+      }
     })
   })
 
@@ -458,6 +458,7 @@ describe("ApiClient", () => {
       vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com")
       client = createApiClient()
     })
+
     it("should successfully delete and parse data", async () => {
       const testSchema = z.object({
         message: z.string(),
@@ -465,51 +466,103 @@ describe("ApiClient", () => {
       })
       const mockResponse = { message: "deleted", deleted: true }
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.delete("/test", testSchema, ["deleteTag"])
+      const result = await client.delete("/test", testSchema, {
+        tags: ["deleteTag"],
+      })
       expect(mockFetch).toHaveBeenCalledWith(
         "https://api.example.com/test",
         expect.objectContaining({
           method: "DELETE",
+          headers: { "Content-Type": "application/json" },
           next: { tags: ["deleteTag"] },
         }),
       )
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
+      expect(result).toEqual({
+        success: true,
+        data: mockResponse,
+        status: StatusCodes.OK,
+      })
     })
+
+    it("should handle 204 No Content response", async () => {
+      mockFetch.mockResolvedValueOnce(new Response(null, { status: 204 }))
+      const result = await client.delete("/test")
+      expect(result).toEqual({
+        success: true,
+        data: undefined,
+        status: 204,
+      })
+    })
+
     it("should return error when response is not ok", async () => {
       const testSchema = z.object({ message: z.string() })
       mockFetch.mockResolvedValueOnce(new Response(null, { status: 403, statusText: "Forbidden" }))
       const result = await client.delete("/test", testSchema)
-      expect(result.isError).toBe(true)
-      expect(result.error).toBeInstanceOf(Error)
-      expect(result.error?.message).toBe("Failed to fetch /test: Forbidden")
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBeInstanceOf(Error)
+        expect(result.error.message).toBe("HTTP 403: Forbidden")
+      }
     })
+
     it("should return error when schema validation fails", async () => {
       const testSchema = z.object({
         message: z.string(),
         deleted: z.boolean(),
       })
-      const invalidResponse = { message: "deleted" }
+      const invalidResponse = { message: "deleted" } // missing deleted field
       mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
       const result = await client.delete("/test", testSchema)
-      expect(result.isError).toBe(true)
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toBeInstanceOf(Error)
+        expect(result.error.message).toBe("Invalid response format")
+      }
     })
-    it("should successfully delete and parse data with revalidate", async () => {
-      const testSchema = z.object({
-        message: z.string(),
-        deleted: z.boolean(),
-      })
-      const mockResponse = { message: "deleted", deleted: true }
-      mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-      const result = await client.delete("/test", testSchema, ["deleteTag"], 10)
-      expect(mockFetch).toHaveBeenCalledWith(
-        "https://api.example.com/test",
-        expect.objectContaining({
-          method: "DELETE",
-          next: { tags: ["deleteTag"], revalidate: 10 },
-        }),
-      )
-      expect(result).toEqual({ data: mockResponse, isError: false, status: StatusCodes.OK })
+  })
+
+  describe("helper methods", () => {
+    it("should throw error when using throwIfError with failed response", () => {
+      const failedResponse = {
+        success: false as const,
+        error: new Error("Test error"),
+        status: 400,
+      }
+
+      expect(() => ApiClient.throwIfError(failedResponse)).toThrow("Test error")
+    })
+
+    it("should return data when using throwIfError with successful response", () => {
+      const successfulResponse = {
+        success: true as const,
+        data: { message: "success" },
+        status: 200,
+      }
+
+      const result = ApiClient.throwIfError(successfulResponse)
+      expect(result).toEqual({ message: "success" })
+    })
+
+    it("should return null when using returnNullIfError with failed response", () => {
+      const failedResponse = {
+        success: false as const,
+        error: new Error("Test error"),
+        status: 400,
+      }
+
+      const result = ApiClient.returnNullIfError(failedResponse)
+      expect(result).toBe(null)
+    })
+
+    it("should return data when using returnNullIfError with successful response", () => {
+      const successfulResponse = {
+        success: true as const,
+        data: { message: "success" },
+        status: 200,
+      }
+
+      const result = ApiClient.returnNullIfError(successfulResponse)
+      expect(result).toEqual({ message: "success" })
     })
   })
 })

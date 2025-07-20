@@ -19,14 +19,15 @@ type AuthState = {
   error: string | null
 }
 
+import type { ApiResponse } from "@/lib/api/client"
+
 type AuthActions = {
   login: UseMutationResult<
-    | {
-        message?: string | undefined
-        data?: string | undefined
-        error?: string | undefined
-      }
-    | undefined,
+    ApiResponse<{
+      message?: string | undefined
+      data?: string | undefined
+      error?: string | undefined
+    }>,
     Error,
     {
       email: string
@@ -72,11 +73,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return await AuthService.login(credentials.email, credentials.password)
     },
     onSuccess: async (data) => {
-      if (data?.data) {
-        setToken(data.data)
+      if (data.success && data.data?.data) {
+        setToken(data.data.data)
         await queryClient.invalidateQueries({ queryKey: ["auth", "me"] })
       } else {
-        throw new Error(data?.error || "Login failed")
+        throw new Error(data.success ? data.data?.error : data.error?.message || "Login failed")
       }
     },
     onError: (error) => {

@@ -1,6 +1,5 @@
 import { GetUserResponseSchema, LoginResponseSchema } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
-import { StatusCodes } from "http-status-codes"
 import { apiClient } from "@/lib/api/client"
 
 const AuthService = {
@@ -12,12 +11,12 @@ const AuthService = {
    * @returns The user token if login is successful
    */
   login: async (email: string, password: string) => {
-    const { data } = await apiClient.post(
+    const response = await apiClient.post(
       "/api/auth/login",
       { email, password },
       LoginResponseSchema,
     )
-    return data
+    return response
   },
   /**
    * Gets user information from a JWT token by making a request to the backend.
@@ -27,11 +26,12 @@ const AuthService = {
    */
   getUserFromToken: async (token: string): Promise<User | null> => {
     try {
-      const { data, status, error } = await apiClient.get("/api/me", GetUserResponseSchema, {
-        Authorization: `Bearer ${token}`,
+      const response = await apiClient.get("/api/me", GetUserResponseSchema, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      if (status !== StatusCodes.OK || !data || error) return null
-      return data.data ?? null
+      return response.success ? response.data.data : null
     } catch (_) {
       return null
     }
