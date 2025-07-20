@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
 }
 
-export default function Home() {
+export default async function Home() {
   const mockBubble1: LocationBubbleProps = {
     locationImage: {
       src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
