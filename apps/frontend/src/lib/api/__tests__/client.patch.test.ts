@@ -44,14 +44,18 @@ describe("ApiClient PATCH method", () => {
 
   it("should return error when response is not ok", async () => {
     const testSchema = z.object({ message: z.string() })
+    const errorResponse = { error: "Internal server error occurred" }
     mockFetch.mockResolvedValueOnce(
-      new Response(null, { status: 500, statusText: "Internal Server Error" }),
+      new Response(JSON.stringify(errorResponse), {
+        status: 500,
+        statusText: "Internal Server Error",
+      }),
     )
     const result = await client.patch("/test", { foo: "bar" }, testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(result.error).toBeInstanceOf(Error)
-      expect(result.error.message).toBe("HTTP 500: Internal Server Error")
+      expect(result.error.message).toBe("Internal server error occurred")
     }
   })
 

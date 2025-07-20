@@ -41,12 +41,15 @@ describe("ApiClient POST method", () => {
 
   it("should return error when response is not ok", async () => {
     const testSchema = z.object({ message: z.string() })
-    mockFetch.mockResolvedValueOnce(new Response(null, { status: 400, statusText: "Bad Request" }))
+    const errorResponse = { error: "Invalid request data" }
+    mockFetch.mockResolvedValueOnce(
+      new Response(JSON.stringify(errorResponse), { status: 400, statusText: "Bad Request" }),
+    )
     const result = await client.post("/test", { foo: "bar" }, testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(result.error).toBeInstanceOf(Error)
-      expect(result.error.message).toBe("HTTP 400: Bad Request")
+      expect(result.error.message).toBe("Invalid request data")
     }
   })
 

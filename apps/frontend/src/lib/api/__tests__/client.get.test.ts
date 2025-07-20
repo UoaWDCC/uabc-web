@@ -75,14 +75,17 @@ describe("ApiClient GET method", () => {
 
   it("should return error when response is not ok", async () => {
     const testSchema = z.object({ message: z.string() })
+    const errorResponse = { error: "Resource not found" }
 
-    mockFetch.mockResolvedValueOnce(new Response(null, { status: 404, statusText: "Not Found" }))
+    mockFetch.mockResolvedValueOnce(
+      new Response(JSON.stringify(errorResponse), { status: 404, statusText: "Not Found" }),
+    )
 
     const result = await client.get("/test", testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(result.error).toBeInstanceOf(Error)
-      expect(result.error.message).toBe("HTTP 404: Not Found")
+      expect(result.error.message).toBe("Resource not found")
       expect(result.status).toBe(404)
     }
   })

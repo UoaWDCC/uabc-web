@@ -8,6 +8,9 @@ import {
 } from "../localStorageManager"
 
 describe("LocalStorageManager Hooks", () => {
+  const testSchema = z.object({ name: z.string(), age: z.number() })
+  const testDefaultValue = { name: "Default", age: 25 }
+
   beforeEach(() => {
     setupTestEnvironment()
   })
@@ -59,30 +62,27 @@ describe("LocalStorageManager Hooks", () => {
     })
 
     it("should validate value when schema is provided", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
       const validData = { name: "John", age: 30 }
       localStorageMock.setItem("test-key", JSON.stringify(validData))
 
-      const { result } = renderHook(() => useLocalStorage("test-key", schema))
+      const { result } = renderHook(() => useLocalStorage("test-key", testSchema))
 
       expect(result.current.value).toEqual(validData)
       expect(result.current.isValid).toBe(true)
     })
 
     it("should mark as valid when schema validation fails but value is null", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
       const invalidData = { name: "John" } // missing age
       localStorageMock.setItem("test-key", JSON.stringify(invalidData))
 
-      const { result } = renderHook(() => useLocalStorage("test-key", schema))
+      const { result } = renderHook(() => useLocalStorage("test-key", testSchema))
 
       expect(result.current.value).toBeNull()
       expect(result.current.isValid).toBe(true) // null values are considered valid
     })
 
     it("should update validity when value changes", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
-      const { result } = renderHook(() => useLocalStorage("test-key", schema))
+      const { result } = renderHook(() => useLocalStorage("test-key", testSchema))
 
       // Set valid value
       act(() => {
@@ -130,8 +130,7 @@ describe("LocalStorageManager Hooks", () => {
     })
 
     it("should throw error when setting invalid value", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
-      const { result } = renderHook(() => useLocalStorage("test-key", schema))
+      const { result } = renderHook(() => useLocalStorage("test-key", testSchema))
 
       expect(() => {
         act(() => {
@@ -160,26 +159,23 @@ describe("LocalStorageManager Hooks", () => {
 
   describe("useLocalStorageWithDefault", () => {
     it("should return default value when no value exists", () => {
-      const defaultValue = { name: "Default", age: 25 }
-      const { result } = renderHook(() => useLocalStorageWithDefault("test-key", defaultValue))
+      const { result } = renderHook(() => useLocalStorageWithDefault("test-key", testDefaultValue))
 
-      expect(result.current.value).toEqual(defaultValue)
+      expect(result.current.value).toEqual(testDefaultValue)
       expect(result.current.isValid).toBe(true)
     })
 
     it("should return stored value when it exists", () => {
       const storedData = { name: "John", age: 30 }
-      const defaultValue = { name: "Default", age: 25 }
       localStorageMock.setItem("test-key", JSON.stringify(storedData))
 
-      const { result } = renderHook(() => useLocalStorageWithDefault("test-key", defaultValue))
+      const { result } = renderHook(() => useLocalStorageWithDefault("test-key", testDefaultValue))
 
       expect(result.current.value).toEqual(storedData)
     })
 
     it("should update value when setValue is called", () => {
-      const defaultValue = { name: "Default", age: 25 }
-      const { result } = renderHook(() => useLocalStorageWithDefault("test-key", defaultValue))
+      const { result } = renderHook(() => useLocalStorageWithDefault("test-key", testDefaultValue))
 
       act(() => {
         result.current.setValue({ name: "John", age: 30 })
@@ -189,36 +185,32 @@ describe("LocalStorageManager Hooks", () => {
     })
 
     it("should return default value after removeValue is called", () => {
-      const defaultValue = { name: "Default", age: 25 }
       const storedData = { name: "John", age: 30 }
       localStorageMock.setItem("test-key", JSON.stringify(storedData))
 
-      const { result } = renderHook(() => useLocalStorageWithDefault("test-key", defaultValue))
+      const { result } = renderHook(() => useLocalStorageWithDefault("test-key", testDefaultValue))
 
       act(() => {
         result.current.removeValue()
       })
 
-      expect(result.current.value).toEqual(defaultValue)
+      expect(result.current.value).toEqual(testDefaultValue)
     })
 
     it("should validate with schema when provided", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
-      const defaultValue = { name: "Default", age: 25 }
       const invalidData = { name: "John" } // missing age
       localStorageMock.setItem("test-key", JSON.stringify(invalidData))
 
       const { result } = renderHook(() =>
-        useLocalStorageWithDefault("test-key", defaultValue, schema),
+        useLocalStorageWithDefault("test-key", testDefaultValue, testSchema),
       )
 
-      expect(result.current.value).toEqual(defaultValue)
+      expect(result.current.value).toEqual(testDefaultValue)
       expect(result.current.isValid).toBe(true) // null values are considered valid
     })
 
     it("should handle storage events with default fallback", () => {
-      const defaultValue = { name: "Default", age: 25 }
-      const { result } = renderHook(() => useLocalStorageWithDefault("test-key", defaultValue))
+      const { result } = renderHook(() => useLocalStorageWithDefault("test-key", testDefaultValue))
 
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
@@ -230,58 +222,52 @@ describe("LocalStorageManager Hooks", () => {
         window.dispatchEvent(storageEvent)
       })
 
-      expect(result.current.value).toEqual(defaultValue)
+      expect(result.current.value).toEqual(testDefaultValue)
     })
 
     it("should maintain default value when stored value is invalid", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
-      const defaultValue = { name: "Default", age: 25 }
       const invalidData = { name: "John" } // missing age
       localStorageMock.setItem("test-key", JSON.stringify(invalidData))
 
       const { result } = renderHook(() =>
-        useLocalStorageWithDefault("test-key", defaultValue, schema),
+        useLocalStorageWithDefault("test-key", testDefaultValue, testSchema),
       )
 
-      expect(result.current.value).toEqual(defaultValue)
+      expect(result.current.value).toEqual(testDefaultValue)
       expect(result.current.isValid).toBe(true) // null values are considered valid
     })
   })
 
   describe("useLocalStorageWithSchema", () => {
     it("should require schema parameter", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
-      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
+      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", testSchema))
 
       expect(result.current.value).toBeNull()
       expect(result.current.isValid).toBe(true)
     })
 
     it("should validate stored value with schema", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
       const validData = { name: "John", age: 30 }
       localStorageMock.setItem("test-key", JSON.stringify(validData))
 
-      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
+      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", testSchema))
 
       expect(result.current.value).toEqual(validData)
       expect(result.current.isValid).toBe(true)
     })
 
     it("should mark as valid when stored value fails validation but value is null", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
       const invalidData = { name: "John" } // missing age
       localStorageMock.setItem("test-key", JSON.stringify(invalidData))
 
-      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
+      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", testSchema))
 
       expect(result.current.value).toBeNull()
       expect(result.current.isValid).toBe(true) // null values are considered valid
     })
 
     it("should validate new values when setValue is called", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
-      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
+      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", testSchema))
 
       act(() => {
         result.current.setValue({ name: "John", age: 30 })
@@ -292,8 +278,7 @@ describe("LocalStorageManager Hooks", () => {
     })
 
     it("should throw error when invalid value is set", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
-      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
+      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", testSchema))
 
       expect(() => {
         act(() => {
@@ -304,8 +289,7 @@ describe("LocalStorageManager Hooks", () => {
     })
 
     it("should handle schema validation in storage events", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
-      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
+      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", testSchema))
 
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
@@ -322,8 +306,7 @@ describe("LocalStorageManager Hooks", () => {
     })
 
     it("should handle schema validation errors in storage events", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
-      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
+      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", testSchema))
 
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
@@ -340,8 +323,7 @@ describe("LocalStorageManager Hooks", () => {
     })
 
     it("should handle null values in storage events", () => {
-      const schema = z.object({ name: z.string(), age: z.number() })
-      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
+      const { result } = renderHook(() => useLocalStorageWithSchema("test-key", testSchema))
 
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",

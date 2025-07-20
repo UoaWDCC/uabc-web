@@ -101,12 +101,15 @@ describe("ApiClient DELETE method", () => {
 
   it("should return error when response is not ok", async () => {
     const testSchema = z.object({ message: z.string() })
-    mockFetch.mockResolvedValueOnce(new Response(null, { status: 403, statusText: "Forbidden" }))
+    const errorResponse = { error: "Access forbidden" }
+    mockFetch.mockResolvedValueOnce(
+      new Response(JSON.stringify(errorResponse), { status: 403, statusText: "Forbidden" }),
+    )
     const result = await client.delete("/test", testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(result.error).toBeInstanceOf(Error)
-      expect(result.error.message).toBe("HTTP 403: Forbidden")
+      expect(result.error.message).toBe("Access forbidden")
     }
   })
 

@@ -103,10 +103,21 @@ class ApiClient {
     schema: z.Schema<T>,
   ): Promise<ApiResponse<T>> {
     if (!response.ok) {
-      return {
-        success: false,
-        error: new Error(`HTTP ${response.status}: ${response.statusText}`),
-        status: response.status,
+      try {
+        const errorData = await response.json()
+        const errorMessage = errorData.error || `HTTP ${response.status}: ${response.statusText}`
+        return {
+          success: false,
+          error: new Error(errorMessage),
+          status: response.status,
+        }
+      } catch {
+        // If we can't parse the error response, fall back to status text
+        return {
+          success: false,
+          error: new Error(`HTTP ${response.status}: ${response.statusText}`),
+          status: response.status,
+        }
       }
     }
 
@@ -265,10 +276,21 @@ class ApiClient {
       )
 
       if (!response.ok) {
-        return {
-          success: false,
-          error: new Error(`HTTP ${response.status}: ${response.statusText}`),
-          status: response.status,
+        try {
+          const errorData = await response.json()
+          const errorMessage = errorData.error || `HTTP ${response.status}: ${response.statusText}`
+          return {
+            success: false,
+            error: new Error(errorMessage),
+            status: response.status,
+          }
+        } catch {
+          // If we can't parse the error response, fall back to status text
+          return {
+            success: false,
+            error: new Error(`HTTP ${response.status}: ${response.statusText}`),
+            status: response.status,
+          }
         }
       }
 

@@ -84,7 +84,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     },
     onError: (error) => {
-      console.error("Login error:", error) // Remove once confirmed working
       notice({
         title: "Login failed",
         description: error.message,
