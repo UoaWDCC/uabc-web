@@ -68,6 +68,8 @@ describe("LocalStorageManager Subscription", () => {
 
       manager.subscribe(listener)
 
+      expect(listener).toHaveBeenCalledWith(null)
+
       const storageEvent = new StorageEvent("storage", {
         key: "different-key",
         newValue: JSON.stringify({ name: "Jane" }),
@@ -76,7 +78,7 @@ describe("LocalStorageManager Subscription", () => {
 
       window.dispatchEvent(storageEvent)
 
-      expect(listener).not.toHaveBeenCalled()
+      expect(listener).toHaveBeenCalledTimes(1)
     })
 
     it("should handle invalid JSON in storage events", () => {
@@ -152,10 +154,11 @@ describe("LocalStorageManager Subscription", () => {
       const listener1 = vi.fn()
       const listener2 = vi.fn()
 
+      manager.setValue({ name: "John" })
+
       const unsubscribe1 = manager.subscribe(listener1)
       const unsubscribe2 = manager.subscribe(listener2)
 
-      // Both listeners should be active
       expect(listener1).toHaveBeenCalledWith({ name: "John" })
       expect(listener2).toHaveBeenCalledWith({ name: "John" })
 
