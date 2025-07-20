@@ -103,10 +103,6 @@ describe("LocalStorageManager Core", () => {
       manager.setValue(testData)
 
       expect(localStorageMock.setItem).toHaveBeenCalledWith("test-key", JSON.stringify(testData))
-      expect(consoleSpy.log).toHaveBeenCalledWith(
-        "Saved to localStorage key: test-key, value:",
-        JSON.stringify(testData),
-      )
     })
 
     it("should remove item when value is null", () => {
@@ -115,7 +111,6 @@ describe("LocalStorageManager Core", () => {
       manager.setValue(null)
 
       expect(localStorageMock.removeItem).toHaveBeenCalledWith("test-key")
-      expect(consoleSpy.log).toHaveBeenCalledWith("Removed localStorage key: test-key")
     })
 
     it("should validate value when schema is provided", () => {

@@ -98,6 +98,14 @@ class LocalStorageManager<T> {
       this.isListeningToStorage = true
     }
 
+    // Call listener with current value immediately upon subscription
+    try {
+      const currentValue = this.getValue()
+      listener(currentValue)
+    } catch (error) {
+      console.error("LocalStorage listener error:", error)
+    }
+
     return () => {
       this.listeners.delete(listener)
 
