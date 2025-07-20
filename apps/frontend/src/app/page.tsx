@@ -14,8 +14,7 @@ export const metadata: Metadata = {
     "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
 }
 
-export default async function Home() {
-  // const { data: aboutUsItems } = await getAboutUsInfo()
+export default function Home() {
   const { data: aboutUsItems } = use(getAboutUsInfo())
 
   const mockItems = [
