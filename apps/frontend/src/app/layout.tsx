@@ -38,6 +38,12 @@ export const metadata: Metadata = {
   authors: [{ name: "2025 WDCC UABC Team" }],
   creator: "2025 WDCC UABC Team",
   publisher: "University of Auckland Badminton Club",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
   openGraph: {
     url: process.env.NEXT_PUBLIC_URL,
     siteName: "UABC",
@@ -69,6 +75,7 @@ export default function RootLayout({
               justifyContent={{ base: "flex-center", lg: "center" }}
               maxW="8xl"
               minH={{ base: "100dvh", lg: "unset" }}
+              overflowX="clip"
               placeSelf="center"
               px="md"
               py="lg"
