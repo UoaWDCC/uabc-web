@@ -3,8 +3,7 @@ import { MembershipType } from "@repo/shared"
 import { UabcLogo } from "@repo/ui/components/Icon"
 import { Box, HStack, Motion, Spacer } from "@yamada-ui/react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { memo, useMemo } from "react"
 import type { NavigationBarProps } from "./NavigationBar"
 import { NavigationBarButton } from "./NavigationBarButton"
 import { NavigationBarUserMenu } from "./NavigationBarUserMenu"
@@ -22,45 +21,12 @@ export const NavigationBarDesktop = ({
   rightSideSingleButton,
   user,
 }: NavigationBarProps) => {
-  const currentPath = usePathname()
-  useEffect(() => {
-    const initialIndex = navItems.findIndex((item) => item.url === currentPath)
-    setInitialIndex(initialIndex)
-    setHoveredIndex(initialIndex !== -1 ? initialIndex : null)
-    if (initialIndex !== -1) {
-      activeRef.current = itemRefs.current[initialIndex]
-    }
-  }, [currentPath, navItems])
-
-  const fullName = `${user?.firstName} ${user?.lastName}`.trim()
-  const src = typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""
-  const admin = user?.role === MembershipType.admin
-
-  const [initialIndex, setInitialIndex] = useState<number | null>(() => {
-    const initialIndex = navItems.findIndex((item) => item.url === currentPath)
-    return initialIndex !== -1 ? initialIndex : null
-  })
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(initialIndex)
-  const itemRefs = useRef<(HTMLAnchorElement | null)[]>([])
-  const activeRef = useRef<HTMLAnchorElement | null>(null)
-
-  const handleHover = (index: number) => {
-    setHoveredIndex(index)
-    const el = itemRefs.current[index]
-    if (el) {
-      activeRef.current = el
-    }
-  }
-
-  const clearHover = () => {
-    setHoveredIndex(initialIndex)
-    activeRef.current = initialIndex ? itemRefs.current[initialIndex] : null
-  }
-
-  const clearIndicator = () => {
-    setHoveredIndex(null)
-    activeRef.current = null
-  }
+  const fullName = useMemo(() => `${user?.firstName} ${user?.lastName}`.trim(), [user])
+  const src = useMemo(
+    () => (typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""),
+    [user],
+  )
+  const admin = useMemo(() => user?.role === MembershipType.admin, [user])
 
   return (
     <HStack
@@ -84,7 +50,6 @@ export const NavigationBarDesktop = ({
       boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.10)"
       display={{ base: "none", md: "flex" }}
       gap={0}
-      maxWidth="1220px"
       position="relative"
       px="lg"
       py="md"
@@ -92,47 +57,33 @@ export const NavigationBarDesktop = ({
       zIndex={1001}
     >
       <HStack as={Motion} gap={0}>
-        <Box
-          as={Link}
-          borderRadius="50%"
-          href="/"
-          onClick={clearIndicator}
-          padding="sm"
-          position="relative"
-        >
+        <Box as={Link} borderRadius="50%" href="/" padding="sm" position="relative">
           <UabcLogo />
         </Box>
-        <HStack as={Motion} data-testid="navbar-buttons-container" gap={0} onHoverEnd={clearHover}>
-          {navItems.map((item, index) => (
-            <Motion key={item.label} onHoverStart={() => handleHover(index)}>
-              <NavigationBarButton
-                hovering={hoveredIndex === index}
-                label={item.label}
-                onClick={() => setInitialIndex(index)}
-                ref={(el) => {
-                  itemRefs.current[index] = el
-                  if (item.url === currentPath && !activeRef.current) {
-                    activeRef.current = el
-                  }
-                }}
-                url={item.url}
-              />
-            </Motion>
-          ))}
-        </HStack>
+        <NavItems navItems={navItems} />
       </HStack>
       <Spacer />
       <Box>
         {user ? (
           <NavigationBarUserMenu admin={admin} avatarProps={{ name: fullName, src: src }} />
         ) : (
-          <NavigationBarButton
-            colorScheme="primary"
-            onClick={clearIndicator}
-            {...rightSideSingleButton}
-          />
+          <NavigationBarButton colorScheme="primary" {...rightSideSingleButton} />
         )}
       </Box>
     </HStack>
   )
 }
+
+const NavItems = memo(({ navItems }: { navItems: NavigationBarProps["navItems"] }) => {
+  return (
+    <HStack as={Motion} data-testid="navbar-buttons-container" gap={0}>
+      {navItems.map((item) => (
+        <Motion key={item.label}>
+          <NavigationBarButton label={item.label} url={item.url} />
+        </Motion>
+      ))}
+    </HStack>
+  )
+})
+
+NavItems.displayName = "NavItems"

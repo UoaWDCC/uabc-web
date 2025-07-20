@@ -1,4 +1,5 @@
 import { GetNavbarResponseSchema } from "@repo/shared/schemas"
+import { cache } from "react"
 import { ApiClient, apiClient } from "@/lib/api/client"
 import { QueryKeys } from "@/services"
 
@@ -8,9 +9,10 @@ import { QueryKeys } from "@/services"
  * @returns A promise that resolves to the Navigation Bar response data
  * @throws When the API request fails
  */
-export const getNavigationBar = async () => {
+export const getNavigationBar = cache(async () => {
+  "use server"
   const response = await apiClient.get("/api/globals/navbar", GetNavbarResponseSchema, {
     tags: [QueryKeys.NAVIGATION_BAR_QUERY_KEY],
   })
   return ApiClient.throwIfError(response, "Failed to retrieve navigation bar data")
-}
+})

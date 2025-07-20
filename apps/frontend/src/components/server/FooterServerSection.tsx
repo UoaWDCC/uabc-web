@@ -1,29 +1,68 @@
-import { Footer } from "@repo/ui/components/Generic"
-import { getQueryClient } from "@repo/ui/components/Provider/getQueryClient"
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
-import { FooterSection } from "@/components/client/FooterSection"
-import { QueryKeys } from "@/services"
+import { Footer, resolveUrl } from "@repo/ui/components/Generic"
+import { LinkTreeIcon } from "@repo/ui/components/Icon"
+import { FacebookIcon, InstagramIcon } from "@yamada-ui/lucide"
+import { use } from "react"
 import { getFooter } from "@/services/cms/footer/FooterService"
-import { ErrorBoundary } from "../ErrorBoundary"
 
 /**
- * Server-side component to fetch and render the footer section using Tanstack Query.
+ * Server-side component to fetch and render the footer section.
  *
- * @returns A hydrated footer section component.
+ * @returns A footer section component.
  */
-export const FooterServerSection = async () => {
-  const queryClient = getQueryClient()
+export const FooterServerSection = () => {
+  const { data: footerResponseData } = use(getFooter())
 
-  await queryClient.prefetchQuery({
-    queryKey: [QueryKeys.FOOTER_QUERY_KEY],
-    queryFn: getFooter,
-  })
+  const logoUrl = footerResponseData.logo?.url
+    ? resolveUrl(footerResponseData.logo?.url, process.env.NEXT_PUBLIC_API_URL)
+    : undefined
+
+  const bottomData = {
+    copyrightName: footerResponseData.copyright,
+    credits: "Developed by the 2025 WDCC UABC Team.",
+  }
+
+  const brandData = {
+    logo: logoUrl
+      ? {
+          src: logoUrl,
+          alt: footerResponseData.logo?.alt ?? "",
+          width: footerResponseData.logo?.width ?? 200,
+          height: footerResponseData.logo?.height ?? 200,
+        }
+      : undefined,
+    title: footerResponseData.title,
+    description: footerResponseData.description,
+  }
+
+  const linksData = {
+    linkGroup1: footerResponseData.linkGroup1 ?? { title: "", links: [] },
+    linkGroup2: footerResponseData.linkGroup2 ?? { title: "", links: [] },
+  }
+
+  const socialLinksData = [
+    {
+      label: "LinkTree",
+      url: footerResponseData.linktree,
+      icon: LinkTreeIcon,
+    },
+    {
+      label: "Facebook",
+      url: footerResponseData.facebook,
+      icon: FacebookIcon,
+    },
+    {
+      label: "Instagram",
+      url: footerResponseData.instagram,
+      icon: InstagramIcon,
+    },
+  ]
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <ErrorBoundary fallback={<Footer />}>
-        <FooterSection />
-      </ErrorBoundary>
-    </HydrationBoundary>
+    <Footer
+      bottomProps={bottomData}
+      brand={brandData}
+      links={linksData}
+      socialLinks={socialLinksData}
+    />
   )
 }

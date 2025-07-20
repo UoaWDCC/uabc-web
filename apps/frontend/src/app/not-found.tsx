@@ -1,4 +1,5 @@
 import { NotFoundCard } from "@repo/ui/components/Generic/NotFoundCard"
+import { VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -13,5 +14,9 @@ export const metadata: Metadata = {
  * @returns A 404 Not Found page with a message and a button to return home.
  */
 export default function NotFound() {
-  return <NotFoundCard />
+  return (
+    <VStack alignItems="center" layerStyle="wrapper">
+      <NotFoundCard />
+    </VStack>
+  )
 }
