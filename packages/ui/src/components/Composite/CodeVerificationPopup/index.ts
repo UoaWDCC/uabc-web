@@ -1,1 +1,1 @@
-export * from "./BookingConfirmedPopup"
+export * from "./CodeVerificationPopup"
