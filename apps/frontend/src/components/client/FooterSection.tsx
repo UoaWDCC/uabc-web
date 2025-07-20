@@ -11,8 +11,7 @@ import { useFooter } from "@/services/cms/footer/FooterQuery"
  * @returns The footer section component that displays the footer data.
  */
 export const FooterSection = () => {
-  const { data: footerResponse, isError, isLoading } = useFooter()
-  const footerResponseData = footerResponse?.data?.data
+  const { data: footerResponseData, isError, isLoading } = useFooter()
 
   if (isLoading) {
     return <Text>Loading...</Text>

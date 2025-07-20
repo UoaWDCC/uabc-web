@@ -1,7 +1,6 @@
 import type { UpdateGameSessionRequest } from "@repo/shared"
 import { GetGameSessionResponseSchema } from "@repo/shared"
-import { StatusCodes } from "http-status-codes"
-import { apiClient } from "@/lib/api/client"
+import { ApiClient, apiClient } from "@/lib/api/client"
 
 const AdminGameSessionService = {
   /**
@@ -12,13 +11,12 @@ const AdminGameSessionService = {
    * @returns The updated game session.
    */
   updateGameSession: async (id: string, data: UpdateGameSessionRequest) => {
-    const { data: updatedGameSession, status } = await apiClient.patch(
+    const response = await apiClient.patch(
       `/admin/game-sessions/${id}`,
       data,
       GetGameSessionResponseSchema,
     )
-    if (status !== StatusCodes.OK) throw new Error(`Failed to update game session with id: ${id}`)
-    return updatedGameSession
+    return ApiClient.throwIfError(response, `Failed to update game session with id: ${id}`)
   },
 
   /**
@@ -27,9 +25,8 @@ const AdminGameSessionService = {
    * @param id The ID of the game session to delete.
    */
   deleteGameSession: async (id: string) => {
-    const { status } = await apiClient.delete(`/admin/game-sessions/${id}`)
-    if (status !== StatusCodes.NO_CONTENT)
-      throw new Error(`Failed to delete game session with id: ${id}`)
+    const response = await apiClient.delete(`/admin/game-sessions/${id}`)
+    return ApiClient.throwIfError(response, `Failed to delete game session with id: ${id}`)
   },
 } as const
 

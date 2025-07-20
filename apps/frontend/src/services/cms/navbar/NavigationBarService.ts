@@ -1,5 +1,5 @@
 import { GetNavbarResponseSchema } from "@repo/shared/schemas"
-import { apiClient } from "@/lib/api/client"
+import { ApiClient, apiClient } from "@/lib/api/client"
 import { QueryKeys } from "@/services"
 
 /**
@@ -9,7 +9,8 @@ import { QueryKeys } from "@/services"
  * @throws When the API request fails
  */
 export const getNavigationBar = async () => {
-  return await apiClient.get("/api/globals/navbar", GetNavbarResponseSchema, [
-    QueryKeys.NAVIGATION_BAR_QUERY_KEY,
-  ])
+  const response = await apiClient.get("/api/globals/navbar", GetNavbarResponseSchema, {
+    tags: [QueryKeys.NAVIGATION_BAR_QUERY_KEY],
+  })
+  return ApiClient.throwIfError(response, "Failed to retrieve navigation bar data")
 }

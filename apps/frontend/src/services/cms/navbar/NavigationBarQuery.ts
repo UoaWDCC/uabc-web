@@ -11,6 +11,9 @@ import { getNavigationBar } from "./NavigationBarService"
 export const useNavigationBar = () => {
   return useSuspenseQuery({
     queryKey: [QueryKeys.NAVIGATION_BAR_QUERY_KEY],
-    queryFn: getNavigationBar,
+    queryFn: async () => {
+      const data = await getNavigationBar()
+      return data?.data ?? null
+    },
   })
 }
