@@ -103,7 +103,6 @@ describe("LocalStorageManager Hooks", () => {
     it("should handle storage events from other tabs", () => {
       const { result } = renderHook(() => useLocalStorage("test-key"))
 
-      // Simulate storage event from another tab
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         newValue: JSON.stringify({ name: "Jane" }),
@@ -145,7 +144,6 @@ describe("LocalStorageManager Hooks", () => {
     it("should handle JSON parsing errors in storage events", () => {
       const { result } = renderHook(() => useLocalStorage("test-key"))
 
-      // Simulate storage event with invalid JSON
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         newValue: "invalid-json",
@@ -222,7 +220,6 @@ describe("LocalStorageManager Hooks", () => {
       const defaultValue = { name: "Default", age: 25 }
       const { result } = renderHook(() => useLocalStorageWithDefault("test-key", defaultValue))
 
-      // Simulate storage event that removes the value
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         newValue: null,
@@ -310,7 +307,6 @@ describe("LocalStorageManager Hooks", () => {
       const schema = z.object({ name: z.string(), age: z.number() })
       const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
 
-      // Simulate storage event with valid data
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         newValue: JSON.stringify({ name: "Jane", age: 25 }),
@@ -329,7 +325,6 @@ describe("LocalStorageManager Hooks", () => {
       const schema = z.object({ name: z.string(), age: z.number() })
       const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
 
-      // Simulate storage event with invalid data
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         newValue: JSON.stringify({ name: "Jane" }), // missing age
@@ -348,7 +343,6 @@ describe("LocalStorageManager Hooks", () => {
       const schema = z.object({ name: z.string(), age: z.number() })
       const { result } = renderHook(() => useLocalStorageWithSchema("test-key", schema))
 
-      // Simulate storage event with null value
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         newValue: null,

@@ -51,7 +51,6 @@ describe("LocalStorageManager Subscription", () => {
 
       manager.subscribe(listener)
 
-      // Simulate storage event from another tab
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         newValue: JSON.stringify({ name: "Jane" }),
@@ -69,7 +68,6 @@ describe("LocalStorageManager Subscription", () => {
 
       manager.subscribe(listener)
 
-      // Simulate storage event for different key
       const storageEvent = new StorageEvent("storage", {
         key: "different-key",
         newValue: JSON.stringify({ name: "Jane" }),
@@ -87,7 +85,6 @@ describe("LocalStorageManager Subscription", () => {
 
       manager.subscribe(listener)
 
-      // Simulate storage event with invalid JSON
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         newValue: "invalid-json",
@@ -106,7 +103,6 @@ describe("LocalStorageManager Subscription", () => {
 
       manager.subscribe(listener)
 
-      // Simulate storage event with valid data
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         newValue: JSON.stringify({ name: "Jane" }),
@@ -125,7 +121,6 @@ describe("LocalStorageManager Subscription", () => {
 
       manager.subscribe(listener)
 
-      // Simulate storage event with invalid data
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         newValue: JSON.stringify({ name: "Jane" }), // missing age
@@ -161,17 +156,14 @@ describe("LocalStorageManager Subscription", () => {
       const unsubscribe2 = manager.subscribe(listener2)
 
       // Both listeners should be active
-      manager.setValue({ name: "John" })
       expect(listener1).toHaveBeenCalledWith({ name: "John" })
       expect(listener2).toHaveBeenCalledWith({ name: "John" })
 
-      // Remove first listener
       unsubscribe1()
       manager.setValue({ name: "Jane" })
       expect(listener1).not.toHaveBeenCalledWith({ name: "Jane" })
       expect(listener2).toHaveBeenCalledWith({ name: "Jane" })
 
-      // Remove second listener
       unsubscribe2()
       manager.setValue({ name: "Bob" })
       expect(listener1).not.toHaveBeenCalledWith({ name: "Bob" })
@@ -194,7 +186,6 @@ describe("LocalStorageManager Subscription", () => {
       expect(listener2).toHaveBeenCalledWith({ name: "John" })
       expect(listener3).toHaveBeenCalledWith({ name: "John" })
 
-      // Remove middle listener
       unsubscribe2()
       manager.setValue({ name: "Jane" })
 
@@ -202,7 +193,6 @@ describe("LocalStorageManager Subscription", () => {
       expect(listener2).not.toHaveBeenCalledWith({ name: "Jane" })
       expect(listener3).toHaveBeenCalledWith({ name: "Jane" })
 
-      // Remove all listeners
       unsubscribe1()
       unsubscribe3()
       manager.setValue({ name: "Bob" })
@@ -218,7 +208,6 @@ describe("LocalStorageManager Subscription", () => {
 
       manager.subscribe(listener)
 
-      // Simulate storage event with null value (item removed)
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         newValue: null,
@@ -236,7 +225,6 @@ describe("LocalStorageManager Subscription", () => {
 
       manager.subscribe(listener)
 
-      // Simulate storage event with undefined value
       const storageEvent = new StorageEvent("storage", {
         key: "test-key",
         // biome-ignore lint/suspicious/noExplicitAny: this is for a test

@@ -5,7 +5,6 @@ import { vi } from "vitest"
 import { AuthProvider } from "@/context/AuthContext"
 import Profile from "./page"
 
-// Mock Next.js router
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: vi.fn(),

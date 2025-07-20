@@ -25,8 +25,6 @@ export const ProfileSection = memo(() => {
     )
   }
 
-  console.log(user)
-
   if (!user) {
     redirect("/auth/login")
   }

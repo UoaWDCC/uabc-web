@@ -11,8 +11,6 @@ import { useNavigationBar } from "@/services/cms/navbar/NavigationBarQuery"
 export default function NavigationBarSection() {
   const { data: navbarResponseData, isError, isLoading } = useNavigationBar()
 
-  console.log(navbarResponseData)
-
   if (isLoading) {
     return <Text>Loading...</Text>
   }

@@ -2,7 +2,6 @@ import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
 import { createApiClient } from "../client"
 
-// Mock fetch globally
 global.fetch = vi.fn()
 
 const mockFetch = vi.mocked(fetch)
@@ -94,7 +93,7 @@ describe("ApiClient GET method", () => {
       requiredField: z.string(),
     })
 
-    const invalidResponse = { message: "success" } // missing requiredField
+    const invalidResponse = { message: "success" }
 
     mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(invalidResponse)))
 

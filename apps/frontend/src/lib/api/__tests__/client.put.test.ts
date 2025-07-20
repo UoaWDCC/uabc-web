@@ -2,7 +2,6 @@ import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
 import { createApiClient } from "../client"
 
-// Mock fetch globally
 global.fetch = vi.fn()
 
 const mockFetch = vi.mocked(fetch)

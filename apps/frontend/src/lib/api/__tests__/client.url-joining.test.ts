@@ -1,7 +1,6 @@
 import { z } from "zod"
 import { createApiClient } from "../client"
 
-// Mock fetch globally
 global.fetch = vi.fn()
 
 const mockFetch = vi.mocked(fetch)
@@ -96,14 +95,12 @@ describe("ApiClient URL joining", () => {
     vi.stubEnv("NEXT_PUBLIC_API_URL", "https://api.example.com/")
     client = createApiClient()
 
-    // Test all methods with the same URL joining scenario
     await client.get("/test", testSchema)
     await client.post("/test", {}, testSchema)
     await client.put("/test", {}, testSchema)
     await client.patch("/test", {}, testSchema)
     await client.delete("/test", testSchema)
 
-    // All should result in the same properly joined URL
     expect(mockFetch).toHaveBeenCalledTimes(5)
     mockFetch.mock.calls.forEach((call) => {
       expect(call[0]).toBe("https://api.example.com/test")

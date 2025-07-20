@@ -9,6 +9,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
+import { useNotice } from "@yamada-ui/react"
 import { createContext, type ReactNode, useContext } from "react"
 import type { ApiResponse } from "@/lib/api/client"
 import { useLocalStorage } from "@/lib/storage"
@@ -50,6 +51,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { value: token, setValue: setToken } = useLocalStorage<string>(AUTH_COOKIE_NAME)
   const queryClient = useQueryClient()
+  const notice = useNotice()
 
   const {
     data: user,
@@ -82,7 +84,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     },
     onError: (error) => {
-      console.error("Login error:", error)
+      console.error("Login error:", error) // Remove once confirmed working
+      notice({
+        title: "Login failed",
+        description: error.message,
+        status: "error",
+      })
     },
   })
 

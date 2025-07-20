@@ -59,12 +59,10 @@ class LocalStorageManager<T> {
     try {
       if (value === null) {
         localStorage.removeItem(this.key)
-        console.log(`Removed localStorage key: ${this.key}`)
       } else {
         const validated = this.schema ? this.schema.parse(value) : value
         const serialized = JSON.stringify(validated)
         localStorage.setItem(this.key, serialized)
-        console.log(`Saved to localStorage key: ${this.key}, value:`, serialized)
       }
 
       // Always notify listeners immediately for same-tab changes
