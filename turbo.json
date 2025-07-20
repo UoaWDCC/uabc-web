@@ -14,6 +14,7 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
     },
     "backend#build": {
+      "dependsOn": ["@repo/test-config#build"],
       "env": [
         "DATABASE_URI",
         "PAYLOAD_SECRET",
