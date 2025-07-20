@@ -9,13 +9,13 @@ import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import type { NextRequest } from "next/server"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { payload } from "@/data-layer/adapters/Payload"
+import BookingDataService from "@/data-layer/services/BookingDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
+import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { DELETE, GET, PATCH } from "./route"
-import BookingDataService from "@/data-layer/services/BookingDataService"
-import { payload } from "@/data-layer/adapters/Payload"
-import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 
 describe("/api/admin/users/[id]", async () => {
   const userDataService = new UserDataService()
