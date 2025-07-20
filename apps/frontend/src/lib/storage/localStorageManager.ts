@@ -165,7 +165,8 @@ export function useLocalStorage<T>(
   removeValue: () => void
   isValid: boolean
 } {
-  const manager = React.useMemo(() => createLocalStorageManager(key, schema), [key, schema])
+  const schemaRef = React.useRef(schema)
+  const manager = React.useMemo(() => createLocalStorageManager(key, schemaRef.current), [key])
   const [value, setValue] = React.useState<T | null>(() => manager.getValue())
   const [isValid, setIsValid] = React.useState(() => {
     if (!schema) return true
