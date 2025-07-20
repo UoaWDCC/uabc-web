@@ -1,4 +1,5 @@
-import { LoginResponseSchema } from "@repo/shared"
+import { GetUserResponseSchema, LoginResponseSchema } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { apiClient } from "@/lib/api/client"
 
 const AuthService = {
@@ -10,12 +11,30 @@ const AuthService = {
    * @returns The user token if login is successful
    */
   login: async (email: string, password: string) => {
-    const { data } = await apiClient.post(
+    const response = await apiClient.post(
       "/api/auth/login",
       { email, password },
       LoginResponseSchema,
     )
-    return data
+    return response
+  },
+  /**
+   * Gets user information from a JWT token by making a request to the backend.
+   *
+   * @param token The JWT token to get user info for.
+   * @returns The user information or null if token is invalid.
+   */
+  getUserFromToken: async (token: string): Promise<User | null> => {
+    try {
+      const response = await apiClient.get("/api/me", GetUserResponseSchema, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      return response.success ? response.data.data : null
+    } catch (_) {
+      return null
+    }
   },
 } as const
 
