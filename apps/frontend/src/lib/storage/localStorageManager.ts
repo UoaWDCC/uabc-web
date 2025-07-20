@@ -18,6 +18,7 @@ class LocalStorageManager<T> {
   private readonly schema?: z.ZodSchema<T>
   private readonly listeners = new Set<Listener<T>>()
   private readonly storageChangeHandler: (event: StorageEvent) => void
+  private isListeningToStorage = false
 
   constructor(key: string, schema?: z.ZodSchema<T>) {
     this.key = key
@@ -51,18 +52,27 @@ class LocalStorageManager<T> {
    */
   setValue(value: T | null): void {
     if (typeof window === "undefined") {
+      console.warn("setValue called in SSR environment")
       return
     }
 
-    if (value === null) {
-      localStorage.removeItem(this.key)
-    } else {
-      const validated = this.schema ? this.schema.parse(value) : value
-      localStorage.setItem(this.key, JSON.stringify(validated))
-    }
+    try {
+      if (value === null) {
+        localStorage.removeItem(this.key)
+        console.log(`Removed localStorage key: ${this.key}`)
+      } else {
+        const validated = this.schema ? this.schema.parse(value) : value
+        const serialized = JSON.stringify(validated)
+        localStorage.setItem(this.key, serialized)
+        console.log(`Saved to localStorage key: ${this.key}, value:`, serialized)
+      }
 
-    // Always notify listeners immediately for same-tab changes
-    this.notifyListeners(value)
+      // Always notify listeners immediately for same-tab changes
+      this.notifyListeners(value)
+    } catch (error) {
+      console.error(`Error setting localStorage key ${this.key}:`, error)
+      throw error
+    }
   }
 
   /**
@@ -84,14 +94,19 @@ class LocalStorageManager<T> {
   subscribe(listener: Listener<T>): Unsubscribe {
     this.listeners.add(listener)
 
-    if (typeof window !== "undefined") {
+    // Only add storage event listener once per manager instance
+    if (typeof window !== "undefined" && !this.isListeningToStorage) {
       window.addEventListener("storage", this.storageChangeHandler)
+      this.isListeningToStorage = true
     }
 
     return () => {
       this.listeners.delete(listener)
-      if (typeof window !== "undefined") {
+
+      // Only remove storage event listener when no more listeners exist
+      if (typeof window !== "undefined" && this.listeners.size === 0 && this.isListeningToStorage) {
         window.removeEventListener("storage", this.storageChangeHandler)
+        this.isListeningToStorage = false
       }
     }
   }

@@ -11,6 +11,8 @@ import { useNavigationBar } from "@/services/cms/navbar/NavigationBarQuery"
 export default function NavigationBarSection() {
   const { data: navbarResponseData, isError, isLoading } = useNavigationBar()
 
+  console.log(navbarResponseData)
+
   if (isLoading) {
     return <Text>Loading...</Text>
   }
@@ -19,8 +21,9 @@ export default function NavigationBarSection() {
     return <Text>ERROR</Text>
   }
 
-  if (!navbarResponseData?.id) {
+  if (!navbarResponseData.id) {
     return <Text>ERROR: NavigationBar data missing id</Text>
   }
+
   return <NavigationBar {...navbarResponseData} id={navbarResponseData.id} />
 }

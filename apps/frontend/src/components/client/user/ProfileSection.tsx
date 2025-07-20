@@ -17,6 +17,8 @@ import { useAuth } from "@/context/AuthContext"
 export const ProfileSection = memo(() => {
   const { user, isLoading } = useAuth()
 
+  console.log(isLoading)
+
   if (isLoading) {
     return (
       <Center minH="50vh">
@@ -25,7 +27,9 @@ export const ProfileSection = memo(() => {
     )
   }
 
-  if (!user || !user.firstName) {
+  console.log(user)
+
+  if (!user) {
     redirect("/auth/login")
   }
 

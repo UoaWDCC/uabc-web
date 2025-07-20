@@ -1,6 +1,7 @@
 "use client"
 
 import type { LoginFormData } from "@repo/shared"
+import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import {
   type UseMutationResult,
@@ -9,6 +10,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query"
 import { createContext, type ReactNode, useContext } from "react"
+import type { ApiResponse } from "@/lib/api/client"
 import { useLocalStorage } from "@/lib/storage"
 import AuthService from "@/services/auth/AuthService"
 
@@ -18,8 +20,6 @@ type AuthState = {
   isPending: boolean
   error: string | null
 }
-
-import type { ApiResponse } from "@/lib/api/client"
 
 type AuthActions = {
   login: UseMutationResult<
@@ -48,15 +48,16 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
  * and mutations.
  */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { value: token, setValue: setToken } = useLocalStorage<string>("token")
+  const { value: token, setValue: setToken } = useLocalStorage<string>(AUTH_COOKIE_NAME)
   const queryClient = useQueryClient()
 
   const {
     data: user,
     isLoading,
+    isPending,
     error,
   } = useQuery<User | null, Error>({
-    queryKey: ["auth", "me"],
+    queryKey: ["auth", "me", token],
     queryFn: async (): Promise<User | null> => {
       if (!token) {
         return null
@@ -65,7 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
     staleTime: 1000 * 60 * 5,
     refetchOnMount: true,
-    enabled: !!token,
+    refetchOnWindowFocus: false,
   })
 
   const login = useMutation({
@@ -75,7 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     onSuccess: async (data) => {
       if (data.success && data.data?.data) {
         setToken(data.data.data)
-        await queryClient.invalidateQueries({ queryKey: ["auth", "me"] })
+        queryClient.removeQueries({ queryKey: ["auth", "me"] })
       } else {
         throw new Error(data.success ? data.data?.error : data.error?.message || "Login failed")
       }
@@ -87,7 +88,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const authState: AuthState = {
     user: user ?? null,
-    isLoading: isLoading || login.isPending,
+    isLoading: isLoading || isPending || login.isPending,
     isPending: login.isPending,
     error: error ? error.message : null,
   }
