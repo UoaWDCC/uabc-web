@@ -3,7 +3,7 @@
 import type { LoginFormData, LoginResponse } from "@repo/shared"
 import { LoginPanel } from "@repo/ui/components/Generic"
 import { useNotice } from "@yamada-ui/react"
-import { redirect, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
 
 export const LoginSection = () => {
@@ -12,7 +12,7 @@ export const LoginSection = () => {
   const notice = useNotice()
 
   if (!isLoading && !isPending && user) {
-    redirect("/profile")
+    router.push("/profile")
   }
 
   const handleLogin = async (data: LoginFormData): Promise<LoginResponse> => {
