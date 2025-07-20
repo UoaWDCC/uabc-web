@@ -4,7 +4,9 @@ import { locationAndTimeOptionsMock } from "@repo/ui/components/Generic/QuickBoo
 import { Heading, Image } from "@repo/ui/components/Primitive"
 import { Bleed, Box, Center, Text, VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
+import { use } from "react"
 import { FaqSection } from "@/components/client/FaqSection"
+import { getAboutUsInfo } from "@/services/cms/about-us-info/AboutUsInfoService"
 
 export const metadata: Metadata = {
   title: "Home | UABC",
@@ -13,24 +15,8 @@ export const metadata: Metadata = {
 }
 
 export default async function Home() {
-  // TODO: replace mock data with real data
-  const mockCards = [
-    {
-      title: "Who We Are",
-      description:
-        "UABC Badminton Club is the official badminton team of UOA, bringing together students who love the game — from absolute beginners to competitive players.",
-    },
-    {
-      title: "Who We Is",
-      description:
-        "UABC Badminton Club is the official badminton team of UOA, bringing together students who love the game — from absolute beginners to competitive players.",
-    },
-    {
-      title: "Who I Is",
-      description:
-        "UABC Badminton Club is the official badminton team of UOA, bringing together students who love the game — from absolute beginners to competitive players.",
-    },
-  ]
+  // const { data: aboutUsItems } = await getAboutUsInfo()
+  const { data: aboutUsItems } = use(getAboutUsInfo())
 
   const mockItems = [
     {
@@ -166,7 +152,7 @@ export default async function Home() {
           </Box>
         </Box>
       </Bleed>
-      <AboutUsSection cards={mockCards} items={mockItems} />
+      <AboutUsSection cards={aboutUsItems.items} items={mockItems} />
       <FaqSection />
     </VStack>
   )
