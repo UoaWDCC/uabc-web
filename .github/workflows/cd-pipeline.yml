@@ -102,9 +102,9 @@ jobs:
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
           TURBO_TEAM: ${{ vars.TURBO_TEAM }}
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-          # SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          # SMTP_USER: ${{ secrets.SMTP_USER }}
-          # SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
 
   deploy-frontend-production:
     name: Deploy Frontend Production

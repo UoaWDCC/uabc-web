@@ -63,9 +63,9 @@ runs:
         TURBO_TEAM=${{ inputs.TURBO_TEAM }}
         TURBO_TOKEN=${{ inputs.TURBO_TOKEN }}
         NEXT_PUBLIC_URL=${{ inputs.NEXT_PUBLIC_URL }}
-        SMTP_HOST=${{ inputs.SMTP_HOST }}
-        SMTP_USER=${{ inputs.SMTP_USER }}
-        SMTP_PASS=${{ inputs.SMTP_PASS }}
+        SMTP_HOST="${{ inputs.SMTP_HOST }}"
+        SMTP_USER="${{ inputs.SMTP_USER }}"
+        SMTP_PASS="${{ inputs.SMTP_PASS }}"
 
     - name: Deploy Backend Secrets
       env:
