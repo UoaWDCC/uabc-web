@@ -149,12 +149,14 @@ export interface Config {
     footer: Footer;
     navbar: Navbar;
     termsOfService: TermsOfService;
+    aboutUsInfo: AboutUsInfo;
   };
   globalsSelect: {
     faq: FaqSelect<false> | FaqSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
     termsOfService: TermsOfServiceSelect<false> | TermsOfServiceSelect<true>;
+    aboutUsInfo: AboutUsInfoSelect<false> | AboutUsInfoSelect<true>;
   };
   locale: null;
   user: Admin & {
@@ -1001,6 +1003,26 @@ export interface Disclaimer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aboutUsInfo".
+ */
+export interface AboutUsInfo {
+  id: string;
+  info: {
+    /**
+     * The heading displayed for about us info items, e.g. Who We Are.
+     */
+    heading: string;
+    /**
+     * The content displayed for about us info items.
+     */
+    description: string;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faq_select".
  */
 export interface FaqSelect<T extends boolean = true> {
@@ -1103,6 +1125,22 @@ export interface SessionRulesSelect<T extends boolean = true> {
 export interface DisclaimerSelect<T extends boolean = true> {
   title?: T;
   disclaimer?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aboutUsInfo_select".
+ */
+export interface AboutUsInfoSelect<T extends boolean = true> {
+  info?:
+    | T
+    | {
+        heading?: T;
+        description?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
