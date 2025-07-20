@@ -12,9 +12,9 @@ export const POST = async (req: NextRequest) => {
   const authDataService = new AuthDataService()
 
   try {
-    const parsedBody = RegisterDetailsSchema.parse(await req.json())
+    const { email, password, emailVerificationCode } = RegisterDetailsSchema.parse(await req.json())
     try {
-      await authDataService.getAuthByEmail(parsedBody.email)
+      await authDataService.getAuthByEmail(email)
       return NextResponse.json(
         { error: "A user with that email already exists" },
         { status: StatusCodes.CONFLICT },
@@ -25,10 +25,18 @@ export const POST = async (req: NextRequest) => {
       }
     }
 
-    const user = await userDataService.createUser({ ...parsedBody, role: "casual" })
-    const hash = await StandardSecurity.hashPassword(parsedBody.password)
+    const user = await userDataService.getUserByEmail(email)
+
+    if (user?.emailVerificationCode !== emailVerificationCode) {
+      return NextResponse.json(
+        { error: "Invalid email verification code" },
+        { status: StatusCodes.BAD_REQUEST },
+      )
+    }
+
+    const hash = await StandardSecurity.hashPassword(password)
     await authDataService.createAuth({
-      email: parsedBody.email,
+      email: email,
       password: hash,
       user: user,
     })
@@ -43,6 +51,16 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json(
         { error: "Invalid request body", details: error.flatten() },
         { status: StatusCodes.BAD_REQUEST },
+      )
+    }
+    if (error instanceof NotFound) {
+      return NextResponse.json(
+        {
+          error: "Email not verified",
+        },
+        {
+          status: StatusCodes.FORBIDDEN,
+        },
       )
     }
     console.error(error)
