@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const authState: AuthState = {
     user: user ?? null,
-    isLoading: typeof window === "undefined" || (isLoading && !!token),
+    isLoading: isLoading || login.isPending,
     isPending: login.isPending,
     error: error ? error.message : null,
   }

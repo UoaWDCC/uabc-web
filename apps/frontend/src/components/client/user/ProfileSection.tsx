@@ -10,13 +10,12 @@ import {
   UserPanel,
 } from "@repo/ui/components/Composite"
 import { Center, Grid, GridItem, Loading, VStack } from "@yamada-ui/react"
-import { useRouter } from "next/navigation"
+import { redirect } from "next/navigation"
 import { memo } from "react"
 import { useAuth } from "@/context/AuthContext"
 
 export const ProfileSection = memo(() => {
   const { user, isLoading } = useAuth()
-  const router = useRouter()
 
   if (isLoading) {
     return (
@@ -27,8 +26,7 @@ export const ProfileSection = memo(() => {
   }
 
   if (!user || !user.firstName) {
-    router.push("/auth/login")
-    return null
+    redirect("/auth/login")
   }
 
   return (
