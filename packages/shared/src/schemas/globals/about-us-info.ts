@@ -2,7 +2,7 @@ import type { AboutUsInfo } from "src/payload-types"
 import z from "zod"
 
 export const AboutUsInfoItemSchema = z.object({
-  heading: z.string(),
+  title: z.string(),
   description: z.string(),
 })
 

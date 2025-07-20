@@ -58,9 +58,9 @@ export type LinkArray = {
  */
 export type AboutUsInfoItems = {
   /**
-   * The heading displayed for about us info items, e.g. Who We Are.
+   * The title displayed for about us info items, e.g. Who We Are.
    */
-  heading: string;
+  title: string;
   /**
    * The content displayed for about us info items.
    */
@@ -1146,7 +1146,7 @@ export interface AboutUsInfoSelect<T extends boolean = true> {
  * via the `definition` "AboutUsInfoItems_select".
  */
 export interface AboutUsInfoItemsSelect<T extends boolean = true> {
-  heading?: T;
+  title?: T;
   description?: T;
   id?: T;
 }
