@@ -28,10 +28,10 @@ export const FooterBrand = memo<FooterBrandProps>(
               <Image
                 alt={logo.alt}
                 h="12"
-                height={logo.height ?? 200}
+                height={logo.height}
                 src={logo.url}
                 w="12"
-                width={logo.width ?? 200}
+                width={logo.width}
               />
             ) : (
               <UabcLogo />

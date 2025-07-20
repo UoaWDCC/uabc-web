@@ -22,12 +22,14 @@ export const FooterServerSection = () => {
   }
 
   const brandData = {
-    logo: {
-      url: logoUrl,
-      alt: footerResponseData.logo?.alt,
-      width: footerResponseData.logo?.width,
-      height: footerResponseData.logo?.height,
-    },
+    logo: logoUrl
+      ? {
+          url: logoUrl,
+          alt: footerResponseData.logo?.alt ?? "",
+          width: footerResponseData.logo?.width ?? 200,
+          height: footerResponseData.logo?.height ?? 200,
+        }
+      : undefined,
     title: footerResponseData.title,
     description: footerResponseData.description,
   }
