@@ -7,7 +7,6 @@ export const AboutUsInfoItemSchema = z.object({
 })
 
 export const AboutUsInfoSchema = z.object({
-  id: z.string().optional().nullable(),
   items: z.array(AboutUsInfoItemSchema),
   updatedAt: z.string().optional().nullable(),
   createdAt: z.string().optional().nullable(),
