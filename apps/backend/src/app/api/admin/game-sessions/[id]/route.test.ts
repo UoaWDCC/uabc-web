@@ -1,14 +1,19 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
+import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
-import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
+import {
+  gameSessionCreateMock,
+  gameSessionWithScheduleCreateMock,
+} from "@/test-config/mocks/GameSession.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { DELETE, PATCH } from "./route"
 
 describe("/api/admin/game-sessions/[id]", async () => {
   const gameSessionDataService = new GameSessionDataService()
+  const bookingDataService = new BookingDataService()
   const cookieStore = await cookies()
 
   describe("DELETE", () => {
@@ -35,14 +40,29 @@ describe("/api/admin/game-sessions/[id]", async () => {
 
     it("should delete gameSession if user is admin", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+      const newGameSession = await gameSessionDataService.createGameSession(
+        gameSessionWithScheduleCreateMock,
+      )
+      const newGameSessionSchedule = newGameSession.gameSessionSchedule
+      expect(newGameSessionSchedule).toBeDefined()
       const res = await DELETE(createMockNextRequest("/api/admin/game-sessions", "DELETE"), {
         params: Promise.resolve({ id: newGameSession.id }),
       })
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
+
+      if (newGameSessionSchedule) {
+        await expect(
+          gameSessionDataService.getGameSessionScheduleById(
+            typeof newGameSessionSchedule === "string"
+              ? newGameSessionSchedule
+              : newGameSessionSchedule.id,
+          ),
+        ).rejects.toThrow("Not Found")
+      }
       await expect(gameSessionDataService.getGameSessionById(newGameSession.id)).rejects.toThrow(
         "Not Found",
       )
+      expect(await bookingDataService.getBookingsBySessionId(newGameSession.id)).toEqual([])
     })
 
     it("should return 404 if gameSession is non-existent", async () => {
