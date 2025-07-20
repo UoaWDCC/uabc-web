@@ -72,32 +72,6 @@ jobs:
           project-name: uabc-staging
           APP_INDEX_MODE: NOINDEX
 
-  deploy-frontend-production:
-    name: Deploy Frontend Production
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'frontend-production')
-    environment:
-      name: staging
-      url: https://uoabadminton.co.nz/
-    runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ github.workflow }}-deploy-frontend-production
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy Frontend
-        id: deploy-frontend
-        uses: ./.github/cd-actions/deploy-frontend/
-        with:
-          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
-          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
-          NODE_ENV: production
-          project-name: uabc
-          APP_INDEX_MODE: NOINDEX
-
   deploy-backend-production:
     name: Deploy Backend Production
     if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'backend-production')
@@ -131,3 +105,29 @@ jobs:
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
+
+  deploy-frontend-production:
+    name: Deploy Frontend Production
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'frontend-production')
+    environment:
+      name: staging
+      url: https://uoabadminton.co.nz/
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy-frontend-production
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Frontend
+        id: deploy-frontend
+        uses: ./.github/cd-actions/deploy-frontend/
+        with:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          NODE_ENV: production
+          project-name: uabc
+          APP_INDEX_MODE: NOINDEX
