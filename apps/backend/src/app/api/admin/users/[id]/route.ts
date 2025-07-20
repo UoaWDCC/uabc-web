@@ -72,16 +72,16 @@ class UserRouteWrapper {
   /**
    * DELETE method to delete a single user by ID.
    *
-   * @param _req The request object
+   * @param req The request object containing the query parameters
    * @param params The route parameters containing the user ID
    * @returns No content response if successful, otherwise appropriate error response
    */
   @Security("jwt", ["admin"])
-  static async DELETE(
-    _req: NextRequest,
-    { params }: { params: Promise<{ id: string; deleteRelatedBookings?: boolean }> },
-  ) {
-    const { id, deleteRelatedBookings } = await params
+  static async DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
+
+    // TODO: this should be a util method in the future
+    const deleteRelatedBookings = req.nextUrl.searchParams.get("deleteRelatedBookings") === "true"
 
     // This will only be undefined if deleteRelatedBookings is false OR transaction support is not enabled
     const cascadeDeleteTransactionID = await UserRouteWrapper.getTransactionId(

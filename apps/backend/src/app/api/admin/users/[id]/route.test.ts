@@ -267,12 +267,14 @@ describe("/api/admin/users/[id]", async () => {
         user: newUser.id,
       })
 
-      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
-        params: Promise.resolve({
-          id: newUser.id,
-          deleteRelatedBookings: true,
-        }),
-      })
+      const res = await DELETE(
+        createMockNextRequest("/api/admin/users?deleteRelatedBookings=true", "DELETE"),
+        {
+          params: Promise.resolve({
+            id: newUser.id,
+          }),
+        },
+      )
 
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
 
@@ -290,37 +292,50 @@ describe("/api/admin/users/[id]", async () => {
       )
     })
 
-    it("should only delete user (and not bookings) when deleteRelatedBookings is false", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+    it.for([
+      // Test case 1: Explicit false boolean parameter
+      "/api/admin/users?deleteRelatedBookings=false",
+      // Test case 2: Invalid boolean value (string instead of true/false)
+      "/api/admin/users?deleteRelatedBookings=straightZhao",
+      // Test case 3: Flag parameter without value (equivalent to true in query params)
+      "/api/admin/users?deleteRelatedBookings",
+      // Test case 4: Unrelated query parameter (testing irrelevant params)
+      "/api/admin/users?straightZhao",
+      // Test case 5: Base URL with no query parameters
+      "/api/admin/users",
+    ] as const)(
+      "should only delete user (and not bookings) when deleteRelatedBookings is false",
+      async (route) => {
+        cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
-      const newUser = await userDataService.createUser(userCreateMock)
-      const booking1 = await bookingDataService.createBooking({
-        ...bookingCreateMock,
-        user: newUser.id,
-      })
-      const booking2 = await bookingDataService.createBooking({
-        ...bookingCreateMock,
-        user: newUser.id,
-      })
+        const newUser = await userDataService.createUser(userCreateMock)
+        const booking1 = await bookingDataService.createBooking({
+          ...bookingCreateMock,
+          user: newUser.id,
+        })
+        const booking2 = await bookingDataService.createBooking({
+          ...bookingCreateMock,
+          user: newUser.id,
+        })
 
-      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
-        params: Promise.resolve({
-          id: newUser.id,
-          deleteRelatedBookings: false,
-        }),
-      })
+        const res = await DELETE(createMockNextRequest(route, "DELETE"), {
+          params: Promise.resolve({
+            id: newUser.id,
+          }),
+        })
 
-      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+        expect(res.status).toBe(StatusCodes.NO_CONTENT)
 
-      await expect(userDataService.getUserById(newUser.id)).rejects.toThrow(
-        getReasonPhrase(StatusCodes.NOT_FOUND),
-      )
+        await expect(userDataService.getUserById(newUser.id)).rejects.toThrow(
+          getReasonPhrase(StatusCodes.NOT_FOUND),
+        )
 
-      const existingBooking1 = await bookingDataService.getBookingById(booking1.id)
-      const existingBooking2 = await bookingDataService.getBookingById(booking2.id)
-      expect(existingBooking1).toBeDefined()
-      expect(existingBooking2).toBeDefined()
-    })
+        const existingBooking1 = await bookingDataService.getBookingById(booking1.id)
+        const existingBooking2 = await bookingDataService.getBookingById(booking2.id)
+        expect(existingBooking1).toBeDefined()
+        expect(existingBooking2).toBeDefined()
+      },
+    )
 
     it("should rollback transaction if error occurs during cascade delete", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
@@ -337,12 +352,14 @@ describe("/api/admin/users/[id]", async () => {
         .spyOn(BookingDataService.prototype, "deleteBookings")
         .mockRejectedValueOnce(new Error("Delete failed"))
 
-      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
-        params: Promise.resolve({
-          id: newUser.id,
-          deleteRelatedBookings: true,
-        }),
-      })
+      const res = await DELETE(
+        createMockNextRequest("/api/admin/users?deleteRelatedBookings=true", "DELETE"),
+        {
+          params: Promise.resolve({
+            id: newUser.id,
+          }),
+        },
+      )
 
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       expect(await res.json()).toStrictEqual({
@@ -377,12 +394,14 @@ describe("/api/admin/users/[id]", async () => {
         user: newUser.id,
       })
 
-      const res = await DELETE(createMockNextRequest("/api/admin/users", "DELETE"), {
-        params: Promise.resolve({
-          id: newUser.id,
-          deleteRelatedBookings: true,
-        }),
-      })
+      const res = await DELETE(
+        createMockNextRequest("/api/admin/users/deleteRelatedBookings=true", "DELETE"),
+        {
+          params: Promise.resolve({
+            id: newUser.id,
+          }),
+        },
+      )
 
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
       expect(beginTransactionSpy).toHaveBeenCalled()
