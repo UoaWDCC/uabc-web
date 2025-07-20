@@ -80,7 +80,7 @@ jobs:
       url: https://server.uoabadminton.co.nz/
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.workflow }}-deploy-backend-staging
+      group: ${{ github.workflow }}-deploy-backend-production
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
