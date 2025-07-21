@@ -23,7 +23,6 @@ describe("/api/admin/users/[id]/bookings", async () => {
         },
       )
       const json = await response.json()
-
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(json).toStrictEqual({ error: "No scope" })
     })
@@ -38,7 +37,6 @@ describe("/api/admin/users/[id]/bookings", async () => {
         },
       )
       const json = await response.json()
-
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(json).toStrictEqual({ error: "No scope" })
     })
@@ -54,6 +52,7 @@ describe("/api/admin/users/[id]/bookings", async () => {
         ...bookingCreateMock,
         user: memberUserMock,
       })
+
       const response = await GET(
         createMockNextRequest(`/api/admin/users/${MEMBER_USER_UID}/bookings`),
         {
