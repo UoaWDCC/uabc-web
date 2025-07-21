@@ -9,7 +9,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
-import { useNotice } from "@yamada-ui/react"
+import { useNotice, useUpdateEffect } from "@yamada-ui/react"
 import { createContext, type ReactNode, useContext } from "react"
 import type { ApiResponse } from "@/lib/api/client"
 import { useLocalStorage } from "@/lib/storage"
@@ -164,6 +164,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     emailVerificationCode,
     register,
   }
+
+  useUpdateEffect(() => {
+    if (!isLoading && token && user === null) {
+      setToken(null)
+    }
+  }, [isLoading, token, user, setToken])
 
   return (
     <AuthContext.Provider value={{ ...authState, ...authActions }}>{children}</AuthContext.Provider>
