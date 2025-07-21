@@ -1,6 +1,6 @@
 import { NuqsProvider } from "@repo/ui/components/Provider"
 import { Center, ColorModeScript } from "@yamada-ui/react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Providers } from "@/app/providers"
 import { FooterServerSection } from "@/components/server/FooterServerSection"
@@ -15,6 +15,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
 })
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL),
@@ -38,12 +45,6 @@ export const metadata: Metadata = {
   authors: [{ name: "2025 WDCC UABC Team" }],
   creator: "2025 WDCC UABC Team",
   publisher: "University of Auckland Badminton Club",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
   openGraph: {
     url: process.env.NEXT_PUBLIC_URL,
     siteName: "UABC",
@@ -75,7 +76,6 @@ export default function RootLayout({
               justifyContent={{ base: "flex-center", lg: "center" }}
               maxW="8xl"
               minH={{ base: "100dvh", lg: "unset" }}
-              overflowX="clip"
               placeSelf="center"
               px="md"
               py="lg"
