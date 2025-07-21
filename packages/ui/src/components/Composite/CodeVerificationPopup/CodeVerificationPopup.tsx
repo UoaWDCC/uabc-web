@@ -24,7 +24,7 @@ export interface CodeVerificationPopupData {
 /**
  * Props for the CodeVerificationPopup component.
  */
-interface CodeVerificationPopupProps extends Omit<ModalProps, "onSubmit"> {
+export interface CodeVerificationPopupProps extends Omit<ModalProps, "onSubmit"> {
   /**
    * The title text displayed in the popup.
    */
