@@ -9,19 +9,9 @@
     "build": {
       "cache": true,
       "dependsOn": ["^build"],
-      "env": [
-        "DATABASE_URI",
-        "PAYLOAD_SECRET",
-        "GOOGLE_CLIENT_ID",
-        "GOOGLE_CLIENT_SECRET",
-        "NEXT_PUBLIC_URL",
-        "NEXT_PUBLIC_API_URL",
-        "JWT_SECRET",
-        "TURBO_TEAM",
-        "TURBO_TOKEN"
-      ],
+      "env": ["TURBO_TEAM", "TURBO_TOKEN"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
+      "outputs": ["dist/**", ".next/**", "public/dist/**"]
     },
     "pages:build": {
       "cache": true,

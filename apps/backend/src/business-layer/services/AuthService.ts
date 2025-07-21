@@ -58,4 +58,14 @@ export default class AuthService {
       path: "/",
     })
   }
+
+  /**
+   * Generates a verification code.
+   *
+   * @returns The generated verification code
+   */
+  public static async generateVerificationCode() {
+    const code = Math.floor(100000 + Math.random() * 900000).toString()
+    return code
+  }
 }

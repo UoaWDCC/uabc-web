@@ -10,4 +10,5 @@ export enum QueryKeys {
   USER_QUERY_KEY = "user",
   SEMESTER_QUERY_KEY = "semester",
   TOS_QUERY_KEY = "tos",
+  ABOUT_US_INFO_QUERY_KEY = "about-us-info",
 }

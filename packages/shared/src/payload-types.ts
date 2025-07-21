@@ -53,6 +53,21 @@ export type LinkArray = {
   id?: string | null;
 }[];
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutUsInfoItems".
+ */
+export type AboutUsInfoItems = {
+  /**
+   * The title displayed for about us info items, e.g. Who We Are.
+   */
+  title: string;
+  /**
+   * The content displayed for about us info items.
+   */
+  description: string;
+  id?: string | null;
+}[];
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -149,12 +164,14 @@ export interface Config {
     footer: Footer;
     navbar: Navbar;
     termsOfService: TermsOfService;
+    aboutUsInfo: AboutUsInfo;
   };
   globalsSelect: {
     faq: FaqSelect<false> | FaqSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
     termsOfService: TermsOfServiceSelect<false> | TermsOfServiceSelect<true>;
+    aboutUsInfo: AboutUsInfoSelect<false> | AboutUsInfoSelect<true>;
   };
   locale: null;
   user: Admin & {
@@ -338,6 +355,10 @@ export interface User {
    * The image of the user
    */
   image?: (string | null) | Media;
+  /**
+   * The email verification token of the user
+   */
+  emailVerificationCode?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -681,6 +702,7 @@ export interface UserSelect<T extends boolean = true> {
   university?: T;
   remainingSessions?: T;
   image?: T;
+  emailVerificationCode?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -996,6 +1018,16 @@ export interface Disclaimer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aboutUsInfo".
+ */
+export interface AboutUsInfo {
+  id: string;
+  items: AboutUsInfoItems;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faq_select".
  */
 export interface FaqSelect<T extends boolean = true> {
@@ -1098,6 +1130,25 @@ export interface SessionRulesSelect<T extends boolean = true> {
 export interface DisclaimerSelect<T extends boolean = true> {
   title?: T;
   disclaimer?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aboutUsInfo_select".
+ */
+export interface AboutUsInfoSelect<T extends boolean = true> {
+  items?: T | AboutUsInfoItemsSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutUsInfoItems_select".
+ */
+export interface AboutUsInfoItemsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  id?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

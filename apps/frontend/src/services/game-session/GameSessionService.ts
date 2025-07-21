@@ -4,8 +4,7 @@ import {
   GetGameSessionResponseSchema,
   type PaginationQuery,
 } from "@repo/shared"
-import { StatusCodes } from "http-status-codes"
-import { apiClient } from "@/lib/api/client"
+import { ApiClient, apiClient } from "@/lib/api/client"
 
 const GameSessionService = {
   /**
@@ -15,12 +14,8 @@ const GameSessionService = {
    * @returns The game session data for the given ID.
    */
   getGameSession: async (id: string) => {
-    const { data: gameSession, status } = await apiClient.get(
-      `/api/game-sessions/${id}`,
-      GetGameSessionResponseSchema,
-    )
-    if (status !== StatusCodes.OK) throw new Error(`Failed to retrieve game session with id: ${id}`)
-    return gameSession
+    const response = await apiClient.get(`/api/game-sessions/${id}`, GetGameSessionResponseSchema)
+    return ApiClient.throwIfError(response, `Failed to retrieve game session with id: ${id}`)
   },
 
   /**
@@ -34,12 +29,11 @@ const GameSessionService = {
     page,
   }: PaginationQuery): Promise<GetAllGameSessionsResponse | undefined> => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
-    const { data, status } = await apiClient.get(
+    const response = await apiClient.get(
       `/api/game-sessions?${query}`,
       GetAllGameSessionsResponseSchema,
     )
-    if (status !== StatusCodes.OK) throw new Error("Failed to retrieve all game sessions")
-    return data
+    return ApiClient.throwIfError(response, "Failed to retrieve all game sessions")
   },
 } as const
 

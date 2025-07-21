@@ -7,7 +7,7 @@ import { NavigationBarMobile } from "./NavigationBarMobile"
 /**
  * Props for the NavigationBar component.
  */
-export interface NavigationBarProps extends Navbar {
+export interface NavigationBarProps extends Omit<Navbar, "id"> {
   user?: User
 }
 
@@ -21,10 +21,14 @@ export interface NavigationBarProps extends Navbar {
 export const NavigationBar = ({ user, ...props }: NavigationBarProps) => {
   return (
     <Center
+      as="nav"
       height="fit-content"
-      paddingTop="md"
+      maxW="8xl"
+      placeSelf="center"
       position="sticky"
-      top={0}
+      pt="lg"
+      px="md"
+      top="0"
       width="full"
       zIndex={100}
     >

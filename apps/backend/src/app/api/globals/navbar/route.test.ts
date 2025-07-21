@@ -8,6 +8,18 @@ describe("globals/navbar", () => {
 
       expect(json).toStrictEqual({
         data: {
+          logo: {
+            alt: "Logo",
+            filename: "Logo.png",
+            url: "/payload/api/media/file/Logo.png",
+            updatedAt: new Date(2025, 0, 1).toISOString(),
+            createdAt: new Date(2025, 0, 1).toISOString(),
+            width: 55,
+            height: 54,
+            focalX: 50,
+            focalY: 50,
+            id: "ccaf8f75ceb9f059773d4774",
+          },
           navItems: [
             {
               id: expect.any(String),

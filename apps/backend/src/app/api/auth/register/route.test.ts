@@ -1,3 +1,4 @@
+import { MembershipType, type RegisterRequestBody } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
@@ -9,14 +10,25 @@ describe("tests /api/auth/register", () => {
   const authDataService = new AuthDataService()
 
   const registerBody = {
-    firstName: "John",
-    lastName: "Doe",
     email: "johndoe@example.com",
     password: "Password123!",
-  }
+    emailVerificationCode: "123456",
+  } satisfies RegisterRequestBody
 
   it("should register a new user", async () => {
-    const res = await POST(createMockNextRequest("/api/auth/register", "POST", registerBody))
+    await userDataService.createUser({
+      firstName: registerBody.email,
+      email: registerBody.email,
+      emailVerificationCode: registerBody.emailVerificationCode,
+      role: MembershipType.casual,
+    })
+    const res = await POST(
+      createMockNextRequest(
+        "/api/auth/register",
+        "POST",
+        registerBody satisfies RegisterRequestBody,
+      ),
+    )
     const json = await res.json()
 
     expect(res.status).toBe(StatusCodes.CREATED)
@@ -29,7 +41,35 @@ describe("tests /api/auth/register", () => {
     expect(auth.password).not.toEqual(registerBody.password)
   })
 
+  it("should return a 400 if a user submits an incorrect verification code", async () => {
+    await userDataService.createUser({
+      firstName: registerBody.email,
+      email: registerBody.email,
+      emailVerificationCode: "333555",
+      role: MembershipType.casual,
+    })
+    const res = await POST(createMockNextRequest("/api/auth/register", "POST", registerBody))
+    const json = await res.json()
+
+    expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+    expect(json.error).toBe("Invalid email verification code")
+  })
+
+  it("should return a 403 if the user hasn't created a verification code request", async () => {
+    const res = await POST(createMockNextRequest("/api/auth/register", "POST", registerBody))
+    const json = await res.json()
+
+    expect(res.status).toBe(StatusCodes.FORBIDDEN)
+    expect(json.error).toBe("Email not verified")
+  })
+
   it("should return a 409 conflict if user already exists", async () => {
+    await userDataService.createUser({
+      firstName: registerBody.email,
+      email: registerBody.email,
+      emailVerificationCode: registerBody.emailVerificationCode,
+      role: MembershipType.casual,
+    })
     await POST(createMockNextRequest("/api/auth/register", "POST", registerBody))
 
     const res = await POST(createMockNextRequest("/api/register", "POST", registerBody))
@@ -43,7 +83,7 @@ describe("tests /api/auth/register", () => {
     const res = await POST(
       createMockNextRequest("/api/auth/register", "POST", {
         ...registerBody,
-        firstName: "30CharactersLongNameThatDoesNoMeetTheSpecificationsOfTheSchema",
+        password: undefined,
       }),
     )
     const json = await res.json()
@@ -55,16 +95,9 @@ describe("tests /api/auth/register", () => {
   it("should return 500 if createUser throws unexpected error", async () => {
     const error = new Error("Simulated internal error")
 
-    vi.spyOn(UserDataService.prototype, "createUser").mockRejectedValueOnce(error)
+    vi.spyOn(UserDataService.prototype, "getUserByEmail").mockRejectedValueOnce(error)
 
-    const body = {
-      firstName: "John",
-      lastName: "Doe",
-      email: "john500@example.com",
-      password: "Password123!",
-    }
-
-    const res = await POST(createMockNextRequest("/api/auth/register", "POST", body))
+    const res = await POST(createMockNextRequest("/api/auth/register", "POST", registerBody))
     const json = await res.json()
 
     expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)

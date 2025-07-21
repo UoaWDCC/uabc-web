@@ -1,6 +1,6 @@
 import { RichText } from "@repo/ui/components/Generic"
 import { Heading } from "@repo/ui/components/Primitive"
-import { EmptyState, VStack } from "@yamada-ui/react"
+import { Center, EmptyState, VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { use } from "react"
 import { getTos } from "@/services/cms/tos/TosService"
@@ -14,9 +14,9 @@ export const metadata: Metadata = {
 export default function TermsOfServiceContent() {
   const tos = use(getTos())
 
-  const data = tos.data
+  const data = tos?.data
 
-  if (!data?.data) {
+  if (!data) {
     return (
       <EmptyState
         description="Failed to load Terms of Service. Please contact the administrator."
@@ -25,10 +25,10 @@ export default function TermsOfServiceContent() {
     )
   }
 
-  const { title, subtitle, checkInRules, sessionRules, disclaimer } = data.data
+  const { title, subtitle, checkInRules, sessionRules, disclaimer } = data
 
   return (
-    <VStack gap="lg" maxW="8xl">
+    <VStack as={Center} gap="lg" layerStyle="wrapper">
       <Heading.h1 fontSize="4xl">{title}</Heading.h1>
       <Heading.h2 fontSize="2xl">{subtitle}</Heading.h2>
       <VStack gap="md">
