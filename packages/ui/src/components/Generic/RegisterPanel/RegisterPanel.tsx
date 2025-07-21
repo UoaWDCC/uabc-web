@@ -91,7 +91,7 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
       </FormControl>
       <FormControl errorMessage={errors.password?.message} invalid={!!errors.password}>
         <TextInput
-          autoComplete={AutoCompleteType.Password}
+          autoComplete={AutoCompleteType.NewPassword}
           data-testid="password"
           placeholder="Password"
           startElement={<LockIcon />}
@@ -104,7 +104,7 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
         invalid={!!errors.confirmPassword}
       >
         <TextInput
-          autoComplete={AutoCompleteType.Password}
+          autoComplete={AutoCompleteType.NewPassword}
           data-testid="confirm-password"
           placeholder="Confirm Password"
           startElement={<LockIcon />}
