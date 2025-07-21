@@ -1,4 +1,4 @@
-import { MembershipType, type RegisterDetails } from "@repo/shared"
+import { MembershipType, type RegisterRequestBody } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
@@ -13,7 +13,7 @@ describe("tests /api/auth/register", () => {
     email: "johndoe@example.com",
     password: "Password123!",
     emailVerificationCode: "123456",
-  } satisfies RegisterDetails
+  } satisfies RegisterRequestBody
 
   it("should register a new user", async () => {
     await userDataService.createUser({
@@ -23,7 +23,11 @@ describe("tests /api/auth/register", () => {
       role: MembershipType.casual,
     })
     const res = await POST(
-      createMockNextRequest("/api/auth/register", "POST", registerBody satisfies RegisterDetails),
+      createMockNextRequest(
+        "/api/auth/register",
+        "POST",
+        registerBody satisfies RegisterRequestBody,
+      ),
     )
     const json = await res.json()
 

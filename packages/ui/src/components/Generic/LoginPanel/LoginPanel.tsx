@@ -74,12 +74,20 @@ export const LoginPanel = memo(({ errorMessage, onSubmit, isLoading }: LoginPane
 
   return (
     <VStack
+      //_before={{
+      //content: '""',
+      //position: "fixed",
+      //inset: 0,
+      //bg: "gray.900",
+      //zIndex: -1,
+      //}}
       as="form"
-      bgColor="secondary.900"
-      borderRadius={{ base: undefined, md: "3xl" }}
-      layerStyle={{ base: undefined, md: "gradientBorder" }}
+      bg="gray.900"
+      layerStyle="gradientBorder"
       onSubmit={handleSubmit(handleLogin)}
-      p={{ base: "md", lg: "lg" }}
+      px={{ base: "md", lg: "lg" }}
+      py={{ base: "md", lg: "lg" }}
+      rounded="3xl"
       w={{ base: "full", md: "md" }}
     >
       <Center py={{ base: "md", md: "unset" }}>
@@ -189,7 +197,7 @@ export const LoginPanel = memo(({ errorMessage, onSubmit, isLoading }: LoginPane
             _hover={{ color: "white" }}
             as={Link}
             color="gray.100"
-            href="/auth/signup"
+            href="/auth/register"
             textDecoration="underline"
           >
             Create Account

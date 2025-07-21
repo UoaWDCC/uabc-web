@@ -21,10 +21,14 @@ export interface NavigationBarProps extends Omit<Navbar, "id"> {
 export const NavigationBar = ({ user, ...props }: NavigationBarProps) => {
   return (
     <Center
+      as="nav"
       height="fit-content"
-      paddingTop="md"
+      maxW="8xl"
+      placeSelf="center"
       position="sticky"
-      top={0}
+      pt="lg"
+      px="md"
+      top="0"
       width="full"
       zIndex={100}
     >

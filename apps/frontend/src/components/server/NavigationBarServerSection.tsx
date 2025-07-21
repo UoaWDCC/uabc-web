@@ -3,9 +3,9 @@ import { use } from "react"
 import { getNavigationBar } from "@/services/cms/navbar/NavigationBarService"
 
 /**
- * Component to server-side fetch and render the navigation bar section using Tanstack Query.
+ * Server-side component to fetch and render the navigation bar section.
  *
- * @returns Server-side component to fetch and render the navigation bar section using Tanstack Query.
+ * @returns A navigation bar section component.
  */
 export const NavigationBarServerSection = () => {
   const { data: navbar } = use(getNavigationBar())

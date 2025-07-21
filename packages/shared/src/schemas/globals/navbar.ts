@@ -9,13 +9,12 @@ export const NavItemSchema = z.object({
 })
 
 export const NavbarSchema = z.object({
-  id: z.string(),
   logo: z.union([z.string(), MediaSchema]),
   navItems: LinkArraySchema,
   rightSideSingleButton: LinkSchema,
   updatedAt: z.string().optional().nullable(),
   createdAt: z.string().optional().nullable(),
-}) satisfies z.ZodType<Navbar>
+}) satisfies z.ZodType<Omit<Navbar, "id">>
 
 export const GetNavbarResponseSchema = z.object({
   data: NavbarSchema,

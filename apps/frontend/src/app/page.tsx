@@ -1,10 +1,15 @@
-import { AboutUsSection } from "@repo/ui/components/Composite/AboutUsSection"
-import { LocationBubble, type LocationBubbleProps, QuickBook } from "@repo/ui/components/Generic"
+import {
+  GridBackground,
+  LocationBubble,
+  type LocationBubbleProps,
+  QuickBook,
+} from "@repo/ui/components/Generic"
 import { locationAndTimeOptionsMock } from "@repo/ui/components/Generic/QuickBook/QuickBook.mock"
 import { Heading, Image } from "@repo/ui/components/Primitive"
 import { Bleed, Box, Center, Text, VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { FaqSection } from "@/components/client/FaqSection"
+import { AboutUsServerSection } from "@/components/server/AboutUsServerSection"
 
 export const metadata: Metadata = {
   title: "Home | UABC",
@@ -13,49 +18,6 @@ export const metadata: Metadata = {
 }
 
 export default async function Home() {
-  // TODO: replace mock data with real data
-  const mockCards = [
-    {
-      title: "Who We Are",
-      description:
-        "UABC Badminton Club is the official badminton team of UOA, bringing together students who love the game — from absolute beginners to competitive players.",
-    },
-    {
-      title: "Who We Is",
-      description:
-        "UABC Badminton Club is the official badminton team of UOA, bringing together students who love the game — from absolute beginners to competitive players.",
-    },
-    {
-      title: "Who I Is",
-      description:
-        "UABC Badminton Club is the official badminton team of UOA, bringing together students who love the game — from absolute beginners to competitive players.",
-    },
-  ]
-
-  const mockItems = [
-    {
-      src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
-      alt: "Mountain Lake",
-      width: 600,
-      height: 400,
-      emoji: "😄",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=600",
-      alt: "Forest Path",
-      width: 600,
-      height: 400,
-      emoji: "😁",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=600",
-      alt: "Desert Dunes",
-      width: 600,
-      height: 400,
-      emoji: "😆",
-    },
-  ]
-
   const mockBubble1: LocationBubbleProps = {
     locationImage: {
       src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
@@ -96,7 +58,8 @@ export default async function Home() {
   }
 
   return (
-    <VStack gap="2xl" maxW="1220px">
+    <VStack gap="2xl" layerStyle="wrapper">
+      <GridBackground />
       <VStack
         align="center"
         bgClip="text"
@@ -119,23 +82,25 @@ export default async function Home() {
           people! Join our sessions or check our Instagram page for events! 🏸
         </Text>
       </VStack>
-      <Box zIndex={2}>
-        <QuickBook locationAndTimeOptions={locationAndTimeOptionsMock} />
-      </Box>
+      <QuickBook locationAndTimeOptions={locationAndTimeOptionsMock} />
       <Bleed as={Center} blockStart={{ base: "4xl", md: "3xl" }} inline="full">
-        <Box h="full" maxH="1150px" position="relative" w="full">
+        <Center h="full" maxH="1150px" overflowY="clip" position="relative" w="full">
           <Image
             alt="Person smashing shuttlecock"
             borderTopRadius="3xl"
-            h="100%"
-            height={600}
+            h="full"
+            height={1000}
+            maxH="1150px"
+            maxW="2000px"
             minH="480px"
             objectFit="cover"
             objectPosition="center"
+            placeSelf="center"
             position="relative"
             src="https://images.unsplash.com/photo-1599391398131-cd12dfc6c24e?q=80&w=1311&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            w="100%"
-            width={400}
+            w="full"
+            width={1000}
+            z={-1}
           />
           <Box
             left="25%"
@@ -164,9 +129,9 @@ export default async function Home() {
           >
             <LocationBubble {...mockBubble3} />
           </Box>
-        </Box>
+        </Center>
       </Bleed>
-      <AboutUsSection cards={mockCards} items={mockItems} />
+      <AboutUsServerSection />
       <FaqSection />
     </VStack>
   )

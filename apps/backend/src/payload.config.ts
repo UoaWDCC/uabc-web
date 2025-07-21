@@ -16,7 +16,7 @@ import { GameSessionSchedule } from "./data-layer/collections/GameSessionSchedul
 import { Media } from "./data-layer/collections/Media"
 import { Semester } from "./data-layer/collections/Semester"
 import { User } from "./data-layer/collections/User"
-
+import { AboutUsInfo } from "./data-layer/globals/AboutUsInfo"
 import { FAQ } from "./data-layer/globals/Faq"
 import { Footer } from "./data-layer/globals/Footer"
 import { Navbar } from "./data-layer/globals/Navbar"
@@ -53,7 +53,7 @@ export default buildConfig({
     Booking,
     Authentication,
   ],
-  globals: [FAQ, Footer, Navbar, Tos],
+  globals: [FAQ, Footer, Navbar, Tos, AboutUsInfo],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
