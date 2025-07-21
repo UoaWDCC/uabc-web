@@ -4,6 +4,9 @@ import { createTimeField } from "@/data-layer/fields/date-time"
 
 export const GameSessionSchedule: CollectionConfig = {
   slug: "gameSessionSchedule",
+  admin: {
+    useAsTitle: "name",
+  },
   access: {},
   fields: [
     {

@@ -4,6 +4,9 @@ import { createTimeField } from "@/data-layer/fields/date-time"
 
 export const Semester: CollectionConfig = {
   slug: "semester",
+  admin: {
+    useAsTitle: "name",
+  },
   access: {},
   fields: [
     {
