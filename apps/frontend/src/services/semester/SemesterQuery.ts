@@ -8,7 +8,7 @@ const SemesterQuery = {
    *
    * @returns A query hook that fetches all semesters
    */
-  useGetSemesters: () => {
+  useGetAllSemesters: () => {
     return useQuery({
       queryKey: [QueryKeys.SEMESTER_QUERY_KEY],
       queryFn: SemesterService.getAllSemesters,
