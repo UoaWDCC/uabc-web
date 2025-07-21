@@ -1,5 +1,5 @@
 import { Button, Heading } from "@repo/ui/components/Primitive"
-import { Center, Container, Text, VStack } from "@yamada-ui/react"
+import { Container, Text, VStack } from "@yamada-ui/react"
 import Link from "next/link"
 
 /**
@@ -11,7 +11,6 @@ export const NotFoundCard = () => {
   return (
     <Container centerContent layerStyle="container">
       <VStack
-        as={Center}
         bgColor="secondary"
         borderRadius="2xl"
         boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.1)"
@@ -22,7 +21,14 @@ export const NotFoundCard = () => {
       >
         <Heading.h1 fontSize={{ base: "3xl", md: "5xl" }}>Error 404</Heading.h1>
         <Text>Page Not Found</Text>
-        <Button as={Link} colorScheme="primary" href="/" size="lg" w="fit-content">
+        <Button
+          as={Link}
+          colorScheme="primary"
+          href="/"
+          placeSelf="center"
+          size="lg"
+          w="fit-content"
+        >
           Return Home
         </Button>
       </VStack>

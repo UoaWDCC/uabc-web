@@ -6,16 +6,17 @@ import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/comp
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
   Box,
+  ButtonGroup,
   Center,
   FormControl,
   memo,
   noop,
   Text,
+  Tooltip,
   Link as UILink,
   VStack,
 } from "@yamada-ui/react"
 import Link from "next/link"
-import type { MouseEventHandler } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { GoogleLogo, UabcLogo } from "../../Icon"
 
@@ -28,11 +29,9 @@ export interface RegisterPanelProps {
    */
   onSubmit?: SubmitHandler<RegisterFormData>
   /**
-   * Handler called when user selects the Google icon button.
-   *
-   * TODO: change as necessary when implementing handler function.
+   * Href for the google icon button.
    */
-  onClickGoogle?: MouseEventHandler<HTMLButtonElement>
+  googleHref?: string
 }
 
 /**
@@ -41,7 +40,7 @@ export interface RegisterPanelProps {
  * @param props RegisterPanel component props
  * @returns A register panel component
  */
-export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelProps) => {
+export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
   const {
     register,
     handleSubmit,
@@ -53,19 +52,20 @@ export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelPro
   return (
     <VStack
       as="form"
-      bgColor="secondary.900"
-      borderRadius={{ base: undefined, md: "3xl" }}
-      layerStyle={{ base: undefined, md: "gradientBorder" }}
+      bg="gray.900"
+      layerStyle="gradientBorder"
+      maxW="lg"
       onSubmit={handleSubmit(onSubmit ?? noop)}
-      p={{ base: "md", lg: "lg" }}
-      w={{ base: "full", md: "md" }}
+      p="lg"
+      rounded="3xl"
+      w="full"
     >
-      <Center py={{ base: "md", md: "unset" }}>
+      <Center>
         {/* TODO: replace with correct logo */}
         <UabcLogo />
       </Center>
 
-      <Center display={{ base: "none", md: "block" }} textAlign="center">
+      <Center textAlign="center">
         <VStack>
           <Heading.h2>Welcome to UABC</Heading.h2>
           <Text>Please enter your details to register</Text>
@@ -128,28 +128,32 @@ export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelPro
         />
       </Center>
 
-      <Center gap={4}>
-        <IconButton
-          aria-label="Google"
-          colorScheme="secondary"
-          data-testid="google-logo"
-          fullRounded
-          onClick={onClickGoogle ?? noop}
-          variant="gradient"
-        >
-          <GoogleLogo fontSize="2xl" />
-        </IconButton>
-        {/* TODO: implement Apple auth or remove Apple icon button */}
-        <IconButton
-          aria-label="Apple"
-          colorScheme="secondary"
-          disabled
-          fullRounded
-          onClick={onClickGoogle}
-          variant="gradient"
-        >
-          <AppleIcon fontSize="2xl" />
-        </IconButton>
+      <Center>
+        <ButtonGroup gap="sm">
+          <Tooltip label="Not ready yet" placement="top">
+            <IconButton
+              aria-label="Google"
+              colorScheme="secondary"
+              disabled
+              fullRounded
+              variant="gradient"
+            >
+              <GoogleLogo fontSize="2xl" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip label="Not ready yet" placement="top">
+            {/* TODO: implement Apple auth or remove Apple icon button */}
+            <IconButton
+              aria-label="Apple"
+              colorScheme="secondary"
+              disabled
+              fullRounded
+              variant="gradient"
+            >
+              <AppleIcon fontSize="2xl" />
+            </IconButton>
+          </Tooltip>
+        </ButtonGroup>
       </Center>
 
       <Center color="gray.100" fontSize="sm" textAlign="center">
@@ -162,7 +166,7 @@ export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelPro
             href="/auth/login"
             textDecoration="underline"
           >
-            Sign in
+            Login
           </UILink>
         </Text>
       </Center>

@@ -77,10 +77,11 @@ export const LoginPanel = memo(({ errorMessage, onSubmit, isLoading }: LoginPane
       as="form"
       bg="gray.900"
       layerStyle="gradientBorder"
+      maxW="lg"
       onSubmit={handleSubmit(handleLogin)}
       p="lg"
       rounded="3xl"
-      w={{ base: "full", md: "md" }}
+      w="full"
     >
       <Center>
         {/* TODO: replace with correct logo */}

@@ -45,7 +45,7 @@ export const LoginSection = () => {
   }
 
   return (
-    <Container layerStyle="container">
+    <Container centerContent layerStyle="container">
       <LoginPanel
         errorMessage={login.error ? login.error.message : undefined}
         googleHref={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
