@@ -38,9 +38,16 @@ export const layerStyles: LayerStyles = {
         "repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 4vw), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 4vw)",
     },
   },
-  wrapper: {
+  container: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: { base: "start", lg: "center" },
     maxW: "8xl",
-    py: { base: "md", lg: "xl" },
-    minH: { base: "full", lg: "4xl" },
+    placeSelf: "center",
+    w: "full",
+  },
+  wrapper: {
+    my: { base: "xl", lg: "0" },
   },
 }

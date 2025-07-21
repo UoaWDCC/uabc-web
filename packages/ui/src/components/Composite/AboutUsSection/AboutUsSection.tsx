@@ -4,7 +4,7 @@ import {
   type AboutUsCarouselProps,
 } from "@repo/ui/components/Generic/AboutUsCarousel"
 import { Button, Heading } from "@repo/ui/components/Primitive"
-import { Container, Flex, VStack } from "@yamada-ui/react"
+import { Flex, VStack } from "@yamada-ui/react"
 import Link from "next/link"
 
 export interface AboutUsSectionProps extends AboutUsCarouselProps {
@@ -13,7 +13,7 @@ export interface AboutUsSectionProps extends AboutUsCarouselProps {
 
 export const AboutUsSection = ({ cards, ...carouselProps }: AboutUsSectionProps) => {
   return (
-    <Container as={VStack} centerContent gap={{ base: "lg", md: "xl" }}>
+    <>
       <Heading.h2 fontSize={{ base: "2xl", md: "6xl" }} fontWeight="semibold" w="full">
         About Us
       </Heading.h2>
@@ -37,7 +37,7 @@ export const AboutUsSection = ({ cards, ...carouselProps }: AboutUsSectionProps)
       <Button as={Link} colorScheme="primary" href="/about" size="lg">
         Learn More
       </Button>
-    </Container>
+    </>
   )
 }
 
