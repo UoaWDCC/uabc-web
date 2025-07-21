@@ -52,19 +52,20 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
   return (
     <VStack
       as="form"
-      bgColor="secondary.900"
-      borderRadius={{ base: undefined, md: "3xl" }}
-      layerStyle={{ base: undefined, md: "gradientBorder" }}
+      bg="gray.900"
+      layerStyle="gradientBorder"
+      maxW="lg"
       onSubmit={handleSubmit(onSubmit ?? noop)}
-      p={{ base: "md", lg: "lg" }}
-      w={{ base: "full", md: "md" }}
+      p="lg"
+      rounded="3xl"
+      w="full"
     >
-      <Center py={{ base: "md", md: "unset" }}>
+      <Center>
         {/* TODO: replace with correct logo */}
         <UabcLogo />
       </Center>
 
-      <Center display={{ base: "none", md: "block" }} textAlign="center">
+      <Center textAlign="center">
         <VStack>
           <Heading.h2>Welcome to UABC</Heading.h2>
           <Text>Please enter your details to register</Text>
@@ -165,7 +166,7 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
             href="/auth/login"
             textDecoration="underline"
           >
-            Sign in
+            Login
           </UILink>
         </Text>
       </Center>

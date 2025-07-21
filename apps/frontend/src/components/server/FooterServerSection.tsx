@@ -1,4 +1,5 @@
-import { Footer, resolveUrl } from "@repo/ui/components/Generic"
+import { Footer } from "@repo/ui/components/Composite"
+import { resolveUrl } from "@repo/ui/components/Generic"
 import { LinkTreeIcon } from "@repo/ui/components/Icon"
 import { FacebookIcon, InstagramIcon } from "@yamada-ui/lucide"
 import { use } from "react"

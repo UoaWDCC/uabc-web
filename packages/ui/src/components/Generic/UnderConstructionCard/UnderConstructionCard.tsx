@@ -54,9 +54,9 @@ export const UnderConstructionCard = ({
       gap="md"
       justifyContent="center"
       layerStyle="gradientBorder"
-      px="md"
-      py="lg"
+      py={{ base: "lg", md: "4xl" }}
       rounded="3xl"
+      w={{ base: "full", md: "2xl" }}
     >
       <CardHeader pt="0">
         <Heading.h3

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Login() {
   return (
-    <VStack alignItems="center" layerStyle="wrapper">
+    <VStack as="main">
       <LoginSection />
     </VStack>
   )

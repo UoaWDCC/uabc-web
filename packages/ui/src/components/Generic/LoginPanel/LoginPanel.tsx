@@ -74,28 +74,21 @@ export const LoginPanel = memo(({ errorMessage, onSubmit, isLoading }: LoginPane
 
   return (
     <VStack
-      //_before={{
-      //content: '""',
-      //position: "fixed",
-      //inset: 0,
-      //bg: "gray.900",
-      //zIndex: -1,
-      //}}
       as="form"
       bg="gray.900"
       layerStyle="gradientBorder"
+      maxW="lg"
       onSubmit={handleSubmit(handleLogin)}
-      px={{ base: "md", lg: "lg" }}
-      py={{ base: "md", lg: "lg" }}
+      p="lg"
       rounded="3xl"
-      w={{ base: "full", md: "md" }}
+      w="full"
     >
-      <Center py={{ base: "md", md: "unset" }}>
+      <Center>
         {/* TODO: replace with correct logo */}
         <UabcLogo />
       </Center>
 
-      <Center display={{ base: "none", md: "block" }} textAlign="center">
+      <Center textAlign="center">
         <VStack>
           <Heading.h2>Welcome back</Heading.h2>
           <Text>Please enter your details to sign in</Text>
