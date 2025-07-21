@@ -4,6 +4,7 @@ import type {
   LoginFormDataSchema,
   LoginRequestBodySchema,
   LoginResponseSchema,
+  RegisterRequestBodySchema,
   UserInfoResponseSchema,
 } from "../../schemas"
 
@@ -16,3 +17,5 @@ export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>
 export type LoginRequestBody = z.infer<typeof LoginRequestBodySchema>
 export type LoginResponse = z.infer<typeof LoginResponseSchema>
 export type LoginFormData = z.infer<typeof LoginFormDataSchema>
+
+export type RegisterRequestBody = z.infer<typeof RegisterRequestBodySchema>

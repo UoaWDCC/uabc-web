@@ -1,7 +1,17 @@
 "use client"
 import { Button } from "@repo/ui/components/Primitive"
-import { AnimatePresence, Box, type ButtonProps, forwardRef, Motion } from "@yamada-ui/react"
+import {
+  AnimatePresence,
+  Box,
+  type ButtonProps,
+  forwardRef,
+  Motion,
+  mergeRefs,
+  useHover,
+} from "@yamada-ui/react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { memo, useMemo } from "react"
 
 /**
  * Props for the NavigationBarButton component.
@@ -9,7 +19,6 @@ import Link from "next/link"
 interface NavigationBarButtonProps extends ButtonProps {
   label: string
   url: string
-  hovering?: boolean
 }
 
 /**
@@ -24,11 +33,20 @@ interface NavigationBarButtonProps extends ButtonProps {
  * @param ref Ref to the button element.
  * @returns A button with a label and a link, with an optional hover indicator.
  */
-export const NavigationBarButton = forwardRef<NavigationBarButtonProps, "a">(
-  ({ label, url, hovering, colorScheme, ...props }, ref) => {
+export const NavigationBarButton = memo(
+  forwardRef<NavigationBarButtonProps, "a">(({ label, url, colorScheme, ...props }, ref) => {
+    const currentPath = usePathname()
+    const active = currentPath === url
+    const { hovered, ref: hoverRef } = useHover()
+    const mergedRef = mergeRefs(ref, hoverRef)
+
+    const showIndicator = useMemo(() => {
+      return hovered || active
+    }, [hovered, active])
+
     return (
       <Box position="relative">
-        <AnimatePresence>{hovering && <NavigationBarHoverIndicator />}</AnimatePresence>
+        <AnimatePresence>{showIndicator && <NavigationBarHoverIndicator />}</AnimatePresence>
         <Button
           as={Link}
           borderRadius="150px"
@@ -37,7 +55,7 @@ export const NavigationBarButton = forwardRef<NavigationBarButtonProps, "a">(
           href={url}
           position="relative"
           px="md"
-          ref={ref}
+          ref={mergedRef}
           size="sm"
           variant={colorScheme ? "solid" : ""}
           zIndex="1"
@@ -47,8 +65,10 @@ export const NavigationBarButton = forwardRef<NavigationBarButtonProps, "a">(
         </Button>
       </Box>
     )
-  },
+  }),
 )
+
+NavigationBarButton.displayName = "NavigationBarButton"
 
 /**
  * An indicator that appears when hovering over a navigation bar button.

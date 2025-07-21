@@ -15,64 +15,49 @@ on:
         required: true
 
 jobs:
-  deploy-backend:
-    name: Deploy Backend
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && (github.event.inputs.environment == 'staging' || github.event.inputs.environment == 'backend-staging'))
-    env:
-      FLY_API_TOKEN: ${{ secrets.FLY_SERVER_API_TOKEN }}
+  deploy-backend-staging:
+    name: Deploy Backend Staging
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'backend-staging')
     environment:
-      name: staging
-      url: https://wdcc-uabc-backend-staging.fly.dev/
+      name: backend-staging
+      url: https://staging-server.uoabadminton.co.nz
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.workflow }}-deploy-backend
+      group: ${{ github.workflow }}-deploy-backend-staging
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - name: Set Backend Secrets
-        id: backend-secrets
-        run: >
-          flyctl secrets set --config apps/backend/fly.staging.toml
-          DATABASE_URI=${{ secrets.DATABASE_URI }}
-          JWT_SECRET=${{ secrets.JWT_SECRET }}
-          PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}
-          GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
-          NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
-          TURBO_TEAM=${{ vars.TURBO_TEAM }}
-          TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
-          NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}
-          NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
-
-      - name: Deploy Backend Secrets
-        id: backend-secrets-deploy
-        run: flyctl secrets deploy --config apps/backend/fly.staging.toml
-
-      - name: Deploy Backend
+      - name: Deploy Backend Staging
         id: deploy-backend
-        run: >
-          flyctl deploy --remote-only --config apps/backend/fly.staging.toml
-          --build-arg DATABASE_URI="${{ secrets.DATABASE_URI }}"
-          --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}"
-          --build-arg PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}"
-          --build-arg GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}"
-          --build-arg GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}"
-          --build-arg NEXT_PUBLIC_URL="${{ secrets.NEXT_PUBLIC_URL }}"
-          --build-arg TURBO_TEAM="${{ vars.TURBO_TEAM }}"
-          --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}"
-          --build-arg NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}"
+        uses: ./.github/cd-actions/deploy-backend/
+        with:
+          # Deployment secrets/variables
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_CONFIG_PATH: fly.staging.toml
+          # Environment secrets/variables
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
 
-  deploy-frontend:
-    name: Deploy Frontend
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && (github.event.inputs.environment == 'staging' || github.event.inputs.environment == 'frontend-staging'))
+  deploy-frontend-staging:
+    name: Deploy Frontend Staging
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'frontend-staging')
     environment:
-      name: staging
-      url: https://uabc.pages.dev/
+      name: frontend-staging
+      url: https://staging.uoabadminton.co.nz/
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.workflow }}-deploy-frontend
+      group: ${{ github.workflow }}-deploy-frontend-staging
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
@@ -86,20 +71,66 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
-          project-name: uabc
+          NODE_ENV: staging
+          project-name: uabc-staging
+          APP_INDEX_MODE: NOINDEX
 
-  deploy-to-production:
-    name: Deploy UABC Production App
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production'
-    env:
-      FLY_API_TOKEN: ${{ secrets.FLY_APP_API_TOKEN }}
+  deploy-backend-production:
+    name: Deploy Backend Production
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'backend-production'
     environment:
-      name: production
-      url: https://uabc.wdcc.co.nz/
+      name: backend-production
+      url: https://server.uoabadminton.co.nz/
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.workflow }}-deploy-production
+      group: ${{ github.workflow }}-deploy-backend-production
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
-      - run: echo "To be implemented"
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy Backend Production
+        id: deploy-backend
+        uses: ./.github/cd-actions/deploy-backend/
+        with:
+          # Deployment secrets/variables
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_CONFIG_PATH: fly.production.toml
+          # Environment secrets/variables
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+
+  deploy-frontend-production:
+    name: Deploy Frontend Production
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'frontend-production'
+    environment:
+      name: frontend-production
+      url: https://uoabadminton.co.nz/
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy-frontend-production
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Frontend
+        id: deploy-frontend
+        uses: ./.github/cd-actions/deploy-frontend/
+        with:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          NODE_ENV: production
+          project-name: uabc
+          APP_INDEX_MODE: NOINDEX

@@ -1,7 +1,6 @@
 import type { Faq } from "@repo/shared/payload-types"
 import { createSimpleSharedFAQItem } from "@repo/ui/test-config/mocks/FAQ.mock"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { StatusCodes } from "http-status-codes"
 import { renderHook, waitFor } from "@/test-config/test-utils"
 import { useFaq } from "./FaqQuery"
 import { getFaq } from "./FaqService"
@@ -42,9 +41,7 @@ describe("useFaq", () => {
     }
 
     mockedGetFaq.mockResolvedValue({
-      data: { data: mockFaq },
-      isError: false,
-      status: StatusCodes.OK,
+      data: mockFaq,
     })
 
     const { result } = renderHook(() => useFaq(), { wrapper })
@@ -55,22 +52,6 @@ describe("useFaq", () => {
 
     expect(result.current.data).toEqual(mockFaq)
     expect(mockedGetFaq).toHaveBeenCalledTimes(1)
-  })
-
-  it("should return null when service returns no data", async () => {
-    mockedGetFaq.mockResolvedValue({
-      data: undefined,
-      isError: false,
-      status: StatusCodes.OK,
-    })
-
-    const { result } = renderHook(() => useFaq(), { wrapper })
-
-    await waitFor(() => {
-      expect(result.current.isSuccess).toBe(true)
-    })
-
-    expect(result.current.data).toBeNull()
   })
 
   it("should handle error when service call fails", async () => {

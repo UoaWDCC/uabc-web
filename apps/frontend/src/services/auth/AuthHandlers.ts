@@ -12,7 +12,14 @@ import AuthService from "./AuthService"
 export async function handleLogin(loginDetails: LoginFormData): Promise<LoginResponse> {
   try {
     const response = await AuthService.login(loginDetails.email, loginDetails.password)
-    return { data: response?.data, message: response?.message, error: response?.error }
+    if (!response.success) {
+      return { error: response.error.message }
+    }
+    return {
+      data: response.data.data,
+      message: response.data.message,
+      error: response.data.error,
+    }
   } catch (error) {
     return { error: String(error) }
   }
