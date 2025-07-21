@@ -9,7 +9,16 @@ export const SemesterSchema = z.object({
   endDate: z.string(),
   breakStart: z.string(),
   breakEnd: z.string(),
-  bookingOpenDay: z.nativeEnum(Weekday),
+  // Payload generates a hard coded weekdays, the `satisfies` operator is used to ensure the type matches
+  bookingOpenDay: z.enum([
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ]),
   bookingOpenTime: z.string(),
   updatedAt: z.string(),
   createdAt: z.string(),

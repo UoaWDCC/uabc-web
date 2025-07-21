@@ -14,10 +14,11 @@ describe("api/me", async () => {
   describe("GET", () => {
     it("should return the current user data", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+
       const response = await GET(createMockNextRequest("/api/me"))
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.OK)
+      const json = await response.json()
       expect(json.data).toEqual(casualUserMock)
     })
 
@@ -27,10 +28,11 @@ describe("api/me", async () => {
       vi.spyOn(UserDataService.prototype, "getUserById").mockRejectedValueOnce(
         new Error("Database error"),
       )
+
       const response = await GET(createMockNextRequest("/api/me"))
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await response.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(consoleErrorSpy).toHaveBeenCalled()
 
@@ -49,6 +51,7 @@ describe("api/me", async () => {
     it("should update the user and return updated the updated user", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
       const updateUserData: UpdateUserRequest = { firstName: "Bob" }
+
       const response = await PATCH(createMockNextRequest("/api/me", "PATCH", updateUserData))
 
       expect(response.status).toBe(StatusCodes.OK)
@@ -58,49 +61,53 @@ describe("api/me", async () => {
 
     it("should return 400 if request body is invalid", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+
       const response = await PATCH(
         createMockNextRequest("/api/me", "PATCH", {
           firstName: 0,
         }),
       )
-      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
 
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
       expect((await response.json()).error).toEqual("Invalid request body")
     })
 
     it("should return 400 if request body contains email", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+
       const response = await PATCH(
         createMockNextRequest("/api/me", "PATCH", {
           email: "new-email@gmail.com",
         }),
       )
-      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
 
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
       expect((await response.json()).error).toEqual("Invalid request body")
     })
 
     it("should return 400 if request body contains remaining sessions", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+
       const response = await PATCH(
         createMockNextRequest("/api/me", "PATCH", {
           remainingSessions: 99999,
         }),
       )
-      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
 
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
       expect((await response.json()).error).toEqual("Invalid request body")
     })
 
     it("should return 400 if request body contains role", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+
       const response = await PATCH(
         createMockNextRequest("/api/me", "PATCH", {
           role: MembershipType.admin,
         }),
       )
-      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
 
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST)
       expect((await response.json()).error).toEqual("Invalid request body")
     })
 
@@ -110,10 +117,11 @@ describe("api/me", async () => {
       vi.spyOn(UserDataService.prototype, "updateUser").mockRejectedValueOnce(
         new Error("Database error"),
       )
+
       const response = await PATCH(createMockNextRequest("/api/me", "PATCH", {}))
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await response.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(consoleErrorSpy).toHaveBeenCalled()
 
