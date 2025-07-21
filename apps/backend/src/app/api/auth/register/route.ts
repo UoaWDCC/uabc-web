@@ -1,4 +1,4 @@
-import { RegisterDetailsSchema } from "@repo/shared"
+import { RegisterRequestBodySchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
@@ -12,7 +12,9 @@ export const POST = async (req: NextRequest) => {
   const authDataService = new AuthDataService()
 
   try {
-    const { email, password, emailVerificationCode } = RegisterDetailsSchema.parse(await req.json())
+    const { email, password, emailVerificationCode } = RegisterRequestBodySchema.parse(
+      await req.json(),
+    )
     try {
       await authDataService.getAuthByEmail(email)
       return NextResponse.json(

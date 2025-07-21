@@ -1,5 +1,6 @@
 import { Popup } from "@repo/shared"
-import type { Meta, StoryObj } from "@storybook/react"
+import { usePopupState } from "@repo/ui/hooks"
+import type { Meta, StoryFn } from "@storybook/react"
 import { NuqsAdapter } from "nuqs/adapters/react"
 import { CodeVerificationPopup } from "./CodeVerificationPopup"
 
@@ -27,13 +28,18 @@ const meta: Meta<typeof CodeVerificationPopup> = {
 
 export default meta
 
-type Story = StoryObj<typeof CodeVerificationPopup>
+type Story = StoryFn<typeof CodeVerificationPopup>
 
-export const Default: Story = {
-  args: {
-    onSubmit: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      return true
-    },
-  },
+export const Default: Story = (args) => {
+  const { close, isOpen } = usePopupState({
+    popupId: Popup.CODE_VERIFICATION,
+    initialValue: "",
+  })
+
+  const onSubmit = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    return true
+  }
+
+  return <CodeVerificationPopup {...args} onClose={close} onSubmit={onSubmit} open={isOpen} />
 }

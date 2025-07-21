@@ -1,8 +1,6 @@
 "use client"
 
-import { Popup } from "@repo/shared"
 import { Button, Heading, PinInput } from "@repo/ui/components/Primitive"
-import { usePopupState } from "@repo/ui/hooks"
 import { ShieldIcon } from "@yamada-ui/lucide"
 import {
   Center,
@@ -19,14 +17,14 @@ import {
 import { type FC, useRef } from "react"
 import { Controller, useForm } from "react-hook-form"
 
-interface Data {
+export interface CodeVerificationPopupData {
   pinInput: string
 }
 
 /**
  * Props for the CodeVerificationPopup component.
  */
-interface CodeVerificationPopupProps extends Omit<ModalProps, "onSubmit"> {
+export interface CodeVerificationPopupProps extends Omit<ModalProps, "onSubmit"> {
   /**
    * The title text displayed in the popup.
    */
@@ -38,11 +36,11 @@ interface CodeVerificationPopupProps extends Omit<ModalProps, "onSubmit"> {
   /**
    * The additional message text displayed in the popup.
    */
-  additionalMessage: string
+  additionalMessage?: string
   /**
    * The onSubmit handler.
    */
-  onSubmit?: (data: Data) => Promise<boolean>
+  onSubmit?: (data: CodeVerificationPopupData) => Promise<boolean>
   /**
    * The error message to display if the submission fails.
    */
@@ -76,22 +74,16 @@ export const CodeVerificationPopup: FC<CodeVerificationPopupProps> = ({
   ...props
 }) => {
   const formRef = useRef<HTMLFormElement>(null)
-  const { close, isOpen } = usePopupState({
-    popupId: Popup.CODE_VERIFICATION,
-    initialValue: "",
-  })
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<Data>()
+  } = useForm<CodeVerificationPopupData>()
   const { page } = useLoading()
   const notice = useNotice()
 
-  const handleSubmission = async (data: Data) => {
-    console.log("handleSubmission", data)
+  const handleSubmission = async (data: CodeVerificationPopupData) => {
     page.start()
-    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     if (onSubmit) {
       const success = await onSubmit(data)
@@ -101,7 +93,6 @@ export const CodeVerificationPopup: FC<CodeVerificationPopupProps> = ({
           description: "The code has been verified.",
           status: "success",
         })
-        close()
       }
     }
     page.finish()
@@ -112,7 +103,6 @@ export const CodeVerificationPopup: FC<CodeVerificationPopupProps> = ({
       as="form"
       onClose={close}
       onSubmit={handleSubmit(handleSubmission)}
-      open={isOpen}
       p="lg"
       ref={formRef}
       rounded="3xl"

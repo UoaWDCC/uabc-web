@@ -1,4 +1,9 @@
-import { GetUserResponseSchema, LoginResponseSchema } from "@repo/shared"
+import {
+  CommonResponse,
+  GetUserResponseSchema,
+  LoginResponseSchema,
+  type RegisterRequestBody,
+} from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import { apiClient } from "@/lib/api/client"
 
@@ -16,6 +21,32 @@ const AuthService = {
       { email, password },
       LoginResponseSchema,
     )
+    return response
+  },
+  /**
+   * Register user with email and password
+   *
+   * @param email The email of the user
+   * @param password The password of the user
+   * @param emailVerificationCode The email verification code of the user
+   * @returns The user token if registration is successful
+   */
+  register: async (email: string, password: string, emailVerificationCode: string) => {
+    const response = await apiClient.post(
+      "/api/auth/register",
+      { email, password, emailVerificationCode } satisfies RegisterRequestBody,
+      CommonResponse,
+    )
+    return response
+  },
+  /**
+   * Send email verification code to user's email
+   *
+   * @param email The email of the user
+   * @returns The response from the backend
+   */
+  sendEmailVerificationCode: async (email: string) => {
+    const response = await apiClient.post("/api/auth/verification-code", { email }, CommonResponse)
     return response
   },
   /**
