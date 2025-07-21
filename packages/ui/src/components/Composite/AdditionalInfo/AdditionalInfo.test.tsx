@@ -14,8 +14,8 @@ const queryClient = new QueryClient({
 
 const userMock = {
   ...casualUserMock,
-  gender: casualUserMock.gender,
-  playLevel: casualUserMock.playLevel,
+  gender: casualUserMock.gender ?? "",
+  playLevel: casualUserMock.playLevel ?? "",
 }
 
 const createWrapper = ({ children }: { children: ReactNode }) => (
