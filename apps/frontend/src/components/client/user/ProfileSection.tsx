@@ -54,7 +54,6 @@ export const ProfileSection = memo(() => {
         </>
       ) : (
         <>
-          {" "}
           <ProfileDetails
             defaultValues={{
               firstName: user.firstName,

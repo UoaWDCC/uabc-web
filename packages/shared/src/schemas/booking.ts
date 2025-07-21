@@ -1,24 +1,24 @@
 import { z } from "zod"
-import { type CreateBookingData, PlayLevel } from "../types"
+import { PlayLevel } from "../types"
 import { GameSessionSchema } from "./game-session"
 import { UserSchema } from "./user"
 
 export const BookingSchema = z.object({
+  id: z.string(),
   user: z.union([z.string(), UserSchema]),
   gameSession: z.union([z.string(), GameSessionSchema]),
   playerLevel: z.nativeEnum(PlayLevel),
-}) satisfies z.ZodType<CreateBookingData>
+  updatedAt: z.string(),
+  createdAt: z.string(),
+})
 
 export const CreateBookingRequestBodySchema = BookingSchema.omit({
+  id: true,
+  updatedAt: true,
+  createdAt: true,
   user: true,
 })
 
 export const GetBookingsResponseSchema = z.object({
-  data: z.array(
-    BookingSchema.extend({
-      id: z.string(),
-      updatedAt: z.string(),
-      createdAt: z.string(),
-    }),
-  ),
+  data: z.array(BookingSchema),
 })
