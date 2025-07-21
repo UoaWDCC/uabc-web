@@ -1,25 +1,28 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
+import { NotFound } from "payload"
 import { Security } from "@/business-layer/middleware/Security"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 
 class BookingsRouteWrapper {
   /**
-   * GET method to fetch bookings for a specific user
+   * DELETE method to delete a booking
    *
    * @param _req the request object
-   * @param params route parameters with the userId
-   * @returns the user's bookings if found, otherwise error response
+   * @returns a no content response if successful
    */
   @Security("jwt", ["admin"])
-  static async GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
       const bookingDataService = new BookingDataService()
-      const bookings = await bookingDataService.getAllBookingsByUserId(id)
+      await bookingDataService.deleteBooking(id)
 
-      return NextResponse.json({ data: bookings })
+      return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
+      if (error instanceof NotFound) {
+        return NextResponse.json({ error: "No booking found" }, { status: StatusCodes.NOT_FOUND })
+      }
       console.error(error)
       return NextResponse.json(
         { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
@@ -29,4 +32,4 @@ class BookingsRouteWrapper {
   }
 }
 
-export const { GET } = BookingsRouteWrapper
+export const { DELETE } = BookingsRouteWrapper
