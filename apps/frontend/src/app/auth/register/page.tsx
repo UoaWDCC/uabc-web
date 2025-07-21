@@ -1,5 +1,6 @@
 import { VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { RegisterSection } from "@/components/client/auth/RegisterSection"
 
 export const metadata: Metadata = {
@@ -10,7 +11,9 @@ export const metadata: Metadata = {
 export default function Login() {
   return (
     <VStack alignItems="center" layerStyle="wrapper">
-      <RegisterSection />
+      <Suspense>
+        <RegisterSection />
+      </Suspense>
     </VStack>
   )
 }
