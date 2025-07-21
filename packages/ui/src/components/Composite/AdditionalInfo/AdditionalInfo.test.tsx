@@ -1,4 +1,4 @@
-import { casualUserMock } from "@repo/shared/mocks"
+import { Gender, PlayLevel } from "@repo/shared"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import type { ReactNode } from "react"
@@ -11,12 +11,6 @@ const queryClient = new QueryClient({
     },
   },
 })
-
-const userMock = {
-  ...casualUserMock,
-  gender: casualUserMock.gender ?? "",
-  playLevel: casualUserMock.playLevel ?? "",
-}
 
 const createWrapper = ({ children }: { children: ReactNode }) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
@@ -67,13 +61,13 @@ describe("<AdditionalInfo />", () => {
     await user.keyboard("{Enter}")
     await user.click(screen.getByRole("button", { name: /save changes/i }))
     await waitFor(() => {
-      expect(screen.getByDisplayValue(userMock.gender)).toBeInTheDocument()
-      expect(screen.getByDisplayValue(userMock.playLevel)).toBeInTheDocument()
+      expect(screen.getByDisplayValue(Gender.other)).toBeInTheDocument()
+      expect(screen.getByDisplayValue(PlayLevel.intermediate)).toBeInTheDocument()
     })
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
-      gender: userMock.gender,
-      playLevel: userMock.playLevel,
-      dietaryRequirements: userMock.dietaryRequirements ?? "",
+      gender: Gender.other,
+      playLevel: PlayLevel.intermediate,
+      dietaryRequirements: "",
     })
   })
 })
