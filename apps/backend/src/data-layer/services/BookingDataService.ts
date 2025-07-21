@@ -88,4 +88,53 @@ export default class BookingDataService {
       id,
     })
   }
+
+  /**
+   * Deletes multiple {@link Booking} documents by their IDs.
+   *
+   * @param ids An array of IDs of the {@link Booking} documents to delete.
+   * @param transactionID An optional transaction ID for the request, useful for tracing.
+   */
+  public async deleteBookings(ids: string[], transactionID?: string | number): Promise<Booking[]> {
+    const bulkDeletionResult = await payload.delete({
+      collection: "booking",
+      where: {
+        id: { in: ids },
+      },
+      req: {
+        transactionID,
+      },
+    })
+
+    return bulkDeletionResult.docs
+  }
+
+  /**
+   * Finds all {@link Booking} documents by a specific user ID.
+   *
+   * @param userId The ID of the user whose bookings to find.
+   * @param transactionID An optional transaction ID for the request, useful for tracing.
+   * @param limit The maximum number of documents to be returned, defaults to 100.
+   * @param page The specific page number to offset to, defaults to 1.
+   */
+  public async getBookingsByUserId(
+    userId: string,
+    transactionID?: string | number,
+    limit = 100,
+    page = 1,
+  ): Promise<PaginatedDocs<Booking>> {
+    return await payload.find({
+      collection: "booking",
+      where: {
+        user: {
+          equals: userId,
+        },
+      },
+      limit,
+      page,
+      req: {
+        transactionID,
+      },
+    })
+  }
 }
