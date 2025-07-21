@@ -1,6 +1,7 @@
-import { LocationBubble } from "@repo/ui/components/Generic"
+import { LocationBubble, type LocationBubbleProps } from "@repo/ui/components/Generic"
 import { Image } from "@repo/ui/components/Primitive"
 import { Box, Container } from "@yamada-ui/react"
+import locationImage from "@/assets/images/DSC9269.webp"
 
 const mockBubble1: LocationBubbleProps = {
   locationImage: {
@@ -63,7 +64,6 @@ export const LocationBubbleSection = () => {
         alt="Person smashing shuttlecock"
         borderTopRadius="3xl"
         h="full"
-        height={1000}
         maxW="2000px"
         minH="480px"
         objectFit="cover"
@@ -71,11 +71,10 @@ export const LocationBubbleSection = () => {
         placeSelf="center"
         pointerEvents="none"
         position="absolute"
-        src="https://images.unsplash.com/photo-1599391398131-cd12dfc6c24e?q=80&w=1311&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        src={locationImage}
         top="-3xl"
         userSelect="none"
         w="100svw"
-        width={1000}
         z={-1}
       />
     </Container>
