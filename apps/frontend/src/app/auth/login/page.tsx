@@ -1,17 +1,16 @@
-import { LoginPanel } from "@repo/ui/components/Generic"
+import { VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
-import { handleLogin } from "@/services/auth/AuthHandlers"
+import { LoginSection } from "@/components/client/auth/LoginSection"
 
 export const metadata: Metadata = {
   title: "Login",
   description: "Login to your account",
 }
 
-export default async function Login() {
+export default function Login() {
   return (
-    <LoginPanel
-      googleHref={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
-      onSubmit={handleLogin}
-    />
+    <VStack alignItems="center" layerStyle="wrapper">
+      <LoginSection />
+    </VStack>
   )
 }
