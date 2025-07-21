@@ -162,7 +162,7 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
             _hover={{ color: "white" }}
             as={Link}
             color="gray.100"
-            href="/auth/signin"
+            href="/auth/login"
             textDecoration="underline"
           >
             Sign in
