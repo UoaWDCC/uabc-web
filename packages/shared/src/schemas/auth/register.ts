@@ -1,7 +1,7 @@
 import z from "zod"
 import { Gender, PlayLevel, University } from "../../types"
 
-export const RegisterDetailsSchema = z.object({
+export const RegisterRequestBodySchema = z.object({
   /**
    * The user's email verification code
    * @example 123456

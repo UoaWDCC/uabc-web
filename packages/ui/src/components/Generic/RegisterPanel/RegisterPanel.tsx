@@ -6,16 +6,17 @@ import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/comp
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
   Box,
+  ButtonGroup,
   Center,
   FormControl,
   memo,
   noop,
   Text,
+  Tooltip,
   Link as UILink,
   VStack,
 } from "@yamada-ui/react"
 import Link from "next/link"
-import type { MouseEventHandler } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { GoogleLogo, UabcLogo } from "../../Icon"
 
@@ -28,11 +29,9 @@ export interface RegisterPanelProps {
    */
   onSubmit?: SubmitHandler<RegisterFormData>
   /**
-   * Handler called when user selects the Google icon button.
-   *
-   * TODO: change as necessary when implementing handler function.
+   * Href for the google icon button.
    */
-  onClickGoogle?: MouseEventHandler<HTMLButtonElement>
+  googleHref?: string
 }
 
 /**
@@ -41,7 +40,7 @@ export interface RegisterPanelProps {
  * @param props RegisterPanel component props
  * @returns A register panel component
  */
-export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelProps) => {
+export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
   const {
     register,
     handleSubmit,
@@ -128,28 +127,32 @@ export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelPro
         />
       </Center>
 
-      <Center gap={4}>
-        <IconButton
-          aria-label="Google"
-          colorScheme="secondary"
-          data-testid="google-logo"
-          fullRounded
-          onClick={onClickGoogle ?? noop}
-          variant="gradient"
-        >
-          <GoogleLogo fontSize="2xl" />
-        </IconButton>
-        {/* TODO: implement Apple auth or remove Apple icon button */}
-        <IconButton
-          aria-label="Apple"
-          colorScheme="secondary"
-          disabled
-          fullRounded
-          onClick={onClickGoogle}
-          variant="gradient"
-        >
-          <AppleIcon fontSize="2xl" />
-        </IconButton>
+      <Center>
+        <ButtonGroup gap="sm">
+          <Tooltip label="Not ready yet" placement="top">
+            <IconButton
+              aria-label="Google"
+              colorScheme="secondary"
+              disabled
+              fullRounded
+              variant="gradient"
+            >
+              <GoogleLogo fontSize="2xl" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip label="Not ready yet" placement="top">
+            {/* TODO: implement Apple auth or remove Apple icon button */}
+            <IconButton
+              aria-label="Apple"
+              colorScheme="secondary"
+              disabled
+              fullRounded
+              variant="gradient"
+            >
+              <AppleIcon fontSize="2xl" />
+            </IconButton>
+          </Tooltip>
+        </ButtonGroup>
       </Center>
 
       <Center color="gray.100" fontSize="sm" textAlign="center">
@@ -159,7 +162,7 @@ export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelPro
             _hover={{ color: "white" }}
             as={Link}
             color="gray.100"
-            href="/auth/signin"
+            href="/auth/login"
             textDecoration="underline"
           >
             Sign in
