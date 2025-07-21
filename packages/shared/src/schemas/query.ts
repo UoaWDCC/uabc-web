@@ -6,7 +6,6 @@ export const PaginationQuerySchema = z.object({
 })
 
 export const GetAllWithPaginationDataSchema = z.object({
-  docs: z.array(z.any()).optional().nullable(),
   totalDocs: z.number(),
   limit: z.number(),
   totalPages: z.number(),
