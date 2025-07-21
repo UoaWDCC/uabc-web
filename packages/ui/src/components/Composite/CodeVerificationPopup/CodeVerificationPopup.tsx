@@ -17,7 +17,7 @@ import {
 import { type FC, useRef } from "react"
 import { Controller, useForm } from "react-hook-form"
 
-interface Data {
+export interface CodeVerificationPopupData {
   pinInput: string
 }
 
@@ -40,7 +40,7 @@ interface CodeVerificationPopupProps extends Omit<ModalProps, "onSubmit"> {
   /**
    * The onSubmit handler.
    */
-  onSubmit?: (data: Data) => Promise<boolean>
+  onSubmit?: (data: CodeVerificationPopupData) => Promise<boolean>
   /**
    * The error message to display if the submission fails.
    */
@@ -83,14 +83,12 @@ export const CodeVerificationPopup: FC<CodeVerificationPopupProps> = ({
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<Data>()
+  } = useForm<CodeVerificationPopupData>()
   const { page } = useLoading()
   const notice = useNotice()
 
-  const handleSubmission = async (data: Data) => {
-    console.log("handleSubmission", data)
+  const handleSubmission = async (data: CodeVerificationPopupData) => {
     page.start()
-    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     if (onSubmit) {
       const success = await onSubmit(data)
