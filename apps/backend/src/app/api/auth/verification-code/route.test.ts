@@ -1,12 +1,15 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import AuthService from "@/business-layer/services/AuthService"
 import MailService from "@/business-layer/services/MailService"
+import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
+import { standardAuthCreateMock } from "@/test-config/mocks/Authentication.mock"
 import { POST } from "./route"
 
 describe("/api/auth/verification-code", () => {
   const userDataService = new UserDataService()
+  const authDataService = new AuthDataService()
   const email = "straightzhao@example.com"
 
   afterEach(() => {
@@ -26,7 +29,7 @@ describe("/api/auth/verification-code", () => {
     const user = await userDataService.getUserByEmail(email)
     expect(user.emailVerificationCode).toBe(code)
     expect(sendEmailMock).toHaveBeenCalledWith(email, code)
-    expect(res.status).toBe(200)
+    expect(res.status).toBe(StatusCodes.OK)
     expect(await res.json()).toEqual({ message: "Verification code sent" })
   })
 
@@ -38,17 +41,24 @@ describe("/api/auth/verification-code", () => {
 
     const res = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
 
-    expect(res.status).toBe(200)
+    expect(res.status).toBe(StatusCodes.OK)
     expect(await res.json()).toEqual({ message: "Verification code sent" })
     let user = await userDataService.getUserByEmail(email)
     expect(user.emailVerificationCode).toBe(code)
 
     vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(code2)
     const res2 = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
-    expect(res2.status).toBe(200)
+    expect(res2.status).toBe(StatusCodes.OK)
     expect(await res2.json()).toEqual({ message: "Verification code sent" })
     user = await userDataService.getUserByEmail(email)
     expect(user.emailVerificationCode).toBe(code2)
+  })
+
+  it("should return a 409 if a user already exists", async () => {
+    await authDataService.createAuth({ ...standardAuthCreateMock, email })
+    const res = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
+    expect(res.status).toBe(StatusCodes.CONFLICT)
+    expect(await res.json()).toEqual({ error: "A user with that email already exists" })
   })
 
   it("should return 400 for invalid request body", async () => {

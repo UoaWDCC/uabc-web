@@ -159,7 +159,7 @@ export const RegisterPanel = memo(({ onSubmit, onClickGoogle }: RegisterPanelPro
             _hover={{ color: "white" }}
             as={Link}
             color="gray.100"
-            href="/auth/signin"
+            href="/auth/login"
             textDecoration="underline"
           >
             Sign in
