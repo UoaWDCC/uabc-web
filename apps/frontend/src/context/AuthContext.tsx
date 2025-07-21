@@ -106,14 +106,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return await AuthService.sendEmailVerificationCode(email)
     },
     onSuccess: async (data) => {
-      if (data.success) {
-        notice({
-          title: "Email Verification Code Sent",
-          description: "Please check your email for the verification code.",
-          status: "success",
-        })
-      } else {
-        throw new Error(data.error ? data.error?.message : "Email Verification Code Failed")
+      if (!data.success) {
+        throw new Error(data.error?.message ?? "Email Verification Code Failed")
       }
     },
     onError: (error) => {
