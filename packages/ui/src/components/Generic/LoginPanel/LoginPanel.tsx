@@ -197,7 +197,7 @@ export const LoginPanel = memo(({ errorMessage, onSubmit, isLoading }: LoginPane
             _hover={{ color: "white" }}
             as={Link}
             color="gray.100"
-            href="/auth/signup"
+            href="/auth/register"
             textDecoration="underline"
           >
             Create Account
