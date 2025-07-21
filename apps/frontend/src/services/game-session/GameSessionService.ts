@@ -1,5 +1,4 @@
 import {
-  type GetAllGameSessionsResponse,
   GetAllGameSessionsResponseSchema,
   GetGameSessionResponseSchema,
   type PaginationQuery,
@@ -24,10 +23,7 @@ const GameSessionService = {
    * @param query The pagination query parameters.
    * @returns A list of all game sessions.
    */
-  getAllPaginatedGameSessions: async ({
-    limit = 100,
-    page,
-  }: PaginationQuery): Promise<GetAllGameSessionsResponse | undefined> => {
+  getAllPaginatedGameSessions: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
     const response = await apiClient.get(
       `/api/game-sessions?${query}`,

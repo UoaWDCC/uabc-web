@@ -1,6 +1,5 @@
 import {
   type CreateUserRequest,
-  type GetAllUsersResponse,
   GetAllUsersResponseSchema,
   GetUserResponseSchema,
   type PaginationQuery,
@@ -25,10 +24,7 @@ const AdminUserService = {
    * @param query The pagination query parameters.
    * @returns A promise that resolves to an array of users.
    */
-  getAllPaginatedUsers: async ({
-    limit = 100,
-    page,
-  }: PaginationQuery): Promise<GetAllUsersResponse | undefined> => {
+  getAllPaginatedUsers: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
     const response = await apiClient.get(`/api/admin/users?${query}`, GetAllUsersResponseSchema)
     return ApiClient.throwIfError(response, "Failed to fetch users")

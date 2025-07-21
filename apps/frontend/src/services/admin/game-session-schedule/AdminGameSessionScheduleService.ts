@@ -1,6 +1,5 @@
 import {
   type CreateGameSessionScheduleRequest,
-  type GetAllGameSessionSchedulesResponse,
   GetAllGameSessionSchedulesResponseSchema,
   GetGameSessionScheduleResponseSchema,
   type PaginationQuery,
@@ -29,10 +28,7 @@ const AdminGameSessionScheduleService = {
    * @param query The pagination query parameters.
    * @returns A promise that resolves to an array of game session schedules.
    */
-  getAllPaginatedGameSessionSchedules: async ({
-    limit = 100,
-    page,
-  }: PaginationQuery): Promise<GetAllGameSessionSchedulesResponse | undefined> => {
+  getAllPaginatedGameSessionSchedules: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
     const response = await apiClient.get(
       `/admin/game-session-schedules?${query}`,
