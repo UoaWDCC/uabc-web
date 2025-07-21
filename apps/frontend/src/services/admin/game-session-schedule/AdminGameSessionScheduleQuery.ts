@@ -10,12 +10,13 @@ const AdminGameSessionScheduleQuery = {
    * @param query The pagination query parameters.
    * @returns A query hook that fetches all game session schedules.
    */
-  useGetAllGameSessionSchedules: (query: PaginationQuery) => {
+  useGetPaginatedGameSessionSchedules: (query: PaginationQuery) => {
     return useInfiniteQuery({
       queryKey: [QueryKeys.GAME_SESSION_SCHEDULE_QUERY_KEY],
       initialPageParam: 1,
       queryFn: async () => {
-        const response = await AdminGameSessionScheduleService.getAllGameSessionSchedules(query)
+        const response =
+          await AdminGameSessionScheduleService.getAllPaginatedGameSessionSchedules(query)
         return response
       },
       getNextPageParam: (lastPage) => lastPage?.data?.nextPage,

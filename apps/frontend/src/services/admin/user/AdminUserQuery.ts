@@ -10,12 +10,12 @@ const AdminUserQuery = {
    * @param query The pagination query parameters.
    * @returns A query hook that fetches all users.
    */
-  useGetAllUsers: (query: PaginationQuery) => {
+  useGetPaginatedUsers: (query: PaginationQuery) => {
     return useInfiniteQuery({
       queryKey: [QueryKeys.USER_QUERY_KEY],
       initialPageParam: 1,
       queryFn: async ({ pageParam }) => {
-        const response = await AdminUserService.getAllUsers({
+        const response = await AdminUserService.getAllPaginatedUsers({
           ...query,
           page: pageParam,
         })

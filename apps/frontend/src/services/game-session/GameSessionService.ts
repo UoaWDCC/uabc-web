@@ -24,7 +24,7 @@ const GameSessionService = {
    * @param query The pagination query parameters.
    * @returns A list of all game sessions.
    */
-  getAllGameSessions: async ({
+  getAllPaginatedGameSessions: async ({
     limit = 100,
     page,
   }: PaginationQuery): Promise<GetAllGameSessionsResponse | undefined> => {

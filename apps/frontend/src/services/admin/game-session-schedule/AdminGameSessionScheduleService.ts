@@ -29,7 +29,7 @@ const AdminGameSessionScheduleService = {
    * @param query The pagination query parameters.
    * @returns A promise that resolves to an array of game session schedules.
    */
-  getAllGameSessionSchedules: async ({
+  getAllPaginatedGameSessionSchedules: async ({
     limit = 100,
     page,
   }: PaginationQuery): Promise<GetAllGameSessionSchedulesResponse | undefined> => {

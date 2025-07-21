@@ -25,7 +25,7 @@ const AdminUserService = {
    * @param query The pagination query parameters.
    * @returns A promise that resolves to an array of users.
    */
-  getAllUsers: async ({
+  getAllPaginatedUsers: async ({
     limit = 100,
     page,
   }: PaginationQuery): Promise<GetAllUsersResponse | undefined> => {

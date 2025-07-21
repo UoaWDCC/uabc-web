@@ -10,12 +10,12 @@ const GameSessionQuery = {
    * @param query The pagination query parameters.
    * @returns A query hook that fetches all game sessions.
    */
-  useGetAllGameSessions: (query: PaginationQuery) => {
+  useGetPaginatedGameSessions: (query: PaginationQuery) => {
     return useInfiniteQuery({
       queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY],
       initialPageParam: 1,
       queryFn: async ({ pageParam }) => {
-        const response = await GameSessionService.getAllGameSessions({
+        const response = await GameSessionService.getAllPaginatedGameSessions({
           ...query,
           page: pageParam,
         })
