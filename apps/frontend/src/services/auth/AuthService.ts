@@ -1,4 +1,9 @@
-import { GetUserResponseSchema, LoginResponseSchema } from "@repo/shared"
+import {
+  CommonResponse,
+  GetUserResponseSchema,
+  LoginResponseSchema,
+  type RegisterRequestBody,
+} from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import { apiClient } from "@/lib/api/client"
 
@@ -18,6 +23,15 @@ const AuthService = {
     )
     return response
   },
+  register: async (email: string, password: string, emailVerificationCode: string) => {
+    const response = await apiClient.post(
+      "/api/auth/register",
+      { email, password, emailVerificationCode } satisfies RegisterRequestBody,
+      CommonResponse,
+    )
+    return response
+  },
+
   /**
    * Gets user information from a JWT token by making a request to the backend.
    *
