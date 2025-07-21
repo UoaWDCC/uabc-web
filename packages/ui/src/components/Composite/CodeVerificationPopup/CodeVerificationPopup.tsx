@@ -49,10 +49,6 @@ interface CodeVerificationPopupProps extends Omit<ModalProps, "onSubmit"> {
    * Whether the popup is loading.
    */
   isLoading?: boolean
-  /**
-   * The function to close the popup.
-   */
-  close: () => void
 }
 
 /**
@@ -75,7 +71,6 @@ export const CodeVerificationPopup: FC<CodeVerificationPopupProps> = ({
   onSubmit,
   errorMessage,
   isLoading,
-  close,
   ...props
 }) => {
   const formRef = useRef<HTMLFormElement>(null)
@@ -98,7 +93,6 @@ export const CodeVerificationPopup: FC<CodeVerificationPopupProps> = ({
           description: "The code has been verified.",
           status: "success",
         })
-        close()
       }
     }
     page.finish()

@@ -8,12 +8,14 @@ import {
 import { RegisterPanel } from "@repo/ui/components/Generic"
 import { usePopupState } from "@repo/ui/hooks"
 import { useNotice } from "@yamada-ui/react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useAuth } from "@/context/AuthContext"
 
 export const RegisterSection = () => {
   const { emailVerificationCode, register } = useAuth()
-  const { close, isOpen, open } = usePopupState({
+  const router = useRouter()
+  const { isOpen, open } = usePopupState({
     popupId: Popup.CODE_VERIFICATION,
     initialValue: "",
   })
@@ -52,7 +54,7 @@ export const RegisterSection = () => {
           description: "Redirecting to login now",
           status: "success",
         })
-        window.location.href = "/auth/login"
+        router.push("/auth/login")
         return true
       }
       return false
@@ -64,7 +66,6 @@ export const RegisterSection = () => {
   return (
     <>
       <CodeVerificationPopup
-        close={close}
         message="Please enter the code sent to your email"
         onSubmit={handleRegister}
         open={isOpen}
