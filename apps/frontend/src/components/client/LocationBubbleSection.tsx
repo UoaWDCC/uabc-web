@@ -1,7 +1,7 @@
 import { LocationBubble, type LocationBubbleProps } from "@repo/ui/components/Generic"
 import { Image } from "@repo/ui/components/Primitive"
 import { Box, Container } from "@yamada-ui/react"
-import locationImage from "@/assets/images/DSC9269.webp"
+import locationBubbleImage from "@/assets/images/DSC9269.webp"
 
 const mockBubble1: LocationBubbleProps = {
   locationImage: {
@@ -71,7 +71,7 @@ export const LocationBubbleSection = () => {
         placeSelf="center"
         pointerEvents="none"
         position="absolute"
-        src={locationImage}
+        src={locationBubbleImage}
         top="-3xl"
         userSelect="none"
         w="100svw"
