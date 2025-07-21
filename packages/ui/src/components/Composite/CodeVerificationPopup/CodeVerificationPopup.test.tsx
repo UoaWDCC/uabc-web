@@ -12,22 +12,22 @@ const defaultProps = {
 
 describe("<CodeVerificationPopup />", () => {
   it("should render and be closed by default if search param is not set", () => {
-    const { close, isOpen } = usePopupState({
+    const { isOpen } = usePopupState({
       popupId: Popup.CODE_VERIFICATION,
       initialValue: "",
     })
-    render(<CodeVerificationPopup close={close} open={isOpen} {...defaultProps} />, {
+    render(<CodeVerificationPopup open={isOpen} {...defaultProps} />, {
       wrapper: withNuqsTestingAdapter(),
     })
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
   })
 
   it("should open when the search param is set", () => {
-    const { close, isOpen } = usePopupState({
+    const { isOpen } = usePopupState({
       popupId: Popup.CODE_VERIFICATION,
       initialValue: "",
     })
-    render(<CodeVerificationPopup close={close} open={isOpen} {...defaultProps} />, {
+    render(<CodeVerificationPopup open={isOpen} {...defaultProps} />, {
       wrapper: withNuqsTestingAdapter({
         searchParams: {
           [Popup.CODE_VERIFICATION]: "open",
@@ -41,12 +41,12 @@ describe("<CodeVerificationPopup />", () => {
 
   it("should submit the form when the code is entered", async () => {
     const onSubmit = vi.fn()
-    const { close, isOpen } = usePopupState({
+    const { isOpen } = usePopupState({
       popupId: Popup.CODE_VERIFICATION,
       initialValue: "",
     })
     const { user } = render(
-      <CodeVerificationPopup close={close} open={isOpen} {...defaultProps} onSubmit={onSubmit} />,
+      <CodeVerificationPopup open={isOpen} {...defaultProps} onSubmit={onSubmit} />,
       {
         wrapper: withNuqsTestingAdapter({
           searchParams: {
