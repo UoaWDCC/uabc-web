@@ -12,3 +12,13 @@ export const BookingSchema = z.object({
 export const CreateBookingRequestBodySchema = BookingSchema.omit({
   user: true,
 })
+
+export const GetBookingsResponseSchema = z.object({
+  data: z.array(
+    BookingSchema.extend({
+      id: z.string(),
+      updatedAt: z.string(),
+      createdAt: z.string(),
+    }),
+  ),
+})

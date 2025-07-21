@@ -1,6 +1,5 @@
 "use client"
 
-import { bookingsMock } from "@repo/shared/mocks"
 import {
   AdditionalInfo,
   AdditionalInfoFields,
@@ -9,15 +8,29 @@ import {
   ProfileDetailsFields,
   UserPanel,
 } from "@repo/ui/components/Composite"
-import { Center, Grid, GridItem, Loading, VStack } from "@yamada-ui/react"
-import { redirect } from "next/navigation"
-import { memo } from "react"
+import { Button } from "@repo/ui/components/Primitive"
+import { CircleAlertIcon } from "@yamada-ui/lucide"
+import { Center, Container, EmptyState, Grid, GridItem, Loading } from "@yamada-ui/react"
+import { useRouter } from "next/navigation"
+import { memo, useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
+import { useMyBookings } from "@/services/BookingQuery"
 
 export const ProfileSection = memo(() => {
   const { user, isLoading, isPending } = useAuth()
+  const { data: bookings, isLoading: isBookingsLoading, isError: isBookingsError } = useMyBookings()
+  const router = useRouter()
 
-  if (isLoading || isPending) {
+  // useEffect is necessary here to ensure navigation (router.push) only occurs after render,
+  // not during render. React does not allow side effects like navigation during render phase.
+  // This follows React and Next.js best practices for safe, predictable navigation if the user is not logged in.
+  useEffect(() => {
+    if (!isLoading && !isPending && !user) {
+      router.push("/auth/login")
+    }
+  }, [isLoading, isPending, user, router])
+
+  if (isLoading || isPending || isBookingsLoading) {
     return (
       <Center minH="50vh">
         <Loading boxSize="sm" />
@@ -26,17 +39,25 @@ export const ProfileSection = memo(() => {
   }
 
   if (!user) {
-    redirect("/auth/login")
+    return (
+      <EmptyState
+        description="Explore our products and add items to your cart"
+        indicator={<CircleAlertIcon />}
+        title="Your cart is empty"
+      >
+        <Button>Back to home</Button>
+      </EmptyState>
+    )
   }
 
   return (
-    <VStack gap="xl" maxW="1220px">
-      <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }}>
+    <Container centerContent gap="xl" layerStyle="container">
+      <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }} w="full">
         <GridItem>
           <UserPanel user={user} />
         </GridItem>
         <GridItem>
-          <ProfileBookingPanel bookings={bookingsMock} />
+          <ProfileBookingPanel bookings={bookings ?? []} error={isBookingsError} />
         </GridItem>
       </Grid>
 
@@ -70,7 +91,7 @@ export const ProfileSection = memo(() => {
         title="Additional Info"
         w="full"
       />
-    </VStack>
+    </Container>
   )
 })
 

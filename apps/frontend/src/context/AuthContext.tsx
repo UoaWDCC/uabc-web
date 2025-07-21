@@ -20,6 +20,7 @@ type AuthState = {
   isLoading: boolean
   isPending: boolean
   error: string | null
+  token: string | null
 }
 
 type AuthActions = {
@@ -155,6 +156,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isLoading: isLoading || login.isPending,
     isPending: isPending || login.isPending,
     error: error ? error.message : null,
+    token: token ?? null,
   }
 
   const authActions: AuthActions = {
