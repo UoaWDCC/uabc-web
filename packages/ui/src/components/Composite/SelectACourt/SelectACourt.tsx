@@ -5,9 +5,17 @@ import { BookingTimesCardGroup } from "@repo/ui/components/Generic"
 import { ShuttleIcon } from "@repo/ui/components/Icon"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
 import { ArrowLeftIcon, ArrowRightIcon } from "@yamada-ui/lucide"
-import { Card, CardBody, CardHeader, Center, HStack, IconButton } from "@yamada-ui/react"
-import { memo, useEffect, useMemo } from "react"
-import { useForm, useWatch } from "react-hook-form"
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Center,
+  HStack,
+  IconButton,
+} from "@yamada-ui/react"
+import { memo } from "react"
+import { Controller, useForm } from "react-hook-form"
 
 type Variant = MembershipType.member | MembershipType.casual
 
@@ -27,7 +35,7 @@ interface SelectACourtFormData {
    * - For members: array of session IDs (up to 2)
    * - For casual: single session ID or undefined
    */
-  bookingTimes: string | string[]
+  bookingTimes: string[]
 }
 
 export interface SelectACourtProps {
@@ -43,7 +51,7 @@ export interface SelectACourtProps {
    *
    * @param data - The form data including selected sessions
    */
-  onNext?: (data: SelectACourtFormData) => void
+  onNext?: (data: { bookingTimes: string | string[] | undefined }) => void
 }
 
 export const SelectACourt = memo<SelectACourtProps>(
@@ -51,61 +59,18 @@ export const SelectACourt = memo<SelectACourtProps>(
     const isMember = variant === "member"
     const max = isMember ? 2 : 1
 
-    const {
-      control,
-      setValue,
-      handleSubmit,
-      formState: { isSubmitting },
-    } = useForm({
-      defaultValues: {
-        bookingTimes: isMember ? [] : "",
-      },
+    const { control, handleSubmit } = useForm<SelectACourtFormData>({
+      defaultValues: { bookingTimes: [] },
     })
-
-    const watched = useWatch({ control, name: "bookingTimes" })
-
-    const selectionArray: string[] = isMember
-      ? (watched as string[])
-      : watched
-        ? [watched as string]
-        : []
-
-    useEffect(() => {
-      if (isMember && watched.length > max) {
-        setValue("bookingTimes", watched.slice(0, max), { shouldDirty: true })
-      }
-    }, [watched, isMember, max, setValue])
-
-    useEffect(() => {
-      onSelect?.(selectionArray)
-    }, [selectionArray, onSelect])
-
-    const processedSessions = useMemo(
-      () =>
-        sessions.map((s) => {
-          const selected = selectionArray.includes(s.value)
-          const capReached = selectionArray.length >= max
-          return {
-            ...s,
-            memberAttendees: isMember ? s.memberAttendees : undefined,
-            casualAttendees: isMember ? s.casualAttendees : undefined,
-            disabled: s.disabled || (isMember ? capReached && !selected : !!watched && !selected),
-          }
-        }),
-      [sessions, selectionArray, max, isMember, watched],
-    )
-
-    const handleNext = (data: SelectACourtFormData) => {
-      if (onNext) {
-        onNext(data)
-      } else {
-        console.log("Next step with data:", data)
-      }
+    const onSubmit = (data: SelectACourtFormData) => {
+      const external = isMember ? data.bookingTimes : (data.bookingTimes[0] ?? undefined)
+      onNext?.({ bookingTimes: external })
     }
 
     return (
       <Card
         alignItems="center"
+        as="form"
         backdropBlur="15px"
         backdropFilter="auto"
         bg={["secondary.50", "secondary.800"]}
@@ -113,6 +78,7 @@ export const SelectACourt = memo<SelectACourtProps>(
         gap="md"
         justifyContent="center"
         layerStyle="gradientBorder"
+        onSubmit={handleSubmit(onSubmit)}
         px={{ base: "md", md: "xl" }}
         py="lg"
         rounded="3xl"
@@ -136,38 +102,84 @@ export const SelectACourt = memo<SelectACourtProps>(
             >
               {title}
             </Heading.h2>
-
-            <IconWithText
-              icon={<ShuttleIcon />}
-              justifySelf="end"
-              label={`Sessions Left: ${max - selectionArray.length}`}
+            <Controller
+              control={control}
+              name="bookingTimes"
+              render={({ field }) => (
+                <IconWithText
+                  icon={<ShuttleIcon />}
+                  justifySelf="end"
+                  label={`Sessions Left: ${max - field.value.length}`}
+                />
+              )}
             />
           </HStack>
         </CardHeader>
         <CardBody p="0" w="full">
-          <form onSubmit={handleSubmit(handleNext)} style={{ width: "100%" }}>
-            <BookingTimesCardGroup
-              control={control}
-              display="grid"
-              gap={{ base: "sm", md: "md" }}
-              gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)" }}
-              items={processedSessions} // Use the computed sessions from useMemo
-              name="bookingTimes"
-            />
-            <Center mt="md" py="md" w="full">
-              <Button
-                colorScheme="primary"
-                endIcon={<ArrowRightIcon />}
-                isDisabled={selectionArray.length === 0}
-                isLoading={isSubmitting}
-                size="lg"
-                type="submit"
-              >
-                Next
-              </Button>
-            </Center>
-          </form>
+          <Controller
+            control={control}
+            name="bookingTimes"
+            render={({ field }) => {
+              const selected: string[] = field.value || []
+              const capReached = selected.length >= max
+
+              const processed = sessions.map((s) => {
+                const isSelected = selected.includes(s.value)
+                return {
+                  ...s,
+                  memberAttendees: isMember ? s.memberAttendees : undefined,
+                  casualAttendees: isMember ? s.casualAttendees : undefined,
+                  disabled: s.disabled || (capReached && !isSelected), // applies to both variants
+                }
+              })
+
+              const handleChange = (next: string[]) => {
+                if (isMember) {
+                  if (next.length > max) return
+                  field.onChange(next)
+                  onSelect?.(next.length ? next : undefined)
+                } else {
+                  // casual: toggle behavior
+                  const last = next[next.length - 1]
+                  const newArray = selected[0] === last ? [] : [last]
+                  field.onChange(newArray)
+                  onSelect?.(newArray[0] ?? undefined)
+                }
+              }
+
+              return (
+                <BookingTimesCardGroup
+                  control={control}
+                  display="grid"
+                  gap={{ base: "sm", md: "md" }}
+                  gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)" }}
+                  items={processed} // Use the computed sessions from useMemo
+                  name="bookingTimes"
+                  onChange={handleChange}
+                />
+              )
+            }}
+          />
         </CardBody>
+        <CardFooter>
+          <Center mt="md" py="md" w="full">
+            <Controller
+              control={control}
+              name="bookingTimes"
+              render={({ field }) => (
+                <Button
+                  colorScheme="primary"
+                  endIcon={<ArrowRightIcon />}
+                  isDisabled={field.value?.length === 0}
+                  size="lg"
+                  type="submit"
+                >
+                  Next
+                </Button>
+              )}
+            />
+          </Center>
+        </CardFooter>
       </Card>
     )
   },
