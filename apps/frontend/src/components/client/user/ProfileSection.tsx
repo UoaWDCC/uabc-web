@@ -16,7 +16,7 @@ import { Container, Grid, GridItem } from "@yamada-ui/react"
 import { useRouter } from "next/navigation"
 import { memo, useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
-import { useMyBookings } from "@/services/BookingQuery"
+import { useMyBookings } from "@/services/bookings/BookingQuery"
 
 export const ProfileSection = memo(() => {
   const { user, isLoading, isPending } = useAuth()
@@ -42,48 +42,49 @@ export const ProfileSection = memo(() => {
           {isBookingsLoading || !user ? (
             <ProfileBookingPanelSkeleton />
           ) : (
-            <ProfileBookingPanel bookings={bookings ?? []} error={isBookingsError} />
+            <ProfileBookingPanel bookings={bookings?.data ?? []} error={isBookingsError} />
           )}
         </GridItem>
       </Grid>
 
       {isLoading || isPending || !user ? (
-        <ProfileDetailsSkeleton />
+        <>
+          <AdditionalInfoSkeleton />
+          <ProfileDetailsSkeleton />
+        </>
       ) : (
-        <ProfileDetails
-          defaultValues={{
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-          }}
-          fields={ProfileDetailsFields}
-          onSave={async (data) => {
-            // TODO: Implement update user mutation
-            console.log(data)
-          }}
-          title="Profile Details"
-          w="full"
-        />
-      )}
-
-      {isLoading || isPending || !user ? (
-        <AdditionalInfoSkeleton />
-      ) : (
-        <AdditionalInfo
-          defaultValues={{
-            gender: user.gender,
-            playLevel: user.playLevel,
-            dietaryRequirements: user.dietaryRequirements,
-          }}
-          fields={AdditionalInfoFields}
-          onSave={async (data) => {
-            // TODO: Implement update user mutation
-            console.log(data)
-          }}
-          title="Additional Info"
-          w="full"
-        />
+        <>
+          {" "}
+          <ProfileDetails
+            defaultValues={{
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              phoneNumber: user.phoneNumber,
+            }}
+            fields={ProfileDetailsFields}
+            onSave={async (data) => {
+              // TODO: Implement update user mutation
+              console.log(data)
+            }}
+            title="Profile Details"
+            w="full"
+          />
+          <AdditionalInfo
+            defaultValues={{
+              gender: user.gender,
+              playLevel: user.playLevel,
+              dietaryRequirements: user.dietaryRequirements,
+            }}
+            fields={AdditionalInfoFields}
+            onSave={async (data) => {
+              // TODO: Implement update user mutation
+              console.log(data)
+            }}
+            title="Additional Info"
+            w="full"
+          />
+        </>
       )}
     </Container>
   )

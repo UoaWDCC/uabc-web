@@ -92,6 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     staleTime: 1000 * 60 * 5,
     refetchOnMount: true,
     refetchOnWindowFocus: false,
+    enabled: !!token,
   })
 
   const login = useMutation({
@@ -166,7 +167,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   useUpdateEffect(() => {
-    if (!isLoading && token && user === null) {
+    if (!isLoading && token && !user) {
       setToken(null)
     }
   }, [isLoading, token, user, setToken])
