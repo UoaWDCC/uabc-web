@@ -138,8 +138,8 @@ importers:
         specifier: 0.34.3
         version: 0.34.3
       zod:
-        specifier: 3.25.74
-        version: 3.25.74
+        specifier: 3.25.76
+        version: 3.25.76
     devDependencies:
       '@repo/shared':
         specifier: workspace:*
@@ -197,7 +197,7 @@ importers:
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
       nuqs:
         specifier: 2.4.3
-        version: 2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
+        version: 2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -208,8 +208,8 @@ importers:
         specifier: 7.60.0
         version: 7.60.0(react@19.1.0)
       zod:
-        specifier: 3.25.74
-        version: 3.25.74
+        specifier: 3.25.76
+        version: 3.25.76
     devDependencies:
       '@cloudflare/next-on-pages':
         specifier: 1.13.12
@@ -324,7 +324,7 @@ importers:
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
       nuqs:
         specifier: 2.4.3
-        version: 2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
+        version: 2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -338,8 +338,8 @@ importers:
         specifier: 9.0.15
         version: 9.0.15(@testing-library/dom@10.4.0)(prettier@3.6.2)
       zod:
-        specifier: 3.25.74
-        version: 3.25.74
+        specifier: 3.25.76
+        version: 3.25.76
     devDependencies:
       '@mdx-js/react':
         specifier: 3.1.0
@@ -9144,6 +9144,9 @@ packages:
   zod@3.25.74:
     resolution: {integrity: sha512-J8poo92VuhKjNknViHRAIuuN6li/EwFbAC8OedzI8uxpEPGiXHGQu9wemIAioIpqgfB4SySaJhdk0mH5Y4ICBg==}
 
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -16842,9 +16845,9 @@ snapshots:
   langbase@1.2.0(react@19.1.0)(ws@8.18.3):
     dependencies:
       dotenv: 16.6.1
-      openai: 4.104.0(ws@8.18.3)(zod@3.25.74)
-      zod: 3.25.74
-      zod-validation-error: 3.5.3(zod@3.25.74)
+      openai: 4.104.0(ws@8.18.3)(zod@3.25.76)
+      zod: 3.25.76
+      zod-validation-error: 3.5.3(zod@3.25.76)
     optionalDependencies:
       react: 19.1.0
     transitivePeerDependencies:
@@ -17652,7 +17655,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuqs@2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0):
+  nuqs@2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0):
     dependencies:
       mitt: 3.0.1
       react: 19.1.0
@@ -17739,7 +17742,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@4.104.0(ws@8.18.3)(zod@3.25.74):
+  openai@4.104.0(ws@8.18.3)(zod@3.25.76):
     dependencies:
       '@types/node': 18.19.119
       '@types/node-fetch': 2.6.12
@@ -17750,7 +17753,7 @@ snapshots:
       node-fetch: 2.7.0
     optionalDependencies:
       ws: 8.18.3
-      zod: 3.25.74
+      zod: 3.25.76
     transitivePeerDependencies:
       - encoding
 
@@ -19881,12 +19884,14 @@ snapshots:
       cookie: 1.0.2
       youch-core: 0.3.3
 
-  zod-validation-error@3.5.3(zod@3.25.74):
+  zod-validation-error@3.5.3(zod@3.25.76):
     dependencies:
-      zod: 3.25.74
+      zod: 3.25.76
 
   zod@3.22.3: {}
 
   zod@3.25.74: {}
+
+  zod@3.25.76: {}
 
   zwitch@2.0.4: {}
