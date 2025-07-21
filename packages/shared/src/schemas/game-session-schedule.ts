@@ -1,10 +1,6 @@
 import z from "zod"
 import type { GameSessionSchedule as GameSessionScheduleType } from "../payload-types"
-import {
-  type CreateGameSessionScheduleData,
-  type UpdateGameSessionScheduleData,
-  Weekday,
-} from "../types"
+import type { CreateGameSessionScheduleData, UpdateGameSessionScheduleData } from "../types"
 import { GetAllWithPaginationDataSchema } from "./query"
 import { SemesterSchema } from "./semester"
 
