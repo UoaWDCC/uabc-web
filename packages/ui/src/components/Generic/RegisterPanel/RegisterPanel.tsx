@@ -2,7 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type RegisterFormData, RegisterFormDataSchema } from "@repo/shared"
-import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
+import {
+  AutoCompleteType,
+  Button,
+  Heading,
+  IconButton,
+  InputType,
+  TextInput,
+} from "@repo/ui/components/Primitive"
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
   Box,
@@ -52,19 +59,20 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
   return (
     <VStack
       as="form"
-      bgColor="secondary.900"
-      borderRadius={{ base: undefined, md: "3xl" }}
-      layerStyle={{ base: undefined, md: "gradientBorder" }}
+      bg="gray.900"
+      layerStyle="gradientBorder"
+      maxW="lg"
       onSubmit={handleSubmit(onSubmit ?? noop)}
-      p={{ base: "md", lg: "lg" }}
-      w={{ base: "full", md: "md" }}
+      p="lg"
+      rounded="3xl"
+      w="full"
     >
-      <Center py={{ base: "md", md: "unset" }}>
+      <Center>
         {/* TODO: replace with correct logo */}
         <UabcLogo />
       </Center>
 
-      <Center display={{ base: "none", md: "block" }} textAlign="center">
+      <Center textAlign="center">
         <VStack>
           <Heading.h2>Welcome to UABC</Heading.h2>
           <Text>Please enter your details to register</Text>
@@ -73,6 +81,7 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
 
       <FormControl errorMessage={errors.email?.message} invalid={!!errors.email}>
         <TextInput
+          autoComplete={AutoCompleteType.Email}
           data-testid="email"
           placeholder="Email Address"
           startElement={<MailIcon />}
@@ -82,6 +91,7 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
       </FormControl>
       <FormControl errorMessage={errors.password?.message} invalid={!!errors.password}>
         <TextInput
+          autoComplete={AutoCompleteType.NewPassword}
           data-testid="password"
           placeholder="Password"
           startElement={<LockIcon />}
@@ -94,6 +104,7 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
         invalid={!!errors.confirmPassword}
       >
         <TextInput
+          autoComplete={AutoCompleteType.NewPassword}
           data-testid="confirm-password"
           placeholder="Confirm Password"
           startElement={<LockIcon />}
@@ -165,7 +176,7 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
             href="/auth/login"
             textDecoration="underline"
           >
-            Sign in
+            Login
           </UILink>
         </Text>
       </Center>

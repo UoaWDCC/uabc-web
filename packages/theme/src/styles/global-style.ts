@@ -20,9 +20,15 @@ export const globalStyle: UIStyle = {
     textWrap: "pretty",
     display: "grid",
     gridTemplateColumns: "1fr",
-    gridTemplateRows: "1fr auto",
-    minH: { base: "100dvh", lg: "max(100dvh, 8xl)" },
+    gridTemplateRows: "auto 1fr auto",
+    minH: { base: "100dvh", lg: "max(100dvh, 9xl)" },
     overflowX: "clip",
+  },
+  main: {
+    alignItems: "center",
+    justifyContent: { base: "start", lg: "center" },
+    minH: { base: "lg", lg: "3xl" },
+    my: { base: "lg", lg: "0" },
   },
   _dark: {
     "*::placeholder, *[data-placeholder]": {

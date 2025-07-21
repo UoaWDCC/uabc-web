@@ -57,7 +57,7 @@ export const NavigationBarDesktop = ({
       zIndex={1001}
     >
       <HStack as={Motion} gap={0}>
-        <Box as={Link} borderRadius="50%" href="/" padding="sm" position="relative">
+        <Box as={Link} borderRadius="50%" href="/" position="relative">
           <UabcLogo />
         </Box>
         <NavItems navItems={navItems} />

@@ -1,5 +1,5 @@
 import { NuqsProvider } from "@repo/ui/components/Provider"
-import { Center, ColorModeScript } from "@yamada-ui/react"
+import { ColorModeScript } from "@yamada-ui/react"
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Providers } from "@/app/providers"
@@ -68,21 +68,7 @@ export default function RootLayout({
           <ColorModeScript initialColorMode="dark" />
           <Providers>
             <NavigationBarServerSection />
-            <Center
-              alignItems="center"
-              as="main"
-              flex="1"
-              flexDirection="column"
-              justifyContent={{ base: "flex-center", lg: "center" }}
-              maxW="8xl"
-              minH={{ base: "100dvh", lg: "unset" }}
-              placeSelf="center"
-              px="md"
-              py="lg"
-              w="full"
-            >
-              {children}
-            </Center>
+            {children}
             <FooterServerSection />
           </Providers>
         </NuqsProvider>

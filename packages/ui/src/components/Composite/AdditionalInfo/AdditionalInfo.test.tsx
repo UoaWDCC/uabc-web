@@ -1,4 +1,3 @@
-import { Gender, PlayLevel } from "@repo/shared"
 import { casualUserMock } from "@repo/shared/mocks"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
@@ -15,8 +14,8 @@ const queryClient = new QueryClient({
 
 const userMock = {
   ...casualUserMock,
-  gender: casualUserMock.gender ?? Gender.male,
-  playLevel: casualUserMock.playLevel ?? PlayLevel.beginner,
+  gender: casualUserMock.gender ?? "",
+  playLevel: casualUserMock.playLevel ?? "",
 }
 
 const createWrapper = ({ children }: { children: ReactNode }) => (
