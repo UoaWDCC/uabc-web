@@ -18,8 +18,8 @@ const AdminGameSessionScheduleQuery = {
         const response = await AdminGameSessionScheduleService.getAllGameSessionSchedules(query)
         return response
       },
-      getNextPageParam: (lastPage) => lastPage?.data?.nextPage ?? undefined,
-      getPreviousPageParam: (firstPage) => firstPage?.data?.prevPage ?? undefined,
+      getNextPageParam: (lastPage) => lastPage?.data?.nextPage,
+      getPreviousPageParam: (firstPage) => firstPage?.data?.prevPage,
     })
   },
 } as const
