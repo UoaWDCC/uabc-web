@@ -7,7 +7,7 @@ import {
 } from "@repo/ui/components/Composite"
 import { RegisterPanel } from "@repo/ui/components/Generic"
 import { usePopupState } from "@repo/ui/hooks"
-import { useNotice } from "@yamada-ui/react"
+import { Container, useNotice } from "@yamada-ui/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useAuth } from "@/context/AuthContext"
@@ -64,7 +64,7 @@ export const RegisterSection = () => {
   }
 
   return (
-    <>
+    <Container centerContent layerStyle="container">
       <CodeVerificationPopup
         message="Please enter the code sent to your email"
         onSubmit={handleRegister}
@@ -72,6 +72,6 @@ export const RegisterSection = () => {
         title="Verify Your Email"
       />
       <RegisterPanel onSubmit={handleSendVerificationCode} />
-    </>
+    </Container>
   )
 }

@@ -2,7 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type RegisterFormData, RegisterFormDataSchema } from "@repo/shared"
-import { Button, Heading, IconButton, InputType, TextInput } from "@repo/ui/components/Primitive"
+import {
+  AutoCompleteType,
+  Button,
+  Heading,
+  IconButton,
+  InputType,
+  TextInput,
+} from "@repo/ui/components/Primitive"
 import { AppleIcon, LockIcon, MailIcon } from "@yamada-ui/lucide"
 import {
   Box,
@@ -74,6 +81,7 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
 
       <FormControl errorMessage={errors.email?.message} invalid={!!errors.email}>
         <TextInput
+          autoComplete={AutoCompleteType.Email}
           data-testid="email"
           placeholder="Email Address"
           startElement={<MailIcon />}
@@ -83,6 +91,7 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
       </FormControl>
       <FormControl errorMessage={errors.password?.message} invalid={!!errors.password}>
         <TextInput
+          autoComplete={AutoCompleteType.Password}
           data-testid="password"
           placeholder="Password"
           startElement={<LockIcon />}
@@ -95,6 +104,7 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
         invalid={!!errors.confirmPassword}
       >
         <TextInput
+          autoComplete={AutoCompleteType.Password}
           data-testid="confirm-password"
           placeholder="Confirm Password"
           startElement={<LockIcon />}
