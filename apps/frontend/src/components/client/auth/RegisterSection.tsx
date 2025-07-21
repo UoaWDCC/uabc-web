@@ -1,7 +1,6 @@
 "use client"
 
-import { Popup } from "@repo/shared/enums"
-import type { RegisterFormData } from "@repo/shared/types"
+import { Popup, type RegisterFormData } from "@repo/shared"
 import {
   CodeVerificationPopup,
   type CodeVerificationPopupData,
@@ -14,7 +13,7 @@ import { useAuth } from "@/context/AuthContext"
 
 export const RegisterSection = () => {
   const { emailVerificationCode, register } = useAuth()
-  const { close, isOpen, toggle } = usePopupState({
+  const { close, isOpen, open } = usePopupState({
     popupId: Popup.CODE_VERIFICATION,
     initialValue: "",
   })
@@ -31,7 +30,7 @@ export const RegisterSection = () => {
           description: `Please check your inbox for ${data.email}`,
           status: "success",
         })
-        toggle()
+        open()
       }
     } catch (error) {
       return {
@@ -53,6 +52,7 @@ export const RegisterSection = () => {
           description: "Redirecting to login now",
           status: "success",
         })
+        window.location.href = "/auth/login"
         return true
       }
       return false
