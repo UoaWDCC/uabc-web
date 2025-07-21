@@ -234,6 +234,10 @@ importers:
         version: 5.8.3
 
   packages/shared:
+    dependencies:
+      next:
+        specifier: 15.3.5
+        version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
