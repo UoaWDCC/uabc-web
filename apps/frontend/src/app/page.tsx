@@ -89,7 +89,7 @@ export default async function Home() {
             alt="Person smashing shuttlecock"
             borderTopRadius="3xl"
             h="full"
-            height={600}
+            height={1000}
             maxH="1150px"
             maxW="2000px"
             minH="480px"
@@ -99,7 +99,7 @@ export default async function Home() {
             position="relative"
             src="https://images.unsplash.com/photo-1599391398131-cd12dfc6c24e?q=80&w=1311&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             w="full"
-            width={400}
+            width={1000}
             z={-1}
           />
           <Box
