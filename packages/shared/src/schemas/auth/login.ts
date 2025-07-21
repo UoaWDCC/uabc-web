@@ -7,7 +7,7 @@ export const JWTEncryptedUserSchema = z.object({
   accessToken: z.string().optional(),
 })
 
-export const UserInfoResponseSchema = z.object({
+export const GoogleUserInfoResponseSchema = z.object({
   /**
    * The unique ID of a Google user
    * @example 111111111111111111111

@@ -1,5 +1,5 @@
 import configPromise from "@payload-config"
-import type { User } from "@repo/shared/payload-types"
+import type { RequestWithUser } from "@repo/shared"
 import { NextRequest } from "next/server"
 import { type CollectionSlug, getPayload, type Payload } from "payload"
 
@@ -48,7 +48,7 @@ export const clearCollection = async (payloadObject: Payload, collectionName: Co
  * @returns The created Next Request
  */
 export function createMockNextRequest(
-  url: string,
+  url = "",
   method: "GET" | "POST" | "PATCH" | "DELETE" = "GET",
   body?: Record<string, unknown>,
 ) {
@@ -60,5 +60,5 @@ export function createMockNextRequest(
         "Content-Type": "application/json",
       },
     }),
-  }) as NextRequest & { user: User }
+  }) as RequestWithUser
 }

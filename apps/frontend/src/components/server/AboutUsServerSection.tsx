@@ -1,4 +1,5 @@
 import { AboutUsSection } from "@repo/ui/components/Composite"
+import { Container } from "@yamada-ui/react"
 import { use } from "react"
 import { getAboutUsInfo } from "@/services/cms/about-us-info/AboutUsInfoService"
 
@@ -34,5 +35,9 @@ const mockItems = [
 export const AboutUsServerSection = () => {
   const { data: aboutUsItems } = use(getAboutUsInfo())
 
-  return <AboutUsSection cards={aboutUsItems.items} items={mockItems} />
+  return (
+    <Container centerContent layerStyle="container">
+      <AboutUsSection cards={aboutUsItems.items} items={mockItems} />
+    </Container>
+  )
 }

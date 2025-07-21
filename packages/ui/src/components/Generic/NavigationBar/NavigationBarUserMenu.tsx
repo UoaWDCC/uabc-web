@@ -26,12 +26,12 @@ export interface NavigationBarUserMenuProps extends MenuProps {
 }
 
 /**
- * NavigationBarUserMenu component renders a user menu with an avatar and options for profile and sign out.
+ * NavigationBarUserMenu component renders a user menu with an avatar and options for profile and logout.
  *
  * @param avatarProps Props for the avatar component, including name and image source.
  * @param admin Optional boolean indicating if the user is an admin. If true, an admin link will be displayed.
  * @param props Additional props for the menu component.
- * @returns A user menu with an avatar and options for profile and sign out.
+ * @returns A user menu with an avatar and options for profile and logout.
  */
 export const NavigationBarUserMenu = ({
   avatarProps,
@@ -65,10 +65,10 @@ export const NavigationBarUserMenu = ({
             <Text fontSize="md">Profile</Text>
           </HStack>
         </MenuItem>
-        <MenuItem as={Link} data-testid="navbar-user-menu-signout-link" href="/auth/signout">
+        <MenuItem as={Link} data-testid="navbar-user-menu-logout-link" href="/auth/logout">
           <HStack>
             <LogOutIcon />
-            <Text>Sign Out</Text>
+            <Text>Logout</Text>
           </HStack>
         </MenuItem>
       </MenuList>

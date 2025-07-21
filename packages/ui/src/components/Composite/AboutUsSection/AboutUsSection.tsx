@@ -4,7 +4,7 @@ import {
   type AboutUsCarouselProps,
 } from "@repo/ui/components/Generic/AboutUsCarousel"
 import { Button, Heading } from "@repo/ui/components/Primitive"
-import { Container, Flex, VStack } from "@yamada-ui/react"
+import { Center, Stack, VStack } from "@yamada-ui/react"
 import Link from "next/link"
 
 export interface AboutUsSectionProps extends AboutUsCarouselProps {
@@ -13,31 +13,41 @@ export interface AboutUsSectionProps extends AboutUsCarouselProps {
 
 export const AboutUsSection = ({ cards, ...carouselProps }: AboutUsSectionProps) => {
   return (
-    <Container as={VStack} centerContent gap={{ base: "lg", md: "xl" }}>
+    <>
       <Heading.h2 fontSize={{ base: "2xl", md: "6xl" }} fontWeight="semibold" w="full">
         About Us
       </Heading.h2>
-      <VStack gap="2xl">
-        <AboutUsCarousel
-          data-testid="about-us-carousel"
-          floatProps={{ marginX: { sm: "sm", md: "lg" }, marginY: "sm" }}
-          wrapperProps={{ paddingX: { sm: "sm", md: "lg" }, paddingY: "sm" }}
-          {...carouselProps}
-          autoplay
-          delay={4000}
-          height="auto"
-          width="full"
-        />
-        <Flex flexDir={{ base: "column", md: "row" }} gap={{ base: "lg", md: "xl" }}>
-          {cards.map((card) => (
-            <AboutUsCard key={card.title} {...card} />
-          ))}
-        </Flex>
+      <VStack as={Center} gap="lg">
+        <VStack gap="xl">
+          <AboutUsCarousel
+            data-testid="about-us-carousel"
+            floatProps={{ marginX: { sm: "sm", md: "lg" }, marginY: "sm" }}
+            wrapperProps={{ paddingX: { sm: "sm", md: "lg" }, paddingY: "sm" }}
+            {...carouselProps}
+            autoplay
+            delay={4000}
+            height="auto"
+            width="full"
+          />
+          <Stack flexDir={{ base: "column", md: "row" }} gap={{ base: "lg", lg: "xl" }}>
+            {cards.map((card) => (
+              <AboutUsCard key={card.title} {...card} />
+            ))}
+          </Stack>
+        </VStack>
+
+        <Button
+          as={Link}
+          colorScheme="primary"
+          href="/about"
+          placeSelf="center"
+          size="lg"
+          w="fit-content"
+        >
+          Learn More
+        </Button>
       </VStack>
-      <Button as={Link} colorScheme="primary" href="/about" size="lg">
-        Learn More
-      </Button>
-    </Container>
+    </>
   )
 }
 

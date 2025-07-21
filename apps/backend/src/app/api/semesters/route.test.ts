@@ -12,18 +12,18 @@ describe("/api/semesters", () => {
       const semester2 = await semesterDataService.createSemester(semesterCreateMock)
 
       const response = await GET()
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.OK)
+      const json = await response.json()
       expect(json.data).toHaveLength(2)
       expect(json.data).toEqual(expect.arrayContaining([semester1, semester2]))
     })
 
     it("should return empty array when no semesters exist", async () => {
       const response = await GET()
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.OK)
+      const json = await response.json()
       expect(json.data).toHaveLength(0)
     })
 
@@ -35,9 +35,9 @@ describe("/api/semesters", () => {
         .mockRejectedValueOnce(new Error("Database error"))
 
       const response = await GET()
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await response.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(mockGetAllSemesters).toHaveBeenCalledWith()
       expect(consoleErrorSpy).toHaveBeenCalled()
