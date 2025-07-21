@@ -47,9 +47,9 @@ describe("/api/admin/game-session-schedules", async () => {
       const res = await GET(
         createMockNextRequest("/api/admin/game-session-schedules?limit=10&page=2"),
       )
-      const json = await res.json()
 
       expect(res.status).toBe(StatusCodes.OK)
+      const json = await res.json()
       expect(json.data.docs.length).toBeLessThanOrEqual(10)
       expect(json.data.page).toBe(2)
       expect(json.data.limit).toBe(10)
@@ -61,9 +61,9 @@ describe("/api/admin/game-session-schedules", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       const res = await GET(createMockNextRequest(""))
-      const json = await res.json()
 
       expect(res.status).toBe(StatusCodes.OK)
+      const json = await res.json()
       expect(json.data.page).toBe(1)
       expect(json.data.limit).toBe(10)
     })
@@ -74,9 +74,9 @@ describe("/api/admin/game-session-schedules", async () => {
       const res = await GET(
         createMockNextRequest("/api/admin/game-session-schedules?limit=999&page=-5"),
       )
-      const json = await res.json()
 
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      const json = await res.json()
       expect(json.error).toBe("Invalid query parameters")
       expect(json.details).toBeDefined()
     })
@@ -93,8 +93,8 @@ describe("/api/admin/game-session-schedules", async () => {
         createMockNextRequest("/api/admin/game-session-schedules?limit=10&page=1"),
       )
 
-      const json = await res.json()
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await res.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
     })
   })
@@ -122,12 +122,12 @@ describe("/api/admin/game-session-schedules", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       const res = await POST(createMockNextRequest("", "POST", gameSessionScheduleCreateMock))
-      const json = await res.json()
 
+      expect(res.status).toBe(StatusCodes.CREATED)
+      const json = await res.json()
       const fetchedGameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(
         json.data.id,
       )
-      expect(res.status).toBe(StatusCodes.CREATED)
       expect(json.data).toEqual(fetchedGameSessionSchedule)
     })
 
@@ -140,9 +140,9 @@ describe("/api/admin/game-session-schedules", async () => {
           day: undefined,
         }),
       )
-      const json = await res.json()
 
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      const json = await res.json()
       expect(json.error).toBe("Invalid request body")
       expect(json.details).toBeDefined()
     })
@@ -156,9 +156,9 @@ describe("/api/admin/game-session-schedules", async () => {
           startTime: "invalid-date",
         }),
       )
-      const json = await res.json()
 
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      const json = await res.json()
       expect(json.error).toEqual("Invalid request body")
       expect(json.details.fieldErrors.startTime[0]).toEqual(
         "Invalid date format, should be in ISO 8601 format",
@@ -174,7 +174,6 @@ describe("/api/admin/game-session-schedules", async () => {
       const res = await POST(createMockNextRequest("", "POST", gameSessionScheduleCreateMock))
 
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
-
       const json = await res.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
     })
