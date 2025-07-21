@@ -1,4 +1,4 @@
-import type { UserInfoResponse } from "@repo/shared"
+import type { GoogleUserInfo } from "@repo/shared"
 
 const googleAuthScopes = [
   "https://www.googleapis.com/auth/userinfo.email",
@@ -6,7 +6,7 @@ const googleAuthScopes = [
 ] // cannot be imported from business-layer/security/google.ts or test fails due to hoisting of vi.mock over imports
 
 // Mock Google user response
-export const googleUserMock: UserInfoResponse = {
+export const googleUserMock: GoogleUserInfo = {
   sub: "111111111111111111111",
   email: "straight.zhao@example.com",
   given_name: "straight",

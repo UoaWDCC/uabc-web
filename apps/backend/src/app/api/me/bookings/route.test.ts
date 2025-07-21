@@ -25,9 +25,9 @@ describe("/api/me/bookings", async () => {
       })
 
       const response = await GET(createMockNextRequest("/api/me/bookings"))
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.OK)
+      const json = await response.json()
       expect(json.data).toEqual(expect.arrayContaining([booking1, booking2]))
     })
 
@@ -35,9 +35,9 @@ describe("/api/me/bookings", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
 
       const response = await GET(createMockNextRequest("/api/me/bookings"))
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.OK)
+      const json = await response.json()
       expect(json.data).toStrictEqual([])
     })
 
@@ -50,9 +50,9 @@ describe("/api/me/bookings", async () => {
         .mockRejectedValueOnce(new Error("Database error"))
 
       const response = await GET(createMockNextRequest("/api/me/bookings"))
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await response.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(consoleErrorSpy).toHaveBeenCalled()
       expect(mockGetBookings).toHaveBeenCalled()
