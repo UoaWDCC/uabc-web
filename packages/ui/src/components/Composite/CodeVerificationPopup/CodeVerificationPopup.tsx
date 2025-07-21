@@ -1,8 +1,6 @@
 "use client"
 
-import { Popup } from "@repo/shared"
 import { Button, Heading, PinInput } from "@repo/ui/components/Primitive"
-import { usePopupState } from "@repo/ui/hooks"
 import { ShieldIcon } from "@yamada-ui/lucide"
 import {
   Center,
@@ -38,7 +36,7 @@ interface CodeVerificationPopupProps extends Omit<ModalProps, "onSubmit"> {
   /**
    * The additional message text displayed in the popup.
    */
-  additionalMessage: string
+  additionalMessage?: string
   /**
    * The onSubmit handler.
    */
@@ -51,6 +49,10 @@ interface CodeVerificationPopupProps extends Omit<ModalProps, "onSubmit"> {
    * Whether the popup is loading.
    */
   isLoading?: boolean
+  /**
+   * The function to close the popup.
+   */
+  close: () => void
 }
 
 /**
@@ -73,13 +75,10 @@ export const CodeVerificationPopup: FC<CodeVerificationPopupProps> = ({
   onSubmit,
   errorMessage,
   isLoading,
+  close,
   ...props
 }) => {
   const formRef = useRef<HTMLFormElement>(null)
-  const { close, isOpen } = usePopupState({
-    popupId: Popup.CODE_VERIFICATION,
-    initialValue: "",
-  })
   const {
     control,
     handleSubmit,
@@ -112,7 +111,6 @@ export const CodeVerificationPopup: FC<CodeVerificationPopupProps> = ({
       as="form"
       onClose={close}
       onSubmit={handleSubmit(handleSubmission)}
-      open={isOpen}
       p="lg"
       ref={formRef}
       rounded="3xl"

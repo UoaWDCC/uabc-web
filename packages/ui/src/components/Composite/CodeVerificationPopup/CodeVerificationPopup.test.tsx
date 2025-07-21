@@ -1,4 +1,5 @@
 import { Popup } from "@repo/shared"
+import { usePopupState } from "@repo/ui/hooks"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { CodeVerificationPopup } from "./CodeVerificationPopup"
@@ -11,12 +12,22 @@ const defaultProps = {
 
 describe("<CodeVerificationPopup />", () => {
   it("should render and be closed by default if search param is not set", () => {
-    render(<CodeVerificationPopup {...defaultProps} />, { wrapper: withNuqsTestingAdapter() })
+    const { close, isOpen } = usePopupState({
+      popupId: Popup.CODE_VERIFICATION,
+      initialValue: "",
+    })
+    render(<CodeVerificationPopup close={close} open={isOpen} {...defaultProps} />, {
+      wrapper: withNuqsTestingAdapter(),
+    })
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
   })
 
   it("should open when the search param is set", () => {
-    render(<CodeVerificationPopup {...defaultProps} />, {
+    const { close, isOpen } = usePopupState({
+      popupId: Popup.CODE_VERIFICATION,
+      initialValue: "",
+    })
+    render(<CodeVerificationPopup close={close} open={isOpen} {...defaultProps} />, {
       wrapper: withNuqsTestingAdapter({
         searchParams: {
           [Popup.CODE_VERIFICATION]: "open",
@@ -30,13 +41,20 @@ describe("<CodeVerificationPopup />", () => {
 
   it("should submit the form when the code is entered", async () => {
     const onSubmit = vi.fn()
-    const { user } = render(<CodeVerificationPopup {...defaultProps} onSubmit={onSubmit} />, {
-      wrapper: withNuqsTestingAdapter({
-        searchParams: {
-          [Popup.CODE_VERIFICATION]: "open",
-        },
-      }),
+    const { close, isOpen } = usePopupState({
+      popupId: Popup.CODE_VERIFICATION,
+      initialValue: "",
     })
+    const { user } = render(
+      <CodeVerificationPopup close={close} open={isOpen} {...defaultProps} onSubmit={onSubmit} />,
+      {
+        wrapper: withNuqsTestingAdapter({
+          searchParams: {
+            [Popup.CODE_VERIFICATION]: "open",
+          },
+        }),
+      },
+    )
     const inputs = await screen.findAllByRole("textbox")
     await user.type(inputs[0], "1")
     await user.type(inputs[1], "2")
