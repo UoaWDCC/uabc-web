@@ -1,4 +1,5 @@
 import { Gender, PlayLevel } from "@repo/shared"
+import { casualUserMock } from "@repo/shared/mocks"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import type { ReactNode } from "react"
@@ -67,7 +68,7 @@ describe("<AdditionalInfo />", () => {
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
       gender: Gender.other,
       playLevel: PlayLevel.intermediate,
-      dietaryRequirements: "",
+      dietaryRequirements: casualUserMock.dietaryRequirements,
     })
   })
 })
