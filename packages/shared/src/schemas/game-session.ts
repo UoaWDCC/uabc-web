@@ -7,13 +7,12 @@ import { SemesterSchema } from "./semester"
 
 export const GameSessionSchema = z.object({
   id: z.string(),
-  gameSessionSchedule: z
-    .union([z.string(), z.null(), GameSessionScheduleSchema])
-    .optional()
-    .nullable(),
+  gameSessionSchedule: z.union([z.string(), GameSessionScheduleSchema]).nullable().optional(),
   semester: z.union([z.string(), SemesterSchema]),
   startTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   endTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  name: z.string().nullable().optional(),
+  location: z.string().nullable().optional(),
   capacity: z.number(),
   casualCapacity: z.number(),
   updatedAt: z.string(),
