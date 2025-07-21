@@ -11,7 +11,7 @@ const SemesterQuery = {
   useGetSemesters: () => {
     return useQuery({
       queryKey: [QueryKeys.SEMESTER_QUERY_KEY],
-      queryFn: SemesterService.getSemesters,
+      queryFn: SemesterService.getAllSemesters,
     })
   },
 } as const
