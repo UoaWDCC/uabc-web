@@ -11,6 +11,7 @@ describe("/api/semesters/[id]", () => {
   describe("GET", () => {
     it("should return semester data when semester exists", async () => {
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
+
       const res = await GET({} as NextRequest, {
         params: Promise.resolve({ id: newSemester.id }),
       })
@@ -32,7 +33,6 @@ describe("/api/semesters/[id]", () => {
 
     it("should handle errors and return 500 status", async () => {
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
-
       const mockGetSemesterById = vi
         .spyOn(SemesterDataService.prototype, "getSemesterById")
         .mockRejectedValueOnce(new Error("Database error"))
@@ -40,9 +40,9 @@ describe("/api/semesters/[id]", () => {
       const response = await GET({} as NextRequest, {
         params: Promise.resolve({ id: "any-id" }),
       })
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await response.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(mockGetSemesterById).toHaveBeenCalledWith("any-id")
       expect(consoleErrorSpy).toHaveBeenCalled()
