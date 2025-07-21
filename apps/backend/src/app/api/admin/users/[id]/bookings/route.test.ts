@@ -22,8 +22,9 @@ describe("/api/admin/users/[id]/bookings", async () => {
           params: Promise.resolve({ id: CASUAL_USER_UID }),
         },
       )
-      const json = await response.json()
+
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
+      const json = await response.json()
       expect(json).toStrictEqual({ error: "No scope" })
     })
 
@@ -36,14 +37,14 @@ describe("/api/admin/users/[id]/bookings", async () => {
           params: Promise.resolve({ id: MEMBER_USER_UID }),
         },
       )
-      const json = await response.json()
+
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
+      const json = await response.json()
       expect(json).toStrictEqual({ error: "No scope" })
     })
 
     it("should return all bookings for a specific user", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-
       const booking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
         user: memberUserMock,
@@ -59,9 +60,9 @@ describe("/api/admin/users/[id]/bookings", async () => {
           params: Promise.resolve({ id: MEMBER_USER_UID }),
         },
       )
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.OK)
+      const json = await response.json()
       expect(json.data).toEqual(expect.arrayContaining([booking1, booking2]))
     })
 
@@ -74,9 +75,9 @@ describe("/api/admin/users/[id]/bookings", async () => {
           params: Promise.resolve({ id: MEMBER_USER_UID }),
         },
       )
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.OK)
+      const json = await response.json()
       expect(json.data).toStrictEqual([])
     })
 
@@ -94,9 +95,9 @@ describe("/api/admin/users/[id]/bookings", async () => {
           params: Promise.resolve({ id: "placeholder-id" }),
         },
       )
-      const json = await response.json()
 
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await response.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(consoleErrorSpy).toHaveBeenCalled()
 

@@ -24,8 +24,7 @@ describe("/api/bookings", async () => {
 
   describe("POST", () => {
     it("should return a 401 if token is missing", async () => {
-      const req = createMockNextRequest("/api/bookings", "POST")
-      const res = await POST(req)
+      const res = await POST(createMockNextRequest())
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No token provided" })
     })
@@ -77,15 +76,14 @@ describe("/api/bookings", async () => {
     it("should return a 403 if the user has no remaining sessions", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
       const gameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
-      const req = createMockNextRequest("/api/bookings", "POST", {
-        gameSession,
-        playerLevel: PlayLevel.beginner,
-      } satisfies CreateBookingRequestBodyType)
-
       await userDataService.updateUser(casualUserMock.id, {
         remainingSessions: -1,
       })
 
+      const req = createMockNextRequest("", "POST", {
+        gameSession,
+        playerLevel: PlayLevel.beginner,
+      } satisfies CreateBookingRequestBodyType)
       const res = await POST(req)
 
       expect(res.status).toBe(StatusCodes.FORBIDDEN)
@@ -101,7 +99,7 @@ describe("/api/bookings", async () => {
       gameSession: gameSession.id,
     })
 
-    const req = createMockNextRequest("/api/bookings", "POST", {
+    const req = createMockNextRequest("", "POST", {
       gameSession: {
         ...gameSession,
         casualCapacity: 1,
@@ -122,7 +120,7 @@ describe("/api/bookings", async () => {
       gameSession: gameSession.id,
     })
 
-    const req = createMockNextRequest("/api/bookings", "POST", {
+    const req = createMockNextRequest("", "POST", {
       gameSession: {
         ...gameSession,
         capacity: 1,
@@ -139,14 +137,15 @@ describe("/api/bookings", async () => {
 
   it("should return 400 if request body is invalid", async () => {
     cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-    const req = createMockNextRequest("/api/bookings", "POST", {
+
+    const req = createMockNextRequest("", "POST", {
       gameSession: gameSessionCreateMock,
       playerLevel: PlayLevel.beginner,
       user: userCreateMock,
     })
     const res = await POST(req)
-    expect(res.status).toBe(StatusCodes.BAD_REQUEST)
 
+    expect(res.status).toBe(StatusCodes.BAD_REQUEST)
     const json = await res.json()
     expect(json.error).toBe("Invalid request body")
     expect(json.details).toBeDefined()
@@ -154,10 +153,11 @@ describe("/api/bookings", async () => {
 
   it("should return 500 for internal server error", async () => {
     cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-    const req = createMockNextRequest("/api/bookings", "POST")
-    const res = await POST(req)
-    expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
 
+    const req = createMockNextRequest("", "POST")
+    const res = await POST(req)
+
+    expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
     const json = await res.json()
     expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
   })

@@ -48,7 +48,7 @@ export const clearCollection = async (payloadObject: Payload, collectionName: Co
  * @returns The created Next Request
  */
 export function createMockNextRequest(
-  url: string,
+  url = "",
   method: "GET" | "POST" | "PATCH" | "DELETE" = "GET",
   body?: Record<string, unknown>,
 ) {
