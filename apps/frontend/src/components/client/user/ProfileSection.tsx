@@ -3,14 +3,16 @@
 import {
   AdditionalInfo,
   AdditionalInfoFields,
+  AdditionalInfoSkeleton,
   ProfileBookingPanel,
+  ProfileBookingPanelSkeleton,
   ProfileDetails,
   ProfileDetailsFields,
+  ProfileDetailsSkeleton,
   UserPanel,
+  UserPanelSkeleton,
 } from "@repo/ui/components/Composite"
-import { Button } from "@repo/ui/components/Primitive"
-import { CircleAlertIcon } from "@yamada-ui/lucide"
-import { Center, Container, EmptyState, Grid, GridItem, Loading } from "@yamada-ui/react"
+import { Container, Grid, GridItem } from "@yamada-ui/react"
 import { useRouter } from "next/navigation"
 import { memo, useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
@@ -30,67 +32,59 @@ export const ProfileSection = memo(() => {
     }
   }, [isLoading, isPending, user, router])
 
-  if (isLoading || isPending || isBookingsLoading) {
-    return (
-      <Center minH="50vh">
-        <Loading boxSize="sm" />
-      </Center>
-    )
-  }
-
-  if (!user) {
-    return (
-      <EmptyState
-        description="Explore our products and add items to your cart"
-        indicator={<CircleAlertIcon />}
-        title="Your cart is empty"
-      >
-        <Button>Back to home</Button>
-      </EmptyState>
-    )
-  }
-
   return (
     <Container centerContent gap="xl" layerStyle="container">
       <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }} w="full">
         <GridItem>
-          <UserPanel user={user} />
+          {isLoading || isPending || !user ? <UserPanelSkeleton /> : <UserPanel user={user} />}
         </GridItem>
         <GridItem>
-          <ProfileBookingPanel bookings={bookings ?? []} error={isBookingsError} />
+          {isBookingsLoading || !user ? (
+            <ProfileBookingPanelSkeleton />
+          ) : (
+            <ProfileBookingPanel bookings={bookings ?? []} error={isBookingsError} />
+          )}
         </GridItem>
       </Grid>
 
-      <ProfileDetails
-        defaultValues={{
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-        }}
-        fields={ProfileDetailsFields}
-        onSave={async (data) => {
-          // TODO: Implement update user mutation
-          console.log(data)
-        }}
-        title="Profile Details"
-        w="full"
-      />
+      {isLoading || isPending || !user ? (
+        <ProfileDetailsSkeleton />
+      ) : (
+        <ProfileDetails
+          defaultValues={{
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+          }}
+          fields={ProfileDetailsFields}
+          onSave={async (data) => {
+            // TODO: Implement update user mutation
+            console.log(data)
+          }}
+          title="Profile Details"
+          w="full"
+        />
+      )}
 
-      <AdditionalInfo
-        defaultValues={{
-          gender: user.gender,
-          playLevel: user.playLevel,
-          dietaryRequirements: user.dietaryRequirements,
-        }}
-        fields={AdditionalInfoFields}
-        onSave={async (data) => {
-          // TODO: Implement update user mutation
-          console.log(data)
-        }}
-        title="Additional Info"
-        w="full"
-      />
+      {isLoading || isPending || !user ? (
+        <AdditionalInfoSkeleton />
+      ) : (
+        <AdditionalInfo
+          defaultValues={{
+            gender: user.gender,
+            playLevel: user.playLevel,
+            dietaryRequirements: user.dietaryRequirements,
+          }}
+          fields={AdditionalInfoFields}
+          onSave={async (data) => {
+            // TODO: Implement update user mutation
+            console.log(data)
+          }}
+          title="Additional Info"
+          w="full"
+        />
+      )}
     </Container>
   )
 })
