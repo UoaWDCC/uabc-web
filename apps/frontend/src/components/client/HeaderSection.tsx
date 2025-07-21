@@ -10,6 +10,7 @@ export const HeaderSection = () => {
       bgGradient="textGradient"
       centerContent
       layerStyle="container"
+      mt={{ base: "md", sm: "lg", lg: "2xl" }}
     >
       <VStack align="center" gap={{ base: "md", md: "lg" }}>
         <Text fontSize={{ base: "sm", md: "xl" }} textAlign="center">
