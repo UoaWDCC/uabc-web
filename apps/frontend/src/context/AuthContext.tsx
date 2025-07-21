@@ -1,6 +1,6 @@
 "use client"
 
-import type { LoginFormData } from "@repo/shared"
+import type { LoginFormData, RegisterRequestBody } from "@repo/shared"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import {
@@ -34,6 +34,28 @@ type AuthActions = {
       email: string
       password: string
       rememberMe: boolean
+    },
+    unknown
+  >
+  emailVerificationCode: UseMutationResult<
+    ApiResponse<{
+      error?: string | undefined
+      message?: string | undefined
+    }>,
+    Error,
+    string,
+    unknown
+  >
+  register: UseMutationResult<
+    ApiResponse<{
+      error?: string | undefined
+      message?: string | undefined
+    }>,
+    Error,
+    {
+      email: string
+      password: string
+      emailVerificationCode: string
     },
     unknown
   >
@@ -92,6 +114,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
   })
 
+  const emailVerificationCode = useMutation({
+    mutationFn: async (email: string) => {
+      return await AuthService.sendEmailVerificationCode(email)
+    },
+    onSuccess: async (data) => {
+      if (!data.success) {
+        throw new Error(data.error?.message ?? "Email Verification Code Failed")
+      }
+    },
+    onError: (error) => {
+      notice({
+        title: "Email Verification Code Failed",
+        description: error.message,
+        status: "error",
+      })
+    },
+  })
+
+  const register = useMutation({
+    mutationFn: async (data: RegisterRequestBody) => {
+      return await AuthService.register(data.email, data.password, data.emailVerificationCode)
+    },
+    onSuccess: async (data) => {
+      if (!data.success) {
+        throw new Error(data.error?.message ?? "Email Verification Code Failed")
+      }
+    },
+    onError: (error) => {
+      notice({
+        title: "Email Verification Code Failed",
+        description: error.message,
+        status: "error",
+      })
+    },
+  })
+
   const authState: AuthState = {
     user: user ?? null,
     isLoading: isLoading || login.isPending,
@@ -101,6 +159,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const authActions: AuthActions = {
     login,
+    emailVerificationCode,
+    register,
   }
 
   return (
