@@ -12,9 +12,7 @@ export const ProfileBookingPanelSkeleton: FC = memo(() => {
       rounded="2xl"
       w="full"
     >
-      <Skeleton borderRadius="md" height="32px" mb="md" width="180px">
-        <Heading.h3>Your Bookings</Heading.h3>
-      </Skeleton>
+      <Heading.h3>Your Bookings</Heading.h3>
       <VStack gap="md" w="full">
         {[1, 2, 3].map((i) => (
           <Skeleton borderRadius="md" height="120px" key={i} w="full" />

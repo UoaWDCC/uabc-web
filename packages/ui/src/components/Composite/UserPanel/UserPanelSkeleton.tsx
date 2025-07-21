@@ -1,3 +1,4 @@
+import { PencilIcon } from "@yamada-ui/lucide"
 import {
   Avatar,
   Box,
@@ -29,9 +30,7 @@ export const UserPanelSkeleton: FC = () => {
             <Avatar size="xl" />
           </Skeleton>
           <Float offset={[4, 4]} placement="end-end">
-            <Skeleton borderRadius="full" height="32px" width="32px">
-              <IconButton aria-label="Edit" rounded="full" size="sm" />
-            </Skeleton>
+            <IconButton aria-label="Edit" disabled icon={<PencilIcon />} rounded="full" size="sm" />
           </Float>
         </Box>
         <VStack gap="xs" mt="sm">
@@ -45,16 +44,50 @@ export const UserPanelSkeleton: FC = () => {
       </CardHeader>
       <CardBody alignItems="center" gap="md">
         <VStack gap="xs" w="full">
-          <Skeleton borderRadius="md" height="48px" w="full">
-            <Text>Email</Text>
-          </Skeleton>
-          <Skeleton borderRadius="md" height="48px" w="full">
-            <Text>Phone</Text>
-          </Skeleton>
+          <VStack
+            alignSelf="center"
+            border="2px solid"
+            borderColor={["blackAlpha.200", "whiteAlpha.300"]}
+            gap="xs"
+            maxW="md"
+            minW={0}
+            px="md"
+            py="sm"
+            rounded="lg"
+            w="full"
+          >
+            <Text color="muted" fontSize="sm">
+              Email
+            </Text>
+            <Skeleton borderRadius="md" height="20px" width="80%">
+              <Text>&nbsp;</Text>
+            </Skeleton>
+          </VStack>
+          <VStack
+            alignSelf="center"
+            border="2px solid"
+            borderColor={["blackAlpha.200", "whiteAlpha.300"]}
+            gap="xs"
+            maxW="md"
+            minW={0}
+            px="md"
+            py="sm"
+            rounded="lg"
+            w="full"
+          >
+            <Text color="muted" fontSize="sm">
+              Phone
+            </Text>
+            <Skeleton borderRadius="md" height="20px" width="80%">
+              <Text>&nbsp;</Text>
+            </Skeleton>
+          </VStack>
         </VStack>
       </CardBody>
       <CardFooter gap="sm" justifyContent="center">
-        <Skeleton borderRadius="md" height="20px" width="120px">
+        {/* ShuttleIcon is not shown in skeleton, but keep Sessions left label */}
+        <Text fontSize="sm">Sessions left:</Text>
+        <Skeleton borderRadius="md" height="20px" width="40px">
           <Text fontSize="sm">&nbsp;</Text>
         </Skeleton>
       </CardFooter>
