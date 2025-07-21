@@ -1,5 +1,6 @@
 "use client"
 
+import type { MembershipType } from "@repo/shared"
 import { BookingTimesCardGroup } from "@repo/ui/components/Generic"
 import { ShuttleIcon } from "@repo/ui/components/Icon"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
@@ -8,83 +9,32 @@ import { Card, CardBody, CardHeader, Center, HStack, IconButton } from "@yamada-
 import { memo, useEffect, useMemo } from "react"
 import { useForm, useWatch } from "react-hook-form"
 
-/**
- * The type of user variant for the booking session.
- */
-type Variant = "member" | "casual"
+type Variant = MembershipType.member | MembershipType.casual
 
-/**
- * Represents a single booking session item.
- */
 interface SessionItem {
-  /**
-   * The display label for the session (e.g., "Monday, 12th May").
-   */
   label: string
-  /**
-   * The number of member attendees in format "current/max" (e.g., "32/35").
-   */
   memberAttendees: string
-  /**
-   * The number of casual attendees in format "current/max" (e.g., "4/5").
-   */
   casualAttendees: string
-  /**
-   * The unique identifier for the session.
-   */
   value: string
-  /**
-   * The location or venue name for the session.
-   */
   addon: string
-  /**
-   * The time description for the session (e.g., "7:30 - 10pm").
-   */
   description: string
-  /**
-   * Whether the session is disabled for selection.
-   */
   disabled?: boolean
 }
 
-/**
- * Props for the SelectACourt component.
- */
+interface SelectACourtFormData {
+  /**
+   * The selected session values.
+   * - For members: array of session IDs (up to 2)
+   * - For casual: single session ID or undefined
+   */
+  bookingTimes: string | string[]
+}
+
 export interface SelectACourtProps {
-  /**
-   * The user variant type that determines selection behavior.
-   * - "member": Can select up to 2 sessions
-   * - "casual": Can select only 1 session
-   *
-   * @default "member"
-   */
   variant?: Variant
-
-  /**
-   * Callback function triggered when sessions are selected or deselected.
-   *
-   * @param value - The selected session value(s). For members: string[], for casual: string | undefined
-   */
   onSelect?: (value: string | string[] | undefined) => void
-
-  /**
-   * Array of available booking sessions to display.
-   *
-   * @default []
-   */
   sessions?: SessionItem[]
-
-  /**
-   * The title displayed in the component header.
-   *
-   * @default "Select a court"
-   */
   title?: string
-
-  /**
-   * Callback function triggered when the back button is clicked.
-   * Used for navigation to the previous step in multi-step forms.
-   */
   onBack?: () => void
 
   /**
@@ -93,69 +43,9 @@ export interface SelectACourtProps {
    *
    * @param data - The form data including selected sessions
    */
-  onNext?: (data: any) => void
+  onNext?: (data: SelectACourtFormData) => void
 }
 
-/**
- * SelectACourt component for choosing booking sessions in a multi-step form flow.
- *
- * This component provides a card-based interface for selecting available booking sessions.
- * It supports both member and casual user types with different selection limits and
- * integrates with React Hook Form for form state management.
- *
- * @param props SelectACourt component properties
- * @returns A session selection component
- *
- * @example
- * // Basic usage with member variant
- * <SelectACourt
- *   variant="member"
- *   sessions={[
- *     {
- *       label: "Monday, 12th May",
- *       memberAttendees: "32/35",
- *       casualAttendees: "4/5",
- *       value: "booking-123",
- *       addon: "UoA Hiwa Center",
- *       description: "7:30 - 10pm"
- *     }
- *   ]}
- *   onSelect={(value) => console.log("Selected:", value)}
- * />
- *
- * @example
- * // Multi-step form integration
- * <SelectACourt
- *   variant="casual"
- *   title="Choose Your Session"
- *   sessions={availableSessions}
- *   onBack={() => setCurrentStep(currentStep - 1)}
- *   onNext={(data) => {
- *     setFormData(data)
- *     setCurrentStep(currentStep + 1)
- *   }}
- *   onSelect={(value) => setSelectedSessions(value)}
- * />
- *
- * @example
- * // With custom session data
- * const customSessions = [
- *   {
- *     label: "Wednesday, 14th May",
- *     memberAttendees: "28/35",
- *     casualAttendees: "2/5",
- *     value: "wed-session",
- *     addon: "Kings School",
- *     description: "7:30 - 10:00 pm",
- *     disabled: false
- *   }
- * ]
- *
- * <SelectACourt
- *   sessions={customSessions}
- *   onSelect={handleSessionSelection}
- * />
- */
 export const SelectACourt = memo<SelectACourtProps>(
   ({ variant = "member", onSelect, sessions = [], title = "Select a court", onBack, onNext }) => {
     const isMember = variant === "member"
@@ -205,7 +95,7 @@ export const SelectACourt = memo<SelectACourtProps>(
       [sessions, selectionArray, max, isMember, watched],
     )
 
-    const handleNext = (data: any) => {
+    const handleNext = (data: SelectACourtFormData) => {
       if (onNext) {
         onNext(data)
       } else {
