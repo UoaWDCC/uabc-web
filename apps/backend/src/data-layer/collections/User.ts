@@ -3,6 +3,9 @@ import type { CollectionConfig } from "payload"
 
 export const User: CollectionConfig = {
   slug: "user",
+  admin: {
+    useAsTitle: "email",
+  },
   fields: [
     {
       name: "firstName",
