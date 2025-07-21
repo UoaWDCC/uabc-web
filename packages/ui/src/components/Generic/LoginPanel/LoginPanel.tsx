@@ -91,7 +91,7 @@ export const LoginPanel = memo(({ errorMessage, onSubmit, isLoading }: LoginPane
       <Center textAlign="center">
         <VStack>
           <Heading.h2>Welcome back</Heading.h2>
-          <Text>Please enter your details to sign in</Text>
+          <Text>Please enter your details to login</Text>
         </VStack>
       </Center>
 
@@ -130,7 +130,7 @@ export const LoginPanel = memo(({ errorMessage, onSubmit, isLoading }: LoginPane
         </UILink>
       </HStack>
       <Button colorScheme="primary" loading={isButtonLoading} type="submit">
-        Sign In
+        Login
       </Button>
 
       <Center position="relative">

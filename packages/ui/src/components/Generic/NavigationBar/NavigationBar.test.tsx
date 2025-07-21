@@ -85,11 +85,11 @@ describe("<NavigationBarMobile />", () => {
     expect(screen.getByText("FAQ")).toBeInTheDocument()
   })
 
-  it("should render a sign in button when user is not signed in", () => {
+  it("should render a login button when user is not signed in", () => {
     render(<NavigationBarMobile {...NAVIGATION_BAR_NO_USER_TEST_CONSTANTS} />)
-    const signInButton = screen.getByText("Sign In")
-    expect(signInButton).toBeInTheDocument()
-    expect(signInButton).toHaveAttribute("href", "/auth/signin")
+    const loginButton = screen.getByText("Login")
+    expect(loginButton).toBeInTheDocument()
+    expect(loginButton).toHaveAttribute("href", "/auth/login")
   })
 
   it("should render a profile link and logout button when user is signed in as a casual", async () => {
@@ -390,9 +390,9 @@ describe("<NavigationBarUserMenu />", () => {
     expect(profileLink).toBeInTheDocument()
     expect(profileLink).toHaveAttribute("href", "/profile")
 
-    const signOutLink = screen.getByTestId("navbar-user-menu-signout-link")
-    expect(signOutLink).toBeInTheDocument()
-    expect(signOutLink).toHaveAttribute("href", "/auth/signout")
+    const logoutLink = screen.getByTestId("navbar-user-menu-logout-link")
+    expect(logoutLink).toBeInTheDocument()
+    expect(logoutLink).toHaveAttribute("href", "/auth/logout")
   })
 
   it("should render the NavigationBarUserMenu with correct menu items for admin", async () => {
@@ -420,8 +420,8 @@ describe("<NavigationBarUserMenu />", () => {
     expect(profileLink).toBeInTheDocument()
     expect(profileLink).toHaveAttribute("href", "/profile")
 
-    const signOutLink = screen.getByTestId("navbar-user-menu-signout-link")
-    expect(signOutLink).toBeInTheDocument()
-    expect(signOutLink).toHaveAttribute("href", "/auth/signout")
+    const logoutLink = screen.getByTestId("navbar-user-menu-logout-link")
+    expect(logoutLink).toBeInTheDocument()
+    expect(logoutLink).toHaveAttribute("href", "/auth/logout")
   })
 })
