@@ -60,7 +60,7 @@ describe("/api/admin/game-session-schedules", async () => {
     it("should use default pagination if params are missing", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
-      const res = await GET(createMockNextRequest(""))
+      const res = await GET(createMockNextRequest())
 
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()

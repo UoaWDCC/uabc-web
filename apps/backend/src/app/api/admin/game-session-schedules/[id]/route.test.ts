@@ -15,7 +15,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
     it("should return 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
 
-      const res = await GET(createMockNextRequest(""), {
+      const res = await GET(createMockNextRequest(), {
         params: Promise.resolve({ id: "some-id" }),
       })
 
@@ -26,7 +26,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
     it("should return 401 if user is member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
 
-      const res = await GET(createMockNextRequest(""), {
+      const res = await GET(createMockNextRequest(), {
         params: Promise.resolve({ id: "some-id" }),
       })
 
@@ -40,7 +40,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
         gameSessionScheduleCreateMock,
       )
-      const res = await GET(createMockNextRequest(""), {
+      const res = await GET(createMockNextRequest(), {
         params: Promise.resolve({ id: newGameSessionSchedule.id }),
       })
 
@@ -51,7 +51,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
     it("should return 404 if gameSessionSchedule is non-existent", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
-      const res = await GET(createMockNextRequest(""), {
+      const res = await GET(createMockNextRequest(), {
         params: Promise.resolve({ id: "non-existent" }),
       })
 
@@ -61,7 +61,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
     it("should return a 500 error for internal server error", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
-      const res = await GET(createMockNextRequest(""), {
+      const res = await GET(createMockNextRequest(), {
         params: Promise.reject(new Error("Param parsing failed")),
       })
 
