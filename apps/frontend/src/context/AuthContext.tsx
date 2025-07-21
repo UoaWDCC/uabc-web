@@ -37,6 +37,15 @@ type AuthActions = {
     },
     unknown
   >
+  emailVerificationCode: UseMutationResult<
+    ApiResponse<{
+      error?: string | undefined
+      message?: string | undefined
+    }>,
+    Error,
+    string,
+    unknown
+  >
 }
 
 type AuthContextValue = AuthState & AuthActions
@@ -92,6 +101,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
   })
 
+  const emailVerificationCode = useMutation({
+    mutationFn: async (email: string) => {
+      return await AuthService.sendEmailVerificationCode(email)
+    },
+    onSuccess: async (data) => {
+      if (data.success) {
+        notice({
+          title: "Email Verification Code Sent",
+          description: "Please check your email for the verification code.",
+          status: "success",
+        })
+      } else {
+        throw new Error(data.error ? data.error?.message : "Email Verification Code Failed")
+      }
+    },
+    onError: (error) => {
+      notice({
+        title: "Email Verification Code Failed",
+        description: error.message,
+        status: "error",
+      })
+    },
+  })
+
   const authState: AuthState = {
     user: user ?? null,
     isLoading: isLoading || login.isPending,
@@ -101,6 +134,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const authActions: AuthActions = {
     login,
+    emailVerificationCode,
   }
 
   return (
