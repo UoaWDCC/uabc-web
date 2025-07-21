@@ -15,6 +15,7 @@ describe("/api/admin/users/[id]/bookings", async () => {
   describe("GET", () => {
     it("should return 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+
       const response = await GET(
         createMockNextRequest(`/api/admin/users/${CASUAL_USER_UID}/bookings`),
         {
@@ -22,12 +23,14 @@ describe("/api/admin/users/[id]/bookings", async () => {
         },
       )
       const json = await response.json()
+
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(json).toStrictEqual({ error: "No scope" })
     })
 
     it("should return 401 if user is a member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+
       const response = await GET(
         createMockNextRequest(`/api/admin/users/${MEMBER_USER_UID}/bookings`),
         {
@@ -35,12 +38,14 @@ describe("/api/admin/users/[id]/bookings", async () => {
         },
       )
       const json = await response.json()
+
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(json).toStrictEqual({ error: "No scope" })
     })
 
     it("should return all bookings for a specific user", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       const booking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
         user: memberUserMock,
@@ -56,12 +61,14 @@ describe("/api/admin/users/[id]/bookings", async () => {
         },
       )
       const json = await response.json()
+
       expect(response.status).toBe(StatusCodes.OK)
       expect(json.data).toEqual(expect.arrayContaining([booking1, booking2]))
     })
 
     it("should return empty if there are no bookings for the specific user", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       const response = await GET(
         createMockNextRequest(`/api/admin/users/${MEMBER_USER_UID}/bookings`),
         {
@@ -69,12 +76,14 @@ describe("/api/admin/users/[id]/bookings", async () => {
         },
       )
       const json = await response.json()
+
       expect(response.status).toBe(StatusCodes.OK)
       expect(json.data).toStrictEqual([])
     })
 
     it("should return 500 and manage any unexpected errors ", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
       vi.spyOn(BookingDataService.prototype, "getAllBookingsByUserId").mockRejectedValueOnce(
         new Error("Database error"),
@@ -87,6 +96,7 @@ describe("/api/admin/users/[id]/bookings", async () => {
         },
       )
       const json = await response.json()
+
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(consoleErrorSpy).toHaveBeenCalled()
