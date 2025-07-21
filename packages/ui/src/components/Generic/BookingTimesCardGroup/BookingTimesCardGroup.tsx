@@ -1,12 +1,14 @@
 "use client"
 import { IconWithText } from "@repo/ui/components/Primitive"
-import { Clock10Icon, MapPinIcon } from "@yamada-ui/lucide"
+import { Clock10Icon, MapPinIcon, UserIcon } from "@yamada-ui/lucide"
 import {
   CheckboxCardGroup,
   type CheckboxCardGroupProps,
   type CheckboxCardProps,
   FormControl,
   type FormControlProps,
+  HStack,
+  VStack,
 } from "@yamada-ui/react"
 import { forwardRef, memo } from "react"
 import type { Control } from "react-hook-form"
@@ -15,11 +17,17 @@ import { Controller } from "react-hook-form"
 /**
  * Props for the {@link BookingTimesCardGroup} component.
  */
+
+interface BookingTimeItem extends CheckboxCardProps {
+  memberAttendees?: string
+  casualAttendees?: string
+}
+
 export interface BookingTimesCardGroupProps extends Omit<CheckboxCardGroupProps, "items"> {
   /**
    * An array of {@link CheckboxCardProps} objects representing the booking times.
    */
-  items: CheckboxCardProps[]
+  items: BookingTimeItem[]
   /**
    * Indicates whether the input field is in an error state.
    *
@@ -72,12 +80,16 @@ export interface BookingTimesCardGroupProps extends Omit<CheckboxCardGroupProps,
  *   items={[
  *     {
  *       label: "Tuesday, 12th May",
+ *       memberAttendees: "32/35",
+ *       casualAttendees: "4/5",
  *       value: "booking-123",
  *       addon: "UoA Hiwa Center",
  *       description: "7:30 - 10pm"
  *     },
  *     {
  *       label: "Wednesday, 13th May",
+ *       memberAttendees: "32/35",
+ *       casualAttendees: "4/5",
  *       value: "booking-456",
  *       addon: "UoA Hiwa Center",
  *       description: "2:00 - 4:30pm",
@@ -118,7 +130,21 @@ export const BookingTimesCardGroup = memo(
                 {...props}
                 items={items.map((item) => ({
                   ...item,
-                  addon: <IconWithText icon={<MapPinIcon />} label={item.addon} />,
+                  addon: (
+                    <VStack alignItems="flex-start" gap="2xs">
+                      <IconWithText icon={<MapPinIcon />} label={item.addon} />
+                      <HStack flexWrap="wrap" gap="2xs" width="fit-content">
+                        <IconWithText
+                          icon={<UserIcon />}
+                          label={`${item.memberAttendees} members Attendees`}
+                        />
+                        <IconWithText
+                          icon={<UserIcon />}
+                          label={`${item.casualAttendees} casuals Attendees`}
+                        />
+                      </HStack>
+                    </VStack>
+                  ),
                   description: <IconWithText icon={<Clock10Icon />} label={item.description} />,
                 }))}
                 onChange={field.onChange}

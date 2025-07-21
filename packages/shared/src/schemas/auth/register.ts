@@ -1,17 +1,12 @@
 import z from "zod"
 import { Gender, PlayLevel, University } from "../../types"
 
-export const RegisterDetailsSchema = z.object({
+export const RegisterRequestBodySchema = z.object({
   /**
-   * The user's first name
-   * @example John
+   * The user's email verification code
+   * @example 123456
    */
-  firstName: z.string().min(1).max(30),
-  /**
-   * The user's last name
-   * @example Doe
-   */
-  lastName: z.string().min(1).max(30),
+  emailVerificationCode: z.string().min(6).max(6),
   /**
    * The user's email address
    * @example straightzhao@gmail.com
@@ -161,4 +156,12 @@ export const AdditionalInfoFormSchema = z.object({
    * Dietary requirements of the new user
    */
   dietaryRequirements: z.string(),
+})
+
+export const VerificationCodeRequestSchema = z.object({
+  /**
+   * The user's email address
+   * @example straightzhao@gmail.com
+   */
+  email: z.string().email(),
 })
