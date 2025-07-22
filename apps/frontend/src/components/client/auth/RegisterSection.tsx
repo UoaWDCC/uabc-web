@@ -26,7 +26,7 @@ export const RegisterSection = () => {
     setFormData(data)
     try {
       const response = await emailVerificationCode.mutateAsync(data.email)
-      if (response.success) {
+      if (!response.error) {
         notice({
           title: "Email verification code sent",
           description: `Please check your inbox for ${data.email}`,
@@ -48,7 +48,7 @@ export const RegisterSection = () => {
         password: formData?.password || "",
         emailVerificationCode: data.pinInput,
       })
-      if (response.success) {
+      if (!response.error) {
         notice({
           title: "Registration successful",
           description: "Redirecting to login now",

@@ -1,14 +1,14 @@
 "use client"
-import { UnAuthorised } from "@repo/ui/components/Generic"
+import { NotAuthorised } from "@repo/ui/components/Generic"
 import { ProfileSection } from "@/components/client/user/ProfileSection"
 import { ProfileSectionSkeleton } from "@/components/client/user/ProfileSectionSkeleton"
-import { Authenticated } from "@/context/RoleWrappers"
+import { RoleGuard } from "@/context/RoleWrappers"
 
 export const ProfileClient = () => {
   return (
-    <Authenticated
+    <RoleGuard
       fallback={
-        <UnAuthorised
+        <NotAuthorised
           as="section"
           description="Please login to view your profile"
           href="/auth/login"
@@ -17,8 +17,9 @@ export const ProfileClient = () => {
         />
       }
       loading={<ProfileSectionSkeleton />}
+      scope={["admin", "member", "casual"]}
     >
       {(auth) => <ProfileSection auth={auth} />}
-    </Authenticated>
+    </RoleGuard>
   )
 }

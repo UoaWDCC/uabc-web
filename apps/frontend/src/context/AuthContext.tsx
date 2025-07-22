@@ -3,15 +3,9 @@
 import type { LoginFormData, RegisterRequestBody } from "@repo/shared"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
-import {
-  type UseMutationResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query"
+import { type UseMutationResult, useMutation, useQuery } from "@tanstack/react-query"
 import { useNotice, useUpdateEffect } from "@yamada-ui/react"
 import { createContext, type ReactNode, useContext } from "react"
-import type { ApiResponse } from "@/lib/api/client"
 import { useLocalStorage } from "@/lib/storage"
 import AuthService from "@/services/auth/AuthService"
 
@@ -26,11 +20,11 @@ type AuthState = {
 
 type AuthActions = {
   login: UseMutationResult<
-    ApiResponse<{
-      message?: string | undefined
+    {
       data?: string | undefined
       error?: string | undefined
-    }>,
+      message?: string | undefined
+    },
     Error,
     {
       email: string
@@ -40,19 +34,19 @@ type AuthActions = {
     unknown
   >
   emailVerificationCode: UseMutationResult<
-    ApiResponse<{
+    {
       error?: string | undefined
       message?: string | undefined
-    }>,
+    },
     Error,
     string,
     unknown
   >
   register: UseMutationResult<
-    ApiResponse<{
-      error?: string | undefined
+    {
       message?: string | undefined
-    }>,
+      error?: string | undefined
+    },
     Error,
     {
       email: string
@@ -78,7 +72,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setValue: setToken,
     isAvailable,
   } = useLocalStorage<string>(AUTH_COOKIE_NAME)
-  const queryClient = useQueryClient()
   const notice = useNotice()
 
   const {
@@ -92,25 +85,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (!token) {
         return null
       }
-      return await AuthService.getUserFromToken(token)
+      const response = await AuthService.getUserFromToken(token)
+      return response.data
     },
     staleTime: 1000 * 60 * 5,
     refetchOnMount: true,
     refetchOnWindowFocus: false,
-    enabled: !!token,
+    enabled: isAvailable && !!token,
   })
 
   const login = useMutation({
     mutationFn: async (credentials: LoginFormData) => {
-      return await AuthService.login(credentials.email, credentials.password)
-    },
-    onSuccess: async (data) => {
-      if (data.success && data.data?.data) {
-        setToken(data.data.data)
-        queryClient.removeQueries({ queryKey: ["auth", "me"] })
-      } else {
-        throw new Error(data.success ? data.data?.error : data.error?.message || "Login failed")
+      const response = await AuthService.login(credentials.email, credentials.password)
+      if (response.data) {
+        setToken(response.data)
       }
+      return response
     },
     onError: (error) => {
       notice({
@@ -125,11 +115,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     mutationFn: async (email: string) => {
       return await AuthService.sendEmailVerificationCode(email)
     },
-    onSuccess: async (data) => {
-      if (!data.success) {
-        throw new Error(data.error?.message ?? "Email Verification Code Failed")
-      }
-    },
     onError: (error) => {
       notice({
         title: "Email Verification Code Failed",
@@ -142,11 +127,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = useMutation({
     mutationFn: async (data: RegisterRequestBody) => {
       return await AuthService.register(data.email, data.password, data.emailVerificationCode)
-    },
-    onSuccess: async (data) => {
-      if (!data.success) {
-        throw new Error(data.error?.message ?? "Email Verification Code Failed")
-      }
     },
     onError: (error) => {
       notice({

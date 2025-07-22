@@ -36,8 +36,8 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
 
       {!user ? (
         <>
-          <AdditionalInfoSkeleton />
           <ProfileDetailsSkeleton />
+          <AdditionalInfoSkeleton />
         </>
       ) : (
         <>

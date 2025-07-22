@@ -17,8 +17,8 @@ export const ProfileSectionSkeleton = () => {
           <ProfileBookingPanelSkeleton />
         </GridItem>
       </Grid>
-      <AdditionalInfoSkeleton />
       <ProfileDetailsSkeleton />
+      <AdditionalInfoSkeleton />
     </Container>
   )
 }

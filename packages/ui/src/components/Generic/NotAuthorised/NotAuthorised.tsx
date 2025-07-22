@@ -11,18 +11,18 @@ import NextLink from "next/link"
 import type { FC } from "react"
 
 /**
- * Props for {@link UnAuthorised} component
+ * Props for {@link NotAuthorised} component
  */
 export interface UnAuthorisedProps
   extends Omit<EmptyStateProps, "title" | "description" | "indicator" | "children"> {
   /**
    * The title to display in the empty state
-   * @defaultValue "Unauthorised"
+   * @defaultValue "Not Authorised"
    */
   title?: string
   /**
    * The description text to display in the empty state
-   * @defaultValue "You do not have permission to view this page."
+   * @defaultValue "You are not authorised to view this page."
    */
   description?: string
   /**
@@ -42,17 +42,17 @@ export interface UnAuthorisedProps
 }
 
 /**
- * Generic unauthorised state component using Yamada UI's EmptyState.
+ * Generic not authorised state component using Yamada UI's EmptyState.
  *
- * @param props UnAuthorised component properties
- * @returns A styled empty state for unauthorised access
+ * @param props NotAuthorised component properties
+ * @returns A styled empty state for not authorised access
  *
  * @example
- * <UnAuthorised />
- * <UnAuthorised title="Access Denied" description="You must be an admin." />
+ * <NotAuthorised />
+ * <NotAuthorised title="Access Denied" description="You must be an admin to view this page." />
  */
-export const UnAuthorised: FC<UnAuthorisedProps> = ({
-  title = "Unauthorised",
+export const NotAuthorised: FC<UnAuthorisedProps> = ({
+  title = "Not Authorised",
   description = "You do not have permission to view this page.",
   returnLabel = "Return Home",
   buttonProps,
@@ -65,7 +65,7 @@ export const UnAuthorised: FC<UnAuthorisedProps> = ({
         <LockIcon fontSize="5xl" />
       </EmptyStateIndicator>
       <EmptyStateTitle as={Heading.h2}>{title}</EmptyStateTitle>
-      <EmptyStateDescription>{description}</EmptyStateDescription>
+      <EmptyStateDescription textAlign="center">{description}</EmptyStateDescription>
       <Button as={NextLink} colorScheme="primary" href={href} placeSelf="center" {...buttonProps}>
         {returnLabel}
       </Button>
@@ -73,4 +73,4 @@ export const UnAuthorised: FC<UnAuthorisedProps> = ({
   )
 }
 
-UnAuthorised.displayName = "UnAuthorised"
+NotAuthorised.displayName = "NotAuthorised"
