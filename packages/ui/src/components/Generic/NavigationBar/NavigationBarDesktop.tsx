@@ -21,7 +21,15 @@ export const NavigationBarDesktop = ({
   rightSideSingleButton,
   user,
 }: NavigationBarProps) => {
-  const fullName = useMemo(() => `${user?.firstName} ${user?.lastName}`.trim(), [user])
+  const fullName = useMemo(() => {
+    if (user?.firstName && user?.lastName) {
+      return `${user.firstName} ${user.lastName}`.trim()
+    }
+    if (user?.firstName) {
+      return user.firstName
+    }
+    return ""
+  }, [user])
   const src = useMemo(
     () => (typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""),
     [user],

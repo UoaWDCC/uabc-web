@@ -2,7 +2,7 @@
 import type { MembershipType } from "@repo/shared"
 import { useUpdateEffect } from "@yamada-ui/react"
 import { useRouter } from "next/navigation"
-import type { ReactNode } from "react"
+import { type ReactNode, useMemo } from "react"
 import { type AuthContextValue, useAuth } from "./AuthContext"
 
 export type RoleGuardProps = {
@@ -55,13 +55,17 @@ export const GuestOnly = ({ children }: GuestOnlyProps) => {
   const auth = useAuth()
   const router = useRouter()
 
+  const shouldRedirect = useMemo(() => {
+    return auth.isLoading || !auth.isAvailable || !auth.token || !auth.user
+  }, [auth.isLoading, auth.isAvailable, auth.token, auth.user])
+
   useUpdateEffect(() => {
-    if (auth.isLoading || !auth.isAvailable || !auth.token || !auth.user) {
+    if (shouldRedirect) {
       return
     }
 
     router.replace("/profile")
-  }, [auth.isLoading, auth.isAvailable, auth.token, auth.user, router])
+  }, [shouldRedirect, router])
 
   return children
 }
