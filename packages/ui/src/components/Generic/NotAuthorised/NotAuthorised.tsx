@@ -13,7 +13,7 @@ import type { FC } from "react"
 /**
  * Props for {@link NotAuthorised} component
  */
-export interface UnAuthorisedProps
+export interface NotAuthorisedProps
   extends Omit<EmptyStateProps, "title" | "description" | "indicator" | "children"> {
   /**
    * The title to display in the empty state
@@ -51,7 +51,7 @@ export interface UnAuthorisedProps
  * <NotAuthorised />
  * <NotAuthorised title="Access Denied" description="You must be an admin to view this page." />
  */
-export const NotAuthorised: FC<UnAuthorisedProps> = ({
+export const NotAuthorised: FC<NotAuthorisedProps> = ({
   title = "Not Authorised",
   description = "You do not have permission to view this page.",
   returnLabel = "Return Home",

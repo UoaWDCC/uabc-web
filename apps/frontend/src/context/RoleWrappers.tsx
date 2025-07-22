@@ -11,8 +11,9 @@ export type RoleGuardProps = {
    * @example ["member", "casual"]
    * @example ["admin"]
    * @example ["member", "casual", "admin"]
+   * @defaultValue ["member", "casual", "admin"]
    */
-  scope: Array<`${MembershipType}`>
+  scope?: Array<`${MembershipType}`>
   /**
    * The children of the role guard.
    * @example <RoleGuard scope={["member", "casual"]}>
@@ -33,7 +34,12 @@ export type RoleGuardProps = {
   loading?: ReactNode
 }
 
-export const RoleGuard = ({ scope, children, fallback = null, loading = null }: RoleGuardProps) => {
+export const RoleGuard = ({
+  scope = ["member", "casual", "admin"],
+  children,
+  fallback = null,
+  loading = null,
+}: RoleGuardProps) => {
   const auth = useAuth()
   const scopeSet = useMemo(() => new Set(scope), [scope])
 

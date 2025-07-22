@@ -17,7 +17,6 @@ export const ProfileClient = () => {
         />
       }
       loading={<ProfileSectionSkeleton />}
-      scope={["admin", "member", "casual"]}
     >
       {(auth) => <ProfileSection auth={auth} />}
     </RoleGuard>
