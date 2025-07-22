@@ -1,6 +1,7 @@
 import { UnderConstructionCard } from "@repo/ui/components/Generic"
 import { Container, VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
+import { AuthWrapper } from "@/components/auth/AuthWrapper"
 
 export const metadata: Metadata = {
   title: "About",
@@ -9,10 +10,12 @@ export const metadata: Metadata = {
 
 export default function About() {
   return (
-    <VStack as="main">
-      <Container centerContent layerStyle="container">
-        <UnderConstructionCard />
-      </Container>
-    </VStack>
+    <AuthWrapper scopes={["casual"]}>
+      <VStack as="main">
+        <Container centerContent layerStyle="container">
+          <UnderConstructionCard />
+        </Container>
+      </VStack>
+    </AuthWrapper>
   )
 }
