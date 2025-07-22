@@ -2,8 +2,9 @@
 
 import type { LoginFormData, LoginResponse } from "@repo/shared"
 import { LoginPanel } from "@repo/ui/components/Generic"
-import { useNotice } from "@yamada-ui/react"
+import { Container, useNotice } from "@yamada-ui/react"
 import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
 
 export const LoginSection = () => {
@@ -11,26 +12,29 @@ export const LoginSection = () => {
   const router = useRouter()
   const notice = useNotice()
 
-  if (!isLoading && !isPending && user) {
-    router.push("/profile")
-  }
+  // useEffect is necessary here to ensure navigation (router.push) only occurs after render,
+  // not during render. React does not allow side effects like navigation during render phase.
+  // This follows React and Next.js best practices for safe, predictable navigation after login.
+  useEffect(() => {
+    if (!isLoading && !isPending && user) {
+      router.push("/profile")
+    }
+  }, [isLoading, isPending, user, router])
 
   const handleLogin = async (data: LoginFormData): Promise<LoginResponse> => {
     try {
       const response = await login.mutateAsync(data)
 
-      if (response.success && response.data?.data) {
+      if (response.data) {
         notice({
           title: "Login successful",
           description: "You are now logged in",
           status: "success",
         })
         router.push("/profile")
-        return response.data
+        return response
       }
-      const errorMessage = response.success
-        ? response.data?.error
-        : response.error?.message || "Login failed"
+      const errorMessage = response.error || "Login failed"
       notice({
         title: "Login failed",
         description: errorMessage,
@@ -45,11 +49,13 @@ export const LoginSection = () => {
   }
 
   return (
-    <LoginPanel
-      errorMessage={login.error ? login.error.message : undefined}
-      googleHref={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
-      isLoading={login.isPending}
-      onSubmit={handleLogin}
-    />
+    <Container centerContent layerStyle="container">
+      <LoginPanel
+        errorMessage={login.error ? login.error.message : undefined}
+        googleHref={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
+        isLoading={login.isPending}
+        onSubmit={handleLogin}
+      />
+    </Container>
   )
 }

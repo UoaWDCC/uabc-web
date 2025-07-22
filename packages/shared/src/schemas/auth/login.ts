@@ -1,5 +1,5 @@
 import z from "zod"
-import { CommonResponse } from "../response"
+import { CommonResponseSchema } from "../response"
 import { UserSchema } from "../user"
 
 export const JWTEncryptedUserSchema = z.object({
@@ -7,7 +7,7 @@ export const JWTEncryptedUserSchema = z.object({
   accessToken: z.string().optional(),
 })
 
-export const UserInfoResponseSchema = z.object({
+export const GoogleUserInfoResponseSchema = z.object({
   /**
    * The unique ID of a Google user
    * @example 111111111111111111111
@@ -58,7 +58,7 @@ export const LoginRequestBodySchema = z.object({
   password: z.string().min(1, "Field is required"),
 })
 
-export const LoginResponseSchema = CommonResponse.extend({
+export const LoginResponseSchema = CommonResponseSchema.extend({
   /**
    * The user's JWT token
    */

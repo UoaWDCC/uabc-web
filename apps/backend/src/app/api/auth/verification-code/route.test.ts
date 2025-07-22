@@ -23,7 +23,7 @@ describe("/api/auth/verification-code", () => {
       .spyOn(MailService, "sendEmailVerificationCode")
       .mockResolvedValueOnce({ success: true })
 
-    const req = createMockNextRequest("/api/auth/verification-code", "POST", { email })
+    const req = createMockNextRequest("", "POST", { email })
     const res = await POST(req)
 
     const user = await userDataService.getUserByEmail(email)
@@ -47,7 +47,9 @@ describe("/api/auth/verification-code", () => {
     expect(user.emailVerificationCode).toBe(code)
 
     vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(code2)
+
     const res2 = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
+
     expect(res2.status).toBe(StatusCodes.OK)
     expect(await res2.json()).toEqual({ message: "Verification code sent" })
     user = await userDataService.getUserByEmail(email)
@@ -56,7 +58,9 @@ describe("/api/auth/verification-code", () => {
 
   it("should return a 409 if a user already exists", async () => {
     await authDataService.createAuth({ ...standardAuthCreateMock, email })
+
     const res = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
+
     expect(res.status).toBe(StatusCodes.CONFLICT)
     expect(await res.json()).toEqual({ error: "A user with that email already exists" })
   })
@@ -67,18 +71,21 @@ describe("/api/auth/verification-code", () => {
         email: "not-an-email",
       }),
     )
-    const json = await res.json()
+
     expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+    const json = await res.json()
     expect(json.error).toBe("Invalid request body")
     expect(json.details).toBeDefined()
   })
 
   it("should return 500 for internal server error", async () => {
     vi.spyOn(UserDataService.prototype, "createUser").mockRejectedValueOnce(new Error("DB error"))
+
     const req = createMockNextRequest("/api/auth/verification-code", "POST", { email })
     const res = await POST(req)
-    const json = await res.json()
+
     expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    const json = await res.json()
     expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
   })
 })

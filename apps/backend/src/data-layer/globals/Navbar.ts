@@ -86,7 +86,7 @@ export const Navbar: GlobalConfig = {
           required: true,
           defaultValue: "Log in",
           admin: {
-            description: "The text displayed for the sign in button.",
+            description: "The text displayed for the login button.",
           },
         },
         {
@@ -95,7 +95,7 @@ export const Navbar: GlobalConfig = {
           required: true,
           defaultValue: "/auth/login",
           admin: {
-            description: "The URL the sign in button points to.",
+            description: "The URL the login button points to.",
           },
         },
       ],

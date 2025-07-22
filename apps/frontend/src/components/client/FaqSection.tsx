@@ -1,6 +1,6 @@
 "use client"
 import { FAQ, FAQSkeleton } from "@repo/ui/components/Generic"
-import { Text } from "@yamada-ui/react"
+import { Container, Text } from "@yamada-ui/react"
 import { useFaq } from "@/services/cms/faq/FaqQuery"
 
 /**
@@ -20,9 +20,11 @@ export const FaqSection = () => {
   }
 
   return (
-    <FAQ
-      items={faqData?.questions || []}
-      richTextProps={{ mediaBaseUrl: process.env.NEXT_PUBLIC_API_URL }}
-    />
+    <Container centerContent layerStyle="container">
+      <FAQ
+        items={faqData?.questions || []}
+        richTextProps={{ mediaBaseUrl: process.env.NEXT_PUBLIC_API_URL }}
+      />
+    </Container>
   )
 }

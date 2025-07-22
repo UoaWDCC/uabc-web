@@ -2,12 +2,12 @@ import type { NextRequest } from "next/server"
 import type z from "zod"
 import type { User } from "../../payload-types"
 import type {
+  GoogleUserInfoResponseSchema,
   JWTEncryptedUserSchema,
   LoginFormDataSchema,
   LoginRequestBodySchema,
   LoginResponseSchema,
   RegisterRequestBodySchema,
-  UserInfoResponseSchema,
 } from "../../schemas"
 
 export const AUTH_COOKIE_NAME = "auth_token"
@@ -16,7 +16,7 @@ export const TOKEN_EXPIRY_TIME = "1h"
 
 export type RequestWithUser = NextRequest & { user: User }
 export type JWTEncryptedUser = z.infer<typeof JWTEncryptedUserSchema>
-export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>
+export type GoogleUserInfo = z.infer<typeof GoogleUserInfoResponseSchema>
 export type LoginRequestBody = z.infer<typeof LoginRequestBodySchema>
 export type LoginResponse = z.infer<typeof LoginResponseSchema>
 export type LoginFormData = z.infer<typeof LoginFormDataSchema>

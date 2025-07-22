@@ -14,22 +14,29 @@ describe("/api/admin/game-session-schedules", async () => {
   describe("GET", () => {
     it("should return 401 if user is a casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const req = createMockNextRequest("/api/admin/game-session-schedules?limit=5&page=1")
-      const res = await GET(req)
+
+      const res = await GET(
+        createMockNextRequest("/api/admin/game-session-schedules?limit=5&page=1"),
+      )
+
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
     })
 
     it("should return 401 if user is a member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
-      const req = createMockNextRequest("/api/admin/game-session-schedules?limit=5&page=1")
-      const res = await GET(req)
+
+      const res = await GET(
+        createMockNextRequest("/api/admin/game-session-schedules?limit=5&page=1"),
+      )
+
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
     })
 
     it("should return paginated schedules for admin", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       const schedulesToCreate = Array.from({ length: 15 }, (_, i) => ({
         ...gameSessionScheduleCreateMock,
         email: `user${i}@test.com`,
@@ -37,8 +44,10 @@ describe("/api/admin/game-session-schedules", async () => {
       await Promise.all(
         schedulesToCreate.map((s) => gameSessionDataService.createGameSessionSchedule(s)),
       )
-      const req = createMockNextRequest("/api/admin/game-session-schedules?limit=10&page=2")
-      const res = await GET(req)
+      const res = await GET(
+        createMockNextRequest("/api/admin/game-session-schedules?limit=10&page=2"),
+      )
+
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
       expect(json.data.docs.length).toBeLessThanOrEqual(10)
@@ -50,8 +59,9 @@ describe("/api/admin/game-session-schedules", async () => {
 
     it("should use default pagination if params are missing", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const req = createMockNextRequest("/api/admin/game-session-schedules")
-      const res = await GET(req)
+
+      const res = await GET(createMockNextRequest())
+
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
       expect(json.data.page).toBe(1)
@@ -60,8 +70,11 @@ describe("/api/admin/game-session-schedules", async () => {
 
     it("should return 400 if limit or page is out of range", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const req = createMockNextRequest("/api/admin/game-session-schedules?limit=999&page=-5")
-      const res = await GET(req)
+
+      const res = await GET(
+        createMockNextRequest("/api/admin/game-session-schedules?limit=999&page=-5"),
+      )
+
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
       const json = await res.json()
       expect(json.error).toBe("Invalid query parameters")
@@ -70,12 +83,16 @@ describe("/api/admin/game-session-schedules", async () => {
 
     it("should handle errors and return 500 status", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       vi.spyOn(
         GameSessionDataService.prototype,
         "getPaginatedGameSessionSchedules",
       ).mockRejectedValueOnce(new Error("Database error"))
-      const req = createMockNextRequest("/api/admin/game-session-schedules?limit=10&page=1")
-      const res = await GET(req)
+
+      const res = await GET(
+        createMockNextRequest("/api/admin/game-session-schedules?limit=10&page=1"),
+      )
+
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
@@ -85,38 +102,28 @@ describe("/api/admin/game-session-schedules", async () => {
   describe("POST", () => {
     it("should return 401 if user is casual", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const req = createMockNextRequest(
-        "/api/admin/game-session-schedules",
-        "POST",
-        gameSessionScheduleCreateMock,
-      )
-      const res = await POST(req)
+
+      const res = await POST(createMockNextRequest("", "POST", gameSessionScheduleCreateMock))
+
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
     })
 
     it("should return 401 if user is member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
-      const req = createMockNextRequest(
-        "/api/admin/game-session-schedules",
-        "POST",
-        gameSessionScheduleCreateMock,
-      )
-      const res = await POST(req)
+
+      const res = await POST(createMockNextRequest("", "POST", gameSessionScheduleCreateMock))
+
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
     })
 
     it("should create game session schedule if user is admin", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const req = createMockNextRequest(
-        "/api/admin/game-session-schedules",
-        "POST",
-        gameSessionScheduleCreateMock,
-      )
-      const res = await POST(req)
-      expect(res.status).toBe(StatusCodes.CREATED)
 
+      const res = await POST(createMockNextRequest("", "POST", gameSessionScheduleCreateMock))
+
+      expect(res.status).toBe(StatusCodes.CREATED)
       const json = await res.json()
       const fetchedGameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(
         json.data.id,
@@ -126,13 +133,15 @@ describe("/api/admin/game-session-schedules", async () => {
 
     it("should return 400 if request body is invalid", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const req = createMockNextRequest("/api/admin/game-session-schedules", "POST", {
-        ...gameSessionScheduleCreateMock,
-        day: undefined,
-      })
-      const res = await POST(req)
-      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
 
+      const res = await POST(
+        createMockNextRequest("", "POST", {
+          ...gameSessionScheduleCreateMock,
+          day: undefined,
+        }),
+      )
+
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
       const json = await res.json()
       expect(json.error).toBe("Invalid request body")
       expect(json.details).toBeDefined()
@@ -140,13 +149,15 @@ describe("/api/admin/game-session-schedules", async () => {
 
     it("should return 400 if invalid date is provided", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const req = createMockNextRequest("/api/admin/game-session-schedules", "POST", {
-        ...gameSessionScheduleCreateMock,
-        startTime: "invalid-date",
-      })
-      const res = await POST(req)
-      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
 
+      const res = await POST(
+        createMockNextRequest("", "POST", {
+          ...gameSessionScheduleCreateMock,
+          startTime: "invalid-date",
+        }),
+      )
+
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
       const json = await res.json()
       expect(json.error).toEqual("Invalid request body")
       expect(json.details.fieldErrors.startTime[0]).toEqual(
@@ -156,17 +167,13 @@ describe("/api/admin/game-session-schedules", async () => {
 
     it("should return 500 for internal server error", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       vi.spyOn(GameSessionDataService.prototype, "createGameSessionSchedule").mockRejectedValueOnce(
         new Error("Database error"),
       )
-      const req = createMockNextRequest(
-        "/api/admin/game-session-schedules",
-        "POST",
-        gameSessionScheduleCreateMock,
-      )
-      const res = await POST(req)
-      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const res = await POST(createMockNextRequest("", "POST", gameSessionScheduleCreateMock))
 
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
     })
