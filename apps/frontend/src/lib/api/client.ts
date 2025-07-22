@@ -1,4 +1,4 @@
-import { CommonResponse } from "@repo/shared"
+import { CommonResponseSchema } from "@repo/shared"
 import type { z } from "zod"
 
 type ApiResponse<T> =
@@ -106,7 +106,7 @@ class ApiClient {
     if (!response.ok) {
       try {
         const errorData = await response.json()
-        const parsedError = CommonResponse.parse(errorData)
+        const parsedError = CommonResponseSchema.parse(errorData)
         const errorMessage = parsedError.error || `HTTP ${response.status}: ${response.statusText}`
         return {
           success: false,
@@ -280,7 +280,7 @@ class ApiClient {
       if (!response.ok) {
         try {
           const errorData = await response.json()
-          const parsedError = CommonResponse.parse(errorData)
+          const parsedError = CommonResponseSchema.parse(errorData)
           const errorMessage =
             parsedError.error || `HTTP ${response.status}: ${response.statusText}`
           return {
@@ -346,7 +346,7 @@ class ApiClient {
    */
   public static throwIfError<T>(response: ApiResponse<T>, errorMessage?: string): T {
     if (!response.success) {
-      throw new Error(errorMessage || response.error.message)
+      throw new Error(response.error.message || errorMessage)
     }
     return response.data
   }

@@ -26,24 +26,22 @@ export const UserPanelSkeleton: FC = () => {
     >
       <CardHeader as={Center} flexDir="column" textAlign="center">
         <Box position="relative">
-          <Skeleton borderRadius="full" height="80px" mb="xs" width="80px">
+          <Skeleton borderRadius="full" mb="xs">
             <Avatar size="xl" />
           </Skeleton>
           <Float offset={[4, 4]} placement="end-end">
             <IconButton aria-label="Edit" disabled icon={<PencilIcon />} rounded="full" size="sm" />
           </Float>
         </Box>
-        <VStack gap="xs" mt="sm">
-          <Skeleton borderRadius="md" height="24px" width="120px">
-            <Text fontSize="xl">&nbsp;</Text>
-          </Skeleton>
-          <Skeleton borderRadius="md" height="20px" width="80px">
-            <Text fontSize="md">&nbsp;</Text>
+        <VStack>
+          <Skeleton alignSelf="center">
+            <Text>University of Auckland Badminton Club</Text>
+            <Text>Casual</Text>
           </Skeleton>
         </VStack>
       </CardHeader>
       <CardBody alignItems="center" gap="md">
-        <VStack gap="xs" w="full">
+        <VStack w="full">
           <VStack
             alignSelf="center"
             border="2px solid"
