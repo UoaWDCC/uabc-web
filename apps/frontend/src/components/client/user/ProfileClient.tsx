@@ -6,7 +6,7 @@ import { Authenticated } from "@/context/RoleWrappers"
 
 export const ProfileClient = () => {
   return (
-    <Authenticated fallback={<UnAuthorised />} loading={<ProfileSectionSkeleton />}>
+    <Authenticated fallback={<UnAuthorised as="section" />} loading={<ProfileSectionSkeleton />}>
       {(auth) => <ProfileSection auth={auth} />}
     </Authenticated>
   )

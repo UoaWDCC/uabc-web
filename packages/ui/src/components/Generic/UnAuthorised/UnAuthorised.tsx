@@ -8,6 +8,7 @@ import {
   EmptyStateTitle,
 } from "@yamada-ui/react"
 import NextLink from "next/link"
+import type { FC } from "react"
 
 /**
  * Props for {@link UnAuthorised} component
@@ -50,14 +51,14 @@ export interface UnAuthorisedProps
  * <UnAuthorised />
  * <UnAuthorised title="Access Denied" description="You must be an admin." />
  */
-export const UnAuthorised = ({
+export const UnAuthorised: FC<UnAuthorisedProps> = ({
   title = "Unauthorised",
   description = "You do not have permission to view this page.",
   returnLabel = "Return Home",
   buttonProps,
   href = "/",
   ...rest
-}: UnAuthorisedProps) => {
+}) => {
   return (
     <EmptyState {...rest}>
       <EmptyStateIndicator>
