@@ -35,12 +35,13 @@ export type RoleGuardProps = {
 
 export const RoleGuard = ({ scope, children, fallback = null, loading = null }: RoleGuardProps) => {
   const auth = useAuth()
+  const scopeSet = useMemo(() => new Set(scope), [scope])
 
   if (auth.isLoading || !auth.isAvailable) {
     return loading
   }
 
-  if (auth.token && auth.user && scope.includes(auth.user.role)) {
+  if (auth.token && auth.user && scopeSet.has(auth.user.role)) {
     return children(auth)
   }
 
