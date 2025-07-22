@@ -18,15 +18,13 @@ import type { AuthContextValue } from "@/context/AuthContext"
 import { useMyBookings } from "@/services/bookings/BookingQuery"
 
 export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
-  const { user, isLoading } = auth
+  const { user } = auth
   const { data: bookings, isLoading: isBookingsLoading, isError: isBookingsError } = useMyBookings()
 
   return (
     <Container centerContent gap="xl" layerStyle="container">
       <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }} w="full">
-        <GridItem>
-          {isLoading || !user ? <UserPanelSkeleton /> : <UserPanel user={user} />}
-        </GridItem>
+        <GridItem>{!user ? <UserPanelSkeleton /> : <UserPanel user={user} />}</GridItem>
         <GridItem>
           {isBookingsLoading || !user ? (
             <ProfileBookingPanelSkeleton />
@@ -36,7 +34,7 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
         </GridItem>
       </Grid>
 
-      {isLoading || !user ? (
+      {!user ? (
         <>
           <AdditionalInfoSkeleton />
           <ProfileDetailsSkeleton />
