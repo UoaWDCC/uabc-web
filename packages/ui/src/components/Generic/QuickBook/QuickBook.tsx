@@ -90,7 +90,7 @@ export const QuickBook = memo(
         p="md"
       >
         <Heading.h2 display={{ base: "none", md: "block" }}>{title}</Heading.h2>
-        <Grid gap="md" templateColumns={{ base: "1fr", md: "1fr 1fr auto" }}>
+        <Grid gap="md" templateColumns={{ base: "1fr", lg: "1fr 1fr auto" }}>
           <GridItem minW={0}>
             <FormControl
               errorMessage={errors.locationAndTimeId?.message}

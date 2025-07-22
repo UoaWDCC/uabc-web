@@ -31,7 +31,7 @@ describe("<LoginPanel />", () => {
     const passwordInput = screen.getByTestId("password")
     await user.type(passwordInput, samplePassword)
 
-    const submitButton = screen.getByText("Sign In")
+    const submitButton = screen.getByText("Login")
     await user.click(submitButton)
 
     expect(handleSubmit).toHaveResolvedWith({ data: "token" })
@@ -47,7 +47,7 @@ describe("<LoginPanel />", () => {
     const emailInput = screen.getByTestId("email")
     await user.type(emailInput, "invalid-email")
 
-    const submitButton = screen.getByText("Sign In")
+    const submitButton = screen.getByText("Login")
     await user.click(submitButton)
 
     expect(handleSubmit).not.toBeCalled()

@@ -41,9 +41,9 @@ export const NavigationBarMobile = ({
       ? [
           ...(user.role === MembershipType.admin ? [{ label: "Admin", url: "/admin" }] : []),
           { label: "Profile", url: "/profile" },
-          { label: "Sign Out", url: "/auth/signout" },
+          { label: "Logout", url: "/auth/logout" },
         ]
-      : [rightSideSingleButton || { label: "Sign In", url: "/auth/signin" }]),
+      : [rightSideSingleButton || { label: "Login", url: "/auth/login" }]),
     ...navItems,
   ]
 

@@ -8,7 +8,7 @@ class BookingsRouteWrapper {
    * GET method to fetch bookings for a specific user
    *
    * @param _req the request object
-   * @param params route parameters with the userID
+   * @param params route parameters with the userId
    * @returns the user's bookings if found, otherwise error response
    */
   @Security("jwt", ["admin"])

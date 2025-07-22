@@ -1,6 +1,6 @@
 import { render, screen } from "@repo/ui/test-utils"
-import { Footer } from "."
 import { MOCK_LINKS, MOCK_SOCIAL_LINKS } from "./constants"
+import { Footer } from "./Footer"
 
 describe("<Footer />", () => {
   it("should have correct displayName", () => {
