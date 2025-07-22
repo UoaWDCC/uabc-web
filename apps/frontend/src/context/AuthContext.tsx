@@ -21,6 +21,7 @@ type AuthState = {
   isPending: boolean
   error: string | null
   token: string | null
+  isAvailable: boolean
 }
 
 type AuthActions = {
@@ -72,7 +73,11 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
  * and mutations.
  */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { value: token, setValue: setToken } = useLocalStorage<string>(AUTH_COOKIE_NAME)
+  const {
+    value: token,
+    setValue: setToken,
+    isAvailable,
+  } = useLocalStorage<string>(AUTH_COOKIE_NAME)
   const queryClient = useQueryClient()
   const notice = useNotice()
 
@@ -158,6 +163,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isPending: isPending || login.isPending,
     error: error ? error.message : null,
     token: token ?? null,
+    isAvailable,
   }
 
   const authActions: AuthActions = {
@@ -167,10 +173,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   useUpdateEffect(() => {
-    if (!isLoading && token && !user) {
+    if (!isLoading && token && !user && isAvailable) {
       setToken(null)
     }
-  }, [isLoading, token, user, setToken])
+  }, [isLoading, token, user, setToken, isAvailable])
 
   return (
     <AuthContext.Provider value={{ ...authState, ...authActions }}>{children}</AuthContext.Provider>

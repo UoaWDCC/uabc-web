@@ -13,30 +13,19 @@ import {
   UserPanelSkeleton,
 } from "@repo/ui/components/Composite"
 import { Container, Grid, GridItem } from "@yamada-ui/react"
-import { useRouter } from "next/navigation"
-import { memo, useEffect } from "react"
-import { useAuth } from "@/context/AuthContext"
+import { memo } from "react"
+import type { AuthContextType } from "@/context/AuthContext"
 import { useMyBookings } from "@/services/bookings/BookingQuery"
 
-export const ProfileSection = memo(() => {
-  const { user, isLoading, isPending } = useAuth()
+export const ProfileSection = memo(({ auth }: { auth: AuthContextType }) => {
+  const { user, isLoading } = auth
   const { data: bookings, isLoading: isBookingsLoading, isError: isBookingsError } = useMyBookings()
-  const router = useRouter()
-
-  // useEffect is necessary here to ensure navigation (router.push) only occurs after render,
-  // not during render. React does not allow side effects like navigation during render phase.
-  // This follows React and Next.js best practices for safe, predictable navigation if the user is not logged in.
-  useEffect(() => {
-    if (!isLoading && !isPending && !user) {
-      router.push("/auth/login")
-    }
-  }, [isLoading, isPending, user, router])
 
   return (
     <Container centerContent gap="xl" layerStyle="container">
       <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }} w="full">
         <GridItem>
-          {isLoading || isPending || !user ? <UserPanelSkeleton /> : <UserPanel user={user} />}
+          {isLoading || !user ? <UserPanelSkeleton /> : <UserPanel user={user} />}
         </GridItem>
         <GridItem>
           {isBookingsLoading || !user ? (
@@ -47,7 +36,7 @@ export const ProfileSection = memo(() => {
         </GridItem>
       </Grid>
 
-      {isLoading || isPending || !user ? (
+      {isLoading || !user ? (
         <>
           <AdditionalInfoSkeleton />
           <ProfileDetailsSkeleton />
