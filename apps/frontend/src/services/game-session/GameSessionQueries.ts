@@ -14,7 +14,7 @@ export const useGetPaginatedGameSessions = (query: PaginationQuery) => {
     queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
-      const response = await GameSessionService.getAllPaginatedGameSessions({
+      const response = await GameSessionService.getPaginatedGameSessions({
         ...query,
         page: pageParam,
       })

@@ -5,7 +5,7 @@ export const PaginationQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
 })
 
-export const GetAllWithPaginationDataSchema = z.object({
+export const PaginationDataSchema = z.object({
   totalDocs: z.number(),
   limit: z.number(),
   totalPages: z.number(),

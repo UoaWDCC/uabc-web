@@ -14,7 +14,7 @@ export const useGetPaginatedGameSessionSchedules = (query: PaginationQuery) => {
     queryKey: [QueryKeys.GAME_SESSION_SCHEDULE_QUERY_KEY],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
-      const response = await AdminGameSessionScheduleService.getAllPaginatedGameSessionSchedules({
+      const response = await AdminGameSessionScheduleService.getPaginatedGameSessionSchedules({
         ...query,
         page: pageParam,
       })

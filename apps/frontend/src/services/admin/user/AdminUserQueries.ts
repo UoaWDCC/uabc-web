@@ -14,7 +14,7 @@ export const useGetPaginatedUsers = (query: PaginationQuery) => {
     queryKey: [QueryKeys.USER_QUERY_KEY],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
-      const response = await AdminUserService.getAllPaginatedUsers({
+      const response = await AdminUserService.getPaginatedUsers({
         ...query,
         page: pageParam,
       })
