@@ -9,7 +9,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
-import { useNotice } from "@yamada-ui/react"
+import { useNotice, useUpdateEffect } from "@yamada-ui/react"
 import { createContext, type ReactNode, useContext } from "react"
 import type { ApiResponse } from "@/lib/api/client"
 import { useLocalStorage } from "@/lib/storage"
@@ -20,6 +20,7 @@ type AuthState = {
   isLoading: boolean
   isPending: boolean
   error: string | null
+  token: string | null
 }
 
 type AuthActions = {
@@ -91,6 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     staleTime: 1000 * 60 * 5,
     refetchOnMount: true,
     refetchOnWindowFocus: false,
+    enabled: !!token,
   })
 
   const login = useMutation({
@@ -155,6 +157,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isLoading: isLoading || login.isPending,
     isPending: isPending || login.isPending,
     error: error ? error.message : null,
+    token: token ?? null,
   }
 
   const authActions: AuthActions = {
@@ -162,6 +165,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     emailVerificationCode,
     register,
   }
+
+  useUpdateEffect(() => {
+    if (!isLoading && token && !user) {
+      setToken(null)
+    }
+  }, [isLoading, token, user, setToken])
 
   return (
     <AuthContext.Provider value={{ ...authState, ...authActions }}>{children}</AuthContext.Provider>

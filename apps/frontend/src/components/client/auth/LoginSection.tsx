@@ -4,6 +4,7 @@ import type { LoginFormData, LoginResponse } from "@repo/shared"
 import { LoginPanel } from "@repo/ui/components/Generic"
 import { Container, useNotice } from "@yamada-ui/react"
 import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
 
 export const LoginSection = () => {
@@ -11,9 +12,14 @@ export const LoginSection = () => {
   const router = useRouter()
   const notice = useNotice()
 
-  if (!isLoading && !isPending && user) {
-    router.push("/profile")
-  }
+  // useEffect is necessary here to ensure navigation (router.push) only occurs after render,
+  // not during render. React does not allow side effects like navigation during render phase.
+  // This follows React and Next.js best practices for safe, predictable navigation after login.
+  useEffect(() => {
+    if (!isLoading && !isPending && user) {
+      router.push("/profile")
+    }
+  }, [isLoading, isPending, user, router])
 
   const handleLogin = async (data: LoginFormData): Promise<LoginResponse> => {
     try {
