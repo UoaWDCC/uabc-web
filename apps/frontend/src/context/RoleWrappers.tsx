@@ -1,7 +1,7 @@
 "use client"
 import { MembershipType } from "@repo/shared"
 import type { ReactNode } from "react"
-import { useAuth } from "./AuthContext"
+import { type AuthContextType, useAuth } from "./AuthContext"
 
 export type RoleWrapperProps = {
   children: (auth: AuthContextType, loading?: ReactNode) => ReactNode
@@ -26,7 +26,7 @@ export const UnAuthenticated = ({
   loading = null,
 }: RoleWrapperProps) => {
   const auth = useAuth()
-  if (auth.isLoading) {
+  if (auth.isLoading || !auth.isAvailable) {
     return children(auth, loading)
   }
   if (!auth.user) {
