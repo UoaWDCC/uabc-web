@@ -66,6 +66,7 @@ export const useDeleteGameSessionSchedule = () => {
   })
 }
 
+/**
  * Retrieves and caches paginated game session schedules.
  *
  * @param query The pagination query parameters.

@@ -57,6 +57,7 @@ export const useDeleteUser = () => {
   })
 }
 
+/**
  * Retrieves and caches paginated users.
  *
  * @param query The pagination query parameters.
