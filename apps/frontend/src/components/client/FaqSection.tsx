@@ -1,7 +1,7 @@
 "use client"
 import { FAQ, FAQSkeleton } from "@repo/ui/components/Generic"
 import { Text } from "@yamada-ui/react"
-import { useFaq } from "@/services/cms/faq/FaqQuery"
+import { useFaq } from "@/services/cms/faq/FaqQueries"
 
 /**
  * A section that displays frequently asked questions (FAQs). Fetches data using the {@link useFaq} hook and displays a loading and an error state when necessary.
