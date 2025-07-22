@@ -14,9 +14,11 @@ const AdminGameSessionScheduleQuery = {
     return useInfiniteQuery({
       queryKey: [QueryKeys.GAME_SESSION_SCHEDULE_QUERY_KEY],
       initialPageParam: 1,
-      queryFn: async () => {
-        const response =
-          await AdminGameSessionScheduleService.getAllPaginatedGameSessionSchedules(query)
+      queryFn: async ({ pageParam }) => {
+        const response = await AdminGameSessionScheduleService.getAllPaginatedGameSessionSchedules({
+          ...query,
+          page: pageParam,
+        })
         return response
       },
       getNextPageParam: (lastPage) => lastPage?.data?.nextPage,
