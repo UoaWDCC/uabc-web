@@ -27,7 +27,7 @@ export const CreateGameSessionScheduleRequestSchema = GameSessionScheduleSchema.
 
 export const GetAllGameSessionSchedulesResponseSchema = z.object({
   data: GetAllWithPaginationDataSchema.extend({
-    docs: z.array(GameSessionScheduleSchema).optional().nullable(),
+    docs: z.array(GameSessionScheduleSchema),
   }),
 })
 

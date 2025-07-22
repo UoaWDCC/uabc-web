@@ -59,7 +59,7 @@ export const UpdateSelfRequestSchema = UpdateUserRequestSchema.strict().omit({
 
 export const GetAllUsersResponseSchema = z.object({
   data: GetAllWithPaginationDataSchema.extend({
-    docs: z.array(UserSchema).optional().nullable(),
+    docs: z.array(UserSchema),
   }),
 })
 

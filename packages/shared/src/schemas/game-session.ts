@@ -34,6 +34,6 @@ export const GetGameSessionResponseSchema = z.object({
 
 export const GetAllGameSessionsResponseSchema = z.object({
   data: GetAllWithPaginationDataSchema.extend({
-    docs: z.array(GameSessionSchema).optional().nullable(),
+    docs: z.array(GameSessionSchema),
   }),
 })
