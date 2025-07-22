@@ -1,10 +1,10 @@
 "use client"
 import { MembershipType } from "@repo/shared"
 import type { ReactNode } from "react"
-import { type AuthContextType, useAuth } from "./AuthContext"
+import { type AuthContextValue, useAuth } from "./AuthContext"
 
 export type RoleWrapperProps = {
-  children: (auth: AuthContextType, loading?: ReactNode) => ReactNode
+  children: (auth: AuthContextValue, loading?: ReactNode) => ReactNode
   fallback?: ReactNode
   loading?: ReactNode
 }

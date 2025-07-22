@@ -14,10 +14,10 @@ import {
 } from "@repo/ui/components/Composite"
 import { Container, Grid, GridItem } from "@yamada-ui/react"
 import { memo } from "react"
-import type { AuthContextType } from "@/context/AuthContext"
+import type { AuthContextValue } from "@/context/AuthContext"
 import { useMyBookings } from "@/services/bookings/BookingQuery"
 
-export const ProfileSection = memo(({ auth }: { auth: AuthContextType }) => {
+export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
   const { user, isLoading } = auth
   const { data: bookings, isLoading: isBookingsLoading, isError: isBookingsError } = useMyBookings()
 

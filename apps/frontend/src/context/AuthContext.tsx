@@ -63,7 +63,7 @@ type AuthActions = {
   >
 }
 
-type AuthContextValue = AuthState & AuthActions
+export type AuthContextValue = AuthState & AuthActions
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
