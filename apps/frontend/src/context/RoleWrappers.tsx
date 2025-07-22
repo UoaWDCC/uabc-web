@@ -37,7 +37,7 @@ export const RoleGuard = ({ scope, children, fallback = null, loading = null }: 
   const auth = useAuth()
 
   if (auth.isLoading || !auth.isAvailable) {
-    return children(auth, loading)
+    return loading
   }
 
   if (auth.token && auth.user && scope.includes(auth.user.role)) {
