@@ -47,10 +47,6 @@ export const Navbar: GlobalConfig = {
           label: "Contact",
           url: "/contact",
         },
-        {
-          label: "FAQ",
-          url: "/faq",
-        },
       ],
       fields: [
         {

@@ -41,11 +41,6 @@ describe("globals/navbar", () => {
               label: "Contact",
               url: "/contact",
             },
-            {
-              id: expect.any(String),
-              label: "FAQ",
-              url: "/faq",
-            },
           ],
           rightSideSingleButton: {
             label: "Log in",
