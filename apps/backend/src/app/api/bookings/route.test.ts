@@ -3,6 +3,7 @@ import {
   type CreateBookingRequestBodyType,
   MembershipType,
   PlayLevel,
+  Weekday,
 } from "@repo/shared"
 import {
   casualUserMock,
@@ -112,7 +113,7 @@ describe("/api/bookings", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
       const customSemester = {
         ...semesterMock,
-        bookingOpenDay: "wednesday" as const,
+        bookingOpenDay: Weekday.wednesday,
         bookingOpenTime: new Date(2025, 0, 1, 12, 0, 0).toISOString(),
       }
       const earlySession = {
@@ -121,16 +122,19 @@ describe("/api/bookings", async () => {
         semester: customSemester,
       }
       vi.setSystemTime(new Date(2025, 0, 1, 13, 0, 0))
-      const req = createMockNextRequest("/api/bookings", "POST", {
-        gameSession: earlySession,
-        playerLevel: PlayLevel.beginner,
-      } satisfies CreateBookingRequestBodyType)
-      const res = await POST(req)
-      expect(res.status).toBe(StatusCodes.FORBIDDEN)
-      expect(await res.json()).toStrictEqual({
-        error: "Cannot book a session scheduled before the semester's booking open time",
-      })
-      vi.useRealTimers()
+      try {
+        const req = createMockNextRequest("/api/bookings", "POST", {
+          gameSession: earlySession,
+          playerLevel: PlayLevel.beginner,
+        } satisfies CreateBookingRequestBodyType)
+        const res = await POST(req)
+        expect(res.status).toBe(StatusCodes.FORBIDDEN)
+        expect(await res.json()).toStrictEqual({
+          error: "Cannot book a session scheduled before the semester's booking open time",
+        })
+      } finally {
+        vi.useRealTimers()
+      }
     })
   })
 
