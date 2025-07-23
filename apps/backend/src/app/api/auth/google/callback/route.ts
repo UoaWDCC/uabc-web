@@ -125,9 +125,11 @@ export const GET = async (req: NextRequest) => {
    * JWT token including user info and the Google access token.
    * Expires in 1 hour (same duration as Google access token)
    */
+  // Omit remainingSessions from user before signing JWT (type-safe)
+  const { remainingSessions: _omit, ...userWithoutSessions } = user
   const token = authService.signJWT(
     {
-      user,
+      user: userWithoutSessions,
       accessToken: tokens.access_token,
     },
     { expiresIn: TOKEN_EXPIRY_TIME },
