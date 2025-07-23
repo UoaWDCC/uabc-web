@@ -178,7 +178,7 @@ export const BookingCard = memo(
         </VStack>
         {menuItems && menuItems.length > 0 && (
           <CardFooter pb="0" px="0">
-            <Menu {...menuProps}>
+            <Menu lazy {...menuProps}>
               <MenuButton
                 aria-label="More options"
                 as={IconButton}

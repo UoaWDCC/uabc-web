@@ -9,27 +9,27 @@ describe("<ProfileBookingPanel />", () => {
   })
 
   it("disables delete and shows tooltip for casual user", async () => {
-    render(<ProfileBookingPanel bookings={bookingsMock} user={casualUserMock} />)
+    const { user } = render(<ProfileBookingPanel bookings={bookingsMock} user={casualUserMock} />)
     const menuButtons = screen.getAllByRole("button", { name: /more options/i })
-    await menuButtons[0].click()
+    user?.click(menuButtons[0])
     const deleteItem = await screen.findByText("Delete")
     expect(deleteItem).toHaveAttribute("aria-disabled", "true")
     expect(screen.getByText("Please contact an admin to delete your booking")).toBeInTheDocument()
   })
 
   it("disables delete and shows tooltip for member user", async () => {
-    render(<ProfileBookingPanel bookings={bookingsMock} user={memberUserMock} />)
+    const { user } = render(<ProfileBookingPanel bookings={bookingsMock} user={memberUserMock} />)
     const menuButtons = screen.getAllByRole("button", { name: /more options/i })
-    await menuButtons[0].click()
+    user?.click(menuButtons[0])
     const deleteItem = await screen.findByText("Delete")
     expect(deleteItem).toHaveAttribute("aria-disabled", "true")
     expect(screen.getByText("Please contact an admin to delete your booking")).toBeInTheDocument()
   })
 
   it("enables delete and does not show tooltip for admin user", async () => {
-    render(<ProfileBookingPanel bookings={bookingsMock} user={adminUserMock} />)
+    const { user } = render(<ProfileBookingPanel bookings={bookingsMock} user={adminUserMock} />)
     const menuButtons = screen.getAllByRole("button", { name: /more options/i })
-    await menuButtons[0].click()
+    user?.click(menuButtons[0])
     const deleteItem = await screen.findByText("Delete")
     expect(deleteItem).not.toHaveAttribute("aria-disabled", "true")
     expect(
