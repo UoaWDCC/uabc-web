@@ -24,6 +24,7 @@ import {
   Portal,
   type PortalProps,
   Text,
+  Tooltip,
   VStack,
 } from "@yamada-ui/react"
 import dayjs from "dayjs"
@@ -38,6 +39,7 @@ const NZ_TIMEZONE = "Pacific/Auckland"
 
 type MenuItemType = MenuItemProps & {
   label: string
+  tooltipLabel?: string
 }
 
 /**
@@ -191,11 +193,20 @@ export const BookingCard = memo(
               />
               <Portal {...portalProps}>
                 <MenuList {...menuListProps}>
-                  {menuItems.map(({ label, ...item }) => (
-                    <MenuItem key={label} {...menuItemProps} {...item}>
-                      {label}
-                    </MenuItem>
-                  ))}
+                  {menuItems.map(({ label, tooltipLabel, ...item }) => {
+                    const menuItem = (
+                      <MenuItem key={label} {...menuItemProps} {...item}>
+                        {label}
+                      </MenuItem>
+                    )
+                    return tooltipLabel ? (
+                      <Tooltip key={label} label={tooltipLabel} withPortal>
+                        {menuItem}
+                      </Tooltip>
+                    ) : (
+                      menuItem
+                    )
+                  })}
                 </MenuList>
               </Portal>
             </Menu>

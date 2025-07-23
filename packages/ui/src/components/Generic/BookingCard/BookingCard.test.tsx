@@ -62,4 +62,16 @@ describe("<BookingCard />", () => {
     await user.click(deleteItem)
     expect(defaultProps.menuItems[1].onClick).toHaveBeenCalled()
   })
+
+  it("should disable the Delete menu item when disabled is true", async () => {
+    const menuItems = [
+      { label: "Edit", onClick: vi.fn(), color: "primary" },
+      { label: "Delete", onClick: vi.fn(), color: "danger", disabled: true },
+    ]
+    const { user } = render(<BookingCard {...defaultProps} menuItems={menuItems} />)
+    const menuButton = screen.getByRole("button", { name: /more options/i })
+    user.click(menuButton)
+    const deleteItem = await screen.findByText("Delete")
+    expect(deleteItem).toHaveAttribute("aria-disabled", "true")
+  })
 })
