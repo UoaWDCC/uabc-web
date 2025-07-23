@@ -1,4 +1,3 @@
-import type { UpdateGameSessionRequest } from "@repo/shared"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { QueryKeys } from "@/services"
 import AdminGameSessionService from "./AdminGameSessionService"
@@ -11,16 +10,7 @@ import AdminGameSessionService from "./AdminGameSessionService"
 export const useUpdateGameSession = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({
-      id,
-      gameSessionData,
-    }: {
-      id: string
-      gameSessionData: UpdateGameSessionRequest
-    }) => {
-      const response = await AdminGameSessionService.updateGameSession(id, gameSessionData)
-      return response
-    },
+    mutationFn: AdminGameSessionService.updateGameSession,
     // TODO: When get by id is implemented, only invalidate the one id for get by id
     onSuccess: () =>
       queryClient.invalidateQueries({

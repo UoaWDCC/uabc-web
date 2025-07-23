@@ -1,4 +1,3 @@
-import type { UpdateSemesterRequest } from "@repo/shared/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { QueryKeys } from "@/services"
 import AdminSemesterService from "./AdminSemesterService"
@@ -28,16 +27,7 @@ export const useCreateSemester = () => {
 export const useUpdateSemester = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({
-      id,
-      semesterData,
-    }: {
-      id: string
-      semesterData: UpdateSemesterRequest
-    }) => {
-      const response = await AdminSemesterService.updateSemester(id, semesterData)
-      return response
-    },
+    mutationFn: AdminSemesterService.updateSemester,
     // TODO: when get by id is implemented, only invalidate the updated id for get by id or update the specific query with the updated data
     onSuccess: () =>
       queryClient.invalidateQueries({

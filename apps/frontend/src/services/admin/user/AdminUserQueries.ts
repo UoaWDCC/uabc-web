@@ -1,4 +1,4 @@
-import type { PaginationQuery, UpdateUserRequest } from "@repo/shared"
+import type { PaginationQuery } from "@repo/shared"
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { QueryKeys } from "@/services"
 import AdminUserService from "./AdminUserService"
@@ -28,10 +28,7 @@ export const useCreateUser = () => {
 export const useUpdateUser = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({ id, userData }: { id: string; userData: UpdateUserRequest }) => {
-      const response = await AdminUserService.updateUser(id, userData)
-      return response
-    },
+    mutationFn: AdminUserService.updateUser,
     // TODO: When get by id is implemented, only invalidate the one id for get by id or update the specific query with the updated data
     onSuccess: () =>
       queryClient.invalidateQueries({

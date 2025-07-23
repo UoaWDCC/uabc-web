@@ -1,4 +1,4 @@
-import type { PaginationQuery, UpdateGameSessionScheduleRequest } from "@repo/shared"
+import type { PaginationQuery } from "@repo/shared"
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { QueryKeys } from "@/services"
 import AdminGameSessionScheduleService from "./AdminGameSessionScheduleService"
@@ -28,19 +28,7 @@ export const useCreateGameSessionSchedule = () => {
 export const useUpdateGameSessionSchedule = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({
-      id,
-      gameSessionScheduleData,
-    }: {
-      id: string
-      gameSessionScheduleData: UpdateGameSessionScheduleRequest
-    }) => {
-      const response = await AdminGameSessionScheduleService.updateGameSessionSchedule(
-        id,
-        gameSessionScheduleData,
-      )
-      return response
-    },
+    mutationFn: AdminGameSessionScheduleService.updateGameSessionSchedule,
     // TODO: when get by id is implemented, only invalidate the updated id for get by id, or update the specific query with the updated data
     onSuccess: () =>
       queryClient.invalidateQueries({

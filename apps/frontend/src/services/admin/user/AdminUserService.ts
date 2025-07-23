@@ -46,8 +46,12 @@ const AdminUserService = {
    * @param data The user data to update.
    * @returns A promise that resolves to the updated user.
    */
-  updateUser: async (id: string, data: UpdateUserRequest) => {
-    const response = await apiClient.patch(`/api/admin/users/${id}`, data, GetUserResponseSchema)
+  updateUser: async ({ id, userData }: { id: string; userData: UpdateUserRequest }) => {
+    const response = await apiClient.patch(
+      `/api/admin/users/${id}`,
+      userData,
+      GetUserResponseSchema,
+    )
     return ApiClient.throwIfError(response, "Failed to update user")
   },
   /**
