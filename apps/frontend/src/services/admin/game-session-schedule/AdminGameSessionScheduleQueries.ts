@@ -70,7 +70,7 @@ export const useDeleteGameSessionSchedule = () => {
  * Retrieves and caches paginated game session schedules.
  *
  * @param query The pagination query parameters.
- * @returns A query hook that fetches all game session schedules.
+ * @returns A query hook that fetches a page of game session schedules.
  */
 export const useGetPaginatedGameSessionSchedules = (query: PaginationQuery) => {
   return useInfiniteQuery({

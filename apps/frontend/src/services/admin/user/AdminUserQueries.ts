@@ -61,7 +61,7 @@ export const useDeleteUser = () => {
  * Retrieves and caches paginated users.
  *
  * @param query The pagination query parameters.
- * @returns A query hook that fetches all users.
+ * @returns A query hook that fetches a page of users.
  */
 export const useGetPaginatedUsers = (query: PaginationQuery) => {
   return useInfiniteQuery({
