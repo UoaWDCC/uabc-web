@@ -428,13 +428,12 @@ class ApiClient {
    * Useful for services that want to handle errors by throwing.
    *
    * @param response The API response.
-   * @param errorMessage Optional custom error message.
    * @returns The data if successful.
    * @throws Error if the response is not successful.
    */
-  public static throwIfError<T>(response: ApiResponse<T>, errorMessage?: string): T {
+  public static throwIfError<T>(response: ApiResponse<T>): T {
     if (!response.success) {
-      throw new Error(response.error.message || errorMessage)
+      throw response.error
     }
     return response.data
   }

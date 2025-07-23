@@ -20,7 +20,7 @@ const AuthService = {
       { email, password },
       LoginResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to login")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Register user with email and password
@@ -36,7 +36,7 @@ const AuthService = {
       { email, password, emailVerificationCode } satisfies RegisterRequestBody,
       CommonResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to register")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Send email verification code to user's email
@@ -50,7 +50,7 @@ const AuthService = {
       { email },
       CommonResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to send email verification code")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Gets user information from a JWT token by making a request to the backend.
@@ -64,7 +64,7 @@ const AuthService = {
         Authorization: `Bearer ${token}`,
       },
     })
-    return ApiClient.throwIfError(response, "Failed to get user from token")
+    return ApiClient.throwIfError(response)
   },
 } as const
 
