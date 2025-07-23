@@ -44,9 +44,7 @@ describe("api/auth/login", () => {
       const data = authService.getData(token as string, JWTEncryptedUserSchema)
       const userMock = await userDataService.getUserByEmail(EMAIL_MOCK)
       // Omit remainingSessions from userMock for JWT payload comparison
-      const userMockWithoutSessions = Object.fromEntries(
-        Object.entries(userMock).filter(([key]) => key !== "remainingSessions"),
-      )
+      const { remainingSessions: _omit, ...userMockWithoutSessions } = userMock
       expect(data).toMatchObject({
         user: userMockWithoutSessions,
       })
