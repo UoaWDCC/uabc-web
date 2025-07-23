@@ -81,10 +81,7 @@ describe("GET /api/auth/google/callback", async () => {
     const authService = new AuthService()
     const data = authService.getData(token as string, JWTEncryptedUserSchema)
     const userMock = await userDataService.getUserByEmail(googleUserMock.email)
-    // Omit remainingSessions from userMock for JWT payload comparison
-    const userMockWithoutSessions = Object.fromEntries(
-      Object.entries(userMock).filter(([key]) => key !== "remainingSessions"),
-    )
+    const { remainingSessions: _omit, ...userMockWithoutSessions } = userMock
     expect(data).toMatchObject({
       user: userMockWithoutSessions,
       accessToken: tokensMock.access_token,
