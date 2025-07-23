@@ -1,5 +1,6 @@
 "use client"
 
+import { MembershipType } from "@repo/shared"
 import type { Booking, GameSession, GameSessionSchedule } from "@repo/shared/payload-types"
 import { CircleAlertIcon } from "@yamada-ui/lucide"
 import { EmptyState, For, type StackProps, VStack } from "@yamada-ui/react"
@@ -26,7 +27,7 @@ export interface ProfileBookingPanelProps extends StackProps {
   /**
    * The user viewing the bookings (for role-based UI)
    */
-  user?: { role: string }
+  user?: { role: MembershipType }
 }
 
 /**
@@ -40,7 +41,8 @@ export interface ProfileBookingPanelProps extends StackProps {
  */
 export const ProfileBookingPanel: FC<ProfileBookingPanelProps> = memo(
   ({ bookings, error, user, ...props }) => {
-    const isDeleteDisabled = user && (user.role === "casual" || user.role === "member")
+    const isDeleteDisabled =
+      user && (user.role === MembershipType.casual || user.role === MembershipType.member)
 
     return (
       <VStack
