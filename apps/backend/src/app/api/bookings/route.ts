@@ -21,6 +21,40 @@ class RouteWrapper {
         typeof parsedBody.gameSession === "string"
           ? await gameSessionDataService.getGameSessionById(parsedBody.gameSession)
           : parsedBody.gameSession
+      const semester = typeof gameSession.semester === "string" ? undefined : gameSession.semester
+      if (semester) {
+        const now = new Date()
+        const openDay = semester.bookingOpenDay
+        const openTime = new Date(semester.bookingOpenTime)
+        const daysOfWeek = [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+        ]
+        const openDayIndex = daysOfWeek.indexOf(openDay)
+        const nowDayIndex = now.getDay()
+        const openDate = new Date(now)
+        openDate.setDate(now.getDate() + ((openDayIndex - nowDayIndex + 7) % 7))
+        openDate.setHours(openTime.getHours(), openTime.getMinutes(), openTime.getSeconds(), 0)
+        if (now < openDate) {
+          return NextResponse.json(
+            { error: "Booking is not open yet for this semester" },
+            { status: StatusCodes.FORBIDDEN },
+          )
+        }
+        // Disallow booking for sessions scheduled before the open date/time
+        const sessionStartTime = new Date(gameSession.startTime)
+        if (sessionStartTime < openDate) {
+          return NextResponse.json(
+            { error: "Cannot book a session scheduled before the semester's booking open time" },
+            { status: StatusCodes.FORBIDDEN },
+          )
+        }
+      }
       const bookings = await bookingDataService.getBookingsBySessionId(gameSession.id)
       // Refetch user data as JWT stored data could be outdated
       const userData = await userDataService.getUserById(req.user.id)

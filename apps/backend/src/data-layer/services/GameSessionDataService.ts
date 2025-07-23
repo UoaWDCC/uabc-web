@@ -44,12 +44,14 @@ export default class GameSessionDataService {
    * Gets a {@link GameSession} by it's ID
    *
    * @param id the ID of the {@link GameSession} to fetch
+   * @param depth the population depth for related documents (default: 1)
    * @returns the {@link GameSession} document if it exists, otherwise throws a {@link NotFound} error
    */
-  public async getGameSessionById(id: string): Promise<GameSession> {
+  public async getGameSessionById(id: string, depth = 1): Promise<GameSession> {
     return await payload.findByID({
       collection: "gameSession",
       id,
+      depth,
     })
   }
 

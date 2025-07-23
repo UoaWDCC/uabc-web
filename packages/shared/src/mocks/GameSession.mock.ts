@@ -1,6 +1,6 @@
 import type { GameSession } from "../payload-types"
 import { gameSessionScheduleMock } from "./gameSessionSchedule.mock"
-import { semesterMock } from "./Semester.mock"
+import { semesterMock, semesterMockBookingNotOpen } from "./Semester.mock"
 
 export const gameSessionMock: GameSession = {
   id: "87efbe48887bc7ae09e305ed",
@@ -12,4 +12,9 @@ export const gameSessionMock: GameSession = {
   casualCapacity: 8,
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),
+}
+
+export const gameSessionMockBookingNotOpen: GameSession = {
+  ...gameSessionMock,
+  semester: semesterMockBookingNotOpen,
 }
