@@ -1,4 +1,10 @@
-import { CreateBookingRequestBodySchema, MembershipType, type RequestWithUser } from "@repo/shared"
+import {
+  CreateBookingRequestBodySchema,
+  DAYS_OF_WEEK,
+  getDaysUntilNextDayOfWeek,
+  MembershipType,
+  type RequestWithUser,
+} from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { NextResponse } from "next/server"
 import { ZodError } from "zod"
@@ -26,19 +32,10 @@ class RouteWrapper {
         const now = new Date()
         const openDay = semester.bookingOpenDay
         const openTime = new Date(semester.bookingOpenTime)
-        const daysOfWeek = [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday",
-        ]
-        const openDayIndex = daysOfWeek.indexOf(openDay)
+        const openDayIndex = DAYS_OF_WEEK.indexOf(openDay)
         const nowDayIndex = now.getDay()
         const openDate = new Date(now)
-        openDate.setDate(now.getDate() + ((openDayIndex - nowDayIndex + 7) % 7))
+        openDate.setDate(now.getDate() + getDaysUntilNextDayOfWeek(nowDayIndex, openDayIndex))
         openDate.setHours(openTime.getHours(), openTime.getMinutes(), openTime.getSeconds(), 0)
         if (now < openDate) {
           return NextResponse.json(
