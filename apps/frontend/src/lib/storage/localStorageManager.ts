@@ -147,6 +147,20 @@ class LocalStorageManager<T> {
       }
     })
   }
+
+  static isAvailable(): boolean {
+    try {
+      if (typeof window === "undefined" || !window.localStorage) {
+        return false
+      }
+      const testKey = "__ls_test__"
+      window.localStorage.setItem(testKey, "1")
+      window.localStorage.removeItem(testKey)
+      return true
+    } catch {
+      return false
+    }
+  }
 }
 
 /**
@@ -170,6 +184,7 @@ export function useLocalStorage<T>(
   setValue: (value: T | null) => void
   removeValue: () => void
   isValid: boolean
+  isAvailable: boolean
 } {
   const manager = React.useMemo(() => createLocalStorageManager(key, schema), [key, schema])
   const [value, setValue] = React.useState<T | null>(() => manager.getValue())
@@ -221,6 +236,7 @@ export function useLocalStorage<T>(
     setValue: setStoredValue,
     removeValue: removeStoredValue,
     isValid,
+    isAvailable: LocalStorageManager.isAvailable(),
   }
 }
 
@@ -236,13 +252,15 @@ export function useLocalStorageWithDefault<T>(
   setValue: (value: T) => void
   removeValue: () => void
   isValid: boolean
+  isAvailable: boolean
 } {
-  const { value, setValue, removeValue, isValid } = useLocalStorage(key, schema)
+  const { value, setValue, removeValue, isValid, isAvailable } = useLocalStorage(key, schema)
   return {
     value: value ?? defaultValue,
     setValue: (newValue: T) => setValue(newValue),
     removeValue,
     isValid,
+    isAvailable,
   }
 }
 
@@ -257,6 +275,7 @@ export function useLocalStorageWithSchema<T>(
   setValue: (value: T | null) => void
   removeValue: () => void
   isValid: boolean
+  isAvailable: boolean
 } {
   return useLocalStorage(key, schema)
 }

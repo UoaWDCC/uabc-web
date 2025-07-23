@@ -1,8 +1,8 @@
 import {
+  type GetAllSemestersResponse,
+  GetAllSemestersResponseSchema,
   type GetSemesterResponse,
   GetSemesterResponseSchema,
-  type GetSemestersResponse,
-  GetSemestersResponseSchema,
 } from "@repo/shared"
 import { apiClient } from "@/lib/api/client"
 
@@ -27,8 +27,8 @@ const SemesterService = {
    *
    * @returns A list of all semesters.
    */
-  getSemesters: async (): Promise<GetSemestersResponse | undefined> => {
-    const response = await apiClient.get("/api/semesters", GetSemestersResponseSchema)
+  getAllSemesters: async (): Promise<GetAllSemestersResponse | undefined> => {
+    const response = await apiClient.get("/api/semesters", GetAllSemestersResponseSchema)
     if (!response.success) throw new Error("Failed to retrieve semesters")
     return response.data
   },

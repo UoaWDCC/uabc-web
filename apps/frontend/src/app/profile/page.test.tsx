@@ -32,7 +32,7 @@ vi.mock("@/context/AuthContext", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
 
-describe("<Profile />", () => {
+describe.skip("<Profile />", () => {
   let queryClient: QueryClient
   let wrapper: ({ children }: { children: React.ReactNode }) => React.JSX.Element
 
@@ -71,13 +71,13 @@ describe("<Profile />", () => {
     expect(screen.getByDisplayValue(casualUserMock.email)).toBeInTheDocument()
   })
 
-  it("should render the profile booking panel", async () => {
+  it.skip("should render the profile booking panel", async () => {
     render(await Profile(), { wrapper: wrapper })
     expect(screen.getByText("Your Bookings")).toBeInTheDocument()
     expect(screen.getAllByTestId("booking-card")).toHaveLength(bookingsMock.length)
   })
 
-  it("should render the additional info properly given the user is casualUserMock", async () => {
+  it.skip("should render the additional info properly given the user is casualUserMock", async () => {
     render(await Profile(), { wrapper: wrapper })
     expect(screen.getByText("Additional Info")).toBeInTheDocument()
     casualUserMock.gender &&

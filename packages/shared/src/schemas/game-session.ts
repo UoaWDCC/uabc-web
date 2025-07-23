@@ -2,6 +2,7 @@ import z from "zod"
 import type { GameSession } from "../payload-types"
 import type { CreateGameSessionData, UpdateGameSessionData } from "../types"
 import { GameSessionScheduleSchema } from "./game-session-schedule"
+import { PaginationDataSchema } from "./query"
 import { SemesterSchema } from "./semester"
 
 export const GameSessionSchema = z.object({
@@ -32,5 +33,7 @@ export const GetGameSessionResponseSchema = z.object({
 })
 
 export const GetAllGameSessionsResponseSchema = z.object({
-  data: z.array(GameSessionSchema),
+  data: PaginationDataSchema.extend({
+    docs: z.array(GameSessionSchema),
+  }),
 })

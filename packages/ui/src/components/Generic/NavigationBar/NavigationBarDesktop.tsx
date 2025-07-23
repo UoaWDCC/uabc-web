@@ -21,7 +21,9 @@ export const NavigationBarDesktop = ({
   rightSideSingleButton,
   user,
 }: NavigationBarProps) => {
-  const fullName = useMemo(() => `${user?.firstName} ${user?.lastName}`.trim(), [user])
+  const fullName = useMemo(() => {
+    return `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim()
+  }, [user])
   const src = useMemo(
     () => (typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""),
     [user],
@@ -56,7 +58,7 @@ export const NavigationBarDesktop = ({
       width="full"
       zIndex={1001}
     >
-      <HStack as={Motion} gap={0}>
+      <HStack as={Motion} gap="xs">
         <Box as={Link} borderRadius="50%" href="/" position="relative">
           <UabcLogo />
         </Box>

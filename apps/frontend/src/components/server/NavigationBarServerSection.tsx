@@ -1,6 +1,6 @@
-import { NavigationBar } from "@repo/ui/components/Generic"
 import { use } from "react"
 import { getNavigationBar } from "@/services/cms/navbar/NavigationBarService"
+import { NavbarSection } from "../client/NavbarSection"
 
 /**
  * Server-side component to fetch and render the navigation bar section.
@@ -10,5 +10,5 @@ import { getNavigationBar } from "@/services/cms/navbar/NavigationBarService"
 export const NavigationBarServerSection = () => {
   const { data: navbar } = use(getNavigationBar())
 
-  return <NavigationBar {...navbar} />
+  return <NavbarSection {...navbar} />
 }

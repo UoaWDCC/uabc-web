@@ -1,76 +1,78 @@
 "use client"
 
-import { bookingsMock } from "@repo/shared/mocks"
 import {
   AdditionalInfo,
   AdditionalInfoFields,
+  AdditionalInfoSkeleton,
   ProfileBookingPanel,
+  ProfileBookingPanelSkeleton,
   ProfileDetails,
   ProfileDetailsFields,
+  ProfileDetailsSkeleton,
   UserPanel,
+  UserPanelSkeleton,
 } from "@repo/ui/components/Composite"
-import { Center, Grid, GridItem, Loading, VStack } from "@yamada-ui/react"
-import { redirect } from "next/navigation"
+import { Container, Grid, GridItem } from "@yamada-ui/react"
 import { memo } from "react"
-import { useAuth } from "@/context/AuthContext"
+import type { AuthContextValue } from "@/context/AuthContext"
+import { useMyBookings } from "@/services/bookings/BookingQuery"
 
-export const ProfileSection = memo(() => {
-  const { user, isLoading, isPending } = useAuth()
-
-  if (isLoading || isPending) {
-    return (
-      <Center minH="50vh">
-        <Loading boxSize="sm" />
-      </Center>
-    )
-  }
-
-  if (!user) {
-    redirect("/auth/login")
-  }
+export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
+  const { user } = auth
+  const { data: bookings, isLoading: isBookingsLoading, isError: isBookingsError } = useMyBookings()
 
   return (
-    <VStack gap="xl" maxW="1220px">
-      <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }}>
+    <Container centerContent gap="xl" layerStyle="container">
+      <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }} w="full">
+        <GridItem>{!user ? <UserPanelSkeleton /> : <UserPanel user={user} />}</GridItem>
         <GridItem>
-          <UserPanel user={user} />
-        </GridItem>
-        <GridItem>
-          <ProfileBookingPanel bookings={bookingsMock} />
+          {isBookingsLoading || !user ? (
+            <ProfileBookingPanelSkeleton />
+          ) : (
+            <ProfileBookingPanel bookings={bookings?.data ?? []} error={isBookingsError} />
+          )}
         </GridItem>
       </Grid>
 
-      <ProfileDetails
-        defaultValues={{
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-        }}
-        fields={ProfileDetailsFields}
-        onSave={async (data) => {
-          // TODO: Implement update user mutation
-          console.log(data)
-        }}
-        title="Profile Details"
-        w="full"
-      />
-
-      <AdditionalInfo
-        defaultValues={{
-          gender: user.gender,
-          playLevel: user.playLevel,
-          dietaryRequirements: user.dietaryRequirements,
-        }}
-        fields={AdditionalInfoFields}
-        onSave={async (data) => {
-          // TODO: Implement update user mutation
-          console.log(data)
-        }}
-        title="Additional Info"
-        w="full"
-      />
-    </VStack>
+      {!user ? (
+        <>
+          <ProfileDetailsSkeleton />
+          <AdditionalInfoSkeleton />
+        </>
+      ) : (
+        <>
+          <ProfileDetails
+            defaultValues={{
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              phoneNumber: user.phoneNumber,
+            }}
+            fields={ProfileDetailsFields}
+            onSave={async (data) => {
+              // TODO: Implement update user mutation
+              console.log(data)
+            }}
+            title="Profile Details"
+            w="full"
+          />
+          <AdditionalInfo
+            defaultValues={{
+              gender: user.gender,
+              playLevel: user.playLevel,
+              dietaryRequirements: user.dietaryRequirements,
+            }}
+            fields={AdditionalInfoFields}
+            onSave={async (data) => {
+              // TODO: Implement update user mutation
+              console.log(data)
+            }}
+            title="Additional Info"
+            w="full"
+          />
+        </>
+      )}
+    </Container>
   )
 })
 
