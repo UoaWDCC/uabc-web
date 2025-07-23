@@ -47,8 +47,6 @@ describe("<BookingCard />", () => {
       ),
     ).toBeInTheDocument()
     expect(screen.getByAltText(defaultProps.imageProps.alt)).toBeInTheDocument()
-    expect(screen.getByText("Edit")).toBeInTheDocument()
-    expect(screen.getByText("Delete")).toBeInTheDocument()
   })
 
   it("should call menu item onClick when clicked", async () => {
@@ -58,6 +56,7 @@ describe("<BookingCard />", () => {
     const editItem = await screen.findByText("Edit")
     await user.click(editItem)
     expect(defaultProps.menuItems[0].onClick).toHaveBeenCalled()
+    await user.click(menuButton)
     const deleteItem = await screen.findByText("Delete")
     await user.click(deleteItem)
     expect(defaultProps.menuItems[1].onClick).toHaveBeenCalled()
