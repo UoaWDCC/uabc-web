@@ -1,7 +1,7 @@
 "use client"
 
 import { MembershipType } from "@repo/shared"
-import type { Booking, GameSession, GameSessionSchedule } from "@repo/shared/payload-types"
+import type { Booking, GameSession, GameSessionSchedule, User } from "@repo/shared/payload-types"
 import { CircleAlertIcon } from "@yamada-ui/lucide"
 import { EmptyState, For, type StackProps, VStack } from "@yamada-ui/react"
 import { type FC, memo } from "react"
@@ -27,7 +27,7 @@ export interface ProfileBookingPanelProps extends StackProps {
   /**
    * The user viewing the bookings (for role-based UI)
    */
-  user?: { role: MembershipType }
+  user?: User
 }
 
 /**
