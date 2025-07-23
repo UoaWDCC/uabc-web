@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
-import { createApiClient } from "../client"
+import { ApiClientError, createApiClient } from "../client"
 
 global.fetch = vi.fn()
 
@@ -84,8 +84,13 @@ describe("ApiClient GET method", () => {
     const result = await client.get("/test", testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Resource not found")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("GET")
+        expect(result.error.url).toBe("https://api.example.com/test")
+        expect(result.error.status).toBe(404)
+      }
       expect(result.status).toBe(404)
     }
   })
@@ -103,8 +108,12 @@ describe("ApiClient GET method", () => {
     const result = await client.get("/test", testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Invalid response format")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("GET")
+        expect(result.error.url).toBe("https://api.example.com/test")
+      }
     }
   })
 
@@ -116,8 +125,12 @@ describe("ApiClient GET method", () => {
     const result = await client.get("/test", testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Network error")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("GET")
+        expect(result.error.url).toBe("https://api.example.com/test")
+      }
       expect(result.status).toBe(null)
     }
   })
@@ -202,8 +215,13 @@ describe("ApiClient GET method", () => {
     const result = await client.get("/test", testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("HTTP 500: Internal Server Error")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("GET")
+        expect(result.error.url).toBe("https://api.example.com/test")
+        expect(result.error.status).toBe(500)
+      }
       expect(result.status).toBe(500)
     }
   })

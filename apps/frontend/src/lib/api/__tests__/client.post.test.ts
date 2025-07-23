@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
-import { createApiClient } from "../client"
+import { ApiClientError, createApiClient } from "../client"
 
 global.fetch = vi.fn()
 
@@ -48,8 +48,13 @@ describe("ApiClient POST method", () => {
     const result = await client.post("/test", { foo: "bar" }, testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Invalid request data")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("POST")
+        expect(result.error.url).toBe("https://api.example.com/test")
+        expect(result.error.status).toBe(400)
+      }
     }
   })
 
@@ -60,8 +65,12 @@ describe("ApiClient POST method", () => {
     const result = await client.post("/test", { foo: "bar" }, testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Invalid response format")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("POST")
+        expect(result.error.url).toBe("https://api.example.com/test")
+      }
     }
   })
 
@@ -73,8 +82,12 @@ describe("ApiClient POST method", () => {
     const result = await client.post("/test", { foo: "bar" }, testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Network error")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("POST")
+        expect(result.error.url).toBe("https://api.example.com/test")
+      }
       expect(result.status).toBe(null)
     }
   })
@@ -87,8 +100,12 @@ describe("ApiClient POST method", () => {
     const result = await client.post("/test", { foo: "bar" }, testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Network error")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("POST")
+        expect(result.error.url).toBe("https://api.example.com/test")
+      }
       expect(result.status).toBe(null)
     }
   })

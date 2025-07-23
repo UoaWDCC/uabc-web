@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
-import { createApiClient } from "../client"
+import { ApiClientError, createApiClient } from "../client"
 
 global.fetch = vi.fn()
 
@@ -54,8 +54,13 @@ describe("ApiClient PATCH method", () => {
     const result = await client.patch("/test", { foo: "bar" }, testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Internal server error occurred")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("PATCH")
+        expect(result.error.url).toBe("https://api.example.com/test")
+        expect(result.error.status).toBe(500)
+      }
     }
   })
 
@@ -69,8 +74,12 @@ describe("ApiClient PATCH method", () => {
     const result = await client.patch("/test", { foo: "bar" }, testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Invalid response format")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("PATCH")
+        expect(result.error.url).toBe("https://api.example.com/test")
+      }
     }
   })
 
@@ -82,8 +91,12 @@ describe("ApiClient PATCH method", () => {
     const result = await client.patch("/test", { foo: "bar" }, testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Network error")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("PATCH")
+        expect(result.error.url).toBe("https://api.example.com/test")
+      }
       expect(result.status).toBe(null)
     }
   })
@@ -96,8 +109,12 @@ describe("ApiClient PATCH method", () => {
     const result = await client.patch("/test", { foo: "bar" }, testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Network error")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("PATCH")
+        expect(result.error.url).toBe("https://api.example.com/test")
+      }
       expect(result.status).toBe(null)
     }
   })

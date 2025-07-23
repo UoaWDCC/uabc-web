@@ -1,14 +1,27 @@
-import { ApiClient } from "../client"
+import { ApiClient, ApiClientError } from "../client"
 
 describe("ApiClient helper methods", () => {
   it("should throw error when using throwIfError with failed response", () => {
     const failedResponse = {
       success: false as const,
-      error: new Error("Test error"),
+      error: new ApiClientError({
+        message: "Test error",
+        method: "GET",
+        url: "https://api.example.com/test",
+      }),
       status: 400,
     }
 
     expect(() => ApiClient.throwIfError(failedResponse)).toThrow("Test error")
+    try {
+      ApiClient.throwIfError(failedResponse)
+    } catch (err) {
+      expect(err).toBeInstanceOf(ApiClientError)
+      if (err instanceof ApiClientError) {
+        expect(err.method).toBe("GET")
+        expect(err.url).toBe("https://api.example.com/test")
+      }
+    }
   })
 
   it("should return data when using throwIfError with successful response", () => {
