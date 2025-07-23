@@ -25,18 +25,16 @@ export const LoginSection = () => {
     try {
       const response = await login.mutateAsync(data)
 
-      if (response.success && response.data?.data) {
+      if (response.data) {
         notice({
           title: "Login successful",
           description: "You are now logged in",
           status: "success",
         })
         router.push("/profile")
-        return response.data
+        return response
       }
-      const errorMessage = response.success
-        ? response.data?.error
-        : response.error?.message || "Login failed"
+      const errorMessage = response.error || "Login failed"
       notice({
         title: "Login failed",
         description: errorMessage,

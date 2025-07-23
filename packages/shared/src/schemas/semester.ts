@@ -43,6 +43,6 @@ export const GetSemesterResponseSchema = z.object({
   data: SemesterSchema,
 })
 
-export const GetSemestersResponseSchema = z.object({
+export const GetAllSemestersResponseSchema = z.object({
   data: z.array(SemesterSchema),
 })
