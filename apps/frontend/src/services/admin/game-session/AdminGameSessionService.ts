@@ -10,7 +10,7 @@ const AdminGameSessionService = {
    * @param data The updated data for the game session.
    * @returns The updated game session.
    */
-  updateGameSession: async (id: string, data: UpdateGameSessionRequest) => {
+  updateGameSession: async ({ id, data }: { id: string; data: UpdateGameSessionRequest }) => {
     const response = await apiClient.patch(
       `/admin/game-sessions/${id}`,
       data,

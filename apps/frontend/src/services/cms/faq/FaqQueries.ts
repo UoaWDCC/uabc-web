@@ -9,7 +9,7 @@ import { getFaq } from "./FaqService"
  *
  * @returns A query hook that fetches FAQ data
  */
-export function useFaq() {
+export const useFaq = () => {
   return useQuery({
     queryKey: [QueryKeys.FAQ_QUERY_KEY],
     queryFn: async () => {

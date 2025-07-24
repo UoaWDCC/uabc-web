@@ -2,7 +2,7 @@ import type { Faq } from "@repo/shared/payload-types"
 import { createSimpleSharedFAQItem } from "@repo/ui/test-config/mocks/FAQ.mock"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { renderHook, waitFor } from "@/test-config/test-utils"
-import { useFaq } from "./FaqQuery"
+import { useFaq } from "./FaqQueries"
 import { getFaq } from "./FaqService"
 
 vi.mock("./FaqService", () => ({
