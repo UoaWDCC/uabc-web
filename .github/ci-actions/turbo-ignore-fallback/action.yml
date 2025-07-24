@@ -1,0 +1,25 @@
+name: 'Turbo Ignore Fallback'
+description: 'Checks if a build is needed using turbo-ignore with fallback to latest master commit hash.'
+
+inputs:
+  workspace:
+    description: 'The workspace to check (e.g., backend, frontend, @repo/ui)'
+    required: true
+
+outputs:
+  exitcode:
+    description: 'The exit code from turbo-ignore'
+    value: ${{ steps.turbo-ignore.outcome }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get latest master commit hash
+      id: master_sha
+      run: echo "sha=$(git rev-parse origin/master)" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Check if build is needed
+      id: turbo-ignore
+      run: pnpm exec turbo-ignore ${{ inputs.workspace }} --fallback=${{ steps.master_sha.outputs.sha }}
+      shell: bash 

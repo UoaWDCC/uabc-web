@@ -35,8 +35,9 @@ runs:
 
     - name: Check if build is needed
       id: turbo-ignore
-      run: pnpm exec turbo-ignore @repo/ui --fallback=master
-      shell: bash
+      uses: ./.github/ci-actions/turbo-ignore-fallback
+      with:
+        workspace: '@repo/ui'
 
     - name: Skip build if not needed
       if: steps.turbo-ignore.outcome == 'success' && steps.turbo-ignore.conclusion == 'success' && steps.turbo-ignore.outputs.exitcode == '0'
