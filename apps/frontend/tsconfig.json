@@ -14,7 +14,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@repo/ui/*": ["../../packages/ui/src/*"],
-      "@repo/shared/*": ["../../packages/shared/src/*"]
+      "@repo/shared/*": ["../../packages/shared/src/*"],
+      "@repo/test-config/*": ["../../packages/test-config/src/*"]
     },
     "plugins": [
       {
