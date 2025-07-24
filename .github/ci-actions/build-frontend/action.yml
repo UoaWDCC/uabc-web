@@ -14,6 +14,20 @@ inputs:
   APP_INDEX_MODE:
     description: "The app index mode."
     required: false
+  SMTP_HOST:
+    description: "The SMTP host."
+    required: false
+  SMTP_USER:
+    description: "The SMTP user."
+    required: false
+  SMTP_PASS:
+    description: "The SMTP password."
+    required: false
+  PAYLOAD_SECRET:
+    description: "The payload secret."
+    required: false
+  DATABASE_URI:
+    description: "The database URI."
 
 runs:
   using: composite
@@ -62,4 +76,9 @@ runs:
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
         NODE_ENV: ${{ inputs.NODE_ENV }}
         APP_INDEX_MODE: ${{ inputs.APP_INDEX_MODE }}
+        SMTP_HOST: ${{ inputs.SMTP_HOST }}
+        SMTP_USER: ${{ inputs.SMTP_USER }}
+        SMTP_PASS: ${{ inputs.SMTP_PASS }}
+        PAYLOAD_SECRET: ${{ inputs.PAYLOAD_SECRET }}
+        DATABASE_URI: ${{ inputs.DATABASE_URI }}
       run: pnpm build --filter frontend
