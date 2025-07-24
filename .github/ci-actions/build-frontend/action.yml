@@ -60,6 +60,7 @@ runs:
       uses: ./.github/ci-actions/turbo-ignore-fallback
       with:
         workspace: frontend
+      continue-on-error: true
 
     - name: Skip build if not needed
       if: steps.turbo-ignore.outcome == 'success' && steps.turbo-ignore.conclusion == 'success' && steps.turbo-ignore.outputs.exitcode == '0'
