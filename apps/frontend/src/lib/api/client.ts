@@ -1,5 +1,6 @@
 import { CommonResponseSchema } from "@repo/shared"
 import type { z } from "zod"
+import { ApiClientError } from "./ApiClientError"
 
 type ApiResponse<T> =
   | { success: true; data: T; status: number }
@@ -9,45 +10,6 @@ type RequestOptions = {
   headers?: Record<string, string>
   tags?: string[]
   revalidate?: number | false
-}
-
-class ApiClientError extends Error {
-  public readonly method: string
-  public readonly url: string
-  public readonly status: number | null
-  public readonly statusText: string | null
-  public readonly errorBody: unknown
-  public readonly originalError: unknown
-
-  constructor({
-    message,
-    method,
-    url,
-    status = null,
-    statusText = null,
-    errorBody = undefined,
-    originalError = undefined,
-  }: {
-    message: string
-    method: string
-    url: string
-    status?: number | null
-    statusText?: string | null
-    errorBody?: unknown
-    originalError?: unknown
-  }) {
-    super(message)
-    this.name = "ApiClientError"
-    this.method = method
-    this.url = url
-    this.status = status
-    this.statusText = statusText
-    this.errorBody = errorBody
-    this.originalError = originalError
-    if (originalError instanceof Error && originalError.stack) {
-      this.stack = originalError.stack
-    }
-  }
 }
 
 /**
@@ -469,8 +431,6 @@ export const createApiClient = (baseUrl?: string): ApiClient => {
  */
 export const apiClient = createApiClient()
 
-// Export types for use in services
 export type { ApiResponse, RequestOptions }
 
-// Export the ApiClient class for testing
-export { ApiClient, ApiClientError }
+export { ApiClient }

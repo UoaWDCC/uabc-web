@@ -1,4 +1,5 @@
-import { ApiClient, ApiClientError } from "../client"
+import { ApiClientError } from "../ApiClientError"
+import { ApiClient } from "../client"
 
 describe("ApiClient helper methods", () => {
   it("should throw error when using throwIfError with failed response", () => {

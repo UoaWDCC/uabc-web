@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
-import { ApiClientError, createApiClient } from "../client"
+import { ApiClientError } from "../ApiClientError"
+import { createApiClient } from "../client"
 
 global.fetch = vi.fn()
 
