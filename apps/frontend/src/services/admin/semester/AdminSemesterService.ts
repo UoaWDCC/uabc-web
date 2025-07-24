@@ -20,7 +20,7 @@ const AdminSemesterService = {
    * @param data The updated data for the semester.
    * @returns The updated semester.
    */
-  updateSemester: async (id: string, data: UpdateSemesterRequest) => {
+  updateSemester: async ({ id, data }: { id: string; data: UpdateSemesterRequest }) => {
     const response = await apiClient.put(`/admin/semesters/${id}`, data, GetSemesterResponseSchema)
     return ApiClient.throwIfError(response)
   },
