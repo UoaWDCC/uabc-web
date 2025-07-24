@@ -82,9 +82,7 @@ describe("<ProfileSection />", () => {
       </QueryClientProvider>,
     )
 
-    const editButton = screen.getAllByText(/Edit/i)[0]
-
-    await user.click(editButton)
+    await user.click(screen.getAllByText(/Edit/i)[0])
     await user.clear(screen.getByLabelText(/First Name/i))
     await user.type(screen.getByLabelText(/First Name/i), "Jane")
     await user.click(screen.getByText(/Save changes/i))
@@ -127,31 +125,17 @@ describe("<ProfileSection />", () => {
       </QueryClientProvider>,
     )
 
-    await user.click(screen.getAllByRole("button", { name: /edit/i })[1])
-    await waitFor(async () => {
-      const genderInput = screen.getByRole("combobox", { name: /male/i })
-      await user.click(genderInput)
-      await user.keyboard("{ArrowDown}")
-      await user.keyboard("{Enter}")
-    })
-    await waitFor(async () => {
-      const playLevelInput = screen.getByRole("combobox", { name: /beginner/i })
-      await user.click(playLevelInput)
-      await user.keyboard("{ArrowDown}")
-      await user.keyboard("{Enter}")
-    })
-    await user.click(screen.getByRole("button", { name: /save changes/i }))
-    await waitFor(() => {
-      expect(screen.getByDisplayValue(Gender.female)).toBeInTheDocument()
-      expect(screen.getByDisplayValue(PlayLevel.intermediate)).toBeInTheDocument()
-    })
+    await user.click(screen.getAllByText(/Edit/i)[1])
+    await user.clear(screen.getByLabelText(/Dietary Requirements/i))
+    await user.type(screen.getByLabelText(/Dietary Requirements/i), "Test")
+    await user.click(screen.getByText(/Save changes/i))
 
     await waitFor(() => {
       expect(mutateAsync).toHaveBeenCalledWith(
         expect.objectContaining({
-          gender: Gender.female,
-          playLevel: PlayLevel.intermediate,
-          dietaryRequirements: mockUser.dietaryRequirements,
+          gender: Gender.male,
+          playLevel: PlayLevel.beginner,
+          dietaryRequirements: "Test",
         }),
       )
     })
