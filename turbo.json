@@ -85,7 +85,7 @@
     },
     "merge": {
       "cache": true,
-      "dependsOn": ["^merge", "@repo/test-config#build"],
+      "dependsOn": ["@repo/test-config#build", "^merge"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     }
   },
