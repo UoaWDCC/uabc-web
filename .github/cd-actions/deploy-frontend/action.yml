@@ -37,6 +37,9 @@ inputs:
   PAYLOAD_SECRET:
     description: The payload secret
     required: false
+  DATABASE_URI:
+    description: The database URI
+    required: false
   # Additional variables
   project-name:
     description: 'Project name'
@@ -99,6 +102,7 @@ runs:
         SMTP_USER: ${{ inputs.SMTP_USER }}
         SMTP_PASS: ${{ inputs.SMTP_PASS }}
         PAYLOAD_SECRET: ${{ inputs.PAYLOAD_SECRET }}
+        DATABASE_URI: ${{ inputs.DATABASE_URI }}
       shell: bash
 
     - name: Deploy to Cloudflare Workers with Wrangler
