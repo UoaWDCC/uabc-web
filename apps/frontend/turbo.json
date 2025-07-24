@@ -9,7 +9,7 @@
       "dependsOn": ["^cf-typegen", "@repo/test-config#build"]
     },
     "deploy": {
-      "dependsOn": ["^deploy", "frontend#build"]
+      "dependsOn": ["frontend#build", "frontend#cf-typegen", "^deploy"]
     }
   }
 }
