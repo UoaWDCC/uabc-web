@@ -14,7 +14,9 @@
       "!**/coverage",
       "!apps/portal",
       "!**/importMap.js",
-      "!**/.vercel"
+      "!**/.vercel",
+      "!**/.open-next",
+      "!**/cloudflare-env.d.ts"
     ],
     "ignoreUnknown": true
   },

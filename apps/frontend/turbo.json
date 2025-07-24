@@ -3,13 +3,13 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "dependsOn": ["@repo/test-config#build"]
+      "dependsOn": ["@repo/test-config#build", "frontend#cf-typegen", "^build"]
     },
     "cf-typegen": {
-      "dependsOn": ["@repo/test-config#build"]
+      "dependsOn": ["@repo/test-config#build", "^cf-typegen"]
     },
     "deploy": {
-      "dependsOn": ["frontend#cf-typegen", "frontend#build"]
+      "dependsOn": ["frontend#build", "^deploy"]
     }
   }
 }

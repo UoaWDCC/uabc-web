@@ -18,7 +18,9 @@
     ".gitignore",
     "tsconfig.tsbuildinfo",
     "patches/**",
-    "**/*.svg"
+    "**/*.svg",
+    "**/.open-next/**",
+    "cloudflare-env.d.ts"
   ],
   "words": [
     "adipiscing",
