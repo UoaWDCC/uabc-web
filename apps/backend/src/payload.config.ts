@@ -31,7 +31,7 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   routes: {
-    admin: "/",
+    admin: "/admin",
     api: "/payload/api",
   },
   cors: "*",

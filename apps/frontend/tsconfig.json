@@ -14,7 +14,10 @@
     "paths": {
       "@/*": ["./src/*"],
       "@repo/ui/*": ["../../packages/ui/src/*"],
-      "@repo/shared/*": ["../../packages/shared/src/*"]
+      "@repo/shared/*": ["../../packages/shared/src/*"],
+      "@backend/*": ["../backend/src/*"],
+      "@payload-config": ["../backend/src/payload.config.ts"],
+      "@/data-layer/*": ["../backend/src/data-layer/*"]
     },
     "plugins": [
       {

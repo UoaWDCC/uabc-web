@@ -27,12 +27,20 @@ const config = (async () => {
   }
 
   const nextConfig: NextConfig = {
-    output: "export",
+    // output: "export",
     images: {
       remotePatterns,
     },
     // Need this to allow static site generation to work with SSG hosting
     trailingSlash: true,
+    rewrites: async () => {
+      return [
+        {
+          source: "/payload/api/:path*",
+          destination: `${process.env.NEXT_PUBLIC_API_URL}/payload/api/:path*`,
+        },
+      ]
+    },
   }
 
   return nextConfig

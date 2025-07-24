@@ -1,10 +1,5 @@
-import { NuqsProvider } from "@repo/ui/components/Provider"
-import { ColorModeScript } from "@yamada-ui/react"
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import { Providers } from "@/app/providers"
-import { FooterServerSection } from "@/components/server/FooterServerSection"
-import { NavigationBarServerSection } from "@/components/server/NavigationBarServerSection"
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -64,14 +59,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
-        <NuqsProvider>
-          <ColorModeScript initialColorMode="dark" />
-          <Providers>
-            <NavigationBarServerSection />
-            {children}
-            <FooterServerSection />
-          </Providers>
-        </NuqsProvider>
+        {children}
       </body>
     </html>
   )
