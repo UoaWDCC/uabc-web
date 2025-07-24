@@ -4,6 +4,12 @@
   "tasks": {
     "build": {
       "dependsOn": ["@repo/test-config#build", "^build"]
+    },
+    "cf-typegen": {
+      "dependsOn": ["^cf-typegen", "@repo/test-config#build"]
+    },
+    "deploy": {
+      "dependsOn": ["^deploy", "frontend#build"]
     }
   }
 }
