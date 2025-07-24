@@ -34,6 +34,9 @@ inputs:
   SMTP_PASS:
     description: The SMTP password
     required: false
+  PAYLOAD_SECRET:
+    description: The payload secret
+    required: false
   # Additional variables
   project-name:
     description: 'Project name'
@@ -95,6 +98,7 @@ runs:
         SMTP_HOST: ${{ inputs.SMTP_HOST }}
         SMTP_USER: ${{ inputs.SMTP_USER }}
         SMTP_PASS: ${{ inputs.SMTP_PASS }}
+        PAYLOAD_SECRET: ${{ inputs.PAYLOAD_SECRET }}
       shell: bash
 
     - name: Deploy to Cloudflare Workers with Wrangler

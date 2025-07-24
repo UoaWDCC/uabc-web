@@ -143,6 +143,8 @@ jobs:
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
           NODE_ENV: preview
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          APP_INDEX_MODE: NOINDEX
           SMTP_HOST: ${{ vars.SMTP_HOST }}
           SMTP_USER: ${{ vars.SMTP_USER }}
           SMTP_PASS: ${{ vars.SMTP_PASS }}
@@ -217,6 +219,10 @@ jobs:
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
           NODE_ENV: preview
           APP_INDEX_MODE: NOINDEX
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          SMTP_HOST: ${{ vars.SMTP_HOST }}
+          SMTP_USER: ${{ vars.SMTP_USER }}
+          SMTP_PASS: ${{ vars.SMTP_PASS }}
           project-name: uabc
 
       - name: Comment Result
