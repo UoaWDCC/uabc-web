@@ -21,5 +21,7 @@ pre-commit:
       stage_fixed: true
     cspell:
       glob: "*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx,css,scss,yaml,yml}"
+      exclude:
+        - "pnpm-lock.yaml"
       run: |
         pnpm cspell {staged_files} --cache --cache-strategy=content --cache-location=.cspellcache
