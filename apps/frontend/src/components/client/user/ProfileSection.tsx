@@ -29,7 +29,11 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
           {isBookingsLoading || !user ? (
             <ProfileBookingPanelSkeleton />
           ) : (
-            <ProfileBookingPanel bookings={bookings?.data ?? []} error={isBookingsError} />
+            <ProfileBookingPanel
+              bookings={bookings?.data ?? []}
+              error={isBookingsError}
+              user={user}
+            />
           )}
         </GridItem>
       </Grid>

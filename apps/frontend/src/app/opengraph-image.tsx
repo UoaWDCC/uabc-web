@@ -3,6 +3,8 @@ import { join } from "node:path"
 import { tokens } from "@repo/theme/tokens"
 import { ImageResponse } from "next/og"
 
+export const dynamic = "force-static"
+
 export const alt = "University of Auckland Badminton Club"
 export const size = {
   width: 1200,
