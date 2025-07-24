@@ -71,7 +71,7 @@ export const ProfileDetailsSchema = CreateUserRequestSchema.pick({
   lastName: z.string().nullable().optional(),
   email: z.string().email("Please enter a valid email address"),
   phoneNumber: z.string().nullable().optional(),
-}) satisfies z.ZodType<User>
+})
 
 export const AdditionalInfoSchema = CreateUserRequestSchema.pick({
   gender: true,
@@ -87,7 +87,7 @@ export const AdditionalInfoSchema = CreateUserRequestSchema.pick({
     .nullable()
     .optional(),
   dietaryRequirements: z.string().nullable().optional(),
-}) satisfies z.ZodType<User>
+})
 
 export const GetAllUsersResponseSchema = z.object({
   data: PaginationDataSchema.extend({
