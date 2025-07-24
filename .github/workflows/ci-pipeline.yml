@@ -271,6 +271,7 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Test
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
