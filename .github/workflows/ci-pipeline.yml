@@ -25,6 +25,8 @@ jobs:
       exists: ${{ steps.filter.outputs.exists }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Filter changes
         uses: yumemi-inc/path-filter@v2
@@ -47,6 +49,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
@@ -61,6 +65,8 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: streetsidesoftware/cspell-action@v7
 
   setup:
@@ -70,6 +76,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Check if node_modules cache exists
         id: cache-check
@@ -118,6 +126,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Run Build Backend
         uses: ./.github/ci-actions/build-backend/
@@ -136,6 +146,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Run Build Frontend
         uses: ./.github/ci-actions/build-frontend/
@@ -151,6 +163,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Build Storybook
         uses: ./.github/ci-actions/build-storybook/
@@ -162,6 +176,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Comment information
         uses: ./.github/ci-actions/comment/
@@ -177,6 +193,8 @@ jobs:
       deployment-url: ${{ steps.deploy-storybook.outputs.deployment-url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Deploy Storybook
         id: preview-storybook
@@ -203,6 +221,8 @@ jobs:
       deployment-url: ${{ steps.deploy-frontend.outputs.deployment-url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Deploy frontend
         id: preview-frontend
@@ -231,6 +251,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -274,7 +296,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -328,7 +350,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Run Vitest Coverage Composite Action
         uses: ./.github/composite-actions/vitest-coverage
@@ -342,6 +364,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
