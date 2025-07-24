@@ -148,6 +148,7 @@ jobs:
           SMTP_HOST: ${{ vars.SMTP_HOST }}
           SMTP_USER: ${{ vars.SMTP_USER }}
           SMTP_PASS: ${{ vars.SMTP_PASS }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
 
   build-storybook:
     needs: [setup, biome, cspell]
@@ -275,6 +276,9 @@ jobs:
 
       - name: Type Check
         run: pnpm turbo run check-types
+        env:
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
 
   test:
     needs: [setup, biome, cspell]
