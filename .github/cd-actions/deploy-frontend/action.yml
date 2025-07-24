@@ -1,5 +1,5 @@
 name: Deploy Frontend
-description: Deploy frontend to Cloudflare
+description: Deploy frontend to Cloudflare Workers using OpenNext
 
 inputs:
   # Environment variables
@@ -48,7 +48,7 @@ runs:
       with:
         version: latest
         run_install: |
-          - args: [--global, wrangler@3.90.0]
+          - args: [--global, wrangler@4.26.0]
 
     - name: Restore node_modules cache
       uses: actions/cache/restore@v4
@@ -76,7 +76,7 @@ runs:
       run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
 
-    - name: Create Cloudflare static Next build
+    - name: Build OpenNext output for Cloudflare Workers
       run: pnpm turbo run build --filter=frontend
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
@@ -85,15 +85,16 @@ runs:
         APP_INDEX_MODE: ${{ inputs.APP_INDEX_MODE }}
       shell: bash
 
-    - name: Publish frontend to cloudflare
+    - name: Deploy to Cloudflare Workers with Wrangler
       uses: cloudflare/wrangler-action@v3
       id: deploy
       with:
         apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
-        command: pages deploy apps/frontend/out --project-name=${{ inputs.project-name }}
+        command: deploy apps/frontend/.vercel/output/static --minify
 
     - name: Output deployment url
       shell: bash
-      run: echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
+      run: |
+        echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT

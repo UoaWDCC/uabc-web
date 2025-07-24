@@ -47,3 +47,7 @@ const config = (async () => {
 })()
 
 export default config
+
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare"
+
+initOpenNextCloudflareForDev()

@@ -5,11 +5,10 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --turbopack --port=3001",
-    "build": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation next build",
+    "build": "cross-env NODE_ENV=production opennextjs-cloudflare build",
     "start": "next start --port=3001",
-    "pages:build": "pnpx @cloudflare/next-on-pages",
-    "preview": "pnpm run pages:build && wrangler pages dev",
-    "deploy": "pnpm run pages:build && wrangler pages deploy",
+    "deploy": "opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "lint": "next lint",
     "test": "cross-env NODE_ENV=test vitest run",
     "test:watch": "cross-env NODE_ENV=test vitest",
@@ -19,6 +18,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "5.1.1",
+    "@opennextjs/cloudflare": "^1.6.1",
     "@payloadcms/next": "3.45.0",
     "@payloadcms/richtext-lexical": "3.45.0",
     "@repo/shared": "workspace:*",
@@ -46,6 +46,7 @@
     "@types/node": "22.15.21",
     "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5",
-    "typescript": "5.8.3"
+    "typescript": "5.8.3",
+    "wrangler": "^4.26.0"
   }
 }
