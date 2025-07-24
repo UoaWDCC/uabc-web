@@ -15,7 +15,7 @@ type RequestOptions = {
 /**
  * ApiClient is a simple HTTP client for making API requests with runtime validation using zod schemas.
  */
-class ApiClient {
+export class ApiClient {
   /**
    * The base URL for all API requests.
    *
@@ -432,5 +432,3 @@ export const createApiClient = (baseUrl?: string): ApiClient => {
 export const apiClient = createApiClient()
 
 export type { ApiResponse, RequestOptions }
-
-export { ApiClient }

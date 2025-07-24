@@ -1,4 +1,4 @@
-class ApiClientError extends Error {
+export class ApiClientError extends Error {
   public readonly method: string
   public readonly url: string
   public readonly status: number | null
@@ -36,5 +36,3 @@ class ApiClientError extends Error {
     }
   }
 }
-
-export { ApiClientError }
