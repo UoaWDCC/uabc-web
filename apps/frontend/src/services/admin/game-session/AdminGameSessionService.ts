@@ -16,7 +16,7 @@ const AdminGameSessionService = {
       data,
       GetGameSessionResponseSchema,
     )
-    return ApiClient.throwIfError(response, `Failed to update game session with id: ${id}`)
+    return ApiClient.throwIfError(response)
   },
 
   /**
@@ -26,7 +26,7 @@ const AdminGameSessionService = {
    */
   deleteGameSession: async (id: string) => {
     const response = await apiClient.delete(`/admin/game-sessions/${id}`)
-    return ApiClient.throwIfError(response, `Failed to delete game session with id: ${id}`)
+    return ApiClient.throwIfError(response)
   },
 } as const
 
