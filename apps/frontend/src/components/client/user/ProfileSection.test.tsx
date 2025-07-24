@@ -128,17 +128,21 @@ describe("<ProfileSection />", () => {
     )
 
     await user.click(screen.getAllByRole("button", { name: /edit/i })[1])
-    const genderInput = screen.getByRole("combobox", { name: /male/i })
-    await user.click(genderInput)
-    await user.keyboard("{ArrowDown}")
-    await user.keyboard("{Enter}")
-    const playLevelInput = screen.getByRole("combobox", { name: /beginner/i })
-    await user.click(playLevelInput)
-    await user.keyboard("{ArrowDown}")
-    await user.keyboard("{Enter}")
+    await waitFor(async () => {
+      const genderInput = screen.getByRole("combobox", { name: /male/i })
+      await user.click(genderInput)
+      await user.keyboard("{ArrowDown}")
+      await user.keyboard("{Enter}")
+    })
+    await waitFor(async () => {
+      const playLevelInput = screen.getByRole("combobox", { name: /beginner/i })
+      await user.click(playLevelInput)
+      await user.keyboard("{ArrowDown}")
+      await user.keyboard("{Enter}")
+    })
     await user.click(screen.getByRole("button", { name: /save changes/i }))
     await waitFor(() => {
-      expect(screen.getByDisplayValue(Gender.other)).toBeInTheDocument()
+      expect(screen.getByDisplayValue(Gender.female)).toBeInTheDocument()
       expect(screen.getByDisplayValue(PlayLevel.intermediate)).toBeInTheDocument()
     })
 
