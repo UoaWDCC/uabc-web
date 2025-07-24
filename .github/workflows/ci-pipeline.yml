@@ -317,7 +317,7 @@ jobs:
 
       - name: Merge Coverage
         if: always()
-        run: pnpm merge
+        run: pnpm merge --force
 
       - name: Upload Coverage Artifact
         if: always()
