@@ -1,4 +1,4 @@
-import { frontendConfig } from "@repo/test-config/frontend"
+import { frontendConfig } from "@repo/test-config/configs"
 import { mergeConfig } from "vitest/config"
 
 export default mergeConfig(frontendConfig, {

@@ -1,4 +1,4 @@
-import { uiConfig } from "@repo/test-config/ui"
+import { uiConfig } from "@repo/test-config/configs"
 import { mergeConfig } from "vitest/config"
 
 export default mergeConfig(uiConfig, {
