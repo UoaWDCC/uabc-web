@@ -1,6 +1,6 @@
 "use client"
 
-import { Gender, PlayLevel } from "@repo/shared"
+import { AdditionalInfoSchema, Gender, PlayLevel } from "@repo/shared"
 import { casualUserMock } from "@repo/shared/mocks"
 import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"
@@ -34,6 +34,7 @@ export const AdditionalInfo = <T extends readonly Field[]>({
       onSave={async (data) => {
         await mutation.mutateAsync(data)
       }}
+      schema={AdditionalInfoSchema}
       {...props}
     />
   )

@@ -58,6 +58,37 @@ export const UpdateSelfRequestSchema = UpdateUserRequestSchema.strict().omit({
   role: true,
 }) satisfies z.ZodType<EditSelfData>
 
+export const ProfileDetailsSchema = CreateUserRequestSchema.pick({
+  firstName: true,
+  lastName: true,
+  email: true,
+  phoneNumber: true,
+}).extend({
+  firstName: z
+    .string()
+    .min(1, "First name is required")
+    .max(30, "First name must be at most 30 characters"),
+  lastName: z.string().nullable().optional(),
+  email: z.string().email("Please enter a valid email address"),
+  phoneNumber: z.string().nullable().optional(),
+}) satisfies z.ZodType<User>
+
+export const AdditionalInfoSchema = CreateUserRequestSchema.pick({
+  gender: true,
+  playLevel: true,
+  dietaryRequirements: true,
+}).extend({
+  gender: z
+    .nativeEnum(Gender, { errorMap: () => ({ message: "Please select a gender" }) })
+    .nullable()
+    .optional(),
+  playLevel: z
+    .nativeEnum(PlayLevel, { errorMap: () => ({ message: "Please select a play level" }) })
+    .nullable()
+    .optional(),
+  dietaryRequirements: z.string().nullable().optional(),
+}) satisfies z.ZodType<User>
+
 export const GetAllUsersResponseSchema = z.object({
   data: PaginationDataSchema.extend({
     docs: z.array(UserSchema),
