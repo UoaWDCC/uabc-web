@@ -313,7 +313,10 @@ jobs:
         run: |
           mkdir -p coverage
           pnpm turbo run test:coverage --continue
-          pnpm merge
+
+      - name: Merge Coverage
+        if: always()
+        run: pnpm merge
 
       - name: Upload Coverage Artifact
         if: always()
@@ -324,8 +327,8 @@ jobs:
 
   vitest-coverage:
     name: Vitest Coverage
-    if: ${{ always() && needs.check_changes.outputs.exists == 'true' }}
     needs: [test]
+    if: always() && ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
