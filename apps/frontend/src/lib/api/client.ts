@@ -433,6 +433,7 @@ class ApiClient {
    */
   public static throwIfError<T>(response: ApiResponse<T>): T {
     if (!response.success) {
+      console.error(response.error)
       throw response.error
     }
     return response.data

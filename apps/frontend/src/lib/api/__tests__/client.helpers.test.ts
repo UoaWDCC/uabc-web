@@ -12,7 +12,10 @@ describe("ApiClient helper methods", () => {
       status: 400,
     }
 
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
     expect(() => ApiClient.throwIfError(failedResponse)).toThrow("Test error")
+    expect(errorSpy).toHaveBeenCalledWith(failedResponse.error)
+    errorSpy.mockRestore()
     try {
       ApiClient.throwIfError(failedResponse)
     } catch (err) {
