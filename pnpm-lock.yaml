@@ -174,9 +174,6 @@ importers:
       '@repo/shared':
         specifier: workspace:*
         version: link:../../packages/shared
-      '@repo/test-config':
-        specifier: workspace:*
-        version: link:../../packages/test-config
       '@repo/theme':
         specifier: workspace:*
         version: link:../../packages/theme
@@ -217,6 +214,9 @@ importers:
       '@cloudflare/next-on-pages':
         specifier: 1.13.12
         version: 1.13.12(vercel@44.4.1(@swc/core@1.12.14)(rollup@4.45.1))(wrangler@4.24.3)
+      '@repo/test-config':
+        specifier: workspace:*
+        version: link:../../packages/test-config
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
