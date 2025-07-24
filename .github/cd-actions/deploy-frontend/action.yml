@@ -25,6 +25,15 @@ inputs:
   APP_INDEX_MODE:
     description: 'App index mode'
     required: false
+  SMTP_HOST:
+    description: The SMTP host
+    required: false
+  SMTP_USER:
+    description: The SMTP user
+    required: false
+  SMTP_PASS:
+    description: The SMTP password
+    required: false
   # Additional variables
   project-name:
     description: 'Project name'
@@ -83,6 +92,9 @@ runs:
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
         NODE_ENV: ${{ inputs.NODE_ENV }}
         APP_INDEX_MODE: ${{ inputs.APP_INDEX_MODE }}
+        SMTP_HOST: ${{ inputs.SMTP_HOST }}
+        SMTP_USER: ${{ inputs.SMTP_USER }}
+        SMTP_PASS: ${{ inputs.SMTP_PASS }}
       shell: bash
 
     - name: Deploy to Cloudflare Workers with Wrangler
