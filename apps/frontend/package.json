@@ -26,6 +26,7 @@
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.7",
     "http-status-codes": "2.3.0",
+    "@repo/test-config": "workspace:*",
     "next": "15.3.5",
     "nuqs": "2.4.3",
     "react": "19.1.0",
@@ -35,7 +36,6 @@
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "1.13.12",
-    "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "22.15.21",
     "@types/react": "19.1.5",
