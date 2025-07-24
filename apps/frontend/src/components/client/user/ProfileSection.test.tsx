@@ -1,4 +1,5 @@
 import type { User } from "@repo/shared/payload-types"
+import { Gender } from "@repo/shared/types"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { vi } from "vitest"
@@ -88,7 +89,13 @@ describe("<ProfileSection />", () => {
     await user.click(screen.getByText(/Save changes/i))
 
     await waitFor(() => {
-      expect(mutateAsync).toHaveBeenCalledWith(expect.objectContaining({ firstName: "Jane" }))
+      expect(mutateAsync).toHaveBeenCalledWith(
+        expect.objectContaining({
+          firstName: "Jane",
+          lastName: mockUser.lastName,
+          phoneNumber: mockUser.phoneNumber,
+        }),
+      )
     })
   })
 
@@ -122,11 +129,19 @@ describe("<ProfileSection />", () => {
     const editButton = screen.getAllByText(/Edit/i)[1]
 
     await user.click(editButton)
-    await user.type(screen.getByLabelText(/Gender/i), "female")
+    await user.click(screen.getByLabelText(/Gender/i))
+    await user.click(screen.getByText(/Female/i))
     await user.click(screen.getAllByText(/Save changes/i)[1])
 
     await waitFor(() => {
-      expect(mutateAsync).toHaveBeenCalledWith(expect.objectContaining({ gender: "female" }))
+      expect(mutateAsync).toHaveBeenCalledWith(
+        expect.objectContaining({
+          gender: Gender.female,
+          firstName: mockUser.firstName,
+          lastName: mockUser.lastName,
+          phoneNumber: mockUser.phoneNumber,
+        }),
+      )
     })
   })
 
