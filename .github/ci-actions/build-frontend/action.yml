@@ -55,6 +55,16 @@ runs:
         restore-keys: |
           ${{ runner.os }}-nextjs-frontend
 
+    - name: Check if build is needed
+      id: turbo-ignore
+      run: pnpm exec turbo-ignore frontend --fallback=master
+      shell: bash
+
+    - name: Skip build if not needed
+      if: steps.turbo-ignore.outcome == 'success' && steps.turbo-ignore.conclusion == 'success' && steps.turbo-ignore.outputs.exitcode == '0'
+      run: exit 0
+      shell: bash
+
     - name: Build frontend
       shell: bash
       env:
