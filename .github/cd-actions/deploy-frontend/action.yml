@@ -63,6 +63,15 @@ runs:
         restore-keys: |
           ${{ runner.os }}-node_modules-
 
+    - name: Restore Next.js cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          apps/frontend/.next/cache
+        key: ${{ runner.os }}-nextjs-frontend-${{ hashFiles('apps/frontend/*') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-frontend
+
     - name: Install dependencies if cache misses
       run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
