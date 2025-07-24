@@ -127,7 +127,7 @@ describe("<ProfileSection />", () => {
       </QueryClientProvider>,
     )
 
-    await user.click(screen.getByRole("button", { name: /edit/i }))
+    await user.click(screen.getAllByRole("button", { name: /edit/i })[1])
     const genderInput = screen.getByRole("combobox", { name: /gender/i })
     await user.click(genderInput)
     await user.keyboard("{ArrowDown}")
