@@ -86,7 +86,8 @@
     "merge": {
       "cache": true,
       "dependsOn": ["^merge", "@repo/test-config#build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["coverage/**"]
     }
   },
   "ui": "tui"
