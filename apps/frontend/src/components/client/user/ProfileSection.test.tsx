@@ -1,5 +1,5 @@
+import { Gender, PlayLevel } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
-import { Gender } from "@repo/shared/types"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { vi } from "vitest"
@@ -127,20 +127,27 @@ describe("<ProfileSection />", () => {
       </QueryClientProvider>,
     )
 
-    const editButton = screen.getAllByText(/Edit/i)[1]
-
-    await user.click(editButton)
-    await user.click(screen.getByLabelText(/Enter your gender/i))
-    await user.click(screen.getByText(/female/i))
-    await user.click(screen.getAllByText(/Save changes/i)[1])
+    await user.click(screen.getByRole("button", { name: /edit/i }))
+    const genderInput = screen.getByRole("combobox", { name: /gender/i })
+    await user.click(genderInput)
+    await user.keyboard("{ArrowDown}")
+    await user.keyboard("{Enter}")
+    const playLevelInput = screen.getByRole("combobox", { name: /play level/i })
+    await user.click(playLevelInput)
+    await user.keyboard("{ArrowDown}")
+    await user.keyboard("{Enter}")
+    await user.click(screen.getByRole("button", { name: /save changes/i }))
+    await waitFor(() => {
+      expect(screen.getByDisplayValue(Gender.other)).toBeInTheDocument()
+      expect(screen.getByDisplayValue(PlayLevel.intermediate)).toBeInTheDocument()
+    })
 
     await waitFor(() => {
       expect(mutateAsync).toHaveBeenCalledWith(
         expect.objectContaining({
-          gender: Gender.female,
-          firstName: mockUser.firstName,
-          lastName: mockUser.lastName,
-          phoneNumber: mockUser.phoneNumber,
+          gender: Gender.other,
+          playLevel: PlayLevel.intermediate,
+          dietaryRequirements: mockUser.dietaryRequirements,
         }),
       )
     })
