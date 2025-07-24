@@ -92,6 +92,12 @@
       "cache": true,
       "dependsOn": ["^deploy"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "opennext:build": {
+      "cache": true,
+      "dependsOn": ["^opennext:build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".vercel/**", ".open-next/**", ".output/**"]
     }
   },
   "ui": "tui"
