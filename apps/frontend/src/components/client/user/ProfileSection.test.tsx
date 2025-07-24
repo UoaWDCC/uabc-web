@@ -128,7 +128,7 @@ describe("<ProfileSection />", () => {
     )
 
     await user.click(screen.getAllByRole("button", { name: /edit/i })[1])
-    const genderInput = screen.getByRole("combobox", { name: /enter your gender/i })
+    const genderInput = screen.getByRole("combobox", { name: /gender/i })
     await user.click(genderInput)
     await user.keyboard("{ArrowDown}")
     await user.keyboard("{Enter}")
