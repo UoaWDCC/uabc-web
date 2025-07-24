@@ -81,7 +81,7 @@ describe("<ProfileSection />", () => {
       </QueryClientProvider>,
     )
 
-    const editButton = screen.getByText(/Edit/i)
+    const editButton = screen.getAllByText(/Edit/i)[0]
 
     await user.click(editButton)
     await user.type(screen.getByLabelText(/First Name/i), "Jane")
@@ -119,7 +119,7 @@ describe("<ProfileSection />", () => {
       </QueryClientProvider>,
     )
 
-    const editButton = screen.getByText(/Edit/i)
+    const editButton = screen.getAllByText(/Edit/i)[1]
 
     await user.click(editButton)
     await user.type(screen.getByLabelText(/Gender/i), "female")
@@ -157,7 +157,7 @@ describe("<ProfileSection />", () => {
       </QueryClientProvider>,
     )
 
-    const editButton = screen.getByText(/Edit/i)
+    const editButton = screen.getAllByText(/Edit/i)[0]
 
     await user.click(editButton)
     await user.type(screen.getByLabelText(/First Name/i), "Error")
