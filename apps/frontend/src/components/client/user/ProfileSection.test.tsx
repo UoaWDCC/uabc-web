@@ -85,6 +85,7 @@ describe("<ProfileSection />", () => {
     const editButton = screen.getAllByText(/Edit/i)[0]
 
     await user.click(editButton)
+    await user.clear(screen.getByLabelText(/First Name/i))
     await user.type(screen.getByLabelText(/First Name/i), "Jane")
     await user.click(screen.getByText(/Save changes/i))
 
@@ -129,8 +130,8 @@ describe("<ProfileSection />", () => {
     const editButton = screen.getAllByText(/Edit/i)[1]
 
     await user.click(editButton)
-    await user.click(screen.getByLabelText(/Gender/i))
-    await user.click(screen.getByText(/Female/i))
+    await user.click(screen.getByLabelText(/Enter your gender/i))
+    await user.click(screen.getByText(/female/i))
     await user.click(screen.getAllByText(/Save changes/i)[1])
 
     await waitFor(() => {
