@@ -35,7 +35,7 @@ runs:
 
     - name: Check if build is needed
       id: turbo-ignore
-      run: pnpm exec turbo-ignore @repo/ui
+      run: pnpm exec turbo-ignore @repo/ui --filter=[master...HEAD]
       shell: bash
 
     - name: Skip build if not needed

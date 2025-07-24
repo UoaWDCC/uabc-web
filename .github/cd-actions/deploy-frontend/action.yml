@@ -74,7 +74,7 @@ runs:
 
     - name: Check if build is needed
       id: turbo-ignore
-      run: pnpm exec turbo-ignore frontend
+      run: pnpm exec turbo-ignore frontend --filter=[master...HEAD]
       shell: bash
 
     - name: Skip build if not needed
