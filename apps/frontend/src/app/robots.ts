@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 
 export const dynamic = "force-static"
+export const runtime = "edge"
 
 export default function robots(): MetadataRoute.Robots {
   if (process.env.APP_INDEX_MODE === "NOINDEX") {

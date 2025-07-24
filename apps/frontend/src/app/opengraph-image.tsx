@@ -3,6 +3,7 @@ import { join } from "node:path"
 import { tokens } from "@repo/theme/tokens"
 import { ImageResponse } from "next/og"
 
+export const runtime = "edge"
 export const dynamic = "force-static"
 
 export const alt = "University of Auckland Badminton Club"
