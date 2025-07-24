@@ -26,10 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Filter changes
         uses: yumemi-inc/path-filter@v2
@@ -53,10 +50,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
@@ -72,10 +66,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
       - uses: streetsidesoftware/cspell-action@v7
 
   setup:
@@ -86,10 +77,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Check if node_modules cache exists
         id: cache-check
@@ -139,10 +127,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Run Build Backend
         uses: ./.github/ci-actions/build-backend/
@@ -162,10 +147,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Run Build Frontend
         uses: ./.github/ci-actions/build-frontend/
@@ -182,10 +164,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Build Storybook
         uses: ./.github/ci-actions/build-storybook/
@@ -198,10 +177,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Comment information
         uses: ./.github/ci-actions/comment/
@@ -218,10 +194,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Deploy Storybook
         id: preview-storybook
@@ -249,10 +222,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Deploy frontend
         id: preview-frontend
@@ -282,10 +252,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -329,10 +296,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -386,7 +350,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Run Vitest Coverage Composite Action
         uses: ./.github/composite-actions/vitest-coverage
@@ -401,10 +365,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
-      - name: Fetch latest master
-        run: git fetch origin master:refs/remotes/origin/master --depth=1
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
