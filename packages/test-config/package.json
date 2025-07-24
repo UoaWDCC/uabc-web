@@ -2,9 +2,9 @@
   "name": "@repo/test-config",
   "type": "module",
   "exports": {
-    "./configs": "./dist/configs/index.js",
-    "./setups/dom": "./dist/setups/dom-setup.js",
-    "./setups/mongodb": "./dist/setups/mongodb-setup.js"
+    "./configs": "./src/configs/index.ts",
+    "./setups/dom": "./src/setups/dom-setup.ts",
+    "./setups/mongodb": "./src/setups/mongodb-setup.ts"
   },
   "scripts": {
     "check-types": "tsc --noEmit",
