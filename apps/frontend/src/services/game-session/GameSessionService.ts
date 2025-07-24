@@ -14,7 +14,7 @@ const GameSessionService = {
    */
   getGameSession: async (id: string) => {
     const response = await apiClient.get(`/api/game-sessions/${id}`, GetGameSessionResponseSchema)
-    return ApiClient.throwIfError(response, `Failed to retrieve game session with id: ${id}`)
+    return ApiClient.throwIfError(response)
   },
 
   /**
@@ -29,7 +29,7 @@ const GameSessionService = {
       `/api/game-sessions?${query}`,
       GetAllGameSessionsResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to retrieve all game sessions")
+    return ApiClient.throwIfError(response)
   },
 } as const
 

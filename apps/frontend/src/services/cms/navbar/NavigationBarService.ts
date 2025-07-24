@@ -13,5 +13,5 @@ export const getNavigationBar = cache(async () => {
   const response = await apiClient.get("/api/globals/navbar", GetNavbarResponseSchema, {
     tags: [QueryKeys.NAVIGATION_BAR_QUERY_KEY],
   })
-  return ApiClient.throwIfError(response, "Failed to retrieve navigation bar data")
+  return ApiClient.throwIfError(response)
 })

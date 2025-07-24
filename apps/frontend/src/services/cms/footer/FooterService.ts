@@ -14,5 +14,5 @@ export const getFooter = cache(async () => {
   const response = await apiClient.get("/api/globals/footer", GetFooterResponseSchema, {
     tags: [QueryKeys.FOOTER_QUERY_KEY],
   })
-  return ApiClient.throwIfError(response, "Failed to retrieve footer data")
+  return ApiClient.throwIfError(response)
 })
