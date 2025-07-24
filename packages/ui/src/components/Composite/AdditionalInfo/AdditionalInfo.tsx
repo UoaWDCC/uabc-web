@@ -26,8 +26,6 @@ export const AdditionalInfo = <T extends readonly Field[]>({
   const mutation = useMutation({
     mutationFn: async (data: NullableFormData<T>) => {
       await onSave?.(data)
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      // throw new Error("Failed to submit form")
     },
   })
 

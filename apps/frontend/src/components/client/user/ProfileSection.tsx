@@ -1,6 +1,7 @@
 "use client"
 
-import type { EditSelfData, Gender, PlayLevel } from "@repo/shared"
+import { isGender, isPlayLevel } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import {
   AdditionalInfo,
   AdditionalInfoFields,
@@ -58,10 +59,10 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
             fields={ProfileDetailsFields}
             onSave={async (data) => {
               // Only send allowed fields for PATCH /me
-              const payload: EditSelfData = {
-                firstName: data.firstName ?? undefined,
-                lastName: data.lastName ?? undefined,
-                phoneNumber: data.phoneNumber ?? undefined,
+              const payload: Partial<Pick<User, "firstName" | "lastName" | "phoneNumber">> = {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                phoneNumber: data.phoneNumber,
               }
               await updateSelfMutation.mutateAsync(payload)
             }}
@@ -76,10 +77,10 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
             }}
             fields={AdditionalInfoFields}
             onSave={async (data) => {
-              const payload: EditSelfData = {
-                gender: data.gender as Gender,
-                playLevel: data.playLevel as PlayLevel,
-                dietaryRequirements: data.dietaryRequirements ?? undefined,
+              const payload: Partial<User> = {
+                gender: isGender(data.gender) ?? null,
+                playLevel: isPlayLevel(data.playLevel) ?? null,
+                dietaryRequirements: data.dietaryRequirements,
               }
               await updateSelfMutation.mutateAsync(payload)
             }}

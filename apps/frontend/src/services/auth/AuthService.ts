@@ -4,6 +4,7 @@ import {
   LoginResponseSchema,
   type RegisterRequestBody,
 } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
 const AuthService = {
@@ -73,7 +74,7 @@ const AuthService = {
    * @param token The user's authentication token
    * @returns The updated user
    */
-  patchMe: async (data: unknown, token: string) => {
+  patchMe: async (data: Partial<User>, token: string) => {
     const response = await apiClient.patch("/api/me", data, GetUserResponseSchema, {
       headers: {
         Authorization: `Bearer ${token}`,
