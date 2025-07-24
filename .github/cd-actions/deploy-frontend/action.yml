@@ -67,8 +67,17 @@ runs:
       run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
 
+    - name: Restore Next.js cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          apps/frontend/.next/cache
+        key: ${{ runner.os }}-nextjs-frontend-${{ hashFiles('apps/frontend/*') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-frontend
+
     - name: Create Cloudflare static Next build
-      run: pnpm turbo run build --filter=frontend
+      run: pnpm run --filter=frontend build
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
