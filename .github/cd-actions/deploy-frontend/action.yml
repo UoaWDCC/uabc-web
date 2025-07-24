@@ -92,7 +92,7 @@ runs:
         apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
-        command: pages deploy apps/frontend/out --project-name=${{ inputs.project-name }}
+        command: pages deploy apps/frontend/.next/output/static --project-name=${{ inputs.project-name }}
 
     - name: Output deployment url
       shell: bash
