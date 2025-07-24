@@ -1,6 +1,7 @@
 "use client"
 
-import type { Booking, GameSession, GameSessionSchedule } from "@repo/shared/payload-types"
+import { MembershipType } from "@repo/shared"
+import type { Booking, GameSession, GameSessionSchedule, User } from "@repo/shared/payload-types"
 import { CircleAlertIcon } from "@yamada-ui/lucide"
 import { EmptyState, For, type StackProps, VStack } from "@yamada-ui/react"
 import { type FC, memo } from "react"
@@ -23,6 +24,10 @@ export interface ProfileBookingPanelProps extends StackProps {
    * Whether there was an error fetching bookings
    */
   error?: boolean
+  /**
+   * The user viewing the bookings (for role-based UI)
+   */
+  user?: User
 }
 
 /**
@@ -35,7 +40,10 @@ export interface ProfileBookingPanelProps extends StackProps {
  * <ProfileBookingPanel bookings={mockBookings} />
  */
 export const ProfileBookingPanel: FC<ProfileBookingPanelProps> = memo(
-  ({ bookings, error, ...props }) => {
+  ({ bookings, error, user, ...props }) => {
+    const isDeleteDisabled =
+      user && (user.role === MembershipType.casual || user.role === MembershipType.member)
+
     return (
       <VStack
         bg={["secondary.50", "secondary.900"]}
@@ -84,7 +92,15 @@ export const ProfileBookingPanel: FC<ProfileBookingPanelProps> = memo(
                 location={name ?? (gameSessionSchedule as GameSessionSchedule).name}
                 menuItems={[
                   { label: "Edit", onClick: () => alert("Edit clicked"), color: "primary" },
-                  { label: "Delete", onClick: () => alert("Delete clicked"), color: "danger" },
+                  {
+                    label: "Delete",
+                    onClick: () => alert("Delete clicked"),
+                    color: "danger",
+                    disabled: isDeleteDisabled,
+                    tooltipLabel: isDeleteDisabled
+                      ? "Please contact an admin to delete your booking"
+                      : undefined,
+                  },
                 ]}
                 startTime={startTime}
               />
