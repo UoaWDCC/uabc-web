@@ -312,10 +312,11 @@ jobs:
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
         run: |
           mkdir -p coverage
-          pnpm test:coverage
+          pnpm turbo run test:coverage --continue
           pnpm merge
 
       - name: Upload Coverage Artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: local-coverage
@@ -323,6 +324,7 @@ jobs:
 
   vitest-coverage:
     name: Vitest Coverage
+    if: ${{ always() && needs.check_changes.outputs.exists == 'true' }}
     needs: [test]
     runs-on: ubuntu-latest
     steps:
