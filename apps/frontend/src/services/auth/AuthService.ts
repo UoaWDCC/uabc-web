@@ -66,6 +66,21 @@ const AuthService = {
     })
     return ApiClient.throwIfError(response)
   },
+  /**
+   * Update the current user's profile
+   *
+   * @param data The user data to update (self-editable fields only)
+   * @param token The user's authentication token
+   * @returns The updated user
+   */
+  patchMe: async (data: unknown, token: string) => {
+    const response = await apiClient.patch("/api/me", data, GetUserResponseSchema, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return ApiClient.throwIfError(response)
+  },
 } as const
 
 export default AuthService

@@ -19,6 +19,7 @@ export const UserSchema = z.object({
   email: z.string().email(),
   emailVerificationCode: z.string().nullable().optional(),
   // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
+  phoneNumber: z.string().nullable().optional(),
   role: z.enum(["admin", "member", "casual"]),
   playLevel: z.enum(["beginner", "intermediate", "advanced"]).nullable().optional(),
   gender: z
