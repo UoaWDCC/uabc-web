@@ -4,9 +4,10 @@ import type {
   UpdateGameSessionData,
   UpdateGameSessionScheduleData,
 } from "@repo/shared"
-import type { GameSession, GameSessionSchedule } from "@repo/shared/payload-types"
+import type { GameSession, GameSessionSchedule, Semester } from "@repo/shared/payload-types"
 import type { PaginatedDocs } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
+import { getWeeklySessionDates } from "../utils/DateUtils"
 
 export default class GameSessionDataService {
   /**
@@ -94,6 +95,56 @@ export default class GameSessionDataService {
       collection: "gameSessionSchedule",
       data: newGameSessionScheduleData,
     })
+  }
+
+  /**
+   * Creates an array of {@link GameSession} documents based on game session schedule
+   *
+   * @param schedule the {@link GameSessionSchedule} the game sessions are based on
+   * @returns an array of newly created {@link GameSession} documents
+   */
+  public async cascadeCreateGameSessions(schedule: GameSessionSchedule): Promise<GameSession[]> {
+    const semesterId = schedule.semester
+    const semester: Semester = await payload.findByID({
+      collection: "semester",
+      id: typeof semesterId === "string" ? semesterId : semesterId.id,
+    })
+
+    if (!semester) {
+      throw new Error("Semester not found")
+    }
+    const sessionDates = getWeeklySessionDates(schedule.day, semester)
+
+    const sessions: CreateGameSessionData[] = sessionDates.map((date) => {
+      const dateStr = date.toISOString().split("T")[0]
+      const timeStrStart = schedule.startTime.split("T")[1]
+      const timeStrEnd = schedule.startTime.split("T")[1]
+
+      const start = new Date(`${dateStr}T${timeStrStart}`)
+      const end = new Date(`${dateStr}T${timeStrEnd}`)
+
+      return {
+        gameSessionSchedule: schedule.id,
+        semester: semester.id,
+        name: schedule.name,
+        location: schedule.location,
+        startTime: start.toISOString(),
+        endTime: end.toISOString(),
+        capacity: schedule.capacity,
+        casualCapacity: schedule.casualCapacity,
+      }
+    })
+    const createdSessions: GameSession[] = []
+
+    for (const session of sessions) {
+      const created = await payload.create({
+        collection: "gameSession",
+        data: session,
+      })
+      createdSessions.push(created as GameSession)
+    }
+
+    return createdSessions
   }
 
   /**

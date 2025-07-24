@@ -2,8 +2,11 @@ import { AUTH_COOKIE_NAME } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
+import { getWeeklySessionDates } from "@/data-layer/utils/DateUtils"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
+import { semesterCascadeCreateMock } from "@/test-config/mocks/Semester.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { GET, POST } from "./route"
 
@@ -118,17 +121,63 @@ describe("/api/admin/game-session-schedules", async () => {
       expect(await res.json()).toStrictEqual({ error: "No scope" })
     })
 
-    it("should create game session schedule if user is admin", async () => {
+    it.for([
+      // Test case 1: Explicit true boolean parameter
+      "/api/admin/game-session-schedules?cascade=true",
+      // Test case 2: Invalid boolean value (string instead of true/false)
+      "/api/admin/game-session-schedules?cascade=straightZhao",
+      // Test case 3: Flag parameter without value (equivalent to true in query params)
+      "/api/admin/game-session-schedules?cascade?",
+      // Test case 4: Unrelated query parameter (testing irrelevant params)
+      "/api/admin/game-session-schedules?straightZhao",
+      // Test case 5: Base URL with no query parameters
+      "/api/admin/game-session-schedules",
+    ] as const)(
+      "should create game session schedule and cascade game session creation if user is admin and cascade not false",
+      async (route) => {
+        const semesterDataService = new SemesterDataService()
+        cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+        const newSemester = await semesterDataService.createSemester(semesterCascadeCreateMock)
+        const res = await POST(
+          createMockNextRequest(route, "POST", {
+            ...gameSessionScheduleCreateMock,
+            semester: newSemester,
+          }),
+        )
+
+        expect(res.status).toBe(StatusCodes.CREATED)
+        const json = await res.json()
+        const fetchedGameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(
+          json.data1.id,
+        )
+        expect(json.data1).toEqual(fetchedGameSessionSchedule)
+
+        const weeklyDates = getWeeklySessionDates(gameSessionScheduleCreateMock.day, newSemester)
+        expect(weeklyDates.length).toEqual(json.data2.length)
+        const gameSessions = await gameSessionDataService.getPaginatedGameSessions()
+        expect(gameSessions.docs.length).toEqual(json.data2.length)
+      },
+    )
+
+    it("should create game session schedule only if cascade is false and user is admin", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
-      const res = await POST(createMockNextRequest("", "POST", gameSessionScheduleCreateMock))
+      const res = await POST(
+        createMockNextRequest(
+          "/api/admin/game-session-schedules?cascade=false",
+          "POST",
+          gameSessionScheduleCreateMock,
+        ),
+      )
 
       expect(res.status).toBe(StatusCodes.CREATED)
       const json = await res.json()
       const fetchedGameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(
-        json.data.id,
+        json.data1.id,
       )
-      expect(json.data).toEqual(fetchedGameSessionSchedule)
+      expect(json.data1).toEqual(fetchedGameSessionSchedule)
+      expect(json.data2).toEqual([])
     })
 
     it("should return 400 if request body is invalid", async () => {
