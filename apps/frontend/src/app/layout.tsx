@@ -45,9 +45,6 @@ export const metadata: Metadata = {
   authors: [{ name: "2025 WDCC UABC Team" }],
   creator: "2025 WDCC UABC Team",
   publisher: "University of Auckland Badminton Club",
-  icons: {
-    icon: "/favicon.ico",
-  },
   openGraph: {
     url: process.env.NEXT_PUBLIC_URL,
     siteName: "UABC",
