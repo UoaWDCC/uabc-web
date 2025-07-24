@@ -4,7 +4,7 @@ import {
   type GetSemesterResponse,
   GetSemesterResponseSchema,
 } from "@repo/shared"
-import { apiClient } from "@/lib/api/client"
+import { ApiClient, apiClient } from "@/lib/api/client"
 
 /**
  * Service for managing semester data.
@@ -18,8 +18,7 @@ const SemesterService = {
    */
   getSemester: async (id: string): Promise<GetSemesterResponse | undefined> => {
     const response = await apiClient.get(`/api/semesters/${id}`, GetSemesterResponseSchema)
-    if (!response.success) throw new Error(`Failed to retrieve semester with id: ${id}`)
-    return response.data
+    return ApiClient.throwIfError(response)
   },
 
   /**
@@ -29,8 +28,7 @@ const SemesterService = {
    */
   getAllSemesters: async (): Promise<GetAllSemestersResponse | undefined> => {
     const response = await apiClient.get("/api/semesters", GetAllSemestersResponseSchema)
-    if (!response.success) throw new Error("Failed to retrieve semesters")
-    return response.data
+    return ApiClient.throwIfError(response)
   },
 } as const
 
