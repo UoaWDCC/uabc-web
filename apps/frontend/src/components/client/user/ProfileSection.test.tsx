@@ -128,11 +128,11 @@ describe("<ProfileSection />", () => {
     )
 
     await user.click(screen.getAllByRole("button", { name: /edit/i })[1])
-    const genderInput = screen.getByRole("combobox", { name: /gender/i })
+    const genderInput = screen.getByRole("combobox", { name: /male/i })
     await user.click(genderInput)
     await user.keyboard("{ArrowDown}")
     await user.keyboard("{Enter}")
-    const playLevelInput = screen.getByRole("combobox", { name: /play level/i })
+    const playLevelInput = screen.getByRole("combobox", { name: /beginner/i })
     await user.click(playLevelInput)
     await user.keyboard("{ArrowDown}")
     await user.keyboard("{Enter}")
@@ -145,7 +145,7 @@ describe("<ProfileSection />", () => {
     await waitFor(() => {
       expect(mutateAsync).toHaveBeenCalledWith(
         expect.objectContaining({
-          gender: Gender.other,
+          gender: Gender.female,
           playLevel: PlayLevel.intermediate,
           dietaryRequirements: mockUser.dietaryRequirements,
         }),
