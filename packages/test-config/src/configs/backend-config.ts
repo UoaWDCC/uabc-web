@@ -4,7 +4,7 @@ import { baseConfig } from "./base-config"
 export const backendConfig = mergeConfig(baseConfig, {
   test: {
     environment: "node",
-    setupFiles: ["@repo/test-config/setups/mongodb"],
+    setupFiles: ["@repo/test-config/setups/mongodb-setup"],
     maxWorkers: process.env.CI === "true" ? 1 : undefined,
     coverage: {
       thresholds: {
