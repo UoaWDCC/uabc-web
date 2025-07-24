@@ -1,7 +1,8 @@
+import { readFile } from "node:fs/promises"
+import { join } from "node:path"
 import { tokens } from "@repo/theme/tokens"
 import { ImageResponse } from "next/og"
 
-export const runtime = "edge"
 export const dynamic = "force-static"
 
 export const alt = "University of Auckland Badminton Club"
@@ -17,10 +18,9 @@ const gradients = tokens.gradients as Record<string, string>
 export const contentType = "image/png"
 
 export default async function OpenGraphImage() {
-  const geistSemiBoldRes = await fetch(
-    new URL("/fonts/Geist-SemiBold.ttf", process.env.NEXT_PUBLIC_URL).toString(),
+  const geistSemiBold = await readFile(
+    join(process.cwd(), "src", "assets", "fonts", "Geist-SemiBold.ttf"),
   )
-  const geistSemiBold = await geistSemiBoldRes.arrayBuffer()
 
   return new ImageResponse(
     <div
