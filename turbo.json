@@ -8,7 +8,7 @@
   "tasks": {
     "build": {
       "cache": true,
-      "dependsOn": ["^build", "@repo/test-config#build"],
+      "dependsOn": ["^build"],
       "env": ["TURBO_TEAM", "TURBO_TOKEN"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "public/dist/**"]
