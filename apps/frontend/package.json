@@ -5,9 +5,9 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --turbopack --port=3001",
-    "build": "cross-env NODE_ENV=production opennextjs-cloudflare build",
+    "build": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation next build",
     "start": "next start --port=3001",
-    "deploy": "opennextjs-cloudflare deploy",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "lint": "next lint",
     "test": "cross-env NODE_ENV=test vitest run",
