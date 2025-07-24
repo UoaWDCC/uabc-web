@@ -15,8 +15,6 @@ class RouteWrapper {
 
       const userData = await userDataService.getUserById(req.user.id)
 
-      console.log(userData)
-
       return NextResponse.json({ data: userData })
     } catch (error) {
       console.error(error)

@@ -21,7 +21,6 @@ import { useMyBookings } from "@/services/bookings/BookingQuery"
 
 export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
   const { user } = auth
-  console.log(user)
   const { data: bookings, isLoading: isBookingsLoading, isError: isBookingsError } = useMyBookings()
   const updateSelfMutation = useUpdateSelfMutation()
 
