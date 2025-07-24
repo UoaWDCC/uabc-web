@@ -1,9 +1,15 @@
 import type { User } from "@repo/shared/payload-types"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { vi } from "vitest"
 import type { AuthContextValue } from "@/context/AuthContext"
 import * as useUpdateSelfMutationModule from "@/services/auth/useUpdateSelfMutation"
 import { ProfileSection } from "./ProfileSection"
+
+vi.mock("@/context/AuthContext", () => ({
+  useAuth: () => mockAuth,
+  AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}))
 
 const mockUser: User = {
   id: "1",
