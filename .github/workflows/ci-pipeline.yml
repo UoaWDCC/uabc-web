@@ -279,6 +279,9 @@ jobs:
         env:
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          SMTP_HOST: ${{ vars.SMTP_HOST }}
+          SMTP_USER: ${{ vars.SMTP_USER }}
+          SMTP_PASS: ${{ vars.SMTP_PASS }}
 
   test:
     needs: [setup, biome, cspell]
