@@ -264,7 +264,7 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Type Check
-        run: pnpm turbo run check-types
+        run: pnpm turbo run check-types --affected
 
   test:
     needs: [setup, biome, cspell]
@@ -375,7 +375,7 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Generate typing
-        run: pnpm turbo run generate:types
+        run: pnpm turbo run generate:types --affected
 
       - name: Write git diff
         run: |

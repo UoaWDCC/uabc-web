@@ -33,9 +33,19 @@ runs:
       run: NODE_ENV=production pnpm install --filter @repo/ui --frozen-lockfile --ignore-scripts
       shell: bash
 
+    - name: Check if build is needed
+      id: turbo-ignore
+      run: pnpm exec turbo-ignore @repo/ui
+      shell: bash
+
+    - name: Skip build if not needed
+      if: steps.turbo-ignore.outcome == 'success' && steps.turbo-ignore.conclusion == 'success' && steps.turbo-ignore.outputs.exitcode == '0'
+      run: exit 0
+      shell: bash
+
     - name: Build Storybook for @repo/ui
       shell: bash
-      run: pnpm turbo run storybook:build --filter @repo/ui
+      run: pnpm turbo run storybook:build --filter @repo/ui --affected
 
     - name: Upload Storybook
       uses: actions/upload-artifact@v4

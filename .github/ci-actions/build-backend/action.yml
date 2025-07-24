@@ -61,6 +61,16 @@ runs:
         restore-keys: |
           ${{ runner.os }}-nextjs-backend
 
+    - name: Check if build is needed
+      id: turbo-ignore
+      run: pnpm exec turbo-ignore backend
+      shell: bash
+
+    - name: Skip build if not needed
+      if: steps.turbo-ignore.outcome == 'success' && steps.turbo-ignore.conclusion == 'success' && steps.turbo-ignore.outputs.exitcode == '0'
+      run: exit 0
+      shell: bash
+
     - name: Build backend
       shell: bash
       env:
@@ -70,4 +80,4 @@ runs:
         GOOGLE_CLIENT_ID: ${{ inputs.GOOGLE_CLIENT_ID }}
         GOOGLE_CLIENT_SECRET: ${{ inputs.GOOGLE_CLIENT_SECRET }}
         JWT_SECRET: ${{ inputs.JWT_SECRET }}
-      run: pnpm turbo run build --filter backend
+      run: pnpm turbo run build --filter backend --affected

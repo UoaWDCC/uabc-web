@@ -80,6 +80,9 @@ importers:
       turbo:
         specifier: 2.5.3
         version: 2.5.3
+      turbo-ignore:
+        specifier: ^2.5.5
+        version: 2.5.5
       typescript:
         specifier: 5.8.3
         version: 5.8.3
@@ -197,7 +200,7 @@ importers:
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
       nuqs:
         specifier: 2.4.3
-        version: 2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
+        version: 2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -328,7 +331,7 @@ importers:
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
       nuqs:
         specifier: 2.4.3
-        version: 2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
+        version: 2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -8550,6 +8553,10 @@ packages:
     resolution: {integrity: sha512-5PefrwHd42UiZX7YA9m1LPW6x9YJBDErXmsegCkVp+GjmWrADfEOxpFrGQNonH3ZMj77WZB2PVE5Aw3gA+IOhg==}
     cpu: [arm64]
     os: [darwin]
+
+  turbo-ignore@2.5.5:
+    resolution: {integrity: sha512-1baD6Wx6WWBhya+JSN8jaJE0mhdc92PICx5acHBdwVsTlpOcuskV/hZR0qTECzIRtKbXP7FRvD9Xj97MRpm88w==}
+    hasBin: true
 
   turbo-linux-64@2.5.3:
     resolution: {integrity: sha512-M9xigFgawn5ofTmRzvjjLj3Lqc05O8VHKuOlWNUlnHPUltFquyEeSkpQNkE/vpPdOR14AzxqHbhhxtfS4qvb1w==}
@@ -17651,7 +17658,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuqs@2.4.3(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0):
+  nuqs@2.4.3(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0):
     dependencies:
       mitt: 3.0.1
       react: 19.1.0
@@ -19268,6 +19275,10 @@ snapshots:
 
   turbo-darwin-arm64@2.5.3:
     optional: true
+
+  turbo-ignore@2.5.5:
+    dependencies:
+      json5: 2.2.3
 
   turbo-linux-64@2.5.3:
     optional: true

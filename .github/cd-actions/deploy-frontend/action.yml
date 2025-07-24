@@ -72,12 +72,22 @@ runs:
         restore-keys: |
           ${{ runner.os }}-nextjs-frontend
 
+    - name: Check if build is needed
+      id: turbo-ignore
+      run: pnpm exec turbo-ignore frontend
+      shell: bash
+
+    - name: Skip build if not needed
+      if: steps.turbo-ignore.outcome == 'success' && steps.turbo-ignore.conclusion == 'success' && steps.turbo-ignore.outputs.exitcode == '0'
+      run: exit 0
+      shell: bash
+
     - name: Install dependencies if cache misses
       run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
 
     - name: Create Cloudflare static Next build
-      run: pnpm turbo run build --filter=frontend
+      run: pnpm turbo run build --filter=frontend --affected
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
