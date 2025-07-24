@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./packages/typescript-config/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@repo/typescript-config/*": ["packages/typescript-config/*"],
+      "@repo/test-config/*": ["packages/test-config/*"],
+      "@repo/ui/*": ["packages/ui/*"],
+      "@repo/theme/*": ["packages/theme/*"],
+      "@repo/shared/*": ["packages/shared/*"]
+    }
+  }
+}

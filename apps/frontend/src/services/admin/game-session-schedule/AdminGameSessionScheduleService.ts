@@ -20,7 +20,7 @@ const AdminGameSessionScheduleService = {
       data,
       GetGameSessionScheduleResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to create game session schedule")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Fetches all game session schedules.
@@ -34,7 +34,7 @@ const AdminGameSessionScheduleService = {
       `/admin/game-session-schedules?${query}`,
       GetAllGameSessionSchedulesResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to fetch all game session schedules")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Fetches a specific game session schedule by ID.
@@ -47,7 +47,7 @@ const AdminGameSessionScheduleService = {
       `/admin/game-session-schedules/${id}`,
       GetGameSessionScheduleResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to fetch game session schedule")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Updates a game session schedule by ID with partial game session schedule data.
@@ -62,7 +62,7 @@ const AdminGameSessionScheduleService = {
       data,
       GetGameSessionScheduleResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to update game session schedule")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Deletes a game session schedule by ID.
@@ -72,7 +72,7 @@ const AdminGameSessionScheduleService = {
    */
   deleteGameSessionSchedule: async (id: string) => {
     const response = await apiClient.delete(`/admin/game-session-schedules/${id}`)
-    return ApiClient.throwIfError(response, "Failed to delete game session schedule")
+    return ApiClient.throwIfError(response)
   },
 } as const
 

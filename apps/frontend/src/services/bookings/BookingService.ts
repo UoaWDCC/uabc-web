@@ -22,7 +22,7 @@ const BookingService = {
         Authorization: `Bearer ${token}`,
       },
     })
-    return ApiClient.throwIfError(response, "Failed to fetch bookings")
+    return ApiClient.throwIfError(response)
   },
 } as const
 

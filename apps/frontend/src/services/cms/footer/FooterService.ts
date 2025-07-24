@@ -11,9 +11,8 @@ import { QueryKeys } from "@/services"
  * @throws When the API request fails
  */
 export const getFooter = cache(async () => {
-  "use server"
   const response = await apiClient.get("/api/globals/footer", GetFooterResponseSchema, {
     tags: [QueryKeys.FOOTER_QUERY_KEY],
   })
-  return ApiClient.throwIfError(response, "Failed to retrieve footer data")
+  return ApiClient.throwIfError(response)
 })

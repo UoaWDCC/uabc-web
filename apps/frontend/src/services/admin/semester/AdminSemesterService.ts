@@ -11,7 +11,7 @@ const AdminSemesterService = {
    */
   createSemester: async (data: CreateSemesterRequest) => {
     const response = await apiClient.post("/admin/semesters", data, GetSemesterResponseSchema)
-    return ApiClient.throwIfError(response, "Failed to create semester")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Update an existing semester.
@@ -22,7 +22,7 @@ const AdminSemesterService = {
    */
   updateSemester: async (id: string, data: UpdateSemesterRequest) => {
     const response = await apiClient.put(`/admin/semesters/${id}`, data, GetSemesterResponseSchema)
-    return ApiClient.throwIfError(response, "Failed to update semester")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Delete an existing semester.
@@ -32,7 +32,7 @@ const AdminSemesterService = {
    */
   deleteSemester: async (id: string) => {
     const response = await apiClient.delete(`/admin/semesters/${id}`)
-    return ApiClient.throwIfError(response, "Failed to delete semester")
+    return ApiClient.throwIfError(response)
   },
 } as const
 
