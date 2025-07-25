@@ -8,33 +8,6 @@ import { payload } from "@/data-layer/adapters/Payload"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 
-const cascadeDeletion = async (gameSessionScheduleId: string) => {
-  const gameSessionDataService = new GameSessionDataService()
-  const bookingDataService = new BookingDataService()
-  // @ts-ignore
-  const transactionID = await payload.db.startTransaction() // @payloadcms/db-mongodb overrides DatabaseAdapter to remove transaction methods
-
-  try {
-    const { docs } = await payload.find({
-      collection: "gameSession",
-      where: {
-        gameSessionSchedule: {
-          equals: gameSessionScheduleId,
-        },
-      },
-    })
-    const gameSession = docs[0]
-    const bookings = await bookingDataService.getBookingsBySessionId(gameSession.id)
-
-    await gameSessionDataService.deleteGameSessionSchedule(gameSessionScheduleId)
-    await gameSessionDataService.deleteGameSession(gameSession.id)
-    await Promise.all(bookings.map((booking) => bookingDataService.deleteBooking(booking.id)))
-    await payload.db.commitTransaction(transactionID)
-  } catch {
-    await payload.db.rollbackTransaction(transactionID)
-  }
-}
-
 class RouteWrapper {
   /**
    * GET method to fetch a game session schedule.
@@ -116,9 +89,30 @@ class RouteWrapper {
       const { id } = await params
       const cascade = req.nextUrl.searchParams.get("cascade") === "true"
       const gameSessionDataService = new GameSessionDataService()
+      const transactionID = await RouteWrapper.getTransactionId(!!cascade)
 
-      if (cascade) {
-        await cascadeDeletion(id)
+      if (transactionID) {
+        try {
+          const { docs } = await payload.find({
+            collection: "gameSession",
+            where: {
+              gameSessionSchedule: {
+                equals: id,
+              },
+            },
+          })
+          const gameSession = docs[0]
+          await gameSessionDataService.deleteGameSessionSchedule(id)
+          await gameSessionDataService.deleteGameSession(gameSession.id)
+          await RouteWrapper.deleteRelatedBookingsForSession(gameSession.id, transactionID)
+          if (transactionID) {
+            await payload.db.commitTransaction(transactionID)
+          }
+        } catch {
+          if (transactionID) {
+            await payload.db.rollbackTransaction(transactionID)
+          }
+        }
       } else {
         await gameSessionDataService.deleteGameSessionSchedule(id)
       }
@@ -137,6 +131,36 @@ class RouteWrapper {
         { status: StatusCodes.INTERNAL_SERVER_ERROR },
       )
     }
+  }
+
+  /**
+   * Retrieves a transaction ID for cascading deletes if related bookings should be deleted.
+   * @param shouldDeleteRelated indicates whether related bookings should be deleted
+   * @private
+   *
+   * @remarks it should be noted that this method will return undefined if the `deleteRelatedBookings` parameter is false or if transaction support is not enabled in Payload.
+   */
+  private static async getTransactionId(
+    shouldDeleteRelated: boolean,
+  ): Promise<string | number | undefined> {
+    if (!shouldDeleteRelated) return undefined
+    return (await payload.db.beginTransaction()) ?? undefined
+  }
+
+  /**
+   * Deletes all bookings related to a game session.
+   * @param sessionId the ID of the game session whose bookings are to be deleted
+   * @param transactionID an optional transaction ID for the request, useful for tracing
+   * @private
+   */
+  private static async deleteRelatedBookingsForSession(
+    sessionId: string,
+    transactionID?: string | number,
+  ): Promise<void> {
+    const bookingDataService = new BookingDataService()
+    const relatedBookings = await bookingDataService.getBookingsBySessionId(sessionId)
+    const relatedBookingIds = relatedBookings.map((booking) => booking.id)
+    await bookingDataService.deleteBookings(relatedBookingIds, transactionID)
   }
 }
 
