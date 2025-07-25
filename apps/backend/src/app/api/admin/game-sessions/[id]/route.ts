@@ -4,7 +4,6 @@ import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
-import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 
 class GameSessionRouteWrapper {
@@ -19,26 +18,8 @@ class GameSessionRouteWrapper {
   static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
-      const bookingDataService = new BookingDataService()
       const gameSessionDataService = new GameSessionDataService()
-      const gameSession = await gameSessionDataService.getGameSessionById(id)
-
       await gameSessionDataService.deleteGameSession(id)
-
-      if (gameSession.gameSessionSchedule) {
-        await gameSessionDataService.deleteGameSessionSchedule(
-          typeof gameSession.gameSessionSchedule === "string"
-            ? gameSession.gameSessionSchedule
-            : gameSession.gameSessionSchedule.id,
-        )
-      }
-
-      const bookings = await bookingDataService.getBookingsBySessionId(gameSession.id)
-
-      if (bookings.length > 0) {
-        await Promise.all(bookings.map((booking) => bookingDataService.deleteBooking(booking.id)))
-      }
-
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
       if (error instanceof NotFound) {
