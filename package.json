@@ -33,7 +33,8 @@
     "postinstall": "pnpm theme",
     "commitlint": "commitlint --edit",
     "deploy": "turbo run deploy",
-    "cf-typegen": "turbo run cf-typegen"
+    "cf-typegen": "turbo run cf-typegen",
+    "opennext:build": "turbo run opennext:build"
   },
   "dependencies": {
     "cross-env": "7.0.3"
