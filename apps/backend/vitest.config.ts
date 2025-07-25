@@ -7,11 +7,11 @@ export default mergeConfig(backendConfig, {
     setupFiles: ["./src/test-config/vitest.setup.ts"],
     coverage: {
       exclude: [
-        "src/test-config/**",
-        "src/app/layout.tsx",
-        "src/app/payload/**",
-        "src/app/[[...segments]]/**",
-        "src/app/importMap.js",
+        "**/test-config/**",
+        "**/app/layout.tsx",
+        "**/app/payload/**",
+        "**/app/[[...segments]]/**",
+        "**/app/importMap.js",
       ],
     },
   },
