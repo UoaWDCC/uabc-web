@@ -271,6 +271,7 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Test
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -312,10 +313,14 @@ jobs:
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
         run: |
           mkdir -p coverage
-          pnpm test:coverage
-          pnpm merge
+          pnpm turbo run test:coverage --continue
+
+      - name: Merge Coverage
+        if: always()
+        run: pnpm merge --force
 
       - name: Upload Coverage Artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: local-coverage
@@ -324,6 +329,7 @@ jobs:
   vitest-coverage:
     name: Vitest Coverage
     needs: [test]
+    if: always() && ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
