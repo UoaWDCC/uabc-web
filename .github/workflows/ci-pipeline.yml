@@ -207,6 +207,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       deployment-url: ${{ steps.deploy-frontend.outputs.deployment-url }}
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
