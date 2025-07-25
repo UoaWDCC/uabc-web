@@ -1,11 +1,10 @@
 import {
+  type GetAllSemestersResponse,
+  GetAllSemestersResponseSchema,
   type GetSemesterResponse,
   GetSemesterResponseSchema,
-  type GetSemestersResponse,
-  GetSemestersResponseSchema,
 } from "@repo/shared"
-import { StatusCodes } from "http-status-codes"
-import { apiClient } from "@/lib/api/client"
+import { ApiClient, apiClient } from "@/lib/api/client"
 
 /**
  * Service for managing semester data.
@@ -18,12 +17,8 @@ const SemesterService = {
    * @returns The semester data for the given semester ID.
    */
   getSemester: async (id: string): Promise<GetSemesterResponse | undefined> => {
-    const { data: semester, status } = await apiClient.get(
-      `/api/semesters/${id}`,
-      GetSemesterResponseSchema,
-    )
-    if (status !== StatusCodes.OK) throw new Error(`Failed to retrieve semester with id: ${id}`)
-    return semester
+    const response = await apiClient.get(`/api/semesters/${id}`, GetSemesterResponseSchema)
+    return ApiClient.throwIfError(response)
   },
 
   /**
@@ -31,13 +26,9 @@ const SemesterService = {
    *
    * @returns A list of all semesters.
    */
-  getSemesters: async (): Promise<GetSemestersResponse | undefined> => {
-    const { data: semesters, status } = await apiClient.get(
-      "/api/semesters",
-      GetSemestersResponseSchema,
-    )
-    if (status !== StatusCodes.OK) throw new Error("Failed to retrieve semesters")
-    return semesters
+  getAllSemesters: async (): Promise<GetAllSemestersResponse | undefined> => {
+    const response = await apiClient.get("/api/semesters", GetAllSemestersResponseSchema)
+    return ApiClient.throwIfError(response)
   },
 } as const
 

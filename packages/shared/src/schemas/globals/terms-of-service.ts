@@ -18,7 +18,6 @@ const DisclaimerSchema = z.object({
 }) satisfies z.ZodType<Disclaimer>
 
 export const TosSchema = z.object({
-  id: z.string(),
   title: z.string(),
   subtitle: z.string(),
   checkInRules: CheckInRulesSchema,
@@ -26,7 +25,7 @@ export const TosSchema = z.object({
   disclaimer: DisclaimerSchema,
   updatedAt: z.string().optional().nullable(),
   createdAt: z.string().optional().nullable(),
-}) satisfies z.ZodType<TermsOfService>
+}) satisfies z.ZodType<Omit<TermsOfService, "id">>
 
 export const GetTosResponseSchema = z.object({
   data: TosSchema,

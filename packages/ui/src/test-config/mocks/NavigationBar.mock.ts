@@ -9,8 +9,8 @@ const navItemsMock = [
 ]
 
 const rightSideSingleButtonMock = {
-  label: "Sign In",
-  url: "/auth/signin",
+  label: "Login",
+  url: "/auth/login",
 }
 
 const logoMock = {

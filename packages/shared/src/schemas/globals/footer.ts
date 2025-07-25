@@ -4,7 +4,6 @@ import { LinkGroupSchema } from "../link"
 import { MediaSchema } from "../media"
 
 export const FooterSchema = z.object({
-  id: z.string(),
   title: z.string(),
   description: z.string(),
   logo: MediaSchema,
@@ -16,7 +15,7 @@ export const FooterSchema = z.object({
   linktree: z.string(),
   updatedAt: z.string().optional().nullable(),
   createdAt: z.string().optional().nullable(),
-}) satisfies z.ZodType<Footer>
+}) satisfies z.ZodType<Omit<Footer, "id">>
 
 export const GetFooterResponseSchema = z.object({
   data: FooterSchema,

@@ -93,7 +93,7 @@ const UserProfileContent = <T extends readonly Field[]>({
       layerStyle="gradientBorder"
       onSubmit={form.handleSubmit(saveChanges)}
       size="lg"
-      w="min(4xl, 100%)"
+      w="full"
       {...props}
     >
       <CardHeader>
