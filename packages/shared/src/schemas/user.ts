@@ -10,6 +10,7 @@ import {
   University,
 } from "../types"
 import { MediaSchema } from "./media"
+import { PaginationDataSchema } from "./query"
 
 export const UserSchema = z.object({
   id: z.string(),
@@ -57,7 +58,9 @@ export const UpdateSelfRequestSchema = UpdateUserRequestSchema.strict().omit({
 }) satisfies z.ZodType<EditSelfData>
 
 export const GetAllUsersResponseSchema = z.object({
-  data: z.array(UserSchema),
+  data: PaginationDataSchema.extend({
+    docs: z.array(UserSchema),
+  }),
 })
 
 export const GetUserResponseSchema = z.object({

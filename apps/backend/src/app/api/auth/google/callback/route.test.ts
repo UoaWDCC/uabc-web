@@ -81,8 +81,9 @@ describe("GET /api/auth/google/callback", async () => {
     const authService = new AuthService()
     const data = authService.getData(token as string, JWTEncryptedUserSchema)
     const userMock = await userDataService.getUserByEmail(googleUserMock.email)
+    const { remainingSessions: _omit, ...userMockWithoutSessions } = userMock
     expect(data).toMatchObject({
-      user: userMock,
+      user: userMockWithoutSessions,
       accessToken: tokensMock.access_token,
     })
   })
@@ -94,9 +95,9 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+    const json = await response.json()
     expect(json.error).toMatch(/state/i)
   })
 
@@ -107,9 +108,9 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?state=${STATE_MOCK}&scope=${SCOPES}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+    const json = await response.json()
     expect(json.error).toMatch("No code provided")
   })
 
@@ -120,9 +121,9 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+    const json = await response.json()
     expect(json.error).toMatch("No scope or invalid scopes provided")
   })
 
@@ -133,9 +134,9 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=invalid_scope`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+    const json = await response.json()
     expect(json.error).toMatch(/scope/i)
   })
 
@@ -146,9 +147,9 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?code=${INVALID_CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    const json = await response.json()
     expect(json.error).toBe("Error invalid google auth")
   })
 
@@ -159,9 +160,9 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?code=${INVALID_USER_CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    const json = await response.json()
     expect(json.error).toBeDefined()
   })
 })

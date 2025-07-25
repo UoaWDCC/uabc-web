@@ -1,6 +1,6 @@
 import z from "zod"
 
-export const CommonResponse = z.object({
+export const CommonResponseSchema = z.object({
   message: z.string().optional(),
   error: z.string().optional(),
 })

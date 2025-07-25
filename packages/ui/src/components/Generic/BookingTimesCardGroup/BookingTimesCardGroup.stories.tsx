@@ -15,18 +15,24 @@ type Story = StoryFn<typeof BookingTimesCardGroup>
 const defaultData = [
   {
     addon: "UoA Hiwa Center",
+    memberAttendees: "32/35",
+    casualAttendees: "4/5",
     description: "19:30 - 20:00",
     label: "Tuesday, 12th May",
     value: "1",
   },
   {
     addon: "UoA Hiwa Center",
+    memberAttendees: "32/35",
+    casualAttendees: "4/5",
     description: "19:30 - 20:00",
     label: "Tuesday, 12th May",
     value: "2",
   },
   {
     addon: "UoA Hiwa Center",
+    memberAttendees: "32/35",
+    casualAttendees: "4/5",
     description: "19:30 - 20:00",
     label: "Tuesday, 12th May",
     value: "3",

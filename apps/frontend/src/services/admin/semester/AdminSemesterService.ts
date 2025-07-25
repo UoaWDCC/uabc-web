@@ -1,7 +1,6 @@
 import type { CreateSemesterRequest, UpdateSemesterRequest } from "@repo/shared"
 import { GetSemesterResponseSchema } from "@repo/shared"
-import { StatusCodes } from "http-status-codes"
-import { apiClient } from "@/lib/api/client"
+import { ApiClient, apiClient } from "@/lib/api/client"
 
 const AdminSemesterService = {
   /**
@@ -11,13 +10,8 @@ const AdminSemesterService = {
    * @returns The created semester.
    */
   createSemester: async (data: CreateSemesterRequest) => {
-    const { data: createdSemester, status } = await apiClient.post(
-      "/admin/semesters",
-      data,
-      GetSemesterResponseSchema,
-    )
-    if (status !== StatusCodes.CREATED) throw new Error("Failed to create semester")
-    return createdSemester
+    const response = await apiClient.post("/admin/semesters", data, GetSemesterResponseSchema)
+    return ApiClient.throwIfError(response)
   },
   /**
    * Update an existing semester.
@@ -26,14 +20,9 @@ const AdminSemesterService = {
    * @param data The updated data for the semester.
    * @returns The updated semester.
    */
-  updateSemester: async (id: string, data: UpdateSemesterRequest) => {
-    const { data: updatedSemester, status } = await apiClient.put(
-      `/admin/semesters/${id}`,
-      data,
-      GetSemesterResponseSchema,
-    )
-    if (status !== StatusCodes.OK) throw new Error("Failed to update semester")
-    return updatedSemester
+  updateSemester: async ({ id, data }: { id: string; data: UpdateSemesterRequest }) => {
+    const response = await apiClient.put(`/admin/semesters/${id}`, data, GetSemesterResponseSchema)
+    return ApiClient.throwIfError(response)
   },
   /**
    * Delete an existing semester.
@@ -42,8 +31,8 @@ const AdminSemesterService = {
    * @returns The deleted semester.
    */
   deleteSemester: async (id: string) => {
-    const { status } = await apiClient.delete(`/admin/semesters/${id}`)
-    if (status !== StatusCodes.NO_CONTENT) throw new Error("Failed to delete semester")
+    const response = await apiClient.delete(`/admin/semesters/${id}`)
+    return ApiClient.throwIfError(response)
   },
 } as const
 

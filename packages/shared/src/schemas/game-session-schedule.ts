@@ -1,16 +1,14 @@
 import z from "zod"
 import type { GameSessionSchedule as GameSessionScheduleType } from "../payload-types"
-import {
-  type CreateGameSessionScheduleData,
-  type UpdateGameSessionScheduleData,
-  Weekday,
-} from "../types"
+import type { CreateGameSessionScheduleData, UpdateGameSessionScheduleData } from "../types"
+import { PaginationDataSchema } from "./query"
 import { SemesterSchema } from "./semester"
 
 export const GameSessionScheduleSchema = z.object({
   id: z.string(),
   semester: z.union([z.string(), SemesterSchema]),
-  day: z.nativeEnum(Weekday),
+  // Payload generates a hard coded weekdays, the `satisfies` operator is used to ensure the type matches
+  day: z.enum(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]),
   name: z.string(),
   location: z.string(),
   startTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
@@ -28,7 +26,9 @@ export const CreateGameSessionScheduleRequestSchema = GameSessionScheduleSchema.
 }) satisfies z.ZodType<CreateGameSessionScheduleData>
 
 export const GetAllGameSessionSchedulesResponseSchema = z.object({
-  data: z.array(GameSessionScheduleSchema),
+  data: PaginationDataSchema.extend({
+    docs: z.array(GameSessionScheduleSchema),
+  }),
 })
 
 export const GetGameSessionScheduleResponseSchema = z.object({

@@ -1,8 +1,8 @@
 import {
   AUTH_COOKIE_NAME,
+  GoogleUserInfoResponseSchema,
   MembershipType,
   TOKEN_EXPIRY_TIME,
-  UserInfoResponseSchema,
 } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
@@ -76,7 +76,7 @@ export const GET = async (req: NextRequest) => {
   let family_name: string | undefined
 
   try {
-    ;({ sub, email, family_name, given_name } = UserInfoResponseSchema.parse(
+    ;({ sub, email, family_name, given_name } = GoogleUserInfoResponseSchema.parse(
       await userInfoResponse.json(),
     ))
   } catch (error) {
@@ -125,9 +125,10 @@ export const GET = async (req: NextRequest) => {
    * JWT token including user info and the Google access token.
    * Expires in 1 hour (same duration as Google access token)
    */
+  const { remainingSessions: _omit, ...userWithoutSessions } = user
   const token = authService.signJWT(
     {
-      user,
+      user: userWithoutSessions,
       accessToken: tokens.access_token,
     },
     { expiresIn: TOKEN_EXPIRY_TIME },

@@ -3,7 +3,6 @@ import { userCreateMock } from "@repo/shared/mocks"
 import bcrypt from "bcryptjs"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
-import { POST as login } from "@/app/api/auth/login/route"
 import AuthService from "@/business-layer/services/AuthService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
@@ -14,20 +13,22 @@ import {
   REAL_HASHED_PASSWORD_MOCK,
   standardAuthCreateMock,
 } from "@/test-config/mocks/Authentication.mock"
+import { POST as login } from "./route"
 
 describe("api/auth/login", () => {
+  const authDataService = new AuthDataService()
+  const userDataService = new UserDataService()
+  const authService = new AuthService()
+
   describe("POST", async () => {
     const cookieStore = await cookies()
 
     it("sets JWT token to cookies and returns it on success auth", async () => {
-      const authDataService = new AuthDataService()
-      const userDataService = new UserDataService()
-
       await authDataService.createAuth(standardAuthCreateMock)
       await userDataService.createUser(userCreateMock)
 
       const compareSpy = vi.spyOn(bcrypt, "compare")
-      const req = createMockNextRequest("/api/auth/login", "POST", {
+      const req = createMockNextRequest("", "POST", {
         email: EMAIL_MOCK,
         password: PASSWORD_MOCK,
       })
@@ -40,16 +41,16 @@ describe("api/auth/login", () => {
       const token = cookieStore.get(AUTH_COOKIE_NAME)?.value
       expect(token).toBeDefined()
 
-      const authService = new AuthService()
       const data = authService.getData(token as string, JWTEncryptedUserSchema)
       const userMock = await userDataService.getUserByEmail(EMAIL_MOCK)
+      const { remainingSessions: _omit, ...userMockWithoutSessions } = userMock
       expect(data).toMatchObject({
-        user: userMock,
+        user: userMockWithoutSessions,
       })
     })
 
     it("returns 400 if email is invalid", async () => {
-      const req = createMockNextRequest("/api/auth/login", "POST", {
+      const req = createMockNextRequest("", "POST", {
         email: "not_an_email",
         password: PASSWORD_MOCK,
       })
@@ -59,7 +60,7 @@ describe("api/auth/login", () => {
     })
 
     it("returns 401 if email is incorrect", async () => {
-      const req = createMockNextRequest("/api/auth/login", "POST", {
+      const req = createMockNextRequest("", "POST", {
         email: "incorrect-email@wdcc.com",
         password: PASSWORD_MOCK,
       })
@@ -69,13 +70,10 @@ describe("api/auth/login", () => {
     })
 
     it("returns 401 if password is incorrect", async () => {
-      const authDataService = new AuthDataService()
-      const userDataService = new UserDataService()
-
       await authDataService.createAuth(standardAuthCreateMock)
       await userDataService.createUser(userCreateMock)
 
-      const req = createMockNextRequest("/api/auth/login", "POST", {
+      const req = createMockNextRequest("", "POST", {
         email: EMAIL_MOCK,
         // cspell:disable-next-line
         password: "incorrect-passw0rd",
