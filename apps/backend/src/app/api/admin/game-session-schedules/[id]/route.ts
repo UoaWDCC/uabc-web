@@ -4,7 +4,36 @@ import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
+import { payload } from "@/data-layer/adapters/Payload"
+import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
+
+const cascadeDeletion = async (gameSessionScheduleId: string) => {
+  const gameSessionDataService = new GameSessionDataService()
+  const bookingDataService = new BookingDataService()
+  // @ts-ignore
+  const transactionID = await payload.db.startTransaction() // @payloadcms/db-mongodb overrides DatabaseAdapter to remove transaction methods
+
+  try {
+    const { docs } = await payload.find({
+      collection: "gameSession",
+      where: {
+        gameSessionSchedule: {
+          equals: gameSessionScheduleId,
+        },
+      },
+    })
+    const gameSession = docs[0]
+    const bookings = await bookingDataService.getBookingsBySessionId(gameSession.id)
+
+    await gameSessionDataService.deleteGameSessionSchedule(gameSessionScheduleId)
+    await gameSessionDataService.deleteGameSession(gameSession.id)
+    await Promise.all(bookings.map((booking) => bookingDataService.deleteBooking(booking.id)))
+    await payload.db.commitTransaction(transactionID)
+  } catch {
+    await payload.db.rollbackTransaction(transactionID)
+  }
+}
 
 class RouteWrapper {
   /**
@@ -77,16 +106,23 @@ class RouteWrapper {
   /**
    * DELETE method to delete a game session schedule.
    *
-   * @param _req The request object
+   * @param req The request object
    * @param params Route parameters containing the GameSessionSchedule ID
    * @returns No content status code
    */
   @Security("jwt", ["admin"])
-  static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  static async DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
+      const cascade = req.nextUrl.searchParams.get("cascade") === "true"
       const gameSessionDataService = new GameSessionDataService()
-      await gameSessionDataService.deleteGameSessionSchedule(id)
+
+      if (cascade) {
+        await cascadeDeletion(id)
+      } else {
+        await gameSessionDataService.deleteGameSessionSchedule(id)
+      }
+
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
       if (error instanceof NotFound) {
