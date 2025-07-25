@@ -5,5 +5,8 @@ export default mergeConfig(backendConfig, {
   test: {
     // You can add backend-specific overrides here
     setupFiles: ["./src/test-config/vitest.setup.ts"],
+    coverage: {
+      exclude: ["src/test-config/**", "src/app/**"],
+    },
   },
 })
