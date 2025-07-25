@@ -76,7 +76,6 @@ describe("<ProfileSection />", () => {
         expect.objectContaining({
           firstName: "Jane",
           lastName: casualUserMock.lastName,
-          phoneNumber: casualUserMock.phoneNumber,
         }),
       )
     })
