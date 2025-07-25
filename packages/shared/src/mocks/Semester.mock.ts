@@ -12,3 +12,9 @@ export const semesterMock: Semester = {
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),
 }
+
+export const semesterMockBookingNotOpen: Semester = {
+  ...semesterMock,
+  bookingOpenDay: "saturday",
+  bookingOpenTime: new Date(2025, 0, 1, 0, 0, 0).toISOString(), // 00:00
+}
