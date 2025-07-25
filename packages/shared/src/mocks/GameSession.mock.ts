@@ -17,4 +17,6 @@ export const gameSessionMock: GameSession = {
 export const gameSessionMockBookingNotOpen: GameSession = {
   ...gameSessionMock,
   semester: semesterMockBookingNotOpen,
+  startTime: new Date(2025, 6, 21, 9, 0, 0).toISOString(), // Monday July 21, 2025 at 9am
+  endTime: new Date(2025, 6, 21, 11, 0, 0).toISOString(), // Monday July 21, 2025 at 11am
 }

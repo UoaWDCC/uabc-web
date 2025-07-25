@@ -1,4 +1,3 @@
-import { MS_PER_DAY } from "../constants"
 import type { Semester } from "../payload-types"
 
 export const semesterMock: Semester = {
@@ -16,6 +15,6 @@ export const semesterMock: Semester = {
 
 export const semesterMockBookingNotOpen: Semester = {
   ...semesterMock,
-  bookingOpenDay: "sunday",
-  bookingOpenTime: new Date(Date.now() + MS_PER_DAY).toISOString(),
+  bookingOpenDay: "saturday",
+  bookingOpenTime: new Date(2025, 0, 1, 0, 0, 0).toISOString(), // 00:00
 }

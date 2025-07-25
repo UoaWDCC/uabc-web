@@ -101,14 +101,23 @@ describe("/api/bookings", async () => {
     it("should return a 403 if booking is attempted before bookingOpenDay and bookingOpenTime", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
 
-      const req = createMockNextRequest("/api/bookings", "POST", {
-        gameSession: gameSessionMockBookingNotOpen,
-        playerLevel: PlayLevel.beginner,
-      } satisfies CreateBookingRequestBodyType)
-      const res = await POST(req)
+      // Set system time to Friday July 18, 2025 (before booking opens on Saturday July 19, 2025 at 00:00)
+      vi.setSystemTime(new Date(2025, 6, 18, 12, 0, 0))
 
-      expect(res.status).toBe(StatusCodes.FORBIDDEN)
-      expect(await res.json()).toStrictEqual({ error: "Booking is not open yet for this semester" })
+      try {
+        const req = createMockNextRequest("/api/bookings", "POST", {
+          gameSession: gameSessionMockBookingNotOpen,
+          playerLevel: PlayLevel.beginner,
+        } satisfies CreateBookingRequestBodyType)
+        const res = await POST(req)
+
+        expect(res.status).toBe(StatusCodes.FORBIDDEN)
+        expect(await res.json()).toStrictEqual({
+          error: "Booking is not open yet for this session",
+        })
+      } finally {
+        vi.useRealTimers()
+      }
     })
     it("should return a 403 if booking a session scheduled before the semester's booking open time", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)

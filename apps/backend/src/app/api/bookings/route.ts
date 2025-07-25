@@ -29,22 +29,27 @@ class RouteWrapper {
           : parsedBody.gameSession
       const semester = typeof gameSession.semester === "string" ? undefined : gameSession.semester
       if (semester) {
-        const now = new Date()
+        const sessionStartTime = new Date(gameSession.startTime)
         const openDay = semester.bookingOpenDay
         const openTime = new Date(semester.bookingOpenTime)
         const openDayIndex = DAYS_OF_WEEK.indexOf(openDay)
-        const nowDayIndex = now.getDay()
-        const openDate = new Date(now)
-        openDate.setDate(now.getDate() + getDaysUntilNextDayOfWeek(nowDayIndex, openDayIndex))
+        const sessionDayIndex = sessionStartTime.getDay()
+
+        // Calculate the booking open date as the week before the session
+        const openDate = new Date(sessionStartTime)
+        openDate.setDate(
+          sessionStartTime.getDate() - 7 + getDaysUntilNextDayOfWeek(sessionDayIndex, openDayIndex),
+        )
         openDate.setHours(openTime.getHours(), openTime.getMinutes(), openTime.getSeconds(), 0)
+
+        const now = new Date()
         if (now < openDate) {
           return NextResponse.json(
-            { error: "Booking is not open yet for this semester" },
+            { error: "Booking is not open yet for this session" },
             { status: StatusCodes.FORBIDDEN },
           )
         }
         // Disallow booking for sessions scheduled before the open date/time
-        const sessionStartTime = new Date(gameSession.startTime)
         if (sessionStartTime < openDate) {
           return NextResponse.json(
             { error: "Cannot book a session scheduled before the semester's booking open time" },
