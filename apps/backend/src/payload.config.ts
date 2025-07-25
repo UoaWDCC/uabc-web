@@ -31,7 +31,7 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   routes: {
-    admin: "/payload/admin",
+    admin: "/",
     api: "/payload/api",
   },
   cors: "*",
@@ -39,7 +39,7 @@ export default buildConfig({
     user: Admin.slug,
     importMap: {
       baseDir: path.resolve(dirname),
-      importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
+      importMapFile: `${path.resolve(dirname)}/app/importMap.js`,
     },
   },
   collections: [
