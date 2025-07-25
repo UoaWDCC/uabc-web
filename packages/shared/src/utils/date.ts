@@ -1,9 +1,13 @@
+import { Weekday } from "../types"
+
 /**
- * Returns the number of days from fromDayIndex to the next occurrence of toDayIndex.
- * @param fromDayIndex The current day index (0 = Sunday, 6 = Saturday)
- * @param toDayIndex The target day index (0 = Sunday, 6 = Saturday)
+ * Returns the number of days from fromDay to the next occurrence of toDay.
+ * @param fromDay The current day of the week
+ * @param toDay The target day of the week
  * @returns Number of days until the next occurrence of the target day
  */
-export function getDaysUntilNextDayOfWeek(fromDayIndex: number, toDayIndex: number): number {
+export function getDaysUntilNextDayOfWeekEnum(fromDay: Weekday, toDay: Weekday): number {
+  const fromDayIndex = Object.values(Weekday).indexOf(fromDay)
+  const toDayIndex = Object.values(Weekday).indexOf(toDay)
   return (toDayIndex - fromDayIndex + 7) % 7
 }

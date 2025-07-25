@@ -1,9 +1,9 @@
 import {
   CreateBookingRequestBodySchema,
-  DAYS_OF_WEEK,
-  getDaysUntilNextDayOfWeek,
+  getDaysUntilNextDayOfWeekEnum,
   MembershipType,
   type RequestWithUser,
+  Weekday,
 } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { NextResponse } from "next/server"
@@ -32,13 +32,17 @@ class RouteWrapper {
         const sessionStartTime = new Date(gameSession.startTime)
         const openDay = semester.bookingOpenDay
         const openTime = new Date(semester.bookingOpenTime)
-        const openDayIndex = DAYS_OF_WEEK.indexOf(openDay)
         const sessionDayIndex = sessionStartTime.getDay()
 
         // Calculate the booking open date as the week before the session
         const openDate = new Date(sessionStartTime)
         openDate.setDate(
-          sessionStartTime.getDate() - 7 + getDaysUntilNextDayOfWeek(sessionDayIndex, openDayIndex),
+          sessionStartTime.getDate() -
+            7 +
+            getDaysUntilNextDayOfWeekEnum(
+              openDay as Weekday,
+              Object.values(Weekday)[sessionDayIndex] as Weekday,
+            ),
         )
         openDate.setHours(openTime.getHours(), openTime.getMinutes(), openTime.getSeconds(), 0)
 
