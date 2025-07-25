@@ -1,5 +1,4 @@
-import { Gender, PlayLevel } from "@repo/shared"
-import type { User } from "@repo/shared/payload-types"
+import { casualUserMock } from "@repo/shared/mocks"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { vi } from "vitest"
@@ -12,22 +11,8 @@ vi.mock("@/context/AuthContext", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
 
-const mockUser: User = {
-  id: "1",
-  firstName: "John",
-  lastName: "Doe",
-  email: "john@example.com",
-  phoneNumber: "1234567890",
-  playLevel: "beginner",
-  gender: "male",
-  dietaryRequirements: "None",
-  role: "member",
-  updatedAt: "2023-01-01T00:00:00.000Z",
-  createdAt: "2023-01-01T00:00:00.000Z",
-}
-
 const mockAuth: AuthContextValue = {
-  user: mockUser,
+  user: casualUserMock,
   isLoading: false,
   isPending: false,
   error: null,
@@ -38,19 +23,20 @@ const mockAuth: AuthContextValue = {
   register: {} as never,
 }
 
-describe("<ProfileSection />", () => {
+const queryClientProvider = ({ children }: { children: React.ReactNode }) => {
   const queryClient = new QueryClient()
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+}
 
+describe("<ProfileSection />", () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
   it("renders profile details and additional info panels", () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <ProfileSection auth={mockAuth} />
-      </QueryClientProvider>,
-    )
+    render(<ProfileSection auth={mockAuth} />, {
+      wrapper: queryClientProvider,
+    })
     expect(screen.getByText("Profile Details")).toBeInTheDocument()
     expect(screen.getByText("Additional Info")).toBeInTheDocument()
   })
@@ -76,11 +62,9 @@ describe("<ProfileSection />", () => {
       submittedAt: 0,
     })
 
-    const { user } = render(
-      <QueryClientProvider client={queryClient}>
-        <ProfileSection auth={mockAuth} />
-      </QueryClientProvider>,
-    )
+    const { user } = render(<ProfileSection auth={mockAuth} />, {
+      wrapper: queryClientProvider,
+    })
 
     await user.click(screen.getAllByText(/Edit/i)[0])
     await user.clear(screen.getByLabelText(/First Name/i))
@@ -91,8 +75,8 @@ describe("<ProfileSection />", () => {
       expect(mutateAsync).toHaveBeenCalledWith(
         expect.objectContaining({
           firstName: "Jane",
-          lastName: mockUser.lastName,
-          phoneNumber: mockUser.phoneNumber,
+          lastName: casualUserMock.lastName,
+          phoneNumber: casualUserMock.phoneNumber,
         }),
       )
     })
@@ -119,11 +103,9 @@ describe("<ProfileSection />", () => {
       submittedAt: 0,
     })
 
-    const { user } = render(
-      <QueryClientProvider client={queryClient}>
-        <ProfileSection auth={mockAuth} />
-      </QueryClientProvider>,
-    )
+    const { user } = render(<ProfileSection auth={mockAuth} />, {
+      wrapper: queryClientProvider,
+    })
 
     await user.click(screen.getAllByText(/Edit/i)[1])
     await user.clear(screen.getByLabelText(/Dietary Requirements/i))
@@ -133,8 +115,8 @@ describe("<ProfileSection />", () => {
     await waitFor(() => {
       expect(mutateAsync).toHaveBeenCalledWith(
         expect.objectContaining({
-          gender: Gender.male,
-          playLevel: PlayLevel.beginner,
+          gender: casualUserMock.gender,
+          playLevel: casualUserMock.playLevel,
           dietaryRequirements: "Test",
         }),
       )
@@ -162,11 +144,9 @@ describe("<ProfileSection />", () => {
       submittedAt: 0,
     })
 
-    const { user } = render(
-      <QueryClientProvider client={queryClient}>
-        <ProfileSection auth={mockAuth} />
-      </QueryClientProvider>,
-    )
+    const { user } = render(<ProfileSection auth={mockAuth} />, {
+      wrapper: queryClientProvider,
+    })
 
     const editButton = screen.getAllByText(/Edit/i)[0]
 
