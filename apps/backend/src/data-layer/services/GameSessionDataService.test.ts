@@ -1,3 +1,4 @@
+import { Weekday } from "@repo/shared"
 import { gameSessionScheduleMock } from "@repo/shared/mocks"
 import { payload } from "@/data-layer/adapters/Payload"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
@@ -40,7 +41,7 @@ describe("GameSessionDataService", () => {
       const gameSessions =
         await gameSessionDataService.cascadeCreateGameSessions(newGameSessionSchedule)
 
-      const allMondays = getWeeklySessionDates("monday", newSemester)
+      const allMondays = getWeeklySessionDates(Weekday.monday, newSemester)
       expect(gameSessions.length).toBe(allMondays.length)
 
       for (const session of gameSessions) {

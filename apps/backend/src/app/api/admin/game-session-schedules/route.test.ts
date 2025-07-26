@@ -1,4 +1,4 @@
-import { AUTH_COOKIE_NAME } from "@repo/shared"
+import { AUTH_COOKIE_NAME, type Weekday } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
@@ -123,11 +123,11 @@ describe("/api/admin/game-session-schedules", async () => {
 
     it.for([
       // Test case 1: Explicit true boolean parameter
-      "/api/admin/game-session-schedules?cascade=true",
+      "/api/admin/game-session-schedules?cascadeDisabled=false",
       // Test case 2: Invalid boolean value (string instead of true/false)
-      "/api/admin/game-session-schedules?cascade=straightZhao",
+      "/api/admin/game-session-schedules?cascadeDisabled=straightZhao",
       // Test case 3: Flag parameter without value (equivalent to true in query params)
-      "/api/admin/game-session-schedules?cascade?",
+      "/api/admin/game-session-schedules?cascadeDisabled?",
       // Test case 4: Unrelated query parameter (testing irrelevant params)
       "/api/admin/game-session-schedules?straightZhao",
       // Test case 5: Base URL with no query parameters
@@ -149,14 +149,16 @@ describe("/api/admin/game-session-schedules", async () => {
         expect(res.status).toBe(StatusCodes.CREATED)
         const json = await res.json()
         const fetchedGameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(
-          json.data1.id,
+          json.data.id,
         )
-        expect(json.data1).toEqual(fetchedGameSessionSchedule)
+        expect(json.data).toEqual(fetchedGameSessionSchedule)
 
-        const weeklyDates = getWeeklySessionDates(gameSessionScheduleCreateMock.day, newSemester)
-        expect(weeklyDates.length).toEqual(json.data2.length)
+        const weeklyDates = getWeeklySessionDates(
+          gameSessionScheduleCreateMock.day as Weekday,
+          newSemester,
+        )
         const gameSessions = await gameSessionDataService.getPaginatedGameSessions()
-        expect(gameSessions.docs.length).toEqual(json.data2.length)
+        expect(gameSessions.docs.length).toEqual(weeklyDates.length)
       },
     )
 
@@ -165,7 +167,7 @@ describe("/api/admin/game-session-schedules", async () => {
 
       const res = await POST(
         createMockNextRequest(
-          "/api/admin/game-session-schedules?cascade=false",
+          "/api/admin/game-session-schedules?cascadeDisabled=true",
           "POST",
           gameSessionScheduleCreateMock,
         ),
@@ -174,10 +176,9 @@ describe("/api/admin/game-session-schedules", async () => {
       expect(res.status).toBe(StatusCodes.CREATED)
       const json = await res.json()
       const fetchedGameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(
-        json.data1.id,
+        json.data.id,
       )
-      expect(json.data1).toEqual(fetchedGameSessionSchedule)
-      expect(json.data2).toEqual([])
+      expect(json.data).toEqual(fetchedGameSessionSchedule)
     })
 
     it("should return 400 if request body is invalid", async () => {

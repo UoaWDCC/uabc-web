@@ -3,6 +3,7 @@ import type {
   CreateGameSessionScheduleData,
   UpdateGameSessionData,
   UpdateGameSessionScheduleData,
+  Weekday,
 } from "@repo/shared"
 import type { GameSession, GameSessionSchedule, Semester } from "@repo/shared/payload-types"
 import type { PaginatedDocs } from "payload"
@@ -113,7 +114,9 @@ export default class GameSessionDataService {
     if (!semester) {
       throw new Error("Semester not found")
     }
-    const sessionDates = getWeeklySessionDates(schedule.day, semester)
+
+    const weekday = schedule.day as Weekday
+    const sessionDates = getWeeklySessionDates(weekday, semester)
 
     const sessions: CreateGameSessionData[] = sessionDates.map((date) => {
       const dateStr = date.toISOString().split("T")[0]
@@ -134,15 +137,15 @@ export default class GameSessionDataService {
         casualCapacity: schedule.casualCapacity,
       }
     })
-    const createdSessions: GameSession[] = []
-
-    for (const session of sessions) {
-      const created = await payload.create({
-        collection: "gameSession",
-        data: session,
-      })
-      createdSessions.push(created as GameSession)
-    }
+    const createdSessions = await Promise.all(
+      sessions.map(
+        (session) =>
+          payload.create({
+            collection: "gameSession",
+            data: session,
+          }) as Promise<GameSession>,
+      ),
+    )
 
     return createdSessions
   }

@@ -58,7 +58,7 @@ class GameSessionSchedulesRouteWrapper {
    */
   @Security("jwt", ["admin"])
   static async POST(req: NextRequest) {
-    const cascade = req.nextUrl.searchParams.get("cascade") === "false"
+    const cascadeDisabled = req.nextUrl.searchParams.get("cascadeDisabled") === "true"
 
     try {
       const parsedBody = CreateGameSessionScheduleRequestSchema.parse(await req.json())
@@ -66,15 +66,10 @@ class GameSessionSchedulesRouteWrapper {
       const newGameSessionSchedule =
         await gameSessionDataService.createGameSessionSchedule(parsedBody)
 
-      let newGameSessions: GameSession[] = []
-      if (!cascade) {
-        newGameSessions =
-          await gameSessionDataService.cascadeCreateGameSessions(newGameSessionSchedule)
+      if (!cascadeDisabled) {
+        await gameSessionDataService.cascadeCreateGameSessions(newGameSessionSchedule)
       }
-      return NextResponse.json(
-        { data1: newGameSessionSchedule, data2: newGameSessions },
-        { status: StatusCodes.CREATED },
-      )
+      return NextResponse.json({ data: newGameSessionSchedule }, { status: StatusCodes.CREATED })
     } catch (error) {
       if (error instanceof ZodError) {
         return NextResponse.json(

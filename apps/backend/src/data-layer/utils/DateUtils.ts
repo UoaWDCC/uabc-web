@@ -11,10 +11,7 @@ const dayToNumber: Record<Weekday, number> = {
   saturday: 6,
 }
 
-export function getWeeklySessionDates(
-  day: "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday",
-  semester: Semester,
-): Date[] {
+export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] {
   const dates: Date[] = []
 
   const semesterStart = new Date(semester.startDate)
@@ -23,18 +20,16 @@ export function getWeeklySessionDates(
   const breakEnd = new Date(semester.breakEnd)
 
   const targetDay = dayToNumber[day]
-  const firstSession = new Date(semesterStart)
-  const dayOffset = (targetDay - firstSession.getDay() + 7) % 7
-  firstSession.setDate(firstSession.getDate() + dayOffset)
+  const sessionDate = new Date(semesterStart)
+  const dayOffset = (targetDay - sessionDate.getDay() + 7) % 7
+  sessionDate.setDate(sessionDate.getDate() + dayOffset)
 
-  for (
-    let current = new Date(firstSession);
-    current <= semesterEnd;
-    current.setDate(current.getDate() + 7)
-  ) {
-    if (current < breakStart || current > breakEnd) {
-      dates.push(new Date(current))
+  while (sessionDate <= semesterEnd) {
+    if (sessionDate < breakStart || sessionDate > breakEnd) {
+      dates.push(new Date(sessionDate))
     }
+
+    sessionDate.setDate(sessionDate.getDate() + 7)
   }
   return dates
 }
