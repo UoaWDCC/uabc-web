@@ -7,7 +7,7 @@ import GameSessionService from "./GameSessionService"
  * Retrieves and caches paginated game sessions.
  *
  * @param query The pagination query parameters.
- * @returns A query hook that fetches all game sessions.
+ * @returns A query hook that fetches a page of game sessions.
  */
 export const useGetPaginatedGameSessions = (query: PaginationQuery) => {
   return useInfiniteQuery({

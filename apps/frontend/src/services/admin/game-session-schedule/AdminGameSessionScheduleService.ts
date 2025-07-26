@@ -56,10 +56,16 @@ const AdminGameSessionScheduleService = {
    * @param data The game session schedule data to update.
    * @returns A promise that resolves to the updated game session schedule.
    */
-  updateGameSessionSchedule: async (id: string, data: UpdateGameSessionScheduleRequest) => {
+  updateGameSessionSchedule: async ({
+    id,
+    gameSessionScheduleData,
+  }: {
+    id: string
+    gameSessionScheduleData: UpdateGameSessionScheduleRequest
+  }) => {
     const response = await apiClient.patch(
       `/admin/game-session-schedules/${id}`,
-      data,
+      gameSessionScheduleData,
       GetGameSessionScheduleResponseSchema,
     )
     return ApiClient.throwIfError(response)
