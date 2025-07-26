@@ -1,13 +1,14 @@
 "use client"
 
 import { Center, Loading, Text, useNotice, VStack } from "@yamada-ui/react"
-import { type ReadonlyURLSearchParams, useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import { useAuth } from "@/context/AuthContext"
 
-export const CallbackSection = ({ searchParams }: { searchParams: ReadonlyURLSearchParams }) => {
+export const CallbackSection = () => {
   const router = useRouter()
   const { googleCallback } = useAuth()
+  const searchParams = useSearchParams()
   const notice = useNotice()
   const [hasProcessed, setHasProcessed] = useState(false)
 
