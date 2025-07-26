@@ -1,7 +1,11 @@
+import { gameSessionScheduleMock } from "@repo/shared/mocks"
 import { payload } from "@/data-layer/adapters/Payload"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
+import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
+import { getWeeklySessionDates } from "../utils/DateUtils"
 import GameSessionDataService from "./GameSessionDataService"
+import SemesterDataService from "./SemesterDataService"
 
 const gameSessionDataService = new GameSessionDataService()
 
@@ -15,6 +19,46 @@ describe("GameSessionDataService", () => {
       })
       expect(fetchedGameSession).toStrictEqual(newGameSession)
     })
+  })
+
+  describe("cascadeCreateGameSessions", () => {
+    const semesterDataService = new SemesterDataService()
+    it("should create multiple game session documents excluding mid-semester break", async () => {
+      const newSemester = await semesterDataService.createSemester({
+        ...semesterCreateMock,
+        startDate: new Date(2025, 2, 3, 0, 0).toISOString(), // 3 March 2025
+        endDate: new Date(2025, 5, 30, 23, 59).toISOString(), // 30 June 2025
+        breakStart: new Date(2025, 3, 14, 0, 0).toISOString(), // 14 April 2025
+        breakEnd: new Date(2025, 3, 25, 23, 59).toISOString(), // 25 April 2025
+      })
+
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleCreateMock,
+        semester: newSemester.id,
+      })
+
+      const gameSessions =
+        await gameSessionDataService.cascadeCreateGameSessions(newGameSessionSchedule)
+
+      const allMondays = getWeeklySessionDates("monday", newSemester)
+      expect(gameSessions.length).toBe(allMondays.length)
+
+      for (const session of gameSessions) {
+        const sessionDate = new Date(session.startTime)
+        const breakStart = new Date(newSemester.breakStart)
+        const breakEnd = new Date(newSemester.breakEnd)
+        expect(sessionDate < breakStart || sessionDate > breakEnd).toBe(true)
+      }
+    })
+  })
+
+  it("should throw a NotFound error if correlating semester does not exist", async () => {
+    await expect(
+      gameSessionDataService.cascadeCreateGameSessions({
+        ...gameSessionScheduleMock,
+        semester: "does not exist",
+      }),
+    ).rejects.toThrowError("Not Found")
   })
 
   describe("getPaginatedGameSessions", () => {
