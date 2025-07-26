@@ -1,6 +1,6 @@
 "use client"
 
-import type { MembershipType } from "@repo/shared"
+import { MAX_CASUAL_BOOKINGS, MAX_MEMBER_BOOKINGS, MembershipType } from "@repo/shared"
 import { BookingTimesCardGroup } from "@repo/ui/components/Generic"
 import { ShuttleIcon } from "@repo/ui/components/Icon"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
@@ -16,8 +16,6 @@ import {
 } from "@yamada-ui/react"
 import { memo } from "react"
 import { Controller, useForm } from "react-hook-form"
-
-type Variant = MembershipType.member | MembershipType.casual
 
 interface SessionItem {
   label: string
@@ -39,7 +37,7 @@ interface SelectACourtFormData {
 }
 
 export interface SelectACourtProps {
-  variant?: Variant
+  membershipType?: MembershipType
   onSelect?: (value: string | string[] | undefined) => void
   sessions?: SessionItem[]
   title?: string
@@ -55,9 +53,10 @@ export interface SelectACourtProps {
 }
 
 export const SelectACourt = memo<SelectACourtProps>(
-  ({ variant = "member", onSelect, sessions = [], title = "Select a court", onBack, onNext }) => {
-    const isMember = variant === "member"
-    const max = isMember ? 2 : 1
+  ({ membershipType, onSelect, sessions = [], title = "Select a court", onBack, onNext }) => {
+    const isMember =
+      membershipType === MembershipType.member || membershipType === MembershipType.admin
+    const maxBookings = isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS
 
     const { control, handleSubmit } = useForm<SelectACourtFormData>({
       defaultValues: { bookingTimes: [] },
@@ -109,7 +108,7 @@ export const SelectACourt = memo<SelectACourtProps>(
                 <IconWithText
                   icon={<ShuttleIcon />}
                   justifySelf="end"
-                  label={`Sessions Left: ${max - field.value.length}`}
+                  label={`Sessions Left: ${maxBookings - field.value.length}`}
                 />
               )}
             />
@@ -121,7 +120,7 @@ export const SelectACourt = memo<SelectACourtProps>(
             name="bookingTimes"
             render={({ field }) => {
               const selected: string[] = field.value || []
-              const capReached = selected.length >= max
+              const capReached = selected.length >= maxBookings
 
               const processed = sessions.map((s) => {
                 const isSelected = selected.includes(s.value)
@@ -135,7 +134,7 @@ export const SelectACourt = memo<SelectACourtProps>(
 
               const handleChange = (next: string[]) => {
                 if (isMember) {
-                  if (next.length > max) return
+                  if (next.length > maxBookings) return
                   field.onChange(next)
                   onSelect?.(next.length ? next : undefined)
                 } else {
