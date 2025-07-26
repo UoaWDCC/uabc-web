@@ -16,6 +16,7 @@ import {
 } from "@yamada-ui/react"
 import { memo } from "react"
 import { Controller, useForm } from "react-hook-form"
+import { getNextSelection, processSessions } from "./Utils"
 
 export interface SessionItem {
   label: string
@@ -122,27 +123,16 @@ export const SelectACourt = memo<SelectACourtProps>(
               const selected: string[] = field.value || []
               const capReached = selected.length >= maxBookings
 
-              const processed = sessions.map((s) => {
-                const isSelected = selected.includes(s.value)
-                return {
-                  ...s,
-                  memberAttendees: isMember ? s.memberAttendees : undefined,
-                  casualAttendees: isMember ? s.casualAttendees : undefined,
-                  disabled: s.disabled || (capReached && !isSelected), // applies to both variants
-                }
-              })
+              const processed = processSessions(sessions, selected, isMember, capReached)
 
               const handleChange = (next: string[]) => {
+                const result = getNextSelection(next, selected, isMember, maxBookings)
                 if (isMember) {
-                  if (next.length > maxBookings) return
-                  field.onChange(next)
-                  onSelect?.(next.length ? next : undefined)
+                  field.onChange(Array.isArray(result) ? result : [])
+                  onSelect?.(result)
                 } else {
-                  // casual: toggle behavior
-                  const last = next[next.length - 1]
-                  const newArray = selected[0] === last ? [] : [last]
-                  field.onChange(newArray)
-                  onSelect?.(newArray[0] ?? undefined)
+                  field.onChange(Array.isArray(result) ? result : result ? [result] : [])
+                  onSelect?.(result)
                 }
               }
 
