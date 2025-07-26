@@ -18,9 +18,9 @@ const meta: Meta<typeof SelectACourt> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const MemberUser: Story = {
   args: {
-    variant: MembershipType.member,
+    membershipType: MembershipType.member,
     title: "Select Your Sessions",
     sessions: [
       {
@@ -70,9 +70,9 @@ export const Default: Story = {
   },
 }
 
-export const Casual: Story = {
+export const CasualUser: Story = {
   args: {
-    variant: MembershipType.casual,
+    membershipType: MembershipType.casual,
     title: "Choose Your Session",
     sessions: [
       {
