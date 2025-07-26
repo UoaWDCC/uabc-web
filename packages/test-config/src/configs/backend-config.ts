@@ -13,9 +13,6 @@ export const backendConfig = mergeConfig(baseConfig, {
         lines: 50,
         statements: 50,
       },
-      exclude: [
-        "**/app/payload/**", // Exclude Payload CMS files
-      ],
     },
   },
 })

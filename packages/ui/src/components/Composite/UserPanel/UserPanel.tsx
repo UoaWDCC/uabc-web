@@ -103,7 +103,7 @@ export const UserPanel: FC<UserPanelProps> = ({ user, iconButtonProps, ...props 
       </CardHeader>
       <CardBody alignItems="center" gap="md">
         <InfoField label="Email" value={email} />
-        <InfoField label="Phone" value={phoneNumber} />
+        <InfoField label="Phone" value={phoneNumber?.length ? phoneNumber : "N/A"} />
       </CardBody>
       <CardFooter gap="sm" justifyContent="center">
         <ShuttleIcon fontSize="sm" />
