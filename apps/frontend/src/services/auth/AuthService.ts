@@ -4,6 +4,7 @@ import {
   LoginResponseSchema,
   type RegisterRequestBody,
 } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
 const AuthService = {
@@ -20,7 +21,7 @@ const AuthService = {
       { email, password },
       LoginResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to login")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Register user with email and password
@@ -36,7 +37,7 @@ const AuthService = {
       { email, password, emailVerificationCode } satisfies RegisterRequestBody,
       CommonResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to register")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Send email verification code to user's email
@@ -50,7 +51,7 @@ const AuthService = {
       { email },
       CommonResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to send email verification code")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Gets user information from a JWT token by making a request to the backend.
@@ -64,7 +65,22 @@ const AuthService = {
         Authorization: `Bearer ${token}`,
       },
     })
-    return ApiClient.throwIfError(response, "Failed to get user from token")
+    return ApiClient.throwIfError(response)
+  },
+  /**
+   * Update the current user's profile
+   *
+   * @param data The user data to update (self-editable fields only)
+   * @param token The user's authentication token
+   * @returns The updated user
+   */
+  patchMe: async (data: Partial<User>, token: string) => {
+    const response = await apiClient.patch("/api/me", data, GetUserResponseSchema, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return ApiClient.throwIfError(response)
   },
 } as const
 

@@ -1,5 +1,6 @@
 import { CommonResponseSchema } from "@repo/shared"
 import type { z } from "zod"
+import { ApiClientError } from "./ApiClientError"
 
 type ApiResponse<T> =
   | { success: true; data: T; status: number }
@@ -14,7 +15,7 @@ type RequestOptions = {
 /**
  * ApiClient is a simple HTTP client for making API requests with runtime validation using zod schemas.
  */
-class ApiClient {
+export class ApiClient {
   /**
    * The base URL for all API requests.
    *
@@ -102,6 +103,8 @@ class ApiClient {
   private async handleResponse<T>(
     response: Response,
     schema: z.Schema<T>,
+    method: string,
+    url: string,
   ): Promise<ApiResponse<T>> {
     if (!response.ok) {
       try {
@@ -110,14 +113,27 @@ class ApiClient {
         const errorMessage = parsedError.error || `HTTP ${response.status}: ${response.statusText}`
         return {
           success: false,
-          error: new Error(errorMessage),
+          error: new ApiClientError({
+            message: errorMessage,
+            method,
+            url,
+            status: response.status,
+            statusText: response.statusText,
+            errorBody: errorData,
+          }),
           status: response.status,
         }
-      } catch {
-        // If we can't parse the error response, fall back to status text
+      } catch (err) {
         return {
           success: false,
-          error: new Error(`HTTP ${response.status}: ${response.statusText}`),
+          error: new ApiClientError({
+            message: `HTTP ${response.status}: ${response.statusText}`,
+            method,
+            url,
+            status: response.status,
+            statusText: response.statusText,
+            originalError: err,
+          }),
           status: response.status,
         }
       }
@@ -131,10 +147,18 @@ class ApiClient {
         data: parsedData,
         status: response.status,
       }
-    } catch {
+    } catch (err) {
       return {
         success: false,
-        error: new Error("Invalid response format"),
+        error: new ApiClientError({
+          message: "Invalid response format",
+          method,
+          url,
+          status: response.status,
+          statusText: response.statusText,
+          errorBody: undefined,
+          originalError: err,
+        }),
         status: response.status,
       }
     }
@@ -153,16 +177,19 @@ class ApiClient {
     schema: z.Schema<T>,
     options: RequestOptions = {},
   ): Promise<ApiResponse<T>> {
+    const url = this.joinUrl(path)
     try {
-      const response = await fetch(
-        this.joinUrl(path),
-        this.createFetchOptions("GET", undefined, options),
-      )
-      return await this.handleResponse(response, schema)
+      const response = await fetch(url, this.createFetchOptions("GET", undefined, options))
+      return await this.handleResponse(response, schema, "GET", url)
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error : new Error("Network error"),
+        error: new ApiClientError({
+          message: "Network error",
+          method: "GET",
+          url,
+          originalError: error,
+        }),
         status: null,
       }
     }
@@ -183,16 +210,19 @@ class ApiClient {
     schema: z.Schema<T>,
     options: RequestOptions = {},
   ): Promise<ApiResponse<T>> {
+    const url = this.joinUrl(path)
     try {
-      const response = await fetch(
-        this.joinUrl(path),
-        this.createFetchOptions("POST", body, options),
-      )
-      return await this.handleResponse(response, schema)
+      const response = await fetch(url, this.createFetchOptions("POST", body, options))
+      return await this.handleResponse(response, schema, "POST", url)
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error : new Error("Network error"),
+        error: new ApiClientError({
+          message: "Network error",
+          method: "POST",
+          url,
+          originalError: error,
+        }),
         status: null,
       }
     }
@@ -213,16 +243,19 @@ class ApiClient {
     schema: z.Schema<T>,
     options: RequestOptions = {},
   ): Promise<ApiResponse<T>> {
+    const url = this.joinUrl(path)
     try {
-      const response = await fetch(
-        this.joinUrl(path),
-        this.createFetchOptions("PUT", body, options),
-      )
-      return await this.handleResponse(response, schema)
+      const response = await fetch(url, this.createFetchOptions("PUT", body, options))
+      return await this.handleResponse(response, schema, "PUT", url)
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error : new Error("Network error"),
+        error: new ApiClientError({
+          message: "Network error",
+          method: "PUT",
+          url,
+          originalError: error,
+        }),
         status: null,
       }
     }
@@ -243,16 +276,19 @@ class ApiClient {
     schema: z.Schema<T>,
     options: RequestOptions = {},
   ): Promise<ApiResponse<T>> {
+    const url = this.joinUrl(path)
     try {
-      const response = await fetch(
-        this.joinUrl(path),
-        this.createFetchOptions("PATCH", body, options),
-      )
-      return await this.handleResponse(response, schema)
+      const response = await fetch(url, this.createFetchOptions("PATCH", body, options))
+      return await this.handleResponse(response, schema, "PATCH", url)
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error : new Error("Network error"),
+        error: new ApiClientError({
+          message: "Network error",
+          method: "PATCH",
+          url,
+          originalError: error,
+        }),
         status: null,
       }
     }
@@ -271,11 +307,9 @@ class ApiClient {
     schema?: z.Schema<T>,
     options: RequestOptions = {},
   ): Promise<ApiResponse<T>> {
+    const url = this.joinUrl(path)
     try {
-      const response = await fetch(
-        this.joinUrl(path),
-        this.createFetchOptions("DELETE", undefined, options),
-      )
+      const response = await fetch(url, this.createFetchOptions("DELETE", undefined, options))
 
       if (!response.ok) {
         try {
@@ -285,20 +319,32 @@ class ApiClient {
             parsedError.error || `HTTP ${response.status}: ${response.statusText}`
           return {
             success: false,
-            error: new Error(errorMessage),
+            error: new ApiClientError({
+              message: errorMessage,
+              method: "DELETE",
+              url,
+              status: response.status,
+              statusText: response.statusText,
+              errorBody: errorData,
+            }),
             status: response.status,
           }
-        } catch {
-          // If we can't parse the error response, fall back to status text
+        } catch (err) {
           return {
             success: false,
-            error: new Error(`HTTP ${response.status}: ${response.statusText}`),
+            error: new ApiClientError({
+              message: `HTTP ${response.status}: ${response.statusText}`,
+              method: "DELETE",
+              url,
+              status: response.status,
+              statusText: response.statusText,
+              originalError: err,
+            }),
             status: response.status,
           }
         }
       }
 
-      // For DELETE requests, we might not always have a response body
       if (response.status === 204 || response.headers.get("content-length") === "0") {
         return {
           success: true,
@@ -308,10 +354,9 @@ class ApiClient {
       }
 
       if (schema) {
-        return await this.handleResponse(response, schema)
+        return await this.handleResponse(response, schema, "DELETE", url)
       }
 
-      // If no schema provided, try to parse as JSON or return undefined
       try {
         const data = await response.json()
         return {
@@ -329,7 +374,12 @@ class ApiClient {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error : new Error("Network error"),
+        error: new ApiClientError({
+          message: "Network error",
+          method: "DELETE",
+          url,
+          originalError: error,
+        }),
         status: null,
       }
     }
@@ -340,13 +390,13 @@ class ApiClient {
    * Useful for services that want to handle errors by throwing.
    *
    * @param response The API response.
-   * @param errorMessage Optional custom error message.
    * @returns The data if successful.
    * @throws Error if the response is not successful.
    */
-  public static throwIfError<T>(response: ApiResponse<T>, errorMessage?: string): T {
+  public static throwIfError<T>(response: ApiResponse<T>): T {
     if (!response.success) {
-      throw new Error(response.error.message || errorMessage)
+      console.error(response.error)
+      throw response.error
     }
     return response.data
   }
@@ -381,8 +431,4 @@ export const createApiClient = (baseUrl?: string): ApiClient => {
  */
 export const apiClient = createApiClient()
 
-// Export types for use in services
 export type { ApiResponse, RequestOptions }
-
-// Export the ApiClient class for testing
-export { ApiClient }

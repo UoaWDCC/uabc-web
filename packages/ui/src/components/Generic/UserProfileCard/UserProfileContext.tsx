@@ -1,7 +1,9 @@
 "use client"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useBoolean } from "@yamada-ui/react"
 import { createContext, type ReactNode, useContext, useState } from "react"
 import { type DefaultValues, type UseFormReturn, useForm } from "react-hook-form"
+import type { ZodTypeAny } from "zod"
 import type { Field, FormData, NullableFormData } from "./types"
 
 /**
@@ -57,6 +59,7 @@ export interface UserProfileProviderProps<T extends readonly Field[]> {
   onSave?: (data: NullableFormData<T>) => Promise<void>
   onSuccess?: () => void
   onCancel?: () => void
+  schema?: ZodTypeAny
 }
 
 /**
@@ -73,10 +76,14 @@ export const UserProfileProvider = <T extends readonly Field[]>({
   onSuccess,
   onCancel,
   fields,
+  schema,
 }: UserProfileProviderProps<T>) => {
   const [isEditing, { on: startEditing, off: stopEditing }] = useBoolean()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const form = useForm<NullableFormData<T>>({ defaultValues })
+  const form = useForm<NullableFormData<T>>({
+    defaultValues,
+    resolver: schema ? zodResolver(schema) : undefined,
+  })
 
   const cancelEditing = () => {
     form.reset()

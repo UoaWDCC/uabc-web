@@ -12,5 +12,5 @@ export const getFaq = async () => {
   const response = await apiClient.get("/api/globals/faq", GetFaqResponseSchema, {
     tags: [QueryKeys.FAQ_QUERY_KEY],
   })
-  return ApiClient.throwIfError(response, "Failed to retrieve FAQ data")
+  return ApiClient.throwIfError(response)
 }

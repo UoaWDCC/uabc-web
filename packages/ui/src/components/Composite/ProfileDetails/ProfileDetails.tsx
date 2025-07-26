@@ -1,5 +1,6 @@
 "use client"
 
+import { ProfileDetailsSchema } from "@repo/shared"
 import { casualUserMock } from "@repo/shared/mocks"
 import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"
@@ -25,8 +26,6 @@ export const ProfileDetails = <T extends readonly Field[]>({
   const mutation = useMutation({
     mutationFn: async (data: NullableFormData<T>) => {
       await onSave?.(data)
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      // throw new Error("Failed to submit form")
     },
   })
 
@@ -35,6 +34,7 @@ export const ProfileDetails = <T extends readonly Field[]>({
       onSave={async (data) => {
         await mutation.mutateAsync(data)
       }}
+      schema={ProfileDetailsSchema}
       {...props}
     />
   )

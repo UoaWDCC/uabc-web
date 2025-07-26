@@ -1,5 +1,7 @@
 "use client"
 
+import { isGender, isPlayLevel } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import {
   AdditionalInfo,
   AdditionalInfoFields,
@@ -15,11 +17,13 @@ import {
 import { Container, Grid, GridItem } from "@yamada-ui/react"
 import { memo } from "react"
 import type { AuthContextValue } from "@/context/AuthContext"
+import { useUpdateSelfMutation } from "@/services/auth/useUpdateSelfMutation"
 import { useMyBookings } from "@/services/bookings/BookingQuery"
 
 export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
   const { user } = auth
   const { data: bookings, isLoading: isBookingsLoading, isError: isBookingsError } = useMyBookings()
+  const updateSelfMutation = useUpdateSelfMutation()
 
   return (
     <Container centerContent gap="xl" layerStyle="container">
@@ -54,8 +58,13 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
             }}
             fields={ProfileDetailsFields}
             onSave={async (data) => {
-              // TODO: Implement update user mutation
-              console.log(data)
+              // Only send allowed fields for PATCH /me
+              const payload: Partial<Pick<User, "firstName" | "lastName" | "phoneNumber">> = {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                phoneNumber: data.phoneNumber,
+              }
+              await updateSelfMutation.mutateAsync(payload)
             }}
             title="Profile Details"
             w="full"
@@ -68,8 +77,12 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
             }}
             fields={AdditionalInfoFields}
             onSave={async (data) => {
-              // TODO: Implement update user mutation
-              console.log(data)
+              const payload: Partial<User> = {
+                gender: isGender(data.gender) ?? null,
+                playLevel: isPlayLevel(data.playLevel) ?? null,
+                dietaryRequirements: data.dietaryRequirements,
+              }
+              await updateSelfMutation.mutateAsync(payload)
             }}
             title="Additional Info"
             w="full"
