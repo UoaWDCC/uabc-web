@@ -17,7 +17,7 @@ import {
 import { memo } from "react"
 import { Controller, useForm } from "react-hook-form"
 
-interface SessionItem {
+export interface SessionItem {
   label: string
   memberAttendees: string
   casualAttendees: string
@@ -27,7 +27,7 @@ interface SessionItem {
   disabled?: boolean
 }
 
-interface SelectACourtFormData {
+export interface SelectACourtFormData {
   /**
    * The selected session values.
    * - For members: array of session IDs (up to 2)
@@ -168,8 +168,8 @@ export const SelectACourt = memo<SelectACourtProps>(
               render={({ field }) => (
                 <Button
                   colorScheme="primary"
+                  disabled={field.value?.length === 0}
                   endIcon={<ArrowRightIcon />}
-                  isDisabled={field.value?.length === 0}
                   size="lg"
                   type="submit"
                 >
