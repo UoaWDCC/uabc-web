@@ -21,6 +21,7 @@ const mockAuth: AuthContextValue = {
   login: {} as never,
   emailVerificationCode: {} as never,
   register: {} as never,
+  googleCallback: {} as never,
 }
 
 const queryClientProvider = ({ children }: { children: React.ReactNode }) => {
