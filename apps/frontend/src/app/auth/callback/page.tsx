@@ -2,7 +2,7 @@
 
 import { Center, Loading, Text, useNotice, VStack } from "@yamada-ui/react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useEffect, useState } from "react"
+import { Suspense, useCallback, useEffect, useState } from "react"
 
 import { useAuth } from "@/context/AuthContext"
 
@@ -66,9 +66,17 @@ export default function CallbackPage() {
   }, [handleAuthCallback])
 
   return (
-    <Center as={VStack} gap="lg" layerStyle="container">
-      <Loading fontSize="5xl" />
-      <Text>Redirecting...</Text>
-    </Center>
+    <Suspense
+      fallback={
+        <Center>
+          <Loading fontSize="5xl" />
+        </Center>
+      }
+    >
+      <Center as={VStack} gap="lg" layerStyle="container">
+        <Loading fontSize="5xl" />
+        <Text>Redirecting...</Text>
+      </Center>
+    </Suspense>
   )
 }
