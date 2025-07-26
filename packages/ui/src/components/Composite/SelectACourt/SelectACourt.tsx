@@ -37,13 +37,18 @@ export interface SelectACourtFormData {
   bookingTimes: string[]
 }
 
+/**
+ * The props for the SelectACourt component.
+ */
 export interface SelectACourtProps {
+  /**
+   * The membership type of the user.
+   */
   membershipType?: MembershipType
   onSelect?: (value: string | string[] | undefined) => void
   sessions?: SessionItem[]
   title?: string
   onBack?: () => void
-
   /**
    * Callback function triggered when the next button is clicked.
    * Used for navigation to the next step in multi-step forms.
@@ -120,13 +125,13 @@ export const SelectACourt = memo<SelectACourtProps>(
             control={control}
             name="bookingTimes"
             render={({ field }) => {
-              const selected: string[] = field.value || []
-              const capReached = selected.length >= maxBookings
+              const selectedSessions: string[] = field.value || []
+              const capReached = selectedSessions.length >= maxBookings
 
-              const processed = processSessions(sessions, selected, isMember, capReached)
+              const processed = processSessions(sessions, selectedSessions, isMember, capReached)
 
               const handleChange = (next: string[]) => {
-                const result = getNextSelection(next, selected, isMember, maxBookings)
+                const result = getNextSelection(next, selectedSessions, isMember, maxBookings)
                 if (isMember) {
                   field.onChange(Array.isArray(result) ? result : [])
                   onSelect?.(result)
