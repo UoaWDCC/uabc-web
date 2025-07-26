@@ -65,39 +65,6 @@ export default function CallbackPage() {
     handleAuthCallback()
   }, [handleAuthCallback])
 
-  // const handleLogin = async (data: LoginFormData): Promise<LoginResponse> => {
-  //   try {
-  //     const response = await login.mutateAsync(data)
-
-  //     if (response.data) {
-  //       notice({
-  //         title: "Login successful",
-  //         description: "You are now logged in",
-  //         status: "success",
-  //       })
-  //       router.push("/profile")
-  //       return response
-  //     }
-  //     const errorMessage = response.error || "Login failed"
-  //     notice({
-  //       title: "Login failed",
-  //       description: errorMessage,
-  //       status: "error",
-  //     })
-  //     return { error: errorMessage }
-  //   } catch (error) {
-  //     return {
-  //       error: error instanceof Error ? error.message : "Login failed",
-  //     }
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if (!isLoading && !isPending && user) {
-  //     router.push("/profile")
-  //   }
-  // }, [isLoading, isPending, user, router])
-
   return (
     <Center as={VStack} gap="lg" layerStyle="container">
       <Loading fontSize="5xl" />
