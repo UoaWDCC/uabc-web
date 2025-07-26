@@ -134,11 +134,10 @@ export const SelectACourt = memo<SelectACourtProps>(
                 const result = getNextSelection(next, selectedSessions, isMember, maxBookings)
                 if (isMember) {
                   field.onChange(Array.isArray(result) ? result : [])
-                  onSelect?.(result)
                 } else {
                   field.onChange(Array.isArray(result) ? result : result ? [result] : [])
-                  onSelect?.(result)
                 }
+                onSelect?.(result)
               }
 
               return (
