@@ -41,7 +41,7 @@ vi.mock("@/business-layer/provider/google", async () => {
   }
 })
 
-import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
+import { JWTEncryptedUserSchema } from "@repo/shared"
 import { cookies } from "next/headers"
 import { GET as callback } from "@/app/api/auth/google/callback/route"
 import UserDataService from "@/data-layer/services/UserDataService"
@@ -64,7 +64,7 @@ describe("GET /api/auth/google/callback", async () => {
     )
   })
 
-  it("redirects user and sets JWT token to cookies on success auth", async () => {
+  it("redirects user and sets JWT token as query parameter on success auth", async () => {
     cookieStore.set("state", STATE_MOCK)
 
     const req = createMockNextRequest(
@@ -73,19 +73,25 @@ describe("GET /api/auth/google/callback", async () => {
     const response = await callback(req)
 
     expect(response.status).toBe(StatusCodes.TEMPORARY_REDIRECT)
-    expect(response.headers.get("location")).toBe("http://localhost:3000/onboarding/name")
 
-    const token = response.cookies.get(AUTH_COOKIE_NAME)?.value
-    expect(token).toBeDefined()
+    const location = response.headers.get("location")
+    expect(location).toBeDefined()
 
-    const authService = new AuthService()
-    const data = authService.getData(token as string, JWTEncryptedUserSchema)
-    const userMock = await userDataService.getUserByEmail(googleUserMock.email)
-    const { remainingSessions: _omit, ...userMockWithoutSessions } = userMock
-    expect(data).toMatchObject({
-      user: userMockWithoutSessions,
-      accessToken: tokensMock.access_token,
-    })
+    if (location) {
+      const redirectUrl = new URL(location)
+      expect(redirectUrl.pathname).toBe("/auth/callback")
+      expect(redirectUrl.searchParams.get("token")).toBeDefined()
+
+      const token = redirectUrl.searchParams.get("token")
+      const authService = new AuthService()
+      const data = authService.getData(token as string, JWTEncryptedUserSchema)
+      const userMock = await userDataService.getUserByEmail(googleUserMock.email)
+      const { remainingSessions: _omit, ...userMockWithoutSessions } = userMock
+      expect(data).toMatchObject({
+        user: userMockWithoutSessions,
+        accessToken: tokensMock.access_token,
+      })
+    }
   })
 
   it("returns 400 if state does not match", async () => {

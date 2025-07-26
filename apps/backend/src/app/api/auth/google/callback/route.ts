@@ -1,9 +1,4 @@
-import {
-  AUTH_COOKIE_NAME,
-  GoogleUserInfoResponseSchema,
-  MembershipType,
-  TOKEN_EXPIRY_TIME,
-} from "@repo/shared"
+import { GoogleUserInfoResponseSchema, MembershipType, TOKEN_EXPIRY_TIME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
@@ -133,15 +128,10 @@ export const GET = async (req: NextRequest) => {
     },
     { expiresIn: TOKEN_EXPIRY_TIME },
   )
-  const response = NextResponse.redirect(new URL("/onboarding/name", req.url))
 
-  response.cookies.set(AUTH_COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 60 * 60,
-    path: "/",
-  })
+  const frontendUrl = new URL("/auth/callback", req.url)
+  frontendUrl.searchParams.set("token", token)
+  const response = NextResponse.redirect(frontendUrl)
 
   return response
 }

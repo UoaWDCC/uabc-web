@@ -55,6 +55,16 @@ type AuthActions = {
     },
     unknown
   >
+  googleCallback: UseMutationResult<
+    {
+      data?: User | undefined
+      error?: string | undefined
+      message?: string | undefined
+    },
+    Error,
+    string,
+    unknown
+  >
 }
 
 export type AuthContextValue = AuthState & AuthActions
@@ -137,6 +147,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
   })
 
+  const googleCallback = useMutation({
+    mutationFn: async (token: string) => {
+      const response = await AuthService.getUserFromToken(token)
+      if (response.data) {
+        setToken(token)
+      }
+      return response
+    },
+    onError: (error) => {
+      notice({
+        title: "Google Login Failed",
+        description: error.message,
+        status: "error",
+      })
+    },
+  })
+
   const authState: AuthState = {
     user: user ?? null,
     isLoading: isLoading || login.isPending,
@@ -150,6 +177,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     login,
     emailVerificationCode,
     register,
+    googleCallback,
   }
 
   useUpdateEffect(() => {
