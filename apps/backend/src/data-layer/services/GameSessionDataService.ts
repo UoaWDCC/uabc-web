@@ -8,7 +8,7 @@ import type {
 import type { GameSession, GameSessionSchedule, Semester } from "@repo/shared/payload-types"
 import type { PaginatedDocs } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
-import { getWeeklySessionDates } from "../utils/DateUtils"
+import { createGameSessionTime, getWeeklySessionDates } from "../utils/DateUtils"
 
 export default class GameSessionDataService {
   /**
@@ -115,28 +115,22 @@ export default class GameSessionDataService {
       throw new Error("Semester not found")
     }
 
-    const weekday = schedule.day as Weekday
-    const sessionDates = getWeeklySessionDates(weekday, semester)
+    const sessionDates = getWeeklySessionDates(schedule.day as Weekday, semester)
 
     const sessions: CreateGameSessionData[] = sessionDates.map((date) => {
-      const dateStr = date.toISOString().split("T")[0]
-      const timeStrStart = schedule.startTime.split("T")[1]
-      const timeStrEnd = schedule.startTime.split("T")[1]
-
-      const start = new Date(`${dateStr}T${timeStrStart}`)
-      const end = new Date(`${dateStr}T${timeStrEnd}`)
+      const gameSessionTimes = createGameSessionTime(schedule, date)
 
       return {
         gameSessionSchedule: schedule.id,
         semester: semester.id,
         name: schedule.name,
         location: schedule.location,
-        startTime: start.toISOString(),
-        endTime: end.toISOString(),
+        ...gameSessionTimes,
         capacity: schedule.capacity,
         casualCapacity: schedule.casualCapacity,
       }
     })
+
     const createdSessions = await Promise.all(
       sessions.map(
         (session) =>

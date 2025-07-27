@@ -1,4 +1,4 @@
-import type { Weekday } from "@repo/shared"
+import type { GameSessionSchedule, Weekday } from "@repo/shared"
 import type { Semester } from "@repo/shared/payload-types"
 
 const dayToNumber: Record<Weekday, number> = {
@@ -28,8 +28,17 @@ export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] 
     if (sessionDate < breakStart || sessionDate > breakEnd) {
       dates.push(new Date(sessionDate))
     }
-
     sessionDate.setDate(sessionDate.getDate() + 7)
   }
+
   return dates
+}
+
+export function createGameSessionTime(schedule: GameSessionSchedule, date: Date) {
+  const dateStr = date.toISOString().split("T")[0]
+  const timeStrStart = schedule.startTime.split("T")[1]
+  const timeStrEnd = schedule.endTime.split("T")[1]
+  const start = new Date(`${dateStr}T${timeStrStart}`).toISOString()
+  const end = new Date(`${dateStr}T${timeStrEnd}`).toISOString()
+  return { startTime: start, endTime: end }
 }
