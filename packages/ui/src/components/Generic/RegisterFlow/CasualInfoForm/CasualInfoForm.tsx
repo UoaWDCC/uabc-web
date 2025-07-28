@@ -1,5 +1,6 @@
 "use client"
 
+import type { CasualInfoFormValues } from "@repo/shared/types"
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import { UserRoundIcon } from "@yamada-ui/lucide"
 
@@ -19,10 +20,6 @@ import {
 } from "@yamada-ui/react"
 import type { FC } from "react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
-
-export type CasualInfoFormValues = {
-  agree: boolean
-}
 
 /**
  * Props for {@link CasualInfoForm} component

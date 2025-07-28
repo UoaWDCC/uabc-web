@@ -158,6 +158,10 @@ export const AdditionalInfoFormSchema = z.object({
   dietaryRequirements: z.string(),
 })
 
+export const CasualInfoFormSchema = z.object({
+  agree: z.boolean(),
+})
+
 export const VerificationCodeRequestSchema = z.object({
   /**
    * The user's email address

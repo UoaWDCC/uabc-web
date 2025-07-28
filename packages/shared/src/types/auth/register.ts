@@ -3,6 +3,7 @@ import type {
   AdditionalInfoFormSchema,
   BasicInfoForm1Schema,
   BasicInfoForm2Schema,
+  CasualInfoFormSchema,
   RegisterFormDataSchema,
   UniversityInfoFormSchema,
 } from "../../schemas"
@@ -12,3 +13,4 @@ export type BasicInfoForm1Values = z.infer<typeof BasicInfoForm1Schema>
 export type BasicInfoForm2Values = z.infer<typeof BasicInfoForm2Schema>
 export type UniversityInfoFormValues = z.infer<typeof UniversityInfoFormSchema>
 export type AdditionalInfoFormValues = z.infer<typeof AdditionalInfoFormSchema>
+export type CasualInfoFormValues = z.infer<typeof CasualInfoFormSchema>

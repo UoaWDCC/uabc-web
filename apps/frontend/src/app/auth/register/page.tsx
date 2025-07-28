@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Register an account",
 }
 
-export default function Login() {
+export default function Register() {
   return (
     <VStack alignItems="center" layerStyle="wrapper">
       <Suspense>
