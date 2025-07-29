@@ -29,13 +29,6 @@ export const CallbackSection = () => {
 
       setHasProcessed(true)
 
-      // Clear the token from the URL to prevent storing it in the browser history
-      if (typeof window !== "undefined") {
-        const url = new URL(window.location.href)
-        url.searchParams.delete("token")
-        window.history.replaceState({}, "", url.toString())
-      }
-
       const response = await AuthService.getUserFromToken(token)
 
       if (response.data) {
