@@ -118,21 +118,21 @@ describe("bookingDataService", () => {
     })
   })
 
-  describe("getAllBookings", () => {
-    it("should find all bookings", async () => {
+  describe("getPaginatedBookings", () => {
+    it("should find all bookings in each page", async () => {
       const createdBooking = await bookingDataService.createBooking(bookingCreateMock)
       const createdBooking2 = await bookingDataService.createBooking(bookingCreateMock2)
 
       const limit = 1
 
       // Test getting 1st page.
-      const fetchedBooking2 = await bookingDataService.getAllBookings(limit, 1)
+      const fetchedBooking2 = await bookingDataService.getPaginatedBookings(limit, 1)
       expect(fetchedBooking2.docs).toEqual(expect.arrayContaining([createdBooking2]))
 
       // Test getting next page.
       expect(fetchedBooking2.hasNextPage).true
       if (fetchedBooking2.hasNextPage && fetchedBooking2.nextPage) {
-        const fetchedBooking2Next = await bookingDataService.getAllBookings(
+        const fetchedBooking2Next = await bookingDataService.getPaginatedBookings(
           limit,
           fetchedBooking2.nextPage,
         )
@@ -142,7 +142,7 @@ describe("bookingDataService", () => {
 
     it("should use default limit and page when no arguments are provided", async () => {
       // Should not throw and should return an object with default pagination values
-      const result = await bookingDataService.getAllBookings()
+      const result = await bookingDataService.getPaginatedBookings()
       expect(result).toHaveProperty("docs")
       expect(result).toHaveProperty("limit", 100)
       expect(result).toHaveProperty("page", 1)

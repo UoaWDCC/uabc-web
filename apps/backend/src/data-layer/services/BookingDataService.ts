@@ -105,13 +105,13 @@ export default class BookingDataService {
   }
 
   /**
-   * Finds all {@link Booking} documents.
+   * Finds a page of {@link Booking} documents.
    *
    * @param limit The maximum documents to be returned
    * @param page The specific page number to offset to
    * @returns All {@link Booking} documents found on the given page
    */
-  public async getAllBookings(limit = 100, page = 1): Promise<PaginatedDocs<Booking>> {
+  public async getPaginatedBookings(limit = 100, page = 1): Promise<PaginatedDocs<Booking>> {
     return await payload.find({ collection: "booking", limit, page })
   }
 
