@@ -15,10 +15,6 @@ export const CallbackSection = () => {
   const token = searchParams.get("token")
 
   const handleAuthCallback = useCallback(async () => {
-    if (hasProcessed || googleCallback.isPending) {
-      return
-    }
-
     try {
       if (!token) {
         notice({
@@ -58,11 +54,13 @@ export const CallbackSection = () => {
     } catch {
       router.push("/auth/login")
     }
-  }, [token, hasProcessed, googleCallback, notice, router])
+  }, [token, googleCallback, notice, router])
 
   useEffect(() => {
-    handleAuthCallback()
-  }, [handleAuthCallback])
+    if (!hasProcessed && !googleCallback.isPending) {
+      handleAuthCallback()
+    }
+  }, [handleAuthCallback, hasProcessed, googleCallback])
 
   return (
     <Center as={VStack} gap="lg" layerStyle="container">
