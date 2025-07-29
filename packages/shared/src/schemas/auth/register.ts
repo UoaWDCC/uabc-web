@@ -1,5 +1,5 @@
 import z from "zod"
-import { Gender, PlayLevel, University } from "../../types"
+import { Gender, PlayLevel, type RegisterFlowState, University } from "../../types"
 
 export const RegisterRequestBodySchema = z.object({
   /**
@@ -161,6 +161,15 @@ export const AdditionalInfoFormSchema = z.object({
 export const CasualInfoFormSchema = z.object({
   agree: z.boolean(),
 })
+
+export const RegisterFlowStateSchema = z.object({
+  step: z.number(),
+  basicInfo1: BasicInfoForm1Schema.nullable(),
+  basicInfo2: BasicInfoForm2Schema.nullable(),
+  universityInfo: UniversityInfoFormSchema.nullable(),
+  additionalInfo: AdditionalInfoFormSchema.nullable(),
+  casualInfo: CasualInfoFormSchema.nullable(),
+}) satisfies z.ZodType<RegisterFlowState>
 
 export const VerificationCodeRequestSchema = z.object({
   /**

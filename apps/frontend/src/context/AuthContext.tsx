@@ -3,6 +3,7 @@
 import type { LoginFormData, RegisterRequestBody } from "@repo/shared"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
+import { useLocalStorage } from "@repo/ui/hooks"
 import {
   type UseMutationResult,
   useMutation,
@@ -12,7 +13,6 @@ import {
 import { useNotice } from "@yamada-ui/react"
 import { createContext, type ReactNode, useContext } from "react"
 import type { ApiResponse } from "@/lib/api/client"
-import { useLocalStorage } from "@/lib/storage"
 import AuthService from "@/services/auth/AuthService"
 
 type AuthState = {
