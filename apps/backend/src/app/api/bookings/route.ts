@@ -34,16 +34,12 @@ class RouteWrapper {
         const openTime = new Date(semester.bookingOpenTime)
         const sessionDayIndex = sessionStartTime.getDay()
 
-        // Calculate the booking open date as the week before the session
+        // Calculate the booking open date
+        // Find the most recent occurrence of the booking open day before the session day
         const openDate = new Date(sessionStartTime)
-        openDate.setDate(
-          sessionStartTime.getDate() -
-            7 +
-            getDaysUntilNextDayOfWeekEnum(
-              openDay as Weekday,
-              Object.values(Weekday)[sessionDayIndex] as Weekday,
-            ),
-        )
+        const sessionDay = Object.values(Weekday)[sessionDayIndex] as Weekday
+        const daysToSubtract = getDaysUntilNextDayOfWeekEnum(openDay as Weekday, sessionDay)
+        openDate.setDate(sessionStartTime.getDate() - daysToSubtract)
         openDate.setHours(openTime.getHours(), openTime.getMinutes(), openTime.getSeconds(), 0)
 
         const now = new Date()
