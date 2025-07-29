@@ -72,7 +72,7 @@ describe("api/admin/game-sessions/[id]/bookings", async () => {
     it("return 500 if any internal server errors occur", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
-      vi.spyOn(BookingDataService.prototype, "getBookingsBySessionId").mockRejectedValueOnce(
+      vi.spyOn(BookingDataService.prototype, "getAllBookingsBySessionId").mockRejectedValueOnce(
         new Error("Database error"),
       )
 
