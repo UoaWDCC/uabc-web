@@ -131,7 +131,6 @@ export const GET = async (req: NextRequest) => {
 
   const frontendUrl = new URL("/auth/callback", req.url)
   frontendUrl.searchParams.set("token", token)
-  const response = NextResponse.redirect(frontendUrl)
 
-  return response
+  return NextResponse.redirect(frontendUrl)
 }
