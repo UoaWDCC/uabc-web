@@ -8,7 +8,7 @@ import type {
 import type { GameSession, GameSessionSchedule, Semester } from "@repo/shared/payload-types"
 import type { PaginatedDocs } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
-import { createGameSessionTime, getWeeklySessionDates } from "../utils/DateUtils"
+import { createGameSessionTimes, getWeeklySessionDates } from "../utils/DateUtils"
 
 export default class GameSessionDataService {
   /**
@@ -118,7 +118,7 @@ export default class GameSessionDataService {
     const sessionDates = getWeeklySessionDates(schedule.day as Weekday, semester)
 
     const sessions: CreateGameSessionData[] = sessionDates.map((date) => {
-      const gameSessionTimes = createGameSessionTime(schedule, date)
+      const gameSessionTimes = createGameSessionTimes(schedule, date)
 
       return {
         gameSessionSchedule: schedule.id,

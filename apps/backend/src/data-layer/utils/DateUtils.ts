@@ -34,11 +34,13 @@ export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] 
   return dates
 }
 
-export function createGameSessionTime(schedule: GameSessionSchedule, date: Date) {
+export function createGameSessionTimes(schedule: GameSessionSchedule, date: Date) {
   const dateStr = date.toISOString().split("T")[0]
   const timeStrStart = schedule.startTime.split("T")[1]
   const timeStrEnd = schedule.endTime.split("T")[1]
+
   const start = new Date(`${dateStr}T${timeStrStart}`).toISOString()
   const end = new Date(`${dateStr}T${timeStrEnd}`).toISOString()
+
   return { startTime: start, endTime: end }
 }
