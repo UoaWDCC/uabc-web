@@ -8,8 +8,10 @@ import type {
   UniversityInfoFormValues,
 } from "@repo/shared/types"
 import { useLocalStorage } from "@repo/ui/hooks"
-import { VStack } from "@yamada-ui/react"
+import { ArrowLeftIcon } from "@yamada-ui/lucide"
+import { Center, Grid, GridItem, VStack } from "@yamada-ui/react"
 import { memo, useReducer } from "react"
+import { Heading, IconButton, LoadingStateBar } from "../../Primitive"
 import { AdditionalInfoForm } from "./AdditionalInfoForm"
 import { BasicInfoForm1 } from "./BasicInfoForm1"
 import { BasicInfoForm2 } from "./BasicInfoForm2"
@@ -36,6 +38,7 @@ type RegisterFlowActionPayloads = {
 
 type RegisterFlowAction =
   | { type: "NEXT" }
+  | { type: "PREV" }
   | {
       [K in keyof RegisterFlowActionPayloads]: {
         type: K
@@ -49,6 +52,11 @@ const reducer = (state: RegisterFlowState, action: RegisterFlowAction): Register
       return {
         ...state,
         step: state.step + 1,
+      }
+    case "PREV":
+      return {
+        ...state,
+        step: state.step - 1,
       }
     case "SET_BASIC_INFO_1":
       return {
@@ -100,6 +108,13 @@ export const RegisterFlow = memo(() => {
       dispatch({ type: "NEXT" })
     }
   }
+
+  const handleGoBack = () => {
+    dispatch({ type: "PREV" })
+    const nextState = reducer(state, { type: "PREV" })
+    setPersistedState(nextState)
+  }
+
   const steps = [
     <BasicInfoForm1
       defaultValues={state.basicInfo1 ?? undefined}
@@ -127,5 +142,29 @@ export const RegisterFlow = memo(() => {
       onSubmit={handleStepSubmit("SET_CASUAL_INFO")}
     />,
   ]
-  return <VStack>{steps[state.step] ?? <RegisterSuccessPanel />}</VStack>
+
+  const enableGoBack = state.step > 0 && state.step < steps.length
+
+  return (
+    <VStack>
+      <Grid templateColumns="1fr 1fr 1fr">
+        <GridItem>
+          <IconButton
+            aria-label="Go back"
+            disabled={!enableGoBack}
+            icon={<ArrowLeftIcon />}
+            onClick={handleGoBack}
+            rounded="full"
+            variant="unstyled"
+          />
+        </GridItem>
+
+        <GridItem as={Center}>
+          <Heading.h2>Title</Heading.h2>
+        </GridItem>
+      </Grid>
+      <LoadingStateBar value={(state.step / steps.length) * 100} />
+      {steps[state.step] ?? <RegisterSuccessPanel />}
+    </VStack>
+  )
 })
