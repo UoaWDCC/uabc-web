@@ -4,10 +4,11 @@ import { Center, Loading, Text, useNotice, VStack } from "@yamada-ui/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import { useAuth } from "@/context/AuthContext"
+import AuthService from "@/services/auth/AuthService"
 
 export const CallbackSection = () => {
   const router = useRouter()
-  const { googleCallback } = useAuth()
+  const { setToken } = useAuth()
   const searchParams = useSearchParams()
   const notice = useNotice()
   const [hasProcessed, setHasProcessed] = useState(false)
@@ -35,9 +36,10 @@ export const CallbackSection = () => {
         window.history.replaceState({}, "", url.toString())
       }
 
-      const result = await googleCallback.mutateAsync(token)
+      const response = await AuthService.getUserFromToken(token)
 
-      if (result.data) {
+      if (response.data) {
+        setToken(token)
         notice({
           title: "Login successful",
           description: "Welcome!",
@@ -45,23 +47,23 @@ export const CallbackSection = () => {
         })
         router.push("/profile")
       } else {
-        notice({
-          title: "Authentication failed",
-          description: result.error || "Failed to authenticate with Google",
-          status: "error",
-        })
         router.push("/auth/login")
       }
     } catch {
+      notice({
+        title: "Authentication failed",
+        description: "Failed to authenticate with Google",
+        status: "error",
+      })
       router.push("/auth/login")
     }
-  }, [token, googleCallback, notice, router])
+  }, [token, setToken, notice, router])
 
   useEffect(() => {
-    if (!hasProcessed && !googleCallback.isPending) {
+    if (!hasProcessed) {
       handleAuthCallback()
     }
-  }, [handleAuthCallback, hasProcessed, googleCallback])
+  }, [handleAuthCallback, hasProcessed])
 
   return (
     <Center as={VStack} gap="lg" layerStyle="container">
