@@ -37,7 +37,7 @@ describe("bookingDataService", () => {
     })
   })
 
-  describe("getBookingBySessionId", () => {
+  describe("getAllBookingsBySessionId", () => {
     it("should fetch bookings by session ID", async () => {
       const createdGameSession =
         await gameSessionDataService.createGameSession(gameSessionCreateMock)
@@ -46,14 +46,16 @@ describe("bookingDataService", () => {
         gameSession: createdGameSession.id,
       })
 
-      const fetchedBooking = await bookingDataService.getBookingsBySessionId(createdGameSession.id)
+      const fetchedBooking = await bookingDataService.getAllBookingsBySessionId(
+        createdGameSession.id,
+      )
       expect(fetchedBooking.length).toEqual(1)
       expect(fetchedBooking).toEqual([createdBooking])
     })
 
     it("should return an empty array when a booking is not found for session ID", async () => {
       expect(
-        await bookingDataService.getBookingsBySessionId("Not a valid session ID"),
+        await bookingDataService.getAllBookingsBySessionId("Not a valid session ID"),
       ).toStrictEqual([])
     })
   })
@@ -83,7 +85,7 @@ describe("bookingDataService", () => {
     })
   })
 
-  describe("getUserBookingsBySessionId", () => {
+  describe("getAllUserBookingsBySessionId", () => {
     it("should find all bookings by userId and sessionId", async () => {
       const createdBooking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
@@ -94,7 +96,7 @@ describe("bookingDataService", () => {
         user: casualUserMock,
       })
 
-      const fetchedBookings = await bookingDataService.getUserBookingsBySessionId(
+      const fetchedBookings = await bookingDataService.getAllUserBookingsBySessionId(
         casualUserMock.id,
         typeof createdBooking1.gameSession === "string"
           ? createdBooking1.gameSession
@@ -108,7 +110,7 @@ describe("bookingDataService", () => {
     })
 
     it("should return empty array if there are no bookings by userId and sessionId", async () => {
-      const fetchedBooking = await bookingDataService.getUserBookingsBySessionId(
+      const fetchedBooking = await bookingDataService.getAllUserBookingsBySessionId(
         "No bookings userId",
         "No bookings sessionId",
       )

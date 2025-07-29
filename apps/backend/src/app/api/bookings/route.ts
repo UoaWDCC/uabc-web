@@ -21,7 +21,7 @@ class RouteWrapper {
         typeof parsedBody.gameSession === "string"
           ? await gameSessionDataService.getGameSessionById(parsedBody.gameSession)
           : parsedBody.gameSession
-      const bookings = await bookingDataService.getBookingsBySessionId(gameSession.id)
+      const bookings = await bookingDataService.getAllBookingsBySessionId(gameSession.id)
       // Refetch user data as JWT stored data could be outdated
       const userData = await userDataService.getUserById(req.user.id)
 
@@ -42,8 +42,8 @@ class RouteWrapper {
         )
 
       if (
-        (await bookingDataService.getUserBookingsBySessionId(userData.id, gameSession.id)).length >
-        0
+        (await bookingDataService.getAllUserBookingsBySessionId(userData.id, gameSession.id))
+          .length > 0
       )
         return NextResponse.json(
           { error: "Session already booked" },
