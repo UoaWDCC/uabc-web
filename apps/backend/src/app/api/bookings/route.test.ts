@@ -102,7 +102,7 @@ describe("/api/bookings", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
 
       // Set system time to Friday July 18, 2025 (before booking opens on Saturday July 19, 2025 at 00:00)
-      vi.setSystemTime(new Date(2025, 6, 18, 12, 0, 0))
+      vi.setSystemTime(new Date(Date.UTC(2025, 6, 18, 12, 0, 0)))
 
       try {
         const req = createMockNextRequest("/api/bookings", "POST", {
@@ -124,15 +124,15 @@ describe("/api/bookings", async () => {
       const customSemester = {
         ...semesterMock,
         bookingOpenDay: Weekday.wednesday,
-        bookingOpenTime: new Date(2025, 0, 1, 12, 0, 0).toISOString(),
+        bookingOpenTime: new Date(Date.UTC(2025, 0, 1, 12, 0, 0)).toISOString(),
       }
       const earlySession = {
         ...gameSessionMock,
-        startTime: new Date(2025, 0, 1, 10, 0, 0).toISOString(),
+        startTime: new Date(Date.UTC(2025, 0, 1, 10, 0, 0)).toISOString(),
         semester: customSemester,
       }
 
-      vi.setSystemTime(new Date(2025, 0, 1, 13, 0, 0))
+      vi.setSystemTime(new Date(Date.UTC(2025, 0, 1, 13, 0, 0)))
 
       try {
         const req = createMockNextRequest("/api/bookings", "POST", {
