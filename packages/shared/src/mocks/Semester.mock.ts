@@ -1,5 +1,5 @@
-import { Weekday } from "src/types"
 import type { Semester } from "../payload-types"
+import { Weekday } from "../types"
 
 export const semesterMock: Semester = {
   id: "e0b2e0db3b65d10f864aeedb",
