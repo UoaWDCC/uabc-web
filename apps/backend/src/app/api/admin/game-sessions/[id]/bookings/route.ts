@@ -16,7 +16,7 @@ class BookingsRouteWrapper {
     try {
       const { id } = await params
       const bookingDataService = new BookingDataService()
-      const bookings = await bookingDataService.getBookingsBySessionId(id)
+      const bookings = await bookingDataService.getAllBookingsBySessionId(id)
 
       return NextResponse.json({ data: bookings })
     } catch (error) {
