@@ -128,7 +128,7 @@ describe("/api/admin/semesters/[id]", async () => {
       const json = await res.json()
       expect(json.error).toEqual("Invalid request body")
       expect(json.details.fieldErrors.bookingOpenDay[0]).toEqual(
-        "Invalid enum value. Expected 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday', received 'day'",
+        "Invalid enum value. Expected 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday', received 'day'",
       )
     })
 
