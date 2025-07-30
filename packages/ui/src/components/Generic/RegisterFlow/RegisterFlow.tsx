@@ -1,3 +1,5 @@
+"use client"
+
 import { RegisterFlowStateSchema } from "@repo/shared/schemas"
 import type {
   AdditionalInfoFormValues,
