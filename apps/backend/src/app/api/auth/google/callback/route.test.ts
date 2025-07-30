@@ -47,6 +47,20 @@ import { GET as callback } from "@/app/api/auth/google/callback/route"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 
+vi.mock("@/data-layer/services/AuthDataService", () => {
+  const actual = vi.importActual<typeof import("@/data-layer/services/AuthDataService")>(
+    "@/data-layer/services/AuthDataService",
+  )
+  return {
+    ...actual,
+    default: vi.fn().mockImplementation(() => ({
+      createAuth: vi.fn().mockResolvedValue(googleUserMock),
+      getAuthByEmail: vi.fn().mockResolvedValue(googleUserMock),
+      updateAuth: vi.fn().mockResolvedValue(googleUserMock),
+    })),
+  }
+})
+
 describe("GET /api/auth/google/callback", async () => {
   const cookieStore = await cookies()
   const userDataService = new UserDataService()
@@ -85,7 +99,10 @@ describe("GET /api/auth/google/callback", async () => {
       const token = redirectUrl.searchParams.get("token")
       const authService = new AuthService()
       const data = authService.getData(token as string, JWTEncryptedUserSchema)
-      const userMock = await userDataService.getUserByEmail(googleUserMock.email)
+
+      const userMock = await userDataService.getUserByEmail(
+        googleUserMock.email ?? "straight.zhao@example.com",
+      )
       const { remainingSessions: _omit, ...userMockWithoutSessions } = userMock
       expect(data).toMatchObject({
         user: userMockWithoutSessions,

@@ -1,4 +1,4 @@
-import type { CreateAuthenticationData } from "@repo/shared"
+import type { CreateAuthenticationData, UpdateAuthenticationData } from "@repo/shared"
 import type { Authentication } from "@repo/shared/payload-types"
 import { NotFound } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
@@ -14,6 +14,24 @@ export default class AuthDataService {
     return await payload.create({
       collection: "authentication",
       data: newAuth,
+    })
+  }
+
+  /**
+   * Updates an existing {@link Authentication} document.
+   *
+   * @param id The ID of the {@link Authentication} document to update
+   * @param updatedAuth The {@link UpdateAuthenticationData} to update the {@link Authentication} document.
+   * @returns The updated {@link Authentication} document
+   */
+  public async updateAuth(
+    id: string,
+    updatedAuth: UpdateAuthenticationData,
+  ): Promise<Authentication> {
+    return await payload.update({
+      collection: "authentication",
+      id,
+      data: updatedAuth,
     })
   }
 

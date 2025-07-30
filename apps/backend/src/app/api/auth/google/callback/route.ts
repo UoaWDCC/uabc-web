@@ -66,8 +66,8 @@ export const GET = async (req: NextRequest) => {
   })
 
   let sub: string
-  let email: string
-  let given_name: string
+  let email: string | undefined
+  let given_name: string | undefined
   let family_name: string | undefined
 
   try {
@@ -83,6 +83,13 @@ export const GET = async (req: NextRequest) => {
       )
     }
     throw error
+  }
+
+  if (!email || !given_name) {
+    return NextResponse.json(
+      { error: "Google user info is missing email or name" },
+      { status: StatusCodes.INTERNAL_SERVER_ERROR },
+    )
   }
 
   const userService = new UserDataService()
@@ -103,16 +110,25 @@ export const GET = async (req: NextRequest) => {
   }
 
   const authDataService = new AuthDataService()
-  await authDataService.createAuth({
-    user,
-    email: user.email,
-    provider: "google",
-    providerAccountId: sub,
-    accessToken: tokens.access_token,
-    expiresAt: tokens.expiry_date,
-    scope: scopes.join(" "),
-    idToken: tokens.id_token,
-  })
+  const existingAuth = await authDataService.getAuthByEmail(email)
+  if (existingAuth) {
+    await authDataService.updateAuth(existingAuth.id, {
+      accessToken: tokens.access_token,
+      expiresAt: tokens.expiry_date,
+      scope: scopes.join(" "),
+      idToken: tokens.id_token,
+    })
+  } else {
+    await authDataService.createAuth({
+      email: user.email,
+      provider: "google",
+      providerAccountId: sub,
+      accessToken: tokens.access_token,
+      expiresAt: tokens.expiry_date,
+      scope: scopes.join(" "),
+      idToken: tokens.id_token,
+    })
+  }
 
   const authService = new AuthService()
 
@@ -129,7 +145,7 @@ export const GET = async (req: NextRequest) => {
     { expiresIn: TOKEN_EXPIRY_TIME },
   )
 
-  const frontendUrl = new URL("/auth/callback", req.url)
+  const frontendUrl = new URL("/auth/callback", process.env.NEXT_PUBLIC_URL)
   frontendUrl.searchParams.set("token", token)
 
   return NextResponse.redirect(frontendUrl)

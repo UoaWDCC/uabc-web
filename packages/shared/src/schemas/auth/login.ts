@@ -17,32 +17,32 @@ export const GoogleUserInfoResponseSchema = z.object({
    * The full name of the Google user
    * @example Straight Zhao
    */
-  name: z.string(),
+  name: z.string().optional(),
   /**
    * The user's first name
    * @example Straight
    */
-  given_name: z.string(),
+  given_name: z.string().optional(),
   /**
    * The user's first name
    * @example Zhao
    */
-  family_name: z.string(),
+  family_name: z.string().optional(),
   /**
    * The user's profile picture URL
    */
-  picture: z.string(),
+  picture: z.string().optional(),
   /**
    * The user's email address
    * @example straightzhao@gmail.com
    */
-  email: z.string().email(),
-  email_verified: z.boolean(),
+  email: z.string().email().optional(),
+  email_verified: z.boolean().optional(),
   /**
    * The hosted domain that the Google account is associated with
    * @example aucklanduni.ac.nz
    */
-  hd: z.string(),
+  hd: z.string().optional(),
 })
 
 export const LoginRequestBodySchema = z.object({

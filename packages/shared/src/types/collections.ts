@@ -41,6 +41,11 @@ export type CreateGameSessionScheduleData = Omit<
 >
 
 /**
+ * Type for updating {@link Authentication} document
+ */
+export type UpdateAuthenticationData = Partial<CreateAuthenticationData>
+
+/**
  * Type for updating {@link GameSession} document
  */
 export type UpdateGameSessionData = Partial<CreateGameSessionData>

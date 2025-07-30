@@ -33,6 +33,22 @@ describe("AuthDataService", () => {
     })
   })
 
+  describe("updateAuth", () => {
+    it("should update an authentication document", async () => {
+      const newMockEmail = "new_email@example.com"
+      const newAuth = await authDataService.createAuth(standardAuthCreateMock)
+      const updatedAuth = await authDataService.updateAuth(newAuth.id, {
+        email: newMockEmail,
+      })
+      expect(updatedAuth.email).toBe(newMockEmail)
+      const fetchedAuth = await payload.findByID({
+        collection: "authentication",
+        id: newAuth.id,
+      })
+      expect(fetchedAuth.email).toBe(newMockEmail)
+    })
+  })
+
   describe("getAuthByEmail", () => {
     it("should be able to get an authentication document by email", async () => {
       const newAuth = await authDataService.createAuth({
