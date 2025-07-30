@@ -1,3 +1,4 @@
+export * from "./about-us-info"
 export * from "./faq"
 export * from "./footer"
 export * from "./navbar"

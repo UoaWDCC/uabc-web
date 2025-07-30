@@ -7,11 +7,12 @@ import { POST } from "./route"
 
 describe("api/auth/logout", async () => {
   const cookieStore = await cookies()
+
   describe("POST", async () => {
     it("clears the auth cookie and redirects to home", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const req = createMockNextRequest("/api/auth/logout", "POST")
-      const response = await POST(req)
+
+      const response = await POST(createMockNextRequest())
 
       expect(response.status).toBe(StatusCodes.OK)
       expect(cookieStore.get(AUTH_COOKIE_NAME)?.value).toBeUndefined()
@@ -19,8 +20,7 @@ describe("api/auth/logout", async () => {
     })
 
     it("return 401 if no token is provided", async () => {
-      const req = createMockNextRequest("/api/auth/logout", "POST")
-      const response = await POST(req)
+      const response = await POST(createMockNextRequest())
 
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
       expect((await response.json()).error).toBe("No token provided")

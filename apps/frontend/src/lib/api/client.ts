@@ -1,9 +1,21 @@
+import { CommonResponseSchema } from "@repo/shared"
 import type { z } from "zod"
+import { ApiClientError } from "./ApiClientError"
+
+type ApiResponse<T> =
+  | { success: true; data: T; status: number }
+  | { success: false; error: Error; status: number | null }
+
+type RequestOptions = {
+  headers?: Record<string, string>
+  tags?: string[]
+  revalidate?: number | false
+}
 
 /**
  * ApiClient is a simple HTTP client for making API requests with runtime validation using zod schemas.
  */
-class ApiClient {
+export class ApiClient {
   /**
    * The base URL for all API requests.
    *
@@ -40,40 +52,146 @@ class ApiClient {
   }
 
   /**
+   * Creates fetch options with consistent configuration.
+   *
+   * @param method The HTTP method.
+   * @param body Optional request body.
+   * @param options Request options including headers, tags, and revalidation.
+   * @returns Fetch options object.
+   * @private
+   */
+  private createFetchOptions(
+    method: string,
+    body?: unknown,
+    options: RequestOptions = {},
+  ): RequestInit & { next?: { tags: string[]; revalidate?: number | false } } {
+    const { headers = {}, tags = [], revalidate } = options
+
+    const fetchOptions: RequestInit & { next?: { tags: string[]; revalidate?: number | false } } = {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...headers,
+      },
+      next: {
+        tags,
+      },
+    }
+
+    if (body) {
+      fetchOptions.body = JSON.stringify(body)
+    }
+
+    if (revalidate !== undefined) {
+      fetchOptions.next = {
+        tags: fetchOptions.next?.tags || [],
+        revalidate,
+      }
+    }
+
+    return fetchOptions
+  }
+
+  /**
+   * Handles the response and returns a consistent ApiResponse.
+   *
+   * @param response The fetch response.
+   * @param schema The zod schema to validate the response data.
+   * @returns A consistent ApiResponse.
+   * @private
+   */
+  private async handleResponse<T>(
+    response: Response,
+    schema: z.Schema<T>,
+    method: string,
+    url: string,
+  ): Promise<ApiResponse<T>> {
+    if (!response.ok) {
+      try {
+        const errorData = await response.json()
+        const parsedError = CommonResponseSchema.parse(errorData)
+        const errorMessage = parsedError.error || `HTTP ${response.status}: ${response.statusText}`
+        return {
+          success: false,
+          error: new ApiClientError({
+            message: errorMessage,
+            method,
+            url,
+            status: response.status,
+            statusText: response.statusText,
+            errorBody: errorData,
+          }),
+          status: response.status,
+        }
+      } catch (err) {
+        return {
+          success: false,
+          error: new ApiClientError({
+            message: `HTTP ${response.status}: ${response.statusText}`,
+            method,
+            url,
+            status: response.status,
+            statusText: response.statusText,
+            originalError: err,
+          }),
+          status: response.status,
+        }
+      }
+    }
+
+    try {
+      const data = await response.json()
+      const parsedData = schema.parse(data)
+      return {
+        success: true,
+        data: parsedData,
+        status: response.status,
+      }
+    } catch (err) {
+      return {
+        success: false,
+        error: new ApiClientError({
+          message: "Invalid response format",
+          method,
+          url,
+          status: response.status,
+          statusText: response.statusText,
+          errorBody: undefined,
+          originalError: err,
+        }),
+        status: response.status,
+      }
+    }
+  }
+
+  /**
    * Performs a GET request to the specified path and validates the response using the provided zod schema.
    *
    * @param path The API endpoint path (relative to baseUrl).
    * @param schema The zod schema to validate the response data.
-   * @param tags Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param revalidate Optional revalidation time in seconds or false to disable revalidation.
+   * @param options Optional request options.
    * @returns The validated response data or error.
    */
   public async get<T>(
     path: string,
     schema: z.Schema<T>,
-    tags: string[] = [],
-    revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
+    options: RequestOptions = {},
+  ): Promise<ApiResponse<T>> {
+    const url = this.joinUrl(path)
     try {
-      const response = await fetch(this.joinUrl(path), {
-        next: {
-          tags,
-          ...(revalidate !== undefined ? { revalidate } : {}),
-        },
-      })
-
-      if (!response.ok) {
-        return {
-          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
-          isError: true,
-          status: response.status,
-        }
-      }
-
-      const data = await response.json()
-      return { data: schema.parse(data), isError: false, status: response.status }
+      const response = await fetch(url, this.createFetchOptions("GET", undefined, options))
+      return await this.handleResponse(response, schema, "GET", url)
     } catch (error) {
-      return { error: error as Error, isError: true, status: null }
+      return {
+        success: false,
+        error: new ApiClientError({
+          message: "Network error",
+          method: "GET",
+          url,
+          originalError: error,
+        }),
+        status: null,
+      }
     }
   }
 
@@ -83,31 +201,30 @@ class ApiClient {
    * @param path The API endpoint path (relative to baseUrl).
    * @param body The request body to send.
    * @param schema The zod schema to validate the response data.
-   * @param tags Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param revalidate Optional revalidation time in seconds or false to disable revalidation.
+   * @param options Optional request options.
    * @returns The validated response data or error.
    */
   public async post<T>(
     path: string,
     body: unknown,
     schema: z.Schema<T>,
-    tags: string[] = [],
-    revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
+    options: RequestOptions = {},
+  ): Promise<ApiResponse<T>> {
+    const url = this.joinUrl(path)
     try {
-      const response = await fetch(this.joinUrl(path), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-        next: {
-          tags,
-          ...(revalidate !== undefined ? { revalidate } : {}),
-        },
-      })
-      const data = await response.json()
-      return { data: schema.parse(data), isError: !response.ok, status: response.status }
+      const response = await fetch(url, this.createFetchOptions("POST", body, options))
+      return await this.handleResponse(response, schema, "POST", url)
     } catch (error) {
-      return { error: error as Error, isError: true, status: null }
+      return {
+        success: false,
+        error: new ApiClientError({
+          message: "Network error",
+          method: "POST",
+          url,
+          originalError: error,
+        }),
+        status: null,
+      }
     }
   }
 
@@ -117,38 +234,30 @@ class ApiClient {
    * @param path The API endpoint path (relative to baseUrl).
    * @param body The request body to send.
    * @param schema The zod schema to validate the response data.
-   * @param tags Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param revalidate Optional revalidation time in seconds or false to disable revalidation.
+   * @param options Optional request options.
    * @returns The validated response data or error.
    */
   public async put<T>(
     path: string,
     body: unknown,
     schema: z.Schema<T>,
-    tags: string[] = [],
-    revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
+    options: RequestOptions = {},
+  ): Promise<ApiResponse<T>> {
+    const url = this.joinUrl(path)
     try {
-      const response = await fetch(this.joinUrl(path), {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-        next: {
-          tags,
-          ...(revalidate !== undefined ? { revalidate } : {}),
-        },
-      })
-      if (!response.ok) {
-        return {
-          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
-          isError: true,
-          status: response.status,
-        }
-      }
-      const data = await response.json()
-      return { data: schema.parse(data), isError: false, status: response.status }
+      const response = await fetch(url, this.createFetchOptions("PUT", body, options))
+      return await this.handleResponse(response, schema, "PUT", url)
     } catch (error) {
-      return { error: error as Error, isError: true, status: null }
+      return {
+        success: false,
+        error: new ApiClientError({
+          message: "Network error",
+          method: "PUT",
+          url,
+          originalError: error,
+        }),
+        status: null,
+      }
     }
   }
 
@@ -158,38 +267,30 @@ class ApiClient {
    * @param path The API endpoint path (relative to baseUrl).
    * @param body The request body to send.
    * @param schema The zod schema to validate the response data.
-   * @param tags Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param revalidate Optional revalidation time in seconds or false to disable revalidation.
+   * @param options Optional request options.
    * @returns The validated response data or error.
    */
   public async patch<T>(
     path: string,
     body: unknown,
     schema: z.Schema<T>,
-    tags: string[] = [],
-    revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
+    options: RequestOptions = {},
+  ): Promise<ApiResponse<T>> {
+    const url = this.joinUrl(path)
     try {
-      const response = await fetch(this.joinUrl(path), {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-        next: {
-          tags,
-          ...(revalidate !== undefined ? { revalidate } : {}),
-        },
-      })
-      if (!response.ok) {
-        return {
-          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
-          isError: true,
-          status: response.status,
-        }
-      }
-      const data = await response.json()
-      return { data: schema.parse(data), isError: false, status: response.status }
+      const response = await fetch(url, this.createFetchOptions("PATCH", body, options))
+      return await this.handleResponse(response, schema, "PATCH", url)
     } catch (error) {
-      return { error: error as Error, isError: true, status: null }
+      return {
+        success: false,
+        error: new ApiClientError({
+          message: "Network error",
+          method: "PATCH",
+          url,
+          originalError: error,
+        }),
+        status: null,
+      }
     }
   }
 
@@ -198,36 +299,117 @@ class ApiClient {
    *
    * @param path The API endpoint path (relative to baseUrl).
    * @param schema Optional zod schema to validate the response data.
-   * @param tags Optional tags for caching or revalidation (used by Next.js fetch).
-   * @param revalidate Optional revalidation time in seconds or false to disable revalidation.
+   * @param options Optional request options.
    * @returns The validated response data or error.
    */
   public async delete<T>(
     path: string,
     schema?: z.Schema<T>,
-    tags?: string[],
-    revalidate?: number | false,
-  ): Promise<{ data?: T; error?: Error; isError: boolean; status: number | null }> {
+    options: RequestOptions = {},
+  ): Promise<ApiResponse<T>> {
+    const url = this.joinUrl(path)
     try {
-      const response = await fetch(this.joinUrl(path), {
-        method: "DELETE",
-        next: {
-          tags: tags ?? [],
-          ...(revalidate !== undefined ? { revalidate } : {}),
-        },
-      })
+      const response = await fetch(url, this.createFetchOptions("DELETE", undefined, options))
+
       if (!response.ok) {
+        try {
+          const errorData = await response.json()
+          const parsedError = CommonResponseSchema.parse(errorData)
+          const errorMessage =
+            parsedError.error || `HTTP ${response.status}: ${response.statusText}`
+          return {
+            success: false,
+            error: new ApiClientError({
+              message: errorMessage,
+              method: "DELETE",
+              url,
+              status: response.status,
+              statusText: response.statusText,
+              errorBody: errorData,
+            }),
+            status: response.status,
+          }
+        } catch (err) {
+          return {
+            success: false,
+            error: new ApiClientError({
+              message: `HTTP ${response.status}: ${response.statusText}`,
+              method: "DELETE",
+              url,
+              status: response.status,
+              statusText: response.statusText,
+              originalError: err,
+            }),
+            status: response.status,
+          }
+        }
+      }
+
+      if (response.status === 204 || response.headers.get("content-length") === "0") {
         return {
-          error: new Error(`Failed to fetch ${path}: ${response.statusText}`),
-          isError: true,
+          success: true,
+          data: undefined as T,
           status: response.status,
         }
       }
-      const data = await response.json()
-      return { data: schema ? schema.parse(data) : data, isError: false, status: response.status }
+
+      if (schema) {
+        return await this.handleResponse(response, schema, "DELETE", url)
+      }
+
+      try {
+        const data = await response.json()
+        return {
+          success: true,
+          data: data as T,
+          status: response.status,
+        }
+      } catch {
+        return {
+          success: true,
+          data: undefined as T,
+          status: response.status,
+        }
+      }
     } catch (error) {
-      return { error: error as Error, isError: true, status: null }
+      return {
+        success: false,
+        error: new ApiClientError({
+          message: "Network error",
+          method: "DELETE",
+          url,
+          originalError: error,
+        }),
+        status: null,
+      }
     }
+  }
+
+  /**
+   * Helper method to throw an error if the response is not successful.
+   * Useful for services that want to handle errors by throwing.
+   *
+   * @param response The API response.
+   * @returns The data if successful.
+   * @throws Error if the response is not successful.
+   */
+  public static throwIfError<T>(response: ApiResponse<T>): T {
+    if (!response.success) {
+      console.error(response.error)
+      throw response.error
+    }
+    return response.data
+  }
+
+  /**
+   * Helper method to return null if the response is not successful.
+   * Useful for optional operations where null is an acceptable fallback.
+   *
+   * @param response The API response.
+   * @returns The data if successful, null otherwise.
+   */
+  public static returnNullIfError<T>(response: ApiResponse<T>): T | null {
+    return response.success ? response.data : null
   }
 }
 
@@ -248,3 +430,5 @@ export const createApiClient = (baseUrl?: string): ApiClient => {
  * In most cases, prefer using this exported instance.
  */
 export const apiClient = createApiClient()
+
+export type { ApiResponse, RequestOptions }

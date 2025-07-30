@@ -20,7 +20,6 @@ class GameSessionRouteWrapper {
       const { id } = await params
       const gameSessionDataService = new GameSessionDataService()
       await gameSessionDataService.deleteGameSession(id)
-
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
       if (error instanceof NotFound) {

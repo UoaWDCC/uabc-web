@@ -1,6 +1,6 @@
 "use client"
 
-import { Gender, PlayLevel } from "@repo/shared"
+import { AdditionalInfoSchema, Gender, PlayLevel } from "@repo/shared"
 import { casualUserMock } from "@repo/shared/mocks"
 import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"
@@ -26,8 +26,6 @@ export const AdditionalInfo = <T extends readonly Field[]>({
   const mutation = useMutation({
     mutationFn: async (data: NullableFormData<T>) => {
       await onSave?.(data)
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      // throw new Error("Failed to submit form")
     },
   })
 
@@ -36,6 +34,7 @@ export const AdditionalInfo = <T extends readonly Field[]>({
       onSave={async (data) => {
         await mutation.mutateAsync(data)
       }}
+      schema={AdditionalInfoSchema}
       {...props}
     />
   )
@@ -78,7 +77,7 @@ export const defaultFields = [
 ] as const
 
 export const defaultValues = {
-  gender: casualUserMock.gender ?? Gender.male,
-  playLevel: casualUserMock.playLevel ?? PlayLevel.beginner,
+  gender: casualUserMock.gender,
+  playLevel: casualUserMock.playLevel,
   dietaryRequirements: casualUserMock.dietaryRequirements,
 } as const

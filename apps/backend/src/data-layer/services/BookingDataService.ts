@@ -51,6 +51,35 @@ export default class BookingDataService {
   }
 
   /**
+   * Finds all {@link Booking} documents by a {@link User}'s id and game session id.
+   *
+   * @param userId The ID of the user whose bookings you want to find
+   * @param sessionId The ID of the game session to search bookings for
+   * @returns An array of {@link Booking} documents that match the game session ID and user ID
+   */
+  public async getUserBookingsBySessionId(userId: string, sessionId: string): Promise<Booking[]> {
+    return (
+      await payload.find({
+        collection: "booking",
+        where: {
+          and: [
+            {
+              gameSession: {
+                equals: sessionId,
+              },
+            },
+            {
+              user: {
+                equals: userId,
+              },
+            },
+          ],
+        },
+      })
+    ).docs
+  }
+
+  /**
    * Finds all {@link Booking} documents by a {@link User}'s id
    *
    * @param userId The ID of the user whose {@link Booking} you find
@@ -65,6 +94,7 @@ export default class BookingDataService {
             equals: userId,
           },
         },
+        pagination: false,
       })
     ).docs
   }
@@ -78,6 +108,26 @@ export default class BookingDataService {
    */
   public async getAllBookings(limit = 100, page = 1): Promise<PaginatedDocs<Booking>> {
     return await payload.find({ collection: "booking", limit, page })
+  }
+
+  /**
+   * Deletes multiple {@link Booking} documents by their IDs.
+   *
+   * @param ids An array of IDs of the {@link Booking} documents to delete.
+   * @param transactionID An optional transaction ID for the request, useful for tracing.
+   */
+  public async deleteBookings(ids: string[], transactionID?: string | number): Promise<Booking[]> {
+    const bulkDeletionResult = await payload.delete({
+      collection: "booking",
+      where: {
+        id: { in: ids },
+      },
+      req: {
+        transactionID,
+      },
+    })
+
+    return bulkDeletionResult.docs
   }
 
   /**

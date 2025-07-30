@@ -28,7 +28,7 @@
     "test:coverage": "turbo run test:coverage",
     "test:coverage:watch": "turbo run test:coverage:watch",
     "test:ui": "turbo run test:ui",
-    "merge": "pnpm --filter=@repo/test-config build && pnpm --prefix=packages/test-config run merge",
+    "merge": "turbo run merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
     "postinstall": "pnpm theme",
     "commitlint": "commitlint --edit"
@@ -78,6 +78,6 @@
     }
   },
   "volta": {
-    "node": "22.17.0"
+    "node": "22.17.1"
   }
 }

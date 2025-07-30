@@ -14,7 +14,7 @@ import type { ImageProps } from "./types"
  * <Image src="/logo.png" alt="Logo" width={100} height={100} />
  */
 export const Image = forwardRef<HTMLImageElement, ImageProps>((props, ref) => {
-  return <ImageBase as={NextImage} ref={ref} {...props} />
+  return <ImageBase as={NextImage} ref={ref} unoptimized {...props} />
 })
 
 Image.displayName = "Image"

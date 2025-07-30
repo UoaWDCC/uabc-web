@@ -1,7 +1,8 @@
-import { NuqsProvider, QueryProvider, UIProvider } from "@repo/ui/components/Provider"
-import { ColorModeScript, Container } from "@yamada-ui/react"
-import type { Metadata } from "next"
+import { NuqsProvider } from "@repo/ui/components/Provider"
+import { ColorModeScript } from "@yamada-ui/react"
+import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import { Providers } from "@/app/providers"
 import { FooterServerSection } from "@/components/server/FooterServerSection"
 import { NavigationBarServerSection } from "@/components/server/NavigationBarServerSection"
 
@@ -14,6 +15,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
 })
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL),
@@ -56,30 +64,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
-        <QueryProvider>
-          <NuqsProvider>
-            <ColorModeScript initialColorMode="dark" />
-            <UIProvider>
-              <Container
-                bgColor="black"
-                bgGradient={{
-                  base: "repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 10vw), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 10vw)",
-                  md: "repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 8vw), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 8vw)",
-                  lg: "repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 6vw), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 6vw)",
-                  xl: "repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 5vw), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 5vw)",
-                  "2xl":
-                    "repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 4vw), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 2px, transparent 2px, transparent 4vw)",
-                }}
-                centerContent
-                paddingX="lg"
-              >
-                <NavigationBarServerSection />
-                {children}
-              </Container>
-              <FooterServerSection />
-            </UIProvider>
-          </NuqsProvider>
-        </QueryProvider>
+        <NuqsProvider>
+          <ColorModeScript initialColorMode="dark" />
+          <Providers>
+            <NavigationBarServerSection />
+            {children}
+            <FooterServerSection />
+          </Providers>
+        </NuqsProvider>
       </body>
     </html>
   )

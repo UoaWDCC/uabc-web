@@ -1,5 +1,5 @@
 import { UnderConstructionCard } from "@repo/ui/components/Generic"
-import { Center } from "@yamada-ui/react"
+import { Container, VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -9,8 +9,10 @@ export const metadata: Metadata = {
 
 export default function Events() {
   return (
-    <Center flex={1}>
-      <UnderConstructionCard />
-    </Center>
+    <VStack as="main">
+      <Container centerContent layerStyle="container">
+        <UnderConstructionCard />
+      </Container>
+    </VStack>
   )
 }

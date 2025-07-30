@@ -46,6 +46,7 @@ describe("/api/game-sessions/[id]", () => {
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(mockGetGameSessionById).toHaveBeenCalledWith("any-id")
       expect(consoleErrorSpy).toHaveBeenCalled()
+
       consoleErrorSpy.mockRestore()
     })
   })

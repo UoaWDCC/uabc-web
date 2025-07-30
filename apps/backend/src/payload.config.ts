@@ -16,7 +16,7 @@ import { GameSessionSchedule } from "./data-layer/collections/GameSessionSchedul
 import { Media } from "./data-layer/collections/Media"
 import { Semester } from "./data-layer/collections/Semester"
 import { User } from "./data-layer/collections/User"
-
+import { AboutUsInfo } from "./data-layer/globals/AboutUsInfo"
 import { FAQ } from "./data-layer/globals/Faq"
 import { Footer } from "./data-layer/globals/Footer"
 import { Navbar } from "./data-layer/globals/Navbar"
@@ -31,7 +31,7 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   routes: {
-    admin: "/payload/admin",
+    admin: "/",
     api: "/payload/api",
   },
   cors: "*",
@@ -39,7 +39,7 @@ export default buildConfig({
     user: Admin.slug,
     importMap: {
       baseDir: path.resolve(dirname),
-      importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
+      importMapFile: `${path.resolve(dirname)}/app/importMap.js`,
     },
   },
   collections: [
@@ -53,7 +53,7 @@ export default buildConfig({
     Booking,
     Authentication,
   ],
-  globals: [FAQ, Footer, Navbar, Tos],
+  globals: [FAQ, Footer, Navbar, Tos, AboutUsInfo],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
@@ -66,6 +66,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
     allowIDOnCreate: process.env.NODE_ENV === "test",
+    transactionOptions: {},
   }),
   email:
     process.env.NODE_ENV === "production"

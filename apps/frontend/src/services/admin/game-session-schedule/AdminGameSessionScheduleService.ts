@@ -5,8 +5,7 @@ import {
   type PaginationQuery,
   type UpdateGameSessionScheduleRequest,
 } from "@repo/shared"
-import { StatusCodes } from "http-status-codes"
-import { apiClient } from "@/lib/api/client"
+import { ApiClient, apiClient } from "@/lib/api/client"
 
 const AdminGameSessionScheduleService = {
   /**
@@ -16,13 +15,12 @@ const AdminGameSessionScheduleService = {
    * @returns The created game session schedule.
    */
   createGameSessionSchedule: async (data: CreateGameSessionScheduleRequest) => {
-    const { data: createdGameSessionSchedule, status } = await apiClient.post(
+    const response = await apiClient.post(
       "/admin/game-session-schedules",
       data,
       GetGameSessionScheduleResponseSchema,
     )
-    if (status !== StatusCodes.CREATED) throw new Error("Failed to create game session schedule")
-    return createdGameSessionSchedule
+    return ApiClient.throwIfError(response)
   },
   /**
    * Fetches all game session schedules.
@@ -30,14 +28,13 @@ const AdminGameSessionScheduleService = {
    * @param query The pagination query parameters.
    * @returns A promise that resolves to an array of game session schedules.
    */
-  getAllGameSessionSchedules: async ({ limit = 100, page }: PaginationQuery) => {
+  getPaginatedGameSessionSchedules: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
-    const { data, status } = await apiClient.get(
+    const response = await apiClient.get(
       `/admin/game-session-schedules?${query}`,
       GetAllGameSessionSchedulesResponseSchema,
     )
-    if (status !== StatusCodes.OK) throw new Error("Failed to fetch all game session schedules")
-    return data
+    return ApiClient.throwIfError(response)
   },
   /**
    * Fetches a specific game session schedule by ID.
@@ -46,12 +43,11 @@ const AdminGameSessionScheduleService = {
    * @returns A promise that resolves to a game session schedule.
    */
   getGameSessionSchedule: async (id: string) => {
-    const { data, status } = await apiClient.get(
+    const response = await apiClient.get(
       `/admin/game-session-schedules/${id}`,
       GetGameSessionScheduleResponseSchema,
     )
-    if (status !== StatusCodes.OK) throw new Error("Failed to fetch game session schedule")
-    return data
+    return ApiClient.throwIfError(response)
   },
   /**
    * Updates a game session schedule by ID with partial game session schedule data.
@@ -60,14 +56,19 @@ const AdminGameSessionScheduleService = {
    * @param data The game session schedule data to update.
    * @returns A promise that resolves to the updated game session schedule.
    */
-  updateGameSessionSchedule: async (id: string, data: UpdateGameSessionScheduleRequest) => {
-    const { data: updatedGameSessionSchedule, status } = await apiClient.patch(
+  updateGameSessionSchedule: async ({
+    id,
+    gameSessionScheduleData,
+  }: {
+    id: string
+    gameSessionScheduleData: UpdateGameSessionScheduleRequest
+  }) => {
+    const response = await apiClient.patch(
       `/admin/game-session-schedules/${id}`,
-      data,
+      gameSessionScheduleData,
       GetGameSessionScheduleResponseSchema,
     )
-    if (status !== StatusCodes.OK) throw new Error("Failed to update game session schedule")
-    return updatedGameSessionSchedule
+    return ApiClient.throwIfError(response)
   },
   /**
    * Deletes a game session schedule by ID.
@@ -76,8 +77,8 @@ const AdminGameSessionScheduleService = {
    * @returns A promise that resolves to a boolean indicating success.
    */
   deleteGameSessionSchedule: async (id: string) => {
-    const { status } = await apiClient.delete(`/admin/game-session-schedules/${id}`)
-    if (status !== StatusCodes.NO_CONTENT) throw new Error("Failed to delete game session schedule")
+    const response = await apiClient.delete(`/admin/game-session-schedules/${id}`)
+    return ApiClient.throwIfError(response)
   },
 } as const
 
