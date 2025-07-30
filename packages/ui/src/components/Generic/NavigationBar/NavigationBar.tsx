@@ -1,6 +1,6 @@
 "use client"
 import type { Navbar, User } from "@repo/shared/payload-types"
-import { Center } from "@yamada-ui/react"
+import { Container } from "@yamada-ui/react"
 import { NavigationBarDesktop } from "./NavigationBarDesktop"
 import { NavigationBarMobile } from "./NavigationBarMobile"
 
@@ -8,7 +8,7 @@ import { NavigationBarMobile } from "./NavigationBarMobile"
  * Props for the NavigationBar component.
  */
 export interface NavigationBarProps extends Omit<Navbar, "id"> {
-  user?: User
+  user?: User | null
 }
 
 /**
@@ -20,20 +20,20 @@ export interface NavigationBarProps extends Omit<Navbar, "id"> {
  */
 export const NavigationBar = ({ user, ...props }: NavigationBarProps) => {
   return (
-    <Center
+    <Container
       as="nav"
-      height="fit-content"
-      maxW="8xl"
-      placeSelf="center"
+      centerContent
+      gap="0"
+      layerStyle="container"
+      pb={{ base: "0", md: "0" }}
       position="sticky"
-      pt="lg"
-      px="md"
+      pt={{ base: "lg", md: "lg" }}
       top="0"
-      width="full"
+      w="full"
       zIndex={100}
     >
       <NavigationBarDesktop {...props} user={user} />
       <NavigationBarMobile {...props} user={user} />
-    </Center>
+    </Container>
   )
 }

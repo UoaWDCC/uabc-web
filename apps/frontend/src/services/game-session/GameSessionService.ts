@@ -14,7 +14,7 @@ const GameSessionService = {
    */
   getGameSession: async (id: string) => {
     const response = await apiClient.get(`/api/game-sessions/${id}`, GetGameSessionResponseSchema)
-    return ApiClient.throwIfError(response, `Failed to retrieve game session with id: ${id}`)
+    return ApiClient.throwIfError(response)
   },
 
   /**
@@ -23,13 +23,13 @@ const GameSessionService = {
    * @param query The pagination query parameters.
    * @returns A list of all game sessions.
    */
-  getAllGameSessions: async ({ limit = 100, page }: PaginationQuery) => {
+  getPaginatedGameSessions: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
     const response = await apiClient.get(
       `/api/game-sessions?${query}`,
       GetAllGameSessionsResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to retrieve all game sessions")
+    return ApiClient.throwIfError(response)
   },
 } as const
 

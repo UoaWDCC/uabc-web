@@ -7,7 +7,7 @@ import {
 } from "@repo/ui/components/Composite"
 import { RegisterPanel } from "@repo/ui/components/Generic"
 import { usePopupState } from "@repo/ui/hooks"
-import { useNotice } from "@yamada-ui/react"
+import { Container, useNotice } from "@yamada-ui/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useAuth } from "@/context/AuthContext"
@@ -26,7 +26,7 @@ export const RegisterSection = () => {
     setFormData(data)
     try {
       const response = await emailVerificationCode.mutateAsync(data.email)
-      if (response.success) {
+      if (!response.error) {
         notice({
           title: "Email verification code sent",
           description: `Please check your inbox for ${data.email}`,
@@ -48,7 +48,7 @@ export const RegisterSection = () => {
         password: formData?.password || "",
         emailVerificationCode: data.pinInput,
       })
-      if (response.success) {
+      if (!response.error) {
         notice({
           title: "Registration successful",
           description: "Redirecting to login now",
@@ -64,7 +64,7 @@ export const RegisterSection = () => {
   }
 
   return (
-    <>
+    <Container centerContent layerStyle="container">
       <CodeVerificationPopup
         message="Please enter the code sent to your email"
         onSubmit={handleRegister}
@@ -72,6 +72,6 @@ export const RegisterSection = () => {
         title="Verify Your Email"
       />
       <RegisterPanel onSubmit={handleSendVerificationCode} />
-    </>
+    </Container>
   )
 }

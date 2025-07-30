@@ -10,6 +10,7 @@ import {
   University,
 } from "../types"
 import { MediaSchema } from "./media"
+import { PaginationDataSchema } from "./query"
 
 export const UserSchema = z.object({
   id: z.string(),
@@ -17,6 +18,7 @@ export const UserSchema = z.object({
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
   emailVerificationCode: z.string().nullable().optional(),
+  phoneNumber: z.string().nullable().optional(),
   // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
   role: z.enum(["admin", "member", "casual"]),
   playLevel: z.enum(["beginner", "intermediate", "advanced"]).nullable().optional(),
@@ -56,8 +58,41 @@ export const UpdateSelfRequestSchema = UpdateUserRequestSchema.strict().omit({
   role: true,
 }) satisfies z.ZodType<EditSelfData>
 
+export const ProfileDetailsSchema = CreateUserRequestSchema.pick({
+  firstName: true,
+  lastName: true,
+  email: true,
+  phoneNumber: true,
+}).extend({
+  firstName: z
+    .string()
+    .min(1, "First name is required")
+    .max(30, "First name must be at most 30 characters"),
+  lastName: z.string().nullable().optional(),
+  email: z.string().email("Please enter a valid email address"),
+  phoneNumber: z.string().nullable().optional(),
+})
+
+export const AdditionalInfoSchema = CreateUserRequestSchema.pick({
+  gender: true,
+  playLevel: true,
+  dietaryRequirements: true,
+}).extend({
+  gender: z
+    .nativeEnum(Gender, { errorMap: () => ({ message: "Please select a gender" }) })
+    .nullable()
+    .optional(),
+  playLevel: z
+    .nativeEnum(PlayLevel, { errorMap: () => ({ message: "Please select a play level" }) })
+    .nullable()
+    .optional(),
+  dietaryRequirements: z.string().nullable().optional(),
+})
+
 export const GetAllUsersResponseSchema = z.object({
-  data: z.array(UserSchema),
+  data: PaginationDataSchema.extend({
+    docs: z.array(UserSchema),
+  }),
 })
 
 export const GetUserResponseSchema = z.object({

@@ -3,7 +3,6 @@ import type { NextConfig } from "next"
 import type { RemotePattern } from "next/dist/shared/lib/image-config"
 
 const env = process.env.NEXT_CONFIG_ENV || "development"
-const generateStatic = env === "staging" || env === "production"
 
 const config = (async () => {
   if (env === "development") {
@@ -28,12 +27,12 @@ const config = (async () => {
   }
 
   const nextConfig: NextConfig = {
-    output: generateStatic ? "export" : "standalone",
+    output: "export",
     images: {
       remotePatterns,
     },
     // Need this to allow static site generation to work with SSG hosting
-    trailingSlash: generateStatic,
+    trailingSlash: true,
   }
 
   return nextConfig

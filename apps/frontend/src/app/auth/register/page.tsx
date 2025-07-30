@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Register() {
   return (
-    <VStack alignItems="center" layerStyle="wrapper">
+    <VStack as="main">
       <Suspense>
         <RegisterSection />
       </Suspense>

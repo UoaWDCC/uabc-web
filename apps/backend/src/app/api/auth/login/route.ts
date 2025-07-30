@@ -44,7 +44,9 @@ export const POST = async (req: NextRequest) => {
     )
   }
 
-  const token = authService.signJWT({ user }, { expiresIn: TOKEN_EXPIRY_TIME })
+  // Omit remainingSessions from user before signing JWT (type-safe)
+  const { remainingSessions: _omit, ...userWithoutSessions } = user
+  const token = authService.signJWT({ user: userWithoutSessions }, { expiresIn: TOKEN_EXPIRY_TIME })
   const response = NextResponse.json(
     {
       data: token,

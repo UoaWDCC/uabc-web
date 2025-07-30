@@ -3,6 +3,9 @@ import type { CollectionConfig } from "payload"
 
 export const User: CollectionConfig = {
   slug: "user",
+  admin: {
+    useAsTitle: "email",
+  },
   fields: [
     {
       name: "firstName",
@@ -99,6 +102,7 @@ export const User: CollectionConfig = {
       name: "remainingSessions",
       type: "number",
       required: false,
+      defaultValue: 0,
       admin: {
         description: "The number of remaining sessions the user has",
       },

@@ -20,7 +20,7 @@ const AdminGameSessionScheduleService = {
       data,
       GetGameSessionScheduleResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to create game session schedule")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Fetches all game session schedules.
@@ -28,13 +28,13 @@ const AdminGameSessionScheduleService = {
    * @param query The pagination query parameters.
    * @returns A promise that resolves to an array of game session schedules.
    */
-  getAllGameSessionSchedules: async ({ limit = 100, page }: PaginationQuery) => {
+  getPaginatedGameSessionSchedules: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
     const response = await apiClient.get(
       `/admin/game-session-schedules?${query}`,
       GetAllGameSessionSchedulesResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to fetch all game session schedules")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Fetches a specific game session schedule by ID.
@@ -47,7 +47,7 @@ const AdminGameSessionScheduleService = {
       `/admin/game-session-schedules/${id}`,
       GetGameSessionScheduleResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to fetch game session schedule")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Updates a game session schedule by ID with partial game session schedule data.
@@ -56,13 +56,19 @@ const AdminGameSessionScheduleService = {
    * @param data The game session schedule data to update.
    * @returns A promise that resolves to the updated game session schedule.
    */
-  updateGameSessionSchedule: async (id: string, data: UpdateGameSessionScheduleRequest) => {
+  updateGameSessionSchedule: async ({
+    id,
+    gameSessionScheduleData,
+  }: {
+    id: string
+    gameSessionScheduleData: UpdateGameSessionScheduleRequest
+  }) => {
     const response = await apiClient.patch(
       `/admin/game-session-schedules/${id}`,
-      data,
+      gameSessionScheduleData,
       GetGameSessionScheduleResponseSchema,
     )
-    return ApiClient.throwIfError(response, "Failed to update game session schedule")
+    return ApiClient.throwIfError(response)
   },
   /**
    * Deletes a game session schedule by ID.
@@ -72,7 +78,7 @@ const AdminGameSessionScheduleService = {
    */
   deleteGameSessionSchedule: async (id: string) => {
     const response = await apiClient.delete(`/admin/game-session-schedules/${id}`)
-    return ApiClient.throwIfError(response, "Failed to delete game session schedule")
+    return ApiClient.throwIfError(response)
   },
 } as const
 

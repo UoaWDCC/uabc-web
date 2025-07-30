@@ -1,76 +1,95 @@
 "use client"
 
-import { bookingsMock } from "@repo/shared/mocks"
+import { isGender, isPlayLevel } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import {
   AdditionalInfo,
   AdditionalInfoFields,
+  AdditionalInfoSkeleton,
   ProfileBookingPanel,
+  ProfileBookingPanelSkeleton,
   ProfileDetails,
   ProfileDetailsFields,
+  ProfileDetailsSkeleton,
   UserPanel,
+  UserPanelSkeleton,
 } from "@repo/ui/components/Composite"
-import { Center, Grid, GridItem, Loading, VStack } from "@yamada-ui/react"
-import { redirect } from "next/navigation"
+import { Container, Grid, GridItem } from "@yamada-ui/react"
 import { memo } from "react"
-import { useAuth } from "@/context/AuthContext"
+import type { AuthContextValue } from "@/context/AuthContext"
+import { useUpdateSelfMutation } from "@/services/auth/useUpdateSelfMutation"
+import { useMyBookings } from "@/services/bookings/BookingQuery"
 
-export const ProfileSection = memo(() => {
-  const { user, isLoading, isPending } = useAuth()
-
-  if (isLoading || isPending) {
-    return (
-      <Center minH="50vh">
-        <Loading boxSize="sm" />
-      </Center>
-    )
-  }
-
-  if (!user) {
-    redirect("/auth/login")
-  }
+export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
+  const { user } = auth
+  const { data: bookings, isLoading: isBookingsLoading, isError: isBookingsError } = useMyBookings()
+  const updateSelfMutation = useUpdateSelfMutation()
 
   return (
-    <VStack gap="xl" maxW="1220px">
-      <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }}>
+    <Container centerContent gap="xl" layerStyle="container">
+      <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }} w="full">
+        <GridItem>{!user ? <UserPanelSkeleton /> : <UserPanel user={user} />}</GridItem>
         <GridItem>
-          <UserPanel user={user} />
-        </GridItem>
-        <GridItem>
-          <ProfileBookingPanel bookings={bookingsMock} />
+          {isBookingsLoading || !user ? (
+            <ProfileBookingPanelSkeleton />
+          ) : (
+            <ProfileBookingPanel
+              bookings={bookings?.data ?? []}
+              error={isBookingsError}
+              user={user}
+            />
+          )}
         </GridItem>
       </Grid>
 
-      <ProfileDetails
-        defaultValues={{
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-        }}
-        fields={ProfileDetailsFields}
-        onSave={async (data) => {
-          // TODO: Implement update user mutation
-          console.log(data)
-        }}
-        title="Profile Details"
-        w="full"
-      />
-
-      <AdditionalInfo
-        defaultValues={{
-          gender: user.gender,
-          playLevel: user.playLevel,
-          dietaryRequirements: user.dietaryRequirements,
-        }}
-        fields={AdditionalInfoFields}
-        onSave={async (data) => {
-          // TODO: Implement update user mutation
-          console.log(data)
-        }}
-        title="Additional Info"
-        w="full"
-      />
-    </VStack>
+      {!user ? (
+        <>
+          <ProfileDetailsSkeleton />
+          <AdditionalInfoSkeleton />
+        </>
+      ) : (
+        <>
+          <ProfileDetails
+            defaultValues={{
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              phoneNumber: user.phoneNumber,
+            }}
+            fields={ProfileDetailsFields}
+            onSave={async (data) => {
+              // Only send allowed fields for PATCH /me
+              const payload: Partial<Pick<User, "firstName" | "lastName" | "phoneNumber">> = {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                phoneNumber: data.phoneNumber,
+              }
+              await updateSelfMutation.mutateAsync(payload)
+            }}
+            title="Profile Details"
+            w="full"
+          />
+          <AdditionalInfo
+            defaultValues={{
+              gender: user.gender,
+              playLevel: user.playLevel,
+              dietaryRequirements: user.dietaryRequirements,
+            }}
+            fields={AdditionalInfoFields}
+            onSave={async (data) => {
+              const payload: Partial<User> = {
+                gender: isGender(data.gender) ?? null,
+                playLevel: isPlayLevel(data.playLevel) ?? null,
+                dietaryRequirements: data.dietaryRequirements,
+              }
+              await updateSelfMutation.mutateAsync(payload)
+            }}
+            title="Additional Info"
+            w="full"
+          />
+        </>
+      )}
+    </Container>
   )
 })
 

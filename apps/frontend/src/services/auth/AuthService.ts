@@ -1,11 +1,11 @@
 import {
-  CommonResponse,
+  CommonResponseSchema,
   GetUserResponseSchema,
   LoginResponseSchema,
   type RegisterRequestBody,
 } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
-import { apiClient } from "@/lib/api/client"
+import { ApiClient, apiClient } from "@/lib/api/client"
 
 const AuthService = {
   /**
@@ -21,7 +21,7 @@ const AuthService = {
       { email, password },
       LoginResponseSchema,
     )
-    return response
+    return ApiClient.throwIfError(response)
   },
   /**
    * Register user with email and password
@@ -35,9 +35,9 @@ const AuthService = {
     const response = await apiClient.post(
       "/api/auth/register",
       { email, password, emailVerificationCode } satisfies RegisterRequestBody,
-      CommonResponse,
+      CommonResponseSchema,
     )
-    return response
+    return ApiClient.throwIfError(response)
   },
   /**
    * Send email verification code to user's email
@@ -46,8 +46,12 @@ const AuthService = {
    * @returns The response from the backend
    */
   sendEmailVerificationCode: async (email: string) => {
-    const response = await apiClient.post("/api/auth/verification-code", { email }, CommonResponse)
-    return response
+    const response = await apiClient.post(
+      "/api/auth/verification-code",
+      { email },
+      CommonResponseSchema,
+    )
+    return ApiClient.throwIfError(response)
   },
   /**
    * Gets user information from a JWT token by making a request to the backend.
@@ -55,17 +59,28 @@ const AuthService = {
    * @param token The JWT token to get user info for.
    * @returns The user information or null if token is invalid.
    */
-  getUserFromToken: async (token: string): Promise<User | null> => {
-    try {
-      const response = await apiClient.get("/api/me", GetUserResponseSchema, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      return response.success ? response.data.data : null
-    } catch (_) {
-      return null
-    }
+  getUserFromToken: async (token: string) => {
+    const response = await apiClient.get("/api/me", GetUserResponseSchema, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return ApiClient.throwIfError(response)
+  },
+  /**
+   * Update the current user's profile
+   *
+   * @param data The user data to update (self-editable fields only)
+   * @param token The user's authentication token
+   * @returns The updated user
+   */
+  patchMe: async (data: Partial<User>, token: string) => {
+    const response = await apiClient.patch("/api/me", data, GetUserResponseSchema, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return ApiClient.throwIfError(response)
   },
 } as const
 

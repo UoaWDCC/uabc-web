@@ -15,8 +15,8 @@ const AdminUserService = {
    * @returns The created user.
    */
   createUser: async (data: CreateUserRequest) => {
-    const response = await apiClient.post("/admin/users", data, GetUserResponseSchema)
-    return ApiClient.throwIfError(response, "Failed to create user")
+    const response = await apiClient.post("/api/admin/users", data, GetUserResponseSchema)
+    return ApiClient.throwIfError(response)
   },
   /**
    * Fetches all users.
@@ -24,10 +24,10 @@ const AdminUserService = {
    * @param query The pagination query parameters.
    * @returns A promise that resolves to an array of users.
    */
-  getAllUsers: async ({ limit = 100, page }: PaginationQuery) => {
+  getPaginatedUsers: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
-    const response = await apiClient.get(`/admin/users?${query}`, GetAllUsersResponseSchema)
-    return ApiClient.throwIfError(response, "Failed to fetch all users")
+    const response = await apiClient.get(`/api/admin/users?${query}`, GetAllUsersResponseSchema)
+    return ApiClient.throwIfError(response)
   },
   /**
    * Fetches a specific user by ID.
@@ -36,8 +36,8 @@ const AdminUserService = {
    * @returns A promise that resolves to a user.
    */
   getUser: async (id: string) => {
-    const response = await apiClient.get(`/admin/users/${id}`, GetUserResponseSchema)
-    return ApiClient.throwIfError(response, "Failed to fetch user")
+    const response = await apiClient.get(`/api/admin/users/${id}`, GetUserResponseSchema)
+    return ApiClient.throwIfError(response)
   },
   /**
    * Updates a user by ID with partial user data.
@@ -46,9 +46,9 @@ const AdminUserService = {
    * @param data The user data to update.
    * @returns A promise that resolves to the updated user.
    */
-  updateUser: async (id: string, data: UpdateUserRequest) => {
-    const response = await apiClient.patch(`/admin/users/${id}`, data, GetUserResponseSchema)
-    return ApiClient.throwIfError(response, "Failed to update user")
+  updateUser: async ({ id, data }: { id: string; data: UpdateUserRequest }) => {
+    const response = await apiClient.patch(`/api/admin/users/${id}`, data, GetUserResponseSchema)
+    return ApiClient.throwIfError(response)
   },
   /**
    * Deletes a user by ID.
@@ -57,8 +57,8 @@ const AdminUserService = {
    * @returns A promise that resolves to a boolean indicating success.
    */
   deleteUser: async (id: string) => {
-    const response = await apiClient.delete(`/admin/users/${id}`)
-    return ApiClient.throwIfError(response, "Failed to delete user")
+    const response = await apiClient.delete(`/api/admin/users/${id}`)
+    return ApiClient.throwIfError(response)
   },
 } as const
 

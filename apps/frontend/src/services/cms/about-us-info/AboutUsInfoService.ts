@@ -10,9 +10,8 @@ import { QueryKeys } from "@/services"
  * @throws When the API request fails
  */
 export const getAboutUsInfo = cache(async () => {
-  "use server"
   const response = await apiClient.get("/api/globals/about-us-info", GetAboutUsInfoResponseSchema, {
     tags: [QueryKeys.ABOUT_US_INFO_QUERY_KEY],
   })
-  return ApiClient.throwIfError(response, "Failed to retrieve about us info data")
+  return ApiClient.throwIfError(response)
 })

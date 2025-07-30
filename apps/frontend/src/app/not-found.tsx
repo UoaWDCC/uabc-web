@@ -15,7 +15,7 @@ export const metadata: Metadata = {
  */
 export default function NotFound() {
   return (
-    <VStack alignItems="center" layerStyle="wrapper">
+    <VStack as="main">
       <NotFoundCard />
     </VStack>
   )
