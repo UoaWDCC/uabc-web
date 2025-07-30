@@ -64,11 +64,11 @@ export const UniversityInfoForm: FC<UniversityInfoFormProps> = memo(
           <FormControl errorMessage={errors.university?.message} invalid={!!errors.university}>
             <Controller
               control={control}
+              defaultValue={defaultValues?.university}
               name="university"
               render={({ field }) => (
                 <Select
                   data-testid="university"
-                  defaultValue={defaultValues?.university}
                   icon={<UniversityIcon />}
                   items={universityOptions}
                   label="University"

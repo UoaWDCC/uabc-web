@@ -76,11 +76,11 @@ export const AdditionalInfoForm: FC<AdditionalInfoFormProps> = memo(
           <FormControl errorMessage={errors.gender?.message} invalid={!!errors.gender}>
             <Controller
               control={control}
+              defaultValue={defaultValues?.gender}
               name="gender"
               render={({ field }) => (
                 <Select
                   data-testid="gender"
-                  defaultValue={defaultValues?.gender}
                   icon={<VenusAndMarsIcon />}
                   items={genderOptions}
                   label="Gender"
@@ -92,11 +92,11 @@ export const AdditionalInfoForm: FC<AdditionalInfoFormProps> = memo(
           <FormControl errorMessage={errors.skillLevel?.message} invalid={!!errors.skillLevel}>
             <Controller
               control={control}
+              defaultValue={defaultValues?.skillLevel}
               name="skillLevel"
               render={({ field }) => (
                 <Select
                   data-testid="skill-level"
-                  defaultValue={defaultValues?.skillLevel}
                   icon={<IdCardIcon />}
                   items={skillLevelOptions}
                   label="Skill level"

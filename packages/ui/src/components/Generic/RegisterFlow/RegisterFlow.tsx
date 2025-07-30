@@ -116,31 +116,56 @@ export const RegisterFlow = memo(() => {
   }
 
   const steps = [
-    <BasicInfoForm1
-      defaultValues={state.basicInfo1 ?? undefined}
-      key="basic-info-form-1"
-      onSubmit={handleStepSubmit("SET_BASIC_INFO_1")}
-    />,
-    <BasicInfoForm2
-      defaultValues={state.basicInfo2 ?? undefined}
-      key="basic-info-form-2"
-      onSubmit={handleStepSubmit("SET_BASIC_INFO_2")}
-    />,
-    <UniversityInfoForm
-      defaultValues={state.universityInfo ?? undefined}
-      key="university-info-form-1"
-      onSubmit={handleStepSubmit("SET_UNIVERSITY_INFO")}
-    />,
-    <AdditionalInfoForm
-      defaultValues={state.additionalInfo ?? undefined}
-      key="basic-info-form-1"
-      onSubmit={handleStepSubmit("SET_ADDITIONAL_INFO")}
-    />,
-    <CasualInfoForm
-      defaultValues={state.casualInfo ?? undefined}
-      key="basic-info-form-1"
-      onSubmit={handleStepSubmit("SET_CASUAL_INFO")}
-    />,
+    {
+      title: "Basic Info",
+      element: (
+        <BasicInfoForm1
+          defaultValues={state.basicInfo1 ?? undefined}
+          key="basic-info-form-1"
+          onSubmit={handleStepSubmit("SET_BASIC_INFO_1")}
+        />
+      ),
+    },
+    {
+      title: "Basic Info",
+      element: (
+        <BasicInfoForm2
+          defaultValues={state.basicInfo2 ?? undefined}
+          key="basic-info-form-2"
+          onSubmit={handleStepSubmit("SET_BASIC_INFO_2")}
+        />
+      ),
+    },
+    {
+      title: "University Info",
+      element: (
+        <UniversityInfoForm
+          defaultValues={state.universityInfo ?? undefined}
+          key="university-info-form-1"
+          onSubmit={handleStepSubmit("SET_UNIVERSITY_INFO")}
+        />
+      ),
+    },
+    {
+      title: "Additional Info",
+      element: (
+        <AdditionalInfoForm
+          defaultValues={state.additionalInfo ?? undefined}
+          key="basic-info-form-1"
+          onSubmit={handleStepSubmit("SET_ADDITIONAL_INFO")}
+        />
+      ),
+    },
+    {
+      title: "Casual Member Info",
+      element: (
+        <CasualInfoForm
+          defaultValues={state.casualInfo ?? undefined}
+          key="basic-info-form-1"
+          onSubmit={handleStepSubmit("SET_CASUAL_INFO")}
+        />
+      ),
+    },
   ]
 
   const enableGoBack = state.step > 0 && state.step < steps.length
@@ -160,11 +185,11 @@ export const RegisterFlow = memo(() => {
         </GridItem>
 
         <GridItem as={Center}>
-          <Heading.h2>Title</Heading.h2>
+          <Heading.h2>{steps[state.step]?.title}</Heading.h2>
         </GridItem>
       </Grid>
       <LoadingStateBar value={(state.step / steps.length) * 100} />
-      {steps[state.step] ?? <RegisterSuccessPanel />}
+      {steps[state.step]?.element ?? <RegisterSuccessPanel />}
     </VStack>
   )
 })
