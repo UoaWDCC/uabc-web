@@ -119,6 +119,7 @@ describe("/api/bookings", async () => {
         vi.useRealTimers()
       }
     })
+
     it("should return a 403 if booking a session scheduled before the semester's booking open time", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
       const customSemester = {
