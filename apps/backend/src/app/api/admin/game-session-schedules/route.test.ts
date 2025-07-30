@@ -123,11 +123,11 @@ describe("/api/admin/game-session-schedules", async () => {
 
     it.for([
       // Test case 1: Explicit true boolean parameter
-      "/api/admin/game-session-schedules?cascadeDisabled=false",
+      "/api/admin/game-session-schedules?cascade=true",
       // Test case 2: Invalid boolean value (string instead of true/false)
-      "/api/admin/game-session-schedules?cascadeDisabled=straightZhao",
+      "/api/admin/game-session-schedules?cascade=straightZhao",
       // Test case 3: Flag parameter without value (equivalent to true in query params)
-      "/api/admin/game-session-schedules?cascadeDisabled?",
+      "/api/admin/game-session-schedules?cascade?",
       // Test case 4: Unrelated query parameter (testing irrelevant params)
       "/api/admin/game-session-schedules?straightZhao",
       // Test case 5: Base URL with no query parameters
@@ -167,7 +167,7 @@ describe("/api/admin/game-session-schedules", async () => {
 
       const res = await POST(
         createMockNextRequest(
-          "/api/admin/game-session-schedules?cascadeDisabled=true",
+          "/api/admin/game-session-schedules?cascade=false",
           "POST",
           gameSessionScheduleCreateMock,
         ),

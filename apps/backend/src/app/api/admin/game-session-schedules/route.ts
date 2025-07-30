@@ -58,7 +58,7 @@ class GameSessionSchedulesRouteWrapper {
    */
   @Security("jwt", ["admin"])
   static async POST(req: NextRequest) {
-    const cascadeDisabled = req.nextUrl.searchParams.get("cascadeDisabled") === "true"
+    const cascadeDisabled = req.nextUrl.searchParams.get("cascade") === "false"
 
     try {
       const parsedBody = CreateGameSessionScheduleRequestSchema.parse(await req.json())

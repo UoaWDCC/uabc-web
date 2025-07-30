@@ -111,10 +111,6 @@ export default class GameSessionDataService {
       id: typeof semesterId === "string" ? semesterId : semesterId.id,
     })
 
-    if (!semester) {
-      throw new Error("Semester not found")
-    }
-
     const sessionDates = getWeeklySessionDates(schedule.day as Weekday, semester)
 
     const sessions: CreateGameSessionData[] = sessionDates.map((date) => {

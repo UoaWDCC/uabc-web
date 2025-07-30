@@ -35,12 +35,18 @@ export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] 
 }
 
 export function createGameSessionTimes(schedule: GameSessionSchedule, date: Date) {
-  const dateStr = date.toISOString().split("T")[0]
-  const timeStrStart = schedule.startTime.split("T")[1]
-  const timeStrEnd = schedule.endTime.split("T")[1]
+  const day = date.getDate()
+  const month = date.getMonth()
+  const year = date.getFullYear()
 
-  const start = new Date(`${dateStr}T${timeStrStart}`).toISOString()
-  const end = new Date(`${dateStr}T${timeStrEnd}`).toISOString()
+  const start = new Date(schedule.startTime)
+  const end = new Date(schedule.endTime)
 
-  return { startTime: start, endTime: end }
+  start.setFullYear(year, month, day)
+  end.setFullYear(year, month, day)
+
+  return {
+    startTime: start.toISOString(),
+    endTime: end.toISOString(),
+  }
 }
