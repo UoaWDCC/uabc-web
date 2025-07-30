@@ -176,6 +176,7 @@ export const RegisterFlow = memo(() => {
         <GridItem>
           <IconButton
             aria-label="Go back"
+            data-testid="go-back"
             disabled={!enableGoBack}
             icon={<ArrowLeftIcon />}
             onClick={handleGoBack}
@@ -193,3 +194,5 @@ export const RegisterFlow = memo(() => {
     </VStack>
   )
 })
+
+RegisterFlow.displayName = "RegisterFlow"
