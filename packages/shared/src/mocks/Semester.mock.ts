@@ -1,3 +1,4 @@
+import { Weekday } from "src/types"
 import type { Semester } from "../payload-types"
 
 export const semesterMock: Semester = {
@@ -7,7 +8,7 @@ export const semesterMock: Semester = {
   endDate: new Date(Date.UTC(2025, 0, 1, 14, 0)).toISOString(),
   breakStart: new Date(Date.UTC(2025, 0, 1, 15, 0)).toISOString(),
   breakEnd: new Date(Date.UTC(2025, 0, 1, 16, 0)).toISOString(),
-  bookingOpenDay: "monday",
+  bookingOpenDay: Weekday.monday,
   bookingOpenTime: new Date(Date.UTC(2025, 0, 1, 12, 0)).toISOString(),
   updatedAt: new Date(Date.UTC(2025, 0, 1)).toISOString(),
   createdAt: new Date(Date.UTC(2025, 0, 1)).toISOString(),
@@ -15,6 +16,6 @@ export const semesterMock: Semester = {
 
 export const semesterMockBookingNotOpen: Semester = {
   ...semesterMock,
-  bookingOpenDay: "saturday",
+  bookingOpenDay: Weekday.saturday,
   bookingOpenTime: new Date(Date.UTC(2025, 0, 1, 0, 0, 0)).toISOString(), // 00:00 UTC
 }
