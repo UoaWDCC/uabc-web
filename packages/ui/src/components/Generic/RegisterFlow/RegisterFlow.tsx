@@ -153,7 +153,7 @@ export const RegisterFlow = memo(() => {
       element: (
         <AdditionalInfoForm
           defaultValues={state.additionalInfo ?? undefined}
-          key="basic-info-form-1"
+          key="additional-info-form-1"
           onSubmit={handleStepSubmit("SET_ADDITIONAL_INFO")}
         />
       ),
@@ -163,7 +163,7 @@ export const RegisterFlow = memo(() => {
       element: (
         <CasualInfoForm
           defaultValues={state.casualInfo ?? undefined}
-          key="basic-info-form-1"
+          key="casual-info-form-1"
           onSubmit={handleStepSubmit("SET_CASUAL_INFO")}
         />
       ),
