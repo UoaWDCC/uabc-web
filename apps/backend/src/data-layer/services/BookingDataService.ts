@@ -37,7 +37,7 @@ export default class BookingDataService {
    * @param sessionId The ID of the game session to search bookings for
    * @returns An array of {@link Booking} documents that match the game session ID
    */
-  public async getBookingsBySessionId(sessionId: string): Promise<Booking[]> {
+  public async getAllBookingsBySessionId(sessionId: string): Promise<Booking[]> {
     return (
       await payload.find({
         collection: "booking",
@@ -46,6 +46,7 @@ export default class BookingDataService {
             equals: sessionId,
           },
         },
+        pagination: false,
       })
     ).docs
   }
@@ -57,7 +58,10 @@ export default class BookingDataService {
    * @param sessionId The ID of the game session to search bookings for
    * @returns An array of {@link Booking} documents that match the game session ID and user ID
    */
-  public async getUserBookingsBySessionId(userId: string, sessionId: string): Promise<Booking[]> {
+  public async getAllUserBookingsBySessionId(
+    userId: string,
+    sessionId: string,
+  ): Promise<Booking[]> {
     return (
       await payload.find({
         collection: "booking",
@@ -75,6 +79,7 @@ export default class BookingDataService {
             },
           ],
         },
+        pagination: false,
       })
     ).docs
   }
@@ -83,7 +88,7 @@ export default class BookingDataService {
    * Finds all {@link Booking} documents by a {@link User}'s id
    *
    * @param userId The ID of the user whose {@link Booking} you find
-   * @returns the {@link Booking} if successful
+   * @returns all {@link Booking} documents if successful
    */
   public async getAllBookingsByUserId(userId: string): Promise<Booking[]> {
     return (
@@ -100,13 +105,13 @@ export default class BookingDataService {
   }
 
   /**
-   * Finds all {@link Booking} documents.
+   * Finds a page of {@link Booking} documents.
    *
    * @param limit The maximum documents to be returned
    * @param page The specific page number to offset to
    * @returns All {@link Booking} documents found on the given page
    */
-  public async getAllBookings(limit = 100, page = 1): Promise<PaginatedDocs<Booking>> {
+  public async getPaginatedBookings(limit = 100, page = 1): Promise<PaginatedDocs<Booking>> {
     return await payload.find({ collection: "booking", limit, page })
   }
 
