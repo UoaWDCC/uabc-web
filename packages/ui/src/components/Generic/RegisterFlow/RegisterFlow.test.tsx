@@ -1,8 +1,5 @@
 import { Gender, PlayLevel, University } from "@repo/shared/types"
-import {
-  cleanupTestEnvironment,
-  setupTestEnvironment,
-} from "@repo/ui/test-config/localStorage-test-utils"
+import { setupTestEnvironment } from "@repo/ui/test-config/localStorage-test-utils"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as RegisterFlowModule from "./index"
@@ -11,10 +8,6 @@ import { RegisterFlow } from "./index"
 describe("<RegisterFlow />", () => {
   beforeEach(() => {
     setupTestEnvironment()
-  })
-
-  afterEach(() => {
-    cleanupTestEnvironment()
   })
 
   it("should re-export the RegisterFlow component and check if RegisterFlow exists", () => {
@@ -78,7 +71,7 @@ describe("<RegisterFlow />", () => {
     await user.click(screen.getByTestId("go-back"))
 
     // Basic Info Form 1
-    expect(screen.getByText(sampleFirstName)).toBeInTheDocument()
-    expect(screen.getByText(sampleLastName)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(sampleFirstName)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(sampleLastName)).toBeInTheDocument()
   })
 })
