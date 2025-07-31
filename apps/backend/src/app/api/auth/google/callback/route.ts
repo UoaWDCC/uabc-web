@@ -106,6 +106,8 @@ export const GET = async (req: NextRequest) => {
   const existingAuth = await authDataService.getAuthByEmail(email)
   if (existingAuth) {
     await authDataService.updateAuth(existingAuth.id, {
+      provider: "google",
+      providerAccountId: sub,
       accessToken: tokens.access_token,
       expiresAt: tokens.expiry_date,
       scope: scopes.join(" "),
