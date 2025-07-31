@@ -36,16 +36,26 @@ describe("AuthDataService", () => {
   describe("updateAuth", () => {
     it("should update an authentication document", async () => {
       const newMockEmail = "new_email@example.com"
+
       const newAuth = await authDataService.createAuth(standardAuthCreateMock)
       const updatedAuth = await authDataService.updateAuth(newAuth.id, {
         email: newMockEmail,
       })
       expect(updatedAuth.email).toBe(newMockEmail)
+
       const fetchedAuth = await payload.findByID({
         collection: "authentication",
         id: newAuth.id,
       })
       expect(fetchedAuth.email).toBe(newMockEmail)
+    })
+
+    it("should throw an error when trying to update a non-existent id", async () => {
+      await expect(() =>
+        authDataService.updateAuth("nonexistent-id", {
+          email: "fake_email@example.com",
+        }),
+      ).rejects.toThrowError("Not Found")
     })
   })
 
