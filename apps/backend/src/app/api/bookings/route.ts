@@ -32,7 +32,6 @@ class RouteWrapper {
       const openDay = (gameSession.semester as Semester).bookingOpenDay
       const openTime = new Date((gameSession.semester as Semester).bookingOpenTime)
 
-      // Calculate the booking open date
       const openDate = calculateOpenDate(sessionStartTime, openDay as Weekday, openTime)
 
       const now = new Date()
