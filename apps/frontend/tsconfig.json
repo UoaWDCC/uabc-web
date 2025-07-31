@@ -28,11 +28,5 @@
     "types": ["vitest/globals"]
   },
   "exclude": ["node_modules"],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "../../packages/ui/src/test-config/localStorage-test-utils.ts"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]
 }
