@@ -1,28 +1,36 @@
 commit-msg:
   commands:
     commitlint:
-      run: pnpm exec commitlint --edit $1
+      run: bun commitlint --edit $1
 
 post-merge:
   commands:
     pnpm:
       glob: "{package.json,pnpm-lock.yaml}"
-      run: pnpm install
+      run: bun install
+
+postinstall:
+  parallel: true
+  commands:
+    frontend:
+      run: bun theme --out apps/frontend/node_modules/@yamada-ui/core
+    ui:
+      run: bun theme --out packages/ui/node_modules/@yamada-ui/core
 
 pre-commit:
   parallel: true
   exclude:
     - "apps/portal/**"
-    - "pnpm-lock.yaml"
+    - "bun.lock"
     - "**/importMap.js"
     - "**/payload-types.ts"
   commands:
     biome:
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
       run: |
-        pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+        bun biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
       stage_fixed: true
     cspell:
       glob: "*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx,css,scss,yaml,yml}"
       run: |
-        pnpm cspell {staged_files} --cache --cache-strategy=content --cache-location=.cspellcache
+        bun cspell {staged_files} --cache --cache-strategy=content --cache-location=.cspellcache

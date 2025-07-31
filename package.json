@@ -6,14 +6,17 @@
   "type": "module",
   "engines": {
     "node": ">=22",
-    "pnpm": "^10.0.0"
+    "bun": ">=1.0.0"
   },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "check-types": "turbo run check-types",
     "dev": "turbo run dev",
-    "clean": "pnpm -r --parallel exec rimraf dist .turbo *.log coverage node_modules .next storybook-static .wrangler",
-    "clean:all": "pnpm clean && pnpm rimraf .turbo .next .vercel .wrangler dist storybook-static *.log coverage trace node_modules",
+    "clean": "bun scripts/clean.ts",
     "generate:importmap": "turbo run generate:importmap",
     "generate:types": "turbo run generate:types",
     "payload": "turbo run payload",
@@ -21,7 +24,7 @@
     "prepare": "lefthook install",
     "spell": "cspell \"**/*.{js,jsx,mjs,cjs,d.cts,d.mts,ts,tsx,md,mdx,json,yml,yaml}\" --cache --cache-strategy=content --cache-location=.cspellcache",
     "start": "turbo run start",
-    "storybook": "pnpm --prefix=packages/ui storybook",
+    "storybook": "bun --prefix=packages/ui storybook",
     "storybook:build": "turbo run storybook:build",
     "test": "turbo run test",
     "test:watch": "turbo run test:watch",
@@ -30,7 +33,7 @@
     "test:ui": "turbo run test:ui",
     "merge": "turbo run merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
-    "postinstall": "pnpm theme",
+    "postinstall": "bun lefthook run postinstall",
     "commitlint": "commitlint --edit"
   },
   "dependencies": {
@@ -62,8 +65,8 @@
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.2.4"
   },
-  "packageManager": "pnpm@10.12.4",
-  "pnpm": {
+  "packageManager": "bun@1.2.19",
+  "bun": {
     "onlyBuiltDependencies": [
       "@swc/core",
       "core-js-pure",
