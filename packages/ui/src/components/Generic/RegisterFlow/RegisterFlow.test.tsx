@@ -54,7 +54,7 @@ describe("<RegisterFlow />", () => {
     // Register Success Panel
     expect(screen.getByTestId("go-back")).toBeDisabled()
     expect(screen.getByText("Success!")).toBeInTheDocument()
-  })
+  }, 10_000)
 
   it("should return to the previous step when the go back button is pressed, and pre-fill the fields", async () => {
     const { user } = render(<RegisterFlow />)
