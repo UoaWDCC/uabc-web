@@ -1,4 +1,11 @@
-import { CreateBookingRequestBodySchema, MembershipType, type RequestWithUser } from "@repo/shared"
+import {
+  CreateBookingRequestBodySchema,
+  calculateOpenDate,
+  MembershipType,
+  type RequestWithUser,
+  type Weekday,
+} from "@repo/shared"
+import type { Semester } from "@repo/shared/payload-types"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { NextResponse } from "next/server"
 import { ZodError } from "zod"
@@ -21,7 +28,29 @@ class RouteWrapper {
         typeof parsedBody.gameSession === "string"
           ? await gameSessionDataService.getGameSessionById(parsedBody.gameSession)
           : parsedBody.gameSession
-      const bookings = await bookingDataService.getBookingsBySessionId(gameSession.id)
+      const sessionStartTime = new Date(gameSession.startTime)
+      const openDay = (gameSession.semester as Semester).bookingOpenDay
+      const openTime = new Date((gameSession.semester as Semester).bookingOpenTime)
+
+      // Calculate the booking open date
+      const openDate = calculateOpenDate(sessionStartTime, openDay as Weekday, openTime)
+
+      const now = new Date()
+      if (now < openDate) {
+        return NextResponse.json(
+          { error: "Booking is not open yet for this session" },
+          { status: StatusCodes.FORBIDDEN },
+        )
+      }
+      // Disallow booking for sessions scheduled before the open date/time
+      if (sessionStartTime < openDate) {
+        return NextResponse.json(
+          { error: "Cannot book a session scheduled before the semester's booking open time" },
+          { status: StatusCodes.FORBIDDEN },
+        )
+      }
+
+      const bookings = await bookingDataService.getAllBookingsBySessionId(gameSession.id)
       // Refetch user data as JWT stored data could be outdated
       const userData = await userDataService.getUserById(req.user.id)
 
@@ -42,8 +71,8 @@ class RouteWrapper {
         )
 
       if (
-        (await bookingDataService.getUserBookingsBySessionId(userData.id, gameSession.id)).length >
-        0
+        (await bookingDataService.getAllUserBookingsBySessionId(userData.id, gameSession.id))
+          .length > 0
       )
         return NextResponse.json(
           { error: "Session already booked" },
