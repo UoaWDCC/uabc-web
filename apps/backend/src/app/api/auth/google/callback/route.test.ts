@@ -248,29 +248,4 @@ describe("GET /api/auth/google/callback", async () => {
     const json = await response.json()
     expect(json.error).toBe("Error parsing user info response")
   })
-
-  it("returns 500 if google user info is missing email or name", async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          ...googleUserMock,
-          email: undefined,
-          given_name: undefined,
-        }),
-      ok: true,
-      status: 200,
-    })
-    vi.stubGlobal("fetch", mockFetch)
-
-    cookieStore.set("state", STATE_MOCK)
-
-    const req = createMockNextRequest(
-      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
-    )
-    const response = await callback(req)
-
-    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
-    const json = await response.json()
-    expect(json.error).toBe("Google user info is missing email or name")
-  })
 })

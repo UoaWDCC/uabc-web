@@ -66,8 +66,8 @@ export const GET = async (req: NextRequest) => {
   })
 
   let sub: string
-  let email: string | undefined
-  let given_name: string | undefined
+  let email: string
+  let given_name: string
   let family_name: string | undefined
 
   try {
@@ -83,13 +83,6 @@ export const GET = async (req: NextRequest) => {
       )
     }
     throw error
-  }
-
-  if (!email || !given_name) {
-    return NextResponse.json(
-      { error: "Google user info is missing email or name" },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR },
-    )
   }
 
   const userService = new UserDataService()

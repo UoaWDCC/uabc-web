@@ -17,12 +17,12 @@ export const GoogleUserInfoResponseSchema = z.object({
    * The full name of the Google user
    * @example Straight Zhao
    */
-  name: z.string().optional(),
+  name: z.string(),
   /**
    * The user's first name
    * @example Straight
    */
-  given_name: z.string().optional(),
+  given_name: z.string(),
   /**
    * The user's first name
    * @example Zhao
@@ -31,13 +31,13 @@ export const GoogleUserInfoResponseSchema = z.object({
   /**
    * The user's profile picture URL
    */
-  picture: z.string().optional(),
+  picture: z.string(),
   /**
    * The user's email address
    * @example straightzhao@gmail.com
    */
-  email: z.string().email().optional(),
-  email_verified: z.boolean().optional(),
+  email: z.string().email(),
+  email_verified: z.boolean(),
   /**
    * The hosted domain that the Google account is associated with
    * @example aucklanduni.ac.nz
