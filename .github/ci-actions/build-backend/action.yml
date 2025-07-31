@@ -70,4 +70,4 @@ runs:
         GOOGLE_CLIENT_ID: ${{ inputs.GOOGLE_CLIENT_ID }}
         GOOGLE_CLIENT_SECRET: ${{ inputs.GOOGLE_CLIENT_SECRET }}
         JWT_SECRET: ${{ inputs.JWT_SECRET }}
-      run: pnpm turbo run build --filter backend
+      run: pnpm turbo run build --filter backend --ui=stream

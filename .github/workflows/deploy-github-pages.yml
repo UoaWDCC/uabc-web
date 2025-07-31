@@ -64,7 +64,7 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Build Storybook
-        run: pnpm turbo run storybook:build
+        run: pnpm turbo run storybook:build --ui=stream
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

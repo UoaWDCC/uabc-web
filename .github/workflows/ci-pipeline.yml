@@ -264,7 +264,7 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Type Check
-        run: pnpm turbo run check-types
+        run: pnpm turbo run check-types --ui=stream
 
   test:
     needs: [setup, biome, cspell]
@@ -313,7 +313,7 @@ jobs:
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
         run: |
           mkdir -p coverage
-          pnpm turbo run test:coverage --continue
+          pnpm turbo run test:coverage --continue --ui=stream
 
       - name: Merge Coverage
         if: always()
@@ -381,7 +381,7 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Generate typing
-        run: pnpm turbo run generate:types
+        run: pnpm turbo run generate:types --ui=stream
 
       - name: Write git diff
         run: |
