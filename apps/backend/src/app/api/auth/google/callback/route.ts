@@ -103,8 +103,8 @@ export const GET = async (req: NextRequest) => {
   }
 
   const authDataService = new AuthDataService()
-  const existingAuth = await authDataService.getAuthByEmail(email)
-  if (existingAuth) {
+  try {
+    const existingAuth = await authDataService.getAuthByEmail(email)
     await authDataService.updateAuth(existingAuth.id, {
       provider: "google",
       providerAccountId: sub,
@@ -113,16 +113,20 @@ export const GET = async (req: NextRequest) => {
       scope: scopes.join(" "),
       idToken: tokens.id_token,
     })
-  } else {
-    await authDataService.createAuth({
-      email: user.email,
-      provider: "google",
-      providerAccountId: sub,
-      accessToken: tokens.access_token,
-      expiresAt: tokens.expiry_date,
-      scope: scopes.join(" "),
-      idToken: tokens.id_token,
-    })
+  } catch (error) {
+    if (error instanceof NotFound) {
+      await authDataService.createAuth({
+        email: user.email,
+        provider: "google",
+        providerAccountId: sub,
+        accessToken: tokens.access_token,
+        expiresAt: tokens.expiry_date,
+        scope: scopes.join(" "),
+        idToken: tokens.id_token,
+      })
+    } else {
+      throw error
+    }
   }
 
   const authService = new AuthService()

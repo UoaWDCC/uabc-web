@@ -43,6 +43,7 @@ vi.mock("@/business-layer/provider/google", async () => {
 
 import { JWTEncryptedUserSchema } from "@repo/shared"
 import { cookies } from "next/headers"
+import { NotFound } from "payload"
 import { GET as callback } from "@/app/api/auth/google/callback/route"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
@@ -112,9 +113,15 @@ describe("GET /api/auth/google/callback", async () => {
     }
   })
 
-  it("creates a new authentication document for the user", async () => {
+  it("creates a new authentication document for the user when auth document can't be found", async () => {
     vi.mocked(AuthDataService).mockImplementationOnce(() => ({
-      getAuthByEmail: vi.fn().mockResolvedValue(null),
+      getAuthByEmail: vi
+        .fn()
+        .mockRejectedValue(
+          new NotFound(
+            () => `Authentication with the email: ${googleUserMock.email} was not found`,
+          ),
+        ),
       createAuth: vi.fn().mockResolvedValue(googleUserMock),
       updateAuth: vi.fn().mockResolvedValue(googleUserMock),
     }))
