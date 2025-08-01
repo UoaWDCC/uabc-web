@@ -76,7 +76,7 @@ describe("<RegisterPanel />", () => {
     expect(handleSubmit).not.toBeCalled()
   })
 
-  it.skip("should render the Google icon button as a link with the correct href", async () => {
+  it("should render the Google icon button as a link with the correct href", async () => {
     const googleUrl = "/"
     render(<RegisterPanel googleHref={googleUrl} />)
 

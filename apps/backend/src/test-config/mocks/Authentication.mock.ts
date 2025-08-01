@@ -1,5 +1,4 @@
 import type { CreateAuthenticationData } from "@repo/shared"
-import { casualUserMock } from "@repo/shared/mocks"
 import type { Authentication } from "@repo/shared/payload-types"
 
 export const FIRSTNAME_MOCK = "Straight"
@@ -39,14 +38,12 @@ export const mockPaginatedDocs = <T>(docs: T[]): MockPaginatedDocs<T> => ({
 })
 
 export const standardAuthCreateMock: CreateAuthenticationData = {
-  user: casualUserMock,
   email: "straight.zhao@example.com",
   password: REAL_HASHED_PASSWORD_MOCK,
 }
 
 export const standardAuthMock: Authentication = {
   id: "60a4fa6ff8ba5b0a929c1142",
-  user: casualUserMock,
   email: EMAIL_MOCK,
   password: REAL_HASHED_PASSWORD_MOCK,
   updatedAt: new Date(2025, 0, 1).toISOString(),
@@ -54,7 +51,6 @@ export const standardAuthMock: Authentication = {
 }
 
 export const googleAuthCreateMock: CreateAuthenticationData = {
-  user: casualUserMock,
   email: EMAIL_MOCK,
   provider: "google",
   providerAccountId: "someid",
@@ -67,7 +63,6 @@ export const googleAuthCreateMock: CreateAuthenticationData = {
 
 export const googleAuthMock: Authentication = {
   id: "60a4fa6ff8ba5b0a929c1142",
-  user: casualUserMock,
   email: EMAIL_MOCK,
   provider: "google",
   providerAccountId: "someid",
