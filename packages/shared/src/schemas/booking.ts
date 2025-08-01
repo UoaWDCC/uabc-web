@@ -12,7 +12,7 @@ export const BookingSchema = z.object({
   createdAt: z.string(),
 })
 
-export const CreateBookingRequestBodySchema = BookingSchema.omit({
+export const CreateBookingRequestSchema = BookingSchema.omit({
   id: true,
   updatedAt: true,
   createdAt: true,

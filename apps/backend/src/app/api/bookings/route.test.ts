@@ -1,6 +1,6 @@
 import {
   AUTH_COOKIE_NAME,
-  type CreateBookingRequestBodyType,
+  type CreateBookingRequest,
   MembershipType,
   PlayLevel,
   Weekday,
@@ -46,7 +46,7 @@ describe("/api/bookings", async () => {
       const req = createMockNextRequest("/api/bookings", "POST", {
         gameSession,
         playerLevel: PlayLevel.beginner,
-      } satisfies CreateBookingRequestBodyType)
+      } satisfies CreateBookingRequest)
 
       const res = await POST(req)
       expect(res.status).toBe(StatusCodes.CREATED)
@@ -74,7 +74,7 @@ describe("/api/bookings", async () => {
       const req = createMockNextRequest("/api/bookings", "POST", {
         gameSession,
         playerLevel: PlayLevel.beginner,
-      } satisfies CreateBookingRequestBodyType)
+      } satisfies CreateBookingRequest)
       const res = await POST(req)
 
       expect(res.status).toBe(StatusCodes.CONFLICT)
@@ -91,7 +91,7 @@ describe("/api/bookings", async () => {
       const req = createMockNextRequest("", "POST", {
         gameSession,
         playerLevel: PlayLevel.beginner,
-      } satisfies CreateBookingRequestBodyType)
+      } satisfies CreateBookingRequest)
       const res = await POST(req)
 
       expect(res.status).toBe(StatusCodes.FORBIDDEN)
@@ -108,7 +108,7 @@ describe("/api/bookings", async () => {
         const req = createMockNextRequest("/api/bookings", "POST", {
           gameSession: gameSessionMockBookingNotOpen,
           playerLevel: PlayLevel.beginner,
-        } satisfies CreateBookingRequestBodyType)
+        } satisfies CreateBookingRequest)
         const res = await POST(req)
 
         expect(res.status).toBe(StatusCodes.FORBIDDEN)
@@ -139,7 +139,7 @@ describe("/api/bookings", async () => {
         const req = createMockNextRequest("/api/bookings", "POST", {
           gameSession: earlySession,
           playerLevel: PlayLevel.beginner,
-        } satisfies CreateBookingRequestBodyType)
+        } satisfies CreateBookingRequest)
         const res = await POST(req)
 
         expect(res.status).toBe(StatusCodes.FORBIDDEN)
@@ -166,7 +166,7 @@ describe("/api/bookings", async () => {
         casualCapacity: 1,
       },
       playerLevel: PlayLevel.beginner,
-    } satisfies CreateBookingRequestBodyType)
+    } satisfies CreateBookingRequest)
     const res = await POST(req)
 
     expect(res.status).toBe(StatusCodes.FORBIDDEN)
@@ -187,7 +187,7 @@ describe("/api/bookings", async () => {
         capacity: 1,
       },
       playerLevel: PlayLevel.beginner,
-    } satisfies CreateBookingRequestBodyType)
+    } satisfies CreateBookingRequest)
     const res = await POST(req)
 
     expect(res.status).toBe(StatusCodes.FORBIDDEN)
