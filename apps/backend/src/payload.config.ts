@@ -19,6 +19,7 @@ import { User } from "./data-layer/collections/User"
 import { AboutUsInfo } from "./data-layer/globals/AboutUsInfo"
 import { FAQ } from "./data-layer/globals/Faq"
 import { Footer } from "./data-layer/globals/Footer"
+import { LocationBubble } from "./data-layer/globals/LocationBubble"
 import { Navbar } from "./data-layer/globals/Navbar"
 import { Tos } from "./data-layer/globals/Tos"
 
@@ -53,7 +54,7 @@ export default buildConfig({
     Booking,
     Authentication,
   ],
-  globals: [FAQ, Footer, Navbar, Tos, AboutUsInfo],
+  globals: [FAQ, Footer, LocationBubble, Navbar, Tos, AboutUsInfo],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
