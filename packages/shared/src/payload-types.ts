@@ -391,7 +391,7 @@ export interface Semester {
   /**
    * The day when booking opens for this semester
    */
-  bookingOpenDay: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+  bookingOpenDay: 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
   /**
    * The time when booking opens for this semester
    */
@@ -420,7 +420,7 @@ export interface GameSessionSchedule {
   /**
    * The day of the week this game session schedule belongs to
    */
-  day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+  day: 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
   /**
    * The start time of the game session
    */
