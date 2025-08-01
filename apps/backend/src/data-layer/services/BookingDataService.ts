@@ -116,6 +116,26 @@ export default class BookingDataService {
   }
 
   /**
+   * Deletes multiple {@link Booking} documents by their IDs.
+   *
+   * @param ids An array of IDs of the {@link Booking} documents to delete.
+   * @param transactionID An optional transaction ID for the request, useful for tracing.
+   */
+  public async deleteBookings(ids: string[], transactionID?: string | number): Promise<Booking[]> {
+    const bulkDeletionResult = await payload.delete({
+      collection: "booking",
+      where: {
+        id: { in: ids },
+      },
+      req: {
+        transactionID,
+      },
+    })
+
+    return bulkDeletionResult.docs
+  }
+
+  /**
    * Updates a {@link Booking} by ID.
    *
    * @param id The ID of the {@link Booking} to update
