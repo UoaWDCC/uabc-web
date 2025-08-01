@@ -6,21 +6,21 @@ import { memo } from "react"
 
 export const AdminSection = memo(() => {
   return (
-    <Container centerContent gap="xl" layerStyle="container">
+    <Container centerContent gap="xl" layerStyle="container" py={0}>
       <AdminTabBar>
         <TabPanel>
           <Container centerContent layerStyle="container">
-            <UnderConstructionCard />
+            <UnderConstructionCard title="View Members is Under Construction 🔧" />
           </Container>
         </TabPanel>
         <TabPanel>
           <Container centerContent layerStyle="container">
-            <UnderConstructionCard />
+            <UnderConstructionCard title="Edit/View Sessions is Under Construction 🔧" />
           </Container>
         </TabPanel>
         <TabPanel>
           <Container centerContent layerStyle="container">
-            <UnderConstructionCard />
+            <UnderConstructionCard title="Create Semesters & Sessions is Under Construction 🔧" />
           </Container>
         </TabPanel>
       </AdminTabBar>
