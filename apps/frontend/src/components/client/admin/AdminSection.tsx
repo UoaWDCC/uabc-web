@@ -7,7 +7,7 @@ import { memo } from "react"
 
 export const AdminSection = memo(() => {
   return (
-    <Container centerContent gap="xl" layerStyle="container" placeSelf="start">
+    <Container centerContent gap="xl" justifyContent="start" layerStyle="container">
       <AdminTabBar>
         <TabPanel>
           <Container centerContent layerStyle="container">
