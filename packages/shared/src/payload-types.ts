@@ -54,6 +54,20 @@ export type LinkArray = {
 }[];
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationBubbleItems".
+ */
+export type LocationBubbleItems =
+  | {
+      /**
+       * The game session schedule displayed for location bubble description, e.g. location, session time
+       */
+      gameSessionSchedule: string | GameSessionSchedule;
+      button: Link;
+      id?: string | null;
+    }[]
+  | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "AboutUsInfoItems".
  */
 export type AboutUsInfoItems = {
@@ -162,6 +176,7 @@ export interface Config {
   globals: {
     faq: Faq;
     footer: Footer;
+    locationBubble: LocationBubble;
     navbar: Navbar;
     termsOfService: TermsOfService;
     aboutUsInfo: AboutUsInfo;
@@ -169,6 +184,7 @@ export interface Config {
   globalsSelect: {
     faq: FaqSelect<false> | FaqSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    locationBubble: LocationBubbleSelect<false> | LocationBubbleSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
     termsOfService: TermsOfServiceSelect<false> | TermsOfServiceSelect<true>;
     aboutUsInfo: AboutUsInfoSelect<false> | AboutUsInfoSelect<true>;
@@ -899,6 +915,16 @@ export interface LinkGroup {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locationBubble".
+ */
+export interface LocationBubble {
+  id: string;
+  items?: LocationBubbleItems;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navbar".
  */
 export interface Navbar {
@@ -1079,6 +1105,25 @@ export interface LinkGroupSelect<T extends boolean = true> {
 export interface LinkArraySelect<T extends boolean = true> {
   label?: T;
   url?: T;
+  id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locationBubble_select".
+ */
+export interface LocationBubbleSelect<T extends boolean = true> {
+  items?: T | LocationBubbleItemsSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationBubbleItems_select".
+ */
+export interface LocationBubbleItemsSelect<T extends boolean = true> {
+  gameSessionSchedule?: T;
+  button?: T | LinkSelect<T>;
   id?: T;
 }
 /**
