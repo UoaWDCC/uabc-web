@@ -14,7 +14,7 @@ export const AdminClient = () => {
       }
       scope={["admin"]}
     >
-      {(auth) => <AdminSection auth={auth} />}
+      {() => <AdminSection />}
     </RoleGuard>
   )
 }

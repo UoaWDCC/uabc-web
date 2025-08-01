@@ -1,9 +1,8 @@
 import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
 import { Container, TabPanel } from "@yamada-ui/react"
 import { memo } from "react"
-import type { AuthContextValue } from "@/context/AuthContext"
 
-export const AdminSection = memo(({ auth }: { auth: AuthContextValue }) => {
+export const AdminSection = memo(() => {
   return (
     <Container centerContent gap="xl" layerStyle="container">
       <AdminTabBar>
