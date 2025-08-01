@@ -1,4 +1,5 @@
 import { CreateGameSessionScheduleRequestSchema, PaginationQuerySchema } from "@repo/shared"
+import type { GameSession } from "@repo/shared/payload-types"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { ZodError } from "zod"
@@ -50,18 +51,24 @@ class GameSessionSchedulesRouteWrapper {
   }
 
   /**
-   * POST Method to create a new game session schedule.
+   * POST Method to create a new game session schedule and defaults cascade creation of game sessions).
    *
    * @param req The request object containing the request body.
-   * @returns The created {@link GameSessionSchedule} document, otherwise an appropriate error response.
+   * @returns The created {@link GameSessionSchedule} document and array of {@link GameSession}, otherwise an appropriate error response.
    */
   @Security("jwt", ["admin"])
   static async POST(req: NextRequest) {
+    const cascadeDisabled = req.nextUrl.searchParams.get("cascade") === "false"
+
     try {
       const parsedBody = CreateGameSessionScheduleRequestSchema.parse(await req.json())
       const gameSessionDataService = new GameSessionDataService()
       const newGameSessionSchedule =
         await gameSessionDataService.createGameSessionSchedule(parsedBody)
+
+      if (!cascadeDisabled) {
+        await gameSessionDataService.cascadeCreateGameSessions(newGameSessionSchedule)
+      }
       return NextResponse.json({ data: newGameSessionSchedule }, { status: StatusCodes.CREATED })
     } catch (error) {
       if (error instanceof ZodError) {
