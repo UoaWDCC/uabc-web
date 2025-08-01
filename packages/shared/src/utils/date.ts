@@ -23,12 +23,17 @@ export function getDaysBetweenWeekdays(fromDay: Weekday, toDay: Weekday): number
  */
 export function calculateOpenDate(startTime: Date, openDay: Weekday, openTime: Date): Date {
   const openDate = new Date(startTime)
-  const dayIndex = startTime.getDay()
+  const dayIndex = startTime.getUTCDay()
   const day = Object.values(Weekday)[dayIndex] as Weekday
   const daysToSubtract = getDaysBetweenWeekdays(openDay, day)
 
-  openDate.setDate(startTime.getDate() - daysToSubtract)
-  openDate.setHours(openTime.getHours(), openTime.getMinutes(), openTime.getSeconds(), 0)
+  openDate.setUTCDate(startTime.getUTCDate() - daysToSubtract)
+  openDate.setUTCHours(
+    openTime.getUTCHours(),
+    openTime.getUTCMinutes(),
+    openTime.getUTCSeconds(),
+    0,
+  )
 
   return openDate
 }

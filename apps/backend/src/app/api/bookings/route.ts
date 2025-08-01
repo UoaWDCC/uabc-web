@@ -1,5 +1,5 @@
 import {
-  CreateBookingRequestBodySchema,
+  CreateBookingRequestSchema,
   calculateOpenDate,
   MembershipType,
   type RequestWithUser,
@@ -22,7 +22,7 @@ class RouteWrapper {
     const bookingDataService = new BookingDataService()
 
     try {
-      const parsedBody = CreateBookingRequestBodySchema.parse(await req.json())
+      const parsedBody = CreateBookingRequestSchema.parse(await req.json())
 
       const gameSession =
         typeof parsedBody.gameSession === "string"
@@ -32,7 +32,6 @@ class RouteWrapper {
       const openDay = (gameSession.semester as Semester).bookingOpenDay
       const openTime = new Date((gameSession.semester as Semester).bookingOpenTime)
 
-      // Calculate the booking open date
       const openDate = calculateOpenDate(sessionStartTime, openDay as Weekday, openTime)
 
       const now = new Date()
