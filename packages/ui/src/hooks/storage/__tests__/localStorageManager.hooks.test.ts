@@ -1,6 +1,9 @@
+import {
+  localStorageMock,
+  setupTestEnvironment,
+} from "@repo/ui/test-config/localStorage-test-utils"
 import { act, renderHook } from "@testing-library/react"
 import { z } from "zod"
-import { localStorageMock, setupTestEnvironment } from "@/test-config/localStorage-test-utils"
 import {
   useLocalStorage,
   useLocalStorageWithDefault,

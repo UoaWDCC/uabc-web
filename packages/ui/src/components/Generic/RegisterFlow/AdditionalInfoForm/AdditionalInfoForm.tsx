@@ -18,6 +18,10 @@ import { Controller, type SubmitHandler, useForm } from "react-hook-form"
  */
 export interface AdditionalInfoFormProps {
   /**
+   * Default values to pre-fill the form.
+   */
+  defaultValues?: AdditionalInfoFormValues
+  /**
    * Submit handler called when user submits the form.
    */
   onSubmit?: SubmitHandler<AdditionalInfoFormValues>
@@ -48,75 +52,80 @@ const skillLevelOptions = Object.values(PlayLevel).map((playLevel) => ({
  * @param props AdditionalInfoForm component props
  * @returns The form component
  */
-export const AdditionalInfoForm: FC<AdditionalInfoFormProps> = memo(({ onSubmit }) => {
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<AdditionalInfoFormValues>({
-    resolver: zodResolver(AdditionalInfoFormSchema),
-  })
+export const AdditionalInfoForm: FC<AdditionalInfoFormProps> = memo(
+  ({ defaultValues, onSubmit }) => {
+    const {
+      control,
+      register,
+      handleSubmit,
+      formState: { errors, isSubmitting },
+    } = useForm<AdditionalInfoFormValues>({
+      resolver: zodResolver(AdditionalInfoFormSchema),
+    })
 
-  return (
-    <VStack
-      as="form"
-      bgColor="inherit"
-      h="full"
-      justifyContent="space-between"
-      onSubmit={handleSubmit(onSubmit ?? noop)}
-    >
-      <VStack>
-        <Heading.h3>Enter additional information</Heading.h3>
-        <FormControl errorMessage={errors.gender?.message} invalid={!!errors.gender}>
-          <Controller
-            control={control}
-            name="gender"
-            render={({ field }) => (
-              <Select
-                data-testid="gender"
-                icon={<VenusAndMarsIcon />}
-                items={genderOptions}
-                label="Gender"
-                {...field}
-              />
-            )}
-          />
-        </FormControl>
-        <FormControl errorMessage={errors.skillLevel?.message} invalid={!!errors.skillLevel}>
-          <Controller
-            control={control}
-            name="skillLevel"
-            render={({ field }) => (
-              <Select
-                data-testid="skill-level"
-                icon={<IdCardIcon />}
-                items={skillLevelOptions}
-                label="Skill level"
-                {...field}
-              />
-            )}
-          />
-        </FormControl>
-        <FormControl
-          errorMessage={errors.dietaryRequirements?.message}
-          invalid={!!errors.dietaryRequirements}
-        >
-          <TextInput
-            data-testid="dietary-requirements"
-            placeholder="Dietary requirements"
-            size="lg"
-            startElement={<BeanOffIcon />}
-            type={InputType.Text}
-            {...register("dietaryRequirements")}
-          />
-        </FormControl>
+    return (
+      <VStack
+        as="form"
+        bgColor="inherit"
+        h="full"
+        justifyContent="space-between"
+        onSubmit={handleSubmit(onSubmit ?? noop)}
+      >
+        <VStack>
+          <Heading.h3>Enter additional information</Heading.h3>
+          <FormControl errorMessage={errors.gender?.message} invalid={!!errors.gender}>
+            <Controller
+              control={control}
+              defaultValue={defaultValues?.gender}
+              name="gender"
+              render={({ field }) => (
+                <Select
+                  data-testid="gender"
+                  icon={<VenusAndMarsIcon />}
+                  items={genderOptions}
+                  label="Gender"
+                  {...field}
+                />
+              )}
+            />
+          </FormControl>
+          <FormControl errorMessage={errors.skillLevel?.message} invalid={!!errors.skillLevel}>
+            <Controller
+              control={control}
+              defaultValue={defaultValues?.skillLevel}
+              name="skillLevel"
+              render={({ field }) => (
+                <Select
+                  data-testid="skill-level"
+                  icon={<IdCardIcon />}
+                  items={skillLevelOptions}
+                  label="Skill level"
+                  {...field}
+                />
+              )}
+            />
+          </FormControl>
+          <FormControl
+            errorMessage={errors.dietaryRequirements?.message}
+            invalid={!!errors.dietaryRequirements}
+          >
+            <TextInput
+              data-testid="dietary-requirements"
+              defaultValue={defaultValues?.dietaryRequirements}
+              placeholder="Dietary requirements"
+              size="lg"
+              startElement={<BeanOffIcon />}
+              type={InputType.Text}
+              {...register("dietaryRequirements")}
+            />
+          </FormControl>
+        </VStack>
+        <Button colorScheme="primary" loading={isSubmitting} type="submit">
+          Continue
+        </Button>
       </VStack>
-      <Button colorScheme="primary" loading={isSubmitting} type="submit">
-        Continue
-      </Button>
-    </VStack>
-  )
-})
+    )
+  },
+)
 
 AdditionalInfoForm.displayName = "AdditionalInfoForm"

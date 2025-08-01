@@ -13,6 +13,10 @@ import { Controller, type SubmitHandler, useForm } from "react-hook-form"
  */
 export interface UniversityInfoFormProps {
   /**
+   * Default values to pre-fill the form.
+   */
+  defaultValues?: UniversityInfoFormValues
+  /**
    * Submit handler called when user submits the form.
    */
   onSubmit?: SubmitHandler<UniversityInfoFormValues>
@@ -35,70 +39,75 @@ const universityOptions = Object.values(University).map((value) => ({
  * @param props UniversityInfoForm component props
  * @returns The form component
  */
-export const UniversityInfoForm: FC<UniversityInfoFormProps> = memo(({ onSubmit }) => {
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    watch,
-  } = useForm<UniversityInfoFormValues>({
-    resolver: zodResolver(UniversityInfoFormSchema),
-  })
+export const UniversityInfoForm: FC<UniversityInfoFormProps> = memo(
+  ({ defaultValues, onSubmit }) => {
+    const {
+      control,
+      register,
+      handleSubmit,
+      formState: { errors, isSubmitting },
+      watch,
+    } = useForm<UniversityInfoFormValues>({
+      resolver: zodResolver(UniversityInfoFormSchema),
+    })
 
-  return (
-    <VStack
-      as="form"
-      bgColor="inherit"
-      h="full"
-      justifyContent="space-between"
-      onSubmit={handleSubmit(onSubmit ?? noop)}
-    >
-      <VStack>
-        <Heading.h3>Enter your university details</Heading.h3>
-        <FormControl errorMessage={errors.university?.message} invalid={!!errors.university}>
-          <Controller
-            control={control}
-            name="university"
-            render={({ field }) => (
-              <Select
-                data-testid="university"
-                icon={<UniversityIcon />}
-                items={universityOptions}
-                label="University"
-                {...field}
-              />
-            )}
-          />
-        </FormControl>
-        <FormControl errorMessage={errors.studentId?.message} invalid={!!errors.studentId}>
-          <TextInput
-            data-testid="student-id"
-            disabled={watch("university") !== University.uoa}
-            placeholder="Student ID"
-            size="lg"
-            startElement={<UserIcon />}
-            type={InputType.Number}
-            {...register("studentId")}
-          />
-        </FormControl>
-        <FormControl errorMessage={errors.studentUpi?.message} invalid={!!errors.studentUpi}>
-          <TextInput
-            data-testid="student-upi"
-            disabled={watch("university") !== University.uoa}
-            placeholder="UPI"
-            size="lg"
-            startElement={<UserIcon />}
-            type={InputType.Text}
-            {...register("studentUpi")}
-          />
-        </FormControl>
+    return (
+      <VStack
+        as="form"
+        bgColor="inherit"
+        h="full"
+        justifyContent="space-between"
+        onSubmit={handleSubmit(onSubmit ?? noop)}
+      >
+        <VStack>
+          <Heading.h3>Enter your university details</Heading.h3>
+          <FormControl errorMessage={errors.university?.message} invalid={!!errors.university}>
+            <Controller
+              control={control}
+              defaultValue={defaultValues?.university}
+              name="university"
+              render={({ field }) => (
+                <Select
+                  data-testid="university"
+                  icon={<UniversityIcon />}
+                  items={universityOptions}
+                  label="University"
+                  {...field}
+                />
+              )}
+            />
+          </FormControl>
+          <FormControl errorMessage={errors.studentId?.message} invalid={!!errors.studentId}>
+            <TextInput
+              data-testid="student-id"
+              defaultValue={defaultValues?.studentId}
+              disabled={watch("university") !== University.uoa}
+              placeholder="Student ID"
+              size="lg"
+              startElement={<UserIcon />}
+              type={InputType.Number}
+              {...register("studentId")}
+            />
+          </FormControl>
+          <FormControl errorMessage={errors.studentUpi?.message} invalid={!!errors.studentUpi}>
+            <TextInput
+              data-testid="student-upi"
+              defaultValue={defaultValues?.studentUpi}
+              disabled={watch("university") !== University.uoa}
+              placeholder="UPI"
+              size="lg"
+              startElement={<UserIcon />}
+              type={InputType.Text}
+              {...register("studentUpi")}
+            />
+          </FormControl>
+        </VStack>
+        <Button colorScheme="primary" loading={isSubmitting} type="submit">
+          Continue
+        </Button>
       </VStack>
-      <Button colorScheme="primary" loading={isSubmitting} type="submit">
-        Continue
-      </Button>
-    </VStack>
-  )
-})
+    )
+  },
+)
 
 UniversityInfoForm.displayName = "UniversityInfoForm"
