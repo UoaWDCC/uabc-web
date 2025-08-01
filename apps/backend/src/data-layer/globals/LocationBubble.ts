@@ -4,31 +4,31 @@ export const LocationBubble: GlobalConfig = {
   slug: "locationBubble",
   fields: [
     {
-      name: "items",
+      name: "LocationBubbleItems",
       type: "array",
-      interfaceName: "LocationBubbleItems",
+      interfaceName: "LocationBubbleItem",
       maxRows: 3,
       fields: [
-        // {
-        //   name: "locationImage",
-        //   type: "relationship",
-        //   required: true,
-        //   relationTo: "media",
-        //   admin: {
-        //     description: "The image displayed for the location.",
-        //   },
-        // },
+        {
+          name: "locationImage",
+          type: "relationship",
+          required: true,
+          relationTo: "media",
+          admin: {
+            description: "The image displayed for the location.",
+          },
+        },
         {
           name: "gameSessionSchedule",
           type: "relationship",
           required: true,
           relationTo: "gameSessionSchedule",
+          hasMany: true,
           admin: {
             description:
               "The game session schedule displayed for location bubble description, e.g. location, session time",
           },
         },
-
         {
           name: "button",
           type: "group",
@@ -60,4 +60,7 @@ export const LocationBubble: GlobalConfig = {
       ],
     },
   ],
+  admin: {
+    description: "Location bubble that will be displayed on the homepage",
+  },
 }
