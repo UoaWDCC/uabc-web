@@ -1,4 +1,32 @@
-import type { GlobalConfig } from "payload"
+import type { GlobalBeforeValidateHook, GlobalConfig } from "payload"
+
+const validateGameSessionSchedules: GlobalBeforeValidateHook = async ({ data, req }) => {
+  const locationBubbleItems = data.LocationBubbleItems
+
+  for (const item of locationBubbleItems) {
+    const scheduleIds = item.gameSessionSchedule
+
+    const schedules = await Promise.all(
+      scheduleIds.map((id: string) =>
+        req.payload.findByID({
+          collection: "gameSessionSchedule",
+          id,
+        }),
+      ),
+    )
+
+    const first = schedules[0]
+    for (const schedule of schedules) {
+      if (schedule.name !== first.name || schedule.location !== first.location) {
+        throw new Error(
+          "All gameSessionSchedules inside a locationBubbleItem must have the same title and location.",
+        )
+      }
+    }
+  }
+
+  return data
+}
 
 export const LocationBubble: GlobalConfig = {
   slug: "locationBubble",
@@ -60,6 +88,9 @@ export const LocationBubble: GlobalConfig = {
       ],
     },
   ],
+  hooks: {
+    beforeValidate: [validateGameSessionSchedules],
+  },
   admin: {
     description: "Location bubble that will be displayed on the homepage",
   },
