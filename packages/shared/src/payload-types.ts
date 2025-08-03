@@ -529,10 +529,6 @@ export interface Booking {
 export interface Authentication {
   id: string;
   /**
-   * The user who owns this authentication
-   */
-  user: string | User;
-  /**
    * The user email that's related to this auth
    */
   email: string;
@@ -807,7 +803,6 @@ export interface BookingSelect<T extends boolean = true> {
  * via the `definition` "authentication_select".
  */
 export interface AuthenticationSelect<T extends boolean = true> {
-  user?: T;
   email?: T;
   password?: T;
   provider?: T;
