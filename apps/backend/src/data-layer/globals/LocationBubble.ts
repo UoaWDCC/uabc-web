@@ -32,7 +32,7 @@ export const LocationBubble: GlobalConfig = {
   slug: "locationBubble",
   fields: [
     {
-      name: "LocationBubbleItems",
+      name: "locationBubbleItems",
       type: "array",
       interfaceName: "LocationBubbleItem",
       maxRows: 3,
