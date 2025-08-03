@@ -59,7 +59,7 @@ export type LinkArray = {
 export type LocationBubbleItem =
   | {
       /**
-       * The image displayed for the location.
+       * The image displayed for the location of game session.
        */
       locationImage: string | Media;
       /**
