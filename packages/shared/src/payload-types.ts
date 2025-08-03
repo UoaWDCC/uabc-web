@@ -920,7 +920,7 @@ export interface LinkGroup {
  */
 export interface LocationBubble {
   id: string;
-  LocationBubbleItems?: LocationBubbleItem;
+  locationBubbleItems?: LocationBubbleItem;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1113,7 +1113,7 @@ export interface LinkArraySelect<T extends boolean = true> {
  * via the `definition` "locationBubble_select".
  */
 export interface LocationBubbleSelect<T extends boolean = true> {
-  LocationBubbleItems?: T | LocationBubbleItemSelect<T>;
+  locationBubbleItems?: T | LocationBubbleItemSelect<T>;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -43,7 +43,7 @@ export const LocationBubble: GlobalConfig = {
           required: true,
           relationTo: "media",
           admin: {
-            description: "The image displayed for the location.",
+            description: "The image displayed for the location of game session.",
           },
         },
         {
