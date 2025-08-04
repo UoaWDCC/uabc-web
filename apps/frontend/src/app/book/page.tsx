@@ -1,6 +1,7 @@
-import { UnderConstructionCard } from "@repo/ui/components/Generic"
-import { Container, VStack } from "@yamada-ui/react"
+import { BookingConfirmedPopup } from "@repo/ui/components/Composite"
+import { VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
+import { BookClient } from "@/components/client/book/BookClient"
 
 export const metadata: Metadata = {
   title: "Book",
@@ -10,9 +11,12 @@ export const metadata: Metadata = {
 export default function Book() {
   return (
     <VStack as="main">
-      <Container centerContent layerStyle="container">
-        <UnderConstructionCard />
-      </Container>
+      <BookClient />
+      <BookingConfirmedPopup
+        additionalMessage="You can now book a court"
+        message="Booking confirmed"
+        title="Booking confirmed"
+      />
     </VStack>
   )
 }

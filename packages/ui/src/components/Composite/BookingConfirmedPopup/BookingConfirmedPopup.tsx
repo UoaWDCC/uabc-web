@@ -1,6 +1,6 @@
 "use client"
 
-import { MembershipType } from "@repo/shared"
+import { MembershipType, Popup } from "@repo/shared"
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import { usePopupState } from "@repo/ui/hooks"
 import { StickerIcon } from "@yamada-ui/lucide"
@@ -56,7 +56,7 @@ export const BookingConfirmedPopup: FC<BookingConfirmedPopupProps> = ({
   ...props
 }) => {
   const { value, close, isOpen } = usePopupState({
-    popupId: "booking-confirmed-popup",
+    popupId: Popup.BOOKING_CONFIRMED,
     initialValue,
   })
 

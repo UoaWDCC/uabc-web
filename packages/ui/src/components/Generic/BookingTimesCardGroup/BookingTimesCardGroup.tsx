@@ -128,7 +128,7 @@ export const BookingTimesCardGroup = memo(
             >
               <CheckboxCardGroup
                 {...props}
-                items={items.map((item) => ({
+                items={items.map(({ memberAttendees, casualAttendees, ...item }) => ({
                   ...item,
                   addon: (
                     <VStack alignItems="flex-start" gap="2xs">
@@ -136,11 +136,11 @@ export const BookingTimesCardGroup = memo(
                       <HStack flexWrap="wrap" gap="2xs" width="fit-content">
                         <IconWithText
                           icon={<UserIcon />}
-                          label={`${item.memberAttendees} members Attendees`}
+                          label={`${memberAttendees} members Attendees`}
                         />
                         <IconWithText
                           icon={<UserIcon />}
-                          label={`${item.casualAttendees} casuals Attendees`}
+                          label={`${casualAttendees} casuals Attendees`}
                         />
                       </HStack>
                     </VStack>
