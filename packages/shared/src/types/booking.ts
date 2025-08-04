@@ -1,9 +1,11 @@
-import type z from "zod"
-import type { BookingSchema, CreateBookingRequestSchema } from "../schemas"
+import type { z } from "zod"
+import type {
+  BookingSchema,
+  CreateBookingRequestSchema,
+  SelectACourtFormDataSchema,
+} from "../schemas"
 
 export type BookingType = z.infer<typeof BookingSchema>
-
-export type CreateBookingRequestBodyType = z.infer<typeof CreateBookingRequestBodySchema>
 
 export type SelectACourtFormData = z.infer<typeof SelectACourtFormDataSchema>
 
