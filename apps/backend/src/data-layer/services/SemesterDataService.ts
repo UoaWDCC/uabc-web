@@ -1,6 +1,7 @@
 import type { CreateSemesterData, EditSemesterData } from "@repo/shared"
 import type { Semester } from "@repo/shared/payload-types"
 import { payload } from "@/data-layer/adapters/Payload"
+import GameSessionDataService from "./GameSessionDataService"
 
 export default class SemesterDataService {
   /**
@@ -61,12 +62,44 @@ export default class SemesterDataService {
    * Deletes a {@link Semester} document
    *
    * @param id The ID of the {@link Semester} to delete
+   * @param transactionID An optional transaction ID for the request, useful for tracing
    * @returns The deleted {@link Semester} document if successful, otherwise throws a {@link NotFound} error
    */
-  public async deleteSemester(id: string): Promise<Semester> {
+  public async deleteSemester(id: string, transactionID?: string | number): Promise<Semester> {
     return await payload.delete({
       collection: "semester",
       id,
+      req: { transactionID },
     })
+  }
+
+  /**
+   * Deletes all GameSessionSchedules for a {@link Semester}, which will then subsequently delete their related docs through cascade deletion
+   *
+   * @param semesterIdf the ID of the semester whose game session schedules are to be deleted
+   * @param transactionID An optional transaction ID for the request, useful for tracing
+   */
+  public async deleteRelatedGameSchedulesForSemester(
+    semesterId: string,
+    transactionID?: string | number,
+  ): Promise<void> {
+    const gameSessionScheduleService = new GameSessionDataService()
+
+    const schedules = await payload.find({
+      collection: "gameSessionSchedule",
+      where: {
+        semester: {
+          equals: semesterId,
+        },
+      },
+      pagination: false,
+      req: { transactionID },
+    })
+
+    const scheduleIds = schedules.docs.map((schedule) => schedule.id)
+    // couldn't figure out how to finish implementing the bulk game session schedule deletion so i'm just using a for loop for now
+    for (const scheduleId of scheduleIds) {
+      await gameSessionScheduleService.deleteGameSessionSchedule(scheduleId, transactionID)
+    }
   }
 }
