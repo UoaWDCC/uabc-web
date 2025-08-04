@@ -23,9 +23,6 @@ export const useCreateBooking = () => {
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.MY_BOOKINGS_QUERY_KEY],
       })
-      queryClient.invalidateQueries({
-        queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY],
-      })
     },
   })
 }
