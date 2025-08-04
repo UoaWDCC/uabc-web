@@ -1,5 +1,5 @@
 import {
-  CreateBookingRequestBodySchema,
+  CreateBookingRequestSchema,
   calculateOpenDate,
   MembershipType,
   type RequestWithUser,
@@ -22,7 +22,7 @@ class RouteWrapper {
     const bookingDataService = new BookingDataService()
 
     try {
-      const parsedBody = CreateBookingRequestBodySchema.parse(await req.json())
+      const parsedBody = CreateBookingRequestSchema.parse(await req.json())
 
       const gameSession =
         typeof parsedBody.gameSession === "string"
