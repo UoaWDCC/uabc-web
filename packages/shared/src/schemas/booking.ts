@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { PlayLevel } from "../types"
+import { type EditBookingData, PlayLevel } from "../types"
 import { GameSessionSchema } from "./game-session"
 import { UserSchema } from "./user"
 
@@ -22,3 +22,6 @@ export const CreateBookingRequestSchema = BookingSchema.omit({
 export const GetBookingsResponseSchema = z.object({
   data: z.array(BookingSchema),
 })
+
+export const UpdateBookingRequestSchema =
+  CreateBookingRequestSchema.partial() satisfies z.ZodType<EditBookingData>
