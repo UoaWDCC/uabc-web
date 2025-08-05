@@ -195,4 +195,25 @@ describe("bookingDataService", () => {
       )
     })
   })
+
+  describe("deleteRelatedBookingsForSession", () => {
+    it("should delete a booking successfully", async () => {
+      const createdBooking = await bookingDataService.createBooking(bookingCreateMock)
+      const deletedBooking = await bookingDataService.deleteBooking(createdBooking.id)
+      expect(deletedBooking).toEqual(createdBooking)
+
+      await expect(() =>
+        payload.findByID({
+          collection: "booking",
+          id: createdBooking.id,
+        }),
+      ).rejects.toThrowError("Not Found")
+    })
+
+    it("should throw a Not Found error when no booking is found to delete", async () => {
+      await expect(() => bookingDataService.deleteBooking("Not a booking ID")).rejects.toThrowError(
+        "Not Found",
+      )
+    })
+  })
 })

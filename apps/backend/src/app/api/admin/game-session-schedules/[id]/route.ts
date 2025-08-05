@@ -5,7 +5,6 @@ import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import { payload } from "@/data-layer/adapters/Payload"
-import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 
 class RouteWrapper {
@@ -104,7 +103,7 @@ class RouteWrapper {
           const gameSession = docs[0]
           await gameSessionDataService.deleteGameSessionSchedule(id)
           await gameSessionDataService.deleteGameSession(gameSession.id)
-          await RouteWrapper.deleteRelatedBookingsForSession(gameSession.id, transactionID)
+          // await RouteWrapper.deleteRelatedBookingsForSession(gameSession.id, transactionID)
           if (transactionID) {
             await payload.db.commitTransaction(transactionID)
           }
@@ -145,22 +144,6 @@ class RouteWrapper {
   ): Promise<string | number | undefined> {
     if (!shouldDeleteRelated) return undefined
     return (await payload.db.beginTransaction()) ?? undefined
-  }
-
-  /**
-   * Deletes all bookings related to a game session.
-   * @param sessionId the ID of the game session whose bookings are to be deleted
-   * @param transactionID an optional transaction ID for the request, useful for tracing
-   * @private
-   */
-  private static async deleteRelatedBookingsForSession(
-    sessionId: string,
-    transactionID?: string | number,
-  ): Promise<void> {
-    const bookingDataService = new BookingDataService()
-    const relatedBookings = await bookingDataService.getBookingsBySessionId(sessionId)
-    const relatedBookingIds = relatedBookings.map((booking) => booking.id)
-    await bookingDataService.deleteBookings(relatedBookingIds, transactionID)
   }
 }
 
