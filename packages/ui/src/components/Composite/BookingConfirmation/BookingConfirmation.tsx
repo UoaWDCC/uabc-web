@@ -1,6 +1,7 @@
 "use client"
 
-import type { MembershipType } from "@repo/shared"
+import { MAX_CASUAL_BOOKINGS, MAX_MEMBER_BOOKINGS, MembershipType } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { ShuttleIcon } from "@repo/ui/components/Icon"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
 import { ArrowLeftIcon } from "@yamada-ui/lucide"
@@ -23,7 +24,6 @@ export interface BookingConfirmationData {
   time: string
   location: string
   attendees: string
-  sessionsLeft: number
 }
 
 /**
@@ -50,6 +50,10 @@ export interface BookingConfirmationProps {
    * The title text displayed in the component.
    */
   title?: string
+  /**
+   * The user object.
+   */
+  user: User
 }
 
 /**
@@ -74,14 +78,21 @@ export interface BookingConfirmationProps {
  * />
  */
 export const BookingConfirmation = memo<BookingConfirmationProps>(
-  ({ bookingData, onBack, onConfirm, title = "Booking Confirmation" }) => {
+  ({ bookingData, user, onBack, onConfirm, title = "Booking Confirmation" }) => {
+    const maxBookings = useMemo(() => {
+      if (user.role === MembershipType.casual) {
+        return MAX_CASUAL_BOOKINGS
+      }
+      return MAX_MEMBER_BOOKINGS
+    }, [user.role])
+
+    const sessionsLeft = useMemo(() => {
+      return Math.min(maxBookings, user.remainingSessions ?? 0) - bookingData.length
+    }, [maxBookings, bookingData.length, user.remainingSessions])
+
     const handleConfirm = useCallback(() => {
       onConfirm?.()
     }, [onConfirm])
-
-    const totalSessionsLeft = useMemo(() => {
-      return bookingData.reduce((total, booking) => total + booking.sessionsLeft, 0)
-    }, [bookingData])
 
     const bookingItems = useMemo(() => {
       return bookingData.map((booking, index) => {
@@ -164,7 +175,7 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
             <IconWithText
               icon={<ShuttleIcon />}
               justifySelf={{ md: "end" }}
-              label={`Sessions Left: ${totalSessionsLeft}`}
+              label={`Sessions Left: ${sessionsLeft}`}
               order={{ base: 3, sm: 2 }}
             />
           </HStack>

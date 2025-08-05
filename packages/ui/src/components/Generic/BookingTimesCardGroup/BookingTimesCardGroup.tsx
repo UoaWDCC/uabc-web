@@ -7,7 +7,6 @@ import {
   type CheckboxCardProps,
   FormControl,
   type FormControlProps,
-  HStack,
   VStack,
 } from "@yamada-ui/react"
 import { forwardRef, memo } from "react"
@@ -133,16 +132,16 @@ export const BookingTimesCardGroup = memo(
                   addon: (
                     <VStack alignItems="flex-start" gap="2xs">
                       <IconWithText icon={<MapPinIcon />} label={item.addon} />
-                      <HStack flexWrap="wrap" gap="2xs" width="fit-content">
+                      <VStack gap="2xs">
                         <IconWithText
                           icon={<UserIcon />}
-                          label={`${memberAttendees} members Attendees`}
+                          label={`${memberAttendees} members attendees`}
                         />
                         <IconWithText
                           icon={<UserIcon />}
-                          label={`${casualAttendees} casuals Attendees`}
+                          label={`${casualAttendees} casuals attendees`}
                         />
-                      </HStack>
+                      </VStack>
                     </VStack>
                   ),
                   description: <IconWithText icon={<Clock10Icon />} label={item.description} />,

@@ -8,6 +8,7 @@ import {
   type SelectACourtFormData,
   SelectACourtFormDataSchema,
 } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { BookingTimesCardGroup } from "@repo/ui/components/Generic"
 import { ShuttleIcon } from "@repo/ui/components/Icon"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
@@ -43,16 +44,26 @@ export interface SessionItem {
  */
 export interface SelectACourtProps {
   /**
-   * The number of remaining sessions the user has.
+   * The user object.
    */
-  remainingSessions: number
+  user: User
   /**
-   * The membership type of the user.
+   * Callback function triggered when the user selects a session.
+   *
+   * @param value - The selected session value.
    */
-  membershipType?: MembershipType
   onSelect?: (value: string[] | undefined) => void
+  /**
+   * The sessions to display.
+   */
   sessions?: SessionItem[]
+  /**
+   * The title of the component.
+   */
   title?: string
+  /**
+   * Callback function triggered when the user goes back.
+   */
   onBack?: () => void
   /**
    * Callback function triggered when the next button is clicked.
@@ -64,23 +75,16 @@ export interface SelectACourtProps {
 }
 
 export const SelectACourt = memo<SelectACourtProps>(
-  ({
-    membershipType,
-    onSelect,
-    sessions = [],
-    title = "Select a court",
-    onBack,
-    onNext,
-    remainingSessions,
-  }) => {
+  ({ user, onSelect, sessions = [], title = "Select a court", onBack, onNext }) => {
     const isMember = useMemo(
-      () => membershipType === MembershipType.member || membershipType === MembershipType.admin,
-      [membershipType],
+      () => user.role === MembershipType.member || user.role === MembershipType.admin,
+      [user.role],
     )
 
     const maxBookings = useMemo(
-      () => Math.min(remainingSessions, isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS),
-      [isMember, remainingSessions],
+      () =>
+        Math.min(user.remainingSessions ?? 0, isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS),
+      [isMember, user.remainingSessions],
     )
 
     const { control, handleSubmit, watch } = useForm<SelectACourtFormData>({
@@ -109,12 +113,12 @@ export const SelectACourt = memo<SelectACourtProps>(
 
         return {
           ...session,
-          memberAttendees: isMember ? session.memberAttendees : undefined,
-          casualAttendees: isMember ? session.casualAttendees : undefined,
+          memberAttendees: session.memberAttendees,
+          casualAttendees: session.casualAttendees,
           disabled: isSelected ? false : session.disabled || capReached,
         }
       })
-    }, [sessions, selectedSessions, maxBookings, isMember])
+    }, [sessions, selectedSessions, maxBookings])
 
     const handleSessionChange = useCallback(
       (newSelection: string[]) => {

@@ -19,7 +19,15 @@ const defaultProps = {
       sessionsLeft: 6,
     },
   ],
-  membershipType: MembershipType.member,
+  user: {
+    id: "1",
+    firstName: "John",
+    email: "john@example.com",
+    updatedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    role: MembershipType.member,
+    remainingSessions: 2,
+  },
   onBack: vi.fn(),
   onConfirm: vi.fn(),
 }

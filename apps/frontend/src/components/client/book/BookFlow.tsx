@@ -124,7 +124,6 @@ const bookingFlowReducer = (
 }
 
 export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
-  const remainingSessions = auth.user.remainingSessions ?? 0
   const [state, dispatch] = useReducer(bookingFlowReducer, initialState)
   const [, setPlayLevel] = useQueryState(
     "playLevel",
@@ -169,7 +168,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
     )
   }
 
-  if (remainingSessions === 0) {
+  if (auth.user.remainingSessions === 0) {
     return (
       <EmptyState
         description="You have no remaining sessions."
@@ -188,11 +187,10 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
       {state.step === "play-level" && <BookACourt onSelect={handlePlayLevelSelect} />}
       {state.step === "select-court" && (
         <SelectACourt
-          membershipType={auth.user.role as MembershipType}
           onBack={handleBack}
           onNext={handleSelectCourt}
-          remainingSessions={remainingSessions}
           sessions={bookings}
+          user={auth.user}
         />
       )}
       {state.step === "confirmation" && state.selectedSessions.length > 0 && (
@@ -205,11 +203,10 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
               auth.user.role === MembershipType.member
                 ? session.memberAttendees
                 : session.casualAttendees,
-            sessionsLeft: remainingSessions,
           }))}
-          membershipType={auth.user.role as MembershipType}
           onBack={handleBack}
           onConfirm={handleConfirmBooking}
+          user={auth.user}
         />
       )}
     </>
