@@ -35,10 +35,6 @@ export interface BookingConfirmationProps {
    */
   bookingData: BookingConfirmationData[]
   /**
-   * The membership type of the user.
-   */
-  membershipType?: MembershipType
-  /**
    * Callback function triggered when the back button is clicked.
    */
   onBack?: () => void
@@ -66,12 +62,15 @@ export interface BookingConfirmationProps {
  * import { BookingConfirmation } from "@repo/ui/components/Composite"
  *
  * <BookingConfirmation
- *   bookingData={{
+ *   bookingData={[{
  *     date: "Tuesday 24/06/25",
  *     time: "7:30 PM - 10:00 PM",
  *     location: "UoA Rec Centre, 17 Symonds Street",
  *     attendees: "39/40",
- *     sessionsLeft: 6
+ *   }]}
+ *   user={{
+ *     role: MembershipType.member,
+ *     remainingSessions: 6,
  *   }}
  *   onBack={() => console.log("Back clicked")}
  *   onConfirm={() => console.log("Confirm clicked")}

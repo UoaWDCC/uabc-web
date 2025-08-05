@@ -12,15 +12,14 @@ describe("<BookACourt />", () => {
     expect(isValidElement(<BookACourt onSelect={mockOnSelect} />)).toBeTruthy()
   })
 
-  it("should render all play level buttons as links with correct href", () => {
+  it("should render all play level buttons with correct text", () => {
     render(<BookACourt onSelect={mockOnSelect} />)
 
     Object.values(PlayLevel).forEach((level) => {
-      const levelLink = screen.getByRole("link", {
+      const levelButton = screen.getByRole("button", {
         name: level,
       })
-      expect(levelLink).toBeInTheDocument()
-      expect(levelLink).toHaveAttribute("href", `/book?playLevel=${level}`)
+      expect(levelButton).toBeInTheDocument()
     })
   })
 
