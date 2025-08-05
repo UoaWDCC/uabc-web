@@ -3,9 +3,16 @@ import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
+import type { GameSession } from "@/data-layer/collections/GameSession"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 
 class GameSessionRouteWrapper {
+  /**
+   * POST Method to create a new game session.
+   *
+   * @param req The request object containing the request body.
+   * @returns The created {@link GameSession} document.
+   */
   @Security("jwt", ["admin"])
   static async POST(req: NextRequest) {
     try {
