@@ -1,4 +1,4 @@
-import { UpdateBookingRequestSchema } from "@repo/shared"
+import { type CommonBookingResponse, UpdateBookingRequestSchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
@@ -15,7 +15,10 @@ class BookingsRouteWrapper {
    * @returns The updated {@link Booking} document, otherwise an appropriate error response.
    */
   @Security("jwt", ["admin"])
-  static async PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  static async PATCH(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> },
+  ): Promise<NextResponse<CommonBookingResponse>> {
     try {
       const parsedBody = UpdateBookingRequestSchema.parse(await req.json())
       const bookingDataService = new BookingDataService()
