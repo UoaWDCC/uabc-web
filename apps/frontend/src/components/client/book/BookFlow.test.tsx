@@ -1,24 +1,16 @@
 import { MembershipType } from "@repo/shared"
 import { memberUserMock } from "@repo/shared/mocks"
 import type { SessionItem } from "@repo/ui/components/Composite"
+import * as usePopupStateModule from "@repo/ui/hooks"
 import { render, screen } from "@repo/ui/test-utils"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { vi } from "vitest"
 import { BookFlow } from "./BookFlow"
 
-// Mock the dependencies
-const mockUsePopupState = vi.fn(() => ({
-  open: vi.fn(),
-}))
-
 vi.mock("@repo/ui/hooks", () => ({
-  usePopupState: mockUsePopupState,
-}))
-
-vi.mock("next/link", () => ({
-  default: ({ children, href }: { children: React.ReactNode; href: string }) => (
-    <a href={href}>{children}</a>
-  ),
+  usePopupState: vi.fn(() => ({
+    open: vi.fn(),
+  })),
 }))
 
 const mockAuth = {
@@ -82,97 +74,93 @@ describe("<BookFlow />", () => {
   it("should handle play level selection and move to next step", async () => {
     const { user } = render(<BookFlow auth={mockAuth} />, { wrapper: withNuqsTestingAdapter() })
 
-    const beginnerButton = screen.getByRole("button", { name: "Beginner" })
+    const beginnerButton = screen.getByRole("button", { name: "beginner" })
     await user.click(beginnerButton)
 
-    // Should move to select court step
     expect(screen.getByText("Select a Court")).toBeInTheDocument()
   })
 
   it("should handle court selection and move to confirmation step", async () => {
     const { user } = render(<BookFlow auth={mockAuth} />, { wrapper: withNuqsTestingAdapter() })
 
-    // First select play level
-    const beginnerButton = screen.getByRole("button", { name: "Beginner" })
+    const beginnerButton = screen.getByRole("button", { name: "beginner" })
     await user.click(beginnerButton)
 
-    // Then select court and proceed
     const nextButton = screen.getByRole("button", { name: "Next" })
     await user.click(nextButton)
 
-    // Should move to confirmation step
     expect(screen.getByText("Booking Confirmation")).toBeInTheDocument()
   })
 
   it("should handle back navigation from select court to play level", async () => {
     const { user } = render(<BookFlow auth={mockAuth} />, { wrapper: withNuqsTestingAdapter() })
 
-    // First select play level
-    const beginnerButton = screen.getByRole("button", { name: "Beginner" })
+    const beginnerButton = screen.getByRole("button", { name: "beginner" })
     await user.click(beginnerButton)
 
-    // Then go back
     const backButton = screen.getByRole("button", { name: "Back" })
     await user.click(backButton)
 
-    // Should return to play level step
-    expect(screen.getByText("Beginner")).toBeInTheDocument()
-    expect(screen.getByText("Intermediate")).toBeInTheDocument()
-    expect(screen.getByText("Advanced")).toBeInTheDocument()
+    expect(screen.getByText("beginner")).toBeInTheDocument()
+    expect(screen.getByText("intermediate")).toBeInTheDocument()
+    expect(screen.getByText("advanced")).toBeInTheDocument()
   })
 
   it("should handle back navigation from confirmation to select court", async () => {
     const { user } = render(<BookFlow auth={mockAuth} />, { wrapper: withNuqsTestingAdapter() })
 
-    // Navigate to confirmation step
-    const beginnerButton = screen.getByRole("button", { name: "Beginner" })
+    const beginnerButton = screen.getByRole("button", { name: "beginner" })
     await user.click(beginnerButton)
 
     const nextButton = screen.getByRole("button", { name: "Next" })
     await user.click(nextButton)
 
-    // Go back from confirmation
     const backButton = screen.getByRole("button", { name: "Back" })
     await user.click(backButton)
 
-    // Should return to select court step
     expect(screen.getByText("Select a Court")).toBeInTheDocument()
   })
 
   it("should handle booking confirmation", async () => {
     const mockOpenPopup = vi.fn()
-    mockUsePopupState.mockReturnValue({
+    vi.spyOn(usePopupStateModule, "usePopupState").mockReturnValue({
       open: mockOpenPopup,
+      isOpen: false,
+      value: "",
+      close: vi.fn(),
+      toggle: vi.fn(),
+      setValue: vi.fn(),
+      clearValue: vi.fn(),
+      navigation: {
+        openPopup: vi.fn(),
+        closePopup: vi.fn(),
+        switchPopup: vi.fn(),
+      },
     })
 
     const { user } = render(<BookFlow auth={mockAuth} />, { wrapper: withNuqsTestingAdapter() })
 
-    // Navigate to confirmation step
-    const beginnerButton = screen.getByRole("button", { name: "Beginner" })
+    const beginnerButton = screen.getByRole("button", { name: "beginner" })
     await user.click(beginnerButton)
 
     const nextButton = screen.getByRole("button", { name: "Next" })
     await user.click(nextButton)
 
-    // Confirm booking
     const confirmButton = screen.getByRole("button", { name: "Confirm Booking" })
     await user.click(confirmButton)
 
-    // Should open booking confirmed popup
     expect(mockOpenPopup).toHaveBeenCalledWith()
   })
 
   it("should render booking confirmation with correct data", async () => {
     const { user } = render(<BookFlow auth={mockAuth} />, { wrapper: withNuqsTestingAdapter() })
 
-    // Navigate to confirmation step
-    const beginnerButton = screen.getByRole("button", { name: "Beginner" })
+    const beginnerButton = screen.getByRole("button", { name: "beginner" })
     await user.click(beginnerButton)
 
     const nextButton = screen.getByRole("button", { name: "Next" })
     await user.click(nextButton)
 
-    // Check if booking confirmation is rendered with session data
     expect(screen.getByText("Booking Confirmation")).toBeInTheDocument()
   })
 
@@ -187,8 +175,7 @@ describe("<BookFlow />", () => {
 
     render(<BookFlow auth={casualAuth} />, { wrapper: withNuqsTestingAdapter() })
 
-    // Should still render the initial BookACourt component
-    expect(screen.getByText("Beginner")).toBeInTheDocument()
+    expect(screen.getByText("beginner")).toBeInTheDocument()
   })
 
   it("should handle admin user role correctly", () => {
@@ -202,7 +189,6 @@ describe("<BookFlow />", () => {
 
     render(<BookFlow auth={adminAuth} />, { wrapper: withNuqsTestingAdapter() })
 
-    // Should still render the initial BookACourt component
-    expect(screen.getByText("Beginner")).toBeInTheDocument()
+    expect(screen.getByText("beginner")).toBeInTheDocument()
   })
 })

@@ -10,3 +10,9 @@ vi.mock("@repo/ui/components/Primitive/Image", () => ({
     <img data-testid="custom-image" {...props} />
   ),
 }))
+
+vi.mock("next/link", () => ({
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  ),
+}))
