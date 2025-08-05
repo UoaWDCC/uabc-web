@@ -1,3 +1,5 @@
+import { BookingSchema } from "@repo/shared/schemas"
+import type { UpdateBookingRequest } from "@repo/shared/types/booking"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
 const AdminBookingService = {
@@ -10,6 +12,19 @@ const AdminBookingService = {
    */
   deleteBooking: async (bookingId: string) => {
     const response = await apiClient.delete(`/api/admin/bookings/${bookingId}`)
+    return ApiClient.throwIfError(response)
+  },
+
+  /**
+   * Updates an existing booking.
+   *
+   * @param bookingId The ID of the booking to update.
+   * @param data The updated booking data.
+   * @returns A promise that resolves to the updated booking.
+   * @throws An error if the update fails.
+   */
+  updateBooking: async (bookingId: string, data: UpdateBookingRequest) => {
+    const response = await apiClient.patch(`/api/admin/bookings/${bookingId}`, data, BookingSchema)
     return ApiClient.throwIfError(response)
   },
 } as const
