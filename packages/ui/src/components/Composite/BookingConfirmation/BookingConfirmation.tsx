@@ -3,18 +3,20 @@
 import type { MembershipType } from "@repo/shared"
 import { ShuttleIcon } from "@repo/ui/components/Icon"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
-import { ArrowLeftIcon, ClockIcon, MapPinIcon, UsersIcon } from "@yamada-ui/lucide"
+import { ArrowLeftIcon } from "@yamada-ui/lucide"
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Center,
+  DataList,
+  HStack,
   IconButton,
   Text,
   VStack,
 } from "@yamada-ui/react"
-import { memo, useCallback } from "react"
+import { memo, useCallback, useMemo } from "react"
 
 export interface BookingConfirmationData {
   date: string
@@ -31,7 +33,7 @@ export interface BookingConfirmationProps {
   /**
    * The booking confirmation data to display. Can be a single booking or an array of bookings.
    */
-  bookingData: BookingConfirmationData | BookingConfirmationData[]
+  bookingData: BookingConfirmationData[]
   /**
    * The membership type of the user.
    */
@@ -77,7 +79,40 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
       onConfirm?.()
     }, [onConfirm])
 
-    const bookings = Array.isArray(bookingData) ? bookingData : [bookingData]
+    const totalSessionsLeft = useMemo(() => {
+      return bookingData.reduce((total, booking) => total + booking.sessionsLeft, 0)
+    }, [bookingData])
+
+    const bookingItems = useMemo(() => {
+      return bookingData.map((booking, index) => {
+        const items = [
+          {
+            term: "Time",
+            description: booking.time,
+            termProps: { color: "muted", fontSize: "sm" },
+            descriptionProps: { fontSize: "md", fontWeight: "medium" },
+          },
+          {
+            term: "Location",
+            description: booking.location,
+            termProps: { color: "muted", fontSize: "sm" },
+            descriptionProps: { fontSize: "md", fontWeight: "medium" },
+          },
+          {
+            term: "Attendees",
+            description: `${booking.attendees} attendees`,
+            termProps: { color: "muted", fontSize: "sm" },
+            descriptionProps: { fontSize: "md", fontWeight: "medium" },
+          },
+        ]
+
+        return {
+          booking,
+          items,
+          index,
+        }
+      })
+    }, [bookingData])
 
     return (
       <Card
@@ -89,36 +124,57 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
         gap="md"
         justifyContent="center"
         layerStyle="gradientBorder"
-        position="relative"
         px={{ base: "md", md: "xl" }}
         py="lg"
         rounded="3xl"
+        w="full"
       >
-        <IconButton
-          aria-label="Back"
-          icon={<ArrowLeftIcon />}
-          left="md"
-          onClick={onBack}
-          position="absolute"
-          top="md"
-          variant="ghost"
-        />
-        <CardHeader pt="lg" w="full">
-          <Heading.h2
-            color={{ base: "primary", md: "white" }}
-            fontSize={{ base: "2xl", md: "3xl" }}
-            fontWeight={{ base: "semibold", md: "medium" }}
-            textAlign="center"
+        <CardHeader pt="0" w="full">
+          <HStack
+            alignItems="center"
+            display={{ base: "flex", md: "grid" }}
+            flexDirection={{ base: "column", sm: "row" }}
+            gap={{ base: "sm", md: "0" }}
+            gridTemplateColumns={{ md: "1fr auto 1fr" }}
+            justifyContent="space-between"
+            position="relative"
+            w="full"
           >
-            {title}
-          </Heading.h2>
+            <IconButton
+              aria-label="Back"
+              icon={<ArrowLeftIcon />}
+              left={0}
+              onClick={onBack}
+              position={{ base: "absolute", md: "relative" }}
+              size={{ base: "md", md: "lg" }}
+              variant="ghost"
+              w="fit-content"
+            />
+
+            <Heading.h2
+              color={{ base: "primary", md: "white" }}
+              fontSize={{ base: "xl", sm: "2xl", md: "3xl" }}
+              fontWeight={{ base: "semibold", md: "medium" }}
+              order={{ base: 2, sm: 1 }}
+              textAlign="center"
+            >
+              {title}
+            </Heading.h2>
+
+            <IconWithText
+              icon={<ShuttleIcon />}
+              justifySelf={{ md: "end" }}
+              label={`Sessions Left: ${totalSessionsLeft}`}
+              order={{ base: 3, sm: 2 }}
+            />
+          </HStack>
         </CardHeader>
 
         <CardBody w="full">
           <VStack gap="lg" w="full">
-            {bookings.map((booking, index) => (
+            {bookingItems.map(({ booking, items, index }) => (
               <VStack gap="md" key={`${booking.date}-${booking.time}-${index}`} w="full">
-                {bookings.length > 1 && (
+                {bookingData.length > 1 && (
                   <Text color="primary" fontSize="lg" fontWeight="medium">
                     Booking {index + 1}
                   </Text>
@@ -127,24 +183,22 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
                   {booking.date}
                 </Text>
 
-                <VStack gap="sm" w="full">
-                  <IconWithText icon={<ClockIcon />} label={booking.time} />
-                  <IconWithText icon={<MapPinIcon />} label={booking.location} />
-                  <IconWithText icon={<UsersIcon />} label={`${booking.attendees} attendees`} />
-                  <IconWithText
-                    icon={<ShuttleIcon />}
-                    label={`Sessions Left After Booking: ${booking.sessionsLeft}`}
-                  />
-                </VStack>
+                <DataList
+                  items={items}
+                  orientation="vertical"
+                  size="md"
+                  variant="subtle"
+                  w="full"
+                />
               </VStack>
             ))}
           </VStack>
         </CardBody>
 
-        <CardFooter pb="lg">
+        <CardFooter>
           <Center w="full">
             <Button colorScheme="primary" onClick={handleConfirm} size="lg">
-              Confirm {bookings.length > 1 ? `${bookings.length} Bookings` : "Booking"}
+              Confirm {bookingData.length > 1 ? `${bookingData.length} Bookings` : "Booking"}
             </Button>
           </Center>
         </CardFooter>

@@ -21,6 +21,7 @@ type Story = StoryObj<typeof meta>
 export const MemberUser: Story = {
   args: {
     membershipType: MembershipType.member,
+    remainingSessions: 2,
     title: "Select Your Sessions",
     sessions: [
       {
@@ -73,6 +74,7 @@ export const MemberUser: Story = {
 export const CasualUser: Story = {
   args: {
     membershipType: MembershipType.casual,
+    remainingSessions: 2,
     title: "Choose Your Session",
     sessions: [
       {

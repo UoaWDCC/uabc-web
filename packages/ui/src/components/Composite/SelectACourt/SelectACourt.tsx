@@ -43,6 +43,10 @@ export interface SessionItem {
  */
 export interface SelectACourtProps {
   /**
+   * The number of remaining sessions the user has.
+   */
+  remainingSessions: number
+  /**
    * The membership type of the user.
    */
   membershipType?: MembershipType
@@ -60,15 +64,23 @@ export interface SelectACourtProps {
 }
 
 export const SelectACourt = memo<SelectACourtProps>(
-  ({ membershipType, onSelect, sessions = [], title = "Select a court", onBack, onNext }) => {
+  ({
+    membershipType,
+    onSelect,
+    sessions = [],
+    title = "Select a court",
+    onBack,
+    onNext,
+    remainingSessions,
+  }) => {
     const isMember = useMemo(
       () => membershipType === MembershipType.member || membershipType === MembershipType.admin,
       [membershipType],
     )
 
     const maxBookings = useMemo(
-      () => (isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS),
-      [isMember],
+      () => Math.min(remainingSessions, isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS),
+      [isMember, remainingSessions],
     )
 
     const { control, handleSubmit, watch } = useForm<SelectACourtFormData>({
@@ -134,22 +146,35 @@ export const SelectACourt = memo<SelectACourtProps>(
         px={{ base: "md", md: "xl" }}
         py="lg"
         rounded="3xl"
+        w="full"
       >
         <CardHeader pt="0" w="full">
-          <HStack alignItems="center" display="grid" gridTemplateColumns="1fr auto 1fr" w="full">
+          <HStack
+            alignItems="center"
+            display={{ base: "flex", md: "grid" }}
+            flexDirection={{ base: "column", sm: "row" }}
+            gap={{ base: "sm", md: "0" }}
+            gridTemplateColumns={{ md: "1fr auto 1fr" }}
+            justifyContent="space-between"
+            position="relative"
+            w="full"
+          >
             <IconButton
               aria-label="Back"
               icon={<ArrowLeftIcon />}
-              justifySelf="start"
+              left={0}
               onClick={onBack}
-              size="lg"
+              position={{ base: "absolute", md: "relative" }}
+              size={{ base: "md", md: "lg" }}
               variant="ghost"
+              w="fit-content"
             />
 
             <Heading.h2
               color={{ base: "primary", md: "white" }}
-              fontSize={{ base: "2xl", md: "3xl" }}
+              fontSize={{ base: "xl", sm: "2xl", md: "3xl" }}
               fontWeight={{ base: "semibold", md: "medium" }}
+              order={{ base: 2, sm: 1 }}
               textAlign="center"
             >
               {title}
@@ -157,13 +182,14 @@ export const SelectACourt = memo<SelectACourtProps>(
 
             <IconWithText
               icon={<ShuttleIcon />}
-              justifySelf="end"
+              justifySelf={{ md: "end" }}
               label={`Sessions Left: ${sessionsLeft}`}
+              order={{ base: 3, sm: 2 }}
             />
           </HStack>
         </CardHeader>
 
-        <CardBody p="0" w="full">
+        <CardBody w="full">
           <BookingTimesCardGroup
             control={control}
             display="grid"
@@ -176,7 +202,7 @@ export const SelectACourt = memo<SelectACourtProps>(
         </CardBody>
 
         <CardFooter>
-          <Center mt="md" py="md" w="full">
+          <Center w="full">
             <Button
               colorScheme="primary"
               disabled={selectedSessions.length === 0}

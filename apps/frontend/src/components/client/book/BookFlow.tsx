@@ -1,8 +1,7 @@
 "use client"
 
 import { MembershipType, PlayLevel, Popup } from "@repo/shared"
-import type { User } from "@repo/shared/payload-types"
-import type { SelectACourtNextData } from "@repo/ui/components/Composite"
+import type { SelectACourtNextData, SessionItem } from "@repo/ui/components/Composite"
 import { BookingConfirmation, SelectACourt } from "@repo/ui/components/Composite"
 import { BookACourt } from "@repo/ui/components/Generic"
 import { Button } from "@repo/ui/components/Primitive"
@@ -12,18 +11,10 @@ import { EmptyState } from "@yamada-ui/react"
 import NextLink from "next/link"
 import { parseAsStringEnum, useQueryState } from "nuqs"
 import { type FC, useReducer } from "react"
+import type { AuthContextValueWithUser } from "@/context/RoleWrappers"
 
 type BookFlowProps = {
-  auth: User
-}
-
-type SessionItem = {
-  label: string
-  memberAttendees: string
-  casualAttendees: string
-  value: string
-  addon: string
-  description: string
+  auth: AuthContextValueWithUser
 }
 
 type BookingFlowState = {
@@ -133,15 +124,16 @@ const bookingFlowReducer = (
 }
 
 export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
+  const remainingSessions = auth.user.remainingSessions ?? 0
   const [state, dispatch] = useReducer(bookingFlowReducer, initialState)
   const [, setPlayLevel] = useQueryState(
     "playLevel",
-    parseAsStringEnum<PlayLevel>(Object.values(PlayLevel)).withDefault(""),
+    parseAsStringEnum<PlayLevel>(Object.values(PlayLevel)),
   )
 
   const { open: openBookingConfirmedPopup } = usePopupState({
     popupId: Popup.BOOKING_CONFIRMED,
-    initialValue: auth.role as MembershipType,
+    initialValue: auth.user.role as MembershipType,
   })
 
   const handlePlayLevelSelect = (level: PlayLevel) => {
@@ -177,14 +169,29 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
     )
   }
 
+  if (remainingSessions === 0) {
+    return (
+      <EmptyState
+        description="You have no remaining sessions."
+        indicator={<CircleAlertIcon />}
+        title="No remaining sessions"
+      >
+        <Button as={NextLink} href="/profile">
+          Go back to profile
+        </Button>
+      </EmptyState>
+    )
+  }
+
   return (
     <>
       {state.step === "play-level" && <BookACourt onSelect={handlePlayLevelSelect} />}
       {state.step === "select-court" && (
         <SelectACourt
-          membershipType={auth.role as MembershipType}
+          membershipType={auth.user.role as MembershipType}
           onBack={handleBack}
           onNext={handleSelectCourt}
+          remainingSessions={remainingSessions}
           sessions={bookings}
         />
       )}
@@ -195,12 +202,12 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
             time: session.description,
             location: session.addon,
             attendees:
-              auth.role === MembershipType.member
+              auth.user.role === MembershipType.member
                 ? session.memberAttendees
                 : session.casualAttendees,
-            sessionsLeft: auth.user.remainingSessions,
+            sessionsLeft: remainingSessions,
           }))}
-          membershipType={auth.role as MembershipType}
+          membershipType={auth.user.role as MembershipType}
           onBack={handleBack}
           onConfirm={handleConfirmBooking}
         />

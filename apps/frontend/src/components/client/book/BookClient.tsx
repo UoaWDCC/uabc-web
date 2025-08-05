@@ -1,5 +1,5 @@
 "use client"
-import { NotAuthorised, UnderConstructionCard } from "@repo/ui/components/Generic"
+import { BookACourtSkeleton, NotAuthorised } from "@repo/ui/components/Generic"
 import { Container } from "@yamada-ui/react"
 import { RoleGuard } from "@/context/RoleWrappers"
 import { BookFlow } from "./BookFlow"
@@ -16,7 +16,11 @@ export const BookClient = () => {
           title="You are not logged in"
         />
       }
-      loading={<UnderConstructionCard />}
+      loading={
+        <Container centerContent layerStyle="container">
+          <BookACourtSkeleton />
+        </Container>
+      }
     >
       {(auth) => (
         <Container centerContent layerStyle="container">

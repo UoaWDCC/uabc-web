@@ -3,13 +3,22 @@ import { render, screen } from "@repo/ui/test-utils"
 import { BookingConfirmation } from "./BookingConfirmation"
 
 const defaultProps = {
-  bookingData: {
-    date: "Tuesday 24/06/25",
-    time: "7:30 PM - 10:00 PM",
-    location: "UoA Rec Centre, 17 Symonds Street",
-    attendees: "39/40",
-    sessionsLeft: 6,
-  },
+  bookingData: [
+    {
+      date: "Tuesday 24/06/25",
+      time: "7:30 PM - 10:00 PM",
+      location: "UoA Rec Centre, 17 Symonds Street",
+      attendees: "39/40",
+      sessionsLeft: 6,
+    },
+    {
+      date: "Tuesday 24/06/25",
+      time: "7:30 PM - 10:00 PM",
+      location: "UoA Rec Centre, 17 Symonds Street",
+      attendees: "39/40",
+      sessionsLeft: 6,
+    },
+  ],
   membershipType: MembershipType.member,
   onBack: vi.fn(),
   onConfirm: vi.fn(),
