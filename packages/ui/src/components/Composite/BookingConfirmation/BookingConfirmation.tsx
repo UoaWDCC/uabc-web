@@ -53,7 +53,7 @@ export interface BookingConfirmationProps {
   /**
    * The user object.
    */
-  user: User
+  user: Pick<User, "remainingSessions" | "role">
 }
 
 /**

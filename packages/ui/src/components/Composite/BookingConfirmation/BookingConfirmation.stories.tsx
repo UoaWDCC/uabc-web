@@ -25,10 +25,12 @@ export const Default: Story = {
         time: "7:30 PM - 10:00 PM",
         location: "UoA Rec Centre, 17 Symonds Street",
         attendees: "39/40",
-        sessionsLeft: 6,
       },
     ],
-    membershipType: MembershipType.member,
+    user: {
+      role: MembershipType.member,
+      remainingSessions: 2,
+    },
   },
 }
 
@@ -40,10 +42,12 @@ export const CasualMember: Story = {
         time: "6:00 PM - 8:00 PM",
         location: "ABA, 123 Main Street",
         attendees: "15/20",
-        sessionsLeft: 2,
       },
     ],
-    membershipType: MembershipType.casual,
+    user: {
+      role: MembershipType.casual,
+      remainingSessions: 1,
+    },
   },
 }
 
@@ -55,10 +59,12 @@ export const CustomTitle: Story = {
         time: "8:00 PM - 10:30 PM",
         location: "Kings School, 456 School Road",
         attendees: "25/30",
-        sessionsLeft: 4,
       },
     ],
-    membershipType: MembershipType.member,
+    user: {
+      role: MembershipType.member,
+      remainingSessions: 2,
+    },
     title: "Confirm Your Booking",
   },
 }

@@ -1,6 +1,7 @@
 import { BookingConfirmedPopup } from "@repo/ui/components/Composite"
 import { VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { BookClient } from "@/components/client/book/BookClient"
 
 export const metadata: Metadata = {
@@ -11,12 +12,14 @@ export const metadata: Metadata = {
 export default function Book() {
   return (
     <VStack as="main">
-      <BookClient />
-      <BookingConfirmedPopup
-        additionalMessage="You can now book a court"
-        message="Booking confirmed"
-        title="Booking confirmed"
-      />
+      <Suspense>
+        <BookClient />
+        <BookingConfirmedPopup
+          additionalMessage="You can now book a court"
+          message="Booking confirmed"
+          title="Booking confirmed"
+        />
+      </Suspense>
     </VStack>
   )
 }

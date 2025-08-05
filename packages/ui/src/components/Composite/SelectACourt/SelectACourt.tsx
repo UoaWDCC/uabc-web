@@ -46,7 +46,7 @@ export interface SelectACourtProps {
   /**
    * The user object.
    */
-  user: User
+  user: Pick<User, "remainingSessions" | "role">
   /**
    * Callback function triggered when the user selects a session.
    *

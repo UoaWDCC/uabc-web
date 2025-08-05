@@ -21,11 +21,6 @@ type Story = StoryObj<typeof meta>
 export const MemberUser: Story = {
   args: {
     user: {
-      id: "1",
-      firstName: "John",
-      email: "john@example.com",
-      updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
       role: MembershipType.member,
       remainingSessions: 2,
     },
@@ -81,11 +76,6 @@ export const MemberUser: Story = {
 export const CasualUser: Story = {
   args: {
     user: {
-      id: "1",
-      firstName: "John",
-      email: "john@example.com",
-      updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
       role: MembershipType.casual,
       remainingSessions: 2,
     },
