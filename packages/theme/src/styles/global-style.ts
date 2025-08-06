@@ -26,7 +26,6 @@ export const globalStyle: UIStyle = {
   },
   main: {
     alignItems: "center",
-    justifyContent: { base: "start", lg: "center" },
     minH: { base: "lg", lg: "3xl" },
   },
   _dark: {
