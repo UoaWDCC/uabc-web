@@ -174,16 +174,18 @@ export const RegisterFlow = memo(() => {
 
   return (
     <VStack>
-      <Grid templateColumns="1fr 1fr 1fr">
+      <Grid templateColumns="repeat(3, 1fr)">
         <GridItem>
           <IconButton
             aria-label="Go back"
+            color={["black", "white"]}
             data-testid="go-back"
             disabled={!enableGoBack}
             icon={<ArrowLeftIcon />}
             onClick={handleGoBack}
-            rounded="full"
-            variant="unstyled"
+            // rounded="full"
+            size="sm"
+            variant="ghost"
           />
         </GridItem>
 

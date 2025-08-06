@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 import { RegisterFlow } from "./RegisterFlow"
 
 const meta = {
-  title: "Generic Components / RegisterFlow+",
+  title: "Generic Components / RegisterFlow",
   component: RegisterFlow,
 } satisfies Meta<typeof RegisterFlow>
 
