@@ -13,7 +13,11 @@ export const AdminSection = memo(() => {
       layerStyle="container"
       py={{ base: "md", sm: "md", lg: "md" }}
     >
-      <AdminTabBar>
+      <AdminTabBar
+        tabPanelsProps={{
+          p: "0",
+        }}
+      >
         <TabPanel>
           <Container centerContent layerStyle="container">
             <UnderConstructionCard title="View Members is Under Construction 🔧" />
