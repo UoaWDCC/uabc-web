@@ -7,7 +7,7 @@ import { memo } from "react"
 
 export const AdminSection = memo(() => {
   return (
-    <VStack alignItems="center" gap="xl">
+    <VStack gap="xl" justifyContent={{ lg: "start" }} layerStyle="container">
       <AdminTabBar>
         <TabPanel>
           <Container centerContent layerStyle="container">
