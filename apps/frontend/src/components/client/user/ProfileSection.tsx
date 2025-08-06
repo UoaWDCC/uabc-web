@@ -18,7 +18,7 @@ import { Container, Grid, GridItem } from "@yamada-ui/react"
 import { memo } from "react"
 import type { AuthContextValue } from "@/context/AuthContext"
 import { useUpdateSelfMutation } from "@/services/auth/AuthMutation"
-import { useMyBookings } from "@/services/bookings/BookingQuery"
+import { useMyBookings } from "@/services/bookings/BookingQueries"
 
 export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
   const { user } = auth
