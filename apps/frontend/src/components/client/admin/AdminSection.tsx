@@ -7,7 +7,7 @@ import { memo } from "react"
 
 export const AdminSection = memo(() => {
   return (
-    <Container centerContent gap="xl" layerStyle="container">
+    <>
       <AdminTabBar>
         <TabPanel>
           <Container centerContent layerStyle="container">
@@ -30,6 +30,6 @@ export const AdminSection = memo(() => {
       <Button colorScheme="danger" placeSelf="start">
         Reset Sessions
       </Button>
-    </Container>
+    </>
   )
 })
