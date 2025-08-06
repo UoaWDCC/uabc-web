@@ -24,9 +24,14 @@ export const GetBookingsResponseSchema = z.object({
   data: z.array(BookingSchema),
 })
 
-export const CommonBookingResponseSchema = CommonResponseSchema.extend({
-  data: BookingSchema.optional(),
-})
+// export const CommonBookingResponseSchema = CommonResponseSchema.extend({
+//   data: BookingSchema.optional(),
+// })
+
+export const CommonBookingResponseSchema = z.union([
+  z.object({ data: BookingSchema }),
+  CommonResponseSchema,
+])
 
 export const UpdateBookingRequestSchema =
   CreateBookingRequestSchema.partial() satisfies z.ZodType<EditBookingData>
