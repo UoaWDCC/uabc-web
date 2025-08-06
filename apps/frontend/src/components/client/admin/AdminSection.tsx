@@ -2,21 +2,27 @@
 
 import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
 import { Button } from "@repo/ui/components/Primitive"
-import { Container, TabPanel } from "@yamada-ui/react"
+import { Container, TabPanel, VStack } from "@yamada-ui/react"
 import { memo } from "react"
 
 export const AdminSection = memo(() => {
   return (
-    <Container centerContent gap="xl" layerStyle="container">
+    <VStack alignItems="center" gap="xl">
       <AdminTabBar>
         <TabPanel>
-          <UnderConstructionCard title="View Members is Under Construction 🔧" />
+          <Container centerContent layerStyle="container">
+            <UnderConstructionCard title="View Members is Under Construction 🔧" />
+          </Container>
         </TabPanel>
         <TabPanel>
-          <UnderConstructionCard title="Edit/View Sessions is Under Construction 🔧" />
+          <Container centerContent layerStyle="container">
+            <UnderConstructionCard title="Edit/View Sessions is Under Construction 🔧" />
+          </Container>
         </TabPanel>
         <TabPanel>
-          <UnderConstructionCard title="Create Semesters & Sessions is Under Construction 🔧" />
+          <Container centerContent layerStyle="container">
+            <UnderConstructionCard title="Create Semesters & Sessions is Under Construction 🔧" />
+          </Container>
         </TabPanel>
       </AdminTabBar>
 
@@ -24,6 +30,6 @@ export const AdminSection = memo(() => {
       <Button colorScheme="danger" placeSelf="start">
         Reset Sessions
       </Button>
-    </Container>
+    </VStack>
   )
 })
