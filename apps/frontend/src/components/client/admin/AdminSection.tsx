@@ -2,12 +2,17 @@
 
 import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
 import { Button } from "@repo/ui/components/Primitive"
-import { Container, TabPanel, VStack } from "@yamada-ui/react"
+import { Container, TabPanel } from "@yamada-ui/react"
 import { memo } from "react"
 
 export const AdminSection = memo(() => {
   return (
-    <VStack gap="xl" justifyContent={{ lg: "start" }} layerStyle="container">
+    <Container
+      gap="xl"
+      justifyContent={{ lg: "start" }}
+      layerStyle="container"
+      py={{ base: "md", sm: "md", lg: "md" }}
+    >
       <AdminTabBar>
         <TabPanel>
           <Container centerContent layerStyle="container">
@@ -30,6 +35,6 @@ export const AdminSection = memo(() => {
       <Button colorScheme="danger" placeSelf="start">
         Reset Sessions
       </Button>
-    </VStack>
+    </Container>
   )
 })
