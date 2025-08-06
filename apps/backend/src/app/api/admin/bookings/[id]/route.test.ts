@@ -1,15 +1,98 @@
-import { AUTH_COOKIE_NAME } from "@repo/shared"
+import { AUTH_COOKIE_NAME, type EditBookingData } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
-import { DELETE } from "./route"
+import { DELETE, PATCH } from "./route"
 
 describe("/api/admin/bookings/[id]", async () => {
   const cookieStore = await cookies()
   const bookingDataService = new BookingDataService()
+
+  describe("PATCH", () => {
+    it("should return 401 if user is casual", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+
+      const res = await PATCH(createMockNextRequest("", "PATCH", {}), {
+        params: Promise.resolve({ id: "some-id" }),
+      })
+
+      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(await res.json()).toStrictEqual({ error: "No scope" })
+    })
+
+    it("should return 401 if user is member", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+
+      const res = await PATCH(createMockNextRequest("", "PATCH", {}), {
+        params: Promise.resolve({ id: "some-id" }),
+      })
+
+      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(await res.json()).toStrictEqual({ error: "No scope" })
+    })
+
+    it("should update the booking if user is admin", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const newBooking = await bookingDataService.createBooking(bookingCreateMock)
+      const updateBooking: EditBookingData = { playerLevel: "beginner" }
+
+      const res = await PATCH(createMockNextRequest("", "PATCH", updateBooking), {
+        params: Promise.resolve({ id: newBooking.id }),
+      })
+
+      expect(res.status).toBe(StatusCodes.OK)
+      const fetchedBooking = await bookingDataService.getBookingById(newBooking.id)
+      expect(fetchedBooking.playerLevel).toBe(updateBooking.playerLevel)
+    })
+
+    it("should return 400 if request body is invalid", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const res = await PATCH(
+        createMockNextRequest("", "PATCH", {
+          playerLevel: "invalid",
+        }),
+        {
+          params: Promise.resolve({ id: "some-id" }),
+        },
+      )
+
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      const json = await res.json()
+      expect(json.error).toBe("Invalid request body")
+      expect(json.details).toBeDefined()
+    })
+
+    it("should return 404 if booking is not found", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const res = await PATCH(createMockNextRequest("", "PATCH", {}), {
+        params: Promise.resolve({ id: "invalid-id" }),
+      })
+
+      expect(res.status).toBe(StatusCodes.NOT_FOUND)
+      const json = await res.json()
+      expect(json.error).toEqual("Booking not found")
+    })
+
+    it("should return 500 for internal server error", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      vi.spyOn(BookingDataService.prototype, "updateBooking").mockRejectedValueOnce(
+        new Error("Database error"),
+      )
+
+      const res = await PATCH(createMockNextRequest("", "PATCH", bookingCreateMock), {
+        params: Promise.resolve({ id: "some-id" }),
+      })
+
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await res.json()
+      expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+    })
+  })
 
   describe("DELETE", () => {
     it("should return 401 if user is a casual", async () => {
