@@ -12,10 +12,6 @@ describe("api/admin/game-sessions", async () => {
   const cookieStore = await cookies()
 
   describe("POST", () => {
-    beforeEach(() => {
-      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-    })
-
     it("should return a 401 status if user is a member", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
 
@@ -35,6 +31,8 @@ describe("api/admin/game-sessions", async () => {
     })
 
     it("should allow admins to create a game session", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       const res = await POST(createMockNextRequest("", "POST", gameSessionCreateMock))
 
       expect(res.status).toBe(StatusCodes.CREATED)
@@ -44,6 +42,8 @@ describe("api/admin/game-sessions", async () => {
     })
 
     it("should return a 400 status when request body is invalid", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       const res = await POST(
         createMockNextRequest("", "POST", {
           ...gameSessionCreateMock,
@@ -58,6 +58,8 @@ describe("api/admin/game-sessions", async () => {
     })
 
     it("should raise an error if invalid date is used", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       const res = await POST(
         createMockNextRequest("", "POST", {
           ...gameSessionCreateMock,
@@ -74,6 +76,8 @@ describe("api/admin/game-sessions", async () => {
     })
 
     it("should return a 500 for an internal server error", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
       vi.spyOn(GameSessionDataService.prototype, "createGameSession").mockRejectedValueOnce(
         new Error("Database error"),
       )
