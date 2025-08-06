@@ -10,7 +10,7 @@ export default mergeConfig(backendConfig, {
         "**/test-config/**",
         "**/app/layout.tsx",
         "**/app/payload/**",
-        "**/app/[[...segments]]/**",
+        "**/app/**/*.tsx", // backend shouldn't need .tsx file that need testing
         "**/app/importMap.js",
       ],
     },

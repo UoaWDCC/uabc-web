@@ -55,6 +55,7 @@ type AuthActions = {
     },
     unknown
   >
+  setToken: (token: string | null) => void
 }
 
 export type AuthContextValue = AuthState & AuthActions
@@ -150,6 +151,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     login,
     emailVerificationCode,
     register,
+    setToken,
   }
 
   useUpdateEffect(() => {

@@ -62,7 +62,7 @@
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.2.4"
   },
-  "packageManager": "pnpm@10.12.4",
+  "packageManager": "pnpm@10.13.1",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@swc/core",
@@ -78,6 +78,6 @@
     }
   },
   "volta": {
-    "node": "22.17.1"
+    "node": "22.18.0"
   }
 }
