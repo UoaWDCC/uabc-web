@@ -26,8 +26,17 @@ export interface BookingConfirmationData
     GameSession,
     "name" | "location" | "startTime" | "endTime" | "capacity" | "casualCapacity"
   > {
+  /**
+   * The number of attendees for the booking.
+   */
   attendees: number
+  /**
+   * The number of casual attendees for the booking.
+   */
   casualAttendees: number
+  /**
+   * The date of the booking.
+   */
   date: string
 }
 

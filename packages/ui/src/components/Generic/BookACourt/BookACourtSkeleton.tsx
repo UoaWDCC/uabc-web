@@ -30,8 +30,7 @@ export const BookACourtSkeleton = () => {
         color="muted"
         fontSize={{ base: "lg", md: "xl" }}
         fontWeight="medium"
-        // TODO: ensure this is the correct path for tos
-        href="/terms-of-service"
+        href="/terms"
         textDecoration="underline"
         variant="link"
       >

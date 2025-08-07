@@ -30,7 +30,6 @@ export const globalStyle: UIStyle = {
     flexDirection: "column",
     justifyContent: "center",
     minH: { base: "lg", lg: "3xl" },
-    maxW: "100svw",
   },
   _dark: {
     "*::placeholder, *[data-placeholder]": {
