@@ -18,8 +18,8 @@ describe("<AdminTabBar />", () => {
     render(<AdminTabBar />)
 
     expect(screen.getByText("View Members")).toBeInTheDocument()
-    expect(screen.getByText("Edit/View Sessions")).toBeInTheDocument()
-    expect(screen.getByText("Create Semesters & Sessions")).toBeInTheDocument()
+    expect(screen.getByText("View Sessions")).toBeInTheDocument()
+    expect(screen.getByText("View Semesters")).toBeInTheDocument()
   })
 
   it("should call onChange when a user clicks on a tab", async () => {
