@@ -14,7 +14,7 @@ export const useDeleteBooking = () => {
     mutationFn: AdminBookingService.deleteBooking,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.MY_BOOKINGS_QUERY_KEY],
+        queryKey: [QueryKeys.BOOKINGS_QUERY_KEY],
       })
     },
   })
@@ -32,7 +32,7 @@ export const useUpdateBooking = () => {
       AdminBookingService.updateBooking(bookingId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.MY_BOOKINGS_QUERY_KEY],
+        queryKey: [QueryKeys.BOOKINGS_QUERY_KEY],
       })
     },
   })
