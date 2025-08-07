@@ -1,7 +1,12 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { MembershipType, type SelectACourtFormData, SelectACourtFormDataSchema } from "@repo/shared"
+import {
+  formatDateWithOrdinal,
+  MembershipType,
+  type SelectACourtFormData,
+  SelectACourtFormDataSchema,
+} from "@repo/shared"
 import type { GameSession, User } from "@repo/shared/payload-types"
 import { type BookingTimeItem, BookingTimesCardGroup } from "@repo/ui/components/Generic"
 import { ShuttleIcon, UabcLogo } from "@repo/ui/components/Icon"
@@ -115,23 +120,11 @@ export const SelectACourt = memo<SelectACourtProps>(
     const processedSessions: BookingTimeItem[] = useMemo(() => {
       return sessions.map((session) => {
         const isSelected = selectedSessions.includes(session.id)
-        const capReached =
-          selectedSessions.length >= maxBookings ||
-          (user.role === MembershipType.casual
+        const isCapacityReached =
+          user.role === MembershipType.casual
             ? session.casualAttendees >= session.casualCapacity
-            : session.attendees >= session.capacity)
-
-        const dateObj = dayjs(new Date(session.date))
-        const dayOfWeek = dateObj.format("dddd")
-        const day = dateObj.format("D")
-        const dayNum = Number.parseInt(day, 10)
-        const dayWithSuffix =
-          day +
-          ["th", "st", "nd", "rd"][
-            dayNum % 10 > 3 || ~~((dayNum % 100) / 10) === 1 ? 0 : dayNum % 10
-          ]
-        const month = dateObj.format("MMMM")
-        const date = `${dayOfWeek}, ${dayWithSuffix} of ${month}`
+            : session.attendees >= session.capacity
+        const capReached = selectedSessions.length >= maxBookings || isCapacityReached
 
         return {
           value: session.id,
@@ -140,7 +133,7 @@ export const SelectACourt = memo<SelectACourtProps>(
           disabled: isSelected ? false : session.disabled || capReached,
           addon: session.name ?? undefined,
           description: session.location ?? undefined,
-          label: date,
+          label: formatDateWithOrdinal(session.date),
         }
       })
     }, [sessions, selectedSessions, maxBookings, user.role])

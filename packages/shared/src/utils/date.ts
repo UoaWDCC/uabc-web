@@ -1,3 +1,4 @@
+import { format } from "date-fns"
 import { Weekday } from "../types"
 
 /**
@@ -36,4 +37,20 @@ export function calculateOpenDate(startTime: Date, openDay: Weekday, openTime: D
   )
 
   return openDate
+}
+
+/**
+ * Formats a date string or Date object into the format "Day, Xth of Month"
+ * Uses date-fns format with 'do' token for industry-standard ordinal formatting
+ *
+ * @param date The date to format (string or Date object)
+ * @returns Formatted date string
+ */
+export function formatDateWithOrdinal(date: string | Date): string {
+  const dateObj = new Date(date)
+  const dayOfWeek = format(dateObj, "eeee")
+  const dayWithSuffix = format(dateObj, "do")
+  const month = format(dateObj, "MMMM")
+
+  return `${dayOfWeek}, ${dayWithSuffix} of ${month}`
 }
