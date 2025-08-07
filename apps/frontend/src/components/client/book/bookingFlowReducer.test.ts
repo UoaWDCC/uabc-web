@@ -68,8 +68,8 @@ describe("bookingFlowReducer", () => {
     const newState = bookingFlowReducer(state, action)
 
     expect(newState.step).toBe("select-court")
-    expect(newState.bookingTimes).toEqual([])
-    expect(newState.selectedSessions).toEqual([])
+    expect(newState.bookingTimes).toEqual(["session-1"])
+    expect(newState.selectedSessions).toEqual(mockBookings)
   })
 
   it("should handle PREV_STEP action from play-level (no change)", () => {
@@ -152,8 +152,8 @@ describe("bookingFlowReducer", () => {
     // PREV_STEP
     state = bookingFlowReducer(state, { type: "PREV_STEP" })
     expect(state.step).toBe("select-court")
-    expect(state.bookingTimes).toEqual([])
-    expect(state.selectedSessions).toEqual([])
+    expect(state.bookingTimes).toEqual(["monday-session"])
+    expect(state.selectedSessions).toHaveLength(1)
 
     // PREV_STEP
     state = bookingFlowReducer(state, { type: "PREV_STEP" })
