@@ -42,8 +42,8 @@ export const AdminTabBar = memo(
   ({
     children,
     tabLabel0 = "View Members",
-    tabLabel1 = "Edit/View Sessions",
-    tabLabel2 = "Create Semesters & Sessions",
+    tabLabel1 = "View Sessions",
+    tabLabel2 = "View Semesters",
     tabListProps,
     tabPanelsProps,
     ...props

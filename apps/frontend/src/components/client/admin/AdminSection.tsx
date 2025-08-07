@@ -27,12 +27,12 @@ export const AdminSection = memo(() => {
         </TabPanel>
         <TabPanel>
           <Container centerContent layerStyle="container">
-            <UnderConstructionCard title="Edit/View Sessions is Under Construction 🔧" />
+            <UnderConstructionCard title="View Sessions is Under Construction 🔧" />
           </Container>
         </TabPanel>
         <TabPanel>
           <Container centerContent layerStyle="container">
-            <UnderConstructionCard title="Create Semesters & Sessions is Under Construction 🔧" />
+            <UnderConstructionCard title="View Semesters is Under Construction 🔧" />
           </Container>
         </TabPanel>
       </AdminTabBar>
