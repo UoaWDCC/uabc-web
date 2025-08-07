@@ -4,6 +4,22 @@ import { ApiClient, apiClient } from "@/lib/api/client"
 
 const AdminGameSessionService = {
   /**
+   * Creates a new game session with the provided data.
+   *
+   * @param data The data for the new game session.
+   * @returns The created game session.
+   * @throws An error if the creation fails.
+   */
+  createGameSession: async (data: UpdateGameSessionRequest) => {
+    const response = await apiClient.post(
+      "/admin/game-sessions",
+      data,
+      GetGameSessionResponseSchema,
+    )
+    return ApiClient.throwIfError(response)
+  },
+
+  /**
    * Update the details of an existing game session.
    *
    * @param id The ID of the game session to update.
