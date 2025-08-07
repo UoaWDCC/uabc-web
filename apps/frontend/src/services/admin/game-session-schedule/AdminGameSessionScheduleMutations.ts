@@ -11,11 +11,15 @@ export const useCreateGameSessionSchedule = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: AdminGameSessionScheduleService.createGameSessionSchedule,
-    // TODO: when get by id is implemented, do not invalidate get by id queries
-    onSuccess: () =>
+    onSuccess: () => {
       queryClient.invalidateQueries({
+        // TODO: when get by id is implemented, only invalidate the updated id for get by id
         queryKey: [QueryKeys.GAME_SESSION_SCHEDULE_QUERY_KEY],
-      }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY],
+      })
+    },
   })
 }
 
@@ -28,11 +32,15 @@ export const useUpdateGameSessionSchedule = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: AdminGameSessionScheduleService.updateGameSessionSchedule,
-    // TODO: when get by id is implemented, only invalidate the updated id for get by id, or update the specific query with the updated data
-    onSuccess: () =>
+    onSuccess: () => {
       queryClient.invalidateQueries({
+        // TODO: when get by id is implemented, only invalidate the updated id for get by id
         queryKey: [QueryKeys.GAME_SESSION_SCHEDULE_QUERY_KEY],
-      }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY],
+      })
+    },
   })
 }
 
@@ -45,10 +53,14 @@ export const useDeleteGameSessionSchedule = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: AdminGameSessionScheduleService.deleteGameSessionSchedule,
-    // TODO: when get by id is implemented, only invalidate the updated id for get by id
-    onSuccess: () =>
+    onSuccess: () => {
       queryClient.invalidateQueries({
+        // TODO: when get by id is implemented, only invalidate the updated id for get by id
         queryKey: [QueryKeys.GAME_SESSION_SCHEDULE_QUERY_KEY],
-      }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY],
+      })
+    },
   })
 }
