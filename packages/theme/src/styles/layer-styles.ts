@@ -45,6 +45,7 @@ export const layerStyles: LayerStyles = {
     justifyContent: { base: "start", lg: "center" },
     maxW: "8xl",
     placeSelf: "center",
+    py: { base: "lg", sm: "lg", lg: "2xl" },
     w: "full",
     flex: 1,
   },

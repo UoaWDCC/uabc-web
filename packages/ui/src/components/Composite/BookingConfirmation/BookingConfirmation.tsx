@@ -191,14 +191,14 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
           <Center
             alignItems="center"
             display={{ base: "none", md: "flex" }}
-            filter="brightness(0.5)"
+            filter="blur(10px) brightness(0.5)"
             inset="0"
             justifyContent="center"
             position="absolute"
             userSelect="none"
-            zIndex={0}
+            zIndex={-1}
           >
-            <UabcLogo boxSize={{ base: "sm", xl: "md" }} />
+            <UabcLogo boxSize={{ base: "sm", xl: "md" }} opacity={0.5} />
           </Center>
 
           <VStack gap="lg" w="full">
