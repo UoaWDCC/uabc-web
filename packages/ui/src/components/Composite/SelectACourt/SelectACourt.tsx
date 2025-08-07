@@ -1,17 +1,12 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  MAX_CASUAL_BOOKINGS,
-  MAX_MEMBER_BOOKINGS,
-  MembershipType,
-  type SelectACourtFormData,
-  SelectACourtFormDataSchema,
-} from "@repo/shared"
+import { MembershipType, type SelectACourtFormData, SelectACourtFormDataSchema } from "@repo/shared"
 import type { GameSession, User } from "@repo/shared/payload-types"
 import { type BookingTimeItem, BookingTimesCardGroup } from "@repo/ui/components/Generic"
 import { ShuttleIcon, UabcLogo } from "@repo/ui/components/Icon"
 import { Button, Heading, IconButton, IconWithText } from "@repo/ui/components/Primitive"
+import { useBookingLimits } from "@repo/ui/hooks"
 import { ArrowLeftIcon, ArrowRightIcon } from "@yamada-ui/lucide"
 import {
   Box,
@@ -96,43 +91,17 @@ export const SelectACourt = memo<SelectACourtProps>(
     onNext,
     initialBookingTimes = [],
   }) => {
-    const isMember = useMemo(
-      () => user.role === MembershipType.member || user.role === MembershipType.admin,
-      [user.role],
-    )
-
-    const maxBookings = useMemo(
-      () =>
-        Math.min(user.remainingSessions ?? 0, isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS),
-      [isMember, user.remainingSessions],
-    )
-
     const { control, handleSubmit, watch } = useForm<SelectACourtFormData>({
       defaultValues: { bookingTimes: initialBookingTimes },
       resolver: zodResolver(SelectACourtFormDataSchema),
     })
 
     const selectedSessions = watch("bookingTimes") || []
-    const sessionsLeft = useMemo(
-      () => maxBookings - selectedSessions.length,
-      [maxBookings, selectedSessions.length],
-    )
 
-    const totalSessionsLeft = useMemo(
-      () => (user.remainingSessions ?? 0) - selectedSessions.length,
-      [user.remainingSessions, selectedSessions.length],
-    )
-
-    const weeklyLimit = useMemo(
-      () => (isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS),
-      [isMember],
-    )
-
-    const sessionsLabel = useMemo(() => {
-      const weeklyText = `${sessionsLeft} / ${weeklyLimit} this week`
-      const totalText = `${totalSessionsLeft} total remaining`
-      return `${weeklyText} • ${totalText}`
-    }, [sessionsLeft, weeklyLimit, totalSessionsLeft])
+    const { isMember, maxBookings, sessionsLabel } = useBookingLimits({
+      user,
+      selectedCount: selectedSessions.length,
+    })
 
     const onSubmit = useCallback(
       (data: SelectACourtFormData) => {

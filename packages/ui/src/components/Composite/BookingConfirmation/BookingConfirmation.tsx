@@ -1,9 +1,10 @@
 "use client"
 
-import { MAX_CASUAL_BOOKINGS, MAX_MEMBER_BOOKINGS, MembershipType } from "@repo/shared"
+import { MembershipType } from "@repo/shared"
 import type { GameSession, User } from "@repo/shared/payload-types"
 import { ShuttleIcon, UabcLogo } from "@repo/ui/components/Icon"
 import { Button, Heading, IconButton, IconWithText } from "@repo/ui/components/Primitive"
+import { useBookingLimits } from "@repo/ui/hooks"
 import { ArrowLeftIcon } from "@yamada-ui/lucide"
 import {
   Box,
@@ -82,32 +83,10 @@ export interface BookingConfirmationProps {
  */
 export const BookingConfirmation = memo<BookingConfirmationProps>(
   ({ bookingData, user, onBack, onConfirm, title = "Booking Confirmation" }) => {
-    const maxBookings = useMemo(() => {
-      if (user.role === MembershipType.casual) {
-        return MAX_CASUAL_BOOKINGS
-      }
-      return MAX_MEMBER_BOOKINGS
-    }, [user.role])
-
-    const sessionsLeft = useMemo(() => {
-      return Math.min(maxBookings, user.remainingSessions ?? 0) - bookingData.length
-    }, [maxBookings, bookingData.length, user.remainingSessions])
-
-    const totalSessionsLeft = useMemo(
-      () => (user.remainingSessions ?? 0) - bookingData.length,
-      [user.remainingSessions, bookingData.length],
-    )
-
-    const weeklyLimit = useMemo(
-      () => (user.role === MembershipType.casual ? MAX_CASUAL_BOOKINGS : MAX_MEMBER_BOOKINGS),
-      [user.role],
-    )
-
-    const sessionsLabel = useMemo(() => {
-      const weeklyText = `${sessionsLeft} / ${weeklyLimit} this week`
-      const totalText = `${totalSessionsLeft} total remaining`
-      return `${weeklyText} • ${totalText}`
-    }, [sessionsLeft, weeklyLimit, totalSessionsLeft])
+    const { sessionsLabel } = useBookingLimits({
+      user,
+      selectedCount: bookingData.length,
+    })
 
     const handleConfirm = useCallback(() => {
       onConfirm?.(bookingData)
