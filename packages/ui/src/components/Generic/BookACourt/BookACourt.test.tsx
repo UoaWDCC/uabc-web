@@ -12,16 +12,17 @@ describe("<BookACourt />", () => {
     expect(isValidElement(<BookACourt onSelect={mockOnSelect} />)).toBeTruthy()
   })
 
-  it("should render all play level buttons with correct text", () => {
-    render(<BookACourt onSelect={mockOnSelect} />)
+  test.each(Object.values(PlayLevel))(
+    "should render play level button with correct text and call onSelect when clicked",
+    async (level) => {
+      const { user } = render(<BookACourt onSelect={mockOnSelect} />)
 
-    Object.values(PlayLevel).forEach((level) => {
-      const levelButton = screen.getByRole("button", {
-        name: level,
-      })
+      const levelButton = screen.getByRole("button", { name: level })
       expect(levelButton).toBeInTheDocument()
-    })
-  })
+      await user.click(levelButton)
+      expect(mockOnSelect).toHaveBeenCalledWith(level)
+    },
+  )
 
   it("should render guideline link call guidelineOnClick when the guideline link is clicked", () => {
     render(<BookACourt onSelect={mockOnSelect} />)
