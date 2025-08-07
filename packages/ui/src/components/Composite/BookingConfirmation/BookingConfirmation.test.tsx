@@ -29,10 +29,10 @@ describe("<BookingConfirmation />", () => {
     render(<BookingConfirmation {...defaultProps} />)
 
     expect(screen.getByText("Booking Confirmation")).toBeInTheDocument()
-    expect(screen.getByText("Tuesday 24/06/25")).toBeInTheDocument()
+    expect(screen.getByText("UoA Rec Centre")).toBeInTheDocument()
     expect(screen.getByText("19:30 - 22:00")).toBeInTheDocument()
-    expect(screen.getByText("UoA Rec Centre, 17 Symonds Street")).toBeInTheDocument()
-    expect(screen.getByText("39/40 attendees")).toBeInTheDocument()
+    expect(screen.getByText("17 Symonds Street")).toBeInTheDocument()
+    expect(screen.getByText("39 / 40")).toBeInTheDocument()
     expect(screen.getByText("1 / 2 this week • 5 total remaining")).toBeInTheDocument()
     expect(screen.getByText("Confirm Booking")).toBeInTheDocument()
   })

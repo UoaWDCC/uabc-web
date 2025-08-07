@@ -28,6 +28,6 @@ describe("<BookACourt />", () => {
 
     const guidelineLink = screen.getByRole("link", { name: "Check-In Form Guidelines" })
     expect(guidelineLink).toBeInTheDocument()
-    expect(guidelineLink).toHaveAttribute("href", "/terms-of-service")
+    expect(guidelineLink).toHaveAttribute("href", "/terms")
   })
 })
