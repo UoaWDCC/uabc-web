@@ -1,7 +1,6 @@
 import { PlayLevel } from "@repo/shared/types"
-import { Button } from "@repo/ui/components/Primitive"
-import { ButtonGroup, For, Link, Spacer, Text, VStack } from "@yamada-ui/react"
-import NextLink from "next/link"
+import { Button, Link } from "@repo/ui/components/Primitive"
+import { ButtonGroup, For, Spacer, Text, VStack } from "@yamada-ui/react"
 import type { FC } from "react"
 
 /**
@@ -45,7 +44,6 @@ export const BookACourt: FC<BookACourtProps> = ({ onSelect }) => {
       </ButtonGroup>
       <Spacer />
       <Link
-        as={NextLink}
         color="muted"
         fontSize={{ base: "lg", md: "xl" }}
         fontWeight="medium"
