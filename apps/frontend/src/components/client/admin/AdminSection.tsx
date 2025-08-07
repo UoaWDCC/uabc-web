@@ -14,6 +14,8 @@ export const AdminSection = memo(() => {
       py={{ base: "md", sm: "md", lg: "md" }}
     >
       <AdminTabBar
+        lazy
+        lazyBehavior="unmount"
         tabPanelsProps={{
           p: "0",
         }}
