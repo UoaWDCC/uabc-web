@@ -166,6 +166,7 @@ export const SelectACourt = memo<SelectACourtProps>(
         justifyContent="center"
         layerStyle="gradientBorder"
         onSubmit={handleSubmit(onSubmit)}
+        position="relative"
         px={{ base: "md", md: "xl" }}
         py="lg"
         rounded="3xl"
@@ -179,18 +180,17 @@ export const SelectACourt = memo<SelectACourtProps>(
             gap={{ base: "sm", md: "0" }}
             gridTemplateColumns={{ md: "1fr auto 1fr" }}
             justifyContent="space-between"
-            position="relative"
             w="full"
           >
             <IconButton
               aria-label="Back"
               color={["black", "white"]}
               icon={<ArrowLeftIcon />}
-              left={{ base: "-md", md: "0" }}
+              left={{ base: "md", md: "0" }}
               onClick={onBack}
               position={{ base: "absolute", md: "relative" }}
               size={{ base: "md", md: "lg" }}
-              top={{ base: "-md", md: "0" }}
+              top={{ base: "md", md: "0" }}
               variant="ghost"
             />
 
@@ -219,12 +219,12 @@ export const SelectACourt = memo<SelectACourtProps>(
             userSelect="none"
             zIndex={0}
           >
-            <UabcLogo boxSize={{ base: "sm", xl: "lg" }} opacity={0.5} />
+            <UabcLogo boxSize={{ base: "sm", xl: "md" }} opacity={0.5} />
           </Center>
 
           <VStack gap="md" w="full">
             <Center>
-              <IconWithText icon={<ShuttleIcon />} label={sessionsLabel} />
+              <IconWithText icon={<ShuttleIcon />} label={sessionsLabel} textWrap="balance" />
             </Center>
 
             <BookingTimesCardGroup

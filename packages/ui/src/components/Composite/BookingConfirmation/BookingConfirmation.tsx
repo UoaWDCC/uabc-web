@@ -15,7 +15,6 @@ import {
   Center,
   DataList,
   HStack,
-  SimpleGrid,
   Text,
   VStack,
 } from "@yamada-ui/react"
@@ -146,6 +145,7 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
         gap="md"
         justifyContent="center"
         layerStyle="gradientBorder"
+        position="relative"
         px={{ base: "md", md: "xl" }}
         py="lg"
         rounded="3xl"
@@ -159,18 +159,17 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
             gap={{ base: "sm", md: "0" }}
             gridTemplateColumns={{ md: "1fr auto 1fr" }}
             justifyContent="space-between"
-            position="relative"
             w="full"
           >
             <IconButton
               aria-label="Back"
               color={["black", "white"]}
               icon={<ArrowLeftIcon />}
-              left={{ base: "-md", md: "0" }}
+              left={{ base: "md", md: "0" }}
               onClick={onBack}
               position={{ base: "absolute", md: "relative" }}
               size={{ base: "md", md: "lg" }}
-              top={{ base: "-md", md: "0" }}
+              top={{ base: "md", md: "0" }}
               variant="ghost"
             />
 
@@ -189,26 +188,22 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
         </CardHeader>
 
         <CardBody position="relative" w="full">
-          <SimpleGrid
-            display={{ base: "none", md: "grid" }}
-            gridTemplateColumns="1fr 2fr"
+          <Center
+            alignItems="center"
+            display={{ base: "none", md: "flex" }}
+            filter="brightness(0.5)"
             inset="0"
-            placeItems="center"
+            justifyContent="center"
             position="absolute"
+            userSelect="none"
+            zIndex={0}
           >
-            <Box />
-            <UabcLogo
-              boxSize={{ base: "sm", xl: "lg" }}
-              filter="brightness(0.5)"
-              opacity={0.5}
-              userSelect="none"
-              z={-1}
-            />
-          </SimpleGrid>
+            <UabcLogo boxSize={{ base: "sm", xl: "md" }} />
+          </Center>
 
           <VStack gap="lg" w="full">
             <Center>
-              <IconWithText icon={<ShuttleIcon />} label={sessionsLabel} />
+              <IconWithText icon={<ShuttleIcon />} label={sessionsLabel} textWrap="balance" />
             </Center>
 
             {bookingItems.map(({ booking, items, index }) => (
