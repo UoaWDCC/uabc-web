@@ -47,10 +47,5 @@ export function calculateOpenDate(startTime: Date, openDay: Weekday, openTime: D
  * @returns Formatted date string
  */
 export function formatDateWithOrdinal(date: string | Date): string {
-  const dateObj = new Date(date)
-  const dayOfWeek = format(dateObj, "eeee")
-  const dayWithSuffix = format(dateObj, "do")
-  const month = format(dateObj, "MMMM")
-
-  return `${dayOfWeek}, ${dayWithSuffix} of ${month}`
+  return format(new Date(date), "eeee, do 'of' MMMM")
 }
