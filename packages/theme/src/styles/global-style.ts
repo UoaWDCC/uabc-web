@@ -29,7 +29,8 @@ export const globalStyle: UIStyle = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    minH: { base: "lg", lg: "3xl" },
+    minH: { base: "xl", lg: "3xl" },
+    py: { base: "lg", md: "2xl" },
   },
   _dark: {
     "*::placeholder, *[data-placeholder]": {
