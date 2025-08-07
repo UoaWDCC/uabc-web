@@ -1,13 +1,13 @@
 "use client"
 
-import { MembershipType, PlayLevel, Popup } from "@repo/shared"
+import { type MembershipType, PlayLevel, Popup } from "@repo/shared"
 import type { SelectACourtNextData, SessionItem } from "@repo/ui/components/Composite"
 import { BookingConfirmation, SelectACourt } from "@repo/ui/components/Composite"
 import { BookACourt } from "@repo/ui/components/Generic"
-import { Button } from "@repo/ui/components/Primitive"
+import { Button, Heading } from "@repo/ui/components/Primitive"
 import { usePopupState } from "@repo/ui/hooks"
 import { CircleAlertIcon } from "@yamada-ui/lucide"
-import { EmptyState } from "@yamada-ui/react"
+import { EmptyState, VStack } from "@yamada-ui/react"
 import NextLink from "next/link"
 import { parseAsStringEnum, useQueryState } from "nuqs"
 import { type FC, useReducer } from "react"
@@ -21,44 +21,64 @@ type BookFlowProps = {
 // Mock bookings data - this should be moved to a proper data source
 const bookings: SessionItem[] = [
   {
-    label: "Monday, 12th May",
-    memberAttendees: "32/35",
-    casualAttendees: "4/5",
-    value: "monday-session",
-    addon: "ABA",
-    description: "5:00 - 7:00 pm",
+    id: "monday-session",
+    name: "ABA",
+    location: "ABA Location",
+    startTime: "17:00",
+    endTime: "19:00",
+    capacity: 35,
+    casualCapacity: 5,
+    attendees: 35,
+    casualAttendees: 5,
+    date: "2025-01-01",
   },
   {
-    label: "Wednesday, 14th May",
-    memberAttendees: "28/35",
-    casualAttendees: "2/5",
-    value: "wednesday-session",
-    addon: "UoA Rec",
-    description: "7:30 - 9:30 pm",
+    id: "wednesday-session",
+    name: "UoA Rec Centre",
+    location: "17 Symonds Street",
+    startTime: "19:30",
+    endTime: "21:30",
+    capacity: 35,
+    casualCapacity: 5,
+    attendees: 20,
+    casualAttendees: 1,
+    date: "2025-01-03",
   },
   {
-    label: "Thursday, 15th May",
-    memberAttendees: "25/30",
-    casualAttendees: "3/5",
-    value: "thursday-session",
-    addon: "Kings School",
-    description: "7:30 - 10:00 pm",
+    id: "thursday-session",
+    name: "Kings School",
+    location: "Kings School Location",
+    startTime: "19:30",
+    endTime: "22:00",
+    capacity: 30,
+    casualCapacity: 5,
+    attendees: 26,
+    casualAttendees: 3,
+    date: "2025-01-04",
   },
   {
-    label: "Friday, 16th May",
-    memberAttendees: "30/35",
-    casualAttendees: "1/5",
-    value: "friday-session",
-    addon: "UoA Rec Centre",
-    description: "7:30 - 9:30 pm",
+    id: "friday-session",
+    name: "UoA Rec Centre",
+    location: "17 Symonds Street",
+    startTime: "19:30",
+    endTime: "21:30",
+    capacity: 35,
+    casualCapacity: 5,
+    attendees: 35,
+    casualAttendees: 5,
+    date: "2025-01-05",
   },
   {
-    label: "Saturday, 17th May",
-    memberAttendees: "20/25",
-    casualAttendees: "2/3",
-    value: "saturday-session",
-    addon: "ABA",
-    description: "4:00 - 6:00 pm",
+    id: "saturday-session",
+    name: "ABA",
+    location: "ABA Location",
+    startTime: "16:00",
+    endTime: "18:00",
+    capacity: 25,
+    casualCapacity: 3,
+    attendees: 15,
+    casualAttendees: 2,
+    date: "2025-01-06",
   },
 ]
 
@@ -88,6 +108,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
 
   const handleConfirmBooking = () => {
     openBookingConfirmedPopup()
+    dispatch({ type: "RESET" })
   }
 
   const handleBack = () => {
@@ -99,6 +120,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
       <EmptyState
         description="There are no bookings available at the moment."
         indicator={<CircleAlertIcon />}
+        placeSelf="center"
         title="No bookings found"
       >
         <Button as={NextLink} href="/profile">
@@ -113,6 +135,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
       <EmptyState
         description="You have no remaining sessions."
         indicator={<CircleAlertIcon />}
+        placeSelf="center"
         title="No remaining sessions"
       >
         <Button as={NextLink} href="/profile">
@@ -124,31 +147,27 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
 
   return (
     <>
-      {state.step === "play-level" && <BookACourt onSelect={handlePlayLevelSelect} />}
-      {state.step === "select-court" && (
+      {state.step === "play-level" ? (
+        <VStack flex={1} gap="lg" textAlign="center">
+          <Heading.h2 fontSize="3xl">Book a court</Heading.h2>
+          <BookACourt onSelect={handlePlayLevelSelect} />
+        </VStack>
+      ) : state.step === "select-court" ? (
         <SelectACourt
+          initialBookingTimes={state.bookingTimes}
           onBack={handleBack}
           onNext={handleSelectCourt}
           sessions={bookings}
           user={auth.user}
         />
-      )}
-      {state.step === "confirmation" && state.selectedSessions.length > 0 && (
+      ) : state.step === "confirmation" ? (
         <BookingConfirmation
-          bookingData={state.selectedSessions.map((session) => ({
-            date: session.label,
-            time: session.description,
-            location: session.addon,
-            attendees:
-              auth.user.role === MembershipType.member
-                ? session.memberAttendees
-                : session.casualAttendees,
-          }))}
+          bookingData={state.selectedSessions ?? []}
           onBack={handleBack}
           onConfirm={handleConfirmBooking}
           user={auth.user}
         />
-      )}
+      ) : null}
     </>
   )
 }

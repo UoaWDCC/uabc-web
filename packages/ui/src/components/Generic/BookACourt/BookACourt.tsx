@@ -28,13 +28,7 @@ export const BookACourt: FC<BookACourtProps> = ({ onSelect }) => {
       <Text color="muted" fontSize={{ base: "lg", md: "xl" }}>
         I am...
       </Text>
-      <ButtonGroup
-        alignItems="center"
-        flexDirection="column"
-        gap={{ base: "md", md: "lg" }}
-        size="lg"
-        w="full"
-      >
+      <ButtonGroup alignItems="center" flexDirection="column" gap="md" size="lg" w="full">
         <For each={Object.values(PlayLevel)}>
           {(level) => (
             <Button
@@ -55,10 +49,8 @@ export const BookACourt: FC<BookACourtProps> = ({ onSelect }) => {
         color="muted"
         fontSize={{ base: "lg", md: "xl" }}
         fontWeight="medium"
-        // TODO: ensure this is the correct path for tos
-        href="/terms-of-service"
+        href="/terms"
         textDecoration="underline"
-        variant="link"
       >
         Check-In Form Guidelines
       </Link>

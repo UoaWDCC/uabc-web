@@ -15,16 +15,22 @@ const meta: Meta<typeof BookingConfirmation> = {
 }
 
 export default meta
-type Story = StoryObj<typeof meta>
+
+type Story = StoryObj<typeof BookingConfirmation>
 
 export const Default: Story = {
   args: {
     bookingData: [
       {
         date: "Tuesday 24/06/25",
-        time: "7:30 PM - 10:00 PM",
-        location: "UoA Rec Centre, 17 Symonds Street",
-        attendees: "39/40",
+        name: "UoA Rec Centre",
+        location: "17 Symonds Street",
+        startTime: "19:30",
+        endTime: "22:00",
+        capacity: 40,
+        casualCapacity: 5,
+        attendees: 39,
+        casualAttendees: 0,
       },
     ],
     user: {
@@ -39,9 +45,14 @@ export const CasualMember: Story = {
     bookingData: [
       {
         date: "Wednesday 25/06/25",
-        time: "6:00 PM - 8:00 PM",
-        location: "ABA, 123 Main Street",
-        attendees: "15/20",
+        name: "ABA",
+        location: "ABA Location",
+        startTime: "16:00",
+        endTime: "18:00",
+        capacity: 25,
+        casualCapacity: 3,
+        attendees: 15,
+        casualAttendees: 0,
       },
     ],
     user: {
@@ -56,9 +67,14 @@ export const CustomTitle: Story = {
     bookingData: [
       {
         date: "Thursday 26/06/25",
-        time: "8:00 PM - 10:30 PM",
-        location: "Kings School, 456 School Road",
-        attendees: "25/30",
+        name: "Kings School",
+        location: "Kings School Location",
+        startTime: "19:30",
+        endTime: "22:00",
+        capacity: 30,
+        casualCapacity: 5,
+        attendees: 25,
+        casualAttendees: 0,
       },
     ],
     user: {

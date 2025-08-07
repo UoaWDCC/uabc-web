@@ -4,12 +4,16 @@ import { createBookingFlowReducer, initialState } from "./bookingFlowReducer"
 
 const mockBookings: SessionItem[] = [
   {
-    label: "Monday, 12th May",
-    memberAttendees: "32/35",
-    casualAttendees: "4/5",
-    value: "monday-session",
-    addon: "ABA",
-    description: "5:00 - 7:00 pm",
+    date: "Monday, 12th May",
+    attendees: 32,
+    casualAttendees: 4,
+    id: "monday-session",
+    name: "ABA",
+    location: "ABA Location",
+    startTime: "17:00",
+    endTime: "19:00",
+    capacity: 35,
+    casualCapacity: 5,
   },
 ]
 

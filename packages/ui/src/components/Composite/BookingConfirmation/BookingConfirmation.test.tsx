@@ -6,9 +6,14 @@ const defaultProps = {
   bookingData: [
     {
       date: "Tuesday 24/06/25",
-      time: "7:30 PM - 10:00 PM",
-      location: "UoA Rec Centre, 17 Symonds Street",
-      attendees: "39/40",
+      name: "UoA Rec Centre",
+      location: "17 Symonds Street",
+      startTime: "19:30",
+      endTime: "22:00",
+      capacity: 40,
+      casualCapacity: 5,
+      attendees: 39,
+      casualAttendees: 0,
     },
   ],
   user: {
@@ -25,10 +30,10 @@ describe("<BookingConfirmation />", () => {
 
     expect(screen.getByText("Booking Confirmation")).toBeInTheDocument()
     expect(screen.getByText("Tuesday 24/06/25")).toBeInTheDocument()
-    expect(screen.getByText("7:30 PM - 10:00 PM")).toBeInTheDocument()
+    expect(screen.getByText("19:30 - 22:00")).toBeInTheDocument()
     expect(screen.getByText("UoA Rec Centre, 17 Symonds Street")).toBeInTheDocument()
     expect(screen.getByText("39/40 attendees")).toBeInTheDocument()
-    expect(screen.getByText("Sessions Left: 1")).toBeInTheDocument()
+    expect(screen.getByText("1 / 2 this week • 5 total remaining")).toBeInTheDocument()
     expect(screen.getByText("Confirm Booking")).toBeInTheDocument()
   })
 

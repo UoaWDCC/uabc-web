@@ -17,7 +17,7 @@ import { Controller } from "react-hook-form"
  * Props for the {@link BookingTimesCardGroup} component.
  */
 
-interface BookingTimeItem extends CheckboxCardProps {
+export interface BookingTimeItem extends CheckboxCardProps {
   memberAttendees?: string
   casualAttendees?: string
 }

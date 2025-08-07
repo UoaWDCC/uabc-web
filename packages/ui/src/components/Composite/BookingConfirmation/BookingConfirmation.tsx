@@ -1,11 +1,12 @@
 "use client"
 
 import { MAX_CASUAL_BOOKINGS, MAX_MEMBER_BOOKINGS, MembershipType } from "@repo/shared"
-import type { User } from "@repo/shared/payload-types"
-import { ShuttleIcon } from "@repo/ui/components/Icon"
-import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
+import type { GameSession, User } from "@repo/shared/payload-types"
+import { ShuttleIcon, UabcLogo } from "@repo/ui/components/Icon"
+import { Button, Heading, IconButton, IconWithText } from "@repo/ui/components/Primitive"
 import { ArrowLeftIcon } from "@yamada-ui/lucide"
 import {
+  Box,
   Card,
   CardBody,
   CardFooter,
@@ -13,17 +14,20 @@ import {
   Center,
   DataList,
   HStack,
-  IconButton,
+  SimpleGrid,
   Text,
   VStack,
 } from "@yamada-ui/react"
 import { memo, useCallback, useMemo } from "react"
 
-export interface BookingConfirmationData {
+export interface BookingConfirmationData
+  extends Pick<
+    GameSession,
+    "name" | "location" | "startTime" | "endTime" | "capacity" | "casualCapacity"
+  > {
+  attendees: number
+  casualAttendees: number
   date: string
-  time: string
-  location: string
-  attendees: string
 }
 
 /**
@@ -41,7 +45,7 @@ export interface BookingConfirmationProps {
   /**
    * Callback function triggered when the confirm button is clicked.
    */
-  onConfirm?: () => void
+  onConfirm?: (data: BookingConfirmationData[]) => void
   /**
    * The title text displayed in the component.
    */
@@ -89,16 +93,32 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
       return Math.min(maxBookings, user.remainingSessions ?? 0) - bookingData.length
     }, [maxBookings, bookingData.length, user.remainingSessions])
 
+    const totalSessionsLeft = useMemo(
+      () => (user.remainingSessions ?? 0) - bookingData.length,
+      [user.remainingSessions, bookingData.length],
+    )
+
+    const weeklyLimit = useMemo(
+      () => (user.role === MembershipType.casual ? MAX_CASUAL_BOOKINGS : MAX_MEMBER_BOOKINGS),
+      [user.role],
+    )
+
+    const sessionsLabel = useMemo(() => {
+      const weeklyText = `${sessionsLeft} / ${weeklyLimit} this week`
+      const totalText = `${totalSessionsLeft} total remaining`
+      return `${weeklyText} • ${totalText}`
+    }, [sessionsLeft, weeklyLimit, totalSessionsLeft])
+
     const handleConfirm = useCallback(() => {
-      onConfirm?.()
-    }, [onConfirm])
+      onConfirm?.(bookingData)
+    }, [onConfirm, bookingData])
 
     const bookingItems = useMemo(() => {
       return bookingData.map((booking, index) => {
         const items = [
           {
             term: "Time",
-            description: booking.time,
+            description: `${booking.startTime} - ${booking.endTime}`,
             termProps: { color: "muted", fontSize: "sm" },
             descriptionProps: { fontSize: "md", fontWeight: "medium" },
           },
@@ -110,7 +130,10 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
           },
           {
             term: "Attendees",
-            description: `${booking.attendees} attendees`,
+            description:
+              user.role === MembershipType.casual
+                ? `${booking.casualAttendees} / ${booking.casualCapacity}`
+                : `${booking.attendees} / ${booking.capacity}`,
             termProps: { color: "muted", fontSize: "sm" },
             descriptionProps: { fontSize: "md", fontWeight: "medium" },
           },
@@ -122,7 +145,7 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
           index,
         }
       })
-    }, [bookingData])
+    }, [bookingData, user.role])
 
     return (
       <Card
@@ -131,6 +154,7 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
         backdropFilter="auto"
         bg={["secondary.50", "secondary.800"]}
         boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.1)"
+        flex={1}
         gap="md"
         justifyContent="center"
         layerStyle="gradientBorder"
@@ -139,7 +163,7 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
         rounded="3xl"
         w="full"
       >
-        <CardHeader pt="0" w="full">
+        <CardHeader pt="0" px="0" w="full">
           <HStack
             alignItems="center"
             display={{ base: "flex", md: "grid" }}
@@ -152,13 +176,14 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
           >
             <IconButton
               aria-label="Back"
+              color={["black", "white"]}
               icon={<ArrowLeftIcon />}
-              left={0}
+              left={{ base: "-md", md: "0" }}
               onClick={onBack}
               position={{ base: "absolute", md: "relative" }}
               size={{ base: "md", md: "lg" }}
+              top={{ base: "-md", md: "0" }}
               variant="ghost"
-              w="fit-content"
             />
 
             <Heading.h2
@@ -171,26 +196,42 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
               {title}
             </Heading.h2>
 
-            <IconWithText
-              icon={<ShuttleIcon />}
-              justifySelf={{ md: "end" }}
-              label={`Sessions Left: ${sessionsLeft}`}
-              order={{ base: 3, sm: 2 }}
-            />
+            <Box order={{ base: 3, sm: 2 }} />
           </HStack>
         </CardHeader>
 
-        <CardBody w="full">
+        <CardBody position="relative" w="full">
+          <SimpleGrid
+            display={{ base: "none", md: "grid" }}
+            gridTemplateColumns="1fr 2fr"
+            inset="0"
+            placeItems="center"
+            position="absolute"
+          >
+            <Box />
+            <UabcLogo
+              boxSize={{ base: "sm", xl: "lg" }}
+              filter="brightness(0.5)"
+              opacity={0.5}
+              userSelect="none"
+              z={-1}
+            />
+          </SimpleGrid>
+
           <VStack gap="lg" w="full">
+            <Center>
+              <IconWithText icon={<ShuttleIcon />} label={sessionsLabel} />
+            </Center>
+
             {bookingItems.map(({ booking, items, index }) => (
-              <VStack gap="md" key={`${booking.date}-${booking.time}-${index}`} w="full">
+              <VStack gap="md" key={`${booking.startTime}-${booking.endTime}-${index}`} w="full">
                 {bookingData.length > 1 && (
                   <Text color="primary" fontSize="lg" fontWeight="medium">
                     Booking {index + 1}
                   </Text>
                 )}
                 <Text fontSize="lg" fontWeight="medium">
-                  {booking.date}
+                  {booking.name}
                 </Text>
 
                 <DataList

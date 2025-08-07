@@ -40,7 +40,7 @@ export const createBookingFlowReducer =
           case "select-court":
             return { ...state, step: "play-level", playLevel: "" }
           case "confirmation":
-            return { ...state, step: "select-court", bookingTimes: [], selectedSessions: [] }
+            return { ...state, step: "select-court" }
           default:
             return state
         }
@@ -48,7 +48,7 @@ export const createBookingFlowReducer =
         return { ...state, playLevel: action.payload }
       case "SET_BOOKING_TIMES": {
         const selectedSessions = action.payload.bookingTimes
-          .map((bookingTime) => bookings.find((booking) => booking.value === bookingTime))
+          .map((bookingTime) => bookings.find((booking) => booking.id === bookingTime))
           .filter((session): session is SessionItem => session !== undefined)
         return {
           ...state,

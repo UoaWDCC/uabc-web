@@ -15,13 +15,7 @@ export const BookACourtSkeleton = () => {
       <Text color="muted" fontSize={{ base: "lg", md: "xl" }}>
         I am...
       </Text>
-      <ButtonGroup
-        alignItems="center"
-        flexDirection="column"
-        gap={{ base: "md", md: "lg" }}
-        size="lg"
-        w="full"
-      >
+      <ButtonGroup alignItems="center" flexDirection="column" gap="md" size="lg" w="full">
         <For each={Object.values(PlayLevel)}>
           {(level) => (
             <Button colorScheme="primary" disabled key={level} maxW="md" w="full">

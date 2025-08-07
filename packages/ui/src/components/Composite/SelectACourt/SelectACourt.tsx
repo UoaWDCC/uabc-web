@@ -8,35 +8,43 @@ import {
   type SelectACourtFormData,
   SelectACourtFormDataSchema,
 } from "@repo/shared"
-import type { User } from "@repo/shared/payload-types"
-import { BookingTimesCardGroup } from "@repo/ui/components/Generic"
-import { ShuttleIcon } from "@repo/ui/components/Icon"
-import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
+import type { GameSession, User } from "@repo/shared/payload-types"
+import { type BookingTimeItem, BookingTimesCardGroup } from "@repo/ui/components/Generic"
+import { ShuttleIcon, UabcLogo } from "@repo/ui/components/Icon"
+import { Button, Heading, IconButton, IconWithText } from "@repo/ui/components/Primitive"
 import { ArrowLeftIcon, ArrowRightIcon } from "@yamada-ui/lucide"
 import {
+  Box,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Center,
   HStack,
-  IconButton,
+  VStack,
 } from "@yamada-ui/react"
+import dayjs from "dayjs"
+import timezone from "dayjs/plugin/timezone"
+import utc from "dayjs/plugin/utc"
 import { memo, useCallback, useMemo } from "react"
 import { useForm } from "react-hook-form"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.tz.setDefault("Pacific/Auckland")
 
 export type SelectACourtNextData = {
   bookingTimes: string[]
 }
 
-export interface SessionItem {
-  label: string
-  memberAttendees: string
-  casualAttendees: string
-  value: string
-  addon: string
-  description: string
+export type SessionItem = Pick<
+  GameSession,
+  "name" | "location" | "startTime" | "endTime" | "capacity" | "casualCapacity" | "id"
+> & {
   disabled?: boolean
+  attendees: number
+  casualAttendees: number
+  date: string
 }
 
 /**
@@ -72,10 +80,22 @@ export interface SelectACourtProps {
    * @param data - The form data including selected sessions
    */
   onNext?: (data: { bookingTimes: string[] }) => void
+  /**
+   * The initially selected booking times.
+   */
+  initialBookingTimes?: string[]
 }
 
 export const SelectACourt = memo<SelectACourtProps>(
-  ({ user, onSelect, sessions = [], title = "Select a court", onBack, onNext }) => {
+  ({
+    user,
+    onSelect,
+    sessions = [],
+    title = "Select a court",
+    onBack,
+    onNext,
+    initialBookingTimes = [],
+  }) => {
     const isMember = useMemo(
       () => user.role === MembershipType.member || user.role === MembershipType.admin,
       [user.role],
@@ -88,7 +108,7 @@ export const SelectACourt = memo<SelectACourtProps>(
     )
 
     const { control, handleSubmit, watch } = useForm<SelectACourtFormData>({
-      defaultValues: { bookingTimes: [] },
+      defaultValues: { bookingTimes: initialBookingTimes },
       resolver: zodResolver(SelectACourtFormDataSchema),
     })
 
@@ -98,27 +118,63 @@ export const SelectACourt = memo<SelectACourtProps>(
       [maxBookings, selectedSessions.length],
     )
 
+    const totalSessionsLeft = useMemo(
+      () => (user.remainingSessions ?? 0) - selectedSessions.length,
+      [user.remainingSessions, selectedSessions.length],
+    )
+
+    const weeklyLimit = useMemo(
+      () => (isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS),
+      [isMember],
+    )
+
+    const sessionsLabel = useMemo(() => {
+      const weeklyText = `${sessionsLeft} / ${weeklyLimit} this week`
+      const totalText = `${totalSessionsLeft} total remaining`
+      return `${weeklyText} • ${totalText}`
+    }, [sessionsLeft, weeklyLimit, totalSessionsLeft])
+
     const onSubmit = useCallback(
       (data: SelectACourtFormData) => {
         const bookingTimes = isMember ? data.bookingTimes : data.bookingTimes.slice(-1)
         onNext?.({ bookingTimes })
+        window.scrollTo({ top: 0, behavior: "smooth" })
       },
       [isMember, onNext],
     )
 
-    const processedSessions = useMemo(() => {
+    const processedSessions: BookingTimeItem[] = useMemo(() => {
       return sessions.map((session) => {
-        const isSelected = selectedSessions.includes(session.value)
-        const capReached = selectedSessions.length >= maxBookings
+        const isSelected = selectedSessions.includes(session.id)
+        const capReached =
+          selectedSessions.length >= maxBookings ||
+          (user.role === MembershipType.casual
+            ? session.casualAttendees >= session.casualCapacity
+            : session.attendees >= session.capacity)
+
+        const dateObj = dayjs(new Date(session.date))
+        const dayOfWeek = dateObj.format("dddd")
+        const day = dateObj.format("D")
+        const dayNum = Number.parseInt(day, 10)
+        const dayWithSuffix =
+          day +
+          ["th", "st", "nd", "rd"][
+            dayNum % 10 > 3 || ~~((dayNum % 100) / 10) === 1 ? 0 : dayNum % 10
+          ]
+        const month = dateObj.format("MMMM")
+        const date = `${dayOfWeek}, ${dayWithSuffix} of ${month}`
 
         return {
-          ...session,
-          memberAttendees: session.memberAttendees,
-          casualAttendees: session.casualAttendees,
+          value: session.id,
+          memberAttendees: `${session.attendees} / ${session.capacity}`,
+          casualAttendees: `${session.casualAttendees} / ${session.casualCapacity}`,
           disabled: isSelected ? false : session.disabled || capReached,
+          addon: session.name ?? undefined,
+          description: session.location ?? undefined,
+          label: date,
         }
       })
-    }, [sessions, selectedSessions, maxBookings])
+    }, [sessions, selectedSessions, maxBookings, user.role])
 
     const handleSessionChange = useCallback(
       (newSelection: string[]) => {
@@ -143,6 +199,7 @@ export const SelectACourt = memo<SelectACourtProps>(
         backdropFilter="auto"
         bg={["secondary.50", "secondary.800"]}
         boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.1)"
+        flex={1}
         gap="md"
         justifyContent="center"
         layerStyle="gradientBorder"
@@ -152,7 +209,7 @@ export const SelectACourt = memo<SelectACourtProps>(
         rounded="3xl"
         w="full"
       >
-        <CardHeader pt="0" w="full">
+        <CardHeader pt="0" px="0" w="full">
           <HStack
             alignItems="center"
             display={{ base: "flex", md: "grid" }}
@@ -165,13 +222,14 @@ export const SelectACourt = memo<SelectACourtProps>(
           >
             <IconButton
               aria-label="Back"
+              color={["black", "white"]}
               icon={<ArrowLeftIcon />}
-              left={0}
+              left={{ base: "-md", md: "0" }}
               onClick={onBack}
               position={{ base: "absolute", md: "relative" }}
               size={{ base: "md", md: "lg" }}
+              top={{ base: "-md", md: "0" }}
               variant="ghost"
-              w="fit-content"
             />
 
             <Heading.h2
@@ -184,25 +242,39 @@ export const SelectACourt = memo<SelectACourtProps>(
               {title}
             </Heading.h2>
 
-            <IconWithText
-              icon={<ShuttleIcon />}
-              justifySelf={{ md: "end" }}
-              label={`Sessions Left: ${sessionsLeft}`}
-              order={{ base: 3, sm: 2 }}
-            />
+            <Box order={{ base: 3, sm: 2 }} />
           </HStack>
         </CardHeader>
 
-        <CardBody w="full">
-          <BookingTimesCardGroup
-            control={control}
-            display="grid"
-            gap={{ base: "sm", md: "md" }}
-            gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)" }}
-            items={processedSessions}
-            name="bookingTimes"
-            onChange={handleSessionChange}
-          />
+        <CardBody position="relative" w="full">
+          <Center
+            alignItems="center"
+            display={{ base: "none", md: "flex" }}
+            filter="blur(10px) brightness(0.5)"
+            inset="0"
+            justifyContent="center"
+            position="absolute"
+            userSelect="none"
+            zIndex={0}
+          >
+            <UabcLogo boxSize={{ base: "sm", xl: "lg" }} opacity={0.5} />
+          </Center>
+
+          <VStack gap="md" w="full">
+            <Center>
+              <IconWithText icon={<ShuttleIcon />} label={sessionsLabel} />
+            </Center>
+
+            <BookingTimesCardGroup
+              control={control}
+              display="grid"
+              gap={{ base: "sm", md: "md" }}
+              gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)" }}
+              items={processedSessions}
+              name="bookingTimes"
+              onChange={handleSessionChange}
+            />
+          </VStack>
         </CardBody>
 
         <CardFooter>

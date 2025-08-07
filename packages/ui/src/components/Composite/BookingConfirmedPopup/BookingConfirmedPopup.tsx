@@ -55,13 +55,13 @@ export const BookingConfirmedPopup: FC<BookingConfirmedPopupProps> = ({
   linkText = "View Booking",
   ...props
 }) => {
-  const { value, close, isOpen } = usePopupState({
+  const { value, isOpen } = usePopupState({
     popupId: Popup.BOOKING_CONFIRMED,
     initialValue,
   })
 
   return (
-    <Modal onClose={close} open={isOpen} p="lg" rounded="3xl" size="xl" {...props}>
+    <Modal open={isOpen} p="lg" rounded="3xl" size="xl" {...props}>
       <ModalHeader alignItems="center" flexDirection="column">
         <StickerIcon boxSize="2xs" />
         <Heading.h2 fontSize="3xl">{title}</Heading.h2>
@@ -71,7 +71,7 @@ export const BookingConfirmedPopup: FC<BookingConfirmedPopupProps> = ({
         {value === MembershipType.casual && additionalMessage && <Text>{additionalMessage}</Text>}
       </ModalBody>
       <ModalFooter alignItems="center" justifyContent="center">
-        <Button as={Link} colorScheme="primary" href="/booking">
+        <Button as={Link} colorScheme="primary" href="/profile">
           {linkText}
         </Button>
       </ModalFooter>
