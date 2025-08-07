@@ -41,9 +41,3 @@ export enum SessionType {
   ongoing = "Ongoing",
   oneOff = "One off",
 }
-
-export enum AdminPage {
-  VIEW_MEMBERS = 0,
-  VIEW_SESSIONS = 1,
-  VIEW_SEMESTERS = 2,
-}

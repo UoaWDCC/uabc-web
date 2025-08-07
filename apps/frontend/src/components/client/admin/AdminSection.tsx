@@ -1,16 +1,11 @@
 "use client"
 
-import type { AdminPage } from "@repo/shared/types"
 import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
 import { Button } from "@repo/ui/components/Primitive"
 import { Container, TabPanel } from "@yamada-ui/react"
-import { type FC, memo } from "react"
+import { memo } from "react"
 
-export interface AdminSectionProps {
-  view: AdminPage
-}
-
-export const AdminSection: FC<AdminSectionProps> = memo(({ view }) => {
+export const AdminSection = memo(() => {
   return (
     <Container
       gap="xl"
@@ -19,7 +14,6 @@ export const AdminSection: FC<AdminSectionProps> = memo(({ view }) => {
       py={{ base: "md", sm: "md", lg: "md" }}
     >
       <AdminTabBar
-        defaultValue={view}
         tabPanelsProps={{
           p: "0",
         }}

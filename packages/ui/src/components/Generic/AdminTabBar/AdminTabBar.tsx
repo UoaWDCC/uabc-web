@@ -1,7 +1,6 @@
 "use client"
 
 import { memo, Tab, TabList, TabPanel, TabPanels, Tabs, type TabsProps } from "@yamada-ui/react"
-import Link from "next/link"
 
 /**
  * Props for {@link AdminTabBar} component
@@ -43,8 +42,8 @@ export const AdminTabBar = memo(
   ({
     children,
     tabLabel0 = "View Members",
-    tabLabel1 = "View Sessions",
-    tabLabel2 = "View Semesters",
+    tabLabel1 = "Edit/View Sessions",
+    tabLabel2 = "Create Semesters & Sessions",
     tabListProps,
     tabPanelsProps,
     ...props
@@ -52,15 +51,9 @@ export const AdminTabBar = memo(
     return (
       <Tabs {...props}>
         <TabList {...tabListProps}>
-          <Tab as={Link} href="/admin/member">
-            {tabLabel0}
-          </Tab>
-          <Tab as={Link} href="/admin/sessions">
-            {tabLabel1}
-          </Tab>
-          <Tab as={Link} href="/admin/semesters">
-            {tabLabel2}
-          </Tab>
+          <Tab>{tabLabel0}</Tab>
+          <Tab>{tabLabel1}</Tab>
+          <Tab>{tabLabel2}</Tab>
         </TabList>
 
         <TabPanels {...tabPanelsProps}>{children}</TabPanels>

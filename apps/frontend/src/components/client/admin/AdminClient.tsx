@@ -1,16 +1,10 @@
 "use client"
 
-import type { AdminPage } from "@repo/shared/types"
 import { NotAuthorised } from "@repo/ui/components/Generic"
-import type { FC } from "react"
 import { RoleGuard } from "@/context/RoleWrappers"
 import { AdminSection } from "./AdminSection"
 
-export interface AdminClientProps {
-  view: AdminPage
-}
-
-export const AdminClient: FC<AdminClientProps> = ({ view }) => {
+export const AdminClient = () => {
   return (
     <RoleGuard
       fallback={
@@ -22,7 +16,7 @@ export const AdminClient: FC<AdminClientProps> = ({ view }) => {
       }
       scope={["admin"]}
     >
-      {() => <AdminSection view={view} />}
+      {() => <AdminSection />}
     </RoleGuard>
   )
 }
