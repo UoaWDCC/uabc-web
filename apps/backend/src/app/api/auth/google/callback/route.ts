@@ -1,9 +1,4 @@
-import {
-  AUTH_COOKIE_NAME,
-  GoogleUserInfoResponseSchema,
-  MembershipType,
-  TOKEN_EXPIRY_TIME,
-} from "@repo/shared"
+import { GoogleUserInfoResponseSchema, MembershipType, TOKEN_EXPIRY_TIME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
@@ -108,16 +103,31 @@ export const GET = async (req: NextRequest) => {
   }
 
   const authDataService = new AuthDataService()
-  await authDataService.createAuth({
-    user,
-    email: user.email,
-    provider: "google",
-    providerAccountId: sub,
-    accessToken: tokens.access_token,
-    expiresAt: tokens.expiry_date,
-    scope: scopes.join(" "),
-    idToken: tokens.id_token,
-  })
+  try {
+    const existingAuth = await authDataService.getAuthByEmail(email)
+    await authDataService.updateAuth(existingAuth.id, {
+      provider: "google",
+      providerAccountId: sub,
+      accessToken: tokens.access_token,
+      expiresAt: tokens.expiry_date,
+      scope: scopes.join(" "),
+      idToken: tokens.id_token,
+    })
+  } catch (error) {
+    if (error instanceof NotFound) {
+      await authDataService.createAuth({
+        email: user.email,
+        provider: "google",
+        providerAccountId: sub,
+        accessToken: tokens.access_token,
+        expiresAt: tokens.expiry_date,
+        scope: scopes.join(" "),
+        idToken: tokens.id_token,
+      })
+    } else {
+      throw error
+    }
+  }
 
   const authService = new AuthService()
 
@@ -133,15 +143,9 @@ export const GET = async (req: NextRequest) => {
     },
     { expiresIn: TOKEN_EXPIRY_TIME },
   )
-  const response = NextResponse.redirect(new URL("/onboarding/name", req.url))
 
-  response.cookies.set(AUTH_COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 60 * 60,
-    path: "/",
-  })
+  const frontendUrl = new URL("/auth/callback", process.env.NEXT_PUBLIC_URL)
+  frontendUrl.searchParams.set("token", token)
 
-  return response
+  return NextResponse.redirect(frontendUrl)
 }
