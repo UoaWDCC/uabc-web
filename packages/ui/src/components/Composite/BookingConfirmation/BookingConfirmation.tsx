@@ -7,14 +7,14 @@ import { Button, Heading, IconButton, IconWithText } from "@repo/ui/components/P
 import { useBookingLimits } from "@repo/ui/hooks"
 import { ArrowLeftIcon } from "@yamada-ui/lucide"
 import {
-  Box,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Center,
   DataList,
-  HStack,
+  Grid,
+  GridItem,
   Text,
   VStack,
 } from "@yamada-ui/react"
@@ -96,6 +96,11 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
       selectedCount: bookingData.length,
     })
 
+    const [weeklyText, totalText] = useMemo(() => {
+      const [weekly, total] = sessionsLabel.split(" • ")
+      return [weekly ?? sessionsLabel, total ?? ""]
+    }, [sessionsLabel])
+
     const handleConfirm = useCallback(() => {
       onConfirm?.(bookingData)
     }, [onConfirm, bookingData])
@@ -151,40 +156,39 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
         rounded="3xl"
         w="full"
       >
-        <CardHeader pt="0" px="0" w="full">
-          <HStack
+        <CardHeader pt="0" w="full">
+          <Grid
             alignItems="center"
-            display={{ base: "flex", md: "grid" }}
             flexDirection={{ base: "column", sm: "row" }}
             gap={{ base: "sm", md: "0" }}
-            gridTemplateColumns={{ md: "1fr auto 1fr" }}
+            gridTemplateColumns="1fr auto 1fr"
             justifyContent="space-between"
             w="full"
           >
-            <IconButton
-              aria-label="Back"
-              color={["black", "white"]}
-              icon={<ArrowLeftIcon />}
-              left={{ base: "md", md: "0" }}
-              onClick={onBack}
-              position={{ base: "absolute", md: "relative" }}
-              size={{ base: "md", md: "lg" }}
-              top={{ base: "md", md: "0" }}
-              variant="ghost"
-            />
+            <GridItem>
+              <IconButton
+                aria-label="Back"
+                color={["black", "white"]}
+                icon={<ArrowLeftIcon />}
+                onClick={onBack}
+                size={{ base: "md", md: "lg" }}
+                variant="ghost"
+              />
+            </GridItem>
 
-            <Heading.h2
-              color={{ base: "primary", md: "white" }}
-              fontSize={{ base: "xl", sm: "2xl", md: "3xl" }}
-              fontWeight={{ base: "semibold", md: "medium" }}
-              order={{ base: 2, sm: 1 }}
-              textAlign="center"
-            >
-              {title}
-            </Heading.h2>
-
-            <Box order={{ base: 3, sm: 2 }} />
-          </HStack>
+            <GridItem>
+              <Heading.h2
+                color={{ base: "primary", md: "white" }}
+                fontSize={{ base: "xl", sm: "2xl", md: "3xl" }}
+                fontWeight={{ base: "semibold", md: "medium" }}
+                order={{ base: 2, sm: 1 }}
+                textAlign="center"
+              >
+                {title}
+              </Heading.h2>
+            </GridItem>
+            <GridItem />
+          </Grid>
         </CardHeader>
 
         <CardBody position="relative" w="full">
@@ -194,17 +198,43 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
             filter="blur(10px) brightness(0.5)"
             inset="0"
             justifyContent="center"
+            pointerEvents="none"
             position="absolute"
             userSelect="none"
-            zIndex={-1}
+            zIndex={0}
           >
             <UabcLogo boxSize={{ base: "sm", xl: "md" }} opacity={0.5} />
           </Center>
 
-          <VStack gap="lg" w="full">
-            <Center>
-              <IconWithText icon={<ShuttleIcon />} label={sessionsLabel} textWrap="balance" />
+          <VStack gap="md" w="full">
+            <Center display={{ base: "none", md: "flex" }}>
+              <IconWithText icon={<ShuttleIcon />} label={sessionsLabel} />
             </Center>
+            <Grid
+              display={{ base: "grid", md: "none" }}
+              gap="sm"
+              gridTemplateColumns="1fr auto 1fr"
+              w="full"
+            >
+              <GridItem as={Center}>
+                <ShuttleIcon />
+              </GridItem>
+              <GridItem>
+                <Grid
+                  gap="sm"
+                  gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+                  textAlign={{ base: "center", md: "left" }}
+                >
+                  <GridItem>
+                    <Text>{weeklyText}</Text>
+                  </GridItem>
+                  <GridItem>
+                    <Text>{totalText}</Text>
+                  </GridItem>
+                </Grid>
+              </GridItem>
+              <GridItem />
+            </Grid>
 
             {bookingItems.map(({ booking, items, index }) => (
               <VStack gap="md" key={`${booking.startTime}-${booking.endTime}-${index}`} w="full">
