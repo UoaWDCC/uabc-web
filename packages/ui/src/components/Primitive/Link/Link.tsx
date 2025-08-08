@@ -21,11 +21,6 @@ export type LinkProps<
    * its type can be augmented via `RouteToSearchParams`.
    */
   query?: SearchParamsFor<Extract<THref, string>>
-  /**
-   * When true, also append `query` to external URLs.
-   * By default, query is only applied to internal routes.
-   */
-  allowExternalQuery?: boolean
 }
 
 /**
@@ -58,14 +53,13 @@ export const Link = <
   href,
   custom,
   query,
-  allowExternalQuery,
   ...props
 }: LinkProps<TCustom, THref>) => {
   let nextHref: NextLinkProps["href"] = href as never
   if (query && typeof href === "string") {
     if (href.startsWith("/")) {
       nextHref = { pathname: href, query } as never
-    } else if (allowExternalQuery) {
+    } else if (query) {
       nextHref = buildExternalHref(href, query as Record<string, unknown>) as never
     }
   }

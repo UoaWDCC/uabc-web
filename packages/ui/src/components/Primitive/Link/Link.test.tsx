@@ -58,19 +58,9 @@ describe("<Link />", () => {
     expect(link).toHaveAttribute("href", expect.stringContaining("multi=2"))
   })
 
-  it("should not append query params for external URLs by default", () => {
+  it("should append query params for external URLs", () => {
     render(
       <Link href="https://example.com" query={{ foo: "bar" }}>
-        External
-      </Link>,
-    )
-    const link = screen.getByRole("link", { name: /external/i })
-    expect(link).toHaveAttribute("href", "https://example.com")
-  })
-
-  it("should append query params for external URLs when allowExternalQuery is true", () => {
-    render(
-      <Link allowExternalQuery href="https://example.com" query={{ foo: "bar" }}>
         External
       </Link>,
     )
