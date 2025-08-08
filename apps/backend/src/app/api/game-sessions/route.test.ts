@@ -2,6 +2,7 @@ import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
+import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import { GET } from "./route"
 
 describe("/api/game-sessions", async () => {
@@ -69,6 +70,39 @@ describe("/api/game-sessions", async () => {
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+    })
+
+    it("should return paginated game sessions with normalized fields from schedules", async () => {
+      // Create a game session schedule
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
+        gameSessionScheduleCreateMock,
+      )
+
+      // Create a game session linked to the schedule with empty name/location
+      const gameSessionWithSchedule = {
+        ...gameSessionCreateMock,
+        gameSessionSchedule: newGameSessionSchedule.id,
+        name: null,
+        location: null,
+      }
+      await gameSessionDataService.createGameSession(gameSessionWithSchedule)
+
+      // Call the API route
+      const req = createMockNextRequest("/api/game-sessions?limit=10&page=1")
+      const res = await GET(req)
+
+      expect(res.status).toBe(StatusCodes.OK)
+      const json = await res.json()
+
+      // Find the game session with our schedule
+      const sessionWithSchedule = json.data.docs.find(
+        (doc: any) => doc.gameSessionSchedule?.id === newGameSessionSchedule.id,
+      )
+
+      // Verify that the response contains normalized fields from the schedule
+      expect(sessionWithSchedule).toBeDefined()
+      expect(sessionWithSchedule.name).toBe(gameSessionScheduleCreateMock.name)
+      expect(sessionWithSchedule.location).toBe(gameSessionScheduleCreateMock.location)
     })
   })
 })

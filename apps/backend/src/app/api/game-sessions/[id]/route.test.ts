@@ -2,6 +2,7 @@ import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
+import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import { GET } from "./route"
 
 const gameSessionDataService = new GameSessionDataService()
@@ -48,6 +49,34 @@ describe("/api/game-sessions/[id]", () => {
       expect(consoleErrorSpy).toHaveBeenCalled()
 
       consoleErrorSpy.mockRestore()
+    })
+
+    it("should return normalized name and location from gameSessionSchedule when GameSession fields are empty", async () => {
+      // Create a game session schedule
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
+        gameSessionScheduleCreateMock,
+      )
+
+      // Create a game session linked to the schedule with empty name/location
+      const gameSessionWithSchedule = {
+        ...gameSessionCreateMock,
+        gameSessionSchedule: newGameSessionSchedule.id,
+        name: null,
+        location: null,
+      }
+      const newGameSession = await gameSessionDataService.createGameSession(gameSessionWithSchedule)
+
+      // Call the API route
+      const res = await GET(createMockNextRequest("/api/gameSessions"), {
+        params: Promise.resolve({ id: newGameSession.id }),
+      })
+
+      expect(res.status).toBe(StatusCodes.OK)
+      const json = await res.json()
+
+      // Verify that the response contains normalized fields from the schedule
+      expect(json.data.name).toBe(gameSessionScheduleCreateMock.name)
+      expect(json.data.location).toBe(gameSessionScheduleCreateMock.location)
     })
   })
 })

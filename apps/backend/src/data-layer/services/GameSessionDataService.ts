@@ -10,6 +10,28 @@ import { payload } from "@/data-layer/adapters/Payload"
 
 export default class GameSessionDataService {
   /**
+   * Normalizes the name and location fields of a GameSession by using values from 
+   * its related GameSessionSchedule when the GameSession fields are null/undefined
+   *
+   * @param gameSession The GameSession to normalize
+   * @returns The GameSession with normalized name and location fields
+   */
+  private normalizeGameSessionFields(gameSession: GameSession): GameSession {
+    // If gameSessionSchedule is populated as an object (not just an ID string)
+    const schedule = gameSession.gameSessionSchedule as GameSessionSchedule | null | undefined
+    
+    if (schedule && typeof schedule === "object" && "name" in schedule) {
+      return {
+        ...gameSession,
+        name: gameSession.name || schedule.name,
+        location: gameSession.location || schedule.location,
+      }
+    }
+    
+    return gameSession
+  }
+
+  /**
    * Creates a new {@link GameSession} document
    *
    * @param newGameSessionData the {@link CreateGameSessionData} to create a new game session with
@@ -33,11 +55,20 @@ export default class GameSessionDataService {
     limit = 100,
     page = 1,
   ): Promise<PaginatedDocs<GameSession>> {
-    return await payload.find({
+    const result = await payload.find({
       collection: "gameSession",
       limit,
       page,
+      depth: 1, // Populate the gameSessionSchedule relationship
     })
+
+    // Apply normalization to each GameSession in the results
+    const normalizedDocs = result.docs.map((doc) => this.normalizeGameSessionFields(doc))
+
+    return {
+      ...result,
+      docs: normalizedDocs,
+    }
   }
 
   /**
@@ -47,10 +78,13 @@ export default class GameSessionDataService {
    * @returns the {@link GameSession} document if it exists, otherwise throws a {@link NotFound} error
    */
   public async getGameSessionById(id: string): Promise<GameSession> {
-    return await payload.findByID({
+    const gameSession = await payload.findByID({
       collection: "gameSession",
       id,
+      depth: 1, // Populate the gameSessionSchedule relationship
     })
+
+    return this.normalizeGameSessionFields(gameSession)
   }
 
   /**

@@ -244,4 +244,81 @@ describe("GameSessionDataService", () => {
       )
     })
   })
+
+  describe("Field normalization from GameSessionSchedule", () => {
+    it("should normalize name and location from gameSessionSchedule when GameSession fields are empty", async () => {
+      // Create a game session schedule
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
+        gameSessionScheduleCreateMock,
+      )
+
+      // Create a game session with empty name and location but linked to schedule
+      const gameSessionWithSchedule = {
+        ...gameSessionCreateMock,
+        gameSessionSchedule: newGameSessionSchedule.id,
+        name: null,
+        location: null,
+      }
+      const newGameSession = await gameSessionDataService.createGameSession(gameSessionWithSchedule)
+
+      // Fetch the game session by ID (should normalize fields)
+      const fetchedGameSession = await gameSessionDataService.getGameSessionById(newGameSession.id)
+
+      // Check that name and location are normalized from the schedule
+      expect(fetchedGameSession.name).toBe(gameSessionScheduleCreateMock.name)
+      expect(fetchedGameSession.location).toBe(gameSessionScheduleCreateMock.location)
+    })
+
+    it("should not override GameSession name and location when they are already set", async () => {
+      // Create a game session schedule
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
+        gameSessionScheduleCreateMock,
+      )
+
+      // Create a game session with its own name and location
+      const gameSessionWithOwnData = {
+        ...gameSessionCreateMock,
+        gameSessionSchedule: newGameSessionSchedule.id,
+        name: "Custom Game Session Name",
+        location: "Custom Location",
+      }
+      const newGameSession = await gameSessionDataService.createGameSession(gameSessionWithOwnData)
+
+      // Fetch the game session by ID
+      const fetchedGameSession = await gameSessionDataService.getGameSessionById(newGameSession.id)
+
+      // Check that original name and location are preserved
+      expect(fetchedGameSession.name).toBe("Custom Game Session Name")
+      expect(fetchedGameSession.location).toBe("Custom Location")
+    })
+
+    it("should normalize fields in paginated results", async () => {
+      // Create a game session schedule
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
+        gameSessionScheduleCreateMock,
+      )
+
+      // Create a game session linked to the schedule with empty fields
+      const gameSessionWithSchedule = {
+        ...gameSessionCreateMock,
+        gameSessionSchedule: newGameSessionSchedule.id,
+        name: null,
+        location: null,
+      }
+      await gameSessionDataService.createGameSession(gameSessionWithSchedule)
+
+      // Get paginated results
+      const paginatedResults = await gameSessionDataService.getPaginatedGameSessions(10, 1)
+
+      // Find our game session in the results
+      const normalizedSession = paginatedResults.docs.find(
+        (session) => session.gameSessionSchedule === newGameSessionSchedule.id,
+      )
+
+      // Check that fields are normalized
+      expect(normalizedSession).toBeDefined()
+      expect(normalizedSession?.name).toBe(gameSessionScheduleCreateMock.name)
+      expect(normalizedSession?.location).toBe(gameSessionScheduleCreateMock.location)
+    })
+  })
 })
