@@ -1,20 +1,31 @@
 "use client"
 
-import type { ValidHrefWithCustom } from "@repo/shared/types/routes"
+import type { SearchParamsFor, ValidHrefWithCustom } from "@repo/shared/types/routes"
+import { buildExternalHref } from "@repo/ui/utils"
 import { type Merge, Link as UILink, type LinkProps as UILinkProps } from "@yamada-ui/react"
 import NextLink, { type LinkProps as NextLinkProps } from "next/link"
 
-export type LinkProps<T extends boolean = false> = Omit<
-  Omit<Merge<UILinkProps, Omit<NextLinkProps, keyof UILinkProps>>, "href">,
-  "href"
-> & {
-  href: ValidHrefWithCustom<T>
+export type LinkProps<
+  TCustom extends boolean = false,
+  THref extends ValidHrefWithCustom<TCustom> = ValidHrefWithCustom<TCustom>,
+> = Omit<Omit<Merge<UILinkProps, Omit<NextLinkProps, keyof UILinkProps>>, "href">, "href"> & {
+  href: THref
   /**
    * Allow custom internal routes (starting with /)
    * When true, any internal route is allowed
    * When false, only predefined routes are allowed
    */
-  custom?: T
+  custom?: TCustom
+  /**
+   * Typed query object for URL search params. If `href` is a known route,
+   * its type can be augmented via `RouteToSearchParams`.
+   */
+  query?: SearchParamsFor<Extract<THref, string>>
+  /**
+   * When true, also append `query` to external URLs.
+   * By default, query is only applied to internal routes.
+   */
+  allowExternalQuery?: boolean
 }
 
 /**
@@ -40,6 +51,24 @@ export type LinkProps<T extends boolean = false> = Omit<
  * <Link href="/invalid-route">Invalid</Link> // ❌
  * ```
  */
-export const Link = <T extends boolean = false>({ href, custom, ...props }: LinkProps<T>) => {
-  return <UILink as={NextLink} href={href} {...props} />
+export const Link = <
+  TCustom extends boolean = false,
+  THref extends ValidHrefWithCustom<TCustom> = ValidHrefWithCustom<TCustom>,
+>({
+  href,
+  custom,
+  query,
+  allowExternalQuery,
+  ...props
+}: LinkProps<TCustom, THref>) => {
+  let nextHref: NextLinkProps["href"] = href as never
+  if (query && typeof href === "string") {
+    if (href.startsWith("/")) {
+      nextHref = { pathname: href, query } as never
+    } else if (allowExternalQuery) {
+      nextHref = buildExternalHref(href, query as Record<string, unknown>) as never
+    }
+  }
+
+  return <UILink as={NextLink} href={nextHref as never} {...props} />
 }

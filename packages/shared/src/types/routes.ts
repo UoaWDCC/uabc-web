@@ -66,6 +66,52 @@ export type ValidHrefWithCustom<T extends boolean = false> = T extends true
   : ValidHref
 
 /**
+ * Primitive types that URL search params may take
+ */
+export type SearchParamPrimitive = string | number | boolean | null | undefined
+
+/**
+ * Allowed value type for a single search param key
+ */
+export type SearchParamValue = SearchParamPrimitive | SearchParamPrimitive[]
+
+/**
+ * Generic record type for search params
+ */
+export type SearchParamsRecord = Record<string, SearchParamValue>
+
+/**
+ * Map routes to their specific search param shapes.
+ *
+ * This interface is intentionally empty and can be augmented via
+ * declaration merging in app code to provide per-route param types.
+ *
+ * Example augmentation in your app:
+ *
+ * declare module "@repo/shared/types/routes" {
+ *   interface RouteToSearchParams {
+ *     "/events": { category?: string; page?: number }
+ *   }
+ * }
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface RouteToSearchParams {
+  /**
+   * Placeholder property to avoid empty-interface lint errors.
+   * This interface is intended for declaration merging.
+   */
+  __never__?: never
+}
+
+/**
+ * Resolve the search param type for a given route. Falls back to a generic
+ * record if the route has no specific mapping.
+ */
+export type SearchParamsFor<R extends string> = R extends keyof RouteToSearchParams
+  ? RouteToSearchParams[R]
+  : SearchParamsRecord
+
+/**
  * Utility function to get route by enum value
  */
 export const getRoute = (route: Routes): string => route
