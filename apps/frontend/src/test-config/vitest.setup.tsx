@@ -11,6 +11,10 @@ vi.mock("@repo/ui/components/Primitive/Image", () => ({
   ),
 }))
 
+/**
+ * Mock the Next.js Link component for testing.
+ * Next.js Link does prefetching, etc. which we don't want in tests.
+ */
 vi.mock("next/link", () => ({
   default: ({ children, href }: { children: React.ReactNode; href: string }) => (
     <a href={href}>{children}</a>

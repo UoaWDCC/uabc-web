@@ -14,11 +14,19 @@ import { type FC, useReducer } from "react"
 import type { AuthContextValueWithUser } from "@/context/RoleWrappers"
 import { createBookingFlowReducer, initialState } from "./bookingFlowReducer"
 
+/**
+ * Props for the BookFlow component.
+ */
 type BookFlowProps = {
+  /**
+   * The authentication context value with user.
+   */
   auth: AuthContextValueWithUser
 }
 
-// Mock bookings data - this should be moved to a proper data source
+/**
+ * TODO: Mock bookings data - this should be moved to a proper data source
+ */
 const bookings: SessionItem[] = [
   {
     id: "monday-session",
@@ -82,6 +90,9 @@ const bookings: SessionItem[] = [
   },
 ]
 
+/**
+ * The main component for the booking flow.
+ */
 export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
   const bookingFlowReducer = createBookingFlowReducer(bookings)
   const [state, dispatch] = useReducer(bookingFlowReducer, initialState)

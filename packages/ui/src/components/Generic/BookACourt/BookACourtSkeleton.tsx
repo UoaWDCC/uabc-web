@@ -1,7 +1,6 @@
 import { PlayLevel } from "@repo/shared/types"
-import { Button } from "@repo/ui/components/Primitive"
-import { ButtonGroup, For, Link, Spacer, Text, VStack } from "@yamada-ui/react"
-import NextLink from "next/link"
+import { Button, Link } from "@repo/ui/components/Primitive"
+import { ButtonGroup, For, Spacer, Text, VStack } from "@yamada-ui/react"
 
 /**
  * A component for choosing a play level when booking a court.
@@ -26,7 +25,6 @@ export const BookACourtSkeleton = () => {
       </ButtonGroup>
       <Spacer />
       <Link
-        as={NextLink}
         color="muted"
         fontSize={{ base: "lg", md: "xl" }}
         fontWeight="medium"
