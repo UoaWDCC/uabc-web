@@ -13,6 +13,10 @@ import { type SubmitHandler, useForm } from "react-hook-form"
  */
 export interface BasicInfoForm1Props {
   /**
+   * Default values to pre-fill the form.
+   */
+  defaultValues?: BasicInfoForm1Values
+  /**
    * Submit handler called when user submits the form.
    */
   onSubmit?: SubmitHandler<BasicInfoForm1Values>
@@ -27,7 +31,7 @@ export interface BasicInfoForm1Props {
  * @param props BasicInfoForm1 component props
  * @returns The form component
  */
-export const BasicInfoForm1: FC<BasicInfoForm1Props> = memo(({ onSubmit }) => {
+export const BasicInfoForm1: FC<BasicInfoForm1Props> = memo(({ defaultValues, onSubmit }) => {
   const {
     register,
     handleSubmit,
@@ -50,6 +54,7 @@ export const BasicInfoForm1: FC<BasicInfoForm1Props> = memo(({ onSubmit }) => {
         <FormControl errorMessage={errors.firstName?.message} invalid={!!errors.firstName}>
           <TextInput
             data-testid="first-name"
+            defaultValue={defaultValues?.firstName}
             placeholder="First name"
             size="lg"
             startElement={<FolderPenIcon />}
@@ -60,6 +65,7 @@ export const BasicInfoForm1: FC<BasicInfoForm1Props> = memo(({ onSubmit }) => {
         <FormControl errorMessage={errors.lastName?.message} invalid={!!errors.lastName}>
           <TextInput
             data-testid="last-name"
+            defaultValue={defaultValues?.lastName}
             placeholder="Lastname"
             size="lg"
             startElement={<FolderPenIcon />}

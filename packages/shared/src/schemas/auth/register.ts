@@ -158,6 +158,19 @@ export const AdditionalInfoFormSchema = z.object({
   dietaryRequirements: z.string(),
 })
 
+export const CasualInfoFormSchema = z.object({
+  agree: z.boolean(),
+})
+
+export const RegisterFlowStateSchema = z.object({
+  step: z.number(),
+  basicInfo1: BasicInfoForm1Schema.nullable(),
+  basicInfo2: BasicInfoForm2Schema.nullable(),
+  universityInfo: UniversityInfoFormSchema.nullable(),
+  additionalInfo: AdditionalInfoFormSchema.nullable(),
+  casualInfo: CasualInfoFormSchema.nullable(),
+})
+
 export const VerificationCodeRequestSchema = z.object({
   /**
    * The user's email address
