@@ -1,7 +1,7 @@
 "use client"
 
 import type { ValidHrefWithCustom } from "@repo/shared/types/routes"
-import { type Merge, type LinkProps as UILinkProps, ui } from "@yamada-ui/react"
+import { type Merge, Link as UILink, type LinkProps as UILinkProps } from "@yamada-ui/react"
 import NextLink, { type LinkProps as NextLinkProps } from "next/link"
 
 export type LinkProps<T extends boolean = false> = Omit<
@@ -41,5 +41,5 @@ export type LinkProps<T extends boolean = false> = Omit<
  * ```
  */
 export const Link = <T extends boolean = false>({ href, custom, ...props }: LinkProps<T>) => {
-  return <ui.a as={NextLink} href={href} {...props} />
+  return <UILink as={NextLink} href={href} {...props} />
 }
