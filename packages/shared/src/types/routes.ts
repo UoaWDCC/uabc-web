@@ -23,6 +23,21 @@ export const RouteGroups = {
 } as const
 
 /**
+ * Compile-time check: ensure every `Routes` enum value is present in `RouteGroups`.
+ * If any enum member is missing from the groups below, TypeScript will report an error.
+ */
+type GroupValues<T extends Record<string, Record<string, unknown>>> = {
+  [K in keyof T]: T[K][keyof T[K]]
+}[keyof T]
+type RoutesInGroups = GroupValues<typeof RouteGroups>
+type AssertAllRoutesPresent<T extends never> = T
+/**
+ * Ensures at compile-time that every value in the `Routes` enum is included in one of the `RouteGroups`.
+ * If any route is missing from the groups, TypeScript will produce an error.
+ */
+type _AllEnumRoutesAreGrouped = AssertAllRoutesPresent<Exclude<Routes, RoutesInGroups>>
+
+/**
  * Type for all valid route values
  */
 export type RouteValue = `${Routes}`
