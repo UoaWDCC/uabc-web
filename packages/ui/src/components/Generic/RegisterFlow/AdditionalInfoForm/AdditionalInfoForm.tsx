@@ -5,9 +5,7 @@ import {
   AdditionalInfoFormSchema,
   type AdditionalInfoFormValues,
   Gender,
-  GenderLabel,
   PlayLevel,
-  PlayLevelLabel,
 } from "@repo/shared"
 import { Button, Heading, InputType, Select, TextInput } from "@repo/ui/components/Primitive"
 import { BeanOffIcon, IdCardIcon, VenusAndMarsIcon } from "@yamada-ui/lucide"
@@ -34,7 +32,7 @@ export interface AdditionalInfoFormProps {
  */
 const genderOptions = Object.values(Gender).map((value) => ({
   value: value,
-  label: GenderLabel[value],
+  label: value,
 }))
 
 /**
@@ -42,7 +40,7 @@ const genderOptions = Object.values(Gender).map((value) => ({
  */
 const skillLevelOptions = Object.values(PlayLevel).map((playLevel) => ({
   value: playLevel,
-  label: PlayLevelLabel[playLevel],
+  label: playLevel,
 }))
 
 /**

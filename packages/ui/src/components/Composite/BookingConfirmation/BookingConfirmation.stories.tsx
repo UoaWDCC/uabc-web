@@ -34,7 +34,7 @@ export const Default: Story = {
       },
     ],
     user: {
-      role: MembershipType.member,
+      role: MembershipType.MEMBER,
       remainingSessions: 2,
     },
   },
@@ -56,7 +56,7 @@ export const CasualMember: Story = {
       },
     ],
     user: {
-      role: MembershipType.casual,
+      role: MembershipType.CASUAL,
       remainingSessions: 1,
     },
   },
@@ -78,7 +78,7 @@ export const CustomTitle: Story = {
       },
     ],
     user: {
-      role: MembershipType.member,
+      role: MembershipType.MEMBER,
       remainingSessions: 2,
     },
     title: "Confirm Your Booking",

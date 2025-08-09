@@ -1,4 +1,4 @@
-import { MembershipType } from "@repo/shared/types/enums"
+import { MembershipType } from "@repo/shared/enums"
 import type { Meta, StoryObj } from "@storybook/react"
 import { SelectACourt } from "./SelectACourt"
 
@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>
 export const MemberUser: Story = {
   args: {
     user: {
-      role: MembershipType.member,
+      role: MembershipType.MEMBER,
       remainingSessions: 2,
     },
     title: "Select Your Sessions",
@@ -96,7 +96,7 @@ export const MemberUser: Story = {
 export const CasualUser: Story = {
   args: {
     user: {
-      role: MembershipType.casual,
+      role: MembershipType.CASUAL,
       remainingSessions: 2,
     },
     title: "Choose Your Session",

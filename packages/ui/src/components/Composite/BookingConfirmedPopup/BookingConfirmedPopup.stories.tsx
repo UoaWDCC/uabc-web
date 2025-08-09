@@ -35,7 +35,7 @@ export const Default: Story = {}
 export const Casual: Story = {
   parameters: {
     query: {
-      "booking-confirmed-popup-value": MembershipType.casual,
+      "booking-confirmed-popup-value": MembershipType.CASUAL,
     },
   },
 }

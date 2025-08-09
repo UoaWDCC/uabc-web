@@ -1,4 +1,4 @@
-import { PlayLevel } from "@repo/shared/types"
+import { PlayLevel } from "@repo/shared"
 import { Button, Link } from "@repo/ui/components/Primitive"
 import { ButtonGroup, For, Spacer, Text, VStack } from "@yamada-ui/react"
 

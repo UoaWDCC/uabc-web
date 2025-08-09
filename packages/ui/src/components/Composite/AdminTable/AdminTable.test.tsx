@@ -11,7 +11,7 @@ const mockData = [
     remaining: "10",
     university: "University of Auckland",
     joined: "2021-01-01",
-    level: PlayLevel.beginner,
+    level: PlayLevel.BEGINNER,
   },
   {
     id: "2",
@@ -21,7 +21,7 @@ const mockData = [
     remaining: "10",
     university: "University of Auckland",
     joined: "2021-01-01",
-    level: PlayLevel.advanced,
+    level: PlayLevel.ADVANCED,
   },
   {
     id: "3",
@@ -31,7 +31,7 @@ const mockData = [
     remaining: "10",
     university: "University of Auckland",
     joined: "2021-01-01",
-    level: PlayLevel.intermediate,
+    level: PlayLevel.INTERMEDIATE,
   },
 ]
 

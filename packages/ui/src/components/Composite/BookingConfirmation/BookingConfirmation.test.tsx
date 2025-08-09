@@ -17,7 +17,7 @@ const defaultProps = {
     },
   ],
   user: {
-    role: MembershipType.member,
+    role: MembershipType.MEMBER,
     remainingSessions: 6,
   },
   onBack: vi.fn(),

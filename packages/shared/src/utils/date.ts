@@ -1,5 +1,5 @@
 import { format } from "date-fns"
-import { Weekday } from "../types"
+import { Weekday } from "../enums"
 
 /**
  * Returns the number of days from fromDay to the next occurrence of toDay.

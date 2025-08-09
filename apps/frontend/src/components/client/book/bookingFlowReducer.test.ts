@@ -49,7 +49,7 @@ describe("bookingFlowReducer", () => {
   })
 
   it("should handle PREV_STEP action from select-court to play-level", () => {
-    const state = { ...initialState, step: "select-court" as const, playLevel: PlayLevel.beginner }
+    const state = { ...initialState, step: "select-court" as const, playLevel: PlayLevel.BEGINNER }
     const action = { type: "PREV_STEP" as const }
     const newState = bookingFlowReducer(state, action)
 
@@ -80,10 +80,10 @@ describe("bookingFlowReducer", () => {
   })
 
   it("should handle SET_PLAY_LEVEL action", () => {
-    const action = { type: "SET_PLAY_LEVEL" as const, payload: PlayLevel.beginner }
+    const action = { type: "SET_PLAY_LEVEL" as const, payload: PlayLevel.BEGINNER }
     const newState = bookingFlowReducer(initialState, action)
 
-    expect(newState.playLevel).toBe(PlayLevel.beginner)
+    expect(newState.playLevel).toBe(PlayLevel.BEGINNER)
   })
 
   it("should handle SET_BOOKING_TIMES action", () => {
@@ -112,7 +112,7 @@ describe("bookingFlowReducer", () => {
   it("should handle RESET action", () => {
     const state = {
       step: "confirmation" as const,
-      playLevel: PlayLevel.beginner,
+      playLevel: PlayLevel.BEGINNER,
       bookingTimes: ["session-1"],
       selectedSessions: mockBookings,
     }
@@ -133,8 +133,8 @@ describe("bookingFlowReducer", () => {
     let state = initialState
 
     // SET_PLAY_LEVEL
-    state = bookingFlowReducer(state, { type: "SET_PLAY_LEVEL", payload: PlayLevel.beginner })
-    expect(state.playLevel).toBe(PlayLevel.beginner)
+    state = bookingFlowReducer(state, { type: "SET_PLAY_LEVEL", payload: PlayLevel.BEGINNER })
+    expect(state.playLevel).toBe(PlayLevel.BEGINNER)
 
     // NEXT_STEP
     state = bookingFlowReducer(state, { type: "NEXT_STEP" })

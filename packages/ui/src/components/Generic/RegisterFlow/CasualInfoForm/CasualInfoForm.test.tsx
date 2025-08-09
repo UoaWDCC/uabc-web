@@ -1,4 +1,4 @@
-import type { CasualInfoFormValues } from "@repo/shared/types"
+import type { CasualInfoFormValues } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as CasualInfoFormModule from "./index"

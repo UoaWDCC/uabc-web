@@ -1,5 +1,5 @@
 import z from "zod"
-import { Gender, PlayLevel, University } from "../../types"
+import { Gender, PlayLevel, University } from "../../enums"
 
 export const RegisterRequestBodySchema = z.object({
   /**
@@ -104,7 +104,7 @@ export const UniversityInfoFormSchema = z
     studentUpi: z.string().optional(),
   })
   .superRefine(({ university, studentId, studentUpi }, ctx) => {
-    if (university === University.uoa) {
+    if (university === University.UOA) {
       if (!studentId) {
         ctx.addIssue({
           code: "custom",

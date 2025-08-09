@@ -1,3 +1,4 @@
+import { Weekday } from "@repo/shared"
 import { payload } from "@/data-layer/adapters/Payload"
 import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import SemesterDataService from "./SemesterDataService"
@@ -44,16 +45,16 @@ describe("SemesterDataService", () => {
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
       const updatedSemester = await semesterDataService.updateSemester(newSemester.id, {
         name: "test",
-        bookingOpenDay: "wednesday",
+        bookingOpenDay: Weekday.WEDNESDAY,
       })
       expect(updatedSemester.name).toStrictEqual("test")
-      expect(updatedSemester.bookingOpenDay).toStrictEqual("wednesday")
+      expect(updatedSemester.bookingOpenDay).toStrictEqual(Weekday.WEDNESDAY)
     })
 
     it("should return null when updating non-existent semester", async () => {
       const updateNotFoundSemester = semesterDataService.updateSemester("nonexistentid", {
         name: "test",
-        bookingOpenDay: "wednesday",
+        bookingOpenDay: Weekday.WEDNESDAY,
       })
       await expect(updateNotFoundSemester).rejects.toThrow("Not Found")
     })

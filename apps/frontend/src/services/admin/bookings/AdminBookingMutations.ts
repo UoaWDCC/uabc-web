@@ -1,4 +1,4 @@
-import type { UpdateBookingRequest } from "@repo/shared/types"
+import type { UpdateBookingRequest } from "@repo/shared"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { QueryKeys } from "@/services"
 import AdminBookingService from "./AdminBookingService"

@@ -19,7 +19,7 @@ describe("<UniversityInfoForm />", () => {
     const { user } = render(<UniversityInfoForm />)
 
     await user.click(screen.getByTestId("university"))
-    await user.click(screen.getByText(University.aut))
+    await user.click(screen.getByText(University.AUT))
 
     expect(screen.getByTestId("student-id")).toBeDisabled()
     expect(screen.getByTestId("student-upi")).toBeDisabled()
@@ -34,7 +34,7 @@ describe("<UniversityInfoForm />", () => {
     const sampleStudentUpi = "bond007"
 
     await user.click(screen.getByTestId("university"))
-    await user.click(screen.getByText(University.uoa))
+    await user.click(screen.getByText(University.UOA))
     await user.type(screen.getByTestId("student-id"), sampleStudentId)
     await user.type(screen.getByTestId("student-upi"), sampleStudentUpi)
 
@@ -42,7 +42,7 @@ describe("<UniversityInfoForm />", () => {
     await user.click(submitButton)
 
     expect(handleSubmit).toReturnWith({
-      university: University.uoa,
+      university: University.UOA,
       studentId: sampleStudentId,
       studentUpi: sampleStudentUpi,
     })
@@ -54,13 +54,13 @@ describe("<UniversityInfoForm />", () => {
     const { user } = render(<UniversityInfoForm onSubmit={handleSubmit} />)
 
     await user.click(screen.getByTestId("university"))
-    await user.click(screen.getByText(University.aut))
+    await user.click(screen.getByText(University.AUT))
 
     const submitButton = screen.getByText("Continue")
     await user.click(submitButton)
 
     expect(handleSubmit).toReturnWith({
-      university: University.aut,
+      university: University.AUT,
       studentId: "",
       studentUpi: "",
     })
@@ -72,7 +72,7 @@ describe("<UniversityInfoForm />", () => {
     const { user } = render(<UniversityInfoForm onSubmit={handleSubmit} />)
 
     await user.click(screen.getByTestId("university"))
-    await user.click(screen.getByText(University.uoa))
+    await user.click(screen.getByText(University.UOA))
     await user.type(screen.getByTestId("student-id"), "1234567890") // More than 9 digits
     await user.type(screen.getByTestId("student-upi"), "bond007")
 
@@ -88,7 +88,7 @@ describe("<UniversityInfoForm />", () => {
     const { user } = render(<UniversityInfoForm onSubmit={handleSubmit} />)
 
     await user.click(screen.getByTestId("university"))
-    await user.click(screen.getByText(University.uoa))
+    await user.click(screen.getByText(University.UOA))
     await user.type(screen.getByTestId("student-id"), "123456789")
     await user.type(screen.getByTestId("student-upi"), "bond1111") // Numerical part is not 3 digits
 

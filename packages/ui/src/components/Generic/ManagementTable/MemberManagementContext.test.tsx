@@ -1,3 +1,4 @@
+import { MembershipType } from "@repo/shared"
 import { act, renderHook } from "@repo/ui/test-utils"
 import { NuqsTestingAdapter } from "nuqs/adapters/testing"
 import type { ReactNode } from "react"
@@ -5,9 +6,9 @@ import { ManagementTableProvider, useManagementTable } from "./MemberManagementC
 
 type Row = { id: string; name: string; role?: string; status?: string }
 const mockData: Row[] = [
-  { id: "1", name: "Alice", role: "admin", status: "active" },
-  { id: "2", name: "Bob", role: "user", status: "inactive" },
-  { id: "3", name: "Charlie", role: "user", status: "active" },
+  { id: "1", name: "Alice", role: MembershipType.ADMIN, status: "active" },
+  { id: "2", name: "Bob", role: MembershipType.CASUAL, status: "inactive" },
+  { id: "3", name: "Charlie", role: MembershipType.MEMBER, status: "active" },
 ]
 
 const filterConfigs = [
@@ -15,7 +16,12 @@ const filterConfigs = [
     type: "multiselect" as const,
     key: "role" as keyof Row,
     label: "Role",
-    items: [{ label: "Admin", value: "admin" as Lowercase<string> }],
+    items: [
+      {
+        label: MembershipType.ADMIN,
+        value: MembershipType.ADMIN as Lowercase<string>,
+      },
+    ],
   },
 ]
 

@@ -54,7 +54,7 @@ interface UseBookingLimitsReturn {
  *
  * @example
  * const limits = useBookingLimits({
- *   user: { role: MembershipType.member, remainingSessions: 5 },
+ *   user: { role: MembershipType.MEMBER, remainingSessions: 5 },
  *   selectedCount: 2,
  * })
  * // limits.sessionsLabel = "1 / 2 this week • 3 total remaining"
@@ -64,7 +64,7 @@ export const useBookingLimits = ({
   selectedCount,
 }: UseBookingLimitsOptions): UseBookingLimitsReturn => {
   const isMember = useMemo(
-    () => user.role === MembershipType.member || user.role === MembershipType.admin,
+    () => user.role === MembershipType.MEMBER || user.role === MembershipType.ADMIN,
     [user.role],
   )
 

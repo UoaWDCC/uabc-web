@@ -35,7 +35,7 @@ export const POST = async (req: NextRequest) => {
         firstName: email,
         email,
         emailVerificationCode: code,
-        role: MembershipType.casual,
+        role: MembershipType.CASUAL,
       })
     }
 

@@ -1,4 +1,4 @@
-import { Gender, PlayLevel } from "../types/enums"
+import { Gender, PlayLevel } from "../enums"
 
 /**
  * Checks if the provided value is a valid Gender enum value. Returns the value if valid, otherwise undefined.

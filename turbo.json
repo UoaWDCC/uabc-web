@@ -30,11 +30,13 @@
     },
     "generate:importmap": {
       "cache": true,
-      "inputs": ["$TURBO_DEFAULT$"]
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": ["$TURBO_ROOT/apps/backend/src/app/importMap.js"]
     },
     "generate:types": {
       "cache": true,
-      "inputs": ["$TURBO_DEFAULT$"]
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": ["$TURBO_ROOT$/packages/shared/src/payload-types.ts"]
     },
     "lint": {
       "dependsOn": ["^lint"]

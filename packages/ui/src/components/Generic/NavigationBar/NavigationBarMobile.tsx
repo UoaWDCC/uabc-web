@@ -39,7 +39,7 @@ export const NavigationBarMobile = ({
   const allNavItems = [
     ...(user
       ? [
-          ...(user.role === MembershipType.admin ? [{ label: "Admin", url: "/admin" }] : []),
+          ...(user.role === MembershipType.ADMIN ? [{ label: "Admin", url: "/admin" }] : []),
           { label: "Profile", url: "/profile" },
           { label: "Logout", url: "/auth/logout" },
         ]

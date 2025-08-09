@@ -39,7 +39,7 @@ export interface BookConfirmProps {
  * @example
  * <BookConfirm
  *  bookings={[{
- *   day: Weekday.tuesday,
+ *   day: Weekday.TUESDAY,
  *   date: "24/06/25",
  *   startTime: "19:30",
  *   endTime: "20:00",

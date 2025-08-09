@@ -4,17 +4,17 @@ import { useBookingLimits } from "./useBookingLimits"
 
 describe("useBookingLimits", () => {
   const memberUser = {
-    role: MembershipType.member,
+    role: MembershipType.MEMBER,
     remainingSessions: 5,
   }
 
   const casualUser = {
-    role: MembershipType.casual,
+    role: MembershipType.CASUAL,
     remainingSessions: 3,
   }
 
   const adminUser = {
-    role: MembershipType.admin,
+    role: MembershipType.ADMIN,
     remainingSessions: 10,
   }
 

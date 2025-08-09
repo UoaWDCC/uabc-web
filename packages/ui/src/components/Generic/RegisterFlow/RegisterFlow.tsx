@@ -1,6 +1,5 @@
 "use client"
 
-import { RegisterFlowStateSchema } from "@repo/shared/schemas"
 import type {
   AdditionalInfoFormValues,
   BasicInfoForm1Values,
@@ -8,7 +7,8 @@ import type {
   CasualInfoFormValues,
   RegisterFlowState,
   UniversityInfoFormValues,
-} from "@repo/shared/types"
+} from "@repo/shared"
+import { RegisterFlowStateSchema } from "@repo/shared/schemas"
 import { useLocalStorage } from "@repo/ui/hooks"
 import { ArrowLeftIcon } from "@yamada-ui/lucide"
 import { Center, Grid, GridItem, VStack } from "@yamada-ui/react"

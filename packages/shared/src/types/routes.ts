@@ -88,7 +88,7 @@ export type SearchParamsRecord = Record<string, SearchParamValue>
  *
  * Example augmentation in your app:
  *
- * declare module "@repo/shared/types/routes" {
+ * declare module "@repo/shared/routes" {
  *   interface RouteToSearchParams {
  *     "/events": { category?: string; page?: number }
  *   }

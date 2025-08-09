@@ -45,7 +45,7 @@ describe("/api/bookings", async () => {
 
       const req = createMockNextRequest("/api/bookings", "POST", {
         gameSession,
-        playerLevel: PlayLevel.beginner,
+        playerLevel: PlayLevel.BEGINNER,
       } satisfies CreateBookingRequest)
 
       const res = await POST(req)
@@ -58,7 +58,7 @@ describe("/api/bookings", async () => {
       expect(user.remainingSessions).toBe(newRemainingSessions)
 
       if (newRemainingSessions <= 0) {
-        expect(user.role).toBe(MembershipType.casual)
+        expect(user.role).toBe(MembershipType.CASUAL)
       }
     })
 
@@ -73,7 +73,7 @@ describe("/api/bookings", async () => {
 
       const req = createMockNextRequest("/api/bookings", "POST", {
         gameSession,
-        playerLevel: PlayLevel.beginner,
+        playerLevel: PlayLevel.BEGINNER,
       } satisfies CreateBookingRequest)
       const res = await POST(req)
 
@@ -90,7 +90,7 @@ describe("/api/bookings", async () => {
 
       const req = createMockNextRequest("", "POST", {
         gameSession,
-        playerLevel: PlayLevel.beginner,
+        playerLevel: PlayLevel.BEGINNER,
       } satisfies CreateBookingRequest)
       const res = await POST(req)
 
@@ -107,7 +107,7 @@ describe("/api/bookings", async () => {
       try {
         const req = createMockNextRequest("/api/bookings", "POST", {
           gameSession: gameSessionMockBookingNotOpen,
-          playerLevel: PlayLevel.beginner,
+          playerLevel: PlayLevel.BEGINNER,
         } satisfies CreateBookingRequest)
         const res = await POST(req)
 
@@ -124,7 +124,7 @@ describe("/api/bookings", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
       const customSemester = {
         ...semesterMock,
-        bookingOpenDay: Weekday.wednesday,
+        bookingOpenDay: Weekday.WEDNESDAY,
         bookingOpenTime: new Date(Date.UTC(2025, 0, 1, 12, 0, 0)).toISOString(),
       }
       const earlySession = {
@@ -138,7 +138,7 @@ describe("/api/bookings", async () => {
       try {
         const req = createMockNextRequest("/api/bookings", "POST", {
           gameSession: earlySession,
-          playerLevel: PlayLevel.beginner,
+          playerLevel: PlayLevel.BEGINNER,
         } satisfies CreateBookingRequest)
         const res = await POST(req)
 
@@ -165,7 +165,7 @@ describe("/api/bookings", async () => {
         ...gameSession,
         casualCapacity: 1,
       },
-      playerLevel: PlayLevel.beginner,
+      playerLevel: PlayLevel.BEGINNER,
     } satisfies CreateBookingRequest)
     const res = await POST(req)
 
@@ -186,7 +186,7 @@ describe("/api/bookings", async () => {
         ...gameSession,
         capacity: 1,
       },
-      playerLevel: PlayLevel.beginner,
+      playerLevel: PlayLevel.BEGINNER,
     } satisfies CreateBookingRequest)
     const res = await POST(req)
 
@@ -201,7 +201,7 @@ describe("/api/bookings", async () => {
 
     const req = createMockNextRequest("", "POST", {
       gameSession: gameSessionCreateMock,
-      playerLevel: PlayLevel.beginner,
+      playerLevel: PlayLevel.BEGINNER,
       user: userCreateMock,
     })
     const res = await POST(req)

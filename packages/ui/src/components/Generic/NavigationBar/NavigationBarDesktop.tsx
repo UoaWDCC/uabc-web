@@ -28,7 +28,7 @@ export const NavigationBarDesktop = ({
     () => (typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""),
     [user],
   )
-  const admin = useMemo(() => user?.role === MembershipType.admin, [user])
+  const admin = useMemo(() => user?.role === MembershipType.ADMIN, [user])
 
   return (
     <HStack

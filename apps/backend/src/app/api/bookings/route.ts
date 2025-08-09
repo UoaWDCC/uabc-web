@@ -60,9 +60,9 @@ class RouteWrapper {
         )
 
       if (
-        (userData.role === MembershipType.casual &&
+        (userData.role === MembershipType.CASUAL &&
           bookings.length >= gameSession.casualCapacity) ||
-        (userData.role === MembershipType.member && bookings.length >= gameSession.capacity)
+        (userData.role === MembershipType.MEMBER && bookings.length >= gameSession.capacity)
       )
         return NextResponse.json(
           { error: "Session is full for the selected user role" },
@@ -87,7 +87,7 @@ class RouteWrapper {
       // Demote user to casual if session count is lower than or equal to 0
       await userDataService.updateUser(req.user.id, {
         remainingSessions: newRemainingSessions,
-        role: newRemainingSessions <= 0 ? MembershipType.casual : req.user.role,
+        role: newRemainingSessions <= 0 ? MembershipType.CASUAL : req.user.role,
       })
 
       return NextResponse.json({ data: newBooking }, { status: StatusCodes.CREATED })

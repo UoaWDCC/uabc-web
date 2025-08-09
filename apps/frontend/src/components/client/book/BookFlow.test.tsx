@@ -170,7 +170,7 @@ describe.skip("<BookFlow />", () => {
       ...mockAuth,
       user: {
         ...mockAuth.user,
-        role: MembershipType.casual,
+        role: MembershipType.CASUAL,
       },
     }
 
@@ -184,7 +184,7 @@ describe.skip("<BookFlow />", () => {
       ...mockAuth,
       user: {
         ...mockAuth.user,
-        role: MembershipType.admin,
+        role: MembershipType.ADMIN,
       },
     }
 
