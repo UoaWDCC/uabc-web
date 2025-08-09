@@ -49,8 +49,11 @@ describe("<BookConfirm />", () => {
     const confirmButton = screen.getByRole("button", { name: "Confirm Booking" })
     expect(confirmButton).toBeInTheDocument()
 
-    const sessionCountText = screen.getByText("Sessions Left After Booking: 8")
+    const sessionCountText = screen.getByText("Sessions left after booking: 8")
     expect(sessionCountText).toBeInTheDocument()
+
+    const weeklyLimitText = screen.getByText("You can book up to 2 sessions per week")
+    expect(weeklyLimitText).toBeInTheDocument()
   })
 
   it("should render bank transfer message for casual bookings", () => {
@@ -61,7 +64,8 @@ describe("<BookConfirm />", () => {
     )
     expect(bankTransferMessage).toBeInTheDocument()
 
-    expect(screen.queryByText("Sessions Left After Booking: 8")).not.toBeInTheDocument()
+    expect(screen.queryByText("Sessions left after booking: 8")).not.toBeInTheDocument()
+    expect(screen.queryByText("You can book up to 2 sessions per week")).not.toBeInTheDocument()
   })
 
   it("should render booking details for each booking", () => {

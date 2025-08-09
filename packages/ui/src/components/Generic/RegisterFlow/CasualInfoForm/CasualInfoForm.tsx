@@ -1,5 +1,6 @@
 "use client"
 
+import type { CasualInfoFormValues } from "@repo/shared/types"
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import { UserRoundIcon } from "@yamada-ui/lucide"
 
@@ -20,14 +21,14 @@ import {
 import type { FC } from "react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 
-export type CasualInfoFormValues = {
-  agree: boolean
-}
-
 /**
  * Props for {@link CasualInfoForm} component
  */
 export interface CasualInfoFormProps {
+  /**
+   * Default values to pre-fill the form.
+   */
+  defaultValues?: CasualInfoFormValues
   /**
    * Submit handler called when user submits the form.
    */
@@ -43,7 +44,7 @@ export interface CasualInfoFormProps {
  * @param props CasualInfoForm component props
  * @returns The form component
  */
-export const CasualInfoForm: FC<CasualInfoFormProps> = memo(({ onSubmit }) => {
+export const CasualInfoForm: FC<CasualInfoFormProps> = memo(({ defaultValues, onSubmit }) => {
   const {
     control,
     handleSubmit,
@@ -88,6 +89,7 @@ export const CasualInfoForm: FC<CasualInfoFormProps> = memo(({ onSubmit }) => {
             <FormControl errorMessage={errors.agree?.message} invalid={!!errors.agree}>
               <Controller
                 control={control}
+                defaultValue={defaultValues?.agree}
                 name="agree"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Checkbox

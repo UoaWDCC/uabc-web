@@ -1,19 +1,14 @@
-import { z } from "zod"
 import {
-  cleanupTestEnvironment,
   consoleSpy,
   localStorageMock,
   setupTestEnvironment,
-} from "@/test-config/localStorage-test-utils"
+} from "@repo/ui/test-config/localStorage-test-utils"
+import { z } from "zod"
 import { createLocalStorageManager } from "../localStorageManager"
 
 describe("LocalStorageManager Core", () => {
   beforeEach(() => {
     setupTestEnvironment()
-  })
-
-  afterEach(() => {
-    cleanupTestEnvironment()
   })
 
   describe("createLocalStorageManager", () => {

@@ -26,9 +26,12 @@ export const globalStyle: UIStyle = {
   },
   main: {
     alignItems: "center",
-    justifyContent: { base: "start", lg: "center" },
-    minH: { base: "lg", lg: "3xl" },
-    my: { base: "md", lg: "0" },
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    minH: { base: "xl", lg: "3xl" },
+    pt: { base: "sm", md: "md", lg: "2xl" },
+    pb: { base: "lg", md: "2xl" },
   },
   _dark: {
     "*::placeholder, *[data-placeholder]": {
