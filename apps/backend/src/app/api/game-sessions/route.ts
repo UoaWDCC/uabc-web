@@ -1,4 +1,5 @@
 import { PaginationQuerySchema } from "@repo/shared"
+import type { GameSessionSchedule } from "@repo/shared/payload-types"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
@@ -28,6 +29,15 @@ export const GET = async (req: NextRequest) => {
       limit,
       page,
     )
+    /**
+     * Normalise the `location` and `name` fields to use their parent {@link GameSessionSchedule} data
+     */
+    paginatedGameSessions.docs.forEach((gameSession) => {
+      if (typeof gameSession.gameSessionSchedule === "object") {
+        gameSession.location = (gameSession.gameSessionSchedule as GameSessionSchedule).location
+        gameSession.name = (gameSession.gameSessionSchedule as GameSessionSchedule)?.name
+      }
+    })
     return NextResponse.json({ data: paginatedGameSessions })
   } catch (error) {
     console.error(error)
