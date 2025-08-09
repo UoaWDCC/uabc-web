@@ -163,6 +163,28 @@ describe("<NavigationBarMobile />", () => {
     expect(backdrop).toBeInTheDocument()
     await waitFor(() => expect(backdrop).toBeVisible())
   })
+
+  it("should handle active state with trailing slashes in mobile menu", async () => {
+    mockUsePathname.mockReturnValue("/about/")
+    const { user } = render(<NavigationBarMobile {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+
+    const menuButton = screen.getByRole("button")
+    await user.click(menuButton)
+
+    const aboutLink = screen.getByText("About")
+    expect(aboutLink).toHaveStyle({ color: "var(--ui-colors-primary)" })
+  })
+
+  it("should handle active state without trailing slashes in mobile menu", async () => {
+    mockUsePathname.mockReturnValue("/about")
+    const { user } = render(<NavigationBarMobile {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
+
+    const menuButton = screen.getByRole("button")
+    await user.click(menuButton)
+
+    const aboutLink = screen.getByText("About")
+    expect(aboutLink).toHaveStyle({ color: "var(--ui-colors-primary)" })
+  })
 })
 
 describe("<NavigationBarDesktop />", () => {
@@ -327,6 +349,14 @@ describe("<NavigationBarDesktop />", () => {
 })
 
 describe("<NavigationBarButton />", () => {
+  beforeEach(() => {
+    mockUsePathname.mockReturnValue("/")
+  })
+
+  afterEach(() => {
+    mockUsePathname.mockReset()
+  })
+
   it("should re-export the NavigationBarButton component and check if it exists", () => {
     expect(NavigationBarModule.NavigationBarButton).toBeDefined()
     expect(
@@ -344,6 +374,30 @@ describe("<NavigationBarButton />", () => {
     const ref = { current: null }
     render(<NavigationBarButton label="Ref Test" ref={ref} url="/ref-test" />)
     expect(ref.current).toBeInstanceOf(HTMLAnchorElement)
+  })
+
+  it("should handle active state with trailing slashes", () => {
+    mockUsePathname.mockReturnValue("/about/")
+    render(<NavigationBarButton label="About" url="/about" />)
+
+    const indicator = screen.getByTestId("navbar-hover-indicator")
+    expect(indicator).toBeInTheDocument()
+  })
+
+  it("should handle active state without trailing slashes", () => {
+    mockUsePathname.mockReturnValue("/about")
+    render(<NavigationBarButton label="About" url="/about/" />)
+
+    const indicator = screen.getByTestId("navbar-hover-indicator")
+    expect(indicator).toBeInTheDocument()
+  })
+
+  it("should not show indicator for inactive paths", () => {
+    mockUsePathname.mockReturnValue("/contact")
+    render(<NavigationBarButton label="About" url="/about" />)
+
+    const indicator = screen.queryByTestId("navbar-hover-indicator")
+    expect(indicator).not.toBeInTheDocument()
   })
 
   // TODO: Fix this test

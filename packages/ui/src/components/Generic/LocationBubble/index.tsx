@@ -109,7 +109,7 @@ export const LocationBubble = ({
                 <Motion
                   data-testid="location-bubble-circle-trigger"
                   height="fit-content"
-                  onTap={onOpen}
+                  onClick={onOpen}
                   pointerEvents="auto"
                   style={{
                     x: bubbleX,
