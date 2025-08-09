@@ -58,11 +58,12 @@ class LocalStorageManager<T> {
 
     try {
       const oldValueStr = localStorage.getItem(this.key)
+      let serialized: string | null = null
       if (value === null) {
         localStorage.removeItem(this.key)
       } else {
         const validated = this.schema ? this.schema.parse(value) : value
-        const serialized = JSON.stringify(validated)
+        serialized = JSON.stringify(validated)
         localStorage.setItem(this.key, serialized)
       }
 
@@ -71,7 +72,7 @@ class LocalStorageManager<T> {
 
       // Manually dispatch a storage event so other manager instances in the same tab receive updates
       try {
-        const newValueStr = value === null ? null : localStorage.getItem(this.key)
+        const newValueStr = value === null ? null : serialized
         if (typeof window !== "undefined" && typeof StorageEvent === "function") {
           const storageEvent = new StorageEvent("storage", {
             key: this.key,
@@ -82,8 +83,8 @@ class LocalStorageManager<T> {
           })
           window.dispatchEvent(storageEvent)
         }
-      } catch {
-        // ignore manual dispatch failures
+      } catch (error) {
+        console.debug("LocalStorage manual dispatch skipped:", error)
       }
     } catch (error) {
       console.error(`Error setting localStorage key ${this.key}:`, error)
@@ -116,8 +117,8 @@ class LocalStorageManager<T> {
         })
         window.dispatchEvent(storageEvent)
       }
-    } catch {
-      // ignore manual dispatch failures
+    } catch (error) {
+      console.debug("LocalStorage manual dispatch skipped:", error)
     }
   }
 
