@@ -1,5 +1,4 @@
 import { Weekday } from "@repo/shared"
-import { gameSessionScheduleMock } from "@repo/shared/mocks"
 import { payload } from "@/data-layer/adapters/Payload"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
@@ -38,8 +37,10 @@ describe("GameSessionDataService", () => {
         semester: newSemester.id,
       })
 
-      const gameSessions =
-        await gameSessionDataService.cascadeCreateGameSessions(newGameSessionSchedule)
+      const gameSessions = await gameSessionDataService.cascadeCreateGameSessions(
+        newGameSessionSchedule,
+        newSemester,
+      )
 
       const allMondays = getWeeklySessionDates(Weekday.monday, newSemester)
       expect(gameSessions.length).toBe(allMondays.length)
@@ -51,15 +52,6 @@ describe("GameSessionDataService", () => {
         expect(sessionDate < breakStart || sessionDate > breakEnd).toBe(true)
       }
     })
-  })
-
-  it("should throw a NotFound error if correlating semester does not exist", async () => {
-    await expect(
-      gameSessionDataService.cascadeCreateGameSessions({
-        ...gameSessionScheduleMock,
-        semester: "does not exist",
-      }),
-    ).rejects.toThrowError("Not Found")
   })
 
   describe("getPaginatedGameSessions", () => {

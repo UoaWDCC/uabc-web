@@ -2,10 +2,12 @@ import { CreateGameSessionScheduleRequestSchema, PaginationQuerySchema } from "@
 import type { GameSession } from "@repo/shared/payload-types"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
+import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import { GameSessionSchedule } from "@/data-layer/collections/GameSessionSchedule"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
 
 class GameSessionSchedulesRouteWrapper {
   /**
@@ -63,14 +65,25 @@ class GameSessionSchedulesRouteWrapper {
     try {
       const parsedBody = CreateGameSessionScheduleRequestSchema.parse(await req.json())
       const gameSessionDataService = new GameSessionDataService()
+      const semesterDataService = new SemesterDataService()
       const newGameSessionSchedule =
         await gameSessionDataService.createGameSessionSchedule(parsedBody)
 
       if (!cascadeDisabled) {
-        await gameSessionDataService.cascadeCreateGameSessions(newGameSessionSchedule)
+        const semesterId =
+          typeof newGameSessionSchedule.semester === "string"
+            ? newGameSessionSchedule.semester
+            : newGameSessionSchedule.semester.id
+
+        const semester = await semesterDataService.getSemesterById(semesterId)
+        await gameSessionDataService.cascadeCreateGameSessions(newGameSessionSchedule, semester)
       }
+
       return NextResponse.json({ data: newGameSessionSchedule }, { status: StatusCodes.CREATED })
     } catch (error) {
+      if (error instanceof NotFound) {
+        return NextResponse.json({ error: "Semester not found" }, { status: StatusCodes.NOT_FOUND })
+      }
       if (error instanceof ZodError) {
         return NextResponse.json(
           { error: "Invalid request body", details: error.flatten() },

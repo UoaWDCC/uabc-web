@@ -104,13 +104,10 @@ export default class GameSessionDataService {
    * @param schedule the {@link GameSessionSchedule} the game sessions are based on
    * @returns an array of newly created {@link GameSession} documents
    */
-  public async cascadeCreateGameSessions(schedule: GameSessionSchedule): Promise<GameSession[]> {
-    const semesterId = schedule.semester
-    const semester: Semester = await payload.findByID({
-      collection: "semester",
-      id: typeof semesterId === "string" ? semesterId : semesterId.id,
-    })
-
+  public async cascadeCreateGameSessions(
+    schedule: GameSessionSchedule,
+    semester: Semester,
+  ): Promise<GameSession[]> {
     const sessionDates = getWeeklySessionDates(schedule.day as Weekday, semester)
 
     const sessions: CreateGameSessionData[] = sessionDates.map((date) => {

@@ -1,16 +1,23 @@
-import type { GameSessionSchedule, Weekday } from "@repo/shared"
+import { type GameSessionSchedule, getDaysBetweenWeekdays, Weekday } from "@repo/shared"
 import type { Semester } from "@repo/shared/payload-types"
 
-const dayToNumber: Record<Weekday, number> = {
-  sunday: 0,
-  monday: 1,
-  tuesday: 2,
-  wednesday: 3,
-  thursday: 4,
-  friday: 5,
-  saturday: 6,
+const numberToDay: Record<number, Weekday> = {
+  0: Weekday.sunday,
+  1: Weekday.monday,
+  2: Weekday.tuesday,
+  3: Weekday.wednesday,
+  4: Weekday.thursday,
+  5: Weekday.friday,
+  6: Weekday.saturday,
 }
 
+/**
+ * Returns the valid dates for game session date time for the semester
+ *
+ * @param day The target day for every week of the semester
+ * @param semester The {@link Semester} for finding valid dates
+ * @returns An array of {@link Date} valid dates that excludes dates break dates
+ */
 export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] {
   const dates: Date[] = []
 
@@ -19,10 +26,9 @@ export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] 
   const breakStart = new Date(semester.breakStart)
   const breakEnd = new Date(semester.breakEnd)
 
-  const targetDay = dayToNumber[day]
   const sessionDate = new Date(semesterStart)
-  const dayOffset = (targetDay - sessionDate.getDay() + 7) % 7
-  sessionDate.setDate(sessionDate.getDate() + dayOffset)
+  const dayOffSet = getDaysBetweenWeekdays(numberToDay[sessionDate.getDay()], day as Weekday)
+  sessionDate.setDate(sessionDate.getDate() + dayOffSet)
 
   while (sessionDate <= semesterEnd) {
     if (sessionDate < breakStart || sessionDate > breakEnd) {
@@ -34,6 +40,13 @@ export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] 
   return dates
 }
 
+/**
+ * Creates the game session time from game session schedule schedule time and valid date
+ *
+ * @param schedule The game session schedule for the time of the game session
+ * @param date The date of the game session
+ * @returns Both startTime and endTime of the game session
+ */
 export function createGameSessionTimes(schedule: GameSessionSchedule, date: Date) {
   const day = date.getDate()
   const month = date.getMonth()
@@ -42,8 +55,8 @@ export function createGameSessionTimes(schedule: GameSessionSchedule, date: Date
   const start = new Date(schedule.startTime)
   const end = new Date(schedule.endTime)
 
-  start.setFullYear(year, month, day)
-  end.setFullYear(year, month, day)
+  start.setUTCFullYear(year, month, day)
+  end.setUTCFullYear(year, month, day)
 
   return {
     startTime: start.toISOString(),
