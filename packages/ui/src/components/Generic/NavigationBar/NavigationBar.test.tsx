@@ -25,6 +25,14 @@ import { NavigationBarMobile } from "./NavigationBarMobile"
 const mockUsePathname = vi.mocked(usePathname)
 
 describe("<NavigationBar />", () => {
+  beforeEach(() => {
+    mockUsePathname.mockReturnValue("/")
+  })
+
+  afterEach(() => {
+    mockUsePathname.mockReset()
+  })
+
   it("should re-export the NavigationBar component and check if it exists", () => {
     expect(NavigationBarModule.NavigationBar).toBeDefined()
     expect(
