@@ -149,12 +149,40 @@ export default class GameSessionDataService {
    * Deletes a {@link GameSessionSchedule} given its ID
    *
    * @param id the ID of the {@link GameSessionSchedule} to delete
+   * @param transactionID An optional transaction ID for the request, useful for tracing
    * @returns the deleted {@link GameSessionSchedule} document if it exists, otherwise throws a {@link NotFound} error
    */
-  public async deleteGameSessionSchedule(id: string): Promise<GameSessionSchedule> {
+  public async deleteGameSessionSchedule(
+    id: string,
+    transactionID?: string | number,
+  ): Promise<GameSessionSchedule> {
     return await payload.delete({
       collection: "gameSessionSchedule",
       id,
+      req: { transactionID },
     })
   }
+
+  // NB: GameSessionSchedule doesn't have docs..? so that means I can't be certain it'll return an array of documents right. should I add docs to it or is there a better way to do it
+  //   /**
+  //    * Deletes multiple {@link GameSessionSchedule} documents given their IDs
+  //    *
+  //    * @param ids an array of IDs of the {@link GameSessionSchedule} documents to delete
+  //    * @param transactionID An optional transaction ID for the request, useful for tracing
+  //    * @returns an array of the deleted {@link GameSessionSchedule} documents if it exists, otherwise throws a {@link NotFound} error
+  //    */
+  //   public async deleteGameSessionSchedules(
+  //     ids: string[],
+  //     transactionID?: string | number,
+  //   ): Promise<GameSessionSchedule[]> {
+  //     const { docs } = await payload.delete({
+  //       collection: "gameSessionSchedule",
+  //       where: {
+  //         id: { in: ids },
+  //       },
+  //       pagination: false,
+  //       req: { transactionID },
+  //     })
+  //     return docs
+  //   }
 }
