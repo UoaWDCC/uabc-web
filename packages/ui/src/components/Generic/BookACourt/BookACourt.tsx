@@ -1,7 +1,19 @@
 import { PlayLevel } from "@repo/shared/types"
-import { Button } from "@repo/ui/components/Primitive"
-import { ButtonGroup, For, Link, Spacer, Text, VStack } from "@yamada-ui/react"
-import NextLink from "next/link"
+import { Button, Link } from "@repo/ui/components/Primitive"
+import { ButtonGroup, For, Spacer, Text, VStack } from "@yamada-ui/react"
+import type { FC } from "react"
+
+/**
+ * The props for the BookACourt component.
+ */
+export type BookACourtProps = {
+  /**
+   * Callback function triggered when a play level is selected.
+   *
+   * @param level - The selected play level.
+   */
+  onSelect: (level: PlayLevel) => void
+}
 
 /**
  * A component for choosing a play level when booking a court.
@@ -9,28 +21,20 @@ import NextLink from "next/link"
  * @returns A component that displays buttons for different play levels.
  * @example <BookACourt />
  */
-export const BookACourt = () => {
+export const BookACourt: FC<BookACourtProps> = ({ onSelect }) => {
   return (
     <VStack alignItems="center" flex={1} gap={{ base: "md", md: "lg" }}>
       <Text color="muted" fontSize={{ base: "lg", md: "xl" }}>
         I am...
       </Text>
-      <ButtonGroup
-        alignItems="center"
-        flexDirection="column"
-        gap={{ base: "md", md: "lg" }}
-        size="lg"
-        w="full"
-      >
+      <ButtonGroup alignItems="center" flexDirection="column" gap="md" size="lg" w="full">
         <For each={Object.values(PlayLevel)}>
           {(level) => (
             <Button
-              as={NextLink}
               colorScheme="primary"
-              // TODO: ensure this is the correct path for booking
-              href={`/book?playLevel=${level}`}
               key={level}
               maxW="md"
+              onClick={() => onSelect(level)}
               w="full"
             >
               {level}
@@ -40,14 +44,11 @@ export const BookACourt = () => {
       </ButtonGroup>
       <Spacer />
       <Link
-        as={NextLink}
         color="muted"
         fontSize={{ base: "lg", md: "xl" }}
         fontWeight="medium"
-        // TODO: ensure this is the correct path for tos
-        href="/terms-of-service"
+        href="/terms"
         textDecoration="underline"
-        variant="link"
       >
         Check-In Form Guidelines
       </Link>

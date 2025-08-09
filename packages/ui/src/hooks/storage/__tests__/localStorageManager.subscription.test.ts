@@ -1,9 +1,9 @@
-import { z } from "zod"
 import {
   cleanupTestEnvironment,
   consoleSpy,
   setupTestEnvironment,
-} from "@/test-config/localStorage-test-utils"
+} from "@repo/ui/test-config/localStorage-test-utils"
+import { z } from "zod"
 import { createLocalStorageManager } from "../localStorageManager"
 
 describe("LocalStorageManager Subscription", () => {

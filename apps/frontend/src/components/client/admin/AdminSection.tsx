@@ -8,9 +8,9 @@ export const AdminSection = memo(() => {
   return (
     <Container
       gap="xl"
-      justifyContent={{ lg: "start" }}
+      justifyContent="start"
       layerStyle="container"
-      py={{ base: "md", sm: "md", lg: "md" }}
+      py={{ base: "0", sm: "0", lg: "0" }}
     >
       <AdminTabBar
         lazy
