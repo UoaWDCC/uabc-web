@@ -78,8 +78,6 @@ class LocalStorageManager<T> {
             key: this.key,
             oldValue: oldValueStr,
             newValue: newValueStr,
-            storageArea: window.localStorage,
-            url: window.location.href,
           })
           window.dispatchEvent(storageEvent)
         }
@@ -112,8 +110,6 @@ class LocalStorageManager<T> {
           key: this.key,
           oldValue: oldValueStr,
           newValue: null,
-          storageArea: window.localStorage,
-          url: window.location.href,
         })
         window.dispatchEvent(storageEvent)
       }
