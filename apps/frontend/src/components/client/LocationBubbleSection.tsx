@@ -46,9 +46,8 @@ export const LocationBubbleSection = () => {
   return (
     <Container
       centerContent
-      h="max(50svh, 1150px)"
       layerStyle="container"
-      maxH="1150px"
+      minH={{ base: "3xl", md: "5xl" }}
       position="relative"
     >
       <Box left="25%" position="absolute" top="33%" transform="translate(-50%, -50%)" zIndex={25}>
@@ -63,9 +62,9 @@ export const LocationBubbleSection = () => {
       <Image
         alt="Person smashing shuttlecock"
         borderTopRadius="3xl"
-        h="full"
+        h={{ base: "3xl", md: "5xl" }}
+        height={600}
         maxW="2000px"
-        minH="480px"
         objectFit="cover"
         objectPosition="center"
         placeSelf="center"
@@ -75,6 +74,7 @@ export const LocationBubbleSection = () => {
         top="-3xl"
         userSelect="none"
         w="100svw"
+        width={400}
         z={-1}
       />
     </Container>

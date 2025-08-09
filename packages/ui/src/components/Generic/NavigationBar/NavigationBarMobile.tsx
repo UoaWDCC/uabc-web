@@ -2,6 +2,7 @@
 import { MembershipType } from "@repo/shared"
 import { UabcLogo } from "@repo/ui/components/Icon"
 import { IconButton } from "@repo/ui/components/Primitive"
+import { isPathActive } from "@repo/ui/utils/path"
 import { MenuIcon, XIcon } from "@yamada-ui/lucide"
 import {
   Box,
@@ -124,7 +125,7 @@ export const NavigationBarMobile = ({
                   _hover={{ bgColor: "secondary" }}
                   as={NextLink}
                   borderRadius="xl"
-                  color={currentPath === item.url ? "primary" : "white"}
+                  color={isPathActive(currentPath, item.url) ? "primary" : "white"}
                   fontSize="xl"
                   fontWeight="semibold"
                   href={item.url}

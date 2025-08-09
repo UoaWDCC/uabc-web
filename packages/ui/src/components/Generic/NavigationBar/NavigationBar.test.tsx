@@ -25,6 +25,14 @@ import { NavigationBarMobile } from "./NavigationBarMobile"
 const mockUsePathname = vi.mocked(usePathname)
 
 describe("<NavigationBar />", () => {
+  beforeEach(() => {
+    mockUsePathname.mockReturnValue("/")
+  })
+
+  afterEach(() => {
+    mockUsePathname.mockReset()
+  })
+
   it("should re-export the NavigationBar component and check if it exists", () => {
     expect(NavigationBarModule.NavigationBar).toBeDefined()
     expect(
@@ -327,6 +335,14 @@ describe("<NavigationBarDesktop />", () => {
 })
 
 describe("<NavigationBarButton />", () => {
+  beforeEach(() => {
+    mockUsePathname.mockReturnValue("/")
+  })
+
+  afterEach(() => {
+    mockUsePathname.mockReset()
+  })
+
   it("should re-export the NavigationBarButton component and check if it exists", () => {
     expect(NavigationBarModule.NavigationBarButton).toBeDefined()
     expect(
@@ -344,6 +360,30 @@ describe("<NavigationBarButton />", () => {
     const ref = { current: null }
     render(<NavigationBarButton label="Ref Test" ref={ref} url="/ref-test" />)
     expect(ref.current).toBeInstanceOf(HTMLAnchorElement)
+  })
+
+  it("should handle active state with trailing slashes", () => {
+    mockUsePathname.mockReturnValue("/about/")
+    render(<NavigationBarButton label="About" url="/about" />)
+
+    const indicator = screen.getByTestId("navbar-hover-indicator")
+    expect(indicator).toBeInTheDocument()
+  })
+
+  it("should handle active state without trailing slashes", () => {
+    mockUsePathname.mockReturnValue("/about")
+    render(<NavigationBarButton label="About" url="/about/" />)
+
+    const indicator = screen.getByTestId("navbar-hover-indicator")
+    expect(indicator).toBeInTheDocument()
+  })
+
+  it("should not show indicator for inactive paths", () => {
+    mockUsePathname.mockReturnValue("/contact")
+    render(<NavigationBarButton label="About" url="/about" />)
+
+    const indicator = screen.queryByTestId("navbar-hover-indicator")
+    expect(indicator).not.toBeInTheDocument()
   })
 
   // TODO: Fix this test
