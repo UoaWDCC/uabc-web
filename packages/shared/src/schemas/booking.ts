@@ -23,5 +23,9 @@ export const GetBookingsResponseSchema = z.object({
   data: z.array(BookingSchema),
 })
 
+export const SelectACourtFormDataSchema = z.object({
+  bookingTimes: z.array(z.string()).min(1, "Please select at least one session"),
+})
+
 export const UpdateBookingRequestSchema =
   CreateBookingRequestSchema.partial() satisfies z.ZodType<EditBookingData>

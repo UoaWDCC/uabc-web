@@ -76,7 +76,6 @@ export const UserPanel: FC<UserPanelProps> = ({ user, iconButtonProps, ...props 
     <Card
       bg={["secondary.50", "secondary.900"]}
       layerStyle="gradientBorder"
-      p={{ base: "md", md: "0", lg: "md" }}
       rounded="2xl"
       size="lg"
       {...props}

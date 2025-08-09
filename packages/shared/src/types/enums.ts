@@ -37,6 +37,7 @@ export enum University {
   working = "Working",
   notAStudent = "Not a student",
 }
+
 export enum SessionType {
   ongoing = "Ongoing",
   oneOff = "One off",

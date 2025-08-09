@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Admin() {
   return (
-    <VStack as="main">
+    <VStack as="main" pt="md">
       <AdminClient />
     </VStack>
   )
