@@ -356,9 +356,25 @@ export interface User {
    */
   image?: (string | null) | Media;
   /**
-   * The email verification token of the user
+   * The email verification codes of the user
    */
-  emailVerificationCode?: string | null;
+  emailVerification?:
+    | {
+        /**
+         * A verification code of the user
+         */
+        verificationCode: string;
+        /**
+         * The current expiration date of this email verification code
+         */
+        expiresAt: string;
+        /**
+         * The date when this email verification code was created
+         */
+        createdAt: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -698,7 +714,14 @@ export interface UserSelect<T extends boolean = true> {
   university?: T;
   remainingSessions?: T;
   image?: T;
-  emailVerificationCode?: T;
+  emailVerification?:
+    | T
+    | {
+        verificationCode?: T;
+        expiresAt?: T;
+        createdAt?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

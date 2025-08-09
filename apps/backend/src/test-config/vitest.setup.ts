@@ -37,7 +37,7 @@ beforeEach(async () => {
   }))
 
   const usersToCreate = [casualUserMock, memberUserMock, adminUserMock]
-  await Promise.all(
+  const createdUsers = await Promise.all(
     usersToCreate.map((user) =>
       payload.create({
         collection: "user",
@@ -45,9 +45,19 @@ beforeEach(async () => {
       }),
     ),
   )
-  casualToken = authService.signJWT({ user: casualUserMock })
-  memberToken = authService.signJWT({ user: memberUserMock })
-  adminToken = authService.signJWT({ user: adminUserMock })
+
+  casualToken = authService.signJWT({
+    user: {
+      ...createdUsers[0],
+      emailVerification: [],
+    },
+  })
+  memberToken = authService.signJWT({
+    user: { ...createdUsers[1], emailVerification: [] },
+  })
+  adminToken = authService.signJWT({
+    user: { ...createdUsers[2], emailVerification: [] },
+  })
 })
 
 afterEach(async () => {
