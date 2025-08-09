@@ -37,7 +37,7 @@ describe("<QuickBook />", () => {
 
     const skillLevelSelect = screen.getByTestId("skill-level")
     await user.click(skillLevelSelect)
-    await user.click(screen.getByText(PlayLevel.beginner))
+    await user.click(screen.getByText(PlayLevel.BEGINNER))
 
     const submitButton = screen.getByText("Book Now")
     await user.click(submitButton)

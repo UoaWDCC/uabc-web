@@ -1,6 +1,6 @@
 "use client"
 
-import type { SearchParamsFor, ValidHrefWithCustom } from "@repo/shared/types/routes"
+import type { SearchParamsFor, ValidHrefWithCustom } from "@repo/shared"
 import { buildExternalHref } from "@repo/ui/utils"
 import { type Merge, Link as UILink, type LinkProps as UILinkProps } from "@yamada-ui/react"
 import NextLink, { type LinkProps as NextLinkProps } from "next/link"

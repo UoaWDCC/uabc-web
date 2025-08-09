@@ -62,12 +62,12 @@ describe("<AdditionalInfo />", () => {
     await user.keyboard("{Enter}")
     await user.click(screen.getByRole("button", { name: /save changes/i }))
     await waitFor(() => {
-      expect(screen.getByDisplayValue(Gender.other)).toBeInTheDocument()
-      expect(screen.getByDisplayValue(PlayLevel.intermediate)).toBeInTheDocument()
+      expect(screen.getByDisplayValue(Gender.OTHER)).toBeInTheDocument()
+      expect(screen.getByDisplayValue(PlayLevel.INTERMEDIATE)).toBeInTheDocument()
     })
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
-      gender: Gender.other,
-      playLevel: PlayLevel.intermediate,
+      gender: Gender.OTHER,
+      playLevel: PlayLevel.INTERMEDIATE,
       dietaryRequirements: casualUserMock.dietaryRequirements,
     })
   })

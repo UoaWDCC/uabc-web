@@ -7,7 +7,7 @@ export const semesterCreateMock: CreateSemesterData = {
   endDate: new Date(2025, 0, 1, 14, 0).toISOString(),
   breakStart: new Date(2025, 0, 1, 15, 0).toISOString(),
   breakEnd: new Date(2025, 0, 1, 16, 0).toISOString(),
-  bookingOpenDay: Weekday.monday,
+  bookingOpenDay: Weekday.MONDAY,
   bookingOpenTime: new Date(2025, 0, 1, 12, 0).toISOString(),
 }
 
@@ -18,7 +18,7 @@ export const semesterMock: Semester = {
   endDate: new Date(2025, 0, 1, 14, 0).toISOString(),
   breakStart: new Date(2025, 0, 1, 15, 0).toISOString(),
   breakEnd: new Date(2025, 0, 1, 16, 0).toISOString(),
-  bookingOpenDay: Weekday.monday,
+  bookingOpenDay: Weekday.MONDAY,
   bookingOpenTime: new Date(2025, 0, 1, 12, 0).toISOString(),
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),

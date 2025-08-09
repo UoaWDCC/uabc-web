@@ -23,17 +23,17 @@ describe("<AdditionalInfoForm />", () => {
     const sampleDietaryRequirements = "BEANS"
 
     await user.click(screen.getByTestId("gender"))
-    await user.click(screen.getByText(Gender.female))
+    await user.click(screen.getByText(Gender.FEMALE))
     await user.click(screen.getByTestId("skill-level"))
-    await user.click(screen.getByText(PlayLevel.advanced))
+    await user.click(screen.getByText(PlayLevel.ADVANCED))
     await user.type(screen.getByTestId("dietary-requirements"), sampleDietaryRequirements)
 
     const submitButton = screen.getByText("Continue")
     await user.click(submitButton)
 
     expect(handleSubmit).toReturnWith({
-      gender: Gender.female,
-      skillLevel: PlayLevel.advanced,
+      gender: Gender.FEMALE,
+      skillLevel: PlayLevel.ADVANCED,
       dietaryRequirements: sampleDietaryRequirements,
     })
   })

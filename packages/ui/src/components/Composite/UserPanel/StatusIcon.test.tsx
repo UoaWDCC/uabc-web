@@ -8,18 +8,18 @@ describe("<StatusIcon />", () => {
   it("should re-export the StatusIcon component and check if StatusIcon exists", () => {
     expect(StatusIconModule.StatusIcon).toBeDefined()
     expect(
-      isValidElement(<StatusIconModule.StatusIcon status={MembershipType.member} />),
+      isValidElement(<StatusIconModule.StatusIcon status={MembershipType.MEMBER} />),
     ).toBeTruthy()
   })
 
   it("should handle both status values correctly", () => {
     const { rerender } = render(
-      <StatusIcon data-testid="status-icon" status={MembershipType.member} />,
+      <StatusIcon data-testid="status-icon" status={MembershipType.MEMBER} />,
     )
     let icon = screen.getByTestId("status-icon")
     expect(icon).toBeInTheDocument()
 
-    rerender(<StatusIcon data-testid="status-icon" status={MembershipType.casual} />)
+    rerender(<StatusIcon data-testid="status-icon" status={MembershipType.CASUAL} />)
     icon = screen.getByTestId("status-icon")
     expect(icon).toBeInTheDocument()
   })

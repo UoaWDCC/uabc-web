@@ -1,5 +1,5 @@
-import { BookingSchema } from "@repo/shared/schemas"
-import type { UpdateBookingRequest } from "@repo/shared/types/booking"
+import type { UpdateBookingRequest } from "@repo/shared"
+import { BookingSchema } from "@repo/shared"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
 const AdminBookingService = {

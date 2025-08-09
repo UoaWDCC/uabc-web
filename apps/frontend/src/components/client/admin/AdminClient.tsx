@@ -14,7 +14,7 @@ export const AdminClient = () => {
           title="Access Denied"
         />
       }
-      scope={["admin"]}
+      scope={["Admin"]}
     >
       {() => <AdminSection />}
     </RoleGuard>

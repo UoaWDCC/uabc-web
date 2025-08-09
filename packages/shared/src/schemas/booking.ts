@@ -1,5 +1,6 @@
 import { z } from "zod"
-import { type EditBookingData, PlayLevel } from "../types"
+import { PlayLevel } from "../enums"
+import type { EditBookingData } from "../types"
 import { GameSessionSchema } from "./game-session"
 import { UserSchema } from "./user"
 

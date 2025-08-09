@@ -103,7 +103,7 @@ describe("api/me", async () => {
 
       const response = await PATCH(
         createMockNextRequest("/api/me", "PATCH", {
-          role: MembershipType.admin,
+          role: MembershipType.ADMIN,
         }),
       )
 

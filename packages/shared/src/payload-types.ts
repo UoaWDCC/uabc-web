@@ -318,7 +318,7 @@ export interface User {
   /**
    * The role of the user
    */
-  role: 'member' | 'casual' | 'admin';
+  role: 'Member' | 'Casual' | 'Admin';
   /**
    * The phone number of the user
    */
@@ -326,11 +326,11 @@ export interface User {
   /**
    * The player level of the user
    */
-  playLevel?: ('beginner' | 'intermediate' | 'advanced') | null;
+  playLevel?: ('Beginner' | 'Intermediate' | 'Advanced') | null;
   /**
    * The gender of the user
    */
-  gender?: ('male' | 'female' | 'non-binary' | 'other' | 'prefer-not-to-answer') | null;
+  gender?: ('Male' | 'Female' | 'Non-binary' | 'Other' | 'Prefer not to answer') | null;
   /**
    * The dietary requirements of the user
    */
@@ -346,7 +346,7 @@ export interface User {
   /**
    * The university of the user
    */
-  university?: ('UoA' | 'AUT' | 'Massey University' | 'Other' | 'Working' | 'Not a student') | null;
+  university?: ('UoA' | 'AUT' | 'Massey' | 'Other' | 'Working' | 'Not a student') | null;
   /**
    * The number of remaining sessions the user has
    */
@@ -391,7 +391,7 @@ export interface Semester {
   /**
    * The day when booking opens for this semester
    */
-  bookingOpenDay: 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
+  bookingOpenDay: 'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday';
   /**
    * The time when booking opens for this semester
    */
@@ -420,7 +420,7 @@ export interface GameSessionSchedule {
   /**
    * The day of the week this game session schedule belongs to
    */
-  day: 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
+  day: 'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday';
   /**
    * The start time of the game session
    */
@@ -498,7 +498,7 @@ export interface Booking {
   /**
    * The skill level of the player
    */
-  playerLevel: 'beginner' | 'intermediate' | 'advanced';
+  playerLevel: 'Beginner' | 'Intermediate' | 'Advanced';
   updatedAt: string;
   createdAt: string;
 }

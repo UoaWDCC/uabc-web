@@ -12,22 +12,22 @@ export type AuthContextValueWithUser = AuthContextValue & {
 export type RoleGuardProps = {
   /**
    * The scope of the role guard.
-   * @example ["member", "casual"]
-   * @example ["admin"]
-   * @example ["member", "casual", "admin"]
-   * @defaultValue ["member", "casual", "admin"]
+   * @example ["Member", "Casual"]
+   * @example ["Admin"]
+   * @example ["Member", "Casual", "Admin"]
+   * @defaultValue ["Member", "Casual", "Admin"]
    */
   scope?: Array<`${MembershipType}`>
   /**
    * The children of the role guard.
-   * @example <RoleGuard scope={["member", "casual"]}>
+   * @example <RoleGuard scope={["Member", "Casual"]}>
    *   {(auth) => <div>Hello {auth.user.name}</div>}
    * </RoleGuard>
    */
   children: (auth: AuthContextValueWithUser, loading?: ReactNode) => ReactNode
   /**
    * The fallback of the role guard.
-   * @example <RoleGuard scope={["member", "casual"]}>
+   * @example <RoleGuard scope={["Member", "Casual"]}>
    *   {(auth) => <div>Hello {auth.user.name}</div>}
    * </RoleGuard>
    */
@@ -39,7 +39,7 @@ export type RoleGuardProps = {
 }
 
 export const RoleGuard = ({
-  scope = ["member", "casual", "admin"],
+  scope = ["Member", "Casual", "Admin"],
   children,
   fallback = null,
   loading = null,

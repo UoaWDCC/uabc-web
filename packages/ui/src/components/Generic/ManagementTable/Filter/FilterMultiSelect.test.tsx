@@ -1,3 +1,4 @@
+import { MembershipType } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { vi } from "vitest"
 import { FilterMultiSelect } from "./FilterMultiSelect"
@@ -26,7 +27,7 @@ describe("<FilterMultiSelect />", () => {
       setFieldFilter,
     })
     const items = [
-      { label: "Admin", value: "admin" as const },
+      { label: MembershipType.ADMIN, value: MembershipType.ADMIN as const },
       { label: "User", value: "user" as const },
     ]
     const { user, rerender } = render(
@@ -62,7 +63,7 @@ describe("<FilterMultiSelect />", () => {
       setFieldFilter: vi.fn(),
     })
     const items = [
-      { label: "Admin", value: "admin" as const },
+      { label: MembershipType.ADMIN, value: MembershipType.ADMIN as const },
       { label: "User", value: "user" as const },
     ]
     render(<FilterMultiSelect filterKey={"role" as never} items={items} />)

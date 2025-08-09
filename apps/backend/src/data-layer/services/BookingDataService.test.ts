@@ -1,4 +1,4 @@
-import type { EditBookingData } from "@repo/shared"
+import { type EditBookingData, PlayLevel } from "@repo/shared"
 import { casualUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
@@ -153,7 +153,7 @@ describe("bookingDataService", () => {
     it("should update a booking with the correct data", async () => {
       const createdBooking = await bookingDataService.createBooking(bookingCreateMock)
       const updateData: EditBookingData = {
-        playerLevel: "intermediate",
+        playerLevel: PlayLevel.INTERMEDIATE,
       }
 
       const updatedBooking = await bookingDataService.updateBooking(createdBooking.id, updateData)
@@ -166,7 +166,7 @@ describe("bookingDataService", () => {
 
     it("should throw a Not Found error when no booking is found to update", async () => {
       const updateData: EditBookingData = {
-        playerLevel: "intermediate",
+        playerLevel: PlayLevel.INTERMEDIATE,
       }
 
       await expect(() =>

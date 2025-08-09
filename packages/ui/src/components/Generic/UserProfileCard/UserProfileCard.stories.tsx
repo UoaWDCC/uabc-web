@@ -94,8 +94,8 @@ export const AdditionalFields: StoryFn = () => {
   return (
     <UserProfileCard
       defaultValues={{
-        gender: Gender.male,
-        playLevel: PlayLevel.beginner,
+        gender: Gender.MALE,
+        playLevel: PlayLevel.BEGINNER,
       }}
       fields={minimalFields}
       onSave={async (data) => {

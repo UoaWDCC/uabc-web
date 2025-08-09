@@ -7,7 +7,7 @@ import { BookConfirm } from "./BookConfirm"
 const mockBookings = {
   bookings: [
     {
-      day: Weekday.tuesday,
+      day: Weekday.TUESDAY,
       date: "24/06/25",
       startTime: "19:30",
       endTime: "20:00",
@@ -17,7 +17,7 @@ const mockBookings = {
       capacity: 40,
     },
     {
-      day: Weekday.monday,
+      day: Weekday.MONDAY,
       date: "23/06/25",
       startTime: "17:30",
       endTime: "18:00",

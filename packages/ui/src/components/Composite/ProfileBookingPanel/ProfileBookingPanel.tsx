@@ -42,7 +42,7 @@ export interface ProfileBookingPanelProps extends StackProps {
 export const ProfileBookingPanel: FC<ProfileBookingPanelProps> = memo(
   ({ bookings, error, user, ...props }) => {
     const isDeleteDisabled =
-      user && (user.role === MembershipType.casual || user.role === MembershipType.member)
+      user && (user.role === MembershipType.CASUAL || user.role === MembershipType.MEMBER)
 
     return (
       <VStack

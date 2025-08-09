@@ -17,7 +17,7 @@ type RouteHandlerContext = {
  * @param scopes The scopes to check for, if not provided, no scope check is performed
  * @returns Calls the original function, otherwise returns a {@link NextResponse} or redirection
  */
-export function Security(securityName: "jwt", scopes?: (keyof typeof MembershipType)[]) {
+export function Security(securityName: "jwt", scopes?: Lowercase<keyof typeof MembershipType>[]) {
   return (
     // biome-ignore lint/suspicious/noExplicitAny: The target may be anything
     _target: any,

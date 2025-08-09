@@ -81,7 +81,7 @@ export const UniversityInfoForm: FC<UniversityInfoFormProps> = memo(
             <TextInput
               data-testid="student-id"
               defaultValue={defaultValues?.studentId}
-              disabled={watch("university") !== University.uoa}
+              disabled={watch("university") !== University.UOA}
               placeholder="Student ID"
               size="lg"
               startElement={<UserIcon />}
@@ -93,7 +93,7 @@ export const UniversityInfoForm: FC<UniversityInfoFormProps> = memo(
             <TextInput
               data-testid="student-upi"
               defaultValue={defaultValues?.studentUpi}
-              disabled={watch("university") !== University.uoa}
+              disabled={watch("university") !== University.UOA}
               placeholder="UPI"
               size="lg"
               startElement={<UserIcon />}
