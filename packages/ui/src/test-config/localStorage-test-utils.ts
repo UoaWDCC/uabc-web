@@ -39,7 +39,7 @@ if (typeof window.StorageEvent === "undefined") {
       url: string
 
       constructor(type: string, eventInitDict?: StorageEventInit) {
-        super(type, eventInitDict)
+        super(type, eventInitDict as EventInit)
         this.key = eventInitDict?.key ?? null
         this.newValue = eventInitDict?.newValue ?? null
         this.oldValue = eventInitDict?.oldValue ?? null
@@ -56,6 +56,7 @@ export const consoleSpy = {
   log: vi.spyOn(console, "log").mockImplementation(() => {}),
   warn: vi.spyOn(console, "warn").mockImplementation(() => {}),
   error: vi.spyOn(console, "error").mockImplementation(() => {}),
+  debug: vi.spyOn(console, "debug").mockImplementation(() => {}),
 }
 
 export const setupTestEnvironment = () => {
@@ -67,4 +68,5 @@ export const cleanupTestEnvironment = () => {
   consoleSpy.log.mockClear()
   consoleSpy.warn.mockClear()
   consoleSpy.error.mockClear()
+  consoleSpy.debug.mockClear()
 }
