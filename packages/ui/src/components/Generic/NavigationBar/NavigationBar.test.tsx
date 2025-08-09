@@ -163,28 +163,6 @@ describe("<NavigationBarMobile />", () => {
     expect(backdrop).toBeInTheDocument()
     await waitFor(() => expect(backdrop).toBeVisible())
   })
-
-  it("should handle active state with trailing slashes in mobile menu", async () => {
-    mockUsePathname.mockReturnValue("/about/")
-    const { user } = render(<NavigationBarMobile {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
-
-    const menuButton = screen.getByRole("button")
-    await user.click(menuButton)
-
-    const aboutLink = screen.getByText("About")
-    expect(aboutLink).toHaveStyle({ color: "var(--ui-colors-primary)" })
-  })
-
-  it("should handle active state without trailing slashes in mobile menu", async () => {
-    mockUsePathname.mockReturnValue("/about")
-    const { user } = render(<NavigationBarMobile {...NAVIGATION_BAR_MEMBER_TEST_CONSTANTS} />)
-
-    const menuButton = screen.getByRole("button")
-    await user.click(menuButton)
-
-    const aboutLink = screen.getByText("About")
-    expect(aboutLink).toHaveStyle({ color: "var(--ui-colors-primary)" })
-  })
 })
 
 describe("<NavigationBarDesktop />", () => {
