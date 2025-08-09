@@ -35,7 +35,7 @@ export const GET = async (req: NextRequest) => {
     paginatedGameSessions.docs.forEach((gameSession) => {
       if (typeof gameSession.gameSessionSchedule === "object") {
         gameSession.location = (gameSession.gameSessionSchedule as GameSessionSchedule).location
-        gameSession.name = (gameSession.gameSessionSchedule as GameSessionSchedule)?.name
+        gameSession.name = (gameSession.gameSessionSchedule as GameSessionSchedule).name
       }
     })
     return NextResponse.json({ data: paginatedGameSessions })
