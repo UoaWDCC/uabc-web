@@ -1,5 +1,6 @@
 "use client"
 
+import { toKebabCase } from "@yamada-ui/react"
 import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from "nuqs"
 import type { ReactNode } from "react"
 import { createContext, useCallback, useContext, useMemo, useState } from "react"
@@ -152,23 +153,20 @@ export const ManagementTableProvider = <
     return new Set(selectedRowIds)
   }, [selectedRowIds])
 
-  const toKebabCase = useCallback((str: string): string => {
-    return str
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "")
+  const normalize = useCallback((str: string): string => {
+    return toKebabCase(String(str))
   }, [])
 
   const filteredData = useMemo(() => {
     let filtered = members
     // Apply generic text filter
     if (filterValue) {
-      const kebabFilter = toKebabCase(filterValue)
+      const kebabFilter = normalize(filterValue)
       filtered = filtered.filter((member) => {
         return searchInFields.some((field) => {
           const value = member[field]
           if (value === null || value === undefined) return false
-          return toKebabCase(String(value)).includes(kebabFilter)
+          return normalize(String(value)).includes(kebabFilter)
         })
       })
     }
@@ -179,19 +177,19 @@ export const ManagementTableProvider = <
           filtered = filtered.filter((member) => {
             const memberValue = member[key as keyof TData]
             return value.some(
-              (filterVal) => toKebabCase(String(memberValue)) === toKebabCase(String(filterVal)),
+              (filterVal) => normalize(String(memberValue)) === normalize(String(filterVal)),
             )
           })
         }
       } else if (value && value !== "all") {
         filtered = filtered.filter((member) => {
           const fieldValue = member[key as keyof TData]
-          return toKebabCase(String(fieldValue)) === toKebabCase(String(value))
+          return normalize(String(fieldValue)) === normalize(String(value))
         })
       }
     })
     return Array.isArray(filtered) ? filtered : []
-  }, [members, filterValue, searchInFields, fieldFilters, toKebabCase])
+  }, [members, filterValue, searchInFields, fieldFilters, normalize])
 
   const totalPages = useMemo(() => {
     return Math.ceil(filteredData.length / perPage)
