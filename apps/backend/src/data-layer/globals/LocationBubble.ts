@@ -1,41 +1,18 @@
-import type { GlobalBeforeValidateHook, GlobalConfig } from "payload"
-
-const validateGameSessionSchedules: GlobalBeforeValidateHook = async ({ data, req }) => {
-  const locationBubbleItems = data.LocationBubbleItems
-
-  for (const item of locationBubbleItems) {
-    const scheduleIds = item.gameSessionSchedule
-
-    const schedules = await Promise.all(
-      scheduleIds.map((id: string) =>
-        req.payload.findByID({
-          collection: "gameSessionSchedule",
-          id,
-        }),
-      ),
-    )
-
-    const first = schedules[0]
-    for (const schedule of schedules) {
-      if (schedule.name !== first.name || schedule.location !== first.location) {
-        throw new Error(
-          "All gameSessionSchedules inside a locationBubbleItem must have the same title and location.",
-        )
-      }
-    }
-  }
-
-  return data
-}
+import type { GlobalConfig } from "payload"
+import { validateGameSessionSchedules } from "../validators/location-bubble-validator"
 
 export const LocationBubble: GlobalConfig = {
   slug: "locationBubble",
+  admin: {
+    description: "Location bubbles that will be displayed on the homepage",
+  },
   fields: [
     {
       name: "locationBubbleItems",
       type: "array",
       interfaceName: "LocationBubbleItem",
       maxRows: 3,
+      required: true,
       fields: [
         {
           name: "locationImage",
@@ -52,6 +29,12 @@ export const LocationBubble: GlobalConfig = {
           required: true,
           relationTo: "gameSessionSchedule",
           hasMany: true,
+          validate: async (val, { req }) => {
+            if (!(await validateGameSessionSchedules(val, req))) {
+              return "All gameSessionSchedules inside a locationBubbleItem must have the same title and location."
+            }
+            return true
+          },
           admin: {
             description:
               "The game session schedule displayed for location bubble description, e.g. location, session time",
@@ -88,10 +71,4 @@ export const LocationBubble: GlobalConfig = {
       ],
     },
   ],
-  hooks: {
-    beforeValidate: [validateGameSessionSchedules],
-  },
-  admin: {
-    description: "Location bubble that will be displayed on the homepage",
-  },
 }

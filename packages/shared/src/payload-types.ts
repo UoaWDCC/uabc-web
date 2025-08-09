@@ -56,20 +56,18 @@ export type LinkArray = {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "LocationBubbleItem".
  */
-export type LocationBubbleItem =
-  | {
-      /**
-       * The image displayed for the location of game session.
-       */
-      locationImage: string | Media;
-      /**
-       * The game session schedule displayed for location bubble description, e.g. location, session time
-       */
-      gameSessionSchedule: (string | GameSessionSchedule)[];
-      button: Link;
-      id?: string | null;
-    }[]
-  | null;
+export type LocationBubbleItem = {
+  /**
+   * The image displayed for the location of game session.
+   */
+  locationImage: string | Media;
+  /**
+   * The game session schedule displayed for location bubble description, e.g. location, session time
+   */
+  gameSessionSchedule: (string | GameSessionSchedule)[];
+  button: Link;
+  id?: string | null;
+}[];
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "AboutUsInfoItems".
@@ -913,14 +911,14 @@ export interface LinkGroup {
   links: LinkArray;
 }
 /**
- * Location bubble that will be displayed on the homepage
+ * Location bubbles that will be displayed on the homepage
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "locationBubble".
  */
 export interface LocationBubble {
   id: string;
-  locationBubbleItems?: LocationBubbleItem;
+  locationBubbleItems: LocationBubbleItem;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
