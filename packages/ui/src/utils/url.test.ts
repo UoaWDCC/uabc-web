@@ -45,7 +45,7 @@ describe("buildExternalHref", () => {
     const params = { tags: ["js", "ts"], active: true }
 
     expect(buildExternalHref(base, params)).toBe(
-      "https://api.example.com/search?tags=js,ts&active=true",
+      "https://api.example.com/search?tags=js%2Cts&active=true",
     )
   })
 
@@ -61,7 +61,7 @@ describe("buildExternalHref", () => {
     const params = { tags: ["js", null, "ts"], active: true }
 
     expect(buildExternalHref(base, params)).toBe(
-      "https://api.example.com/search?tags=js,ts&active=true",
+      "https://api.example.com/search?tags=js%2Cts&active=true",
     )
   })
 
@@ -87,7 +87,7 @@ describe("buildExternalHref", () => {
     }
 
     expect(buildExternalHref(base, params)).toBe(
-      "https://api.example.com/search?tags=js,42,true,ts&active=true",
+      "https://api.example.com/search?tags=js%2C42%2Ctrue%2Cts&active=true",
     )
   })
 
@@ -129,7 +129,7 @@ describe("buildExternalHref", () => {
     }
 
     expect(buildExternalHref(base, params)).toBe(
-      "https://api.example.com/data?config=[object Object]&user=[object Object]",
+      "https://api.example.com/data?config=%5Bobject+Object%5D&user=%5Bobject+Object%5D",
     )
   })
 
@@ -142,7 +142,7 @@ describe("buildExternalHref", () => {
     }
 
     expect(buildExternalHref(base, params)).toBe(
-      "https://api.example.com/search?query=hello%20world&email=user%40example.com&path=%2Fapi%2Fdata",
+      "https://api.example.com/search?query=hello+world&email=user%40example.com&path=%2Fapi%2Fdata",
     )
   })
 

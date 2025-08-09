@@ -25,7 +25,7 @@ export type SerializableQuery = Record<string, unknown>
  *
  * // With arrays
  * serializeQuery({ tags: ["js", "ts"], active: true })
- * // Returns: "tags=js,ts&active=true"
+ * // Returns: "tags=js%2Cts&active=true"
  *
  * // With null values (filtered out)
  * serializeQuery({ name: "John", email: null, age: 30 })
