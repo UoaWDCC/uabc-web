@@ -1,8 +1,22 @@
 import type { UpdateGameSessionRequest } from "@repo/shared"
-import { GetGameSessionResponseSchema } from "@repo/shared"
+import { GetBookingsResponseSchema, GetGameSessionResponseSchema } from "@repo/shared"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
 const AdminGameSessionService = {
+  /**
+   * Fetches a game session's bookings by its ID.
+   *
+   * @param id The ID of the game session to fetch bookings for.
+   * @returns The bookings associated with the game session.
+   */
+  getAllGameSessionBookings: async (id: string) => {
+    const response = await apiClient.get(
+      `/admin/game-sessions/${id}/bookings`,
+      GetBookingsResponseSchema,
+    )
+    return ApiClient.throwIfError(response)
+  },
+
   /**
    * Creates a new game session with the provided data.
    *
