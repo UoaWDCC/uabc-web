@@ -32,12 +32,13 @@ export const GET = async (req: NextRequest) => {
     /**
      * Normalise the `location` and `name` fields to use their parent {@link GameSessionSchedule} data
      */
-    paginatedGameSessions.docs.forEach((gameSession) => {
+    for (let i = 0; i < paginatedGameSessions.docs.length; i++) {
+      const gameSession = paginatedGameSessions.docs[i]
       if (typeof gameSession.gameSessionSchedule === "object") {
         gameSession.location = (gameSession.gameSessionSchedule as GameSessionSchedule).location
         gameSession.name = (gameSession.gameSessionSchedule as GameSessionSchedule).name
       }
-    })
+    }
     return NextResponse.json({ data: paginatedGameSessions })
   } catch (error) {
     console.error(error)
