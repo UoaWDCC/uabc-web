@@ -11,7 +11,7 @@ export default class MailService {
     return await payload.sendEmail({
       to: email,
       subject: "Email verification code",
-      text: `Here is your email verification code: ${verificationCode}`,
+      text: `Here is your email verification code: ${verificationCode}. This code will expire in 24 hours.`,
     })
   }
 }
