@@ -13,7 +13,7 @@ import { MediaSchema } from "./media"
 import { PaginationDataSchema } from "./query"
 
 export const EmailVerificationCodeSchema = z.object({
-  id: z.string(),
+  id: z.string().nullable().optional(),
   verificationCode: z.string(),
   createdAt: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   expiresAt: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
