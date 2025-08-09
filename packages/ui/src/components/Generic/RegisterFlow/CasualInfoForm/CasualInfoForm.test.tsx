@@ -1,7 +1,8 @@
+import type { CasualInfoFormValues } from "@repo/shared/types"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as CasualInfoFormModule from "./index"
-import { CasualInfoForm, type CasualInfoFormValues } from "./index"
+import { CasualInfoForm } from "./index"
 
 describe("<CasualInfoForm />", () => {
   it("should re-export the CasualInfoForm component and check if CasualInfoForm exists", () => {

@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation"
 import { type ReactNode, useMemo } from "react"
 import { type AuthContextValue, useAuth } from "./AuthContext"
 
+export type AuthContextValueWithUser = AuthContextValue & {
+  user: NonNullable<AuthContextValue["user"]>
+}
+
 export type RoleGuardProps = {
   /**
    * The scope of the role guard.
@@ -17,14 +21,14 @@ export type RoleGuardProps = {
   /**
    * The children of the role guard.
    * @example <RoleGuard scope={["member", "casual"]}>
-   *   {(auth) => <div>Hello {auth.user?.name}</div>}
+   *   {(auth) => <div>Hello {auth.user.name}</div>}
    * </RoleGuard>
    */
-  children: (auth: AuthContextValue, loading?: ReactNode) => ReactNode
+  children: (auth: AuthContextValueWithUser, loading?: ReactNode) => ReactNode
   /**
    * The fallback of the role guard.
    * @example <RoleGuard scope={["member", "casual"]}>
-   *   {(auth) => <div>Hello {auth.user?.name}</div>}
+   *   {(auth) => <div>Hello {auth.user.name}</div>}
    * </RoleGuard>
    */
   fallback?: ReactNode
@@ -48,7 +52,7 @@ export const RoleGuard = ({
   }
 
   if (auth.token && auth.user && scopeSet.has(auth.user.role)) {
-    return children(auth)
+    return children(auth as AuthContextValueWithUser)
   }
 
   return fallback

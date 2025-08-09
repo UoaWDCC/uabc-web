@@ -47,7 +47,7 @@ export interface RegisterPanelProps {
  * @param props RegisterPanel component props
  * @returns A register panel component
  */
-export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
+export const RegisterPanel = memo(({ onSubmit, googleHref }: RegisterPanelProps) => {
   const {
     register,
     handleSubmit,
@@ -140,17 +140,17 @@ export const RegisterPanel = memo(({ onSubmit }: RegisterPanelProps) => {
 
       <Center>
         <ButtonGroup gap="sm">
-          <Tooltip label="Not ready yet" placement="top">
-            <IconButton
-              aria-label="Google"
-              colorScheme="secondary"
-              disabled
-              fullRounded
-              variant="gradient"
-            >
-              <GoogleLogo fontSize="2xl" />
-            </IconButton>
-          </Tooltip>
+          <IconButton
+            aria-label="Google"
+            as={Link}
+            colorScheme="secondary"
+            disabled={!googleHref}
+            fullRounded
+            href={googleHref ?? "#"}
+            variant="gradient"
+          >
+            <GoogleLogo fontSize="2xl" />
+          </IconButton>
           <Tooltip label="Not ready yet" placement="top">
             {/* TODO: implement Apple auth or remove Apple icon button */}
             <IconButton

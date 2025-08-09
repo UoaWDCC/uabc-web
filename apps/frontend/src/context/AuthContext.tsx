@@ -3,10 +3,10 @@
 import type { LoginFormData, RegisterRequestBody } from "@repo/shared"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
+import { useLocalStorage } from "@repo/ui/hooks"
 import { type UseMutationResult, useMutation, useQuery } from "@tanstack/react-query"
 import { useNotice, useUpdateEffect } from "@yamada-ui/react"
 import { createContext, type ReactNode, useContext } from "react"
-import { useLocalStorage } from "@/lib/storage"
 import AuthService from "@/services/auth/AuthService"
 
 type AuthState = {
@@ -55,6 +55,7 @@ type AuthActions = {
     },
     unknown
   >
+  setToken: (token: string | null) => void
 }
 
 export type AuthContextValue = AuthState & AuthActions
@@ -150,6 +151,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     login,
     emailVerificationCode,
     register,
+    setToken,
   }
 
   useUpdateEffect(() => {

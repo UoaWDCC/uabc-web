@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { PlayLevel } from "../types"
+import { type EditBookingData, PlayLevel } from "../types"
 import { GameSessionSchema } from "./game-session"
 import { UserSchema } from "./user"
 
@@ -12,7 +12,7 @@ export const BookingSchema = z.object({
   createdAt: z.string(),
 })
 
-export const CreateBookingRequestBodySchema = BookingSchema.omit({
+export const CreateBookingRequestSchema = BookingSchema.omit({
   id: true,
   updatedAt: true,
   createdAt: true,
@@ -22,3 +22,10 @@ export const CreateBookingRequestBodySchema = BookingSchema.omit({
 export const GetBookingsResponseSchema = z.object({
   data: z.array(BookingSchema),
 })
+
+export const SelectACourtFormDataSchema = z.object({
+  bookingTimes: z.array(z.string()).min(1, "Please select at least one session"),
+})
+
+export const UpdateBookingRequestSchema =
+  CreateBookingRequestSchema.partial() satisfies z.ZodType<EditBookingData>

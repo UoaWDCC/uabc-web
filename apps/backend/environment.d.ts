@@ -25,6 +25,11 @@ declare global {
       NEXT_PUBLIC_URL: string
 
       /**
+       * The public URL of the API
+       */
+      NEXT_PUBLIC_API_URL: string
+
+      /**
        * The hostname of the SMTP server
        */
       SMTP_HOST: string
