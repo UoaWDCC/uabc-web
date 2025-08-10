@@ -1,12 +1,15 @@
-import type {
-  CreateGameSessionData,
-  CreateGameSessionScheduleData,
-  UpdateGameSessionData,
-  UpdateGameSessionScheduleData,
+import {
+  type CreateGameSessionData,
+  type CreateGameSessionScheduleData,
+  getGameSessionOpenDay,
+  type UpdateGameSessionData,
+  type UpdateGameSessionScheduleData,
+  type Weekday,
 } from "@repo/shared"
-import type { GameSession, GameSessionSchedule } from "@repo/shared/payload-types"
+import type { GameSession, GameSessionSchedule, Semester } from "@repo/shared/payload-types"
 import type { PaginatedDocs } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
+import { createGameSessionTimes, getWeeklySessionDates } from "../utils/DateUtils"
 
 export default class GameSessionDataService {
   /**
@@ -94,6 +97,49 @@ export default class GameSessionDataService {
       collection: "gameSessionSchedule",
       data: newGameSessionScheduleData,
     })
+  }
+
+  /**
+   * Creates an array of {@link GameSession} documents based on game session schedule
+   *
+   * @param schedule the {@link GameSessionSchedule} the game sessions are based on
+   * @returns an array of newly created {@link GameSession} documents
+   */
+  public async cascadeCreateGameSessions(
+    schedule: GameSessionSchedule,
+    semester: Semester,
+  ): Promise<GameSession[]> {
+    const sessionDates = getWeeklySessionDates(schedule.day as Weekday, semester)
+
+    const sessions: CreateGameSessionData[] = sessionDates.map((date) => {
+      const gameSessionTimes = createGameSessionTimes(schedule, date)
+
+      return {
+        gameSessionSchedule: schedule.id,
+        semester: semester.id,
+        name: schedule.name,
+        location: schedule.location,
+        ...gameSessionTimes,
+        capacity: schedule.capacity,
+        casualCapacity: schedule.casualCapacity,
+        openTime: getGameSessionOpenDay(
+          semester,
+          new Date(gameSessionTimes.startTime),
+        ).toISOString(),
+      }
+    })
+
+    const createdSessions = await Promise.all(
+      sessions.map(
+        (session) =>
+          payload.create({
+            collection: "gameSession",
+            data: session,
+          }) as Promise<GameSession>,
+      ),
+    )
+
+    return createdSessions
   }
 
   /**

@@ -481,6 +481,10 @@ export interface GameSession {
    */
   location?: string | null;
   /**
+   * The open time of the game session
+   */
+  openTime: string;
+  /**
    * The start time of the game session
    */
   startTime: string;
@@ -778,6 +782,7 @@ export interface GameSessionSelect<T extends boolean = true> {
   semester?: T;
   name?: T;
   location?: T;
+  openTime?: T;
   startTime?: T;
   endTime?: T;
   capacity?: T;
