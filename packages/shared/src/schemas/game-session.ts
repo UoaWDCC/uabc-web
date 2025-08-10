@@ -24,7 +24,8 @@ export const CreateGameSessionRequestSchema = GameSessionSchema.omit({
   updatedAt: true,
   createdAt: true,
   id: true,
-}) satisfies z.ZodType<CreateGameSessionData>
+  openTime: true,
+}) satisfies z.ZodType<Omit<CreateGameSessionData, "openTime">>
 
 export const UpdateGameSessionRequestSchema =
   CreateGameSessionRequestSchema.partial() satisfies z.ZodType<UpdateGameSessionData>
