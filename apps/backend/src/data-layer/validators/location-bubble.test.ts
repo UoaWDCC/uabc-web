@@ -1,7 +1,7 @@
 import type { PayloadRequest } from "payload"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import { payload } from "../adapters/Payload"
-import { validateGameSessionSchedules } from "./location-bubble-validator"
+import { validateGameSessionSchedules } from "./location-bubble"
 
 describe("validateGameSessionSchedules", () => {
   const payloadRequest = {
@@ -16,7 +16,9 @@ describe("validateGameSessionSchedules", () => {
       data: gameSessionScheduleCreateMock,
     })
 
-    const valid = await validateGameSessionSchedules([newGameSessionSchedule.id], payloadRequest)
+    const valid = await validateGameSessionSchedules([newGameSessionSchedule.id], {
+      req: payloadRequest,
+    })
 
     expect(valid).toBe(true)
   })
@@ -34,9 +36,17 @@ describe("validateGameSessionSchedules", () => {
 
     const valid = await validateGameSessionSchedules(
       [newGameSessionSchedule1.id, newGameSessionSchedule2.id],
-      payloadRequest,
+      { req: payloadRequest },
     )
 
-    expect(valid).toBe(false)
+    expect(valid).toBe("All game session schedules must have the same title and location.")
+  })
+
+  it("returns false if no game session schedule selected", async () => {
+    const valid = await validateGameSessionSchedules([], {
+      req: payloadRequest,
+    })
+
+    expect(valid).toBe("This field is required")
   })
 })

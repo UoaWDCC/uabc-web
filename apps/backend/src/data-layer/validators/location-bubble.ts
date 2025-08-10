@@ -10,9 +10,9 @@ import type { PayloadRequest } from "payload"
  */
 export const validateGameSessionSchedules = async (
   gameSessionSchedules: RelationshipValueMany | null | undefined,
-  req: PayloadRequest,
-) => {
-  if (!gameSessionSchedules || gameSessionSchedules.length === 0) return true
+  { req }: { req: PayloadRequest },
+): Promise<string | true> => {
+  if (!gameSessionSchedules?.length) return "This field is required"
 
   const gameSessionScheduleIds = Array.isArray(gameSessionSchedules)
     ? gameSessionSchedules
@@ -26,12 +26,11 @@ export const validateGameSessionSchedules = async (
       }),
     ),
   )
-  const first = schedules[0]
-  const differentGameSessionSchedules = schedules.some(
-    (schedule) => schedule.name !== first.name || schedule.location !== first.location,
+  const scheduleName = schedules[0]
+  return (
+    !schedules.some(
+      (schedule) =>
+        schedule.name !== scheduleName.name || schedule.location !== scheduleName.location,
+    ) || "All game session schedules must have the same title and location."
   )
-  if (differentGameSessionSchedules) {
-    return false
-  }
-  return true
 }

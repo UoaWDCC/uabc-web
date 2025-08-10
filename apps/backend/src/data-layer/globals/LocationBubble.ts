@@ -1,5 +1,5 @@
 import type { GlobalConfig } from "payload"
-import { validateGameSessionSchedules } from "../validators/location-bubble-validator"
+import { validateGameSessionSchedules } from "../validators/location-bubble"
 
 export const LocationBubble: GlobalConfig = {
   slug: "locationBubble",
@@ -29,12 +29,7 @@ export const LocationBubble: GlobalConfig = {
           required: true,
           relationTo: "gameSessionSchedule",
           hasMany: true,
-          validate: async (val, { req }) => {
-            if (!(await validateGameSessionSchedules(val, req))) {
-              return "All gameSessionSchedules inside a locationBubbleItem must have the same title and location."
-            }
-            return true
-          },
+          validate: validateGameSessionSchedules,
           admin: {
             description:
               "The game session schedule displayed for location bubble description, e.g. location, session time",
