@@ -1,4 +1,4 @@
-import { AUTH_COOKIE_NAME, type EditBookingData } from "@repo/shared"
+import { AUTH_COOKIE_NAME, type EditBookingData, PlayLevel } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import BookingDataService from "@/data-layer/services/BookingDataService"
@@ -37,7 +37,7 @@ describe("/api/admin/bookings/[id]", async () => {
     it("should update the booking if user is admin", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const newBooking = await bookingDataService.createBooking(bookingCreateMock)
-      const updateBooking: EditBookingData = { playerLevel: "beginner" }
+      const updateBooking: EditBookingData = { playerLevel: PlayLevel.BEGINNER }
 
       const res = await PATCH(createMockNextRequest("", "PATCH", updateBooking), {
         params: Promise.resolve({ id: newBooking.id }),

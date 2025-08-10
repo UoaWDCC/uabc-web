@@ -1,3 +1,4 @@
+import { MembershipType, University } from "@repo/shared"
 import type { Meta, StoryObj } from "@storybook/react"
 import type { Column } from "@yamada-ui/table"
 import { NuqsAdapter } from "nuqs/adapters/react"
@@ -8,57 +9,57 @@ const mockData = [
     id: "1",
     name: "Alice",
     email: "alice@example.com",
-    role: "admin",
-    university: "University of Auckland",
+    role: MembershipType.ADMIN,
+    university: University.UOA,
   },
   {
     id: "2",
     name: "Bob",
     email: "bob@example.com",
-    role: "casual",
-    university: "Auckland University of Technology",
+    role: MembershipType.CASUAL,
+    university: University.AUT,
   },
   {
     id: "3",
     name: "Charlie",
     email: "charlie@example.com",
-    role: "member",
-    university: "Massey University",
+    role: MembershipType.MEMBER,
+    university: University.MASSEY,
   },
   {
     id: "4",
     name: "David",
     email: "david@example.com",
-    role: "casual",
-    university: "University of Auckland",
+    role: MembershipType.CASUAL,
+    university: University.UOA,
   },
   {
     id: "5",
     name: "Eve",
     email: "eve@example.com",
-    role: "member",
-    university: "Auckland University of Technology",
+    role: MembershipType.MEMBER,
+    university: University.AUT,
   },
   {
     id: "6",
     name: "Frank",
     email: "frank@example.com",
-    role: "casual",
-    university: "Massey University",
+    role: MembershipType.CASUAL,
+    university: University.MASSEY,
   },
   {
     id: "7",
     name: "Grace",
     email: "grace@example.com",
-    role: "member",
-    university: "University of Auckland",
+    role: MembershipType.MEMBER,
+    university: University.UOA,
   },
   {
     id: "8",
     name: "Hank",
     email: "hank@example.com",
-    role: "casual",
-    university: "Auckland University of Technology",
+    role: MembershipType.CASUAL,
+    university: University.AUT,
   },
 ]
 
@@ -187,11 +188,10 @@ export const Advanced: Story = {
         {
           key: "role",
           type: "multiselect",
-          items: [
-            { label: "Admin", value: "admin" },
-            { label: "Casual", value: "casual" },
-            { label: "Member", value: "member" },
-          ],
+          items: Object.values(MembershipType).map((role) => ({
+            label: role,
+            value: role,
+          })),
           label: "All",
           onChange: () => {
             console.log("onChange")
@@ -200,14 +200,10 @@ export const Advanced: Story = {
         {
           key: "university",
           type: "multiselect",
-          items: [
-            { label: "University of Auckland", value: "university-of-auckland" },
-            {
-              label: "Auckland University of Technology",
-              value: "auckland-university-of-technology",
-            },
-            { label: "Massey University", value: "massey-university" },
-          ],
+          items: Object.values(University).map((university) => ({
+            label: university,
+            value: university,
+          })),
           label: "University",
           w: "md",
         },

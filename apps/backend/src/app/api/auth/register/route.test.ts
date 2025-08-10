@@ -20,7 +20,7 @@ describe("tests /api/auth/register", () => {
       firstName: registerBody.email,
       email: registerBody.email,
       emailVerificationCode: registerBody.emailVerificationCode,
-      role: MembershipType.casual,
+      role: MembershipType.CASUAL,
     })
 
     const res = await POST(
@@ -43,7 +43,7 @@ describe("tests /api/auth/register", () => {
       firstName: registerBody.email,
       email: registerBody.email,
       emailVerificationCode: "333555",
-      role: MembershipType.casual,
+      role: MembershipType.CASUAL,
     })
 
     const res = await POST(createMockNextRequest("", "POST", registerBody))
@@ -66,7 +66,7 @@ describe("tests /api/auth/register", () => {
       firstName: registerBody.email,
       email: registerBody.email,
       emailVerificationCode: registerBody.emailVerificationCode,
-      role: MembershipType.casual,
+      role: MembershipType.CASUAL,
     })
 
     await POST(createMockNextRequest("", "POST", registerBody))

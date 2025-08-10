@@ -1,4 +1,4 @@
-import type { CreateBookingData } from "@repo/shared"
+import { type CreateBookingData, PlayLevel } from "@repo/shared"
 import { casualUserMock } from "@repo/shared/mocks"
 import type { Booking } from "@repo/shared/payload-types"
 import { gameSessionMock } from "./GameSession.mock"
@@ -6,20 +6,20 @@ import { gameSessionMock } from "./GameSession.mock"
 export const bookingCreateMock: CreateBookingData = {
   user: casualUserMock,
   gameSession: gameSessionMock,
-  playerLevel: "beginner",
+  playerLevel: PlayLevel.BEGINNER,
 }
 
 export const bookingCreateMock2: CreateBookingData = {
   user: casualUserMock,
   gameSession: gameSessionMock,
-  playerLevel: "advanced",
+  playerLevel: PlayLevel.ADVANCED,
 }
 
 export const bookingMock: Booking = {
   id: "ccaf8f75ceb9f059773d4774",
   user: casualUserMock,
   gameSession: gameSessionMock,
-  playerLevel: "beginner",
+  playerLevel: PlayLevel.BEGINNER,
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),
 }

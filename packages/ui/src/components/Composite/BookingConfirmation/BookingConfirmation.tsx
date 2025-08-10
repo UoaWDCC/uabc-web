@@ -82,7 +82,7 @@ export interface BookingConfirmationProps {
  *     attendees: "39/40",
  *   }]}
  *   user={{
- *     role: MembershipType.member,
+ *     role: MembershipType.MEMBER,
  *     remainingSessions: 6,
  *   }}
  *   onBack={() => console.log("Back clicked")}
@@ -123,7 +123,7 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
           {
             term: "Attendees",
             description:
-              user.role === MembershipType.casual
+              user.role === MembershipType.CASUAL
                 ? `${booking.casualAttendees} / ${booking.casualCapacity}`
                 : `${booking.attendees} / ${booking.capacity}`,
             termProps: { color: "muted", fontSize: "sm" },

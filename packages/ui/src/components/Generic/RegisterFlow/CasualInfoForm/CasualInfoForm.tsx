@@ -1,6 +1,6 @@
 "use client"
 
-import type { CasualInfoFormValues } from "@repo/shared/types"
+import type { CasualInfoFormValues } from "@repo/shared"
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import { UserRoundIcon } from "@yamada-ui/lucide"
 

@@ -1,6 +1,6 @@
 "use client"
+import type { EditSelfData } from "@repo/shared"
 import { UpdateSelfRequestSchema } from "@repo/shared"
-import type { EditSelfData } from "@repo/shared/types/collections"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAuth } from "@/context/AuthContext"
 import AuthService from "./AuthService"

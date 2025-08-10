@@ -55,7 +55,7 @@ export interface BookingDetailsProps {
  * @returns A component that displays booking details.
  * @example
  * <BookingDetails
- *  day={Weekday.tuesday}
+ *  day={Weekday.TUESDAY}
  *  date="24/06/25"
  *  startTime="19:30"
  *  endTime="20:00"

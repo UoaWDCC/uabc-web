@@ -1,4 +1,4 @@
-import { Gender, PlayLevel, University } from "@repo/shared/types"
+import { Gender, PlayLevel, University } from "@repo/shared"
 import { setupTestEnvironment } from "@repo/ui/test-config/localStorage-test-utils"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
@@ -34,16 +34,16 @@ describe("<RegisterFlow />", () => {
 
     // University Info Form
     await user.click(screen.getByTestId("university"))
-    await user.click(screen.getByText(University.uoa))
+    await user.click(screen.getByText(University.UOA))
     await user.type(screen.getByTestId("student-id"), "610855188")
     await user.type(screen.getByTestId("student-upi"), "bond007")
     await user.click(screen.getByText("Continue"))
 
     // Additional Info Form
     await user.click(screen.getByTestId("gender"))
-    await user.click(screen.getByText(Gender.female))
+    await user.click(screen.getByText(Gender.FEMALE))
     await user.click(screen.getByTestId("skill-level"))
-    await user.click(screen.getByText(PlayLevel.advanced))
+    await user.click(screen.getByText(PlayLevel.ADVANCED))
     await user.type(screen.getByTestId("dietary-requirements"), "BEANS")
     await user.click(screen.getByText("Continue"))
 

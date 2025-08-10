@@ -1,6 +1,7 @@
 import { z } from "zod"
+import { Weekday } from "../enums"
 import type { Semester } from "../payload-types"
-import { type CreateSemesterData, type EditSemesterData, Weekday } from "../types"
+import type { CreateSemesterData, EditSemesterData } from "../types"
 
 export const SemesterSchema = z.object({
   id: z.string(),
@@ -11,13 +12,13 @@ export const SemesterSchema = z.object({
   breakEnd: z.string(),
   // Payload generates a hard coded weekdays, the `satisfies` operator is used to ensure the type matches
   bookingOpenDay: z.enum([
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ]),
   bookingOpenTime: z.string(),
   updatedAt: z.string(),
