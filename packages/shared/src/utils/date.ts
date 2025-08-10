@@ -1,5 +1,5 @@
 import { format } from "date-fns"
-import type { Semester } from "src/payload-types"
+import type { Semester } from "../payload-types"
 import { Weekday } from "../types"
 
 /**
