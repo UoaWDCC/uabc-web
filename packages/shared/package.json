@@ -16,6 +16,7 @@
     "zod": "3.25.74"
   },
   "dependencies": {
+    "date-fns": "4.1.0",
     "next": "15.3.5"
   }
 }

@@ -3,10 +3,12 @@
 import type { LoginFormData, RegisterRequestBody } from "@repo/shared"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
+import { useLocalStorage } from "@repo/ui/hooks"
 import { type UseMutationResult, useMutation, useQuery } from "@tanstack/react-query"
-import { useNotice, useUpdateEffect } from "@yamada-ui/react"
+import { useNotice } from "@yamada-ui/react"
+import { StatusCodes } from "http-status-codes"
 import { createContext, type ReactNode, useContext } from "react"
-import { useLocalStorage } from "@/lib/storage"
+import { ApiClientError } from "@/lib/api/ApiClientError"
 import AuthService from "@/services/auth/AuthService"
 
 type AuthState = {
@@ -80,18 +82,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isLoading,
     isPending,
     error,
-  } = useQuery<User | null, Error>({
+  } = useQuery<User | null, Error, User | null>({
     queryKey: ["auth", "me", token],
     queryFn: async (): Promise<User | null> => {
       if (!token) {
         return null
       }
-      const response = await AuthService.getUserFromToken(token)
-      return response.data
+      try {
+        const response = await AuthService.getUserFromToken(token)
+        return response.data
+      } catch (err) {
+        if (err instanceof ApiClientError && err.status === StatusCodes.UNAUTHORIZED) {
+          setToken(null)
+          return null
+        }
+        throw err
+      }
     },
     staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
     refetchOnMount: true,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     enabled: isAvailable && !!token,
   })
 
@@ -153,12 +164,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     register,
     setToken,
   }
-
-  useUpdateEffect(() => {
-    if (!isLoading && token && !user && isAvailable) {
-      setToken(null)
-    }
-  }, [isLoading, token, user, setToken, isAvailable])
 
   return (
     <AuthContext.Provider value={{ ...authState, ...authActions }}>{children}</AuthContext.Provider>
