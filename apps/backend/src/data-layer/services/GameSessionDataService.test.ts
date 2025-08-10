@@ -23,7 +23,6 @@ describe("GameSessionDataService", () => {
   })
 
   describe("cascadeCreateGameSessions", () => {
-    const semesterDataService = new SemesterDataService()
     it("should create multiple game session documents excluding mid-semester break", async () => {
       const newSemester = await semesterDataService.createSemester({
         ...semesterCreateMock,
@@ -51,6 +50,16 @@ describe("GameSessionDataService", () => {
         const breakStart = new Date(newSemester.breakStart)
         const breakEnd = new Date(newSemester.breakEnd)
         expect(sessionDate < breakStart || sessionDate > breakEnd).toBe(true)
+
+        const openDate = new Date(session.openTime)
+        const semesterBookingOpenDay = Object.values(Weekday).indexOf(
+          newSemester.bookingOpenDay as Weekday,
+        )
+        const semesterBookingOpenTime = new Date(newSemester.bookingOpenTime)
+        expect(openDate <= sessionDate).toBe(true)
+        expect(openDate.getUTCDay() === semesterBookingOpenDay).toBe(true)
+        expect(openDate.getUTCHours() === semesterBookingOpenTime.getUTCHours()).toBe(true)
+        expect(openDate.getUTCMinutes() === semesterBookingOpenTime.getUTCMinutes()).toBe(true)
       }
     })
   })
