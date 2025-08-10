@@ -1,16 +1,11 @@
 "use client"
 
+import type { QuickBookFormData, SessionItem } from "@repo/shared"
 import { PlayLevel } from "@repo/shared"
 import { Button, Heading, Select } from "@repo/ui/components/Primitive"
 import { CalendarClockIcon, CircleGaugeIcon } from "@yamada-ui/lucide"
 import { FormControl, Grid, GridItem, memo, noop, type SelectItem, VStack } from "@yamada-ui/react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
-import { locationAndTimeOptionsMock } from "./QuickBook.mock"
-
-export type QuickBookFormValues = {
-  locationAndTimeId: string
-  skillLevel: PlayLevel
-}
 
 /**
  * Props for {@link QuickBook} component
@@ -33,19 +28,16 @@ export interface QuickBookProps {
   submitLabel?: string
 
   /**
-   * Options for the Location & Time Select component.
+   * Available sessions for booking.
    *
-   * @remarks Type is currently SelectItem[], which may be changed to a better alternative
-   * @remarks label: human-readable information about the BookingSchedule/location & time; value: ID of the BookingSchedule/location & time
-   *
-   * @see {@link locationAndTimeOptionsMock}
+   * @remarks The component will automatically convert these to select options
    */
-  locationAndTimeOptions: SelectItem[]
+  sessions: SessionItem[]
 
   /**
    * Submit handler called when user submits the QuickBook form.
    */
-  onSubmit?: SubmitHandler<QuickBookFormValues>
+  onSubmit?: SubmitHandler<QuickBookFormData>
 }
 
 /**
@@ -68,17 +60,25 @@ const skillLevelOptions = Object.values(PlayLevel).map((playLevel) => ({
  * See {@link https://react.dev/reference/react/memo#minimizing-props-changes}
  */
 export const QuickBook = memo(
-  ({
-    title = "Quick Book",
-    submitLabel = "Book Now",
-    locationAndTimeOptions,
-    onSubmit,
-  }: QuickBookProps) => {
+  ({ title = "Quick Book", submitLabel = "Book Now", sessions, onSubmit }: QuickBookProps) => {
     const {
       control,
       handleSubmit,
       formState: { errors, isSubmitting },
-    } = useForm<QuickBookFormValues>()
+    } = useForm<QuickBookFormData>()
+
+    // Convert sessions to select options
+    const locationAndTimeOptions: SelectItem[] = sessions.map((session) => {
+      const dayName = new Date(session.date).toLocaleDateString("en-US", { weekday: "short" })
+      const startTime = session.startTime
+      const endTime = session.endTime
+      const location = session.name || session.location
+
+      return {
+        label: `${dayName} | ${startTime} - ${endTime} | ${location}`,
+        value: session.id,
+      }
+    })
 
     return (
       <VStack

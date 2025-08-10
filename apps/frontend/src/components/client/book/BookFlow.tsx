@@ -1,16 +1,15 @@
 "use client"
 
-import { type MembershipType, PlayLevel, Popup } from "@repo/shared"
-import type { SelectACourtNextData, SessionItem } from "@repo/ui/components/Composite"
+import { type MembershipType, mockSessions, type PlayLevel, Popup } from "@repo/shared"
+import type { SelectACourtNextData } from "@repo/ui/components/Composite"
 import { BookingConfirmation, SelectACourt } from "@repo/ui/components/Composite"
 import { BookACourt } from "@repo/ui/components/Generic"
 import { Button, Heading } from "@repo/ui/components/Primitive"
-import { usePopupState } from "@repo/ui/hooks"
+import { usePopupState, useQuickBookProcessor } from "@repo/ui/hooks"
 import { CircleAlertIcon } from "@yamada-ui/lucide"
 import { EmptyState, VStack } from "@yamada-ui/react"
 import NextLink from "next/link"
-import { parseAsStringEnum, useQueryState } from "nuqs"
-import { type FC, useReducer } from "react"
+import { type FC, useEffect, useReducer, useRef } from "react"
 import type { AuthContextValueWithUser } from "@/context/RoleWrappers"
 import { createBookingFlowReducer, initialState } from "./bookingFlowReducer"
 
@@ -25,95 +24,43 @@ type BookFlowProps = {
 }
 
 /**
- * TODO: Mock bookings data - this should be moved to a proper data source
- */
-const bookings: SessionItem[] = [
-  {
-    id: "monday-session",
-    name: "ABA",
-    location: "ABA Location",
-    startTime: "17:00",
-    endTime: "19:00",
-    capacity: 35,
-    casualCapacity: 5,
-    attendees: 35,
-    casualAttendees: 5,
-    date: "2025-01-01",
-  },
-  {
-    id: "wednesday-session",
-    name: "UoA Rec Centre",
-    location: "17 Symonds Street",
-    startTime: "19:30",
-    endTime: "21:30",
-    capacity: 35,
-    casualCapacity: 5,
-    attendees: 20,
-    casualAttendees: 1,
-    date: "2025-01-03",
-  },
-  {
-    id: "thursday-session",
-    name: "Kings School",
-    location: "Kings School Location",
-    startTime: "19:30",
-    endTime: "22:00",
-    capacity: 30,
-    casualCapacity: 5,
-    attendees: 26,
-    casualAttendees: 3,
-    date: "2025-01-04",
-  },
-  {
-    id: "friday-session",
-    name: "UoA Rec Centre",
-    location: "17 Symonds Street",
-    startTime: "19:30",
-    endTime: "21:30",
-    capacity: 35,
-    casualCapacity: 5,
-    attendees: 35,
-    casualAttendees: 5,
-    date: "2025-01-05",
-  },
-  {
-    id: "saturday-session",
-    name: "ABA",
-    location: "ABA Location",
-    startTime: "16:00",
-    endTime: "18:00",
-    capacity: 25,
-    casualCapacity: 3,
-    attendees: 15,
-    casualAttendees: 2,
-    date: "2025-01-06",
-  },
-]
-
-/**
  * The main component for the booking flow.
  */
 export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
-  const bookingFlowReducer = createBookingFlowReducer(bookings)
+  const bookingFlowReducer = createBookingFlowReducer(mockSessions)
   const [state, dispatch] = useReducer(bookingFlowReducer, initialState)
-  const [, setPlayLevel] = useQueryState(
-    "playLevel",
-    parseAsStringEnum<PlayLevel>(Object.values(PlayLevel)),
-  )
+  const hasProcessedQuickBook = useRef(false)
 
   const { open: openBookingConfirmedPopup } = usePopupState({
     popupId: Popup.BOOKING_CONFIRMED,
     initialValue: auth.user.role as MembershipType,
   })
 
+  // Process quick book data using the dedicated hook
+  const { isProcessing, processQuickBookData, saveCurrentBookingState } = useQuickBookProcessor({
+    sessions: mockSessions,
+    currentStep: state.step,
+    dispatch,
+    user: auth.user,
+  })
+
+  // Process quick book data only on initial load, not when navigating back
+  useEffect(() => {
+    if (isProcessing && !hasProcessedQuickBook.current) {
+      hasProcessedQuickBook.current = true
+      processQuickBookData()
+    }
+  }, [isProcessing, processQuickBookData])
+
   const handlePlayLevelSelect = (level: PlayLevel) => {
     dispatch({ type: "SET_PLAY_LEVEL", payload: level })
-    setPlayLevel(level)
     dispatch({ type: "NEXT_STEP" })
   }
 
   const handleSelectCourt = (data: SelectACourtNextData) => {
     dispatch({ type: "SET_BOOKING_TIMES", payload: data })
+    // Save current booking state before moving to next step
+    saveCurrentBookingState(state.playLevel as PlayLevel, data.bookingTimes)
     dispatch({ type: "NEXT_STEP" })
   }
 
@@ -126,7 +73,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
     dispatch({ type: "PREV_STEP" })
   }
 
-  if (!bookings.length) {
+  if (!mockSessions.length) {
     return (
       <EmptyState
         description="There are no bookings available at the moment."
@@ -168,7 +115,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
           initialBookingTimes={state.bookingTimes}
           onBack={handleBack}
           onNext={handleSelectCourt}
-          sessions={bookings}
+          sessions={mockSessions}
           user={auth.user}
         />
       ) : state.step === "confirmation" ? (

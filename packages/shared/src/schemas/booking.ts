@@ -27,5 +27,15 @@ export const SelectACourtFormDataSchema = z.object({
   bookingTimes: z.array(z.string()).min(1, "Please select at least one session"),
 })
 
+export const QuickBookFormDataSchema = z.object({
+  locationAndTimeId: z.string().min(1, "Please select a location and time"),
+  skillLevel: z.nativeEnum(PlayLevel),
+})
+
+export const QuickBookLocalStorageSchema = z.object({
+  formData: QuickBookFormDataSchema,
+  timestamp: z.string(),
+})
+
 export const UpdateBookingRequestSchema =
   CreateBookingRequestSchema.partial() satisfies z.ZodType<EditBookingData>

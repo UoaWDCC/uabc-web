@@ -1,7 +1,7 @@
 "use client"
 import type { MembershipType } from "@repo/shared"
 import { useUpdateEffect } from "@yamada-ui/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { type ReactNode, useMemo } from "react"
 import { type AuthContextValue, useAuth } from "./AuthContext"
 
@@ -65,6 +65,7 @@ export type GuestOnlyProps = {
 export const GuestOnly = ({ children }: GuestOnlyProps) => {
   const auth = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const shouldRedirect = useMemo(() => {
     return auth.isLoading || !auth.isAvailable || !auth.token || !auth.user
@@ -75,8 +76,12 @@ export const GuestOnly = ({ children }: GuestOnlyProps) => {
       return
     }
 
-    router.replace("/profile")
-  }, [shouldRedirect, router])
+    // Check for return URL and redirect there instead of always going to profile
+    const returnUrl = searchParams.get("returnUrl")
+    const redirectUrl = returnUrl ? decodeURIComponent(returnUrl) : "/profile"
+
+    router.replace(redirectUrl)
+  }, [shouldRedirect, router, searchParams])
 
   return children
 }

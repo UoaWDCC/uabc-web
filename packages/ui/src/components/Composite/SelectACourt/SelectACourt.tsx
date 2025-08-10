@@ -223,7 +223,7 @@ export const SelectACourt = memo<SelectACourtProps>(
             pointerEvents="none"
             position="absolute"
             userSelect="none"
-            zIndex={0}
+            zIndex={-1}
           >
             <UabcLogo boxSize={{ base: "sm", xl: "md" }} opacity={0.5} />
           </Center>
