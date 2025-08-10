@@ -284,7 +284,7 @@ describe("GameSessionDataService", () => {
         ...gameSessionCreateMock,
         semester: id,
         endTime: new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString(), // 1 day from now
-        openTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour ago
+        openTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour later
       })
 
       // Should only return the current session

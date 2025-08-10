@@ -103,13 +103,9 @@ export default class GameSessionDataService {
     switch (timeframe) {
       case GameSessionTimeframe.UPCOMING:
         filter = {
-          and: [
-            {
-              startTime: {
-                greater_than_equal: currentDate,
-              },
-            },
-          ],
+          startTime: {
+            greater_than_equal: currentDate,
+          },
         }
         break
       case GameSessionTimeframe.PAST:

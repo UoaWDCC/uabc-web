@@ -8,7 +8,7 @@ export enum GameSessionTimeframe {
    */
   PAST = "past",
   /**
-   * Any game sessions that are current (excludes past game sessions, or game sessions too far in the future)
+   * Any game sessions that are current (excludes past game sessions, or sessions that aren't open yet)
    */
   CURRENT = "current",
   /**
