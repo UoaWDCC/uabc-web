@@ -3,6 +3,7 @@
 import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
 import { Container, TabPanel } from "@yamada-ui/react"
 import { memo } from "react"
+import { AdminMembersSection } from "./AdminMembersSection"
 
 export const AdminSection = memo(() => {
   return (
@@ -21,7 +22,7 @@ export const AdminSection = memo(() => {
       >
         <TabPanel>
           <Container centerContent layerStyle="container">
-            <UnderConstructionCard title="View Members is Under Construction 🔧" />
+            <AdminMembersSection />
           </Container>
         </TabPanel>
         <TabPanel>
