@@ -125,7 +125,7 @@ export default class GameSessionDataService {
         openTime: getGameSessionOpenDay(
           semester,
           new Date(gameSessionTimes.startTime),
-        ).toUTCString(),
+        ).toISOString(),
       }
     })
 
