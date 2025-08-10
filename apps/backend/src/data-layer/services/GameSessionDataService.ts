@@ -1,11 +1,12 @@
-import type {
-  CreateGameSessionData,
-  CreateGameSessionScheduleData,
-  UpdateGameSessionData,
-  UpdateGameSessionScheduleData,
+import {
+  type CreateGameSessionData,
+  type CreateGameSessionScheduleData,
+  GameSessionTimeframe,
+  type UpdateGameSessionData,
+  type UpdateGameSessionScheduleData,
 } from "@repo/shared"
 import type { GameSession, GameSessionSchedule } from "@repo/shared/payload-types"
-import type { PaginatedDocs } from "payload"
+import type { PaginatedDocs, Sort, Where } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
 
 export default class GameSessionDataService {
@@ -87,7 +88,39 @@ export default class GameSessionDataService {
    * @param semesterId the ID of the {@link Semester} to get game sessions for
    * @returns an array of {@link GameSession} documents
    */
-  public async getGameSessionsBySemesterId(semesterId: string): Promise<GameSession[]> {
+  public async getGameSessionsBySemesterId(
+    semesterId: string,
+    timeframe: GameSessionTimeframe = GameSessionTimeframe.DEFAULT,
+  ): Promise<GameSession[]> {
+    const currentDate = new Date().toISOString()
+
+    let filter: Where = {}
+    const sort: Sort = "-startTime"
+
+    switch (timeframe) {
+      case GameSessionTimeframe.UPCOMING:
+        filter = {
+          and: [
+            {
+              startTime: {
+                greater_than_equal: currentDate,
+              },
+            },
+          ],
+        }
+        break
+      case GameSessionTimeframe.PAST:
+        filter = {
+          startTime: {
+            greater_than: currentDate,
+          },
+        }
+        break
+      case GameSessionTimeframe.NEXT:
+        break
+      default:
+    }
+
     return (
       await payload.find({
         collection: "gameSession",
@@ -95,7 +128,9 @@ export default class GameSessionDataService {
           semester: {
             equals: semesterId,
           },
+          ...filter,
         },
+        sort: sort,
         pagination: false,
       })
     ).docs
