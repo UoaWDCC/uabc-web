@@ -4,7 +4,7 @@ import type { z } from "zod"
 type Listener<T> = (value: T | null) => void
 type Unsubscribe = () => void
 
-interface StorageEvent {
+interface LocalStorageEvent {
   key: string | null
   newValue: string | null
   oldValue: string | null
@@ -17,7 +17,7 @@ class LocalStorageManager<T> {
   private readonly key: string
   private readonly schema?: z.ZodSchema<T>
   private readonly listeners = new Set<Listener<T>>()
-  private readonly storageChangeHandler: (event: StorageEvent) => void
+  private readonly storageChangeHandler: (event: LocalStorageEvent) => void
   private isListeningToStorage = false
 
   constructor(key: string, schema?: z.ZodSchema<T>) {
@@ -57,16 +57,33 @@ class LocalStorageManager<T> {
     }
 
     try {
+      const oldValueStr = localStorage.getItem(this.key)
+      let serialized: string | null = null
       if (value === null) {
         localStorage.removeItem(this.key)
       } else {
         const validated = this.schema ? this.schema.parse(value) : value
-        const serialized = JSON.stringify(validated)
+        serialized = JSON.stringify(validated)
         localStorage.setItem(this.key, serialized)
       }
 
       // Always notify listeners immediately for same-tab changes
       this.notifyListeners(value)
+
+      // Manually dispatch a storage event so other manager instances in the same tab receive updates
+      try {
+        const newValueStr = value === null ? null : serialized
+        if (typeof window !== "undefined" && typeof StorageEvent === "function") {
+          const storageEvent = new StorageEvent("storage", {
+            key: this.key,
+            oldValue: oldValueStr,
+            newValue: newValueStr,
+          })
+          window.dispatchEvent(storageEvent)
+        }
+      } catch (error) {
+        console.debug("LocalStorage manual dispatch skipped:", error)
+      }
     } catch (error) {
       console.error(`Error setting localStorage key ${this.key}:`, error)
       throw error
@@ -81,9 +98,24 @@ class LocalStorageManager<T> {
       return
     }
 
+    const oldValueStr = localStorage.getItem(this.key)
     localStorage.removeItem(this.key)
     // Always notify listeners immediately for same-tab changes
     this.notifyListeners(null)
+
+    // Manually dispatch a storage event so other manager instances in the same tab receive updates
+    try {
+      if (typeof window !== "undefined" && typeof StorageEvent === "function") {
+        const storageEvent = new StorageEvent("storage", {
+          key: this.key,
+          oldValue: oldValueStr,
+          newValue: null,
+        })
+        window.dispatchEvent(storageEvent)
+      }
+    } catch (error) {
+      console.debug("LocalStorage manual dispatch skipped:", error)
+    }
   }
 
   /**
@@ -120,7 +152,7 @@ class LocalStorageManager<T> {
   /**
    * Handles storage change events and notifies listeners
    */
-  private handleStorageChange(event: StorageEvent): void {
+  private handleStorageChange(event: LocalStorageEvent): void {
     if (event.key !== this.key) {
       return
     }
