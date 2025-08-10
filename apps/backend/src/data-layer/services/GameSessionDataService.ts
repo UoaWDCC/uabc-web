@@ -95,7 +95,7 @@ export default class GameSessionDataService {
     semesterId: string,
     timeframe: GameSessionTimeframe = GameSessionTimeframe.DEFAULT,
   ): Promise<GameSession[]> {
-    const currentDate = new Date().toISOString()
+    const currentDate = new Date()
 
     let filter: Where = {}
     const sort: Sort = "-startTime"
