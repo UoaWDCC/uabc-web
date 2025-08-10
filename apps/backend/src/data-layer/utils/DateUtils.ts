@@ -1,16 +1,6 @@
 import { type GameSessionSchedule, getDaysBetweenWeekdays, Weekday } from "@repo/shared"
 import type { Semester } from "@repo/shared/payload-types"
 
-const numberToDay: Record<number, Weekday> = {
-  0: Weekday.sunday,
-  1: Weekday.monday,
-  2: Weekday.tuesday,
-  3: Weekday.wednesday,
-  4: Weekday.thursday,
-  5: Weekday.friday,
-  6: Weekday.saturday,
-}
-
 /**
  * Returns the valid dates for game session date time for the semester
  *
@@ -27,7 +17,7 @@ export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] 
   const breakEnd = new Date(semester.breakEnd)
 
   const sessionDate = new Date(semesterStart)
-  const dayOffSet = getDaysBetweenWeekdays(numberToDay[sessionDate.getDay()], day as Weekday)
+  const dayOffSet = getDaysBetweenWeekdays(Object.values(Weekday)[sessionDate.getDay()], day)
   sessionDate.setDate(sessionDate.getDate() + dayOffSet)
 
   while (sessionDate <= semesterEnd) {
