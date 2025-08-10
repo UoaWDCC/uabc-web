@@ -115,7 +115,7 @@ export default class GameSessionDataService {
       case GameSessionTimeframe.PAST:
         filter = {
           startTime: {
-            greater_than: currentDate,
+            less_than: currentDate,
           },
         }
         break
@@ -129,7 +129,7 @@ export default class GameSessionDataService {
             },
             {
               openTime: {
-                greater_than_equal: currentDate,
+                less_than_equal: currentDate,
               },
             },
           ],

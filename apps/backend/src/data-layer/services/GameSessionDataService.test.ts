@@ -238,16 +238,16 @@ describe("GameSessionDataService", () => {
       await gameSessionDataService.createGameSession({
         ...gameSessionCreateMock,
         semester: id,
-        startTime: new Date(now.getTime() - 1000 * 60 * 60).toISOString(), // 1 hour ago
+        startTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour from now
         endTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour from now
       })
 
-      // PAST: startTime > now
+      // PAST: startTime < now
       const pastSession = await gameSessionDataService.createGameSession({
         ...gameSessionCreateMock,
         semester: id,
-        startTime: new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString(), // 1 day from now
-        endTime: new Date(now.getTime() + 1000 * 60 * 60 * 25).toISOString(), // 25 hours from now
+        startTime: new Date(now.getTime() - 1000 * 60 * 60 * 24).toISOString(), // 1 day before now
+        endTime: new Date(now.getTime() - 1000 * 60 * 60 * 25).toISOString(), // 25 hours before now
       })
 
       // Should only return the past session
@@ -263,15 +263,15 @@ describe("GameSessionDataService", () => {
       const { id } = await semesterDataService.createSemester(semesterCreateMock)
       const now = new Date()
 
-      // CURRENT: endDate >= now && openTime >= now
+      // CURRENT: endDate >= now && openTime <= now
       const currentSession = await gameSessionDataService.createGameSession({
         ...gameSessionCreateMock,
         semester: id,
+        openTime: new Date(now.getTime() - 1000 * 60 * 60).toISOString(), // 1 hour before now
         endTime: new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString(), // 1 day from now
-        openTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour from now
       })
 
-      // Not CURRENT: endDate < now
+      // Not CURRENT(PAST): endDate < now
       await gameSessionDataService.createGameSession({
         ...gameSessionCreateMock,
         semester: id,
@@ -279,12 +279,12 @@ describe("GameSessionDataService", () => {
         openTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour from now
       })
 
-      // Not CURRENT: openTime < now
+      // Not CURRENT: openTime > now
       await gameSessionDataService.createGameSession({
         ...gameSessionCreateMock,
         semester: id,
         endTime: new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString(), // 1 day from now
-        openTime: new Date(now.getTime() - 1000 * 60 * 60).toISOString(), // 1 hour ago
+        openTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour ago
       })
 
       // Should only return the current session
