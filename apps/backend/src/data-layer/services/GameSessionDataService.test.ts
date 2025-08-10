@@ -259,6 +259,43 @@ describe("GameSessionDataService", () => {
       expect(sessions[0].id).toBe(pastSession.id)
     })
 
+    it("should return only CURRENT game sessions for a given semester ID", async () => {
+      const { id } = await semesterDataService.createSemester(semesterCreateMock)
+      const now = new Date()
+
+      // CURRENT: endDate >= now && openTime >= now
+      const currentSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+        endTime: new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString(), // 1 day from now
+        openTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour from now
+      })
+
+      // Not CURRENT: endDate < now
+      await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+        endTime: new Date(now.getTime() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
+        openTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour from now
+      })
+
+      // Not CURRENT: openTime < now
+      await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+        endTime: new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString(), // 1 day from now
+        openTime: new Date(now.getTime() - 1000 * 60 * 60).toISOString(), // 1 hour ago
+      })
+
+      // Should only return the current session
+      const sessions = await gameSessionDataService.getGameSessionsBySemesterId(
+        id,
+        GameSessionTimeframe.CURRENT,
+      )
+      expect(sessions).toHaveLength(1)
+      expect(sessions[0].id).toBe(currentSession.id)
+    })
+
     it("should return an empty array if no game sessions exist for the semester", async () => {
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
       const sessions = await gameSessionDataService.getGameSessionsBySemesterId(newSemester.id)

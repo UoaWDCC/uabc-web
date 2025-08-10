@@ -119,7 +119,21 @@ export default class GameSessionDataService {
           },
         }
         break
-      case GameSessionTimeframe.NEXT:
+      case GameSessionTimeframe.CURRENT:
+        filter = {
+          and: [
+            {
+              endTime: {
+                greater_than_equal: currentDate,
+              },
+            },
+            {
+              openTime: {
+                greater_than_equal: currentDate,
+              },
+            },
+          ],
+        }
         break
       default:
     }
