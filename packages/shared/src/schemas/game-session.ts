@@ -9,6 +9,7 @@ export const GameSessionSchema = z.object({
   id: z.string(),
   gameSessionSchedule: z.union([z.string(), GameSessionScheduleSchema]).nullable().optional(),
   semester: z.union([z.string(), SemesterSchema]),
+  openTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   startTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   endTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   name: z.string().nullable().optional(),
@@ -23,7 +24,8 @@ export const CreateGameSessionRequestSchema = GameSessionSchema.omit({
   updatedAt: true,
   createdAt: true,
   id: true,
-}) satisfies z.ZodType<CreateGameSessionData>
+  openTime: true,
+}) satisfies z.ZodType<Omit<CreateGameSessionData, "openTime">>
 
 export const UpdateGameSessionRequestSchema =
   CreateGameSessionRequestSchema.partial() satisfies z.ZodType<UpdateGameSessionData>

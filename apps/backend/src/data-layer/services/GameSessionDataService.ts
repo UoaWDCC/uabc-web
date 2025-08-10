@@ -1,9 +1,10 @@
-import type {
-  CreateGameSessionData,
-  CreateGameSessionScheduleData,
-  UpdateGameSessionData,
-  UpdateGameSessionScheduleData,
-  Weekday,
+import {
+  type CreateGameSessionData,
+  type CreateGameSessionScheduleData,
+  getGameSessionOpenDay,
+  type UpdateGameSessionData,
+  type UpdateGameSessionScheduleData,
+  type Weekday,
 } from "@repo/shared"
 import type { GameSession, GameSessionSchedule, Semester } from "@repo/shared/payload-types"
 import type { PaginatedDocs } from "payload"
@@ -121,6 +122,10 @@ export default class GameSessionDataService {
         ...gameSessionTimes,
         capacity: schedule.capacity,
         casualCapacity: schedule.casualCapacity,
+        openTime: getGameSessionOpenDay(
+          semester,
+          new Date(gameSessionTimes.startTime),
+        ).toISOString(),
       }
     })
 

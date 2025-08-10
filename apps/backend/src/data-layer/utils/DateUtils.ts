@@ -17,14 +17,14 @@ export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] 
   const breakEnd = new Date(semester.breakEnd)
 
   const sessionDate = new Date(semesterStart)
-  const dayOffSet = getDaysBetweenWeekdays(Object.values(Weekday)[sessionDate.getDay()], day)
-  sessionDate.setDate(sessionDate.getDate() + dayOffSet)
+  const dayOffSet = getDaysBetweenWeekdays(Object.values(Weekday)[sessionDate.getUTCDay()], day)
+  sessionDate.setDate(sessionDate.getUTCDate() + dayOffSet)
 
   while (sessionDate <= semesterEnd) {
     if (sessionDate < breakStart || sessionDate > breakEnd) {
       dates.push(new Date(sessionDate))
     }
-    sessionDate.setDate(sessionDate.getDate() + 7)
+    sessionDate.setDate(sessionDate.getUTCDate() + 7)
   }
 
   return dates
