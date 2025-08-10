@@ -2,6 +2,9 @@
   "languages": {
     "TypeScript": {
       "format_on_save": "on"
+    },
+    "Markdown": {
+      "format_on_save": "on"
     }
   },
   "language_servers": ["...", "!eslint"],
