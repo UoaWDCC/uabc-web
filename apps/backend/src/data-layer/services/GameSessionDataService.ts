@@ -82,6 +82,26 @@ export default class GameSessionDataService {
   }
 
   /**
+   * Gets all {@link GameSession} documents for a given semester ID
+   *
+   * @param semesterId the ID of the {@link Semester} to get game sessions for
+   * @returns an array of {@link GameSession} documents
+   */
+  public async getGameSessionsBySemesterId(semesterId: string): Promise<GameSession[]> {
+    return (
+      await payload.find({
+        collection: "gameSession",
+        where: {
+          semester: {
+            equals: semesterId,
+          },
+        },
+        pagination: false,
+      })
+    ).docs
+  }
+
+  /**
    * Creates a new {@link GameSessionSchedule} document
    *
    * @param {CreateGameSessionScheduleData} newGameSessionScheduleData the game session schedule data

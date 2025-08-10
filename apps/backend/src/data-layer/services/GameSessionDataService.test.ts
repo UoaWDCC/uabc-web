@@ -1,11 +1,14 @@
 import { payload } from "@/data-layer/adapters/Payload"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
+import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import GameSessionDataService from "./GameSessionDataService"
 
-const gameSessionDataService = new GameSessionDataService()
-
 describe("GameSessionDataService", () => {
+  const gameSessionDataService = new GameSessionDataService()
+  const semesterDataService = new SemesterDataService()
+
   describe("createGameSession", () => {
     it("should create a game session document", async () => {
       const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
@@ -129,6 +132,38 @@ describe("GameSessionDataService", () => {
     })
     expect(fetchedGameSessionSchedule).not.toBeNull()
     expect(fetchedGameSessionSchedule.id).toEqual(newGameSessionSchedule.id)
+  })
+
+  describe("getGameSessionsBySemesterId", () => {
+    it("should return all game sessions for a given semester ID", async () => {
+      // Create a semester and use its actual ID
+      const { id } = await semesterDataService.createSemester(semesterCreateMock)
+
+      const session1 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+      })
+      const session2 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+      })
+
+      await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: "123456789065d10f864aeedb",
+      })
+
+      const sessions = await gameSessionDataService.getGameSessionsBySemesterId(id)
+      expect(sessions).toHaveLength(2)
+      expect(sessions).toStrictEqual(expect.arrayContaining([session1, session2]))
+    })
+
+    it("should return an empty array if no game sessions exist for the semester", async () => {
+      // Create a semester and use its actual ID, but don't create any game sessions for it
+      const newSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const sessions = await gameSessionDataService.getGameSessionsBySemesterId(newSemester.id)
+      expect(sessions).toEqual([])
+    })
   })
 
   describe("getPaginatedGameSessionSchedules", () => {
