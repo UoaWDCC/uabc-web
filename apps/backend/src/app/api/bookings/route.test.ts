@@ -19,16 +19,134 @@ import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
-import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
-import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
+import { bookingCreateMock, futureBookingCreateMock } from "@/test-config/mocks/Booking.mock"
+import {
+  futureGameSessionCreateMock,
+  gameSessionCreateMock,
+} from "@/test-config/mocks/GameSession.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
-import { POST } from "./route"
+import { GET, POST } from "./route"
 
 describe("/api/bookings", async () => {
   const cookieStore = await cookies()
   const bookingDataService = new BookingDataService()
   const gameSessionDataService = new GameSessionDataService()
   const userDataService = new UserDataService()
+
+  describe("GET", () => {
+    it("should return a 401 if token is missing", async () => {
+      const res = await GET(createMockNextRequest())
+      expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
+      expect(await res.json()).toStrictEqual({ error: "No token provided" })
+    })
+
+    it("should return all paginated game sessions if no query type is set", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+
+      const bookingsToCreate = [
+        ...Array.from({ length: 15 }, (_, _i) => ({
+          ...bookingCreateMock,
+        })),
+        futureBookingCreateMock,
+      ]
+      await Promise.all(bookingsToCreate.map((u) => bookingDataService.createBooking(u)))
+
+      const req = createMockNextRequest("/api/bookings?limit=10&page=2")
+      const res = await GET(req)
+
+      expect(res.status).toBe(StatusCodes.OK)
+      const json = await res.json()
+      expect(json.data.docs.length).toBeLessThanOrEqual(10)
+      expect(json.data.page).toBe(2)
+      expect(json.data.limit).toBe(10)
+      expect(json.data.totalDocs).toBeGreaterThanOrEqual(16)
+      expect(json.data.totalPages).toBeGreaterThanOrEqual(2)
+    })
+
+    it("should return all future paginated game sessions if query type is set to future", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+
+      const { id } = await gameSessionDataService.createGameSession(futureGameSessionCreateMock)
+
+      const bookingsToCreate = [
+        ...Array.from({ length: 15 }, (_, _i) => ({
+          ...bookingCreateMock,
+        })),
+        {
+          ...futureBookingCreateMock,
+          gameSession: id,
+        },
+      ]
+      await Promise.all(bookingsToCreate.map((u) => bookingDataService.createBooking(u)))
+
+      const req = createMockNextRequest("/api/bookings?limit=10&page=1&type=future")
+      const res = await GET(req)
+
+      expect(res.status).toBe(StatusCodes.OK)
+      const json = await res.json()
+      expect(json.data.docs.length).toBe(1)
+      expect(json.data.page).toBe(1)
+      expect(json.data.limit).toBe(10)
+      expect(json.data.docs[0].gameSession).toBe(id)
+      expect(new Date(json.data.docs[0].startTime).getTime()).toBeGreaterThan(Date.now())
+    })
+
+    it("should use default pagination if params are not specified", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+
+      const bookingsToCreate = [
+        ...Array.from({ length: 15 }, (_, _i) => ({
+          ...bookingCreateMock,
+        })),
+        futureBookingCreateMock,
+      ]
+      await Promise.all(bookingsToCreate.map((u) => bookingDataService.createBooking(u)))
+
+      const req = createMockNextRequest("/api/bookings")
+      const res = await GET(req)
+
+      expect(res.status).toBe(StatusCodes.OK)
+      const json = await res.json()
+      expect(json.data.page).toBe(1)
+      expect(json.data.limit).toBe(10)
+    })
+
+    it("should return 400 if limit or page is out of range", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+      const req = createMockNextRequest("/api/bookings?limit=999&page=-5")
+      const res = await GET(req)
+
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      const json = await res.json()
+      expect(json.error).toBe("Invalid query parameters")
+      expect(json.details).toBeDefined()
+    })
+
+    it("should return 400 if query params are invalid", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+      const req = createMockNextRequest("/api/bookings?limit=abc&page=def&type=type")
+      const res = await GET(req)
+
+      expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+      const json = await res.json()
+      expect(json.error).toBe("Invalid query parameters")
+      expect(json.details).toBeDefined()
+    })
+
+    it("should handle errors and return 500 status", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+      vi.spyOn(BookingDataService.prototype, "getPaginatedBookings").mockRejectedValueOnce(
+        new Error("Database error"),
+      )
+
+      const req = createMockNextRequest("/api/bookings?limit=10&page=1&type=future")
+      const res = await GET(req)
+
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await res.json()
+      expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+    })
+  })
 
   describe("POST", () => {
     it("should return a 401 if token is missing", async () => {
