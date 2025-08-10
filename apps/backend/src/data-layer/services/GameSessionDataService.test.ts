@@ -1,11 +1,11 @@
-import { Weekday } from "@repo/shared"
+import { GameSessionTimeframe, Weekday } from "@repo/shared"
 import { payload } from "@/data-layer/adapters/Payload"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import { getWeeklySessionDates } from "../utils/DateUtils"
 import GameSessionDataService from "./GameSessionDataService"
-import SemesterDataService from "./SemesterDataService"
 
 describe("GameSessionDataService", () => {
   const gameSessionDataService = new GameSessionDataService()
@@ -176,6 +176,131 @@ describe("GameSessionDataService", () => {
     })
     expect(fetchedGameSessionSchedule).not.toBeNull()
     expect(fetchedGameSessionSchedule.id).toEqual(newGameSessionSchedule.id)
+  })
+
+  describe("getGameSessionsBySemesterId", () => {
+    it("should return all game sessions for a given semester ID (DEFAULT timeframe)", async () => {
+      const { id } = await semesterDataService.createSemester(semesterCreateMock)
+
+      const session1 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+      })
+      const session2 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+      })
+
+      await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: "123456789065d10f864aeedb",
+      })
+
+      const sessions = await gameSessionDataService.getGameSessionsBySemesterId(id)
+      expect(sessions).toHaveLength(2)
+      expect(sessions).toStrictEqual(expect.arrayContaining([session1, session2]))
+    })
+
+    it("should return only UPCOMING game sessions for a given semester ID", async () => {
+      const { id } = await semesterDataService.createSemester(semesterCreateMock)
+      const now = new Date()
+
+      // UPCOMING: startTime >= now, endTime >= now
+      const upcomingSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+        startTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(),
+        endTime: new Date(now.getTime() + 2000 * 60 * 60).toISOString(),
+      })
+
+      // PAST: startTime < now
+      await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+        startTime: new Date(now.getTime() - 1000 * 60 * 60 * 24).toISOString(),
+        endTime: new Date(now.getTime() - 1000 * 60 * 60 * 25).toISOString(),
+      })
+
+      // Should only return the upcoming session
+      const sessions = await gameSessionDataService.getGameSessionsBySemesterId(
+        id,
+        GameSessionTimeframe.UPCOMING,
+      )
+      expect(sessions).toHaveLength(1)
+      expect(sessions[0].id).toBe(upcomingSession.id)
+    })
+
+    it("should return only PAST game sessions for a given semester ID", async () => {
+      const { id } = await semesterDataService.createSemester(semesterCreateMock)
+      const now = new Date()
+
+      // UPCOMING: startTime >= now, endTime >= now
+      await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+        startTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour from now
+        endTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour from now
+      })
+
+      // PAST: startTime < now
+      const pastSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+        startTime: new Date(now.getTime() - 1000 * 60 * 60 * 24).toISOString(), // 1 day before now
+        endTime: new Date(now.getTime() - 1000 * 60 * 60 * 25).toISOString(), // 25 hours before now
+      })
+
+      // Should only return the past session
+      const sessions = await gameSessionDataService.getGameSessionsBySemesterId(
+        id,
+        GameSessionTimeframe.PAST,
+      )
+      expect(sessions).toHaveLength(1)
+      expect(sessions[0].id).toBe(pastSession.id)
+    })
+
+    it("should return only CURRENT game sessions for a given semester ID", async () => {
+      const { id } = await semesterDataService.createSemester(semesterCreateMock)
+      const now = new Date()
+
+      // CURRENT: endDate >= now && openTime <= now
+      const currentSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+        openTime: new Date(now.getTime() - 1000 * 60 * 60).toISOString(), // 1 hour before now
+        endTime: new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString(), // 1 day from now
+      })
+
+      // Not CURRENT(PAST): endDate < now
+      await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+        endTime: new Date(now.getTime() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
+        openTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour from now
+      })
+
+      // Not CURRENT: openTime > now
+      await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: id,
+        endTime: new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString(), // 1 day from now
+        openTime: new Date(now.getTime() + 1000 * 60 * 60).toISOString(), // 1 hour later
+      })
+
+      // Should only return the current session
+      const sessions = await gameSessionDataService.getGameSessionsBySemesterId(
+        id,
+        GameSessionTimeframe.CURRENT,
+      )
+      expect(sessions).toHaveLength(1)
+      expect(sessions[0].id).toBe(currentSession.id)
+    })
+
+    it("should return an empty array if no game sessions exist for the semester", async () => {
+      const newSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const sessions = await gameSessionDataService.getGameSessionsBySemesterId(newSemester.id)
+      expect(sessions).toEqual([])
+    })
   })
 
   describe("getPaginatedGameSessionSchedules", () => {
