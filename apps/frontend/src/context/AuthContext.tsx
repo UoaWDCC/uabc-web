@@ -3,6 +3,7 @@
 import type { LoginFormData, RegisterRequestBody } from "@repo/shared"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
+import { noticeOptions } from "@repo/theme"
 import { useLocalStorage } from "@repo/ui/hooks"
 import { type UseMutationResult, useMutation, useQuery } from "@tanstack/react-query"
 import { useNotice, useUpdateEffect } from "@yamada-ui/react"
@@ -74,7 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setValue: setToken,
     isAvailable,
   } = useLocalStorage<string>(AUTH_COOKIE_NAME)
-  const notice = useNotice()
+  const notice = useNotice(noticeOptions)
 
   const {
     data: user,

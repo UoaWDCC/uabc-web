@@ -23,4 +23,4 @@ export const defaultTheme: UsageTheme = {
 
 export const theme = extendTheme(defaultTheme)()
 
-export { components, semantics, tokens }
+export { components, semantics, tokens, noticeOptions }
