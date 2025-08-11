@@ -1,6 +1,12 @@
 "use client"
 
-import { type MembershipType, mockSessions, type PlayLevel, Popup } from "@repo/shared"
+import {
+  type MembershipType,
+  mockSessions,
+  type PlayLevel,
+  Popup,
+  type SessionItem,
+} from "@repo/shared"
 import type { SelectACourtNextData } from "@repo/ui/components/Composite"
 import { BookingConfirmation, SelectACourt } from "@repo/ui/components/Composite"
 import { BookACourt } from "@repo/ui/components/Generic"
@@ -21,13 +27,17 @@ type BookFlowProps = {
    * The authentication context value with user.
    */
   auth: AuthContextValueWithUser
+  /**
+   * Sessions to drive the booking flow. Defaults to shared mockSessions.
+   */
+  sessions?: SessionItem[]
 }
 
 /**
  * The main component for the booking flow.
  */
-export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
-  const bookingFlowReducer = createBookingFlowReducer(mockSessions)
+export const BookFlow: FC<BookFlowProps> = ({ auth, sessions = mockSessions }) => {
+  const bookingFlowReducer = createBookingFlowReducer(sessions)
   const [state, dispatch] = useReducer(bookingFlowReducer, initialState)
   const hasProcessedQuickBook = useRef(false)
 
@@ -38,7 +48,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
 
   // Process quick book data using the dedicated hook
   const { isProcessing, processQuickBookData, saveCurrentBookingState } = useQuickBookProcessor({
-    sessions: mockSessions,
+    sessions,
     currentStep: state.step,
     dispatch,
     user: auth.user,
@@ -73,7 +83,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
     dispatch({ type: "PREV_STEP" })
   }
 
-  if (!mockSessions.length) {
+  if (!sessions.length) {
     return (
       <EmptyState
         description="There are no bookings available at the moment."
@@ -115,7 +125,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
           initialBookingTimes={state.bookingTimes}
           onBack={handleBack}
           onNext={handleSelectCourt}
-          sessions={mockSessions}
+          sessions={sessions}
           user={auth.user}
         />
       ) : state.step === "confirmation" ? (
