@@ -1,5 +1,4 @@
-import { MembershipType, PlayLevel } from "@repo/shared"
-import type { SessionItem } from "@repo/ui/components/Composite"
+import { MembershipType, PlayLevel, type SessionItem } from "@repo/shared"
 import { act, renderHook } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { useQuickBookProcessor } from "./useQuickBookProcessor"

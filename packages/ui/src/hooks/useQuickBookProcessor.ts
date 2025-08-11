@@ -1,8 +1,7 @@
 "use client"
 
-import { MembershipType, PlayLevel } from "@repo/shared"
+import { MembershipType, PlayLevel, type SessionItem } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
-import type { SessionItem } from "@repo/ui/components/Composite"
 import { parseAsStringEnum, useQueryState } from "nuqs"
 import { useCallback, useMemo } from "react"
 import { useQuickBookStorage } from "./storage/quickBookStorage"
