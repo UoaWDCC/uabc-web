@@ -78,52 +78,6 @@ describe("NavigationUtils", () => {
     })
   })
 
-  describe("getSearchParam", () => {
-    const originalLocation = window.location
-
-    beforeEach(() => {
-      Object.defineProperty(window, "location", {
-        value: {
-          ...originalLocation,
-          search: "?returnUrl=%2Fbook&other=value",
-        },
-        writable: true,
-      })
-    })
-
-    afterEach(() => {
-      Object.defineProperty(window, "location", {
-        value: originalLocation,
-        writable: true,
-      })
-    })
-
-    it("should get a specific search parameter", () => {
-      expect(NavigationUtils.getSearchParam("returnUrl")).toBe("/book")
-      expect(NavigationUtils.getSearchParam("other")).toBe("value")
-    })
-
-    it("should return null for non-existent parameters", () => {
-      expect(NavigationUtils.getSearchParam("nonexistent")).toBeNull()
-    })
-
-    it("should handle empty search string", () => {
-      Object.defineProperty(window.location, "search", {
-        value: "",
-        writable: true,
-      })
-      expect(NavigationUtils.getSearchParam("returnUrl")).toBeNull()
-    })
-
-    it("should handle malformed search string gracefully", () => {
-      Object.defineProperty(window.location, "search", {
-        value: "invalid",
-        writable: true,
-      })
-      expect(NavigationUtils.getSearchParam("returnUrl")).toBeNull()
-    })
-  })
-
   describe("decodeUrlParam", () => {
     it("should decode URL-encoded strings", () => {
       expect(NavigationUtils.decodeUrlParam("%2Fbook")).toBe("/book")

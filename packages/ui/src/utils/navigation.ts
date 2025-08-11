@@ -98,40 +98,6 @@ export class NavigationUtils {
   }
 
   /**
-   * Gets a specific search parameter from the current URL
-   *
-   * ⚠️ DEPRECATED: Use Next.js useSearchParams() hook instead
-   * This method is client-side only and may cause hydration issues.
-   *
-   * @param key The parameter key to retrieve
-   * @returns The parameter value or null if not found
-   *
-   * @example
-   * ```ts
-   * // ❌ Don't use this in components
-   * const returnUrl = NavigationUtils.getSearchParam("returnUrl")
-   *
-   * // ✅ Use this instead
-   * const searchParams = useSearchParams()
-   * const returnUrl = searchParams.get("returnUrl")
-   * ```
-   */
-  static getSearchParam(key: string): string | null {
-    if (typeof window === "undefined") {
-      console.warn("getSearchParam called on server side. Use useSearchParams hook instead.")
-      return null
-    }
-
-    try {
-      const urlParams = new URLSearchParams(window.location.search)
-      return urlParams.get(key)
-    } catch (error) {
-      console.warn("Failed to get search param:", key, error)
-      return null
-    }
-  }
-
-  /**
    * Safely decodes a URL-encoded string
    *
    * @param encodedString The URL-encoded string to decode
