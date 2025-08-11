@@ -46,6 +46,7 @@ const mockAuth = {
 describe("<BookFlow />", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    window.localStorage.removeItem("quick_book_data")
   })
 
   it("should render BookACourt component on initial step", () => {
