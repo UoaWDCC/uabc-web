@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { describe, expect, it, vi } from "vitest"
 import { useAuthNavigation } from "./useAuthNavigation"
 
@@ -7,6 +7,7 @@ import { useAuthNavigation } from "./useAuthNavigation"
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(),
   useSearchParams: vi.fn(),
+  usePathname: vi.fn(),
 }))
 
 const mockRouter = {
@@ -20,12 +21,14 @@ const mockRouter = {
 
 type MockedUseRouter = ReturnType<typeof vi.fn>
 type MockedUseSearchParams = ReturnType<typeof vi.fn>
+type MockedUsePathname = ReturnType<typeof vi.fn>
 
 describe("useAuthNavigation", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     ;(useRouter as MockedUseRouter).mockReturnValue(mockRouter)
     ;(useSearchParams as MockedUseSearchParams).mockReturnValue(new URLSearchParams())
+    ;(usePathname as MockedUsePathname).mockReturnValue("/current")
   })
 
   it("should return returnUrl as null when no search params", () => {
@@ -104,18 +107,12 @@ describe("useAuthNavigation", () => {
   })
 
   it("should clear return URL from current URL", () => {
-    const mockReplaceState = vi.fn()
-    Object.defineProperty(window, "history", {
-      value: { replaceState: mockReplaceState },
-      writable: true,
-    })
-
     const { result } = renderHook(() => useAuthNavigation())
 
     act(() => {
       result.current.clearReturnUrl()
     })
 
-    expect(mockReplaceState).toHaveBeenCalled()
+    expect(mockRouter.replace).toHaveBeenCalledWith("/current")
   })
 })
