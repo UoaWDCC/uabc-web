@@ -1,6 +1,6 @@
 "use client"
 
-import { mockSessions, type PlayLevel, Routes } from "@repo/shared"
+import { mockSessions, type QuickBookFormData, Routes } from "@repo/shared"
 import { QuickBook } from "@repo/ui/components/Generic"
 import { useAuthNavigation, useQuickBookStorage } from "@repo/ui/hooks"
 import { Container } from "@yamada-ui/react"
@@ -13,10 +13,7 @@ export const QuickBookSection = () => {
   const { setValue: setQuickBookData } = useQuickBookStorage()
   const { buildLoginUrl } = useAuthNavigation()
 
-  const handleQuickBookSubmit = (formData: {
-    locationAndTimeId: string
-    skillLevel: PlayLevel
-  }) => {
+  const handleQuickBookSubmit = (formData: QuickBookFormData) => {
     // Save quick book data to localStorage
     setQuickBookData({
       formData,

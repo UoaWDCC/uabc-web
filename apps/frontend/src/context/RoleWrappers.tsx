@@ -1,5 +1,6 @@
 "use client"
 import type { MembershipType } from "@repo/shared"
+import { NavigationUtils } from "@repo/ui/utils"
 import { useUpdateEffect } from "@yamada-ui/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { type ReactNode, useMemo } from "react"
@@ -76,9 +77,12 @@ export const GuestOnly = ({ children }: GuestOnlyProps) => {
       return
     }
 
-    // Check for return URL and redirect there instead of always going to profile
-    const returnUrl = searchParams.get("returnUrl")
-    const redirectUrl = returnUrl ? decodeURIComponent(returnUrl) : "/profile"
+    const raw = searchParams?.get("returnUrl")
+    const decoded = raw ? NavigationUtils.decodeUrlParam(raw) : null
+    let redirectUrl = "/profile"
+    if (decoded && !NavigationUtils.isExternalUrl(decoded)) {
+      redirectUrl = NavigationUtils.normalizeUrl(decoded)
+    }
 
     router.replace(redirectUrl)
   }, [shouldRedirect, router, searchParams])

@@ -1,11 +1,13 @@
 "use client"
 
+import { zodResolver } from "@hookform/resolvers/zod"
 import type { QuickBookFormData, SessionItem } from "@repo/shared"
-import { PlayLevel } from "@repo/shared"
+import { PlayLevel, QuickBookFormDataSchema } from "@repo/shared"
 import { Button, Heading, Select } from "@repo/ui/components/Primitive"
 import { CalendarClockIcon, CircleGaugeIcon } from "@yamada-ui/lucide"
 import { FormControl, Grid, GridItem, memo, noop, type SelectItem, VStack } from "@yamada-ui/react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
+import { convertSessionsToSelectItems } from "./utils"
 
 /**
  * Props for {@link QuickBook} component
@@ -65,20 +67,10 @@ export const QuickBook = memo(
       control,
       handleSubmit,
       formState: { errors, isSubmitting },
-    } = useForm<QuickBookFormData>()
+    } = useForm<QuickBookFormData>({ resolver: zodResolver(QuickBookFormDataSchema) })
 
-    // Convert sessions to select options
-    const locationAndTimeOptions: SelectItem[] = sessions.map((session) => {
-      const dayName = new Date(session.date).toLocaleDateString("en-US", { weekday: "short" })
-      const startTime = session.startTime
-      const endTime = session.endTime
-      const location = session.name || session.location
-
-      return {
-        label: `${dayName} | ${startTime} - ${endTime} | ${location}`,
-        value: session.id,
-      }
-    })
+    // Convert sessions to select options with consistent timezone formatting
+    const locationAndTimeOptions: SelectItem[] = convertSessionsToSelectItems(sessions)
 
     return (
       <VStack

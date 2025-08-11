@@ -9,7 +9,6 @@ import { useQuickBookStorage } from "./storage/quickBookStorage"
 
 // Constants
 const DEFAULT_MAX_AGE_MS = 24 * 60 * 60 * 1000 // 24 hours
-const STEPS_TO_SKIP = 2 // Number of steps to skip when processing quick book data
 
 /**
  * Validation result types for quick book data
@@ -191,10 +190,8 @@ export const useQuickBookProcessor = <
         },
       } as TAction)
 
-      // Skip to confirmation step
-      for (let i = 0; i < STEPS_TO_SKIP; i++) {
-        dispatch({ type: "NEXT_STEP" } as TAction)
-      }
+      // Jump directly to confirmation step to avoid coupling to step count
+      dispatch({ type: "JUMP_TO_CONFIRMATION" } as TAction)
     }
 
     return true

@@ -85,9 +85,11 @@ export const useAuthNavigation = (
         return
       }
 
-      const targetUrl = returnUrl
-        ? decodeURIComponent(returnUrl)
-        : (defaultUrl ?? defaultRedirectUrl)
+      const decoded = returnUrl ? decodeURIComponent(returnUrl) : null
+      const candidate = decoded ?? defaultUrl ?? defaultRedirectUrl
+      const targetUrl = NavigationUtils.isExternalUrl(candidate)
+        ? (defaultUrl ?? defaultRedirectUrl)
+        : candidate
 
       onBeforeNavigate?.(targetUrl)
       hasNavigatedRef.current = true
