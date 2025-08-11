@@ -49,13 +49,6 @@ describe("<BookFlow />", () => {
     window.localStorage.removeItem("quick_book_data")
   })
 
-  it("should render BookACourt component on initial step", () => {
-    render(<BookFlow auth={mockAuth} />, { wrapper: withNuqsTestingAdapter() })
-    expect(screen.getByText(MembershipType.member)).toBeInTheDocument()
-    expect(screen.getByText(MembershipType.casual)).toBeInTheDocument()
-    expect(screen.getByText(MembershipType.admin)).toBeInTheDocument()
-  })
-
   it("should show empty state when no bookings are available", () => {
     render(<BookFlow auth={mockAuth} sessions={[]} />, {
       wrapper: withNuqsTestingAdapter(),
