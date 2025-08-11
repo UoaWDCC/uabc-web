@@ -1,4 +1,4 @@
-import { mockSessions } from "@repo/shared"
+import { formatDateWithOrdinal, mockSessions } from "@repo/shared"
 import { render, screen } from "@repo/ui/test-utils"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { vi } from "vitest"
@@ -84,7 +84,7 @@ describe("<BookFlow />", () => {
     })
     const beginnerButton = screen.getByRole("button", { name: /beginner/i })
     await user.click(beginnerButton)
-    expect(screen.getByText("Select a Court")).toBeInTheDocument()
+    expect(screen.getByText(/select a court/i)).toBeInTheDocument()
   })
 
   it("should handle court selection and move to confirmation step", async () => {
@@ -93,6 +93,9 @@ describe("<BookFlow />", () => {
     })
     const beginnerButton = screen.getByRole("button", { name: /beginner/i })
     await user.click(beginnerButton)
+    const firstDateLabel = formatDateWithOrdinal(mockSessions[0].date)
+    const dateText = screen.getByText(firstDateLabel)
+    await user.click(dateText.closest("label") ?? dateText)
     const nextButton = screen.getByRole("button", { name: "Next" })
     await user.click(nextButton)
     expect(screen.getByText("Booking Confirmation")).toBeInTheDocument()
@@ -117,11 +120,14 @@ describe("<BookFlow />", () => {
     })
     const beginnerButton = screen.getByRole("button", { name: /beginner/i })
     await user.click(beginnerButton)
+    const firstDateLabel = formatDateWithOrdinal(mockSessions[0].date)
+    const dateText = screen.getByText(firstDateLabel)
+    await user.click(dateText.closest("label") ?? dateText)
     const nextButton = screen.getByRole("button", { name: "Next" })
     await user.click(nextButton)
     const backButton = screen.getByRole("button", { name: "Back" })
     await user.click(backButton)
-    expect(screen.getByText("Select a Court")).toBeInTheDocument()
+    expect(screen.getByText(/select a court/i)).toBeInTheDocument()
   })
 
   it("should handle booking confirmation", async () => {
@@ -145,6 +151,9 @@ describe("<BookFlow />", () => {
     })
     const beginnerButton = screen.getByRole("button", { name: /beginner/i })
     await user.click(beginnerButton)
+    const firstDateLabel = formatDateWithOrdinal(mockSessions[0].date)
+    const dateText = screen.getByText(firstDateLabel)
+    await user.click(dateText.closest("label") ?? dateText)
     const nextButton = screen.getByRole("button", { name: "Next" })
     await user.click(nextButton)
     const confirmButton = screen.getByRole("button", { name: "Confirm Booking" })
@@ -158,6 +167,8 @@ describe("<BookFlow />", () => {
     })
     const beginnerButton = screen.getByRole("button", { name: /beginner/i })
     await user.click(beginnerButton)
+    const firstDateLabel = formatDateWithOrdinal(mockSessions[0].date)
+    await user.click(screen.getByText(firstDateLabel))
     const nextButton = screen.getByRole("button", { name: "Next" })
     await user.click(nextButton)
     expect(screen.getByText("Booking Confirmation")).toBeInTheDocument()
