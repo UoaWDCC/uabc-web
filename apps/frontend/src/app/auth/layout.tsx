@@ -7,8 +7,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   return (
     <Suspense
       fallback={
-        <Center>
-          <Loading />
+        <Center layerStyle="container">
+          <Loading fontSize="4xl" />
         </Center>
       }
     >
