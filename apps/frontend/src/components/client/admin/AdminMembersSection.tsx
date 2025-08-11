@@ -91,6 +91,7 @@ export const AdminMembersSection = () => {
     },
   ]
 
+  console.log("pages:")
   thing.data?.pages.map((page) => {
     console.log(page)
   })
