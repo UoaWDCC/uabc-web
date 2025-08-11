@@ -1,6 +1,8 @@
 "use client"
 
-import { type MembershipType, mockSessions, PlayLevel, Popup, type SessionItem } from "@repo/shared"
+import { type MembershipType, PlayLevel, Popup, type SessionItem } from "@repo/shared"
+// TODO: Remove this once we link to backend
+import { mockSessions } from "@repo/shared/mocks"
 import type { SelectACourtNextData } from "@repo/ui/components/Composite"
 import { BookingConfirmation, SelectACourt } from "@repo/ui/components/Composite"
 import { BookACourt } from "@repo/ui/components/Generic"

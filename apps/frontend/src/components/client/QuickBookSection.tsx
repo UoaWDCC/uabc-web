@@ -1,6 +1,8 @@
 "use client"
 
-import { mockSessions, type QuickBookFormData, Routes } from "@repo/shared"
+import { type QuickBookFormData, Routes } from "@repo/shared"
+// TODO: Remove this once we link to backend
+import { mockSessions } from "@repo/shared/mocks"
 import { QuickBook } from "@repo/ui/components/Generic"
 import { useAuthNavigation, useQuickBookStorage } from "@repo/ui/hooks"
 import { Container } from "@yamada-ui/react"

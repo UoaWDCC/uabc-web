@@ -1,4 +1,4 @@
-import { mockSessions } from "@repo/shared"
+import { mockSessions } from "@repo/shared/mocks"
 import type { Meta, StoryObj } from "@storybook/nextjs"
 import { QuickBook } from "./QuickBook"
 

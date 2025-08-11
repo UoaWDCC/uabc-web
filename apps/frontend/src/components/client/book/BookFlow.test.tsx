@@ -1,4 +1,5 @@
-import { formatDateWithOrdinal, mockSessions } from "@repo/shared"
+import { formatDateWithOrdinal } from "@repo/shared"
+import { mockSessions } from "@repo/shared/mocks"
 import { render, screen } from "@repo/ui/test-utils"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { vi } from "vitest"

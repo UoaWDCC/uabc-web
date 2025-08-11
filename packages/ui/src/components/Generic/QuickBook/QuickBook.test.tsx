@@ -1,5 +1,5 @@
-import "@testing-library/jest-dom"
-import { mockSessions, PlayLevel, type QuickBookFormData } from "@repo/shared"
+import { PlayLevel, type QuickBookFormData } from "@repo/shared"
+import { mockSessions } from "@repo/shared/mocks"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as QuickBookModule from "./index"
