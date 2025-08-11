@@ -50,7 +50,13 @@ export const Filter = <
   return (
     <VStack gap="md" w="full">
       <Stack flexDirection={{ base: "column", xl: "row" }} gap="md" w="full">
-        <Wrap gap="md" minW={0} order={{ base: 2, xl: 1 }} w="full">
+        <Wrap
+          flexDirection={{ base: "row", xl: "column" }}
+          gap="md"
+          minW={0}
+          order={{ base: 2, xl: 1 }}
+          w="full"
+        >
           {filterConfigs.map((config) => {
             if (isTextConfig(config)) {
               const textConfig = config as FilterTextConfig<TData>
@@ -84,7 +90,7 @@ export const Filter = <
             return null
           })}
         </Wrap>
-        <HStack alignItems={{ base: "start", xl: "center" }} order={{ base: 1, xl: 2 }}>
+        <HStack alignItems={{ base: "start", xl: "end" }} order={{ base: 1, xl: 2 }}>
           <FilterColumnVisibility columns={columnsConfig} />
           <FilterActions />
         </HStack>

@@ -1,7 +1,13 @@
 import { PlayLevel } from "@repo/shared/types"
 import { AdminTable } from "@repo/ui/components/Composite"
+import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembersSection = () => {
+  const thing = useGetPaginatedUsers({
+    limit: 20,
+    page: 20,
+  })
+
   const mockData = [
     {
       id: "1",
@@ -84,6 +90,10 @@ export const AdminMembersSection = () => {
       level: PlayLevel.advanced,
     },
   ]
+
+  thing.data?.pages.map((page) => {
+    console.log(page)
+  })
 
   return <AdminTable data={mockData} />
 }

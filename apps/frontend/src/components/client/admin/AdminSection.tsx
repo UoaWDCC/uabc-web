@@ -21,7 +21,7 @@ export const AdminSection = memo(() => {
         }}
       >
         <TabPanel>
-          <Container centerContent layerStyle="container">
+          <Container centerContent layerStyle="container" padding="0">
             <AdminMembersSection />
           </Container>
         </TabPanel>
