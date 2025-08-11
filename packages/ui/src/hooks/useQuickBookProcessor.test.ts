@@ -359,7 +359,7 @@ describe("useQuickBookProcessor", () => {
       },
     })
 
-    expect(mockDispatch).toHaveBeenCalledWith({ type: "NEXT_STEP" })
+    expect(mockDispatch).toHaveBeenCalledWith({ type: "JUMP_TO_CONFIRMATION" })
     expect(mockSetPlayLevel).toHaveBeenCalledWith(PlayLevel.intermediate)
     expect(mockClearQuickBookData).not.toHaveBeenCalled()
   })
