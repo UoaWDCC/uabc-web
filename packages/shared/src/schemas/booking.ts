@@ -28,8 +28,13 @@ export const SelectACourtFormDataSchema = z.object({
 })
 
 export const QuickBookFormDataSchema = z.object({
-  locationAndTimeId: z.string().min(1, "Please select a location and time"),
-  skillLevel: z.nativeEnum(PlayLevel),
+  locationAndTimeId: z
+    .string({ required_error: "Please select a location and time" })
+    .min(1, "Please select a location and time"),
+  skillLevel: z.nativeEnum(PlayLevel, {
+    required_error: "Please select your skill level",
+    invalid_type_error: "Please select your skill level",
+  }),
 })
 
 export const QuickBookLocalStorageSchema = z.object({
