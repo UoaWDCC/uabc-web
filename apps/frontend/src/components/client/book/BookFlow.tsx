@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  type MembershipType,
-  mockSessions,
-  type PlayLevel,
-  Popup,
-  type SessionItem,
-} from "@repo/shared"
+import { type MembershipType, mockSessions, PlayLevel, Popup, type SessionItem } from "@repo/shared"
 import type { SelectACourtNextData } from "@repo/ui/components/Composite"
 import { BookingConfirmation, SelectACourt } from "@repo/ui/components/Composite"
 import { BookACourt } from "@repo/ui/components/Generic"
@@ -15,6 +9,7 @@ import { usePopupState, useQuickBookProcessor } from "@repo/ui/hooks"
 import { CircleAlertIcon } from "@yamada-ui/lucide"
 import { EmptyState, VStack } from "@yamada-ui/react"
 import NextLink from "next/link"
+import { parseAsStringEnum, useQueryState } from "nuqs"
 import { type FC, useEffect, useReducer, useRef } from "react"
 import type { AuthContextValueWithUser } from "@/context/RoleWrappers"
 import { createBookingFlowReducer, initialState } from "./bookingFlowReducer"
@@ -62,8 +57,14 @@ export const BookFlow: FC<BookFlowProps> = ({ auth, sessions = mockSessions }) =
     }
   }, [isProcessing, processQuickBookData])
 
+  const [, setPlayLevelQuery] = useQueryState(
+    "playLevel",
+    parseAsStringEnum<PlayLevel>(Object.values(PlayLevel)),
+  )
+
   const handlePlayLevelSelect = (level: PlayLevel) => {
     dispatch({ type: "SET_PLAY_LEVEL", payload: level })
+    setPlayLevelQuery(level)
     dispatch({ type: "NEXT_STEP" })
   }
 

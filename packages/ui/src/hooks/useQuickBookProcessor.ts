@@ -189,7 +189,6 @@ export const useQuickBookProcessor = <
         },
       } as TAction)
 
-      // Jump directly to confirmation step to avoid coupling to step count
       dispatch({ type: "JUMP_TO_CONFIRMATION" } as TAction)
     }
 
