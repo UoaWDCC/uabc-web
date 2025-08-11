@@ -1,10 +1,11 @@
 import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev"
 import type { NextConfig } from "next"
 import type { RemotePattern } from "next/dist/shared/lib/image-config"
+import withRspack from "next-rspack"
 
 const env = process.env.NEXT_CONFIG_ENV || "development"
 
-const config = (async () => {
+const config = withRspack(async () => {
   if (env === "development") {
     await setupDevPlatform()
   }
@@ -36,6 +37,6 @@ const config = (async () => {
   }
 
   return nextConfig
-})()
+})
 
 export default config
