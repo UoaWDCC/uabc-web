@@ -1,4 +1,5 @@
-import { Container, Loading } from "@yamada-ui/react"
+import { QuickBookSkeleton } from "@repo/ui/components/Generic"
+import { Container } from "@yamada-ui/react"
 import { Suspense } from "react"
 import { QuickBookSection } from "@/components/client/QuickBookSection"
 
@@ -10,7 +11,7 @@ export const QuickBookServerSection = () => {
     <Suspense
       fallback={
         <Container centerContent layerStyle="container">
-          <Loading fontSize="4xl" />
+          <QuickBookSkeleton />
         </Container>
       }
     >
