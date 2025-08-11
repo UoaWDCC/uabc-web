@@ -34,7 +34,7 @@ describe("<QuickBook />", () => {
     // The first session should be "Tue | 19:30 - 22:00 | UoA Recreation Centre"
     await user.click(screen.getByText("Tue | 19:30 - 22:00 | UoA Recreation Centre"))
 
-    const skillLevelSelect = screen.getByText("Skill Level")
+    const skillLevelSelect = screen.getByTestId("skill-level")
     await user.click(skillLevelSelect)
     await user.click(screen.getByText(PlayLevel.beginner))
 

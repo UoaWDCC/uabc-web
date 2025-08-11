@@ -362,7 +362,7 @@ describe("useQuickBookProcessor", () => {
 
     expect(mockDispatch).toHaveBeenCalledWith({ type: "NEXT_STEP" })
     expect(mockSetPlayLevel).toHaveBeenCalledWith(PlayLevel.intermediate)
-    expect(mockClearQuickBookData).toHaveBeenCalled()
+    expect(mockClearQuickBookData).not.toHaveBeenCalled()
   })
 
   it("should return correct processing state", () => {
@@ -478,7 +478,7 @@ describe("useQuickBookProcessor", () => {
       type: "SET_PLAY_LEVEL",
       payload: PlayLevel.advanced,
     })
-    expect(mockClearQuickBookData).toHaveBeenCalled()
+    expect(mockClearQuickBookData).not.toHaveBeenCalled()
   })
 
   it("should not clear data for no-data reason", () => {

@@ -39,24 +39,29 @@ export class NavigationUtils {
       return buildExternalHref(href, query as Record<string, unknown>)
     }
 
-    const searchParams = new URLSearchParams()
-
-    for (const [key, value] of Object.entries(query)) {
-      if (value == null || value === "") {
+    // Build query string manually to keep commas in array values unencoded
+    const parts: string[] = []
+    for (const [rawKey, rawValue] of Object.entries(query)) {
+      if (rawValue == null || rawValue === "") {
         continue
       }
 
-      if (Array.isArray(value)) {
-        const filteredValues = value.filter((v) => v != null && v !== "").map(String)
-        if (filteredValues.length > 0) {
-          searchParams.append(key, filteredValues.join(","))
+      const key = encodeURIComponent(rawKey).replace(/%20/g, "+")
+      if (Array.isArray(rawValue)) {
+        const encodedJoined = rawValue
+          .filter((v) => v != null && v !== "")
+          .map((v) => encodeURIComponent(String(v)).replace(/%20/g, "+"))
+          .join(",")
+        if (encodedJoined) {
+          parts.push(`${key}=${encodedJoined}`)
         }
       } else {
-        searchParams.append(key, String(value))
+        const value = encodeURIComponent(String(rawValue)).replace(/%20/g, "+")
+        parts.push(`${key}=${value}`)
       }
     }
 
-    const queryString = searchParams.toString()
+    const queryString = parts.join("&")
     return queryString ? `${href}?${queryString}` : href
   }
 
