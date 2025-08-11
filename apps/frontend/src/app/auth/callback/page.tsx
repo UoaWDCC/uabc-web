@@ -1,5 +1,3 @@
-"use client"
-
 import { Center, Loading } from "@yamada-ui/react"
 import { Suspense } from "react"
 import { CallbackSection } from "@/components/client/auth/CallbackSection"
