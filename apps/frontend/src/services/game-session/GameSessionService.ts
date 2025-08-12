@@ -1,7 +1,11 @@
 import {
+  type GameSessionTimeframe,
+  type GetAllGameSessionsBySemesterResponse,
+  GetAllGameSessionsBySemesterResponseSchema,
   GetGameSessionResponseSchema,
   GetPaginatedGameSessionsResponseSchema,
   type PaginationQuery,
+  SearchParams,
 } from "@repo/shared"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
@@ -29,6 +33,24 @@ const GameSessionService = {
       `/api/game-sessions?${query}`,
       GetPaginatedGameSessionsResponseSchema,
     )
+    return ApiClient.throwIfError(response)
+  },
+
+  /**
+   * Retrieves all game sessions for a specific semester ID.
+   *
+   * @param id The ID of the semester to retrieve game sessions for.
+   * @returns An array of game sessions for the specified semester.
+   */
+  getAllGameSessionsBySemester: async (
+    id: string,
+    sessionTimeframe?: GameSessionTimeframe,
+  ): Promise<GetAllGameSessionsBySemesterResponse> => {
+    const path = `/api/semesters/${id}/game-sessions`
+    const url = sessionTimeframe
+      ? `${path}?${SearchParams.SESSION_TIMEFRAME}=${sessionTimeframe}`
+      : path
+    const response = await apiClient.get(url, GetAllGameSessionsBySemesterResponseSchema)
     return ApiClient.throwIfError(response)
   },
 } as const
