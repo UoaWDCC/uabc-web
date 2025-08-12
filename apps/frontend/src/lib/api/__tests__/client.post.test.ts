@@ -142,7 +142,7 @@ describe("ApiClient POST method", () => {
     // Mock localStorage to return a token
     Object.defineProperty(global, "localStorage", {
       value: {
-        getItem: vi.fn(() => JSON.stringify(mockToken)),
+        getItem: vi.fn(() => mockToken),
       },
       writable: true,
     })
