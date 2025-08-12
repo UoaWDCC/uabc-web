@@ -42,6 +42,7 @@ const mockAuth = {
   emailVerificationCode: {} as never,
   register: {} as never,
   setToken: {} as never,
+  logout: {} as never,
 } as const
 
 describe("<BookFlow />", () => {
