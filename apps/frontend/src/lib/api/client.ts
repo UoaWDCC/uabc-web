@@ -1,4 +1,4 @@
-import { CommonResponseSchema } from "@repo/shared"
+import { AUTH_COOKIE_NAME, CommonResponseSchema } from "@repo/shared"
 import type { z } from "zod"
 import { ApiClientError } from "./ApiClientError"
 
@@ -27,6 +27,7 @@ export class ApiClient {
    * Creates an instance of ApiClient.
    *
    * @param baseUrl The base URL for the API. If not provided, uses NEXT_PUBLIC_API_URL from environment variables.
+   * @param getCurrentToken Optional function to get the current token. If not provided, no token will be used.
    * @throws If no base URL is provided or found in environment variables.
    */
   constructor(baseUrl?: string) {
@@ -52,6 +53,22 @@ export class ApiClient {
   }
 
   /**
+   * Retrieves the current token from localStorage.
+   *
+   * @returns The current token or null if not found.
+   * @private
+   */
+  private getCurrentToken = (): string | null => {
+    try {
+      const token = localStorage.getItem(AUTH_COOKIE_NAME)
+      return token ? JSON.parse(token) : null
+    } catch (error) {
+      console.error("Error retrieving token from localStorage:", error)
+      return null
+    }
+  }
+
+  /**
    * Creates fetch options with consistent configuration.
    *
    * @param method The HTTP method.
@@ -66,11 +83,20 @@ export class ApiClient {
     options: RequestOptions = {},
   ): RequestInit & { next?: { tags: string[]; revalidate?: number | false } } {
     const { headers = {}, tags = [], revalidate } = options
+    const token = this.getCurrentToken()
+
+    const baseHeaders: Record<string, string> = {
+      "Content-Type": "application/json",
+    }
+
+    if (token) {
+      baseHeaders.Authorization = `Bearer ${token}`
+    }
 
     const fetchOptions: RequestInit & { next?: { tags: string[]; revalidate?: number | false } } = {
       method,
       headers: {
-        "Content-Type": "application/json",
+        ...baseHeaders,
         ...headers,
       },
       next: {
