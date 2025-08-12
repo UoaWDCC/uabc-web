@@ -66,7 +66,7 @@ export class ApiClient {
 
     try {
       const token = localStorage.getItem(AUTH_COOKIE_NAME)
-      return token ? JSON.parse(token) : null
+      return token
     } catch (error) {
       console.error("Error retrieving token from localStorage:", error)
       return null

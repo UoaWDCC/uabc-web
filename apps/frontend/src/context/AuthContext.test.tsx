@@ -73,7 +73,7 @@ describe("AuthContext", () => {
 
   it("clears token on unauthorized response and returns user null", async () => {
     localStorage.setItem(AUTH_COOKIE_NAME, JSON.stringify("token-123"))
-    vi.spyOn(AuthService, "getUserFromToken").mockRejectedValue(
+    vi.spyOn(AuthService, "getUserInfo").mockRejectedValue(
       new ApiClientError({
         message: "Unauthorized",
         method: "GET",
