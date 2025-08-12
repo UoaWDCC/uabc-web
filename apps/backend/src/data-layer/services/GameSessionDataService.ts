@@ -188,6 +188,7 @@ export default class GameSessionDataService {
       collection: "gameSession",
       where: { schedule: { equals: id } },
       pagination: false,
+      req: { transactionID },
     })
 
     for (const gameSession of gameSessions.docs) {
