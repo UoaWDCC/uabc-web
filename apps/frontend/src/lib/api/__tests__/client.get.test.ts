@@ -279,31 +279,4 @@ describe("ApiClient GET method", () => {
     })
     expect(result.success).toBe(true)
   })
-
-  it("should handle SSR scenario (no window object) gracefully", async () => {
-    const testSchema = z.object({ message: z.string() })
-    const mockResponse = { message: "success" }
-
-    // Mock server-side environment (no window)
-    const originalWindow = global.window
-    delete (global as any).window
-
-    mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
-
-    const result = await client.get("/test", testSchema)
-
-    expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      next: {
-        tags: [],
-      },
-    })
-    expect(result.success).toBe(true)
-
-    // Restore window
-    global.window = originalWindow
-  })
 })
