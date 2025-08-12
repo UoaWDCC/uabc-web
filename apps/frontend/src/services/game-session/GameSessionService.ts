@@ -1,6 +1,6 @@
 import {
-  GetAllGameSessionsResponseSchema,
   GetGameSessionResponseSchema,
+  GetPaginatedGameSessionsResponseSchema,
   type PaginationQuery,
 } from "@repo/shared"
 import { ApiClient, apiClient } from "@/lib/api/client"
@@ -27,7 +27,7 @@ const GameSessionService = {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
     const response = await apiClient.get(
       `/api/game-sessions?${query}`,
-      GetAllGameSessionsResponseSchema,
+      GetPaginatedGameSessionsResponseSchema,
     )
     return ApiClient.throwIfError(response)
   },
