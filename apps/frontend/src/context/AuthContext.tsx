@@ -3,6 +3,7 @@
 import type { LoginFormData, RegisterRequestBody } from "@repo/shared"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
+import { noticeOptions } from "@repo/theme"
 import { useLocalStorage } from "@repo/ui/hooks"
 import { type UseMutationResult, useMutation, useQuery } from "@tanstack/react-query"
 import { useNotice } from "@yamada-ui/react"
@@ -58,6 +59,7 @@ type AuthActions = {
     unknown
   >
   setToken: (token: string | null) => void
+  logout: () => void
 }
 
 export type AuthContextValue = AuthState & AuthActions
@@ -75,7 +77,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setValue: setToken,
     isAvailable,
   } = useLocalStorage<string>(AUTH_COOKIE_NAME)
-  const notice = useNotice()
+  const notice = useNotice(noticeOptions)
 
   const {
     data: user,
@@ -149,6 +151,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
   })
 
+  const logout = () => {
+    setToken(null)
+    notice({
+      title: "Logged out",
+      description: "You have been logged out successfully.",
+      status: "success",
+    })
+  }
+
   const authState: AuthState = {
     user: user ?? null,
     isLoading: isLoading || login.isPending,
@@ -163,6 +174,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     emailVerificationCode,
     register,
     setToken,
+    logout,
   }
 
   return (

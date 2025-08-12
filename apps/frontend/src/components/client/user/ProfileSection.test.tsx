@@ -22,6 +22,7 @@ const mockAuth: AuthContextValue = {
   emailVerificationCode: {} as never,
   register: {} as never,
   setToken: {} as never,
+  logout: {} as never,
 }
 
 const queryClientProvider = ({ children }: { children: React.ReactNode }) => {
