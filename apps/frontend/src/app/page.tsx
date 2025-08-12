@@ -3,8 +3,8 @@ import type { Metadata } from "next"
 import { FaqSection } from "@/components/client/FaqSection"
 import { HeaderSection } from "@/components/client/HeaderSection"
 import { LocationBubbleSection } from "@/components/client/LocationBubbleSection"
-import { QuickBookSection } from "@/components/client/QuickBookSection"
 import { AboutUsServerSection } from "@/components/server/AboutUsServerSection"
+import { QuickBookServerSection } from "@/components/server/QuickBookServerSection"
 
 export const metadata: Metadata = {
   title: "Home | UABC",
@@ -16,7 +16,7 @@ export default async function Home() {
   return (
     <VStack as="main">
       <HeaderSection />
-      <QuickBookSection />
+      <QuickBookServerSection />
       <LocationBubbleSection />
       <AboutUsServerSection />
       <FaqSection />
