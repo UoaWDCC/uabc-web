@@ -24,6 +24,7 @@ const mockAuth = {
   emailVerificationCode: {} as never,
   register: {} as never,
   setToken: {} as never,
+  logout: {} as never,
 } as const
 
 // TODO: FIX THIS TESTS
