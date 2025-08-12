@@ -10,7 +10,7 @@ export const AdminMembersSection = () => {
   const userData =
     data?.pages[0].data.docs.map((page) => ({
       id: page.id,
-      name: page.firstName + page.lastName,
+      name: page.firstName + " " + (page.lastName && ""),
       email: page.email,
       remaining: String(page.remainingSessions),
       joined: page.createdAt,
