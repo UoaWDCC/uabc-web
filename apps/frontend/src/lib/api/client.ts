@@ -10,6 +10,7 @@ type RequestOptions = {
   headers?: Record<string, string>
   tags?: string[]
   revalidate?: number | false
+  requiresAuth?: boolean
 }
 
 /**
@@ -59,6 +60,10 @@ export class ApiClient {
    * @private
    */
   private getCurrentToken = (): string | null => {
+    if (typeof window === "undefined") {
+      return null
+    }
+
     try {
       const token = localStorage.getItem(AUTH_COOKIE_NAME)
       return token ? JSON.parse(token) : null
@@ -82,8 +87,13 @@ export class ApiClient {
     body?: unknown,
     options: RequestOptions = {},
   ): RequestInit & { next?: { tags: string[]; revalidate?: number | false } } {
-    const { headers = {}, tags = [], revalidate } = options
+    const { headers = {}, tags = [], revalidate, requiresAuth = false } = options
     const token = this.getCurrentToken()
+
+    // Frontend validation: Check if auth is required but no token is available
+    if (requiresAuth && !token) {
+      throw new Error("No token provided")
+    }
 
     const baseHeaders: Record<string, string> = {
       "Content-Type": "application/json",

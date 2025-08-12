@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (!token) {
         return null
       }
-      const response = await AuthService.getUserFromToken(token)
+      const response = await AuthService.getUserInfo()
       return response.data
     },
     staleTime: 1000 * 60 * 5,
