@@ -79,7 +79,7 @@ export default class SemesterDataService {
    * @param semesterIdf the ID of the semester whose game session schedules are to be deleted
    * @param transactionID An optional transaction ID for the request, useful for tracing
    */
-  public async deleteRelatedGameSchedulesForSemester(
+  public async deleteRelatedDocsForSemester(
     semesterId: string,
     transactionID?: string | number,
   ): Promise<void> {
