@@ -1,7 +1,7 @@
 "use client"
 
 import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
-import { Container, TabPanel } from "@yamada-ui/react"
+import { Container, TabPanel, VStack } from "@yamada-ui/react"
 import { memo } from "react"
 import { AdminMembersSection } from "./AdminMembersSection"
 

@@ -1,4 +1,5 @@
 import { AdminTable, type UserData } from "@repo/ui/components/Composite"
+import { Button } from "@yamada-ui/react"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembersSection = () => {
@@ -19,5 +20,10 @@ export const AdminMembersSection = () => {
       level: page.playLevel,
     })) ?? []
 
-  return <AdminTable data={userData as UserData[]} />
+  return (
+    <>
+      <AdminTable data={userData as UserData[]} />
+      <Button colorScheme="danger">Reset Memberships</Button>
+    </>
+  )
 }
