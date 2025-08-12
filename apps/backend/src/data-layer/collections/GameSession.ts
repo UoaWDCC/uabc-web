@@ -43,6 +43,17 @@ export const GameSession: CollectionConfig = {
       },
     },
     {
+      name: "openTime",
+      type: "date",
+      required: true,
+      admin: {
+        date: {
+          pickerAppearance: "dayAndTime",
+        },
+        description: "The open time of the game session",
+      },
+    },
+    {
       name: "startTime",
       type: "date",
       required: true,

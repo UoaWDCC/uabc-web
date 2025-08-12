@@ -25,9 +25,9 @@ export const NavigationBar = ({ user, ...props }: NavigationBarProps) => {
       centerContent
       gap="0"
       layerStyle="container"
-      pb={{ base: "0", md: "0" }}
+      pb={{ base: "0", sm: "0", lg: "0" }}
       position="sticky"
-      pt={{ base: "lg", md: "lg" }}
+      pt={{ base: "md", lg: "lg" }}
       top="0"
       w="full"
       zIndex={100}

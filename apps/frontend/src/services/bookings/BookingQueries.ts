@@ -10,7 +10,7 @@ import BookingService from "./BookingService"
  */
 export function useMyBookings() {
   return useQuery({
-    queryKey: [QueryKeys.MY_BOOKINGS_QUERY_KEY],
+    queryKey: [QueryKeys.BOOKINGS_QUERY_KEY, QueryKeys.MY_BOOKINGS_QUERY_KEY],
     queryFn: async () => {
       return await BookingService.getMyBookings()
     },

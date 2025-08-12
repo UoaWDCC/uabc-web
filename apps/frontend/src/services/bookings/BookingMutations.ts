@@ -16,7 +16,7 @@ export const useCreateBooking = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.MY_BOOKINGS_QUERY_KEY],
+        queryKey: [QueryKeys.BOOKINGS_QUERY_KEY],
       })
     },
   })
