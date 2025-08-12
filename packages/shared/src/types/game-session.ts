@@ -26,11 +26,3 @@ export type SessionItem = Pick<
   casualAttendees: number
   date: string
 }
-
-/**
- * Select item type for dropdown/select components
- */
-export type SelectItem = {
-  label: string
-  value: string
-}
