@@ -1,6 +1,6 @@
 import { formatDateWithOrdinal } from "@repo/shared"
 import { mockSessions } from "@repo/shared/mocks"
-import { render, screen } from "@repo/ui/test-utils"
+import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { vi } from "vitest"
 
@@ -49,6 +49,13 @@ vi.mock("@/context/AuthContext", () => ({
   useAuth: () => mockAuth,
   AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
+
+vi.mock("@/services/bookings/BookingMutations", () => {
+  const mutateAsync = vi.fn().mockResolvedValue({})
+  return {
+    useCreateBooking: () => ({ mutateAsync, isPending: false }),
+  }
+})
 
 describe("<BookFlow />", () => {
   beforeEach(() => {
@@ -161,7 +168,7 @@ describe("<BookFlow />", () => {
     await user.click(nextButton)
     const confirmButton = screen.getByRole("button", { name: "Confirm Booking" })
     await user.click(confirmButton)
-    expect(openSpy).toHaveBeenCalled()
+    await waitFor(() => expect(openSpy).toHaveBeenCalled())
   })
 
   it("should render booking confirmation with correct data", async () => {
