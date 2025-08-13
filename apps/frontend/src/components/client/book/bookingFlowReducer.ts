@@ -1,5 +1,5 @@
-import type { PlayLevel } from "@repo/shared"
-import type { SelectACourtNextData, SessionItem } from "@repo/ui/components/Composite"
+import type { PlayLevel, SessionItem } from "@repo/shared"
+import type { SelectACourtNextData } from "@repo/ui/components/Composite"
 
 export type BookingFlowState = {
   step: "play-level" | "select-court" | "confirmation"
@@ -11,6 +11,7 @@ export type BookingFlowState = {
 export type BookingFlowAction =
   | { type: "NEXT_STEP" }
   | { type: "PREV_STEP" }
+  | { type: "JUMP_TO_CONFIRMATION" }
   | { type: "SET_PLAY_LEVEL"; payload: PlayLevel }
   | { type: "SET_BOOKING_TIMES"; payload: SelectACourtNextData }
   | { type: "RESET" }
@@ -44,6 +45,8 @@ export const createBookingFlowReducer =
           default:
             return state
         }
+      case "JUMP_TO_CONFIRMATION":
+        return { ...state, step: "confirmation" }
       case "SET_PLAY_LEVEL":
         return { ...state, playLevel: action.payload }
       case "SET_BOOKING_TIMES": {
