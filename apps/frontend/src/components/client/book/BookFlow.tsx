@@ -1,19 +1,24 @@
 "use client"
 
-import { type MembershipType, PlayLevel, Popup, type SessionItem } from "@repo/shared"
-// TODO: Remove this once we link to backend
-import { mockSessions } from "@repo/shared/mocks"
+import {
+  type CreateBookingRequest,
+  type MembershipType,
+  PlayLevel,
+  Popup,
+  type SessionItem,
+} from "@repo/shared"
 import type { SelectACourtNextData } from "@repo/ui/components/Composite"
 import { BookingConfirmation, SelectACourt } from "@repo/ui/components/Composite"
 import { BookACourt } from "@repo/ui/components/Generic"
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import { usePopupState, useQuickBookProcessor } from "@repo/ui/hooks"
 import { CircleAlertIcon } from "@yamada-ui/lucide"
-import { EmptyState, VStack } from "@yamada-ui/react"
+import { EmptyState, useNotice, VStack } from "@yamada-ui/react"
 import NextLink from "next/link"
 import { parseAsStringEnum, useQueryState } from "nuqs"
 import { type FC, useEffect, useReducer, useRef } from "react"
 import type { AuthContextValueWithUser } from "@/context/RoleWrappers"
+import { useCreateBooking } from "@/services/bookings/BookingMutations"
 import { createBookingFlowReducer, initialState } from "./bookingFlowReducer"
 
 /**
@@ -27,16 +32,18 @@ type BookFlowProps = {
   /**
    * Sessions to drive the booking flow. Defaults to shared mockSessions.
    */
-  sessions?: SessionItem[]
+  sessions: SessionItem[]
 }
 
 /**
  * The main component for the booking flow.
  */
-export const BookFlow: FC<BookFlowProps> = ({ auth, sessions = mockSessions }) => {
+export const BookFlow: FC<BookFlowProps> = ({ auth, sessions }) => {
   const bookingFlowReducer = createBookingFlowReducer(sessions)
   const [state, dispatch] = useReducer(bookingFlowReducer, initialState)
   const hasProcessedQuickBook = useRef(false)
+  const notice = useNotice()
+  const createBooking = useCreateBooking()
 
   const { open: openBookingConfirmedPopup } = usePopupState({
     popupId: Popup.BOOKING_CONFIRMED,
@@ -77,7 +84,25 @@ export const BookFlow: FC<BookFlowProps> = ({ auth, sessions = mockSessions }) =
     dispatch({ type: "NEXT_STEP" })
   }
 
-  const handleConfirmBooking = () => {
+  const handleConfirmBooking = async () => {
+    const playerLevel = state.playLevel as PlayLevel
+    const selected = state.selectedSessions
+
+    for (const session of selected) {
+      const payload: CreateBookingRequest = {
+        gameSession: session.id,
+        playerLevel,
+      }
+      try {
+        await createBooking.mutateAsync(payload)
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Failed to create booking"
+        notice({ title: "Booking failed", description: message, status: "error" })
+        return
+      }
+    }
+
+    notice({ title: "Booking confirmed", description: "Your booking has been created." })
     openBookingConfirmedPopup()
     dispatch({ type: "RESET" })
   }

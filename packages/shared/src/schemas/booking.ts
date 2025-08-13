@@ -19,6 +19,10 @@ export const CreateBookingRequestSchema = BookingSchema.omit({
   user: true,
 })
 
+export const CreateBookingResponseSchema = z.object({
+  data: BookingSchema,
+})
+
 export const GetBookingsResponseSchema = z.object({
   data: z.array(BookingSchema),
 })
