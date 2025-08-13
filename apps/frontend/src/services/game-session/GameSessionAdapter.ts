@@ -10,6 +10,8 @@ export const mapGameSessionsToSessionItems = (sessions: GameSession[]): SessionI
   return sessions.map((session) => {
     const start = new Date(session.startTime)
     const end = new Date(session.endTime)
+    const open = new Date(session.openTime)
+    const now = new Date()
 
     const startTime = start.toLocaleTimeString(undefined, {
       hour: "2-digit",
@@ -31,10 +33,10 @@ export const mapGameSessionsToSessionItems = (sessions: GameSession[]): SessionI
       endTime,
       capacity: session.capacity,
       casualCapacity: session.casualCapacity,
-      attendees: 0,
-      casualAttendees: 0,
+      attendees: 0, // TODO: get from booking
+      casualAttendees: 0, // TODO: get from booking
       date: session.startTime,
-      disabled: false,
+      disabled: now < open || now >= start,
     }
   })
 }

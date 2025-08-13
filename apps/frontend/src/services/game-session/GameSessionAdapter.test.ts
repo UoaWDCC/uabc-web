@@ -3,7 +3,15 @@ import { mapGameSessionsToSessionItems } from "./GameSessionAdapter"
 
 describe("mapGameSessionsToSessionItems", () => {
   it("maps game sessions to session items", () => {
-    const session = { ...gameSessionMock, name: "UoA Rec Centre", location: "17 Symonds Street" }
+    const session = {
+      ...gameSessionMock,
+      name: "UoA Rec Centre",
+      location: "17 Symonds Street",
+      startTime: new Date(Date.now() + 60_000).toISOString(),
+      openTime: new Date(Date.now() - 60_000).toISOString(),
+      capacity: 10,
+      casualCapacity: 5,
+    }
     const result = mapGameSessionsToSessionItems([session])
     expect(result).toHaveLength(1)
     const item = result[0]
@@ -31,7 +39,13 @@ describe("mapGameSessionsToSessionItems", () => {
   })
 
   it("sets undefined for nullable fields", () => {
-    const session = { ...gameSessionMock, name: null, location: null }
+    const session = {
+      ...gameSessionMock,
+      name: null,
+      location: null,
+      startTime: new Date(Date.now() + 60_000).toISOString(),
+      openTime: new Date(Date.now() - 60_000).toISOString(),
+    }
     const [item] = mapGameSessionsToSessionItems([session])
     expect(item.name).toBeUndefined()
     expect(item.location).toBeUndefined()

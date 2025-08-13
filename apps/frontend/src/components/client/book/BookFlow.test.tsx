@@ -68,7 +68,9 @@ describe("<BookFlow />", () => {
         remainingSessions: 0,
       },
     }
-    render(<BookFlow auth={authWithNoSessions} />, { wrapper: withNuqsTestingAdapter() })
+    render(<BookFlow auth={authWithNoSessions} sessions={mockSessions} />, {
+      wrapper: withNuqsTestingAdapter(),
+    })
     expect(screen.getByText("No remaining sessions")).toBeInTheDocument()
     expect(screen.getByText("You have no remaining sessions.")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Go back to profile" })).toBeInTheDocument()

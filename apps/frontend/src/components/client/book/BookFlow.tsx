@@ -88,23 +88,29 @@ export const BookFlow: FC<BookFlowProps> = ({ auth, sessions }) => {
     const playerLevel = state.playLevel as PlayLevel
     const selected = state.selectedSessions
 
-    for (const session of selected) {
-      const payload: CreateBookingRequest = {
-        gameSession: session.id,
-        playerLevel,
-      }
-      try {
-        await createBooking.mutateAsync(payload)
-      } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : "Failed to create booking"
-        notice({ title: "Booking failed", description: message, status: "error" })
-        return
-      }
+    const results = await Promise.allSettled(
+      selected.map((session) =>
+        createBooking.mutateAsync({
+          gameSession: session.id,
+          playerLevel,
+        } satisfies CreateBookingRequest),
+      ),
+    )
+
+    const successes = results.filter((r) => r.status === "fulfilled").length
+    const failures = results.length - successes
+
+    if (successes > 0) {
+      const successMsg = successes === 1 ? "Booking created." : `${successes} bookings created.`
+      notice({ title: "Booking confirmed", description: successMsg })
+      openBookingConfirmedPopup()
+      dispatch({ type: "RESET" })
     }
 
-    notice({ title: "Booking confirmed", description: "Your booking has been created." })
-    openBookingConfirmedPopup()
-    dispatch({ type: "RESET" })
+    if (failures > 0) {
+      const errorMsg = failures === 1 ? "1 booking failed." : `${failures} bookings failed.`
+      notice({ title: "Some bookings failed", description: errorMsg, status: "error" })
+    }
   }
 
   const handleBack = () => {
@@ -159,6 +165,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth, sessions }) => {
       ) : state.step === "confirmation" ? (
         <BookingConfirmation
           bookingData={state.selectedSessions ?? []}
+          loading={createBooking.isPending}
           onBack={handleBack}
           onConfirm={handleConfirmBooking}
           user={auth.user}
