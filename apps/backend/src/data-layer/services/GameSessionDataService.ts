@@ -1,12 +1,16 @@
-import type {
-  CreateGameSessionData,
-  CreateGameSessionScheduleData,
-  UpdateGameSessionData,
-  UpdateGameSessionScheduleData,
+import {
+  type CreateGameSessionData,
+  type CreateGameSessionScheduleData,
+  GameSessionTimeframe,
+  getGameSessionOpenDay,
+  type UpdateGameSessionData,
+  type UpdateGameSessionScheduleData,
+  type Weekday,
 } from "@repo/shared"
-import type { GameSession, GameSessionSchedule } from "@repo/shared/payload-types"
-import type { PaginatedDocs } from "payload"
+import type { GameSession, GameSessionSchedule, Semester } from "@repo/shared/payload-types"
+import type { PaginatedDocs, Sort, Where } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
+import { createGameSessionTimes, getWeeklySessionDates } from "../utils/DateUtils"
 
 export default class GameSessionDataService {
   /**
@@ -110,6 +114,70 @@ export default class GameSessionDataService {
   }
 
   /**
+   * Gets all {@link GameSession} documents for a given semester ID
+   *
+   * @param semesterId the ID of the {@link Semester} to get game sessions for
+   * @returns an array of {@link GameSession} documents
+   */
+  public async getGameSessionsBySemesterId(
+    semesterId: string,
+    timeframe: GameSessionTimeframe = GameSessionTimeframe.DEFAULT,
+  ): Promise<GameSession[]> {
+    const currentDate = new Date()
+
+    let filter: Where = {}
+    const sort: Sort = "-startTime"
+
+    switch (timeframe) {
+      case GameSessionTimeframe.UPCOMING:
+        filter = {
+          startTime: {
+            greater_than_equal: currentDate,
+          },
+        }
+        break
+      case GameSessionTimeframe.PAST:
+        filter = {
+          startTime: {
+            less_than: currentDate,
+          },
+        }
+        break
+      case GameSessionTimeframe.CURRENT:
+        filter = {
+          and: [
+            {
+              endTime: {
+                greater_than_equal: currentDate,
+              },
+            },
+            {
+              openTime: {
+                less_than_equal: currentDate,
+              },
+            },
+          ],
+        }
+        break
+      default:
+    }
+
+    return (
+      await payload.find({
+        collection: "gameSession",
+        where: {
+          semester: {
+            equals: semesterId,
+          },
+          ...filter,
+        },
+        sort: sort,
+        pagination: false,
+      })
+    ).docs
+  }
+
+  /**
    * Creates a new {@link GameSessionSchedule} document
    *
    * @param {CreateGameSessionScheduleData} newGameSessionScheduleData the game session schedule data
@@ -122,6 +190,49 @@ export default class GameSessionDataService {
       collection: "gameSessionSchedule",
       data: newGameSessionScheduleData,
     })
+  }
+
+  /**
+   * Creates an array of {@link GameSession} documents based on game session schedule
+   *
+   * @param schedule the {@link GameSessionSchedule} the game sessions are based on
+   * @returns an array of newly created {@link GameSession} documents
+   */
+  public async cascadeCreateGameSessions(
+    schedule: GameSessionSchedule,
+    semester: Semester,
+  ): Promise<GameSession[]> {
+    const sessionDates = getWeeklySessionDates(schedule.day as Weekday, semester)
+
+    const sessions: CreateGameSessionData[] = sessionDates.map((date) => {
+      const gameSessionTimes = createGameSessionTimes(schedule, date)
+
+      return {
+        gameSessionSchedule: schedule.id,
+        semester: semester.id,
+        name: schedule.name,
+        location: schedule.location,
+        ...gameSessionTimes,
+        capacity: schedule.capacity,
+        casualCapacity: schedule.casualCapacity,
+        openTime: getGameSessionOpenDay(
+          semester,
+          new Date(gameSessionTimes.startTime),
+        ).toISOString(),
+      }
+    })
+
+    const createdSessions = await Promise.all(
+      sessions.map(
+        (session) =>
+          payload.create({
+            collection: "gameSession",
+            data: session,
+          }) as Promise<GameSession>,
+      ),
+    )
+
+    return createdSessions
   }
 
   /**
