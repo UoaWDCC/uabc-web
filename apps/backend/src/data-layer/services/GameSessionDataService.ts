@@ -297,7 +297,7 @@ export default class GameSessionDataService {
   ): Promise<GameSessionSchedule> {
     const gameSessions = await payload.find({
       collection: "gameSession",
-      where: { schedule: { equals: id } },
+      where: { gameSessionSchedule: { equals: id } },
       pagination: false,
       req: { transactionID },
     })

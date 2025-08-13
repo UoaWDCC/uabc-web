@@ -38,7 +38,7 @@ describe("/api/admin/semesters/[id]", async () => {
       expect(await res.json()).toStrictEqual({ error: "No scope" })
     })
 
-    it("should delete semester if user is admin", async () => {
+    it("should delete semester and related documents if user is admin", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
 
