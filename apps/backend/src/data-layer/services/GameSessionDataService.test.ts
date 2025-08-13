@@ -1,21 +1,19 @@
 import { GameSessionTimeframe, Weekday } from "@repo/shared"
 import { payload } from "@/data-layer/adapters/Payload"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
-import BookingDataService from "./BookingDataService"
-import GameSessionDataService from "./GameSessionDataService"
-import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import { getWeeklySessionDates } from "../utils/DateUtils"
+import BookingDataService from "./BookingDataService"
+import GameSessionDataService from "./GameSessionDataService"
 
 const gameSessionDataService = new GameSessionDataService()
 const bookingDataService = new BookingDataService()
+const semesterDataService = new SemesterDataService()
 
 describe("GameSessionDataService", () => {
-  const gameSessionDataService = new GameSessionDataService()
-  const semesterDataService = new SemesterDataService()
-
   describe("createGameSession", () => {
     it("should create a game session document", async () => {
       const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
