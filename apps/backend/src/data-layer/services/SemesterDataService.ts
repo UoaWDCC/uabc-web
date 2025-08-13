@@ -85,6 +85,7 @@ export default class SemesterDataService {
   ): Promise<void> {
     const gameSessionScheduleService = new GameSessionDataService()
 
+    // if we use payload.delete then my cascade deletion logic won't work, and we're not using hooks as well
     const schedules = await payload.find({
       collection: "gameSessionSchedule",
       where: {
