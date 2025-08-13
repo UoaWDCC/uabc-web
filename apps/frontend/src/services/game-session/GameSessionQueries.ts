@@ -1,5 +1,5 @@
-import type { PaginationQuery, SessionItem } from "@repo/shared"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import type { GameSessionTimeframe, PaginationQuery, SessionItem } from "@repo/shared"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { QueryKeys } from "@/services"
 import { mapGameSessionsToSessionItems } from "./GameSessionAdapter"
@@ -46,4 +46,27 @@ export const useAvailableSessions = () => {
     error: query.error,
     refetch: query.refetch,
   }
+}
+
+/**
+ * Retrieves and caches all game sessions for a specific semester.
+ *
+ * @param id The ID of the semester to retrieve game sessions for.
+ * @param sessionTimeFrame Optional timeframe for filtering game sessions.
+ * @returns A query hook that fetches all game sessions for the specified semester.
+ */
+export const useGetAllGameSessionsBySemester = (
+  id: string,
+  sessionTimeFrame?: GameSessionTimeframe,
+) => {
+  return useQuery({
+    queryKey: [
+      QueryKeys.GAME_SESSION_QUERY_KEY,
+      QueryKeys.SEMESTER_QUERY_KEY,
+      id,
+      sessionTimeFrame,
+    ],
+    queryFn: async () =>
+      await GameSessionService.getAllGameSessionsBySemester(id, sessionTimeFrame),
+  })
 }
