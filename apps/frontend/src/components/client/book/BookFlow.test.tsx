@@ -45,6 +45,11 @@ const mockAuth = {
   logout: {} as never,
 } as const
 
+vi.mock("@/context/AuthContext", () => ({
+  useAuth: () => mockAuth,
+  AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}))
+
 describe("<BookFlow />", () => {
   beforeEach(() => {
     vi.clearAllMocks()
