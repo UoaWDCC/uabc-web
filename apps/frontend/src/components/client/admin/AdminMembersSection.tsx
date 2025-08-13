@@ -1,8 +1,11 @@
 import { AdminTable, type UserData } from "@repo/ui/components/Composite"
 import { Button } from "@yamada-ui/react"
+import { useDeleteUser } from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembersSection = () => {
+  const deleteUser = useDeleteUser()
+
   const { data } = useGetPaginatedUsers({
     limit: 20,
     page: 20,
@@ -22,8 +25,15 @@ export const AdminMembersSection = () => {
 
   return (
     <>
-      <AdminTable data={userData as UserData[]} />
-      <Button colorScheme="danger">Reset Memberships</Button>
+      <AdminTable
+        data={userData as UserData[]}
+        onDelete={async (id) => {
+          deleteUser.mutate(id)
+        }}
+      />
+      <Button colorScheme="danger" placeSelf="start">
+        Reset Memberships
+      </Button>
     </>
   )
 }
