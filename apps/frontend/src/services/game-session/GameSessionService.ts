@@ -40,6 +40,7 @@ const GameSessionService = {
    * Retrieves all game sessions for a specific semester ID.
    *
    * @param id The ID of the semester to retrieve game sessions for.
+   * @param sessionTimeframe Optional timeframe for filtering game sessions.
    * @returns An array of game sessions for the specified semester.
    */
   getAllGameSessionsBySemester: async (
