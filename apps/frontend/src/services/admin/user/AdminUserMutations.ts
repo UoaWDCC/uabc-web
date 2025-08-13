@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useAuth } from "@/context/AuthContext"
 import { QueryKeys } from "@/services"
 import AdminUserService from "./AdminUserService"
 
@@ -42,9 +43,15 @@ export const useUpdateUser = () => {
  * @returns A mutation hook for deleting a user.
  */
 export const useDeleteUser = () => {
+  const { token } = useAuth()
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: AdminUserService.deleteUser,
+    mutationFn: async (id: string) => {
+      if (!token) {
+        throw new Error("No token provided")
+      }
+      return await AdminUserService.deleteUser(id, token)
+    },
     // TODO: When get by id is implemented, only invalidate the one id for get by id
     onSuccess: () =>
       queryClient.invalidateQueries({

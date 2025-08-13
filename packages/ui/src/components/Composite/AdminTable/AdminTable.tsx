@@ -110,8 +110,8 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onDelete }) => {
         cancel="cancel"
         header="Are you sure?"
         onCancel={onClose}
-        onClose={handleDeleteConfirm}
-        onSuccess={onClose}
+        onClose={onClose}
+        onSuccess={handleDeleteConfirm}
         open={open}
         success="Delete"
       >

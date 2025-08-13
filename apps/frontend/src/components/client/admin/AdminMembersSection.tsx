@@ -4,7 +4,7 @@ import { useDeleteUser } from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembersSection = () => {
-  const deleteUser = useDeleteUser()
+  const deleteUserMutation = useDeleteUser()
 
   const { data } = useGetPaginatedUsers({
     limit: 20,
@@ -28,7 +28,7 @@ export const AdminMembersSection = () => {
       <AdminTable
         data={userData as UserData[]}
         onDelete={async (id) => {
-          deleteUser.mutate(id)
+          deleteUserMutation.mutate(id)
         }}
       />
       <Button colorScheme="danger" placeSelf="start">

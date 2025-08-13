@@ -63,8 +63,15 @@ const AdminUserService = {
    * @param id The user ID.
    * @returns A promise that resolves to a boolean indicating success.
    */
-  deleteUser: async (id: string) => {
-    const response = await apiClient.delete(`/api/admin/users/${id}`)
+  deleteUser: async (id: string, token: string) => {
+    if (!token) {
+      throw new Error("No token provided")
+    }
+    const response = await apiClient.delete(`/api/admin/users/${id}`, undefined, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     return ApiClient.throwIfError(response)
   },
 } as const
