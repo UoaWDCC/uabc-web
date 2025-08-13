@@ -107,13 +107,16 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onDelete }) => {
       />
 
       <Dialog
-        cancel="cancel"
+        cancel="Cancel"
         header="Are you sure?"
         onCancel={onClose}
         onClose={onClose}
         onSuccess={handleDeleteConfirm}
         open={open}
-        success="Delete"
+        success={{
+          children: "Delete",
+          colorScheme: "danger",
+        }}
       >
         You cannot undo this action.
       </Dialog>

@@ -1,11 +1,12 @@
 import { AdminTable, type UserData } from "@repo/ui/components/Composite"
-import { Button } from "@yamada-ui/react"
+import { Button, useNotice } from "@yamada-ui/react"
 import { useDeleteUser } from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembersSection = () => {
-  const deleteUserMutation = useDeleteUser()
+  const notice = useNotice()
 
+  const deleteUserMutation = useDeleteUser()
   const { data } = useGetPaginatedUsers({
     limit: 20,
     page: 20,
@@ -28,7 +29,22 @@ export const AdminMembersSection = () => {
       <AdminTable
         data={userData as UserData[]}
         onDelete={async (id) => {
-          deleteUserMutation.mutate(id)
+          deleteUserMutation.mutate(id, {
+            onSuccess: () => {
+              notice({
+                title: "Deletion successful",
+                description: "User has been deleted",
+                status: "success",
+              })
+            },
+            onError: () => {
+              notice({
+                title: "Deletion failed",
+                description: "Failed to delete user",
+                status: "error",
+              })
+            },
+          })
         }}
       />
       <Button colorScheme="danger" placeSelf="start">
