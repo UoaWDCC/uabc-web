@@ -31,7 +31,7 @@
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "react-hook-form": "7.60.0",
-    "zod": "3.25.74"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "1.13.12",
