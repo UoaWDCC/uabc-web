@@ -1,5 +1,5 @@
 import {
-  type GameSessionTimeframe,
+  GameSessionTimeframe,
   type GetAllGameSessionsBySemesterResponse,
   GetAllGameSessionsBySemesterResponseSchema,
   GetGameSessionResponseSchema,
@@ -44,7 +44,7 @@ const GameSessionService = {
    */
   getAllGameSessionsBySemester: async (
     id: string,
-    sessionTimeframe?: GameSessionTimeframe,
+    sessionTimeframe: GameSessionTimeframe = GameSessionTimeframe.DEFAULT,
   ): Promise<GetAllGameSessionsBySemesterResponse> => {
     const path = `/api/semesters/${id}/game-sessions`
     const url = sessionTimeframe
