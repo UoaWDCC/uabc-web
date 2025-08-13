@@ -1,5 +1,5 @@
-import { PlayLevel } from "@repo/shared"
-import type { SelectACourtNextData, SessionItem } from "@repo/ui/components/Composite"
+import { PlayLevel, type SessionItem } from "@repo/shared"
+import type { SelectACourtNextData } from "@repo/ui/components/Composite"
 import { createBookingFlowReducer, initialState } from "./bookingFlowReducer"
 
 const mockBookings: SessionItem[] = [

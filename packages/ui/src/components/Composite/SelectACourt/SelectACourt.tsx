@@ -1,13 +1,14 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import type { SessionItem } from "@repo/shared"
 import {
   formatDateWithOrdinal,
   MembershipType,
   type SelectACourtFormData,
   SelectACourtFormDataSchema,
 } from "@repo/shared"
-import type { GameSession, User } from "@repo/shared/payload-types"
+import type { User } from "@repo/shared/payload-types"
 import { type BookingTimeItem, BookingTimesCardGroup } from "@repo/ui/components/Generic"
 import { ShuttleIcon, UabcLogo } from "@repo/ui/components/Icon"
 import { Button, Heading, IconButton, IconWithText } from "@repo/ui/components/Primitive"
@@ -36,16 +37,6 @@ dayjs.tz.setDefault("Pacific/Auckland")
 
 export type SelectACourtNextData = {
   bookingTimes: string[]
-}
-
-export type SessionItem = Pick<
-  GameSession,
-  "name" | "location" | "startTime" | "endTime" | "capacity" | "casualCapacity" | "id"
-> & {
-  disabled?: boolean
-  attendees: number
-  casualAttendees: number
-  date: string
 }
 
 /**
@@ -223,7 +214,7 @@ export const SelectACourt = memo<SelectACourtProps>(
             pointerEvents="none"
             position="absolute"
             userSelect="none"
-            zIndex={0}
+            zIndex={-1}
           >
             <UabcLogo boxSize={{ base: "sm", xl: "md" }} opacity={0.5} />
           </Center>
