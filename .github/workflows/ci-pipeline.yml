@@ -305,7 +305,7 @@ jobs:
   merge-coverage:
     name: Merge Coverage
     needs: [test]
-    if: always() && ${{ needs.check_changes.outputs.exists == 'true' }}
+    if: ${{ needs.check_changes.outputs.exists == 'true' && needs.test.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -334,7 +334,7 @@ jobs:
           path: packages/ui
 
       - name: Merge Coverage Files
-        run: pnpm merge
+        run: node packages/test-config/scripts/merge-coverage.ts
         shell: bash
 
       - name: Upload Merged Coverage
@@ -346,7 +346,7 @@ jobs:
   vitest-coverage:
     name: Vitest Coverage
     needs: [merge-coverage]
-    if: always() && ${{ needs.check_changes.outputs.exists == 'true' }}
+    if: ${{ needs.check_changes.outputs.exists == 'true' && needs.merge-coverage.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
