@@ -1,3 +1,4 @@
+import { CapacityStatus } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { describe, expect, it, vi } from "vitest"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
@@ -25,7 +26,15 @@ describe("/api/semesters/[id]/game-sessions", () => {
 
       expect(res.status).toBe(StatusCodes.OK)
       const data = await res.json()
-      expect(data.data).toEqual([newSession])
+      expect(data.data).toEqual([
+        {
+          ...newSession,
+          regularBookings: 0,
+          casualBookings: 0,
+          regularCapacityStatus: CapacityStatus.available,
+          casualCapacityStatus: CapacityStatus.available,
+        },
+      ])
     })
 
     it("should return 404 when semester does not exist", async () => {
