@@ -1,6 +1,6 @@
 import { noop } from "@yamada-ui/react"
 import "@testing-library/jest-dom"
-import { TextEncoder } from "node:util"
+import { TextEncoder as NodeTextEncoder } from "node:util"
 
 const { getComputedStyle } = window
 
@@ -26,7 +26,9 @@ if (typeof window.matchMedia !== "function") {
   })
 }
 
-global.TextEncoder = TextEncoder
+if (typeof globalThis.TextEncoder !== "function") {
+  globalThis.TextEncoder = NodeTextEncoder as unknown as typeof globalThis.TextEncoder
+}
 
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn(),
