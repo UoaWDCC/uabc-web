@@ -339,7 +339,8 @@ jobs:
           path: packages/ui/coverage
 
       - name: Merge Coverage Files
-        run: node packages/test-config/src/scripts/merge-coverage.ts
+        working-directory: packages/test-config
+        run: node src/scripts/merge-coverage.ts
         shell: bash
 
       - name: Upload Merged Coverage
