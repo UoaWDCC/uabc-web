@@ -1,6 +1,9 @@
 import { TimeframeFilter, Weekday } from "@repo/shared"
 import { payload } from "@/data-layer/adapters/Payload"
+import BookingDataService from "@/data-layer/services/BookingDataService"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
+import UserDataService from "@/data-layer/services/UserDataService"
+import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
@@ -10,6 +13,8 @@ import GameSessionDataService from "./GameSessionDataService"
 describe("GameSessionDataService", () => {
   const gameSessionDataService = new GameSessionDataService()
   const semesterDataService = new SemesterDataService()
+  const bookingDataService = new BookingDataService()
+  const userDataService = new UserDataService()
 
   describe("createGameSession", () => {
     it("should create a game session document", async () => {
@@ -414,6 +419,110 @@ describe("GameSessionDataService", () => {
       await expect(gameSessionDataService.deleteGameSessionSchedule("fakeid")).rejects.toThrowError(
         "Not Found",
       )
+    })
+  })
+
+  describe("getGameSessionsCapacityBySemesterId", () => {
+    it("should return game sessions with capacity status information", async () => {
+      const newSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const newGameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: newSemester.id,
+        capacity: 5,
+        casualCapacity: 2,
+      })
+
+      const casualUser = await userDataService.createUser(casualUserMock)
+      const memberUser = await userDataService.createUser(memberUserMock)
+
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: newGameSession.id,
+        user: casualUser.id,
+      })
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: newGameSession.id,
+        user: memberUser.id,
+      })
+
+      const sessions = await gameSessionDataService.getGameSessionsCapacityBySemesterId(
+        newSemester.id,
+      )
+
+      expect(sessions).toHaveLength(1)
+      expect(sessions[0]).toMatchObject({
+        id: newGameSession.id,
+        casualCapacityStatus: 1,
+        memberCapacityStatus: 1,
+      })
+    })
+
+    it("should return sessions with zero capacity status when no bookings exist", async () => {
+      const newSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const newGameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: newSemester.id,
+        capacity: 5,
+        casualCapacity: 2,
+      })
+
+      const sessions = await gameSessionDataService.getGameSessionsCapacityBySemesterId(
+        newSemester.id,
+      )
+
+      expect(sessions).toHaveLength(1)
+      expect(sessions[0]).toMatchObject({
+        id: newGameSession.id,
+        casualCapacityStatus: 0,
+        memberCapacityStatus: 0,
+      })
+    })
+
+    it("should apply timeframe filter correctly", async () => {
+      const newSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const futureDate = new Date()
+      futureDate.setDate(futureDate.getDate() + 7)
+
+      const pastDate = new Date()
+      pastDate.setDate(pastDate.getDate() - 7)
+
+      const upcomingSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: newSemester.id,
+        startTime: futureDate.toISOString(),
+        endTime: new Date(futureDate.getTime() + 2 * 60 * 60 * 1000).toISOString(),
+      })
+      const pastSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: newSemester.id,
+        startTime: pastDate.toISOString(),
+        endTime: new Date(pastDate.getTime() + 2 * 60 * 60 * 1000).toISOString(),
+      })
+
+      const upcomingSessions = await gameSessionDataService.getGameSessionsCapacityBySemesterId(
+        newSemester.id,
+        TimeframeFilter.UPCOMING,
+      )
+      const pastSessions = await gameSessionDataService.getGameSessionsCapacityBySemesterId(
+        newSemester.id,
+        TimeframeFilter.PAST,
+      )
+
+      expect(upcomingSessions).toHaveLength(1)
+      expect(upcomingSessions[0].id).toBe(upcomingSession.id)
+
+      expect(pastSessions).toHaveLength(1)
+      expect(pastSessions[0].id).toBe(pastSession.id)
+    })
+
+    it("should return empty array when no sessions exist for semester", async () => {
+      const newSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const sessions = await gameSessionDataService.getGameSessionsCapacityBySemesterId(
+        newSemester.id,
+      )
+
+      expect(sessions).toEqual([])
     })
   })
 })

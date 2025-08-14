@@ -2,7 +2,9 @@ import type z from "zod"
 import type { GameSession } from "../payload-types"
 import type {
   GameSessionScheduleSchema,
+  GameSessionWithCapacityStatusSchema,
   GetAllGameSessionsBySemesterResponseSchema,
+  GetGameSessionsWithCapacityStatusResponseSchema,
   GetPaginatedGameSessionsResponseSchema,
   UpdateGameSessionRequestSchema,
 } from "../schemas"
@@ -14,6 +16,10 @@ export type GetPaginatedGameSessionsResponse = z.infer<
 >
 export type GetAllGameSessionsBySemesterResponse = z.infer<
   typeof GetAllGameSessionsBySemesterResponseSchema
+>
+export type GameSessionWithCapacityStatus = z.infer<typeof GameSessionWithCapacityStatusSchema>
+export type GetGameSessionsWithCapacityStatusResponse = z.infer<
+  typeof GetGameSessionsWithCapacityStatusResponseSchema
 >
 
 /**
