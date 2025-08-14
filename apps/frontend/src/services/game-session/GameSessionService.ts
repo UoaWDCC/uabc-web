@@ -1,11 +1,11 @@
 import {
-  GameSessionTimeframe,
   type GetAllGameSessionsBySemesterResponse,
   GetAllGameSessionsBySemesterResponseSchema,
   GetGameSessionResponseSchema,
   GetPaginatedGameSessionsResponseSchema,
   type PaginationQuery,
   SearchParams,
+  TimeframeFilter,
 } from "@repo/shared"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
@@ -45,7 +45,7 @@ const GameSessionService = {
    */
   getAllGameSessionsBySemester: async (
     id: string,
-    sessionTimeframe: GameSessionTimeframe = GameSessionTimeframe.DEFAULT,
+    sessionTimeframe: TimeframeFilter = TimeframeFilter.DEFAULT,
   ): Promise<GetAllGameSessionsBySemesterResponse> => {
     const path = `/api/semesters/${id}/game-sessions`
     const url = sessionTimeframe

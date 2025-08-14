@@ -1,3 +1,4 @@
+import { TimeframeFilter } from "@repo/shared/enums"
 import { useQuery } from "@tanstack/react-query"
 import { QueryKeys } from "@/services"
 import SemesterService from "./SemesterService"
@@ -21,7 +22,7 @@ export const useGetAllSemesters = () => {
  */
 export const useGetCurrentSemester = () => {
   return useQuery({
-    queryKey: [QueryKeys.SEMESTER_QUERY_KEY, "current"],
+    queryKey: [QueryKeys.SEMESTER_QUERY_KEY, TimeframeFilter.CURRENT],
     queryFn: SemesterService.getCurrentSemester,
   })
 }
