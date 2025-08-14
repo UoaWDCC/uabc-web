@@ -1,6 +1,4 @@
-// ensure proper route security
 // https://payloadcms.com/docs/database/transactions
-// TODO: finish testing for route.ts
 import { UpdateSemesterRequestSchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"

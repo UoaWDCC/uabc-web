@@ -48,13 +48,36 @@ describe("/api/admin/semesters/[id]", async () => {
     it("should delete semester and related documents if user is admin", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleMock,
+        semester: newSemester,
+      })
+      const newGameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionMock,
+        gameSessionSchedule: newGameSessionSchedule,
+      })
+      const newBooking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: newGameSession,
+      })
 
       const res = await DELETE({} as NextRequest, {
         params: Promise.resolve({ id: newSemester.id }),
       })
 
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
-      await expect(semesterDataService.getSemesterById(newSemester.id)).rejects.toThrow("Not Found")
+      await expect(semesterDataService.getSemesterById(newSemester.id)).rejects.toThrow(
+        getReasonPhrase(StatusCodes.NOT_FOUND),
+      )
+      await expect(
+        gameSessionDataService.getGameSessionScheduleById(newGameSessionSchedule.id),
+      ).rejects.toThrow(getReasonPhrase(StatusCodes.NOT_FOUND))
+      await expect(gameSessionDataService.getGameSessionById(newGameSession.id)).rejects.toThrow(
+        getReasonPhrase(StatusCodes.NOT_FOUND),
+      )
+      await expect(bookingDataService.getBookingById(newBooking.id)).rejects.toThrow(
+        getReasonPhrase(StatusCodes.NOT_FOUND),
+      )
     })
 
     it("should return 404 if semester is non-existent", async () => {
@@ -85,7 +108,7 @@ describe("/api/admin/semesters/[id]", async () => {
       })
 
       vi.spyOn(SemesterDataService.prototype, "deleteRelatedDocsForSemester").mockRejectedValueOnce(
-        new Error("Database error"),
+        new Error("Cascade deletion failed"),
       )
 
       const res = await DELETE({} as NextRequest, {

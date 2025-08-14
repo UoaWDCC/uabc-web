@@ -85,7 +85,7 @@ export default class SemesterDataService {
   ): Promise<void> {
     const gameSessionScheduleService = new GameSessionDataService()
 
-    // if we use payload.delete then my cascade deletion logic won't work, and we're not using hooks as well
+    // if we use payload.delete then the cascade deletion logic won't work, as we're not using hooks as well
     const schedules = await payload.find({
       collection: "gameSessionSchedule",
       where: {
@@ -98,7 +98,7 @@ export default class SemesterDataService {
     })
 
     const scheduleIds = schedules.docs.map((schedule) => schedule.id)
-    // couldn't figure out how to finish implementing the bulk game session schedule deletion so i'm just using a for loop for now
+    // couldn't figure out how to finish implementing the bulk game session schedule deletion so i'm just using a for loop for now - is it fine to keep as is?
     for (const scheduleId of scheduleIds) {
       await gameSessionScheduleService.deleteGameSessionSchedule(scheduleId, transactionID)
     }
