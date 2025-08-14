@@ -1,0 +1,65 @@
+name: "Test"
+description: "Run tests with coverage for a specific workspace and upload coverage artifact."
+
+inputs:
+  filter:
+    description: "turbo filter target (e.g., frontend, backend, @repo/ui)"
+    required: true
+  coverage-path:
+    description: "Path to coverage directory to upload (e.g., apps/frontend/coverage)"
+    required: true
+  artifact-name:
+    description: "Name of the artifact to upload (e.g., coverage-frontend)"
+    required: true
+  NEXT_PUBLIC_URL:
+    description: "Optional NEXT_PUBLIC_URL for frontend tests"
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        run_install: false
+
+    - name: Restore node_modules cache
+      uses: actions/cache/restore@v4
+      id: cache
+      with:
+        path: |
+          node_modules
+          */node_modules
+          packages/*/node_modules
+          apps/*/node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
+    - name: Install dependencies if cache is not hit
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: pnpm install --frozen-lockfile --ignore-scripts
+      shell: bash
+
+    - name: Run tests with coverage
+      shell: bash
+      env:
+        NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
+      run: |
+        mkdir -p "${{ inputs.coverage-path }}"
+        pnpm turbo run test:coverage --continue --filter "${{ inputs.filter }}"
+
+    - name: Upload coverage artifact
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.coverage-path }}
+
+
