@@ -13,3 +13,15 @@ export const useGetAllSemesters = () => {
     queryFn: SemesterService.getAllSemesters,
   })
 }
+
+/**
+ * Retrieves and caches the current semester.
+ *
+ * @returns A query hook that fetches the current semester
+ */
+export const useGetCurrentSemester = () => {
+  return useQuery({
+    queryKey: [QueryKeys.SEMESTER_QUERY_KEY, "current"],
+    queryFn: SemesterService.getCurrentSemester,
+  })
+}
