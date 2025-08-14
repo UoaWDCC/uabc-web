@@ -1,4 +1,4 @@
-import { GameSessionTimeframe, SearchParams } from "@repo/shared"
+import { SearchParams, TimeframeFilter } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
@@ -9,7 +9,7 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ id: 
   const { id } = await params
   const searchParams = req.nextUrl.searchParams
   const timeframe = (searchParams.get(SearchParams.SESSION_TIMEFRAME) ||
-    GameSessionTimeframe.DEFAULT) as GameSessionTimeframe
+    TimeframeFilter.DEFAULT) as TimeframeFilter
 
   try {
     const semesterDataService = new SemesterDataService()

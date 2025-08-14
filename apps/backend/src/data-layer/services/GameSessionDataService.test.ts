@@ -1,4 +1,4 @@
-import { GameSessionTimeframe, Weekday } from "@repo/shared"
+import { TimeframeFilter, Weekday } from "@repo/shared"
 import { payload } from "@/data-layer/adapters/Payload"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
@@ -224,7 +224,7 @@ describe("GameSessionDataService", () => {
       // Should only return the upcoming session
       const sessions = await gameSessionDataService.getGameSessionsBySemesterId(
         id,
-        GameSessionTimeframe.UPCOMING,
+        TimeframeFilter.UPCOMING,
       )
       expect(sessions).toHaveLength(1)
       expect(sessions[0].id).toBe(upcomingSession.id)
@@ -253,7 +253,7 @@ describe("GameSessionDataService", () => {
       // Should only return the past session
       const sessions = await gameSessionDataService.getGameSessionsBySemesterId(
         id,
-        GameSessionTimeframe.PAST,
+        TimeframeFilter.PAST,
       )
       expect(sessions).toHaveLength(1)
       expect(sessions[0].id).toBe(pastSession.id)
@@ -290,7 +290,7 @@ describe("GameSessionDataService", () => {
       // Should only return the current session
       const sessions = await gameSessionDataService.getGameSessionsBySemesterId(
         id,
-        GameSessionTimeframe.CURRENT,
+        TimeframeFilter.CURRENT,
       )
       expect(sessions).toHaveLength(1)
       expect(sessions[0].id).toBe(currentSession.id)
