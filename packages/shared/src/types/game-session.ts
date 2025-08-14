@@ -2,13 +2,19 @@ import type z from "zod"
 import type { GameSession } from "../payload-types"
 import type {
   GameSessionScheduleSchema,
-  GetAllGameSessionsResponseSchema,
+  GetAllGameSessionsBySemesterResponseSchema,
+  GetPaginatedGameSessionsResponseSchema,
   UpdateGameSessionRequestSchema,
 } from "../schemas"
 
 export type GameSessionSchedule = z.infer<typeof GameSessionScheduleSchema>
 export type UpdateGameSessionRequest = z.infer<typeof UpdateGameSessionRequestSchema>
-export type GetAllGameSessionsResponse = z.infer<typeof GetAllGameSessionsResponseSchema>
+export type GetPaginatedGameSessionsResponse = z.infer<
+  typeof GetPaginatedGameSessionsResponseSchema
+>
+export type GetAllGameSessionsBySemesterResponse = z.infer<
+  typeof GetAllGameSessionsBySemesterResponseSchema
+>
 
 /**
  * Session item type for UI components

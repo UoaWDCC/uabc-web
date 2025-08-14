@@ -1,5 +1,6 @@
 import type { CreateSemesterData, EditSemesterData } from "@repo/shared"
 import type { Semester } from "@repo/shared/payload-types"
+import { NotFound } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
 import GameSessionDataService from "./GameSessionDataService"
 
@@ -28,6 +29,42 @@ export default class SemesterDataService {
       pagination: false,
     })
     return docs
+  }
+
+  /**
+   * Finds the current {@link Semester} based on the current date
+   *
+   * @returns The current {@link Semester} document if one exists for the current date
+   * @throws Error if no current semester is found
+   */
+  public async getCurrentSemester(): Promise<Semester> {
+    const currentDate = new Date().toISOString()
+
+    const { docs } = await payload.find({
+      collection: "semester",
+      where: {
+        and: [
+          {
+            startDate: {
+              less_than_equal: currentDate,
+            },
+          },
+          {
+            endDate: {
+              greater_than_equal: currentDate,
+            },
+          },
+        ],
+      },
+      limit: 1,
+    })
+
+    if (!docs.length)
+      throw new NotFound(() => {
+        return "No current semester found"
+      })
+
+    return docs[0]
   }
 
   /**
