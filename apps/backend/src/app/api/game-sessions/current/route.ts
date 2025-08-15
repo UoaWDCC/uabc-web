@@ -1,67 +1,47 @@
-import { type GetCurrentGameSessionsResponse, MembershipType, TimeframeFilter } from "@repo/shared"
-import type { GameSessionSchedule, User } from "@repo/shared/payload-types"
+import { type GetCurrentGameSessionsResponse, TimeframeFilter } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { NextResponse } from "next/server"
 import { NotFound } from "payload"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
+import { countAttendees, getSessionProperties } from "@/data-layer/utils/GameSessionUtils"
 
 /**
- * GET method to fetch currently available game sessions for the current semester.
+ * GET method to fetch currently available game sessions for the current semester
  *
- * @returns Array of currently available game sessions for the current semester
+ * Retrieves active game sessions along with their attendee counts, optimized for
+ * performance with efficient database queries and data transformation.
+ *
+ * @returns JSON response containing array of current game sessions with attendee data
  */
-export const GET = async (): Promise<NextResponse<GetCurrentGameSessionsResponse>> => {
+export const GET = async (): Promise<
+  NextResponse<GetCurrentGameSessionsResponse | { error: string }>
+> => {
   try {
     const semesterDataService = new SemesterDataService()
     const gameSessionDataService = new GameSessionDataService()
     const bookingDataService = new BookingDataService()
 
     const currentSemester = await semesterDataService.getCurrentSemester()
+
     const sessions = await gameSessionDataService.getGameSessionsBySemesterId(
       currentSemester.id,
       TimeframeFilter.CURRENT,
     )
 
-    const sessionIds = sessions.map((s) => s.id)
+    if (sessions.length === 0) {
+      return NextResponse.json({ data: [] })
+    }
+
+    const sessionIds = sessions.map((session) => session.id)
     const allBookings = await bookingDataService.getAllBookingsBySessionIds(sessionIds)
 
-    const countsBySessionId = new Map<string, { attendees: number; casualAttendees: number }>()
-    for (let i = 0; i < sessionIds.length; i++) {
-      countsBySessionId.set(sessionIds[i], { attendees: 0, casualAttendees: 0 })
-    }
-    for (let i = 0; i < allBookings.length; i++) {
-      const booking = allBookings[i]
-      const sessionId =
-        booking.gameSession && typeof booking.gameSession === "object"
-          ? booking.gameSession.id
-          : (booking.gameSession as string)
-      const user = booking.user as User | string | null | undefined
-      const counts = countsBySessionId.get(sessionId)
-      if (!counts) continue
+    const attendeeCounts = countAttendees(allBookings)
 
-      if (user && typeof user === "object") {
-        if (user.role === MembershipType.casual) {
-          counts.casualAttendees++
-        } else {
-          counts.attendees++
-        }
-      } else {
-        counts.attendees++
-      }
-    }
-
-    const data = sessions.map((session) => {
-      const location =
-        session.gameSessionSchedule && typeof session.gameSessionSchedule === "object"
-          ? (session.gameSessionSchedule as GameSessionSchedule).location
-          : session.location
-      const name =
-        session.gameSessionSchedule && typeof session.gameSessionSchedule === "object"
-          ? (session.gameSessionSchedule as GameSessionSchedule).name
-          : session.name
-      const counts = countsBySessionId.get(session.id) ?? { attendees: 0, casualAttendees: 0 }
+    const enhancedSessions = sessions.map((session) => {
+      const { location, name } = getSessionProperties(session)
+      const counts = attendeeCounts.get(session.id) ?? { attendees: 0, casualAttendees: 0 }
 
       return {
         ...session,
@@ -72,7 +52,7 @@ export const GET = async (): Promise<NextResponse<GetCurrentGameSessionsResponse
       }
     })
 
-    return NextResponse.json({ data })
+    return NextResponse.json({ data: enhancedSessions })
   } catch (error) {
     if (error instanceof NotFound) {
       return NextResponse.json(
@@ -80,7 +60,20 @@ export const GET = async (): Promise<NextResponse<GetCurrentGameSessionsResponse
         { status: StatusCodes.NOT_FOUND },
       )
     }
-    console.error(error)
+
+    const errorContext = {
+      endpoint: "/api/game-sessions/current",
+      method: "GET",
+      timestamp: new Date().toISOString(),
+      error: {
+        message: error instanceof Error ? error.message : String(error),
+        name: error instanceof Error ? error.name : "UnknownError",
+        stack: error instanceof Error ? error.stack : undefined,
+      },
+    }
+
+    console.error("Failed to fetch current game sessions:", errorContext)
+
     return NextResponse.json(
       { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
       { status: StatusCodes.INTERNAL_SERVER_ERROR },
