@@ -9,7 +9,7 @@
     "build": {
       "cache": true,
       "dependsOn": ["^build"],
-      "env": ["TURBO_TEAM", "TURBO_TOKEN"],
+      "env": ["TURBO_TEAM", "TURBO_TOKEN", "NEXT_PUBLIC_API_URL", "NEXT_PUBLIC_URL"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "public/dist/**"]
     },
