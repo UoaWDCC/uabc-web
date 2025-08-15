@@ -305,7 +305,7 @@ jobs:
   merge-coverage:
     name: Merge Coverage
     needs: [test]
-    if: ${{ needs.check_changes.outputs.exists == 'true' && needs.test.result == 'success' }}
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
