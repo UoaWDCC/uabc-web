@@ -1,8 +1,9 @@
 "use client"
 
-import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
+import { AdminTabBarExtended, UnderConstructionCard } from "@repo/ui/components/Generic"
 import { Container, TabPanel } from "@yamada-ui/react"
 import { memo } from "react"
+import { CsvUploadSection } from "./CsvUploadSection"
 
 export const AdminSection = memo(() => {
   return (
@@ -12,7 +13,7 @@ export const AdminSection = memo(() => {
       layerStyle="container"
       py={{ base: "0", sm: "0", lg: "0" }}
     >
-      <AdminTabBar
+      <AdminTabBarExtended
         lazy
         lazyBehavior="unmount"
         tabPanelsProps={{
@@ -34,7 +35,12 @@ export const AdminSection = memo(() => {
             <UnderConstructionCard title="View Semesters is Under Construction 🔧" />
           </Container>
         </TabPanel>
-      </AdminTabBar>
+        <TabPanel>
+          <Container centerContent layerStyle="container">
+            <CsvUploadSection />
+          </Container>
+        </TabPanel>
+      </AdminTabBarExtended>
     </Container>
   )
 })
