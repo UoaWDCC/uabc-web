@@ -1,7 +1,14 @@
 import { AdminTable, type UserData } from "@repo/ui/components/Composite"
 import { Button, Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
+import dayjs from "dayjs"
+import timezone from "dayjs/plugin/timezone"
+import utc from "dayjs/plugin/utc"
 import { useDeleteUser } from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.tz.setDefault("Pacific/Auckland")
 
 export const AdminMembersSection = () => {
   const { open: open1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
@@ -14,7 +21,13 @@ export const AdminMembersSection = () => {
     page: 20,
   })
 
-  const handleResetConfirm = () => {
+  const handleResetConfirm1 = () => {
+    onClose1()
+    onOpen2()
+  }
+
+  const handleResetConfirm2 = () => {
+    onClose2()
     notice({
       title: "TODO: Reset Memberships",
     })
@@ -26,9 +39,9 @@ export const AdminMembersSection = () => {
       name: page.firstName + (page.lastName ? ` ${page.lastName}` : ""),
       email: page.email,
       remaining: String(page.remainingSessions),
-      joined: page.createdAt,
+      joined: dayjs(page.createdAt).format("h:mm A D MMM YYYY"),
       role: page.role,
-      university: "todo",
+      university: page.university,
       level: page.playLevel,
     })) ?? []
 
@@ -63,7 +76,7 @@ export const AdminMembersSection = () => {
         header="Are you sure?"
         onCancel={onClose1}
         onClose={onClose1}
-        onSuccess={onOpen2}
+        onSuccess={handleResetConfirm1}
         open={open1}
         success={{
           children: "Reset",
@@ -77,7 +90,7 @@ export const AdminMembersSection = () => {
         header="Are you really sure?"
         onCancel={onClose2}
         onClose={onClose2}
-        onSuccess={handleResetConfirm}
+        onSuccess={handleResetConfirm2}
         open={open2}
         success={{
           children: "Reset",
