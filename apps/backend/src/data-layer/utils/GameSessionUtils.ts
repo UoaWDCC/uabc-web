@@ -1,27 +1,5 @@
-import { MembershipType } from "@repo/shared"
-import type { Booking, GameSession, GameSessionSchedule, User } from "@repo/shared/payload-types"
-
-/**
- * Type guard to check if a value is a User object with required properties
- *
- * @param user - The value to check
- * @returns True if the value is a User object, false otherwise
- */
-export const isUserObject = (user: User | string | null | undefined): user is User => {
-  return !!user && typeof user === "object"
-}
-
-/**
- * Type guard to check if a value is a GameSessionSchedule object with required properties
- *
- * @param schedule - The value to check
- * @returns True if the value is a GameSessionSchedule object, false otherwise
- */
-export const isGameSessionScheduleObject = (
-  schedule: GameSessionSchedule | string | null | undefined,
-): schedule is GameSessionSchedule => {
-  return !!schedule && typeof schedule === "object"
-}
+import { isGameSessionScheduleObject, isUserObject, MembershipType } from "@repo/shared"
+import type { Booking, GameSession } from "@repo/shared/payload-types"
 
 /**
  * Extract session properties with fallback logic from GameSession
