@@ -25,7 +25,7 @@ describe("SemesterDataService", () => {
 
     it("should return null for non-existent ID", async () => {
       const fetchedSemester = semesterDataService.getSemesterById("nonexistentid")
-      expect(fetchedSemester).rejects.toThrow("Not Found")
+      await expect(fetchedSemester).rejects.toThrow("Not Found")
     })
   })
 
@@ -36,6 +36,94 @@ describe("SemesterDataService", () => {
       const fetchedSemesters = await semesterDataService.getAllSemesters()
       expect(fetchedSemesters.length).toStrictEqual(2)
       expect(fetchedSemesters).toStrictEqual(expect.arrayContaining([semester2, semester1]))
+    })
+  })
+
+  describe("getCurrentSemester", () => {
+    it("should return the current semester when one exists", async () => {
+      const currentDate = new Date()
+      const startDate = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000) // 1 day ago
+      const endDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000) // 1 day from now
+
+      const currentSemesterData = {
+        ...semesterCreateMock,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+      }
+
+      const createdSemester = await semesterDataService.createSemester(currentSemesterData)
+      const currentSemester = await semesterDataService.getCurrentSemester()
+
+      expect(currentSemester).toEqual(createdSemester)
+    })
+
+    it("should throw error when no current semester exists", async () => {
+      // Create a semester that's in the past
+      const pastDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // 30 days ago
+      const pastSemesterData = {
+        ...semesterCreateMock,
+        startDate: new Date(pastDate.getTime() - 24 * 60 * 60 * 1000).toISOString(),
+        endDate: pastDate.toISOString(),
+      }
+
+      await semesterDataService.createSemester(pastSemesterData)
+
+      await expect(semesterDataService.getCurrentSemester()).rejects.toThrow(
+        "No current semester found",
+      )
+    })
+
+    it("should return a valid current semester when multiple current semesters exist", async () => {
+      const currentDate = new Date()
+      const startDate1 = new Date(currentDate.getTime() - 48 * 60 * 60 * 1000) // 2 days ago
+      const endDate1 = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000) // 1 day from now
+      const startDate2 = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000) // 1 day ago
+      const endDate2 = new Date(currentDate.getTime() + 48 * 60 * 60 * 1000) // 2 days from now
+
+      const semester1Data = {
+        ...semesterCreateMock,
+        name: "Semester 1",
+        startDate: startDate1.toISOString(),
+        endDate: endDate1.toISOString(),
+      }
+
+      const semester2Data = {
+        ...semesterCreateMock,
+        name: "Semester 2",
+        startDate: startDate2.toISOString(),
+        endDate: endDate2.toISOString(),
+      }
+
+      const createdSemester1 = await semesterDataService.createSemester(semester1Data)
+      const createdSemester2 = await semesterDataService.createSemester(semester2Data)
+
+      const currentSemester = await semesterDataService.getCurrentSemester()
+
+      // Should return one of the valid current semesters
+      const validSemesters = [createdSemester1, createdSemester2]
+      expect(validSemesters).toContainEqual(currentSemester)
+
+      // Verify that the returned semester is indeed current
+      const currentDateISO = currentDate.toISOString()
+      expect(currentSemester.startDate <= currentDateISO).toBe(true)
+      expect(currentSemester.endDate >= currentDateISO).toBe(true)
+    })
+
+    it("should handle semester boundaries correctly", async () => {
+      const currentDate = new Date()
+
+      // Create a semester where current date is exactly at the start
+      const exactStartSemesterData = {
+        ...semesterCreateMock,
+        name: "Exact Start Semester",
+        startDate: currentDate.toISOString(),
+        endDate: new Date(currentDate.getTime() + 24 * 60 * 60 * 1000).toISOString(),
+      }
+
+      const createdSemester = await semesterDataService.createSemester(exactStartSemesterData)
+      const currentSemester = await semesterDataService.getCurrentSemester()
+
+      expect(currentSemester).toEqual(createdSemester)
     })
   })
 

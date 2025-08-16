@@ -1,4 +1,5 @@
 import { format } from "date-fns"
+import type { Semester } from "../payload-types"
 import { Weekday } from "../types"
 
 /**
@@ -48,4 +49,32 @@ export function calculateOpenDate(startTime: Date, openDay: Weekday, openTime: D
  */
 export function formatDateWithOrdinal(date: string | Date): string {
   return format(new Date(date), "eeee, do 'of' MMMM")
+}
+
+/**
+ * Calculates the open date for a session based on the start time, open day, and open time.
+ *
+ * @param semester The {@link Semester} object containing booking open day and time
+ * @param startTime The start time
+ * @returns The calculated booking open date
+ */
+export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date {
+  const { bookingOpenDay, bookingOpenTime } = semester
+
+  const openDate = new Date(startTime)
+  const openTime = new Date(bookingOpenTime)
+
+  const dayIndex = startTime.getUTCDay()
+  const day = Object.values(Weekday)[dayIndex] as Weekday
+  const daysToSubtract = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day)
+
+  openDate.setUTCDate(startTime.getUTCDate() - daysToSubtract)
+  openDate.setUTCHours(
+    openTime.getUTCHours(),
+    openTime.getUTCMinutes(),
+    openTime.getUTCSeconds(),
+    0,
+  )
+
+  return openDate
 }
