@@ -3,6 +3,7 @@ import type { GameSession } from "../payload-types"
 import type { CreateGameSessionData, UpdateGameSessionData } from "../types"
 import { GameSessionScheduleSchema } from "./game-session-schedule"
 import { PaginationDataSchema } from "./query"
+import { CommonResponseSchema } from "./response"
 import { SemesterSchema } from "./semester"
 
 export const GameSessionSchema = z.object({
@@ -49,6 +50,6 @@ export const GameSessionWithCountsSchema = GameSessionSchema.extend({
   casualAttendees: z.number(),
 })
 
-export const GetCurrentGameSessionsResponseSchema = z.object({
-  data: z.array(GameSessionWithCountsSchema),
+export const GetCurrentGameSessionsResponseSchema = CommonResponseSchema.extend({
+  data: z.array(GameSessionWithCountsSchema).optional(),
 })

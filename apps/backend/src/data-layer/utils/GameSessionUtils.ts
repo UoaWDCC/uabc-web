@@ -20,13 +20,7 @@ export const isUserObject = (user: User | string | null | undefined): user is Us
 export const isGameSessionScheduleObject = (
   schedule: GameSessionSchedule | string | null | undefined,
 ): schedule is GameSessionSchedule => {
-  return (
-    schedule !== null &&
-    schedule !== undefined &&
-    typeof schedule === "object" &&
-    "location" in schedule &&
-    "name" in schedule
-  )
+  return !!schedule && typeof schedule === "object"
 }
 
 /**

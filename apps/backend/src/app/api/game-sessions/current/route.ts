@@ -15,9 +15,7 @@ import { countAttendees, getSessionProperties } from "@/data-layer/utils/GameSes
  *
  * @returns JSON response containing array of current game sessions with attendee data
  */
-export const GET = async (): Promise<
-  NextResponse<GetCurrentGameSessionsResponse | { error: string }>
-> => {
+export const GET = async (): Promise<NextResponse<GetCurrentGameSessionsResponse>> => {
   try {
     const semesterDataService = new SemesterDataService()
     const gameSessionDataService = new GameSessionDataService()
