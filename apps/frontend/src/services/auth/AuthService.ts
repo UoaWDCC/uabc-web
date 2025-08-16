@@ -56,29 +56,21 @@ const AuthService = {
   /**
    * Gets user information from a JWT token by making a request to the backend.
    *
-   * @param token The JWT token to get user info for.
    * @returns The user information or null if token is invalid.
    */
-  getUserFromToken: async (token: string) => {
-    const response = await apiClient.get("/api/me", GetUserResponseSchema, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+  getUserInfo: async () => {
+    const response = await apiClient.get("/api/me", GetUserResponseSchema, { requiresAuth: true })
     return ApiClient.throwIfError(response)
   },
   /**
    * Update the current user's profile
    *
    * @param data The user data to update (self-editable fields only)
-   * @param token The user's authentication token
    * @returns The updated user
    */
-  patchMe: async (data: Partial<User>, token: string) => {
+  patchMe: async (data: Partial<User>) => {
     const response = await apiClient.patch("/api/me", data, GetUserResponseSchema, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      requiresAuth: true,
     })
     return ApiClient.throwIfError(response)
   },

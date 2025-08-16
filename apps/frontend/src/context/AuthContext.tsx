@@ -85,13 +85,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isPending,
     error,
   } = useQuery<User | null, Error, User | null>({
-    queryKey: ["auth", "me", token],
+    queryKey: ["auth", "me"],
     queryFn: async (): Promise<User | null> => {
       if (!token) {
         return null
       }
       try {
-        const response = await AuthService.getUserFromToken(token)
+        const response = await AuthService.getUserInfo()
         return response.data
       } catch (err) {
         if (err instanceof ApiClientError && err.status === StatusCodes.UNAUTHORIZED) {
