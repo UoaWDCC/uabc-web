@@ -8,7 +8,7 @@ import type { Booking, GameSession, GameSessionSchedule, User } from "@repo/shar
  * @returns True if the value is a User object, false otherwise
  */
 export const isUserObject = (user: User | string | null | undefined): user is User => {
-  return user !== null && user !== undefined && typeof user === "object" && "role" in user
+  return !!user && typeof user === "object"
 }
 
 /**
