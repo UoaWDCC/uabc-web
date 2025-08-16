@@ -117,11 +117,44 @@ export const User: CollectionConfig = {
       },
     },
     {
-      name: "emailVerificationCode",
-      type: "text",
+      name: "emailVerification",
+      type: "array",
       required: false,
+      defaultValue: [],
+      fields: [
+        {
+          name: "verificationCode",
+          type: "text",
+          required: true,
+          admin: {
+            description: "A verification code of the user",
+          },
+        },
+        {
+          name: "expiresAt",
+          type: "date",
+          required: true,
+          admin: {
+            date: {
+              pickerAppearance: "dayAndTime",
+            },
+            description: "The current expiration date of this email verification code",
+          },
+        },
+        {
+          name: "createdAt",
+          type: "date",
+          required: true,
+          admin: {
+            date: {
+              pickerAppearance: "dayAndTime",
+            },
+            description: "The date when this email verification code was created",
+          },
+        },
+      ],
       admin: {
-        description: "The email verification token of the user",
+        description: "The email verification codes of the user",
       },
     },
   ],

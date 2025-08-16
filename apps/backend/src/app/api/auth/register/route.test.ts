@@ -15,11 +15,21 @@ describe("tests /api/auth/register", () => {
     emailVerificationCode: "123456",
   } satisfies RegisterRequestBody
 
+  const now = new Date()
+  const createdAt = now.toISOString()
+  const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString()
+
   it("should register a new user", async () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerificationCode: registerBody.emailVerificationCode,
+      emailVerification: [
+        {
+          verificationCode: registerBody.emailVerificationCode,
+          createdAt: createdAt,
+          expiresAt: expiresAt,
+        },
+      ],
       role: MembershipType.casual,
     })
 
@@ -32,7 +42,10 @@ describe("tests /api/auth/register", () => {
     expect(json.message).toBe("User registered successfully")
 
     const user = await userDataService.getUserById(json.data.id)
-    expect(user).toStrictEqual(json.data)
+    expect(json.data).toMatchObject({
+      ...user,
+      updatedAt: expect.any(String),
+    })
 
     const auth = await authDataService.getAuthByEmail(registerBody.email)
     expect(auth.password).not.toEqual(registerBody.password)
@@ -42,7 +55,13 @@ describe("tests /api/auth/register", () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerificationCode: "333555",
+      emailVerification: [
+        {
+          verificationCode: "333555",
+          createdAt: createdAt,
+          expiresAt: expiresAt,
+        },
+      ],
       role: MembershipType.casual,
     })
 
@@ -65,7 +84,13 @@ describe("tests /api/auth/register", () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerificationCode: registerBody.emailVerificationCode,
+      emailVerification: [
+        {
+          verificationCode: registerBody.emailVerificationCode,
+          createdAt: createdAt,
+          expiresAt: expiresAt,
+        },
+      ],
       role: MembershipType.casual,
     })
 

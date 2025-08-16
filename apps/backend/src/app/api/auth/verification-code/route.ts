@@ -27,14 +27,42 @@ export const POST = async (req: NextRequest) => {
 
     try {
       const user = await userDataService.getUserByEmail(email)
+
+      // remove expired verification codes
+      const now = new Date()
+      const userEmailVerification = user.emailVerification || []
+      const validCodes = userEmailVerification.filter(
+        (verification) => new Date(verification.expiresAt) > now,
+      )
+
+      // check if user has max number of verification codes (5)
+      if (userEmailVerification.length >= 5) {
+        return NextResponse.json(
+          { error: "Maximum number of verification codes reached" },
+          { status: StatusCodes.TOO_MANY_REQUESTS },
+        )
+      }
       await userDataService.updateUser(user.id, {
-        emailVerificationCode: code,
+        emailVerification: [
+          ...validCodes,
+          {
+            verificationCode: code,
+            createdAt: new Date().toISOString(),
+            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+          },
+        ],
       })
     } catch {
       await userDataService.createUser({
         firstName: email,
         email,
-        emailVerificationCode: code,
+        emailVerification: [
+          {
+            verificationCode: code,
+            createdAt: new Date().toISOString(),
+            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+          },
+        ],
         role: MembershipType.casual,
       })
     }
