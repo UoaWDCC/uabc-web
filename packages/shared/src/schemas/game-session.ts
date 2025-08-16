@@ -43,3 +43,12 @@ export const GetPaginatedGameSessionsResponseSchema = z.object({
 export const GetAllGameSessionsBySemesterResponseSchema = z.object({
   data: z.array(GameSessionSchema),
 })
+
+export const GameSessionWithCapacityStatusSchema = GameSessionSchema.extend({
+  regularCapacityStatus: z.number(),
+  casualCapacityStatus: z.number(),
+})
+
+export const GetGameSessionsWithCapacityStatusResponseSchema = z.object({
+  data: z.array(GameSessionWithCapacityStatusSchema),
+})

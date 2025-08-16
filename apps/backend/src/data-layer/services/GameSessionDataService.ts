@@ -1,16 +1,19 @@
 import {
   type CreateGameSessionData,
   type CreateGameSessionScheduleData,
+  type GameSessionWithCapacityStatus,
   getGameSessionOpenDay,
+  MembershipType,
   TimeframeFilter,
   type UpdateGameSessionData,
   type UpdateGameSessionScheduleData,
   type Weekday,
 } from "@repo/shared"
-import type { GameSession, GameSessionSchedule, Semester } from "@repo/shared/payload-types"
+import type { GameSession, GameSessionSchedule, Semester, User } from "@repo/shared/payload-types"
 import type { PaginatedDocs, Sort, Where } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
 import { createGameSessionTimes, getWeeklySessionDates } from "../utils/DateUtils"
+import BookingDataService from "./BookingDataService"
 
 export default class GameSessionDataService {
   /**
@@ -267,5 +270,38 @@ export default class GameSessionDataService {
       collection: "gameSessionSchedule",
       id,
     })
+  }
+
+  /**
+   * Gets all {@link GameSession} documents for a given semester ID with capacity status information
+   *
+   * @param semesterId the ID of the {@link Semester} to get game sessions for
+   * @param timeframe the timeframe filter to apply
+   * @returns an array of {@link GameSessionWithCapacityStatus} documents
+   */
+  public async getGameSessionsCapacityBySemesterId(
+    semesterId: string,
+    timeframe: TimeframeFilter = TimeframeFilter.DEFAULT,
+  ): Promise<GameSessionWithCapacityStatus[]> {
+    const sessions = await this.getGameSessionsBySemesterId(semesterId, timeframe)
+    const bookingDataService = new BookingDataService()
+
+    const sessionsWithCapacityStatus = await Promise.all(
+      sessions.map(async (session) => {
+        const sessionBookings = await bookingDataService.getAllBookingsBySessionId(session.id)
+
+        const casualBookings = sessionBookings.filter(
+          (booking) => (booking.user as User)?.role === MembershipType.casual,
+        ).length
+
+        return {
+          ...session,
+          casualCapacityStatus: casualBookings,
+          memberCapacityStatus: sessionBookings.length - casualBookings,
+        }
+      }),
+    )
+
+    return sessionsWithCapacityStatus
   }
 }
