@@ -1,13 +1,15 @@
 import {
+  BookingQueryType,
   CreateBookingRequestSchema,
   calculateOpenDate,
   MembershipType,
+  PaginationQuerySchema,
   type RequestWithUser,
   type Weekday,
 } from "@repo/shared"
 import type { Semester } from "@repo/shared/payload-types"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
-import { NextResponse } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import BookingDataService from "@/data-layer/services/BookingDataService"
@@ -15,6 +17,57 @@ import GameSessionDataService from "@/data-layer/services/GameSessionDataService
 import UserDataService from "@/data-layer/services/UserDataService"
 
 class RouteWrapper {
+  @Security("jwt")
+  static async GET(req: NextRequest) {
+    const bookingDataService = new BookingDataService()
+    const gameSessionDataService = new GameSessionDataService()
+
+    try {
+      const { searchParams } = new URL(req.url)
+      const result = PaginationQuerySchema.safeParse({
+        limit: searchParams.get("limit") ?? 10,
+        page: searchParams.get("page") ?? 1,
+      })
+
+      if (!result.success) {
+        return NextResponse.json(
+          { error: "Invalid query parameters", details: result.error.flatten() },
+          { status: StatusCodes.BAD_REQUEST },
+        )
+      }
+      const { limit, page } = result.data
+      const type = searchParams.get("type") ?? BookingQueryType.ALL
+
+      if (!Object.values(BookingQueryType).includes(type as BookingQueryType)) {
+        return NextResponse.json(
+          { error: "Invalid query parameters", details: "Invalid query type provided" },
+          { status: StatusCodes.BAD_REQUEST },
+        )
+      }
+
+      const paginatedBookings = await bookingDataService.getPaginatedBookings(limit, page)
+      let docs = paginatedBookings.docs
+
+      if (type === BookingQueryType.FUTURE) {
+        docs = docs.filter(async (booking) => {
+          console.log(booking)
+          const gameSession = await gameSessionDataService.getGameSessionById(
+            typeof booking.gameSession === "string" ? booking.gameSession : booking.gameSession.id,
+          )
+          return new Date(gameSession.startTime).getTime() > Date.now()
+        })
+      }
+
+      return NextResponse.json({ data: { ...paginatedBookings, docs } })
+    } catch (error) {
+      console.error(error)
+      return NextResponse.json(
+        { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
+        { status: StatusCodes.INTERNAL_SERVER_ERROR },
+      )
+    }
+  }
+
   @Security("jwt")
   static async POST(req: RequestWithUser) {
     const gameSessionDataService = new GameSessionDataService()
@@ -107,4 +160,4 @@ class RouteWrapper {
   }
 }
 
-export const { POST } = RouteWrapper
+export const { GET, POST } = RouteWrapper
