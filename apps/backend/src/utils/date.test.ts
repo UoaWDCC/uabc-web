@@ -1,4 +1,11 @@
-import { calculateOpenDate, getDaysBetweenWeekdays, Weekday } from "@repo/shared"
+import {
+  calculateOpenDate,
+  getDaysBetweenWeekdays,
+  getGameSessionOpenDay,
+  Weekday,
+} from "@repo/shared"
+import { semesterMock } from "@repo/shared/mocks"
+import type { Semester } from "@repo/shared/payload-types"
 
 describe("getDaysBetweenWeekdays", () => {
   it("should return 0 when fromDay and toDay are the same", () => {
@@ -96,6 +103,73 @@ describe("calculateOpenDate", () => {
 
     // Should be Thursday before the session with exact time from openTime
     const expected = new Date(Date.UTC(2024, 0, 18, 14, 30, 45))
+    expect(result).toEqual(expected)
+  })
+})
+
+describe("getGameSessionOpenDay", () => {
+  it("should calculate the correct open date for a session on Monday with booking open on Friday", () => {
+    const semester: Semester = {
+      ...semesterMock,
+      bookingOpenDay: Weekday.friday,
+      bookingOpenTime: new Date(Date.UTC(2024, 0, 1, 9, 0, 0)).toISOString(), // 9 AM
+    }
+    const startTime = new Date(Date.UTC(2024, 0, 15, 14, 0, 0)) // Monday
+
+    const result = getGameSessionOpenDay(semester, startTime)
+    const expected = new Date(Date.UTC(2024, 0, 12, 9, 0, 0))
+    expect(result).toEqual(expected)
+  })
+
+  it("should calculate the correct open date for a session on Sunday with booking open on Wednesday", () => {
+    const semester: Semester = {
+      ...semesterMock,
+      bookingOpenDay: Weekday.wednesday,
+      bookingOpenTime: new Date(Date.UTC(2024, 0, 1, 10, 0, 0)).toISOString(), // 10 AM
+    }
+    const startTime = new Date(Date.UTC(2024, 0, 21, 15, 0, 0)) // Sunday
+
+    const result = getGameSessionOpenDay(semester, startTime)
+    const expected = new Date(Date.UTC(2024, 0, 17, 10, 0, 0))
+    expect(result).toEqual(expected)
+  })
+
+  it("should calculate the correct open date when session and open day are the same", () => {
+    const semester: Semester = {
+      ...semesterMock,
+      bookingOpenDay: Weekday.tuesday,
+      bookingOpenTime: new Date(Date.UTC(2024, 0, 1, 8, 0, 0)).toISOString(), // 8 AM
+    }
+    const startTime = new Date(Date.UTC(2024, 0, 16, 13, 0, 0)) // Tuesday
+
+    const result = getGameSessionOpenDay(semester, startTime)
+    const expected = new Date(Date.UTC(2024, 0, 16, 8, 0, 0))
+    expect(result).toEqual(expected)
+  })
+
+  it("should preserve the time from bookingOpenTime parameter", () => {
+    const semester: Semester = {
+      ...semesterMock,
+      bookingOpenDay: Weekday.thursday,
+      bookingOpenTime: new Date(Date.UTC(2024, 0, 1, 14, 30, 45)).toISOString(), // 2:30:45 PM
+    }
+    const startTime = new Date(Date.UTC(2024, 0, 20, 16, 0, 0)) // Saturday
+
+    const result = getGameSessionOpenDay(semester, startTime)
+    const expected = new Date(Date.UTC(2024, 0, 18, 14, 30, 45)) // Thursday before
+    expect(result).toEqual(expected)
+  })
+
+  it("should handle bookingOpenTime as a string", () => {
+    const semester: Semester = {
+      ...semesterMock,
+      bookingOpenDay: Weekday.monday,
+      bookingOpenTime: "2024-01-01T12:00:00.000Z",
+    }
+    const startTime = new Date(Date.UTC(2024, 0, 18, 18, 0, 0)) // Thursday
+
+    const result = getGameSessionOpenDay(semester, startTime)
+    const expected = new Date(Date.UTC(2024, 0, 15, 12, 0, 0)) // Monday before
     expect(result).toEqual(expected)
   })
 })

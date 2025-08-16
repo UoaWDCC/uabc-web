@@ -1,0 +1,43 @@
+name: "Merge Coverage"
+description: "Download coverage artifacts from multiple test runs and merge them into a single coverage report."
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Download Frontend Coverage
+      uses: actions/download-artifact@v4
+      continue-on-error: true
+      with:
+        name: coverage-frontend
+        path: apps/frontend/coverage
+
+    - name: Download Backend Coverage
+      uses: actions/download-artifact@v4
+      continue-on-error: true
+      with:
+        name: coverage-backend
+        path: apps/backend/coverage
+
+    - name: Download UI Coverage
+      uses: actions/download-artifact@v4
+      continue-on-error: true
+      with:
+        name: coverage-ui
+        path: packages/ui/coverage
+
+    - name: Merge Coverage Files
+      shell: bash
+      run: |
+        cd packages/test-config
+        node src/scripts/merge-coverage.ts
+
+    - name: Upload Merged Coverage
+      uses: actions/upload-artifact@v4
+      with:
+        name: local-coverage
+        path: coverage

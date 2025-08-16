@@ -24,7 +24,7 @@
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "5.81.5",
     "@yamada-ui/lucide": "1.10.5",
-    "@yamada-ui/react": "1.7.7",
+    "@yamada-ui/react": "1.7.8",
     "dayjs": "1.11.13",
     "http-status-codes": "2.3.0",
     "next": "15.3.5",
@@ -32,7 +32,7 @@
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "react-hook-form": "7.60.0",
-    "zod": "3.25.74"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "1.13.12",
@@ -41,6 +41,6 @@
     "@types/node": "22.15.21",
     "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5",
-    "typescript": "5.8.3"
+    "typescript": "5.9.2"
   }
 }
