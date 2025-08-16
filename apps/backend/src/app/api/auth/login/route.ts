@@ -36,7 +36,14 @@ export const POST = async (req: NextRequest) => {
     throw error
   }
 
-  const passwordVerified = await StandardSecurity.verifyPassword(password, auth.password as string)
+  if (!auth.password) {
+    return NextResponse.json(
+      { error: "Please login with Google" },
+      { status: StatusCodes.CONFLICT },
+    )
+  }
+
+  const passwordVerified = await StandardSecurity.verifyPassword(password, auth.password)
   if (!passwordVerified) {
     return NextResponse.json(
       { error: "Invalid email or password" },
