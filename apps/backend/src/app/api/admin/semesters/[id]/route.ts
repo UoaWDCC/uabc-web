@@ -1,9 +1,15 @@
+// https://payloadcms.com/docs/database/transactions
 import { UpdateSemesterRequestSchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
+import {
+  commitCascadeTransaction,
+  getTransactionId,
+  rollbackCascadeTransaction,
+} from "@/data-layer/adapters/Transaction"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 
 class SemesterRouteWrapper {
@@ -14,13 +20,25 @@ class SemesterRouteWrapper {
    * @returns No content status code
    */
   @Security("jwt", ["admin"])
-  static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  static async DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
+
+    const deletedRelatedDocs = req.nextUrl.searchParams.get("deleteRelatedDocs") !== "false"
+    const cascadeTransactionId = await getTransactionId(!!deletedRelatedDocs)
+
     try {
-      const { id } = await params
       const semesterDataService = new SemesterDataService()
-      await semesterDataService.deleteSemester(id)
+      if (deletedRelatedDocs) {
+        await semesterDataService.deleteRelatedDocsForSemester(id, cascadeTransactionId)
+      }
+      await semesterDataService.deleteSemester(id, cascadeTransactionId)
+
+      await commitCascadeTransaction(cascadeTransactionId)
+
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
+      await rollbackCascadeTransaction(cascadeTransactionId)
+
       if (error instanceof NotFound) {
         return NextResponse.json({ error: "Semester not found" }, { status: StatusCodes.NOT_FOUND })
       }
@@ -30,6 +48,7 @@ class SemesterRouteWrapper {
       )
     }
   }
+
   /**
    * PATCH method to update a semester.
    *
