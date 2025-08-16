@@ -9,7 +9,7 @@ export const semesterMock: Semester = {
   breakStart: new Date(Date.UTC(2025, 0, 1, 15, 0)).toISOString(),
   breakEnd: new Date(Date.UTC(2025, 0, 1, 16, 0)).toISOString(),
   bookingOpenDay: Weekday.monday,
-  bookingOpenTime: new Date(Date.UTC(2025, 0, 1, 12, 0)).toISOString(),
+  bookingOpenTime: new Date(Date.UTC(1970, 0, 1, 12, 0)).toISOString(), // 12:00 UTC
   updatedAt: new Date(Date.UTC(2025, 0, 1)).toISOString(),
   createdAt: new Date(Date.UTC(2025, 0, 1)).toISOString(),
 }
@@ -17,5 +17,5 @@ export const semesterMock: Semester = {
 export const semesterMockBookingNotOpen: Semester = {
   ...semesterMock,
   bookingOpenDay: Weekday.saturday,
-  bookingOpenTime: new Date(Date.UTC(2025, 0, 1, 0, 0, 0)).toISOString(), // 00:00 UTC
+  bookingOpenTime: new Date(Date.UTC(1970, 0, 1, 0, 0, 0)).toISOString(), // 00:00 UTC
 }
