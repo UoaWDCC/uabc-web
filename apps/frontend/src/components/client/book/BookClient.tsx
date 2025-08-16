@@ -1,11 +1,14 @@
 "use client"
 import { BookACourtSkeleton, NotAuthorised } from "@repo/ui/components/Generic"
 import { Heading } from "@repo/ui/components/Primitive"
-import { Container, VStack } from "@yamada-ui/react"
+import { CircleAlertIcon } from "@yamada-ui/lucide"
+import { Container, EmptyState, VStack } from "@yamada-ui/react"
 import { RoleGuard } from "@/context/RoleWrappers"
+import { useAvailableSessions } from "@/services/game-session/GameSessionQueries"
 import { BookFlow } from "./BookFlow"
 
 export const BookClient = () => {
+  const { sessions, isError, error, isLoading } = useAvailableSessions()
   return (
     <RoleGuard
       fallback={
@@ -28,7 +31,21 @@ export const BookClient = () => {
     >
       {(auth) => (
         <Container centerContent layerStyle="container">
-          <BookFlow auth={auth} />
+          {isLoading ? (
+            <VStack flex={1} gap="lg" textAlign="center">
+              <Heading.h2 fontSize="3xl">Book a court</Heading.h2>
+              <BookACourtSkeleton />
+            </VStack>
+          ) : isError ? (
+            <EmptyState
+              description={error?.message ?? "Failed to load sessions."}
+              indicator={<CircleAlertIcon />}
+              placeSelf="center"
+              title="Could not load sessions"
+            />
+          ) : (
+            <BookFlow auth={auth} sessions={sessions} />
+          )}
         </Container>
       )}
     </RoleGuard>

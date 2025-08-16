@@ -5,8 +5,8 @@ import { Suspense } from "react"
 import { BookClient } from "@/components/client/book/BookClient"
 
 export const metadata: Metadata = {
-  title: "Book",
-  description: "Check back later for booking functionality!",
+  title: "Book a court",
+  description: "Select your play level, choose a court, and confirm your booking.",
 }
 
 export default function Book() {
