@@ -84,7 +84,7 @@ describe("api/auth/login", () => {
     })
 
     it("returns 409 if password is missing and prompts Google login", async () => {
-      await authDataService.createAuth({ ...standardAuthCreateMock, password: undefined })
+      await authDataService.createAuth({ ...standardAuthCreateMock, provider: "google" })
       await userDataService.createUser(userCreateMock)
 
       const req = createMockNextRequest("", "POST", {
