@@ -25,12 +25,16 @@ export const GET = async (): Promise<
 
     const currentSemester = await semesterDataService.getCurrentSemester()
 
+    console.log(currentSemester)
+
     const sessions = await gameSessionDataService.getGameSessionsBySemesterId(
       currentSemester.id,
       TimeframeFilter.CURRENT,
     )
 
-    if (sessions.length === 0) {
+    console.log(sessions)
+
+    if (!sessions.length) {
       return NextResponse.json({ data: [] })
     }
 
@@ -61,18 +65,7 @@ export const GET = async (): Promise<
       )
     }
 
-    const errorContext = {
-      endpoint: "/api/game-sessions/current",
-      method: "GET",
-      timestamp: new Date().toISOString(),
-      error: {
-        message: error instanceof Error ? error.message : String(error),
-        name: error instanceof Error ? error.name : "UnknownError",
-        stack: error instanceof Error ? error.stack : undefined,
-      },
-    }
-
-    console.error("Failed to fetch current game sessions:", errorContext)
+    console.error(error)
 
     return NextResponse.json(
       { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },

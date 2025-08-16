@@ -55,22 +55,16 @@ export const getSessionProperties = (session: GameSession) => {
 /**
  * Efficiently count attendees and casual attendees for each game session
  *
- * Groups bookings by session ID and categorizes users by membership type.
- * Uses a Map for O(1) lookup performance with large datasets.
- *
  * @param bookings - Array of booking records to process
- * @returns Map of session IDs to their attendee counts
+ * @returns Map of session IDs to their attendee and casual attendee counts
  */
 export const countAttendees = (bookings: Booking[]) => {
   const counts = new Map<string, { attendees: number; casualAttendees: number }>()
 
   for (const booking of bookings) {
     const sessionId =
-      typeof booking.gameSession === "object"
-        ? booking.gameSession.id
-        : (booking.gameSession as string)
+      typeof booking.gameSession === "object" ? booking.gameSession.id : booking.gameSession
 
-    // Initialize counts for new sessions
     if (!counts.has(sessionId)) {
       counts.set(sessionId, { attendees: 0, casualAttendees: 0 })
     }
@@ -82,8 +76,13 @@ export const countAttendees = (bookings: Booking[]) => {
 
     const user = booking.user
 
-    // Categorize by membership type
-    if (isUserObject(user) && user.role === MembershipType.casual) {
+    if (!isUserObject(user)) {
+      throw new Error(
+        `Invalid user object in booking ${booking.id}: expected User object but got ${typeof user}`,
+      )
+    }
+
+    if (user.role === MembershipType.casual) {
       sessionCounts.casualAttendees++
     } else {
       sessionCounts.attendees++
