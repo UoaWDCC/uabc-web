@@ -79,29 +79,6 @@ describe("/api/auth/verification-code", () => {
   })
 
   it("should add a new verification code correctly if a user has an undefined emailVerification field", async () => {
-    // const mockUser = {
-    //   ...casualUserMock,
-    //   emailVerification: undefined,
-    // }
-    // vi.spyOn(UserDataService.prototype, "getUserByEmail").mockResolvedValueOnce(mockUser)
-
-    // const code = "123456"
-    // vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(code)
-    // vi.spyOn(MailService, "sendEmailVerificationCode").mockResolvedValue({ success: true })
-
-    // const res = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
-
-    // expect(res.status).toBe(StatusCodes.OK)
-    // expect(await res.json()).toEqual({ message: "Verification code sent" })
-    // const user = await userDataService.getUserByEmail(email)
-    // expect(user.emailVerification).toContainEqual({
-    //   id: expect.any(String),
-    //   verificationCode: code,
-    //   createdAt: expect.any(String),
-    //   expiresAt: expect.any(String),
-    // })
-
-    // Create a real user in the test database
     await userDataService.createUser({
       ...userCreateMock,
       email,
