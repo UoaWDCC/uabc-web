@@ -16,8 +16,8 @@ describe("/api/game-sessions/current", () => {
   describe("GET", () => {
     it("should return current sessions for the current semester", async () => {
       const currentDate = new Date()
-      const startDate = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000)
-      const endDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000)
+      const startDate = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000) // 1 day ago
+      const endDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000) // 1 day from now
 
       const currentSemester = await semesterDataService.createSemester({
         ...semesterCreateMock,
@@ -28,8 +28,8 @@ describe("/api/game-sessions/current", () => {
       const session = await gameSessionDataService.createGameSession({
         ...gameSessionCreateMock,
         semester: currentSemester,
-        openTime: new Date(currentDate.getTime() - 60 * 60 * 1000).toISOString(),
-        endTime: new Date(currentDate.getTime() + 60 * 60 * 1000).toISOString(),
+        openTime: new Date(currentDate.getTime() - 60 * 60 * 1000).toISOString(), // 1 hour ago
+        endTime: new Date(currentDate.getTime() + 60 * 60 * 1000).toISOString(), // 1 hour from now
       })
 
       const res = await GET()
@@ -48,8 +48,8 @@ describe("/api/game-sessions/current", () => {
       const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {})
 
       const currentDate = new Date()
-      const startDate = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000)
-      const endDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000)
+      const startDate = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000) // 1 day ago
+      const endDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000) // 1 day from now
 
       const currentSemester = await semesterDataService.createSemester({
         ...semesterCreateMock,
@@ -60,8 +60,8 @@ describe("/api/game-sessions/current", () => {
       const session = await gameSessionDataService.createGameSession({
         ...gameSessionCreateMock,
         semester: currentSemester,
-        openTime: new Date(currentDate.getTime() - 60 * 60 * 1000).toISOString(),
-        endTime: new Date(currentDate.getTime() + 60 * 60 * 1000).toISOString(),
+        openTime: new Date(currentDate.getTime() - 60 * 60 * 1000).toISOString(), // 1 hour ago
+        endTime: new Date(currentDate.getTime() + 60 * 60 * 1000).toISOString(), // 1 hour from now
       })
 
       // Create bookings with different user types
@@ -94,8 +94,8 @@ describe("/api/game-sessions/current", () => {
 
     it("should return empty array when no sessions exist", async () => {
       const currentDate = new Date()
-      const startDate = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000)
-      const endDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000)
+      const startDate = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000) // 1 day ago
+      const endDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000) // 1 day from now
 
       await semesterDataService.createSemester({
         ...semesterCreateMock,

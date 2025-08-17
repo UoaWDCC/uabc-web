@@ -23,14 +23,10 @@ export const GET = async (): Promise<NextResponse<GetCurrentGameSessionsResponse
 
     const currentSemester = await semesterDataService.getCurrentSemester()
 
-    console.log(currentSemester)
-
     const sessions = await gameSessionDataService.getGameSessionsBySemesterId(
       currentSemester.id,
       TimeframeFilter.CURRENT,
     )
-
-    console.log(sessions)
 
     if (!sessions.length) {
       return NextResponse.json({ data: [] })
