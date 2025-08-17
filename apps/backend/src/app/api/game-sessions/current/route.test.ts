@@ -45,8 +45,6 @@ describe("/api/game-sessions/current", () => {
     })
 
     it("should return current sessions with attendee counts", async () => {
-      const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {})
-
       const currentDate = new Date()
       const startDate = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000) // 1 day ago
       const endDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000) // 1 day from now
@@ -64,7 +62,6 @@ describe("/api/game-sessions/current", () => {
         endTime: new Date(currentDate.getTime() + 60 * 60 * 1000).toISOString(), // 1 hour from now
       })
 
-      // Create bookings with different user types
       await bookingDataService.createBooking({
         ...bookingCreateMock,
         user: casualUserMock,
@@ -84,12 +81,6 @@ describe("/api/game-sessions/current", () => {
       expect(json.data).toHaveLength(1)
       expect(json.data[0].attendees).toBe(1) // member user
       expect(json.data[0].casualAttendees).toBe(1) // casual user
-
-      // Verify console.log was called
-      expect(consoleLogSpy).toHaveBeenCalledWith(currentSemester)
-      expect(consoleLogSpy).toHaveBeenCalledWith([session])
-
-      consoleLogSpy.mockRestore()
     })
 
     it("should return empty array when no sessions exist", async () => {
