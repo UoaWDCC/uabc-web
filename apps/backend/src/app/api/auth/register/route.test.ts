@@ -100,4 +100,15 @@ describe("tests /api/auth/register", () => {
     const json = await res.json()
     expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
   })
+
+  it("should return 500 if getAuthByEmail throws unexpected error", async () => {
+    const error = new Error("Simulated internal error")
+    vi.spyOn(AuthDataService.prototype, "getAuthByEmail").mockRejectedValueOnce(error)
+
+    const res = await POST(createMockNextRequest("", "POST", registerBody))
+
+    expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    const json = await res.json()
+    expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+  })
 })
