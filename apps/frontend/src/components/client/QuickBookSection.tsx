@@ -7,16 +7,16 @@ import { Container } from "@yamada-ui/react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
 import { mapGameSessionsToSessionItems } from "@/services/game-session/GameSessionAdapter"
-import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
+import { useGetCurrentAvailableGameSessions } from "@/services/game-session/GameSessionQueries"
 
 export const QuickBookSection = () => {
   const { user } = useAuth()
   const router = useRouter()
   const { setValue: setQuickBookData } = useQuickBookStorage()
   const { buildLoginUrl } = useAuthNavigation()
-  const { data, isLoading } = useGetCurrentGameSessions()
+  const { data, isLoading } = useGetCurrentAvailableGameSessions()
 
-  const sessions = data?.data ? mapGameSessionsToSessionItems(data.data) : []
+  const sessions = data ? mapGameSessionsToSessionItems(data) : []
 
   const handleQuickBookSubmit = (formData: QuickBookFormData) => {
     // Save quick book data to localStorage

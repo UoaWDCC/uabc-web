@@ -1,6 +1,7 @@
-import { type PaginationQuery, TimeframeFilter } from "@repo/shared"
+import { isGameSessionObject, type PaginationQuery, TimeframeFilter } from "@repo/shared"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { QueryKeys } from "@/services"
+import { useMyBookings } from "../bookings/BookingQuery"
 import GameSessionService from "./GameSessionService"
 
 /**
@@ -55,4 +56,29 @@ export const useGetCurrentGameSessions = () => {
     queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY, TimeframeFilter.CURRENT],
     queryFn: GameSessionService.getCurrentGameSessions,
   })
+}
+
+/**
+ * Retrieves and caches all current available game sessions.
+ *
+ * @returns A query hook that fetches all current available game sessions.
+ */
+export const useGetCurrentAvailableGameSessions = () => {
+  const current = useGetCurrentGameSessions()
+  const bookings = useMyBookings()
+
+  const availableSessions = current.data?.data?.filter((session) => {
+    const isBooked = bookings.data?.data.some((booking) => {
+      if (!isGameSessionObject(booking.gameSession)) {
+        return false
+      }
+      return booking.gameSession.id === session.id
+    })
+    return !isBooked && session.capacity > 0
+  })
+
+  return {
+    ...current,
+    data: availableSessions,
+  }
 }

@@ -5,13 +5,13 @@ import { CircleAlertIcon } from "@yamada-ui/lucide"
 import { Container, EmptyState, VStack } from "@yamada-ui/react"
 import { RoleGuard } from "@/context/RoleWrappers"
 import { mapGameSessionsToSessionItems } from "@/services/game-session/GameSessionAdapter"
-import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
+import { useGetCurrentAvailableGameSessions } from "@/services/game-session/GameSessionQueries"
 import { BookFlow } from "./BookFlow"
 
 export const BookClient = () => {
-  const { data, isError, error, isLoading } = useGetCurrentGameSessions()
+  const { data, isError, error, isLoading } = useGetCurrentAvailableGameSessions()
 
-  const sessions = data?.data ? mapGameSessionsToSessionItems(data.data) : []
+  const sessions = data ? mapGameSessionsToSessionItems(data) : []
 
   return (
     <RoleGuard
