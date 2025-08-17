@@ -3,6 +3,7 @@ import { casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import type { User } from "@repo/shared/payload-types"
 import { bookingMock } from "@/test-config/mocks/Booking.mock"
 import { gameSessionMock } from "@/test-config/mocks/GameSession.mock"
+import { gameSessionScheduleMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import { countAttendees, getSessionProperties } from "./GameSessionUtils"
 
 describe("GameSessionUtils", () => {
@@ -10,19 +11,7 @@ describe("GameSessionUtils", () => {
     it("should extract properties from gameSessionSchedule when available", () => {
       const sessionWithSchedule = {
         ...gameSessionMock,
-        gameSessionSchedule: {
-          id: "schedule-id",
-          location: "Scheduled Location",
-          name: "Scheduled Name",
-          semester: "semester-id",
-          day: "monday" as const,
-          startTime: "09:00",
-          endTime: "11:00",
-          capacity: 10,
-          casualCapacity: 8,
-          updatedAt: new Date().toISOString(),
-          createdAt: new Date().toISOString(),
-        },
+        gameSessionSchedule: gameSessionScheduleMock,
         location: "Fallback Location",
         name: "Fallback Name",
       }
@@ -30,8 +19,8 @@ describe("GameSessionUtils", () => {
       const result = getSessionProperties(sessionWithSchedule)
 
       expect(result).toEqual({
-        location: "Scheduled Location",
-        name: "Scheduled Name",
+        location: gameSessionScheduleMock.location,
+        name: gameSessionScheduleMock.name,
       })
     })
 
