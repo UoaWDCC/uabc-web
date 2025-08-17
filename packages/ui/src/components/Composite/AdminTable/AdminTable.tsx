@@ -1,10 +1,10 @@
 "use client"
 
-import { MembershipType, PlayLevel, University } from "@repo/shared"
 import { ManagementTable } from "@repo/ui/components/Generic"
 import { Dialog, useDisclosure } from "@yamada-ui/react"
 import { type FC, memo, useState } from "react"
 import { columns, type UserData } from "./Columns"
+import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
 
 export interface AdminTableProps {
   data: UserData[]
@@ -46,63 +46,11 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onDelete }) => {
           },
         ]}
         columns={columns}
-        columnsConfig={[
-          { key: "name", label: "Name", required: true },
-          { key: "email", label: "Email" },
-          { key: "role", label: "Role" },
-          { key: "level", label: "Play Level" },
-          { key: "remaining", label: "Remaining" },
-          { key: "university", label: "University" },
-          { key: "joined", label: "Joined" },
-        ]}
+        columnsConfig={COLUMNS_CONFIG}
         data={data}
         emptyStateColumnKey="name"
         emptyStateText="No users found."
-        filterConfigs={[
-          {
-            key: ["name", "email", "university", "role", "remaining", "joined"],
-            type: "text",
-            placeholder: "Filter...",
-          },
-          {
-            key: "role",
-            type: "multiselect",
-            items: [
-              ...Object.values(MembershipType).map((role) => ({
-                label: role,
-                value: role,
-              })),
-            ],
-            label: "All",
-            onChange: () => {
-              console.log("onChange")
-            },
-          },
-          {
-            key: "university",
-            type: "multiselect",
-            items: [
-              ...Object.values(University).map((university) => ({
-                label: university,
-                value: university,
-              })),
-            ],
-            label: "University",
-            w: "md",
-          },
-          {
-            key: "level",
-            type: "multiselect",
-            items: [
-              ...Object.values(PlayLevel).map((level) => ({
-                label: level,
-                value: level,
-              })),
-            ],
-            label: "Play Level",
-            w: "md",
-          },
-        ]}
+        filterConfigs={FILTER_CONFIGS}
         rowId="id"
       />
 
