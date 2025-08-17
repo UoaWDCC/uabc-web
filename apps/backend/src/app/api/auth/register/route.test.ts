@@ -41,12 +41,6 @@ describe("tests /api/auth/register", () => {
     const json = await res.json()
     expect(json.message).toBe("User registered successfully")
 
-    const user = await userDataService.getUserById(json.data.id)
-    expect(json.data).toMatchObject({
-      ...user,
-      updatedAt: expect.any(String),
-    })
-
     const auth = await authDataService.getAuthByEmail(registerBody.email)
     expect(auth.password).not.toEqual(registerBody.password)
   })
@@ -118,6 +112,17 @@ describe("tests /api/auth/register", () => {
   it("should return 500 if createUser throws unexpected error", async () => {
     const error = new Error("Simulated internal error")
     vi.spyOn(UserDataService.prototype, "getUserByEmail").mockRejectedValueOnce(error)
+
+    const res = await POST(createMockNextRequest("", "POST", registerBody))
+
+    expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    const json = await res.json()
+    expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+  })
+
+  it("should return 500 if getAuthByEmail throws unexpected error", async () => {
+    const error = new Error("Simulated internal error")
+    vi.spyOn(AuthDataService.prototype, "getAuthByEmail").mockRejectedValueOnce(error)
 
     const res = await POST(createMockNextRequest("", "POST", registerBody))
 

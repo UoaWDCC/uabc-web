@@ -54,6 +54,22 @@ export type LinkArray = {
 }[];
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationBubbleItem".
+ */
+export type LocationBubbleItem = {
+  /**
+   * The image displayed for the location of game session.
+   */
+  locationImage: string | Media;
+  /**
+   * The game session schedule displayed for location bubble description, e.g. location, session time
+   */
+  gameSessionSchedule: (string | GameSessionSchedule)[];
+  button: Link;
+  id?: string | null;
+}[];
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "AboutUsInfoItems".
  */
 export type AboutUsInfoItems = {
@@ -162,6 +178,7 @@ export interface Config {
   globals: {
     faq: Faq;
     footer: Footer;
+    locationBubble: LocationBubble;
     navbar: Navbar;
     termsOfService: TermsOfService;
     aboutUsInfo: AboutUsInfo;
@@ -169,6 +186,7 @@ export interface Config {
   globalsSelect: {
     faq: FaqSelect<false> | FaqSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    locationBubble: LocationBubbleSelect<false> | LocationBubbleSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
     termsOfService: TermsOfServiceSelect<false> | TermsOfServiceSelect<true>;
     aboutUsInfo: AboutUsInfoSelect<false> | AboutUsInfoSelect<true>;
@@ -479,6 +497,10 @@ export interface GameSession {
    */
   location?: string | null;
   /**
+   * The open time of the game session
+   */
+  openTime: string;
+  /**
    * The start time of the game session
    */
   startTime: string;
@@ -783,6 +805,7 @@ export interface GameSessionSelect<T extends boolean = true> {
   semester?: T;
   name?: T;
   location?: T;
+  openTime?: T;
   startTime?: T;
   endTime?: T;
   capacity?: T;
@@ -914,6 +937,18 @@ export interface LinkGroup {
    */
   title: string;
   links: LinkArray;
+}
+/**
+ * Location bubbles that will be displayed on the homepage
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locationBubble".
+ */
+export interface LocationBubble {
+  id: string;
+  locationBubbleItems: LocationBubbleItem;
+  updatedAt?: string | null;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1097,6 +1132,26 @@ export interface LinkGroupSelect<T extends boolean = true> {
 export interface LinkArraySelect<T extends boolean = true> {
   label?: T;
   url?: T;
+  id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locationBubble_select".
+ */
+export interface LocationBubbleSelect<T extends boolean = true> {
+  locationBubbleItems?: T | LocationBubbleItemSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationBubbleItem_select".
+ */
+export interface LocationBubbleItemSelect<T extends boolean = true> {
+  locationImage?: T;
+  gameSessionSchedule?: T;
+  button?: T | LinkSelect<T>;
   id?: T;
 }
 /**

@@ -46,5 +46,6 @@ export const layerStyles: LayerStyles = {
     maxW: "8xl",
     placeSelf: "center",
     w: "full",
+    flex: 1,
   },
 }
