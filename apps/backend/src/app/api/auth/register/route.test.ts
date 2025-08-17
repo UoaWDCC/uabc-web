@@ -31,7 +31,7 @@ describe("tests /api/auth/register", () => {
     const json = await res.json()
     expect(json.message).toBe("User registered successfully")
 
-    const user = await userDataService.getUserById(json.data.id)
+    const user = await userDataService.getUserByEmail(registerBody.email)
     expect(user).toBeDefined()
 
     const auth = await authDataService.getAuthByEmail(registerBody.email)
