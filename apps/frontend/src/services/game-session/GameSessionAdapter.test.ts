@@ -7,8 +7,9 @@ describe("mapGameSessionsToSessionItems", () => {
       ...gameSessionMock,
       name: "UoA Rec Centre",
       location: "17 Symonds Street",
-      startTime: new Date(Date.now() + 60_000).toISOString(),
-      openTime: new Date(Date.now() - 60_000).toISOString(),
+      startTime: new Date(Date.now() + 60_000).toISOString(), // 1 minute in future
+      endTime: new Date(Date.now() + 120_000).toISOString(), // 2 minutes in future
+      openTime: new Date(Date.now() - 60_000).toISOString(), // 1 minute in past
       capacity: 10,
       casualCapacity: 5,
     }
@@ -43,8 +44,9 @@ describe("mapGameSessionsToSessionItems", () => {
       ...gameSessionMock,
       name: null,
       location: null,
-      startTime: new Date(Date.now() + 60_000).toISOString(),
-      openTime: new Date(Date.now() - 60_000).toISOString(),
+      startTime: new Date(Date.now() + 60_000).toISOString(), // 1 minute in future
+      endTime: new Date(Date.now() + 120_000).toISOString(), // 2 minutes in future
+      openTime: new Date(Date.now() - 60_000).toISOString(), // 1 minute in past
     }
     const [item] = mapGameSessionsToSessionItems([session])
     expect(item.name).toBeUndefined()
