@@ -27,23 +27,15 @@ export const POST = async (req: NextRequest) => {
       }
     }
 
-    let user = await userDataService.getUserByEmail(email)
+    const user = await userDataService.getUserByEmail(email)
 
-    let verified = false
-    const now = new Date()
-    for (const verification of user.emailVerification || []) {
-      if (
-        verification.verificationCode === emailVerificationCode &&
-        new Date(verification.expiresAt) > now
-      ) {
-        user = await userDataService.updateUser(user.id, {
-          emailVerification: [],
-        })
-        verified = true
-        break
-      }
-    }
-    if (!verified) {
+    if (
+      !user.emailVerification?.some(
+        (verification) =>
+          verification.verificationCode === emailVerificationCode &&
+          new Date(verification.expiresAt) > new Date(),
+      )
+    ) {
       return NextResponse.json(
         { error: "Invalid email verification code" },
         { status: StatusCodes.BAD_REQUEST },
