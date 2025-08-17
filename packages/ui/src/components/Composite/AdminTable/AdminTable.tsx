@@ -16,7 +16,7 @@ export interface AdminTableProps {
  */
 export const AdminTable: FC<AdminTableProps> = memo(({ data, onDelete }) => {
   const { open, onOpen, onClose } = useDisclosure()
-  const [selectedUser, setSelectedUser] = useState<UserData | null>()
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null)
 
   const handleDeleteClick = (row: UserData) => {
     setSelectedUser(row)

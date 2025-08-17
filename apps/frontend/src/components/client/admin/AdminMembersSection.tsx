@@ -18,7 +18,7 @@ export const AdminMembersSection = () => {
   const deleteUserMutation = useDeleteUser()
   const { data } = useGetPaginatedUsers({
     limit: 20,
-    page: 20,
+    page: 1,
   })
 
   const handleResetConfirm1 = () => {
@@ -34,16 +34,18 @@ export const AdminMembersSection = () => {
   }
 
   const userData =
-    data?.pages[0].data.docs.map((page) => ({
-      id: page.id,
-      name: page.firstName + (page.lastName ? ` ${page.lastName}` : ""),
-      email: page.email,
-      remaining: String(page.remainingSessions),
-      joined: dayjs(page.createdAt).format("h:mm A D MMM YYYY"),
-      role: page.role,
-      university: page.university,
-      level: page.playLevel,
-    })) ?? []
+    data?.pages
+      .flatMap((page) => page.data.docs)
+      .map((page) => ({
+        id: page.id,
+        name: page.firstName + (page.lastName ? ` ${page.lastName}` : ""),
+        email: page.email,
+        remaining: String(page.remainingSessions),
+        joined: dayjs(page.createdAt).format("h:mm A D MMM YYYY"),
+        role: page.role,
+        university: page.university,
+        level: page.playLevel,
+      })) ?? []
 
   return (
     <>
