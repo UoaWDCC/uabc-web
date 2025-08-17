@@ -100,16 +100,18 @@ export const BookFlow: FC<BookFlowProps> = ({ auth, sessions }) => {
     const successes = results.filter((r) => r.status === "fulfilled").length
     const failures = results.length - successes
 
-    if (successes > 0) {
-      const successMsg = successes === 1 ? "Booking created." : `${successes} bookings created.`
-      notice({ title: "Booking confirmed", description: successMsg })
-      openBookingConfirmedPopup()
-      dispatch({ type: "RESET" })
-    }
-
     if (failures > 0) {
       const errorMsg = failures === 1 ? "1 booking failed." : `${failures} bookings failed.`
       notice({ title: "Some bookings failed", description: errorMsg, status: "error" })
+    }
+
+    if (successes > 0) {
+      const successMsg = successes === 1 ? "Booking created." : `${successes} bookings created.`
+      notice({ title: "Booking confirmed", description: successMsg })
+      if (successes === selected.length) {
+        openBookingConfirmedPopup()
+        dispatch({ type: "RESET" })
+      }
     }
   }
 
