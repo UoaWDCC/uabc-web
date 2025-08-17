@@ -15,9 +15,9 @@ describe("tests /api/auth/register", () => {
     emailVerificationCode: "123456",
   } satisfies RegisterRequestBody
 
-  const now = new Date()
+  const now = new Date() // Use current date for createdAt
   const createdAt = now.toISOString()
-  const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString()
+  const expiresAt = new Date(now.getTime() + 10 * 60 * 1000).toISOString() // 10 minutes from now
 
   it("should register a new user", async () => {
     await userDataService.createUser({

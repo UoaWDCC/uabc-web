@@ -129,8 +129,8 @@ describe("/api/auth/verification-code", () => {
       ...casualUserMock,
       emailVerification: Array.from({ length: 5 }, (_, i) => ({
         verificationCode: `${i * 100000}`,
-        createdAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        createdAt: new Date().toISOString(), // Use current date for createdAt
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes from now
       })),
     })
 

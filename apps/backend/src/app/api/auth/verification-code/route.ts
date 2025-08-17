@@ -47,8 +47,8 @@ export const POST = async (req: NextRequest) => {
           ...validCodes,
           {
             verificationCode: code,
-            createdAt: new Date().toISOString(),
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+            createdAt: new Date().toISOString(), // Use current date for createdAt
+            expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes from now
           },
         ],
       })
@@ -59,8 +59,8 @@ export const POST = async (req: NextRequest) => {
         emailVerification: [
           {
             verificationCode: code,
-            createdAt: new Date().toISOString(),
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+            createdAt: new Date().toISOString(), // Use current date for createdAt
+            expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes from now
           },
         ],
         role: MembershipType.casual,
