@@ -28,6 +28,10 @@ export interface ProfileBookingPanelProps extends StackProps {
    * The user viewing the bookings (for role-based UI)
    */
   user?: User
+  /**
+   * Callback function to handle booking deletion
+   */
+  onDeleteBooking?: (bookingId: string) => Promise<void>
 }
 
 /**
@@ -40,9 +44,14 @@ export interface ProfileBookingPanelProps extends StackProps {
  * <ProfileBookingPanel bookings={mockBookings} />
  */
 export const ProfileBookingPanel: FC<ProfileBookingPanelProps> = memo(
-  ({ bookings, error, user, ...props }) => {
-    const isDeleteDisabled =
-      user && (user.role === MembershipType.casual || user.role === MembershipType.member)
+  ({ bookings, error, user, onDeleteBooking, ...props }) => {
+    const isDeleteDisabled = user && user.role !== MembershipType.admin
+
+    const handleDelete = async (bookingId: string) => {
+      if (onDeleteBooking) {
+        await onDeleteBooking(bookingId)
+      }
+    }
 
     return (
       <VStack
@@ -94,7 +103,7 @@ export const ProfileBookingPanel: FC<ProfileBookingPanelProps> = memo(
                   { label: "Edit", onClick: () => alert("Edit clicked"), color: "primary" },
                   {
                     label: "Delete",
-                    onClick: () => alert("Delete clicked"),
+                    onClick: () => handleDelete(id),
                     color: "danger",
                     disabled: isDeleteDisabled,
                     tooltipLabel: isDeleteDisabled
@@ -111,3 +120,5 @@ export const ProfileBookingPanel: FC<ProfileBookingPanelProps> = memo(
     )
   },
 )
+
+ProfileBookingPanel.displayName = "ProfileBookingPanel"
