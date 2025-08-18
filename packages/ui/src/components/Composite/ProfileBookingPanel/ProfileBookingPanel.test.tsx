@@ -39,7 +39,7 @@ describe("<ProfileBookingPanel />", () => {
   })
 
   it("calls onDeleteBooking when admin clicks delete", async () => {
-    const mockDeleteHandler = vi.fn()
+    const mockDeleteHandler = vi.fn().mockResolvedValue(undefined)
     const { user } = render(
       <ProfileBookingPanel
         bookings={bookingsMock}
@@ -50,7 +50,7 @@ describe("<ProfileBookingPanel />", () => {
     const menuButtons = screen.getAllByRole("button", { name: /more options/i })
     user?.click(menuButtons[0])
     const deleteItem = await screen.findByText("Delete")
-    user?.click(deleteItem)
+    await user?.click(deleteItem)
     expect(mockDeleteHandler).toHaveBeenCalledWith(bookingsMock[0].id)
   })
 
