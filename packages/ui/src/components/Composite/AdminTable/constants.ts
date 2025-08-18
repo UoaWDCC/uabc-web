@@ -15,7 +15,7 @@ export const COLUMNS_CONFIG: ColumnConfig<UserData>[] = [
 
 export const FILTER_CONFIGS: readonly FilterBarConfig<UserData>[] = [
   {
-    key: ["name", "email", "university", "role", "remaining", "joined"],
+    key: ["name", "email"],
     type: "text",
     placeholder: "Filter...",
   },
