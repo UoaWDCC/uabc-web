@@ -1,2 +1,2 @@
 export * from "./date"
-export * from "./typeGuards"
+export * from "./type-guards"

@@ -60,6 +60,42 @@ describe("bookingDataService", () => {
     })
   })
 
+  describe("getAllBookingsBySessionIds", () => {
+    it("should fetch bookings by multiple session IDs", async () => {
+      const createdGameSession1 =
+        await gameSessionDataService.createGameSession(gameSessionCreateMock)
+      const createdGameSession2 =
+        await gameSessionDataService.createGameSession(gameSessionCreateMock)
+
+      const createdBooking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: createdGameSession1.id,
+      })
+      const createdBooking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: createdGameSession2.id,
+      })
+
+      const fetchedBookings = await bookingDataService.getAllBookingsBySessionIds([
+        createdGameSession1.id,
+        createdGameSession2.id,
+      ])
+      expect(fetchedBookings.length).toEqual(2)
+      expect(fetchedBookings).toEqual(expect.arrayContaining([createdBooking1, createdBooking2]))
+    })
+
+    it("should return an empty array when no bookings are found for session IDs", async () => {
+      expect(
+        await bookingDataService.getAllBookingsBySessionIds(["Not a valid session ID"]),
+      ).toStrictEqual([])
+    })
+
+    it("should return empty array when sessionIds is empty", async () => {
+      const result = await bookingDataService.getAllBookingsBySessionIds([])
+      expect(result).toStrictEqual([])
+    })
+  })
+
   describe("getAllBookingsByUserId", () => {
     it("should find all bookings by userId", async () => {
       const createdBooking1 = await bookingDataService.createBooking({
