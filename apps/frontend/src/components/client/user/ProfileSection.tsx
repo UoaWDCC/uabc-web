@@ -45,8 +45,7 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
         description: "Your booking has been deleted",
         status: "success",
       })
-    } catch (error) {
-      console.error("Failed to delete booking:", error)
+    } catch (_) {
       notice({
         title: "Failed to delete booking",
         description: "Please try again later",
