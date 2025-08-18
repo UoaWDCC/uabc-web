@@ -1,5 +1,6 @@
 import { isGameSessionObject, type PaginationQuery, TimeframeFilter } from "@repo/shared"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
 import { QueryKeys } from "@/services"
 import { useMyBookings } from "../bookings/BookingQuery"
 import GameSessionService from "./GameSessionService"
@@ -67,15 +68,19 @@ export const useGetCurrentAvailableGameSessions = () => {
   const current = useGetCurrentGameSessions()
   const bookings = useMyBookings()
 
-  const availableSessions = current.data?.data?.filter((session) => {
-    const isBooked = bookings.data?.data.some((booking) => {
-      if (!isGameSessionObject(booking.gameSession)) {
-        return false
-      }
-      return booking.gameSession.id === session.id
-    })
-    return !isBooked && session.capacity > 0
-  })
+  const availableSessions = useMemo(
+    () =>
+      current.data?.data?.filter((session) => {
+        const isBooked = bookings.data?.data.some((booking) => {
+          if (!isGameSessionObject(booking.gameSession)) {
+            return false
+          }
+          return booking.gameSession.id === session.id
+        })
+        return !isBooked && session.capacity > 0
+      }),
+    [current.data?.data, bookings.data?.data],
+  )
 
   return {
     ...current,
