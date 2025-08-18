@@ -1,5 +1,6 @@
 import { adminUserMock, bookingsMock, casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import { render, screen } from "@repo/ui/test-utils"
+import { vi } from "vitest"
 import { ProfileBookingPanel } from "./ProfileBookingPanel"
 
 describe("<ProfileBookingPanel />", () => {
@@ -35,6 +36,22 @@ describe("<ProfileBookingPanel />", () => {
     expect(
       screen.queryByText("Please contact an admin to delete your booking"),
     ).not.toBeInTheDocument()
+  })
+
+  it("calls onDeleteBooking when admin clicks delete", async () => {
+    const mockDeleteHandler = vi.fn()
+    const { user } = render(
+      <ProfileBookingPanel
+        bookings={bookingsMock}
+        onDeleteBooking={mockDeleteHandler}
+        user={adminUserMock}
+      />,
+    )
+    const menuButtons = screen.getAllByRole("button", { name: /more options/i })
+    user?.click(menuButtons[0])
+    const deleteItem = await screen.findByText("Delete")
+    user?.click(deleteItem)
+    expect(mockDeleteHandler).toHaveBeenCalledWith(bookingsMock[0].id)
   })
 
   it("renders empty state when no bookings", () => {

@@ -14,9 +14,11 @@ import {
   UserPanel,
   UserPanelSkeleton,
 } from "@repo/ui/components/Composite"
-import { Container, Grid, GridItem } from "@yamada-ui/react"
-import { memo } from "react"
+import { ConfirmationPopUp } from "@repo/ui/components/Generic"
+import { Container, Grid, GridItem, useDisclosure, useNotice } from "@yamada-ui/react"
+import { memo, useState } from "react"
 import type { AuthContextValue } from "@/context/AuthContext"
+import { useDeleteBooking } from "@/services/admin/bookings/AdminBookingMutations"
 import { useUpdateSelfMutation } from "@/services/auth/useUpdateSelfMutation"
 import { useMyBookings } from "@/services/bookings/BookingQuery"
 
@@ -24,6 +26,40 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
   const { user } = auth
   const { data: bookings, isLoading: isBookingsLoading, isError: isBookingsError } = useMyBookings()
   const updateSelfMutation = useUpdateSelfMutation()
+  const deleteBookingMutation = useDeleteBooking()
+  const notice = useNotice()
+  const [bookingId, setBookingId] = useState<string | null>(null)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const handleDeleteBooking = async (bookingId: string) => {
+    setBookingId(bookingId)
+    onOpen()
+  }
+
+  const confirmDelete = async () => {
+    if (!bookingId) return
+    try {
+      await deleteBookingMutation.mutateAsync(bookingId)
+      notice({
+        title: "Booking deleted",
+        description: "Your booking has been deleted",
+        status: "success",
+      })
+    } catch (error) {
+      console.error("Failed to delete booking:", error)
+      notice({
+        title: "Failed to delete booking",
+        description: "Please try again later",
+        status: "error",
+      })
+    } finally {
+      onClose()
+    }
+  }
+
+  const cancelDelete = () => {
+    onClose()
+  }
 
   return (
     <Container centerContent gap="xl" layerStyle="container">
@@ -36,6 +72,7 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
             <ProfileBookingPanel
               bookings={bookings?.data ?? []}
               error={isBookingsError}
+              onDeleteBooking={handleDeleteBooking}
               user={user}
             />
           )}
@@ -89,6 +126,24 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
           />
         </>
       )}
+
+      <ConfirmationPopUp
+        cancelButton={{
+          children: "Cancel",
+          onClick: cancelDelete,
+        }}
+        confirmButton={{
+          children: "Delete",
+          colorScheme: "danger",
+          onClick: confirmDelete,
+          loadingText: "Deleting...",
+          loading: deleteBookingMutation.isPending,
+        }}
+        onClose={cancelDelete}
+        open={isOpen}
+        subtitle="Are you sure you want to delete this booking? This action cannot be undone."
+        title="Delete Booking"
+      />
     </Container>
   )
 })
