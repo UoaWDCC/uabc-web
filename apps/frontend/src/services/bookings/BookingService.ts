@@ -1,6 +1,6 @@
 import {
   type CreateBookingRequest,
-  CreateBookingRequestSchema,
+  CreateBookingResponseSchema,
   GetBookingsResponseSchema,
 } from "@repo/shared"
 import { ApiClient, apiClient } from "@/lib/api/client"
@@ -39,7 +39,7 @@ const BookingService = {
     if (!token) {
       throw new Error("No token provided")
     }
-    const response = await apiClient.post("/api/bookings", data, CreateBookingRequestSchema, {
+    const response = await apiClient.post("/api/bookings", data, CreateBookingResponseSchema, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
