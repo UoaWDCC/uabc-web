@@ -45,7 +45,7 @@ export interface ProfileBookingPanelProps extends StackProps {
  */
 export const ProfileBookingPanel: FC<ProfileBookingPanelProps> = memo(
   ({ bookings, error, user, onDeleteBooking, ...props }) => {
-    const isDeleteDisabled = user && !user.role.includes(MembershipType.admin)
+    const isDeleteDisabled = user && user.role !== MembershipType.admin
 
     const handleDelete = async (bookingId: string) => {
       if (onDeleteBooking) {
