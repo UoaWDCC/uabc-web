@@ -1,19 +1,22 @@
 "use client"
 
 import { type QuickBookFormData, Routes } from "@repo/shared"
-// TODO: Remove this once we link to backend
-import { mockSessions } from "@repo/shared/mocks"
-import { QuickBook } from "@repo/ui/components/Generic"
+import { QuickBook, QuickBookSkeleton } from "@repo/ui/components/Generic"
 import { useAuthNavigation, useQuickBookStorage } from "@repo/ui/hooks"
 import { Container } from "@yamada-ui/react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
+import { mapGameSessionsToSessionItems } from "@/services/game-session/GameSessionAdapter"
+import { useGetCurrentAvailableGameSessions } from "@/services/game-session/GameSessionQueries"
 
 export const QuickBookSection = () => {
   const { user } = useAuth()
   const router = useRouter()
   const { setValue: setQuickBookData } = useQuickBookStorage()
   const { buildLoginUrl } = useAuthNavigation()
+  const { data, isLoading } = useGetCurrentAvailableGameSessions()
+
+  const sessions = data ? mapGameSessionsToSessionItems(data) : []
 
   const handleQuickBookSubmit = (formData: QuickBookFormData) => {
     // Save quick book data to localStorage
@@ -35,7 +38,11 @@ export const QuickBookSection = () => {
 
   return (
     <Container centerContent layerStyle="container" zIndex="nappa">
-      <QuickBook onSubmit={handleQuickBookSubmit} sessions={mockSessions} />
+      {isLoading ? (
+        <QuickBookSkeleton />
+      ) : (
+        <QuickBook onSubmit={handleQuickBookSubmit} sessions={sessions} />
+      )}
     </Container>
   )
 }
