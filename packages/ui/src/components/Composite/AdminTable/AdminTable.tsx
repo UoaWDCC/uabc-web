@@ -8,7 +8,7 @@ import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
 
 export interface AdminTableProps {
   data: UserData[]
-  onDelete?: (id: string) => Promise<void>
+  onDelete?: (id: string) => void
 }
 
 /**

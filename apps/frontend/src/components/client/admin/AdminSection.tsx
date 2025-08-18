@@ -13,24 +13,18 @@ export const AdminSection = memo(() => {
       layerStyle="container"
       py={{ base: "0", sm: "0", lg: "0" }}
     >
-      <AdminTabBar
-        lazy
-        lazyBehavior="unmount"
-        tabPanelsProps={{
-          p: "0",
-        }}
-      >
-        <TabPanel>
+      <AdminTabBar lazy lazyBehavior="unmount">
+        <TabPanel px="0">
           <VStack as="section">
             <AdminMembersSection />
           </VStack>
         </TabPanel>
-        <TabPanel>
+        <TabPanel px="0">
           <Container centerContent layerStyle="container">
             <UnderConstructionCard title="View Sessions is Under Construction 🔧" />
           </Container>
         </TabPanel>
-        <TabPanel>
+        <TabPanel px="0">
           <Container centerContent layerStyle="container">
             <UnderConstructionCard title="View Semesters is Under Construction 🔧" />
           </Container>
