@@ -65,7 +65,7 @@ export class ApiClient {
     }
 
     try {
-      const token = localStorage.getItem(AUTH_COOKIE_NAME)
+      const token = JSON.parse(localStorage.getItem(AUTH_COOKIE_NAME) ?? "null")
       return token
     } catch (error) {
       console.error("Error retrieving token from localStorage:", error)
@@ -91,15 +91,14 @@ export class ApiClient {
     const token = this.getCurrentToken()
 
     // Frontend validation: Check if auth is required but no token is available
-    if (requiresAuth && !token) {
-      throw new Error("No token provided")
-    }
-
     const baseHeaders: Record<string, string> = {
       "Content-Type": "application/json",
     }
 
-    if (token) {
+    if (requiresAuth) {
+      if (!token) {
+        throw new Error("No token provided")
+      }
       baseHeaders.Authorization = `Bearer ${token}`
     }
 
