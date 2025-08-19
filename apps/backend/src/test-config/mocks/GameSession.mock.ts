@@ -6,6 +6,7 @@ export const gameSessionCreateMock: CreateGameSessionData = {
   semester: semesterMock,
   startTime: new Date().toISOString(),
   endTime: new Date().toISOString(),
+  openTime: new Date().toISOString(),
   capacity: 10,
   casualCapacity: 8,
 }
@@ -22,6 +23,7 @@ export const oneOffGameSessionCreateMock: CreateGameSessionData = {
   semester: semesterMock,
   startTime: new Date().toISOString(),
   endTime: new Date().toISOString(),
+  openTime: new Date().toISOString(),
   capacity: 10,
   casualCapacity: 8,
   location: "240 Straight Zhao St",
@@ -33,6 +35,7 @@ export const gameSessionMock: GameSession = {
   semester: semesterMock,
   startTime: new Date().toISOString(),
   endTime: new Date().toISOString(),
+  openTime: new Date().toISOString(),
   capacity: 10,
   casualCapacity: 8,
   updatedAt: new Date(2025, 0, 1).toISOString(),

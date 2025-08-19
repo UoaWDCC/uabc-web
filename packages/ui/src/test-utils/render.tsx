@@ -13,6 +13,7 @@ import React from "react"
 import type * as ReactDOMClient from "react-dom/client"
 import "@testing-library/jest-dom/vitest"
 import { UIProvider } from "@repo/ui/components/Provider"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 export type RenderOptions = {
   withProvider?: boolean
@@ -42,14 +43,24 @@ export function render(
 ): RenderReturn {
   const user = userEvent.setup()
 
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  })
+
   if (withProvider) {
     const prevWrapper = rest.wrapper
     rest.wrapper = ({ children }: { children: ReactNode }) => {
       const element = prevWrapper ? React.createElement(prevWrapper, { children }) : children
       return (
-        <UIProvider config={config} theme={theme}>
-          {element}
-        </UIProvider>
+        <QueryClientProvider client={queryClient}>
+          <UIProvider config={config} theme={theme}>
+            {element}
+          </UIProvider>
+        </QueryClientProvider>
       )
     }
   }
@@ -96,14 +107,24 @@ export function renderHook<
   render: (props: M) => Y,
   { withProvider = true, providerProps, ...rest }: RenderHookOptions<M, D, H, R> = {},
 ) {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  })
+
   if (withProvider) {
     const prevWrapper = rest.wrapper
     rest.wrapper = ({ children }: { children: ReactNode }) => {
       const element = prevWrapper ? React.createElement(prevWrapper, { children }) : children
       return (
-        <UIProvider config={config} theme={theme} {...providerProps}>
-          {element}
-        </UIProvider>
+        <QueryClientProvider client={queryClient}>
+          <UIProvider config={config} theme={theme} {...providerProps}>
+            {element}
+          </UIProvider>
+        </QueryClientProvider>
       )
     }
   }

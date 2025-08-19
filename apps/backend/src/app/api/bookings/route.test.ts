@@ -8,7 +8,6 @@ import {
 import {
   casualUserMock,
   gameSessionMock,
-  gameSessionMockBookingNotOpen,
   memberUserMock,
   semesterMock,
   userCreateMock,
@@ -216,29 +215,7 @@ describe("/api/bookings", async () => {
       expect(await res.json()).toStrictEqual({ error: "No remaining sessions" })
     })
 
-    it("should return a 403 if booking is attempted before bookingOpenDay and bookingOpenTime", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
-
-      // Set system time to Friday July 18, 2025 (before booking opens on Saturday July 19, 2025 at 00:00)
-      vi.setSystemTime(new Date(Date.UTC(2025, 6, 18, 12, 0, 0)))
-
-      try {
-        const req = createMockNextRequest("/api/bookings", "POST", {
-          gameSession: gameSessionMockBookingNotOpen,
-          playerLevel: PlayLevel.beginner,
-        } satisfies CreateBookingRequest)
-        const res = await POST(req)
-
-        expect(res.status).toBe(StatusCodes.FORBIDDEN)
-        expect(await res.json()).toStrictEqual({
-          error: "Booking is not open yet for this session",
-        })
-      } finally {
-        vi.useRealTimers()
-      }
-    })
-
-    it("should return a 403 if booking a session scheduled before the semester's booking open time", async () => {
+    it("should return a 403 if booking a session scheduled before the booking open time", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, memberToken)
       const customSemester = {
         ...semesterMock,
@@ -262,7 +239,7 @@ describe("/api/bookings", async () => {
 
         expect(res.status).toBe(StatusCodes.FORBIDDEN)
         expect(await res.json()).toStrictEqual({
-          error: "Cannot book a session scheduled before the semester's booking open time",
+          error: "Booking is not open yet for this session",
         })
       } finally {
         vi.useRealTimers()

@@ -1,17 +1,25 @@
 "use client"
 
-import { type MembershipType, PlayLevel, Popup } from "@repo/shared"
-import type { SelectACourtNextData, SessionItem } from "@repo/ui/components/Composite"
+import {
+  type CreateBookingRequest,
+  type MembershipType,
+  type PlayLevel,
+  Popup,
+  type SessionItem,
+} from "@repo/shared"
+import type { SelectACourtNextData } from "@repo/ui/components/Composite"
 import { BookingConfirmation, SelectACourt } from "@repo/ui/components/Composite"
 import { BookACourt } from "@repo/ui/components/Generic"
 import { Button, Heading } from "@repo/ui/components/Primitive"
-import { usePopupState } from "@repo/ui/hooks"
+import { usePopupState, useQuickBookProcessor } from "@repo/ui/hooks"
+import { useQueryClient } from "@tanstack/react-query"
 import { CircleAlertIcon } from "@yamada-ui/lucide"
-import { EmptyState, VStack } from "@yamada-ui/react"
+import { EmptyState, useNotice, VStack } from "@yamada-ui/react"
 import NextLink from "next/link"
-import { parseAsStringEnum, useQueryState } from "nuqs"
-import { type FC, useReducer } from "react"
+import { type FC, useEffect, useReducer } from "react"
 import type { AuthContextValueWithUser } from "@/context/RoleWrappers"
+import { QueryKeys } from "@/services"
+import { useCreateBooking } from "@/services/bookings/BookingMutations"
 import { createBookingFlowReducer, initialState } from "./bookingFlowReducer"
 
 /**
@@ -22,111 +30,93 @@ type BookFlowProps = {
    * The authentication context value with user.
    */
   auth: AuthContextValueWithUser
+  /**
+   * Sessions to drive the booking flow. Defaults to shared mockSessions.
+   */
+  sessions: SessionItem[]
 }
-
-/**
- * TODO: Mock bookings data - this should be moved to a proper data source
- */
-const bookings: SessionItem[] = [
-  {
-    id: "monday-session",
-    name: "ABA",
-    location: "ABA Location",
-    startTime: "17:00",
-    endTime: "19:00",
-    capacity: 35,
-    casualCapacity: 5,
-    attendees: 35,
-    casualAttendees: 5,
-    date: "2025-01-01",
-  },
-  {
-    id: "wednesday-session",
-    name: "UoA Rec Centre",
-    location: "17 Symonds Street",
-    startTime: "19:30",
-    endTime: "21:30",
-    capacity: 35,
-    casualCapacity: 5,
-    attendees: 20,
-    casualAttendees: 1,
-    date: "2025-01-03",
-  },
-  {
-    id: "thursday-session",
-    name: "Kings School",
-    location: "Kings School Location",
-    startTime: "19:30",
-    endTime: "22:00",
-    capacity: 30,
-    casualCapacity: 5,
-    attendees: 26,
-    casualAttendees: 3,
-    date: "2025-01-04",
-  },
-  {
-    id: "friday-session",
-    name: "UoA Rec Centre",
-    location: "17 Symonds Street",
-    startTime: "19:30",
-    endTime: "21:30",
-    capacity: 35,
-    casualCapacity: 5,
-    attendees: 35,
-    casualAttendees: 5,
-    date: "2025-01-05",
-  },
-  {
-    id: "saturday-session",
-    name: "ABA",
-    location: "ABA Location",
-    startTime: "16:00",
-    endTime: "18:00",
-    capacity: 25,
-    casualCapacity: 3,
-    attendees: 15,
-    casualAttendees: 2,
-    date: "2025-01-06",
-  },
-]
 
 /**
  * The main component for the booking flow.
  */
-export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
-  const bookingFlowReducer = createBookingFlowReducer(bookings)
+export const BookFlow: FC<BookFlowProps> = ({ auth, sessions }) => {
+  const bookingFlowReducer = createBookingFlowReducer(sessions)
   const [state, dispatch] = useReducer(bookingFlowReducer, initialState)
-  const [, setPlayLevel] = useQueryState(
-    "playLevel",
-    parseAsStringEnum<PlayLevel>(Object.values(PlayLevel)),
-  )
+  const notice = useNotice()
+  const createBooking = useCreateBooking()
+  const queryClient = useQueryClient()
 
   const { open: openBookingConfirmedPopup } = usePopupState({
     popupId: Popup.BOOKING_CONFIRMED,
     initialValue: auth.user.role as MembershipType,
   })
 
+  const { saveCurrentBookingState, hasValidData, processQuickBookData, clearQuickBookData } =
+    useQuickBookProcessor({
+      sessions,
+      currentStep: state.step,
+      dispatch,
+      user: auth.user,
+    })
+
+  useEffect(() => {
+    if (hasValidData) {
+      processQuickBookData()
+      return
+    }
+  }, [hasValidData, processQuickBookData])
+
   const handlePlayLevelSelect = (level: PlayLevel) => {
     dispatch({ type: "SET_PLAY_LEVEL", payload: level })
-    setPlayLevel(level)
     dispatch({ type: "NEXT_STEP" })
   }
 
   const handleSelectCourt = (data: SelectACourtNextData) => {
     dispatch({ type: "SET_BOOKING_TIMES", payload: data })
+    // Save current booking state before moving to next step
+    saveCurrentBookingState(state.playLevel as PlayLevel, data.bookingTimes)
     dispatch({ type: "NEXT_STEP" })
   }
 
-  const handleConfirmBooking = () => {
-    openBookingConfirmedPopup()
-    dispatch({ type: "RESET" })
+  const handleConfirmBooking = async () => {
+    const playerLevel = state.playLevel as PlayLevel
+    const selected = state.selectedSessions
+
+    const results = await Promise.allSettled(
+      selected.map((session) =>
+        createBooking.mutateAsync({
+          gameSession: session.id,
+          playerLevel,
+        } satisfies CreateBookingRequest),
+      ),
+    )
+
+    const successes = results.filter((r) => r.status === "fulfilled").length
+    const failures = results.length - successes
+
+    if (failures > 0) {
+      const errorMsg = failures === 1 ? "1 booking failed." : `${failures} bookings failed.`
+      notice({ title: "Some bookings failed", description: errorMsg, status: "error" })
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.MY_BOOKINGS_QUERY_KEY] })
+    }
+
+    if (successes > 0) {
+      const successMsg = successes === 1 ? "Booking created." : `${successes} bookings created.`
+      notice({ title: "Booking confirmed", description: successMsg })
+      if (successes === selected.length) {
+        openBookingConfirmedPopup()
+        dispatch({ type: "RESET" })
+        clearQuickBookData()
+      }
+    }
   }
 
   const handleBack = () => {
     dispatch({ type: "PREV_STEP" })
   }
 
-  if (!bookings.length) {
+  if (!sessions.length) {
     return (
       <EmptyState
         description="There are no bookings available at the moment."
@@ -168,12 +158,13 @@ export const BookFlow: FC<BookFlowProps> = ({ auth }) => {
           initialBookingTimes={state.bookingTimes}
           onBack={handleBack}
           onNext={handleSelectCourt}
-          sessions={bookings}
+          sessions={sessions}
           user={auth.user}
         />
       ) : state.step === "confirmation" ? (
         <BookingConfirmation
           bookingData={state.selectedSessions ?? []}
+          loading={createBooking.isPending}
           onBack={handleBack}
           onConfirm={handleConfirmBooking}
           user={auth.user}
