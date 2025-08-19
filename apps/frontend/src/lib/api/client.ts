@@ -59,17 +59,30 @@ export class ApiClient {
    * @returns The current token or null if not found.
    * @private
    */
+  // private getCurrentToken = (): string | null => {
+  //   if (typeof window === "undefined") {
+  //     return null
+  //   }
+
+  //   try {
+  //     const token = JSON.parse(localStorage.getItem(AUTH_COOKIE_NAME) ?? "null")
+  //     return token
+  //   } catch (error) {
+  //     console.error("Error retrieving token from localStorage:", error)
+  //     return null
+  //   }
+  // }
+
   private getCurrentToken = (): string | null => {
     if (typeof window === "undefined") {
       return null
     }
-
+    const raw = localStorage.getItem(AUTH_COOKIE_NAME)
+    if (!raw) return null
     try {
-      const token = JSON.parse(localStorage.getItem(AUTH_COOKIE_NAME) ?? "null")
-      return token
-    } catch (error) {
-      console.error("Error retrieving token from localStorage:", error)
-      return null
+      return JSON.parse(raw)
+    } catch {
+      return raw
     }
   }
 
