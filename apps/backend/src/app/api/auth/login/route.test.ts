@@ -82,5 +82,20 @@ describe("api/auth/login", () => {
 
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
     })
+
+    it("returns 409 if password is missing and prompts Google login", async () => {
+      await authDataService.createAuth({ ...standardAuthCreateMock, provider: "google" })
+      await userDataService.createUser(userCreateMock)
+
+      const req = createMockNextRequest("", "POST", {
+        email: EMAIL_MOCK,
+        password: PASSWORD_MOCK,
+      })
+      const response = await login(req)
+      const body = await response.json()
+
+      expect(response.status).toBe(StatusCodes.CONFLICT)
+      expect(body.error).toBe("Please login with Google")
+    })
   })
 })

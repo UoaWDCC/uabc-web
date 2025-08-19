@@ -63,6 +63,10 @@ export interface BookingConfirmationProps {
    * The user object.
    */
   user: Pick<User, "remainingSessions" | "role">
+  /**
+   * Whether the confirm button is loading.
+   */
+  loading?: boolean
 }
 
 /**
@@ -90,7 +94,7 @@ export interface BookingConfirmationProps {
  * />
  */
 export const BookingConfirmation = memo<BookingConfirmationProps>(
-  ({ bookingData, user, onBack, onConfirm, title = "Booking Confirmation" }) => {
+  ({ bookingData, user, onBack, onConfirm, title = "Booking Confirmation", loading }) => {
     const { sessionsLabel } = useBookingLimits({
       user,
       selectedCount: bookingData.length,
@@ -201,7 +205,7 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
             pointerEvents="none"
             position="absolute"
             userSelect="none"
-            zIndex={0}
+            zIndex={-1}
           >
             <UabcLogo boxSize={{ base: "sm", xl: "md" }} opacity={0.5} />
           </Center>
@@ -261,7 +265,13 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
 
         <CardFooter>
           <Center w="full">
-            <Button colorScheme="primary" onClick={handleConfirm} size="lg">
+            <Button
+              colorScheme="primary"
+              isLoading={loading}
+              loadingText="Confirming..."
+              onClick={handleConfirm}
+              size="lg"
+            >
               Confirm {bookingData.length > 1 ? `${bookingData.length} Bookings` : "Booking"}
             </Button>
           </Center>

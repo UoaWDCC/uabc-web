@@ -1,6 +1,6 @@
 import {
   type CreateBookingRequest,
-  CreateBookingRequestSchema,
+  CreateBookingResponseSchema,
   GetBookingsResponseSchema,
 } from "@repo/shared"
 import { ApiClient, apiClient } from "@/lib/api/client"
@@ -29,7 +29,7 @@ const BookingService = {
    * @returns A promise that resolves to the created booking.
    */
   createBooking: async (data: CreateBookingRequest) => {
-    const response = await apiClient.post("/api/bookings", data, CreateBookingRequestSchema, {
+    const response = await apiClient.post("/api/bookings", data, CreateBookingResponseSchema, {
       requiresAuth: true,
     })
     return ApiClient.throwIfError(response)

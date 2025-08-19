@@ -1,8 +1,8 @@
 import {
   type CreateGameSessionData,
   type CreateGameSessionScheduleData,
-  GameSessionTimeframe,
   getGameSessionOpenDay,
+  TimeframeFilter,
   type UpdateGameSessionData,
   type UpdateGameSessionScheduleData,
   type Weekday,
@@ -93,7 +93,7 @@ export default class GameSessionDataService {
    */
   public async getGameSessionsBySemesterId(
     semesterId: string,
-    timeframe: GameSessionTimeframe = GameSessionTimeframe.DEFAULT,
+    timeframe: TimeframeFilter = TimeframeFilter.DEFAULT,
   ): Promise<GameSession[]> {
     const currentDate = new Date()
 
@@ -101,21 +101,21 @@ export default class GameSessionDataService {
     const sort: Sort = "-startTime"
 
     switch (timeframe) {
-      case GameSessionTimeframe.UPCOMING:
+      case TimeframeFilter.UPCOMING:
         filter = {
           startTime: {
             greater_than_equal: currentDate,
           },
         }
         break
-      case GameSessionTimeframe.PAST:
+      case TimeframeFilter.PAST:
         filter = {
           startTime: {
             less_than: currentDate,
           },
         }
         break
-      case GameSessionTimeframe.CURRENT:
+      case TimeframeFilter.CURRENT:
         filter = {
           and: [
             {

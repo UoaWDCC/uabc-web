@@ -12,10 +12,14 @@ export const useCreateSemester = () => {
   return useMutation({
     mutationFn: AdminSemesterService.createSemester,
     // TODO: when get by id is implemented, do not invalidate get by id queries
-    onSuccess: () =>
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.SEMESTER_QUERY_KEY],
-      }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY, QueryKeys.SEMESTER_QUERY_KEY],
+      })
+    },
   })
 }
 
@@ -29,10 +33,14 @@ export const useUpdateSemester = () => {
   return useMutation({
     mutationFn: AdminSemesterService.updateSemester,
     // TODO: when get by id is implemented, only invalidate the updated id for get by id or update the specific query with the updated data
-    onSuccess: () =>
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.SEMESTER_QUERY_KEY],
-      }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY, QueryKeys.SEMESTER_QUERY_KEY],
+      })
+    },
   })
 }
 
@@ -46,9 +54,13 @@ export const useDeleteSemester = () => {
   return useMutation({
     mutationFn: AdminSemesterService.deleteSemester,
     // TODO: when get by id is implemented, only invalidate the updated id for get by id
-    onSuccess: () =>
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.SEMESTER_QUERY_KEY],
-      }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY, QueryKeys.SEMESTER_QUERY_KEY],
+      })
+    },
   })
 }
