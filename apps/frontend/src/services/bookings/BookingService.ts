@@ -1,4 +1,8 @@
-import { GetBookingsResponseSchema } from "@repo/shared"
+import {
+  type CreateBookingRequest,
+  CreateBookingResponseSchema,
+  GetBookingsResponseSchema,
+} from "@repo/shared"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
 /**
@@ -19,6 +23,24 @@ const BookingService = {
     const response = await apiClient.get("/api/me/bookings", GetBookingsResponseSchema, {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return ApiClient.throwIfError(response)
+  },
+
+  /**
+   * Creates a new booking.
+   *
+   * @param data The booking data to create.
+   * @returns A promise that resolves to the created booking.
+   */
+  createBooking: async (data: CreateBookingRequest, token: string) => {
+    if (!token) {
+      throw new Error("No token provided")
+    }
+    const response = await apiClient.post("/api/bookings", data, CreateBookingResponseSchema, {
+      headers: {
         Authorization: `Bearer ${token}`,
       },
     })

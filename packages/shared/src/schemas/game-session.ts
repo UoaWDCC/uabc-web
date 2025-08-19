@@ -3,12 +3,14 @@ import type { GameSession } from "../payload-types"
 import type { CreateGameSessionData, UpdateGameSessionData } from "../types"
 import { GameSessionScheduleSchema } from "./game-session-schedule"
 import { PaginationDataSchema } from "./query"
+import { CommonResponseSchema } from "./response"
 import { SemesterSchema } from "./semester"
 
 export const GameSessionSchema = z.object({
   id: z.string(),
   gameSessionSchedule: z.union([z.string(), GameSessionScheduleSchema]).nullable().optional(),
   semester: z.union([z.string(), SemesterSchema]),
+  openTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   startTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   endTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   name: z.string().nullable().optional(),
@@ -23,7 +25,8 @@ export const CreateGameSessionRequestSchema = GameSessionSchema.omit({
   updatedAt: true,
   createdAt: true,
   id: true,
-}) satisfies z.ZodType<CreateGameSessionData>
+  openTime: true,
+}) satisfies z.ZodType<Omit<CreateGameSessionData, "openTime">>
 
 export const UpdateGameSessionRequestSchema =
   CreateGameSessionRequestSchema.partial() satisfies z.ZodType<UpdateGameSessionData>
@@ -32,8 +35,21 @@ export const GetGameSessionResponseSchema = z.object({
   data: GameSessionSchema,
 })
 
-export const GetAllGameSessionsResponseSchema = z.object({
+export const GetPaginatedGameSessionsResponseSchema = z.object({
   data: PaginationDataSchema.extend({
     docs: z.array(GameSessionSchema),
   }),
+})
+
+export const GetAllGameSessionsBySemesterResponseSchema = z.object({
+  data: z.array(GameSessionSchema),
+})
+
+export const GameSessionWithCountsSchema = GameSessionSchema.extend({
+  attendees: z.number(),
+  casualAttendees: z.number(),
+})
+
+export const GetCurrentGameSessionsResponseSchema = CommonResponseSchema.extend({
+  data: z.array(GameSessionWithCountsSchema).optional(),
 })

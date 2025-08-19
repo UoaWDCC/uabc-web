@@ -8,15 +8,6 @@ export const Authentication: CollectionConfig = {
   access: {},
   fields: [
     {
-      name: "user",
-      type: "relationship",
-      relationTo: "user",
-      required: true,
-      admin: {
-        description: "The user who owns this authentication",
-      },
-    },
-    {
       name: "email",
       type: "email",
       required: true,

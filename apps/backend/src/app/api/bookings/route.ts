@@ -1,4 +1,4 @@
-import { CreateBookingRequestBodySchema, MembershipType, type RequestWithUser } from "@repo/shared"
+import { CreateBookingRequestSchema, MembershipType, type RequestWithUser } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { NextResponse } from "next/server"
 import { ZodError } from "zod"
@@ -15,12 +15,22 @@ class RouteWrapper {
     const bookingDataService = new BookingDataService()
 
     try {
-      const parsedBody = CreateBookingRequestBodySchema.parse(await req.json())
+      const parsedBody = CreateBookingRequestSchema.parse(await req.json())
 
       const gameSession =
         typeof parsedBody.gameSession === "string"
           ? await gameSessionDataService.getGameSessionById(parsedBody.gameSession)
           : parsedBody.gameSession
+      const sessionStartTime = new Date(gameSession.openTime)
+
+      const now = new Date()
+      if (now < sessionStartTime) {
+        return NextResponse.json(
+          { error: "Booking is not open yet for this session" },
+          { status: StatusCodes.FORBIDDEN },
+        )
+      }
+
       const bookings = await bookingDataService.getAllBookingsBySessionId(gameSession.id)
       // Refetch user data as JWT stored data could be outdated
       const userData = await userDataService.getUserById(req.user.id)

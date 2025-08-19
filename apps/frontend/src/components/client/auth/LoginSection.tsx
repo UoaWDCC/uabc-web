@@ -2,24 +2,18 @@
 
 import type { LoginFormData, LoginResponse } from "@repo/shared"
 import { LoginPanel } from "@repo/ui/components/Generic"
+import { useAuthNavigation } from "@repo/ui/hooks"
 import { Container, useNotice } from "@yamada-ui/react"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
 
 export const LoginSection = () => {
-  const { login, isLoading, isPending, user } = useAuth()
-  const router = useRouter()
+  const { login } = useAuth()
   const notice = useNotice()
 
-  // useEffect is necessary here to ensure navigation (router.push) only occurs after render,
-  // not during render. React does not allow side effects like navigation during render phase.
-  // This follows React and Next.js best practices for safe, predictable navigation after login.
-  useEffect(() => {
-    if (!isLoading && !isPending && user) {
-      router.push("/profile")
-    }
-  }, [isLoading, isPending, user, router])
+  const { navigateToReturnUrl } = useAuthNavigation({
+    defaultRedirectUrl: "/profile",
+    autoRedirect: false,
+  })
 
   const handleLogin = async (data: LoginFormData): Promise<LoginResponse> => {
     try {
@@ -31,9 +25,12 @@ export const LoginSection = () => {
           description: "You are now logged in",
           status: "success",
         })
-        router.push("/profile")
+
+        // Navigate to return URL or default profile page
+        navigateToReturnUrl()
         return response
       }
+
       const errorMessage = response.error || "Login failed"
       notice({
         title: "Login failed",

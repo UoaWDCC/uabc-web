@@ -1,10 +1,17 @@
 import {
   AUTH_COOKIE_NAME,
-  type CreateBookingRequestBodyType,
+  type CreateBookingRequest,
   MembershipType,
   PlayLevel,
+  Weekday,
 } from "@repo/shared"
-import { casualUserMock, memberUserMock, userCreateMock } from "@repo/shared/mocks"
+import {
+  casualUserMock,
+  gameSessionMock,
+  memberUserMock,
+  semesterMock,
+  userCreateMock,
+} from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import BookingDataService from "@/data-layer/services/BookingDataService"
@@ -38,7 +45,7 @@ describe("/api/bookings", async () => {
       const req = createMockNextRequest("/api/bookings", "POST", {
         gameSession,
         playerLevel: PlayLevel.beginner,
-      } satisfies CreateBookingRequestBodyType)
+      } satisfies CreateBookingRequest)
 
       const res = await POST(req)
       expect(res.status).toBe(StatusCodes.CREATED)
@@ -66,7 +73,7 @@ describe("/api/bookings", async () => {
       const req = createMockNextRequest("/api/bookings", "POST", {
         gameSession,
         playerLevel: PlayLevel.beginner,
-      } satisfies CreateBookingRequestBodyType)
+      } satisfies CreateBookingRequest)
       const res = await POST(req)
 
       expect(res.status).toBe(StatusCodes.CONFLICT)
@@ -83,11 +90,42 @@ describe("/api/bookings", async () => {
       const req = createMockNextRequest("", "POST", {
         gameSession,
         playerLevel: PlayLevel.beginner,
-      } satisfies CreateBookingRequestBodyType)
+      } satisfies CreateBookingRequest)
       const res = await POST(req)
 
       expect(res.status).toBe(StatusCodes.FORBIDDEN)
       expect(await res.json()).toStrictEqual({ error: "No remaining sessions" })
+    })
+
+    it("should return a 403 if booking a session scheduled before the booking open time", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+      const customSemester = {
+        ...semesterMock,
+        bookingOpenDay: Weekday.wednesday,
+        bookingOpenTime: new Date(Date.UTC(2025, 0, 1, 12, 0, 0)).toISOString(),
+      }
+      const earlySession = {
+        ...gameSessionMock,
+        startTime: new Date(Date.UTC(2025, 0, 1, 10, 0, 0)).toISOString(),
+        semester: customSemester,
+      }
+
+      vi.setSystemTime(new Date(Date.UTC(2025, 0, 1, 13, 0, 0)))
+
+      try {
+        const req = createMockNextRequest("/api/bookings", "POST", {
+          gameSession: earlySession,
+          playerLevel: PlayLevel.beginner,
+        } satisfies CreateBookingRequest)
+        const res = await POST(req)
+
+        expect(res.status).toBe(StatusCodes.FORBIDDEN)
+        expect(await res.json()).toStrictEqual({
+          error: "Booking is not open yet for this session",
+        })
+      } finally {
+        vi.useRealTimers()
+      }
     })
   })
 
@@ -105,7 +143,7 @@ describe("/api/bookings", async () => {
         casualCapacity: 1,
       },
       playerLevel: PlayLevel.beginner,
-    } satisfies CreateBookingRequestBodyType)
+    } satisfies CreateBookingRequest)
     const res = await POST(req)
 
     expect(res.status).toBe(StatusCodes.FORBIDDEN)
@@ -126,7 +164,7 @@ describe("/api/bookings", async () => {
         capacity: 1,
       },
       playerLevel: PlayLevel.beginner,
-    } satisfies CreateBookingRequestBodyType)
+    } satisfies CreateBookingRequest)
     const res = await POST(req)
 
     expect(res.status).toBe(StatusCodes.FORBIDDEN)

@@ -5,13 +5,13 @@ export enum MembershipType {
 }
 
 export enum Weekday {
+  sunday = "sunday",
   monday = "monday",
   tuesday = "tuesday",
   wednesday = "wednesday",
   thursday = "thursday",
   friday = "friday",
   saturday = "saturday",
-  sunday = "sunday",
 }
 
 // TODO: Decide if we should change PlayLevel enum values to title case
@@ -37,6 +37,7 @@ export enum University {
   working = "Working",
   notAStudent = "Not a student",
 }
+
 export enum SessionType {
   ongoing = "Ongoing",
   oneOff = "One off",

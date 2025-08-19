@@ -1,9 +1,14 @@
 "use client"
 import type { MembershipType } from "@repo/shared"
+import { NavigationUtils } from "@repo/ui/utils"
 import { useUpdateEffect } from "@yamada-ui/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { type ReactNode, useMemo } from "react"
 import { type AuthContextValue, useAuth } from "./AuthContext"
+
+export type AuthContextValueWithUser = AuthContextValue & {
+  user: NonNullable<AuthContextValue["user"]>
+}
 
 export type RoleGuardProps = {
   /**
@@ -17,14 +22,14 @@ export type RoleGuardProps = {
   /**
    * The children of the role guard.
    * @example <RoleGuard scope={["member", "casual"]}>
-   *   {(auth) => <div>Hello {auth.user?.name}</div>}
+   *   {(auth) => <div>Hello {auth.user.name}</div>}
    * </RoleGuard>
    */
-  children: (auth: AuthContextValue, loading?: ReactNode) => ReactNode
+  children: (auth: AuthContextValueWithUser, loading?: ReactNode) => ReactNode
   /**
    * The fallback of the role guard.
    * @example <RoleGuard scope={["member", "casual"]}>
-   *   {(auth) => <div>Hello {auth.user?.name}</div>}
+   *   {(auth) => <div>Hello {auth.user.name}</div>}
    * </RoleGuard>
    */
   fallback?: ReactNode
@@ -48,7 +53,7 @@ export const RoleGuard = ({
   }
 
   if (auth.token && auth.user && scopeSet.has(auth.user.role)) {
-    return children(auth)
+    return children(auth as AuthContextValueWithUser)
   }
 
   return fallback
@@ -61,6 +66,7 @@ export type GuestOnlyProps = {
 export const GuestOnly = ({ children }: GuestOnlyProps) => {
   const auth = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const shouldRedirect = useMemo(() => {
     return auth.isLoading || !auth.isAvailable || !auth.token || !auth.user
@@ -71,8 +77,15 @@ export const GuestOnly = ({ children }: GuestOnlyProps) => {
       return
     }
 
-    router.replace("/profile")
-  }, [shouldRedirect, router])
+    const raw = searchParams?.get("returnUrl")
+    const decoded = raw ? NavigationUtils.decodeUrlParam(raw) : null
+    let redirectUrl = "/profile"
+    if (decoded && !NavigationUtils.isExternalUrl(decoded)) {
+      redirectUrl = NavigationUtils.normalizeUrl(decoded)
+    }
+
+    router.replace(redirectUrl)
+  }, [shouldRedirect, router, searchParams])
 
   return children
 }

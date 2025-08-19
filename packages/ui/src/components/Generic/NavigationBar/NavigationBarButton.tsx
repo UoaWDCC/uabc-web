@@ -1,5 +1,6 @@
 "use client"
 import { Button } from "@repo/ui/components/Primitive"
+import { isPathActive } from "@repo/ui/utils/path"
 import {
   AnimatePresence,
   Box,
@@ -36,7 +37,7 @@ interface NavigationBarButtonProps extends ButtonProps {
 export const NavigationBarButton = memo(
   forwardRef<NavigationBarButtonProps, "a">(({ label, url, colorScheme, ...props }, ref) => {
     const currentPath = usePathname()
-    const active = currentPath === url
+    const active = isPathActive(currentPath, url)
     const { hovered, ref: hoverRef } = useHover()
     const mergedRef = mergeRefs(ref, hoverRef)
 
@@ -46,7 +47,9 @@ export const NavigationBarButton = memo(
 
     return (
       <Box position="relative">
-        <AnimatePresence>{showIndicator && <NavigationBarHoverIndicator />}</AnimatePresence>
+        <AnimatePresence mode="wait">
+          {showIndicator && <NavigationBarHoverIndicator key="indicator" />}
+        </AnimatePresence>
         <Button
           as={Link}
           borderRadius="150px"
