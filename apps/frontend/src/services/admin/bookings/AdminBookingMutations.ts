@@ -1,6 +1,5 @@
 import type { UpdateBookingRequest } from "@repo/shared/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useAuth } from "@/context/AuthContext"
 import { QueryKeys } from "@/services"
 import AdminBookingService from "./AdminBookingService"
 
@@ -11,13 +10,9 @@ import AdminBookingService from "./AdminBookingService"
  */
 export const useDeleteBooking = () => {
   const queryClient = useQueryClient()
-  const { token } = useAuth()
   return useMutation({
     mutationFn: (bookingId: string) => {
-      if (!token) {
-        throw new Error("No token provided")
-      }
-      return AdminBookingService.deleteBooking(bookingId, token)
+      return AdminBookingService.deleteBooking(bookingId)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
