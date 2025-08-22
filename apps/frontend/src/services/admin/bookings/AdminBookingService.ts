@@ -28,7 +28,12 @@ const AdminBookingService = {
    * @throws An error if the update fails.
    */
   updateBooking: async (bookingId: string, data: UpdateBookingRequest) => {
-    const response = await apiClient.patch(`/api/admin/bookings/${bookingId}`, data, BookingSchema)
+    const response = await apiClient.patch(
+      `/api/admin/bookings/${bookingId}`,
+      data,
+      BookingSchema,
+      { requiresAuth: true },
+    )
     return ApiClient.throwIfError(response)
   },
 } as const

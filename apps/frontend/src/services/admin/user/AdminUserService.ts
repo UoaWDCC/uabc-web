@@ -15,7 +15,9 @@ const AdminUserService = {
    * @returns The created user.
    */
   createUser: async (data: CreateUserRequest) => {
-    const response = await apiClient.post("/api/admin/users", data, GetUserResponseSchema)
+    const response = await apiClient.post("/api/admin/users", data, GetUserResponseSchema, {
+      requiresAuth: true,
+    })
     return ApiClient.throwIfError(response)
   },
   /**
@@ -26,7 +28,9 @@ const AdminUserService = {
    */
   getPaginatedUsers: async ({ limit = 100, page }: PaginationQuery) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
-    const response = await apiClient.get(`/api/admin/users?${query}`, GetAllUsersResponseSchema)
+    const response = await apiClient.get(`/api/admin/users?${query}`, GetAllUsersResponseSchema, {
+      requiresAuth: true,
+    })
     return ApiClient.throwIfError(response)
   },
   /**
@@ -36,7 +40,9 @@ const AdminUserService = {
    * @returns A promise that resolves to a user.
    */
   getUser: async (id: string) => {
-    const response = await apiClient.get(`/api/admin/users/${id}`, GetUserResponseSchema)
+    const response = await apiClient.get(`/api/admin/users/${id}`, GetUserResponseSchema, {
+      requiresAuth: true,
+    })
     return ApiClient.throwIfError(response)
   },
   /**
@@ -47,7 +53,9 @@ const AdminUserService = {
    * @returns A promise that resolves to the updated user.
    */
   updateUser: async ({ id, data }: { id: string; data: UpdateUserRequest }) => {
-    const response = await apiClient.patch(`/api/admin/users/${id}`, data, GetUserResponseSchema)
+    const response = await apiClient.patch(`/api/admin/users/${id}`, data, GetUserResponseSchema, {
+      requiresAuth: true,
+    })
     return ApiClient.throwIfError(response)
   },
   /**
@@ -57,7 +65,9 @@ const AdminUserService = {
    * @returns A promise that resolves to a boolean indicating success.
    */
   deleteUser: async (id: string) => {
-    const response = await apiClient.delete(`/api/admin/users/${id}`)
+    const response = await apiClient.delete(`/api/admin/users/${id}`, undefined, {
+      requiresAuth: true,
+    })
     return ApiClient.throwIfError(response)
   },
 } as const

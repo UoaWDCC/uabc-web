@@ -19,6 +19,7 @@ const AdminGameSessionScheduleService = {
       "/admin/game-session-schedules",
       data,
       GetGameSessionScheduleResponseSchema,
+      { requiresAuth: true },
     )
     return ApiClient.throwIfError(response)
   },
@@ -33,6 +34,7 @@ const AdminGameSessionScheduleService = {
     const response = await apiClient.get(
       `/admin/game-session-schedules?${query}`,
       GetAllGameSessionSchedulesResponseSchema,
+      { requiresAuth: true },
     )
     return ApiClient.throwIfError(response)
   },
@@ -46,6 +48,7 @@ const AdminGameSessionScheduleService = {
     const response = await apiClient.get(
       `/admin/game-session-schedules/${id}`,
       GetGameSessionScheduleResponseSchema,
+      { requiresAuth: true },
     )
     return ApiClient.throwIfError(response)
   },
@@ -67,6 +70,7 @@ const AdminGameSessionScheduleService = {
       `/admin/game-session-schedules/${id}`,
       gameSessionScheduleData,
       GetGameSessionScheduleResponseSchema,
+      { requiresAuth: true },
     )
     return ApiClient.throwIfError(response)
   },
@@ -77,7 +81,9 @@ const AdminGameSessionScheduleService = {
    * @returns A promise that resolves to a boolean indicating success.
    */
   deleteGameSessionSchedule: async (id: string) => {
-    const response = await apiClient.delete(`/admin/game-session-schedules/${id}`)
+    const response = await apiClient.delete(`/admin/game-session-schedules/${id}`, undefined, {
+      requiresAuth: true,
+    })
     return ApiClient.throwIfError(response)
   },
 } as const

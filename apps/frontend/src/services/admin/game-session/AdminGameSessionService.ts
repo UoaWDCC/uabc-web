@@ -13,6 +13,7 @@ const AdminGameSessionService = {
     const response = await apiClient.get(
       `/admin/game-sessions/${id}/bookings`,
       GetBookingsResponseSchema,
+      { requiresAuth: true },
     )
     return ApiClient.throwIfError(response)
   },
@@ -29,6 +30,7 @@ const AdminGameSessionService = {
       "/admin/game-sessions",
       data,
       GetGameSessionResponseSchema,
+      { requiresAuth: true },
     )
     return ApiClient.throwIfError(response)
   },
@@ -45,6 +47,7 @@ const AdminGameSessionService = {
       `/admin/game-sessions/${id}`,
       data,
       GetGameSessionResponseSchema,
+      { requiresAuth: true },
     )
     return ApiClient.throwIfError(response)
   },
@@ -55,7 +58,9 @@ const AdminGameSessionService = {
    * @param id The ID of the game session to delete.
    */
   deleteGameSession: async (id: string) => {
-    const response = await apiClient.delete(`/admin/game-sessions/${id}`)
+    const response = await apiClient.delete(`/admin/game-sessions/${id}`, undefined, {
+      requiresAuth: true,
+    })
     return ApiClient.throwIfError(response)
   },
 } as const
