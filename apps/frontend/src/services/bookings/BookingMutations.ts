@@ -1,5 +1,6 @@
 import type { CreateBookingRequest } from "@repo/shared"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useAuth } from "@/context/AuthContext"
 import { QueryKeys } from "@/services"
 import BookingService from "./BookingService"
 
@@ -10,9 +11,10 @@ import BookingService from "./BookingService"
  */
 export const useCreateBooking = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
     mutationFn: (data: CreateBookingRequest) => {
-      return BookingService.createBooking(data)
+      return BookingService.createBooking(data, token)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

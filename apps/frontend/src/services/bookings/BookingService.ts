@@ -15,9 +15,10 @@ const BookingService = {
    * @returns A promise that resolves to an array of Booking objects.
    * @throws When the API request fails
    */
-  getMyBookings: async () => {
+  getMyBookings: async (token: string | null) => {
     const response = await apiClient.get("/api/me/bookings", GetBookingsResponseSchema, {
       requiresAuth: true,
+      token: token,
     })
     return ApiClient.throwIfError(response)
   },
@@ -28,9 +29,10 @@ const BookingService = {
    * @param data The booking data to create.
    * @returns A promise that resolves to the created booking.
    */
-  createBooking: async (data: CreateBookingRequest) => {
+  createBooking: async (data: CreateBookingRequest, token: string | null) => {
     const response = await apiClient.post("/api/bookings", data, CreateBookingResponseSchema, {
       requiresAuth: true,
+      token: token,
     })
     return ApiClient.throwIfError(response)
   },

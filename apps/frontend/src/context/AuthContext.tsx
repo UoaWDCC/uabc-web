@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return null
       }
       try {
-        const response = await AuthService.getUserInfo()
+        const response = await AuthService.getUserInfo(token)
         return response.data
       } catch (err) {
         if (err instanceof ApiClientError && err.status === StatusCodes.UNAUTHORIZED) {

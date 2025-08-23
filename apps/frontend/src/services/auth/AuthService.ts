@@ -58,8 +58,11 @@ const AuthService = {
    *
    * @returns The user information or null if token is invalid.
    */
-  getUserInfo: async () => {
-    const response = await apiClient.get("/api/me", GetUserResponseSchema, { requiresAuth: true })
+  getUserInfo: async (token: string | null) => {
+    const response = await apiClient.get("/api/me", GetUserResponseSchema, {
+      requiresAuth: true,
+      token,
+    })
     return ApiClient.throwIfError(response)
   },
   /**
@@ -68,9 +71,10 @@ const AuthService = {
    * @param data The user data to update (self-editable fields only)
    * @returns The updated user
    */
-  patchMe: async (data: Partial<User>) => {
+  patchMe: async (data: Partial<User>, token: string | null) => {
     const response = await apiClient.patch("/api/me", data, GetUserResponseSchema, {
       requiresAuth: true,
+      token,
     })
     return ApiClient.throwIfError(response)
   },

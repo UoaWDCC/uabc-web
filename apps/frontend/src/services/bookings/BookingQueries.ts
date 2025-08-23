@@ -14,10 +14,8 @@ export function useMyBookings() {
   return useQuery({
     queryKey: [QueryKeys.BOOKINGS_QUERY_KEY, QueryKeys.MY_BOOKINGS_QUERY_KEY],
     queryFn: async () => {
-      if (!token) {
-        throw new Error("No token provided")
-      }
-      return await BookingService.getMyBookings()
+      return await BookingService.getMyBookings(token)
     },
+    enabled: !!token,
   })
 }
