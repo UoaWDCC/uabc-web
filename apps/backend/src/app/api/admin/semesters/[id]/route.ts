@@ -28,7 +28,10 @@ class SemesterRouteWrapper {
       const semesterDataService = new SemesterDataService()
 
       // check if semester exists, otherwise throw notfound error
-      await semesterDataService.getSemesterById(id)
+      const semester = await semesterDataService.getSemesterById(id)
+      if (!semester) {
+        throw new NotFound()
+      }
 
       if (deleteRelatedDocs) {
         cascadeTransactionId = await createTransactionId()
