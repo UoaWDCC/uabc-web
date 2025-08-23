@@ -238,7 +238,7 @@ describe("ApiClient GET method", () => {
       writable: true,
     })
 
-    const result = await client.get("/test", testSchema, { requiresAuth: true })
+    const result = await client.get("/test", testSchema, { requiresAuth: true, token: null })
 
     expect(result.success).toBe(false)
     if (!result.success) {
@@ -265,7 +265,7 @@ describe("ApiClient GET method", () => {
 
     mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
 
-    const result = await client.get("/test", testSchema, { requiresAuth: true })
+    const result = await client.get("/test", testSchema, { requiresAuth: true, token: mockToken })
 
     expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
       method: "GET",
