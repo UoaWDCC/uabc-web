@@ -1,5 +1,6 @@
 import type { UpdateBookingRequest } from "@repo/shared/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useAuth } from "@/context/AuthContext"
 import { QueryKeys } from "@/services"
 import AdminBookingService from "./AdminBookingService"
 
@@ -10,9 +11,10 @@ import AdminBookingService from "./AdminBookingService"
  */
 export const useDeleteBooking = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
     mutationFn: (bookingId: string) => {
-      return AdminBookingService.deleteBooking(bookingId)
+      return AdminBookingService.deleteBooking({ bookingId, token })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -29,9 +31,10 @@ export const useDeleteBooking = () => {
  */
 export const useUpdateBooking = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
     mutationFn: ({ bookingId, data }: { bookingId: string; data: UpdateBookingRequest }) =>
-      AdminBookingService.updateBooking(bookingId, data),
+      AdminBookingService.updateBooking({ bookingId, data, token }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.BOOKINGS_QUERY_KEY],

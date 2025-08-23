@@ -9,9 +9,16 @@ const AdminSemesterService = {
    * @param data The data for the new semester.
    * @returns The created semester.
    */
-  createSemester: async (data: CreateSemesterRequest) => {
+  createSemester: async ({
+    data,
+    token,
+  }: {
+    data: CreateSemesterRequest
+    token: string | null
+  }) => {
     const response = await apiClient.post("/admin/semesters", data, GetSemesterResponseSchema, {
       requiresAuth: true,
+      token,
     })
     return ApiClient.throwIfError(response)
   },
@@ -22,12 +29,20 @@ const AdminSemesterService = {
    * @param data The updated data for the semester.
    * @returns The updated semester.
    */
-  updateSemester: async ({ id, data }: { id: string; data: UpdateSemesterRequest }) => {
+  updateSemester: async ({
+    id,
+    data,
+    token,
+  }: {
+    id: string
+    data: UpdateSemesterRequest
+    token: string | null
+  }) => {
     const response = await apiClient.put(
       `/admin/semesters/${id}`,
       data,
       GetSemesterResponseSchema,
-      { requiresAuth: true },
+      { requiresAuth: true, token },
     )
     return ApiClient.throwIfError(response)
   },
@@ -37,9 +52,10 @@ const AdminSemesterService = {
    * @param id The ID of the semester to delete.
    * @returns The deleted semester.
    */
-  deleteSemester: async (id: string) => {
+  deleteSemester: async ({ id, token }: { id: string; token: string | null }) => {
     const response = await apiClient.delete(`/admin/semesters/${id}`, undefined, {
       requiresAuth: true,
+      token,
     })
     return ApiClient.throwIfError(response)
   },

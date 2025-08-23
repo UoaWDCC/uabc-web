@@ -1,4 +1,6 @@
+import type { UpdateGameSessionRequest } from "@repo/shared/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useAuth } from "@/context/AuthContext"
 import { QueryKeys } from "@/services"
 import AdminGameSessionService from "./AdminGameSessionService"
 
@@ -9,8 +11,10 @@ import AdminGameSessionService from "./AdminGameSessionService"
  */
 export const useCreateGameSession = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
-    mutationFn: AdminGameSessionService.createGameSession,
+    mutationFn: (data: UpdateGameSessionRequest) =>
+      AdminGameSessionService.createGameSession({ data, token }),
     onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY],
@@ -25,8 +29,10 @@ export const useCreateGameSession = () => {
  */
 export const useUpdateGameSession = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
-    mutationFn: AdminGameSessionService.updateGameSession,
+    mutationFn: ({ id, data }: { id: string; data: UpdateGameSessionRequest }) =>
+      AdminGameSessionService.updateGameSession({ id, data, token }),
     // TODO: When get by id is implemented, only invalidate the one id for get by id
     onSuccess: () =>
       queryClient.invalidateQueries({
@@ -42,8 +48,9 @@ export const useUpdateGameSession = () => {
  */
 export const useDeleteGameSession = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
-    mutationFn: AdminGameSessionService.deleteGameSession,
+    mutationFn: (id: string) => AdminGameSessionService.deleteGameSession(id, token),
     // TODO: When get by id is implemented, only invalidate the one id for get by id
     onSuccess: () =>
       queryClient.invalidateQueries({
