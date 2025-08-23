@@ -96,6 +96,8 @@ describe("/api/admin/semesters/[id]", async () => {
       })
 
       expect(res.status).toBe(StatusCodes.NOT_FOUND)
+      const json = await res.json()
+      expect(json.error).toEqual("Semester not found")
     })
 
     it("should handle errors and return 500 status", async () => {
