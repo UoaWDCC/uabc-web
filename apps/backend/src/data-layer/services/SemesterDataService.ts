@@ -120,11 +120,11 @@ export default class SemesterDataService {
     transactionID?: string | number,
   ): Promise<void> {
     // check to see if semester exists, otherwise throw a notfound error
-    await payload.findByID({
-      collection: "semester",
-      id: semesterId,
-      req: { transactionID },
-    })
+    // await payload.findByID({
+    //   collection: "semester",
+    //   id: semesterId,
+    //   req: { transactionID },
+    // })
 
     const schedules = await payload.find({
       collection: "gameSessionSchedule",

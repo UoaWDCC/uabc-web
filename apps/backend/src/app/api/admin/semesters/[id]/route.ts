@@ -23,13 +23,15 @@ class SemesterRouteWrapper {
     const { id } = await params
     let cascadeTransactionId: string | number | undefined
     const deleteRelatedDocs = req.nextUrl.searchParams.get("deleteRelatedDocs") !== "false"
-    if (deleteRelatedDocs) {
-      cascadeTransactionId = await createTransactionId()
-    }
 
     try {
       const semesterDataService = new SemesterDataService()
+
+      // check if semester exists, otherwise throw notfound error
+      await semesterDataService.getSemesterById(id)
+
       if (deleteRelatedDocs) {
+        cascadeTransactionId = await createTransactionId()
         await semesterDataService.deleteRelatedDocsForSemester(id, cascadeTransactionId)
       }
       await semesterDataService.deleteSemester(id, cascadeTransactionId)
