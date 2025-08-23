@@ -19,6 +19,7 @@ export const RouteGroups = {
   },
   user: {
     profile: Routes.PROFILE,
+    onboarding: Routes.ONBOARDING,
   },
 } as const
 
