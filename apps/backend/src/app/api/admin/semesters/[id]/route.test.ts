@@ -45,7 +45,19 @@ describe("/api/admin/semesters/[id]", async () => {
       expect(await res.json()).toStrictEqual({ error: "No scope" })
     })
 
-    it("should delete semester and related documents if user is admin", async () => {
+    it("should delete semester if user is admin", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const newSemester = await semesterDataService.createSemester(semesterCreateMock)
+
+      const res = await DELETE({} as NextRequest, {
+        params: Promise.resolve({ id: newSemester.id }),
+      })
+
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+      await expect(semesterDataService.getSemesterById(newSemester.id)).rejects.toThrow("Not Found")
+    })
+
+    it("should delete semester and related documents if user is admin and deleteRelatedDocs is true", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
