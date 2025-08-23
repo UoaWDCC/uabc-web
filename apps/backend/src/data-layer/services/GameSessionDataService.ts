@@ -72,19 +72,6 @@ export default class GameSessionDataService {
     })
   }
 
-  // /**
-  //  * Deletes a {@link GameSession} given its ID
-  //  *
-  //  * @param id the ID of the {@link GameSession} to delete
-  //  * @returns the deleted {@link GameSession} document if it exists, otherwise throws a {@link NotFound} error
-  //  */
-  // public async deleteGameSession(id: string): Promise<GameSession> {
-  //   return await payload.delete({
-  //     collection: "gameSession",
-  //     id,
-  //   })
-  // }
-
   /**
    * Deletes a {@link GameSession} given its ID, and deletes it's related bookings.
    *
@@ -96,16 +83,6 @@ export default class GameSessionDataService {
     id: string,
     transactionID?: string | number,
   ): Promise<GameSession> {
-    await payload.delete({
-      collection: "booking",
-      where: {
-        gameSession: {
-          equals: id,
-        },
-      },
-      req: { transactionID },
-    })
-
     return await payload.delete({
       collection: "gameSession",
       id,
@@ -295,23 +272,72 @@ export default class GameSessionDataService {
     id: string,
     transactionID?: string | number,
   ): Promise<GameSessionSchedule> {
-    const gameSessions = await payload.find({
-      collection: "gameSession",
-      where: { gameSessionSchedule: { equals: id } },
-      pagination: false,
-      req: { transactionID },
-    })
-
-    for (const gameSession of gameSessions.docs) {
-      await this.deleteGameSession(gameSession.id, transactionID)
-    }
-
     return await payload.delete({
       collection: "gameSessionSchedule",
       id,
       req: { transactionID },
     })
   }
+
+  /**
+   * Deletes all GameSessionSchedules for a {@link Semester}
+   *
+   * @param semesterId the ID of the semester whose game session schedules are to be deleted
+   * @param transactionID An optional transaction ID for the request, useful for tracing
+   */
+  public async deleteGameSessionScheduleForSemester(
+    semesterId: string,
+    transactionID?: string | number,
+  ): Promise<void> {
+    await payload.delete({
+      collection: "gameSessionSchedule",
+      where: {
+        semester: {
+          equals: semesterId,
+        },
+      },
+      req: { transactionID },
+    })
+  }
+
+  /**
+   * Deletes {@link GameSessions} given a gameSessionScheduleId
+   *
+   * @param id the ID of the {@link GameSessionSchedule} whose gameSessions we want to delete
+   * @param transactionID An optional transaction ID for the request, useful for tracing
+   * @returns the deleted {@link GameSession} documents if it exists, otherwise throws a {@link NotFound} error
+   */
+  public async deleteGameSessionForGameSessionSchedule(
+    gameSessionScheduleId: string,
+    transactionID?: string | number,
+  ) {
+    await payload.delete({
+      collection: "gameSession",
+      where: { gameSessionSchedule: { equals: gameSessionScheduleId } },
+      req: { transactionID },
+    })
+  }
+  // public async deleteGameSessionSchedule(
+  //   id: string,
+  //   transactionID?: string | number,
+  // ): Promise<GameSessionSchedule> {
+  //   const gameSessions = await payload.find({
+  //     collection: "gameSession",
+  //     where: { gameSessionSchedule: { equals: id } },
+  //     pagination: false,
+  //     req: { transactionID },
+  //   })
+
+  //   for (const gameSession of gameSessions.docs) {
+  //     await this.deleteGameSession(gameSession.id, transactionID)
+  //   }
+
+  //   return await payload.delete({
+  //     collection: "gameSessionSchedule",
+  //     id,
+  //     req: { transactionID },
+  //   })
+  // }
 
   // NB: GameSessionSchedule doesn't have docs..? so that means I can't be certain it'll return an array of documents right. should I add docs to it or is there a better way to do it
   //   /**

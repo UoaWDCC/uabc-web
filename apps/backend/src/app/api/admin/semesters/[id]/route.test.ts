@@ -66,18 +66,14 @@ describe("/api/admin/semesters/[id]", async () => {
       })
 
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
-      await expect(semesterDataService.getSemesterById(newSemester.id)).rejects.toThrow(
-        getReasonPhrase(StatusCodes.NOT_FOUND),
-      )
+      await expect(semesterDataService.getSemesterById(newSemester.id)).rejects.toThrow("Not Found")
       await expect(
         gameSessionDataService.getGameSessionScheduleById(newGameSessionSchedule.id),
-      ).rejects.toThrow(getReasonPhrase(StatusCodes.NOT_FOUND))
+      ).rejects.toThrow("Not Found")
       await expect(gameSessionDataService.getGameSessionById(newGameSession.id)).rejects.toThrow(
-        getReasonPhrase(StatusCodes.NOT_FOUND),
+        "Not Found",
       )
-      await expect(bookingDataService.getBookingById(newBooking.id)).rejects.toThrow(
-        getReasonPhrase(StatusCodes.NOT_FOUND),
-      )
+      await expect(bookingDataService.getBookingById(newBooking.id)).rejects.toThrow("Not Found")
     })
 
     it("should return 404 if semester is non-existent", async () => {
@@ -90,7 +86,22 @@ describe("/api/admin/semesters/[id]", async () => {
       expect(res.status).toBe(StatusCodes.NOT_FOUND)
     })
 
-    it("should rollback transaction and return 500 status if error occurs", async () => {
+    it("should handle errors and return 500 status", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      vi.spyOn(SemesterDataService.prototype, "deleteSemester").mockRejectedValueOnce(
+        new Error("Database error"),
+      )
+
+      const res = await DELETE({} as NextRequest, {
+        params: Promise.resolve({ id: "test" }),
+      })
+
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      const json = await res.json()
+      expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+    })
+
+    it("should rollback transaction if error occurs in transaction", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
@@ -111,13 +122,9 @@ describe("/api/admin/semesters/[id]", async () => {
         new Error("Cascade deletion failed"),
       )
 
-      const res = await DELETE({} as NextRequest, {
+      await DELETE({} as NextRequest, {
         params: Promise.resolve({ id: "test" }),
       })
-
-      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
-      const json = await res.json()
-      expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
 
       const existingSemester = await semesterDataService.getSemesterById(newSemester.id)
       const existingGameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(

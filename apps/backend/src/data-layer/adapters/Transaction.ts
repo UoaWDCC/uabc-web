@@ -1,25 +1,31 @@
 import { payload } from "./Payload"
 
 /**
- * Retrieves a transaction ID for cascading deletes if related bookings should be deleted.
- * @param shouldDeleteRelated indicates whether related bookings should be deleted
- * @private
+ * Creates a transaction ID for cascading deletes
  *
- * @remarks it should be noted that this method will return undefined if the `deleteRelatedBookings` parameter is false or if transaction support is not enabled in Payload.
+ * @param shouldDeleteRelated indicates whether related bookings should be deleted
+ * @returns the identifier for the transaction or null if one cannot be established
  */
-export async function getTransactionId(
-  shouldDeleteRelated: boolean,
-): Promise<string | number | undefined> {
-  if (!shouldDeleteRelated) return undefined
+export async function createTransactionId(): Promise<string | number | undefined> {
   return (await payload.db.beginTransaction()) ?? undefined
 }
 
+/**
+ * Commits a transaction for a successful cascade transaction
+ *
+ * @param cascadeTransactionId the id of the cascade transaction
+ */
 export async function commitCascadeTransaction(cascadeTransactionId?: string | number) {
   if (cascadeTransactionId) {
     await payload.db.commitTransaction(cascadeTransactionId)
   }
 }
 
+/**
+ * Rollbacks a transaction for failed cascade transaction
+ *
+ * @param cascadeTransactionId the id of the cascade transaction
+ */
 export async function rollbackCascadeTransaction(cascadeTransactionId?: string | number) {
   if (cascadeTransactionId) {
     await payload.db.rollbackTransaction(cascadeTransactionId)

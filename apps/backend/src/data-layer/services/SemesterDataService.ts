@@ -2,7 +2,6 @@ import type { CreateSemesterData, EditSemesterData } from "@repo/shared"
 import type { Semester } from "@repo/shared/payload-types"
 import { NotFound } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
-import GameSessionDataService from "./GameSessionDataService"
 
 export default class SemesterDataService {
   /**
@@ -111,18 +110,15 @@ export default class SemesterDataService {
   }
 
   /**
-   * Deletes all GameSessionSchedules for a {@link Semester}, which will then subsequently delete their related docs through cascade deletion
+   * Deletes all related docs for a semester
    *
-   * @param semesterIdf the ID of the semester whose game session schedules are to be deleted
+   * @param semesterId the ID of the semester whose game session schedules are to be deleted
    * @param transactionID An optional transaction ID for the request, useful for tracing
    */
   public async deleteRelatedDocsForSemester(
     semesterId: string,
     transactionID?: string | number,
   ): Promise<void> {
-    const gameSessionScheduleService = new GameSessionDataService()
-
-    // if we use payload.delete then the cascade deletion logic won't work, as we're not using hooks as well
     const schedules = await payload.find({
       collection: "gameSessionSchedule",
       where: {
@@ -133,11 +129,48 @@ export default class SemesterDataService {
       pagination: false,
       req: { transactionID },
     })
-
     const scheduleIds = schedules.docs.map((schedule) => schedule.id)
-    // couldn't figure out how to finish implementing the bulk game session schedule deletion so i'm just using a for loop for now - is it fine to keep as is?
-    for (const scheduleId of scheduleIds) {
-      await gameSessionScheduleService.deleteGameSessionSchedule(scheduleId, transactionID)
-    }
+
+    const sessions = await payload.find({
+      collection: "gameSession",
+      where: {
+        gameSessionSchedule: {
+          in: { scheduleIds },
+        },
+      },
+      pagination: false,
+      req: { transactionID },
+    })
+    const sessionIds = sessions.docs.map((session) => session.id)
+
+    await payload.delete({
+      collection: "booking",
+      where: {
+        gameSession: {
+          in: { sessionIds },
+        },
+      },
+      req: { transactionID },
+    })
+
+    await payload.delete({
+      collection: "gameSession",
+      where: {
+        gameSessionSchedule: {
+          in: { scheduleIds },
+        },
+      },
+      req: { transactionID },
+    })
+
+    await payload.delete({
+      collection: "gameSessionSchedule",
+      where: {
+        semester: {
+          equals: { semesterId },
+        },
+      },
+      req: { transactionID },
+    })
   }
 }
