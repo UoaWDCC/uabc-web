@@ -82,4 +82,88 @@ describe("<OnboardingSection />", () => {
       dietaryRequirements: "Peanut",
     })
   }, 10_000)
+
+  it("should handle when user is missing fields", () => {
+    const mockAuthMissingFields: AuthContextValueWithUser = {
+      ...mockAuth,
+      user: {
+        ...casualUserMock,
+        firstName: "",
+        lastName: null,
+        phoneNumber: null,
+        university: null,
+        studentId: null,
+        studentUpi: null,
+        gender: null,
+        playLevel: null,
+        dietaryRequirements: null,
+      },
+    }
+
+    render(<OnboardingSection auth={mockAuthMissingFields} />)
+    expect(screen.getByText("Casual member information")).toBeInTheDocument()
+  })
+
+  it("should handle user with only phoneNumber present", () => {
+    const userWithOnlyPhone: AuthContextValueWithUser = {
+      ...mockAuth,
+      user: {
+        ...casualUserMock,
+        firstName: "",
+        lastName: null,
+        phoneNumber: "021 123 4567",
+        university: null,
+        studentId: null,
+        studentUpi: null,
+        gender: null,
+        playLevel: null,
+        dietaryRequirements: null,
+      },
+    }
+
+    render(<OnboardingSection auth={userWithOnlyPhone} />)
+    expect(screen.getByText("Basic Info")).toBeInTheDocument()
+  })
+
+  it("should handle user with only gender present", () => {
+    const userWithOnlyGender: AuthContextValueWithUser = {
+      ...mockAuth,
+      user: {
+        ...casualUserMock,
+        firstName: "",
+        lastName: null,
+        phoneNumber: null,
+        university: null,
+        studentId: null,
+        studentUpi: null,
+        gender: Gender.female,
+        playLevel: null,
+        dietaryRequirements: null,
+      },
+    }
+
+    render(<OnboardingSection auth={userWithOnlyGender} />)
+    expect(screen.getByText("Basic Info")).toBeInTheDocument()
+  })
+
+  it("should handle user with university and gender but no name", () => {
+    const userWithUniversityAndGender: AuthContextValueWithUser = {
+      ...mockAuth,
+      user: {
+        ...casualUserMock,
+        firstName: "",
+        lastName: null,
+        phoneNumber: null,
+        university: University.uoa,
+        studentId: "123456",
+        studentUpi: "abc123",
+        gender: Gender.male,
+        playLevel: PlayLevel.intermediate,
+        dietaryRequirements: "None",
+      },
+    }
+
+    render(<OnboardingSection auth={userWithUniversityAndGender} />)
+    expect(screen.getByText("Basic Info")).toBeInTheDocument()
+  })
 })
