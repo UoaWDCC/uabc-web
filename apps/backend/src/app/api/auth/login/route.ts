@@ -1,4 +1,4 @@
-import { TOKEN_EXPIRY_TIME } from "@repo/shared"
+import { TOKEN_EXPIRY_TIME, type University } from "@repo/shared"
 import type { Authentication, User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
@@ -53,7 +53,11 @@ export const POST = async (req: NextRequest) => {
 
   // Omit remainingSessions from user before signing JWT (type-safe)
   const { remainingSessions: _omit, ...userWithoutSessions } = user
-  const token = authService.signJWT({ user: userWithoutSessions }, { expiresIn: TOKEN_EXPIRY_TIME })
+  const userForJWT = {
+    ...userWithoutSessions,
+    university: userWithoutSessions.university as University | null | undefined,
+  }
+  const token = authService.signJWT({ user: userForJWT }, { expiresIn: TOKEN_EXPIRY_TIME })
   const response = NextResponse.json(
     {
       data: token,

@@ -1,3 +1,4 @@
+import type { University } from "@repo/shared"
 import { adminUserMock, casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import type { CollectionSlug } from "payload"
 import AuthService from "@/business-layer/services/AuthService"
@@ -45,9 +46,24 @@ beforeEach(async () => {
       }),
     ),
   )
-  casualToken = authService.signJWT({ user: casualUserMock })
-  memberToken = authService.signJWT({ user: memberUserMock })
-  adminToken = authService.signJWT({ user: adminUserMock })
+
+  // Apply university type assertion for JWT compatibility
+  const casualUserForJWT = {
+    ...casualUserMock,
+    university: casualUserMock.university as University | null | undefined,
+  }
+  const memberUserForJWT = {
+    ...memberUserMock,
+    university: memberUserMock.university as University | null | undefined,
+  }
+  const adminUserForJWT = {
+    ...adminUserMock,
+    university: adminUserMock.university as University | null | undefined,
+  }
+
+  casualToken = authService.signJWT({ user: casualUserForJWT })
+  memberToken = authService.signJWT({ user: memberUserForJWT })
+  adminToken = authService.signJWT({ user: adminUserForJWT })
 })
 
 afterEach(async () => {
