@@ -1,4 +1,4 @@
-import { AUTH_COOKIE_NAME, CommonResponseSchema } from "@repo/shared"
+import { CommonResponseSchema } from "@repo/shared"
 import type { z } from "zod"
 import { ApiClientError } from "./ApiClientError"
 
@@ -6,12 +6,21 @@ type ApiResponse<T> =
   | { success: true; data: T; status: number }
   | { success: false; error: Error; status: number | null }
 
-type RequestOptions = {
-  headers?: Record<string, string>
-  tags?: string[]
-  revalidate?: number | false
-  requiresAuth?: boolean
-}
+type RequestOptions =
+  | {
+      requiresAuth: true
+      token: string | null
+      headers?: Record<string, string>
+      tags?: string[]
+      revalidate?: number | false
+    }
+  | {
+      requiresAuth?: false
+      token?: string | null
+      headers?: Record<string, string>
+      tags?: string[]
+      revalidate?: number | false
+    }
 
 /**
  * ApiClient is a simple HTTP client for making API requests with runtime validation using zod schemas.
@@ -54,39 +63,6 @@ export class ApiClient {
   }
 
   /**
-   * Retrieves the current token from localStorage.
-   *
-   * @returns The current token or null if not found.
-   * @private
-   */
-  // private getCurrentToken = (): string | null => {
-  //   if (typeof window === "undefined") {
-  //     return null
-  //   }
-
-  //   try {
-  //     const token = JSON.parse(localStorage.getItem(AUTH_COOKIE_NAME) ?? "null")
-  //     return token
-  //   } catch (error) {
-  //     console.error("Error retrieving token from localStorage:", error)
-  //     return null
-  //   }
-  // }
-
-  private getCurrentToken = (): string | null => {
-    if (typeof window === "undefined") {
-      return null
-    }
-    const raw = localStorage.getItem(AUTH_COOKIE_NAME)
-    if (!raw) return null
-    try {
-      return JSON.parse(raw)
-    } catch {
-      return raw
-    }
-  }
-
-  /**
    * Creates fetch options with consistent configuration.
    *
    * @param method The HTTP method.
@@ -100,8 +76,7 @@ export class ApiClient {
     body?: unknown,
     options: RequestOptions = {},
   ): RequestInit & { next?: { tags: string[]; revalidate?: number | false } } {
-    const { headers = {}, tags = [], revalidate, requiresAuth = false } = options
-    const token = this.getCurrentToken()
+    const { requiresAuth = false, token = null, headers = {}, tags = [], revalidate } = options
 
     // Frontend validation: Check if auth is required but no token is available
     const baseHeaders: Record<string, string> = {
@@ -109,7 +84,7 @@ export class ApiClient {
     }
 
     if (requiresAuth) {
-      if (!token) {
+      if (typeof token !== "string" || token.trim() === "") {
         throw new Error("No token provided")
       }
       baseHeaders.Authorization = `Bearer ${token}`
