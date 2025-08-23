@@ -135,7 +135,7 @@ export default class SemesterDataService {
       collection: "gameSession",
       where: {
         gameSessionSchedule: {
-          in: { scheduleIds },
+          in: scheduleIds,
         },
       },
       pagination: false,
@@ -147,7 +147,7 @@ export default class SemesterDataService {
       collection: "booking",
       where: {
         gameSession: {
-          in: { sessionIds },
+          in: sessionIds,
         },
       },
       req: { transactionID },
@@ -157,7 +157,7 @@ export default class SemesterDataService {
       collection: "gameSession",
       where: {
         gameSessionSchedule: {
-          in: { scheduleIds },
+          in: scheduleIds,
         },
       },
       req: { transactionID },
@@ -167,7 +167,7 @@ export default class SemesterDataService {
       collection: "gameSessionSchedule",
       where: {
         semester: {
-          equals: { semesterId },
+          equals: semesterId,
         },
       },
       req: { transactionID },
