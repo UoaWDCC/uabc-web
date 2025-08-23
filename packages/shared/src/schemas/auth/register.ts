@@ -145,11 +145,11 @@ export const AdditionalInfoFormSchema = z.object({
     }),
   }),
   /**
-   * Skill level of the new user
+   * Play level of the new user
    */
-  skillLevel: z.nativeEnum(PlayLevel, {
+  playLevel: z.nativeEnum(PlayLevel, {
     errorMap: () => ({
-      message: "Please select a skill level",
+      message: "Please select a play level",
     }),
   }),
   /**
