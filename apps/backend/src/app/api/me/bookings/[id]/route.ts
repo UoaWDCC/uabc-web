@@ -9,7 +9,8 @@ import UserDataService from "@/data-layer/services/UserDataService"
 
 class RouteWrapper {
   @Security("jwt")
-  static async PATCH(req: RequestWithUser) {
+  static async PATCH(req: RequestWithUser, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
     const gameSessionDataService = new GameSessionDataService()
     const userDataService = new UserDataService()
     const bookingDataService = new BookingDataService()
@@ -61,7 +62,7 @@ class RouteWrapper {
           { status: StatusCodes.CONFLICT },
         )
 
-      const updatedBooking = await bookingDataService.updateBooking(gameSession.id, parsedBody)
+      const updatedBooking = await bookingDataService.updateBooking(id, parsedBody)
 
       return NextResponse.json({ data: updatedBooking }, { status: StatusCodes.OK })
     } catch (error) {
