@@ -1,6 +1,8 @@
 import {
   type GetAllGameSessionsBySemesterResponse,
   GetAllGameSessionsBySemesterResponseSchema,
+  type GetCurrentGameSessionsResponse,
+  GetCurrentGameSessionsResponseSchema,
   GetGameSessionResponseSchema,
   GetPaginatedGameSessionsResponseSchema,
   type PaginationQuery,
@@ -52,6 +54,19 @@ const GameSessionService = {
       ? `${path}?${SearchParams.SESSION_TIMEFRAME}=${sessionTimeframe}`
       : path
     const response = await apiClient.get(url, GetAllGameSessionsBySemesterResponseSchema)
+    return ApiClient.throwIfError(response)
+  },
+
+  /**
+   * Retrieves all current game sessions.
+   *
+   * @returns An array of current game sessions.
+   */
+  getCurrentGameSessions: async (): Promise<GetCurrentGameSessionsResponse> => {
+    const response = await apiClient.get(
+      "/api/game-sessions/current",
+      GetCurrentGameSessionsResponseSchema,
+    )
     return ApiClient.throwIfError(response)
   },
 } as const

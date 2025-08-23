@@ -1,4 +1,4 @@
-import type { GameSessionSchedule, User } from "../payload-types"
+import type { GameSession, GameSessionSchedule, User } from "../payload-types"
 import { Gender, PlayLevel } from "../types/enums"
 
 /**
@@ -33,6 +33,18 @@ export const isPlayLevel = (value: unknown): PlayLevel | undefined => {
  */
 export const isUserObject = (user: User | string | null | undefined): user is User => {
   return !!user && typeof user === "object"
+}
+
+/**
+ * Type guard to check if a value is a GameSession object with required properties
+ *
+ * @param gameSession The value to check
+ * @returns True if the value is a GameSession object, false otherwise
+ */
+export const isGameSessionObject = (
+  gameSession: GameSession | string | null | undefined,
+): gameSession is GameSession => {
+  return !!gameSession && typeof gameSession === "object"
 }
 
 /**

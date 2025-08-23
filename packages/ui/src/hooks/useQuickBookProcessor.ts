@@ -1,9 +1,8 @@
 "use client"
 
-import { MembershipType, PlayLevel, type SessionItem } from "@repo/shared"
+import { MembershipType, type PlayLevel, type SessionItem } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
-import { parseAsStringEnum, useQueryState } from "nuqs"
-import { useCallback, useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useQuickBookStorage } from "./storage/quickBookStorage"
 
 // Constants
@@ -121,7 +120,6 @@ export const useQuickBookProcessor = <
   TAction extends { type: string; payload?: unknown } = { type: string; payload?: unknown },
 >({
   sessions,
-  currentStep,
   dispatch,
   user,
   maxAge = DEFAULT_MAX_AGE_MS,
@@ -131,10 +129,7 @@ export const useQuickBookProcessor = <
     setValue: setQuickBookData,
     removeValue: clearQuickBookData,
   } = useQuickBookStorage()
-  const [, setPlayLevel] = useQueryState(
-    "playLevel",
-    parseAsStringEnum<PlayLevel>(Object.values(PlayLevel)),
-  )
+  const [playLevel, setPlayLevel] = useState<PlayLevel | null>(null)
 
   // Helper function to check if a session is full based on user role
   const isSessionFull = useCallback(
@@ -193,7 +188,7 @@ export const useQuickBookProcessor = <
     }
 
     return true
-  }, [validationResult, quickBookData, clearQuickBookData, setPlayLevel, dispatch, sessions])
+  }, [validationResult, quickBookData, clearQuickBookData, dispatch, sessions])
 
   // Function to save current booking state when moving to next step
   const saveCurrentBookingState = useCallback(
@@ -222,7 +217,7 @@ export const useQuickBookProcessor = <
     /**
      * Whether quick book data is currently being processed
      */
-    isProcessing: validationResult.isValid && currentStep === "play-level",
+    isProcessing: false, // Always false since we removed automatic processing
     /**
      * The reason why the data is invalid (if applicable)
      */
@@ -239,6 +234,14 @@ export const useQuickBookProcessor = <
      * Save current booking state to quick book storage
      */
     saveCurrentBookingState,
+    /**
+     * Set play level in local state
+     */
+    setPlayLevel,
+    /**
+     * Current play level in local state
+     */
+    playLevel,
     /**
      * Raw quick book data (for debugging or custom processing)
      */
