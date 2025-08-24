@@ -3,6 +3,7 @@ import type { GameSession } from "../payload-types"
 import type {
   GameSessionScheduleSchema,
   GetAllGameSessionsBySemesterResponseSchema,
+  GetCurrentGameSessionsResponseSchema,
   GetPaginatedGameSessionsResponseSchema,
   UpdateGameSessionRequestSchema,
 } from "../schemas"
@@ -15,6 +16,8 @@ export type GetPaginatedGameSessionsResponse = z.infer<
 export type GetAllGameSessionsBySemesterResponse = z.infer<
   typeof GetAllGameSessionsBySemesterResponseSchema
 >
+
+export type GetCurrentGameSessionsResponse = z.infer<typeof GetCurrentGameSessionsResponseSchema>
 
 /**
  * Session item type for UI components

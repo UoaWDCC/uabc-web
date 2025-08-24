@@ -8,19 +8,12 @@ vi.mock("./storage/quickBookStorage", () => ({
   useQuickBookStorage: vi.fn(),
 }))
 
-vi.mock("nuqs", () => ({
-  useQueryState: vi.fn(() => [null, vi.fn()]),
-  parseAsStringEnum: vi.fn(),
-}))
-
 const mockUseQuickBookStorage = vi.mocked(
   await import("./storage/quickBookStorage"),
 ).useQuickBookStorage
-const mockUseQueryState = vi.mocked(await import("nuqs")).useQueryState
 
 describe("useQuickBookProcessor", () => {
   const mockDispatch = vi.fn()
-  const mockSetPlayLevel = vi.fn()
   const mockClearQuickBookData = vi.fn()
   const mockSetQuickBookData = vi.fn()
 
@@ -55,7 +48,6 @@ describe("useQuickBookProcessor", () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    mockUseQueryState.mockReturnValue([null, mockSetPlayLevel])
   })
 
   afterEach(() => {
@@ -82,8 +74,8 @@ describe("useQuickBookProcessor", () => {
 
     expect(result.current.hasValidData).toBe(false)
     expect(result.current.validationReason).toBe("no-data")
+    expect(result.current.isProcessing).toBe(false)
     expect(mockDispatch).not.toHaveBeenCalled()
-    expect(mockSetPlayLevel).not.toHaveBeenCalled()
     expect(mockClearQuickBookData).not.toHaveBeenCalled()
   })
 
@@ -112,9 +104,8 @@ describe("useQuickBookProcessor", () => {
     )
 
     expect(result.current.hasValidData).toBe(true)
-    expect(result.current.isProcessing).toBe(false) // Not processing because not on play-level step
+    expect(result.current.isProcessing).toBe(false) // Always false since we removed automatic processing
     expect(mockDispatch).not.toHaveBeenCalled()
-    expect(mockSetPlayLevel).not.toHaveBeenCalled()
   })
 
   it("should clear expired quick book data and return hasValidData as false", () => {
@@ -154,7 +145,6 @@ describe("useQuickBookProcessor", () => {
 
     expect(mockClearQuickBookData).toHaveBeenCalled()
     expect(mockDispatch).not.toHaveBeenCalled()
-    expect(mockSetPlayLevel).not.toHaveBeenCalled()
   })
 
   it("should clear data when session no longer exists and return hasValidData as false", () => {
@@ -194,7 +184,6 @@ describe("useQuickBookProcessor", () => {
 
     expect(mockClearQuickBookData).toHaveBeenCalled()
     expect(mockDispatch).not.toHaveBeenCalled()
-    expect(mockSetPlayLevel).not.toHaveBeenCalled()
   })
 
   it("should clear data when session is full and return hasValidData as false", () => {
@@ -250,7 +239,6 @@ describe("useQuickBookProcessor", () => {
 
     expect(mockClearQuickBookData).toHaveBeenCalled()
     expect(mockDispatch).not.toHaveBeenCalled()
-    expect(mockSetPlayLevel).not.toHaveBeenCalled()
   })
 
   it("should not clear data when session is full for casual users but member capacity is available", () => {
@@ -308,7 +296,6 @@ describe("useQuickBookProcessor", () => {
 
     expect(mockClearQuickBookData).toHaveBeenCalled()
     expect(mockDispatch).not.toHaveBeenCalled()
-    expect(mockSetPlayLevel).not.toHaveBeenCalled()
   })
 
   it("should process valid quick book data and auto-populate form", () => {
@@ -339,7 +326,7 @@ describe("useQuickBookProcessor", () => {
 
     expect(result.current.hasValidData).toBe(true)
     expect(result.current.validationReason).toBe("valid")
-    expect(result.current.isProcessing).toBe(true)
+    expect(result.current.isProcessing).toBe(false)
 
     // Process the data
     act(() => {
@@ -360,7 +347,6 @@ describe("useQuickBookProcessor", () => {
     })
 
     expect(mockDispatch).toHaveBeenCalledWith({ type: "JUMP_TO_CONFIRMATION" })
-    expect(mockSetPlayLevel).toHaveBeenCalledWith(PlayLevel.intermediate)
     expect(mockClearQuickBookData).not.toHaveBeenCalled()
   })
 
@@ -391,10 +377,11 @@ describe("useQuickBookProcessor", () => {
     )
 
     expect(result.current.hasValidData).toBe(true)
-    expect(result.current.isProcessing).toBe(true)
+    expect(result.current.isProcessing).toBe(false)
     expect(result.current.validationReason).toBe("valid")
     expect(typeof result.current.processQuickBookData).toBe("function")
     expect(typeof result.current.clearQuickBookData).toBe("function")
+    expect(typeof result.current.setPlayLevel).toBe("function")
     expect(result.current.quickBookData).toBeDefined()
   })
 
