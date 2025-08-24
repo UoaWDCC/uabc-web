@@ -1,26 +1,16 @@
 "use client"
 
-import {
-  type Gender,
-  PlayLevel,
-  type RegisterFlowState,
-  RegisterFlowStateSchema,
-  type University,
-} from "@repo/shared"
+import { type Gender, PlayLevel, type RegisterFlowState, type University } from "@repo/shared"
+import type { AuthContextValueWithUser } from "@repo/shared/types/auth"
 import { RegisterFlow } from "@repo/ui/components/Generic"
-import { useLocalStorage } from "@repo/ui/hooks"
+import { useRegisterFlowStorage } from "@repo/ui/hooks/storage/registerFlowStorage"
 import { Container } from "@yamada-ui/react"
 import { useEffect } from "react"
-import type { AuthContextValueWithUser } from "@/context/RoleWrappers"
 import { useUpdateSelfMutation } from "@/services/auth/useUpdateSelfMutation"
 
 export const OnboardingSection = ({ auth }: { auth: AuthContextValueWithUser }) => {
   const { user } = auth
-  const LOCAL_STORAGE_KEY = "register-flow"
-  const { setValue } = useLocalStorage<RegisterFlowState>(
-    LOCAL_STORAGE_KEY,
-    RegisterFlowStateSchema,
-  )
+  const { setValue } = useRegisterFlowStorage()
   const updateSelfMutation = useUpdateSelfMutation()
 
   useEffect(() => {

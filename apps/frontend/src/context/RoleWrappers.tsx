@@ -1,14 +1,11 @@
 "use client"
 import { type MembershipType, OnboardedUserSchema, Routes } from "@repo/shared"
+import type { AuthContextValueWithUser } from "@repo/shared/types/auth"
 import { NavigationUtils } from "@repo/ui/utils"
 import { useUpdateEffect } from "@yamada-ui/react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { type ReactNode, useEffect, useMemo } from "react"
-import { type AuthContextValue, useAuth } from "./AuthContext"
-
-export type AuthContextValueWithUser = AuthContextValue & {
-  user: NonNullable<AuthContextValue["user"]>
-}
+import { useAuth } from "./AuthContext"
 
 export type RoleGuardProps = {
   /**

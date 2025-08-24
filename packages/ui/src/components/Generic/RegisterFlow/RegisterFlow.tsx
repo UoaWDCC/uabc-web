@@ -1,6 +1,5 @@
 "use client"
 
-import { RegisterFlowStateSchema } from "@repo/shared/schemas"
 import type {
   AdditionalInfoFormValues,
   BasicInfoForm1Values,
@@ -9,7 +8,7 @@ import type {
   RegisterFlowState,
   UniversityInfoFormValues,
 } from "@repo/shared/types"
-import { useLocalStorage } from "@repo/ui/hooks"
+import { useRegisterFlowStorage } from "@repo/ui/hooks/storage/registerFlowStorage"
 import { ArrowLeftIcon } from "@yamada-ui/lucide"
 import { Center, Grid, GridItem, VStack } from "@yamada-ui/react"
 import { memo, useReducer } from "react"
@@ -100,8 +99,6 @@ interface RegisterFlowProps {
   handleComplete?: (state: RegisterFlowState) => Promise<void>
 }
 
-const LOCAL_STORAGE_KEY = "register-flow"
-
 /**
  * RegisterFlow component that manages the multi-step onboarding process.
  *
@@ -109,10 +106,7 @@ const LOCAL_STORAGE_KEY = "register-flow"
  * @returns The RegisterFlow component with all steps and forms.
  */
 export const RegisterFlow = memo(({ handleComplete }: RegisterFlowProps) => {
-  const { value: persistedState, setValue: setPersistedState } = useLocalStorage<RegisterFlowState>(
-    LOCAL_STORAGE_KEY,
-    RegisterFlowStateSchema,
-  )
+  const { value: persistedState, setValue: setPersistedState } = useRegisterFlowStorage()
 
   const [state, dispatch] = useReducer(reducer, persistedState ?? initialState)
 

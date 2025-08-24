@@ -1,27 +1,14 @@
 import { casualUserMock } from "@repo/shared/mocks"
+import { mockAuthContextValue } from "@repo/shared/mocks/Authentication.mock"
 import { Gender, PlayLevel, University } from "@repo/shared/types"
+import type { AuthContextValueWithUser } from "@repo/shared/types/auth"
 import { render, screen } from "@repo/ui/test-utils"
-import type { AuthContextValueWithUser } from "@/context/RoleWrappers"
 import { OnboardingSection } from "./OnboardingSection"
 
 vi.mock("@/context/AuthContext", () => ({
-  useAuth: () => mockAuth,
+  useAuth: () => mockAuthContextValue,
   AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
-
-const mockAuth: AuthContextValueWithUser = {
-  user: casualUserMock,
-  isLoading: false,
-  isPending: false,
-  error: null,
-  token: "mock-token",
-  isAvailable: true,
-  login: {} as never,
-  emailVerificationCode: {} as never,
-  register: {} as never,
-  setToken: {} as never,
-  logout: {} as never,
-}
 
 const mockMutateAsync = vi.fn()
 vi.mock("@/services/auth/useUpdateSelfMutation", () => ({
@@ -38,12 +25,12 @@ describe("<OnboardingSection />", () => {
   })
 
   it("renders the register flow component", () => {
-    render(<OnboardingSection auth={mockAuth} />)
+    render(<OnboardingSection auth={mockAuthContextValue} />)
     expect(screen.getByText("Basic Info")).toBeInTheDocument()
   })
 
   it("should call handleComplete when registration is complete", async () => {
-    const { user } = render(<OnboardingSection auth={mockAuth} />)
+    const { user } = render(<OnboardingSection auth={mockAuthContextValue} />)
 
     // Basic Info Form 1
     await user.click(screen.getByText("Continue"))
@@ -85,7 +72,7 @@ describe("<OnboardingSection />", () => {
 
   it("should handle when user is missing fields", () => {
     const mockAuthMissingFields: AuthContextValueWithUser = {
-      ...mockAuth,
+      ...mockAuthContextValue,
       user: {
         ...casualUserMock,
         firstName: "",
@@ -106,7 +93,7 @@ describe("<OnboardingSection />", () => {
 
   it("should handle user with only phoneNumber present", () => {
     const userWithOnlyPhone: AuthContextValueWithUser = {
-      ...mockAuth,
+      ...mockAuthContextValue,
       user: {
         ...casualUserMock,
         firstName: "",
@@ -127,7 +114,7 @@ describe("<OnboardingSection />", () => {
 
   it("should handle user with only gender present", () => {
     const userWithOnlyGender: AuthContextValueWithUser = {
-      ...mockAuth,
+      ...mockAuthContextValue,
       user: {
         ...casualUserMock,
         firstName: "",
@@ -148,7 +135,7 @@ describe("<OnboardingSection />", () => {
 
   it("should handle user with university and gender but no name", () => {
     const userWithUniversityAndGender: AuthContextValueWithUser = {
-      ...mockAuth,
+      ...mockAuthContextValue,
       user: {
         ...casualUserMock,
         firstName: "",
