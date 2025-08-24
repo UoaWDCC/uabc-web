@@ -6,7 +6,10 @@ import AuthService from "@/business-layer/services/AuthService"
 import MailService from "@/business-layer/services/MailService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
-import { getVerificationCodeExpiryDate } from "@/data-layer/utils/DateUtils"
+import {
+  getVerificationCodeCoolDownDate,
+  getVerificationCodeExpiryDate,
+} from "@/data-layer/utils/DateUtils"
 
 export const POST = async (req: NextRequest) => {
   const userDataService = new UserDataService()
@@ -29,40 +32,39 @@ export const POST = async (req: NextRequest) => {
     try {
       const user = await userDataService.getUserByEmail(email)
 
-      // remove expired verification codes
-      const now = new Date()
-      const userEmailVerification = user.emailVerification || []
-      const validCodes = userEmailVerification.filter(
-        (verification) => new Date(verification.expiresAt) > now,
-      )
-
-      // check if user has max number of verification codes (5)
-      if (userEmailVerification.length >= 5) {
+      // check that latest verification code is past cool down period
+      const latestVerification = user.emailVerification?.[0] || null
+      if (
+        latestVerification &&
+        getVerificationCodeCoolDownDate(new Date(latestVerification.createdAt)) > new Date()
+      ) {
         return NextResponse.json(
-          { error: "Maximum number of verification codes reached" },
+          { error: "A verification code has already been sent recently" },
           { status: StatusCodes.TOO_MANY_REQUESTS },
         )
       }
+
+      const newCodes = [
+        {
+          verificationCode: code,
+          createdAt: new Date().toISOString(), // Use current date for createdAt
+          expiresAt: getVerificationCodeExpiryDate().toISOString(),
+        },
+        ...(user.emailVerification || []).slice(0, 4), // Keep only the latest 5 codes
+      ]
+
       await userDataService.updateUser(user.id, {
-        emailVerification: [
-          ...validCodes,
-          {
-            verificationCode: code,
-            createdAt: now.toISOString(),
-            expiresAt: getVerificationCodeExpiryDate(now).toISOString(),
-          },
-        ],
+        emailVerification: newCodes,
       })
     } catch {
-      const verificationCreatedAt = new Date() // Use current date for createdAt
       await userDataService.createUser({
         firstName: email,
         email,
         emailVerification: [
           {
             verificationCode: code,
-            createdAt: verificationCreatedAt.toISOString(),
-            expiresAt: getVerificationCodeExpiryDate(verificationCreatedAt).toISOString(),
+            createdAt: new Date().toISOString(), // Use current date for createdAt
+            expiresAt: getVerificationCodeExpiryDate().toISOString(),
           },
         ],
         role: MembershipType.casual,

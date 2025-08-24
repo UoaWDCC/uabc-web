@@ -67,6 +67,28 @@ describe("tests /api/auth/register", () => {
     expect(json.error).toBe("Invalid email verification code")
   })
 
+  it("should return a 400 if a user submits an expired verification code", async () => {
+    const expiredTime = new Date(Date.now() - 60 * 60 * 1000) // 1 hour ago
+    await userDataService.createUser({
+      firstName: registerBody.email,
+      email: registerBody.email,
+      emailVerification: [
+        {
+          verificationCode: registerBody.emailVerificationCode,
+          createdAt: expiredTime.toISOString(),
+          expiresAt: getVerificationCodeExpiryDate(expiredTime).toISOString(),
+        },
+      ],
+      role: MembershipType.casual,
+    })
+
+    const res = await POST(createMockNextRequest("", "POST", registerBody))
+    const json = await res.json()
+
+    expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+    expect(json.error).toBe("Latest email verification code has expired")
+  })
+
   it("should return a 403 if the user hasn't created a verification code request", async () => {
     const res = await POST(createMockNextRequest("", "POST", registerBody))
 

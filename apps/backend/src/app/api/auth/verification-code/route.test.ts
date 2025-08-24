@@ -49,6 +49,11 @@ describe("/api/auth/verification-code", () => {
   it("should add a the verification code if a user already exists", async () => {
     const code = "123456"
     const code2 = "234567"
+    // Mock the first time (current time)
+    const firstTime = new Date()
+    vi.useFakeTimers()
+    vi.setSystemTime(firstTime)
+
     vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(code)
     vi.spyOn(MailService, "sendEmailVerificationCode").mockResolvedValue({ success: true })
 
@@ -64,6 +69,9 @@ describe("/api/auth/verification-code", () => {
       expiresAt: expect.any(String),
     })
 
+    const secondTime = new Date(firstTime.getTime() + 6 * 60 * 1000) // 6 minutes later
+    vi.setSystemTime(secondTime)
+
     vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(code2)
 
     const res2 = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
@@ -77,6 +85,8 @@ describe("/api/auth/verification-code", () => {
       createdAt: expect.any(String),
       expiresAt: expect.any(String),
     })
+
+    vi.useRealTimers()
   })
 
   it("should add a new verification code correctly if a user has an undefined emailVerification field", async () => {
@@ -125,23 +135,23 @@ describe("/api/auth/verification-code", () => {
     expect(json.details).toBeDefined()
   })
 
-  it("should return 429 if the user has reached the maximum number of verification codes", async () => {
+  it("should return 429 if the user tries to resend before cool down finishes", async () => {
     const verificationCreatedAt = new Date() // Use current date for createdAt
     vi.spyOn(UserDataService.prototype, "getUserByEmail").mockResolvedValueOnce({
       ...casualUserMock,
-      emailVerification: Array.from({ length: 5 }, (_, i) => ({
-        verificationCode: `${i * 100000}`,
-        createdAt: verificationCreatedAt.toISOString(),
-        expiresAt: getVerificationCodeExpiryDate(verificationCreatedAt).toISOString(),
-      })),
+      emailVerification: [
+        {
+          verificationCode: "333555",
+          createdAt: verificationCreatedAt.toISOString(),
+          expiresAt: getVerificationCodeExpiryDate(verificationCreatedAt).toISOString(),
+        },
+      ],
     })
-
     const req = createMockNextRequest("/api/auth/verification-code", "POST", { email })
     const res = await POST(req)
-
     expect(res.status).toBe(StatusCodes.TOO_MANY_REQUESTS)
     const json = await res.json()
-    expect(json.error).toBe("Maximum number of verification codes reached")
+    expect(json.error).toBe("A verification code has already been sent recently")
   })
 
   it("should return 500 for internal server error", async () => {
