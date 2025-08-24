@@ -3,6 +3,7 @@ import { gameSessionScheduleMock, semesterMock } from "@repo/shared/mocks"
 import { describe, expect, it } from "vitest"
 import {
   createGameSessionTimes,
+  getVerificationCodeCoolDownDate,
   getVerificationCodeExpiryDate,
   getWeeklySessionDates,
 } from "./DateUtils"
@@ -89,12 +90,36 @@ describe("DateUtils", () => {
       const now = new Date()
       const expiryDate = getVerificationCodeExpiryDate(now)
 
+      expect(expiryDate instanceof Date).toBe(true)
       expect(expiryDate.getTime()).toEqual(now.getTime() + 10 * 60 * 1000)
     })
 
-    it("returns a valid Date object", () => {
+    it("handles no parameter", () => {
+      const now = new Date()
       const expiryDate = getVerificationCodeExpiryDate()
+
       expect(expiryDate instanceof Date).toBe(true)
+      expect(expiryDate.getTime()).toBeGreaterThanOrEqual(now.getTime() + 10 * 59 * 1000) // Allowing 1 second
+      expect(expiryDate.getTime()).toBeLessThanOrEqual(now.getTime() + 10 * 61 * 1000) // Allowing 1 second
+    })
+  })
+
+  describe("getVerificationCodeCoolDownDate", () => {
+    it("returns a date 5 minutes from now", () => {
+      const now = new Date()
+      const coolDownDate = getVerificationCodeCoolDownDate(now)
+
+      expect(coolDownDate instanceof Date).toBe(true)
+      expect(coolDownDate.getTime()).toEqual(now.getTime() + 5 * 60 * 1000)
+    })
+
+    it("handles no parameters", () => {
+      const now = new Date()
+      const coolDownDate = getVerificationCodeCoolDownDate()
+
+      expect(coolDownDate instanceof Date).toBe(true)
+      expect(coolDownDate.getTime()).toBeGreaterThanOrEqual(now.getTime() + 5 * 59 * 1000) // Allowing 1
+      expect(coolDownDate.getTime()).toBeLessThanOrEqual(now.getTime() + 5 * 61 * 1000) // Allowing 1 second
     })
   })
 })
