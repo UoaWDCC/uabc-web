@@ -18,7 +18,7 @@ describe("MailService", () => {
       expect(sendEmailMock).toHaveBeenCalledWith({
         to: email,
         subject: "Email verification code",
-        text: `Here is your email verification code: ${code}. This code will expire in 24 hours.`,
+        text: `Here is your email verification code: ${code}. This code will expire in 10 minutes.`,
       })
       expect(result).toEqual({ success: true })
     })
