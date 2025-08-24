@@ -119,8 +119,14 @@ export const User: CollectionConfig = {
     {
       name: "emailVerification",
       type: "array",
-      required: false,
-      defaultValue: [],
+      required: true,
+      defaultValue: [
+        {
+          verificationCode: "initial-code",
+          expiresAt: new Date(1970, 1, 1).toISOString(),
+          createdAt: new Date(1970, 1, 1).toISOString(),
+        },
+      ],
       fields: [
         {
           name: "verificationCode",

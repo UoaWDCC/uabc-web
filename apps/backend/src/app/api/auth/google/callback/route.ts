@@ -96,6 +96,13 @@ export const GET = async (req: NextRequest) => {
         lastName: family_name,
         role: MembershipType.casual,
         email,
+        emailVerification: [
+          {
+            verificationCode: "initial-code",
+            expiresAt: new Date(1970, 1, 1).toISOString(),
+            createdAt: new Date(1970, 1, 1).toISOString(),
+          },
+        ],
       })
     } else {
       throw error

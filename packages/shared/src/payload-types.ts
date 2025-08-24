@@ -376,23 +376,21 @@ export interface User {
   /**
    * The email verification codes of the user
    */
-  emailVerification?:
-    | {
-        /**
-         * A verification code of the user
-         */
-        verificationCode: string;
-        /**
-         * The current expiration date of this email verification code
-         */
-        expiresAt: string;
-        /**
-         * The date when this email verification code was created
-         */
-        createdAt: string;
-        id?: string | null;
-      }[]
-    | null;
+  emailVerification: {
+    /**
+     * A verification code of the user
+     */
+    verificationCode: string;
+    /**
+     * The current expiration date of this email verification code
+     */
+    expiresAt: string;
+    /**
+     * The date when this email verification code was created
+     */
+    createdAt: string;
+    id?: string | null;
+  }[];
   updatedAt: string;
   createdAt: string;
 }
