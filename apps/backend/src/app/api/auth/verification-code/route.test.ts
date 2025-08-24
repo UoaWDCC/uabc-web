@@ -151,7 +151,9 @@ describe("/api/auth/verification-code", () => {
     const res = await POST(req)
     expect(res.status).toBe(StatusCodes.TOO_MANY_REQUESTS)
     const json = await res.json()
-    expect(json.error).toBe("A verification code has already been sent recently")
+    expect(json.error).toBe(
+      "A verification code has already been sent recently. Please wait before requesting another one.",
+    )
   })
 
   it("should return 500 for internal server error", async () => {

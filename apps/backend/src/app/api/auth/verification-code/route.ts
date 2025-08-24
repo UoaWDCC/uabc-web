@@ -39,7 +39,10 @@ export const POST = async (req: NextRequest) => {
         getVerificationCodeCoolDownDate(new Date(latestVerification.createdAt)) > new Date()
       ) {
         return NextResponse.json(
-          { error: "A verification code has already been sent recently" },
+          {
+            error:
+              "A verification code has already been sent recently. Please wait before requesting another one.",
+          },
           { status: StatusCodes.TOO_MANY_REQUESTS },
         )
       }
