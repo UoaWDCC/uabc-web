@@ -1,5 +1,5 @@
 "use client"
-import { type MembershipType, OnboardedUserSchema } from "@repo/shared"
+import { type MembershipType, OnboardedUserSchema, Routes } from "@repo/shared"
 import { NavigationUtils } from "@repo/ui/utils"
 import { useUpdateEffect } from "@yamada-ui/react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
@@ -54,11 +54,11 @@ export const RoleGuard = ({
     if (!auth.user || auth.isLoading) return
 
     try {
-      if (pathname !== "/onboarding") {
+      if (pathname !== Routes.ONBOARDING) {
         OnboardedUserSchema.parse(auth.user)
       }
     } catch (_err) {
-      router.push("/onboarding")
+      router.push(Routes.ONBOARDING)
     }
   }, [auth, pathname, router])
 
