@@ -5,6 +5,7 @@ import MailService from "@/business-layer/services/MailService"
 import { payload } from "@/data-layer/adapters/Payload"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
+import { getVerificationCodeExpiryDate } from "@/data-layer/utils/DateUtils"
 import { clearCollection, createMockNextRequest } from "@/test-config/backend-utils"
 import { standardAuthCreateMock } from "@/test-config/mocks/Authentication.mock"
 import { POST } from "./route"
@@ -125,12 +126,13 @@ describe("/api/auth/verification-code", () => {
   })
 
   it("should return 429 if the user has reached the maximum number of verification codes", async () => {
+    const verificationCreatedAt = new Date() // Use current date for createdAt
     vi.spyOn(UserDataService.prototype, "getUserByEmail").mockResolvedValueOnce({
       ...casualUserMock,
       emailVerification: Array.from({ length: 5 }, (_, i) => ({
         verificationCode: `${i * 100000}`,
-        createdAt: new Date().toISOString(), // Use current date for createdAt
-        expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes from now
+        createdAt: verificationCreatedAt.toISOString(),
+        expiresAt: getVerificationCodeExpiryDate(verificationCreatedAt).toISOString(),
       })),
     })
 

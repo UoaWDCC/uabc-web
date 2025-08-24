@@ -1,7 +1,11 @@
 import type { Weekday } from "@repo/shared"
 import { gameSessionScheduleMock, semesterMock } from "@repo/shared/mocks"
 import { describe, expect, it } from "vitest"
-import { createGameSessionTimes, getWeeklySessionDates } from "./DateUtils"
+import {
+  createGameSessionTimes,
+  getVerificationCodeExpiryDate,
+  getWeeklySessionDates,
+} from "./DateUtils"
 
 describe("DateUtils", () => {
   describe("getWeeklySessionDates", () => {
@@ -77,6 +81,20 @@ describe("DateUtils", () => {
         startTime: "2025-03-12T09:30:00.000Z",
         endTime: "2025-03-12T11:00:00.000Z",
       })
+    })
+  })
+
+  describe("getVerificationCodeExpiryDate", () => {
+    it("returns a date 10 minutes from now", () => {
+      const now = new Date()
+      const expiryDate = getVerificationCodeExpiryDate(now)
+
+      expect(expiryDate.getTime()).toEqual(now.getTime() + 10 * 60 * 1000)
+    })
+
+    it("returns a valid Date object", () => {
+      const expiryDate = getVerificationCodeExpiryDate()
+      expect(expiryDate instanceof Date).toBe(true)
     })
   })
 })

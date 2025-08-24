@@ -2,6 +2,7 @@ import { MembershipType, type RegisterRequestBody } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
+import { getVerificationCodeExpiryDate } from "@/data-layer/utils/DateUtils"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { POST } from "./route"
 
@@ -17,7 +18,7 @@ describe("tests /api/auth/register", () => {
 
   const now = new Date() // Use current date for createdAt
   const createdAt = now.toISOString()
-  const expiresAt = new Date(now.getTime() + 10 * 60 * 1000).toISOString() // 10 minutes from now
+  const expiresAt = getVerificationCodeExpiryDate(now).toISOString()
 
   it("should register a new user", async () => {
     await userDataService.createUser({

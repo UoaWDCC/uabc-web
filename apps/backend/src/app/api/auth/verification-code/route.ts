@@ -6,6 +6,7 @@ import AuthService from "@/business-layer/services/AuthService"
 import MailService from "@/business-layer/services/MailService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
+import { getVerificationCodeExpiryDate } from "@/data-layer/utils/DateUtils"
 
 export const POST = async (req: NextRequest) => {
   const userDataService = new UserDataService()
@@ -47,20 +48,21 @@ export const POST = async (req: NextRequest) => {
           ...validCodes,
           {
             verificationCode: code,
-            createdAt: new Date().toISOString(), // Use current date for createdAt
-            expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes from now
+            createdAt: now.toISOString(),
+            expiresAt: getVerificationCodeExpiryDate(now).toISOString(),
           },
         ],
       })
     } catch {
+      const verificationCreatedAt = new Date() // Use current date for createdAt
       await userDataService.createUser({
         firstName: email,
         email,
         emailVerification: [
           {
             verificationCode: code,
-            createdAt: new Date().toISOString(), // Use current date for createdAt
-            expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes from now
+            createdAt: verificationCreatedAt.toISOString(),
+            expiresAt: getVerificationCodeExpiryDate(verificationCreatedAt).toISOString(),
           },
         ],
         role: MembershipType.casual,
