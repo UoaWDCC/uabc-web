@@ -84,7 +84,7 @@ export const Filter = <
             return null
           })}
         </Wrap>
-        <HStack alignItems={{ base: "start", xl: "center" }} order={{ base: 1, xl: 2 }}>
+        <HStack alignItems={{ base: "start", xl: "end" }} order={{ base: 1, xl: 2 }}>
           <FilterColumnVisibility columns={columnsConfig} />
           <FilterActions />
         </HStack>

@@ -24,9 +24,16 @@ const AdminUserService = {
    * @param query The pagination query parameters.
    * @returns A promise that resolves to an array of users.
    */
-  getPaginatedUsers: async ({ limit = 100, page }: PaginationQuery) => {
+  getPaginatedUsers: async ({ limit = 100, page }: PaginationQuery, token: string) => {
+    if (!token) {
+      throw new Error("No token provided")
+    }
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
-    const response = await apiClient.get(`/api/admin/users?${query}`, GetAllUsersResponseSchema)
+    const response = await apiClient.get(`/api/admin/users?${query}`, GetAllUsersResponseSchema, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     return ApiClient.throwIfError(response)
   },
   /**
@@ -56,8 +63,15 @@ const AdminUserService = {
    * @param id The user ID.
    * @returns A promise that resolves to a boolean indicating success.
    */
-  deleteUser: async (id: string) => {
-    const response = await apiClient.delete(`/api/admin/users/${id}`)
+  deleteUser: async (id: string, token: string) => {
+    if (!token) {
+      throw new Error("No token provided")
+    }
+    const response = await apiClient.delete(`/api/admin/users/${id}`, undefined, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     return ApiClient.throwIfError(response)
   },
 } as const
