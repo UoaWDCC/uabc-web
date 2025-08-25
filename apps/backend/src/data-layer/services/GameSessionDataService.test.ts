@@ -7,10 +7,10 @@ import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import { getWeeklySessionDates } from "../utils/DateUtils"
 import GameSessionDataService from "./GameSessionDataService"
 
-describe("GameSessionDataService", () => {
-  const gameSessionDataService = new GameSessionDataService()
-  const semesterDataService = new SemesterDataService()
+const gameSessionDataService = new GameSessionDataService()
+const semesterDataService = new SemesterDataService()
 
+describe("GameSessionDataService", () => {
   describe("createGameSession", () => {
     it("should create a game session document", async () => {
       const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
@@ -149,14 +149,29 @@ describe("GameSessionDataService", () => {
     it("should delete a game session", async () => {
       const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
 
+      // const newBooking1 = await bookingDataService.createBooking({
+      //   ...bookingCreateMock,
+      //   gameSession: newGameSession,
+      // })
+      // const newBooking2 = await bookingDataService.createBooking({
+      //   ...bookingCreateMock,
+      //   gameSession: newGameSession,
+      // })
+
       const deletedGameSession = await gameSessionDataService.deleteGameSession(newGameSession.id)
       expect(deletedGameSession).not.toBeNull()
       expect(deletedGameSession).toEqual(newGameSession)
 
-      // check that the document is deleted
       await expect(
         gameSessionDataService.getGameSessionById(deletedGameSession.id),
       ).rejects.toThrowError("Not Found")
+
+      // await expect(bookingDataService.getBookingById(newBooking1.id)).rejects.toThrowError(
+      //   "Not Found",
+      // )
+      // await expect(bookingDataService.getBookingById(newBooking2.id)).rejects.toThrowError(
+      //   "Not Found",
+      // )
     })
 
     it("should throw a NotFound error if game session does not exist when deleting", async () => {
@@ -393,10 +408,19 @@ describe("GameSessionDataService", () => {
   })
 
   describe("deleteGameSessionSchedule", () => {
-    it("should delete a game session schedule", async () => {
+    it("should delete all related game sessions and then delete the game session schedule", async () => {
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
         gameSessionScheduleCreateMock,
       )
+
+      // const newGameSession1 = await gameSessionDataService.createGameSession({
+      //   ...gameSessionCreateMock,
+      //   gameSessionSchedule: newGameSessionSchedule,
+      // })
+      // const newGameSession2 = await gameSessionDataService.createGameSession({
+      //   ...gameSessionCreateMock,
+      //   gameSessionSchedule: newGameSessionSchedule,
+      // })
 
       const deletedGameSessionSchedule = await gameSessionDataService.deleteGameSessionSchedule(
         newGameSessionSchedule.id,
@@ -404,10 +428,16 @@ describe("GameSessionDataService", () => {
       expect(deletedGameSessionSchedule).not.toBeNull()
       expect(deletedGameSessionSchedule).toEqual(newGameSessionSchedule)
 
-      // check that the document is deleted
       await expect(
         gameSessionDataService.getGameSessionScheduleById(deletedGameSessionSchedule.id),
       ).rejects.toThrowError("Not Found")
+
+      // await expect(
+      //   gameSessionDataService.getGameSessionById(newGameSession1.id),
+      // ).rejects.toThrowError("Not Found")
+      // await expect(
+      //   gameSessionDataService.getGameSessionById(newGameSession2.id),
+      // ).rejects.toThrowError("Not Found")
     })
 
     it("should throw a NotFound error if game session schedule does not exist when deleting", async () => {
