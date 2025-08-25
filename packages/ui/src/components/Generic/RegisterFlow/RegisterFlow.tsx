@@ -1,6 +1,5 @@
 "use client"
 
-import { RegisterFlowStateSchema } from "@repo/shared/schemas"
 import type {
   AdditionalInfoFormValues,
   BasicInfoForm1Values,
@@ -9,7 +8,7 @@ import type {
   RegisterFlowState,
   UniversityInfoFormValues,
 } from "@repo/shared/types"
-import { useLocalStorage } from "@repo/ui/hooks"
+import { useRegisterFlowStorage } from "@repo/ui/hooks/storage/registerFlowStorage"
 import { ArrowLeftIcon } from "@yamada-ui/lucide"
 import { Center, Grid, GridItem, VStack } from "@yamada-ui/react"
 import { memo, useReducer } from "react"
@@ -90,13 +89,24 @@ const reducer = (state: RegisterFlowState, action: RegisterFlowAction): Register
   }
 }
 
-const LOCAL_STORAGE_KEY = "register-flow"
+/**
+ * Props for the RegisterFlow component.
+ */
+interface RegisterFlowProps {
+  /**
+   * Callback function to handle the completion of the registration flow.
+   */
+  handleComplete?: (state: RegisterFlowState) => Promise<void>
+}
 
-export const RegisterFlow = memo(() => {
-  const { value: persistedState, setValue: setPersistedState } = useLocalStorage<RegisterFlowState>(
-    LOCAL_STORAGE_KEY,
-    RegisterFlowStateSchema,
-  )
+/**
+ * RegisterFlow component that manages the multi-step onboarding process.
+ *
+ * @param handleComplete Callback function to handle the completion of the registration flow.
+ * @returns The RegisterFlow component with all steps and forms.
+ */
+export const RegisterFlow = memo(({ handleComplete }: RegisterFlowProps) => {
+  const { value: persistedState, setValue: setPersistedState } = useRegisterFlowStorage()
 
   const [state, dispatch] = useReducer(reducer, persistedState ?? initialState)
 
@@ -107,6 +117,9 @@ export const RegisterFlow = memo(() => {
 
       const nextState = reducer(state, action)
       setPersistedState(nextState)
+      if (state.step === steps.length - 1) {
+        handleComplete?.(nextState)
+      }
       dispatch({ type: "NEXT" })
     }
   }
@@ -173,17 +186,24 @@ export const RegisterFlow = memo(() => {
   const enableGoBack = state.step > 0 && state.step < steps.length
 
   return (
-    <VStack>
-      <Grid templateColumns="repeat(3, 1fr)">
+    <VStack
+      bg="gray.900"
+      layerStyle="gradientBorder"
+      maxW="lg"
+      minH="2xl"
+      p="lg"
+      rounded="3xl"
+      w="full"
+    >
+      <Grid templateColumns="1fr auto 1fr">
         <GridItem>
           <IconButton
             aria-label="Go back"
             color={["black", "white"]}
             data-testid="go-back"
             disabled={!enableGoBack}
-            icon={<ArrowLeftIcon />}
+            icon={<ArrowLeftIcon fontSize="xl" />}
             onClick={handleGoBack}
-            // rounded="full"
             size="sm"
             variant="ghost"
           />

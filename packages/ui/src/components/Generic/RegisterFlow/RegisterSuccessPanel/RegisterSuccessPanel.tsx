@@ -19,9 +19,11 @@ export const RegisterSuccessPanel: FC = memo(() => {
     <VStack bgColor="inherit" gap="lg" h="full">
       <Alert
         alignItems="center"
+        bg="inherit"
         border={0}
         flexDir="column"
-        h="2xs"
+        flexGrow={1}
+        gap="sm"
         justifyContent="center"
         status="success"
         textAlign="center"
@@ -33,8 +35,7 @@ export const RegisterSuccessPanel: FC = memo(() => {
         </AlertDescription>
       </Alert>
 
-      {/* TODO: use correct href for profile dashboard */}
-      <Button as={Link} colorScheme="primary" href="/">
+      <Button as={Link} colorScheme="primary" href="/profile">
         Profile Dashboard
       </Button>
     </VStack>

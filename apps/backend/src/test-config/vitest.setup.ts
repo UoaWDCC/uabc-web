@@ -45,6 +45,7 @@ beforeEach(async () => {
       }),
     ),
   )
+
   casualToken = authService.signJWT({ user: casualUserMock })
   memberToken = authService.signJWT({ user: memberUserMock })
   adminToken = authService.signJWT({ user: adminUserMock })

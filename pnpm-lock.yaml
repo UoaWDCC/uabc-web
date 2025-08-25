@@ -235,6 +235,9 @@ importers:
 
   packages/shared:
     dependencies:
+      '@tanstack/react-query':
+        specifier: 5.81.5
+        version: 5.81.5(react@19.1.1)
       date-fns:
         specifier: 4.1.0
         version: 4.1.0

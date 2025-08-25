@@ -16,6 +16,7 @@
     "zod": "3.25.76"
   },
   "dependencies": {
+    "@tanstack/react-query": "5.81.5",
     "date-fns": "4.1.0",
     "next": "15.3.5"
   }

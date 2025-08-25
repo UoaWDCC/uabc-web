@@ -20,4 +20,5 @@ export enum Routes {
 
   // User pages
   PROFILE = "/profile",
+  ONBOARDING = "/onboarding",
 }

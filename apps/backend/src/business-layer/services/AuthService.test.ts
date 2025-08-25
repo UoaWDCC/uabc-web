@@ -1,4 +1,9 @@
-import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema, TOKEN_EXPIRY_TIME } from "@repo/shared"
+import {
+  AUTH_COOKIE_NAME,
+  JWTEncryptedUserSchema,
+  TOKEN_EXPIRY_TIME,
+  type University,
+} from "@repo/shared"
 import { casualUserMock } from "@repo/shared/mocks"
 import jwt from "jsonwebtoken"
 import { cookies } from "next/headers"
@@ -11,7 +16,11 @@ describe("AuthService", () => {
 
   describe("signJWT", () => {
     it("should sign a JWT token and return it", () => {
-      const payload = { user: casualUserMock, accessToken: tokensMock.access_token }
+      const casualUserForJWT = {
+        ...casualUserMock,
+        university: casualUserMock.university as University | null | undefined,
+      }
+      const payload = { user: casualUserForJWT, accessToken: tokensMock.access_token }
       const options = { expiresIn: TOKEN_EXPIRY_TIME } as const
 
       const token = authService.signJWT(payload, options)
@@ -19,14 +28,18 @@ describe("AuthService", () => {
     })
 
     it("should generate a JWT token that matches the encrypted data", () => {
-      const payload = { user: casualUserMock, accessToken: tokensMock.access_token }
+      const casualUserForJWT = {
+        ...casualUserMock,
+        university: casualUserMock.university as University | null | undefined,
+      }
+      const payload = { user: casualUserForJWT, accessToken: tokensMock.access_token }
       const options = { expiresIn: TOKEN_EXPIRY_TIME } as const
 
       const token = authService.signJWT(payload, options)
 
       const decoded = jwt.verify(token, JWT_SECRET_MOCK)
       expect(decoded).toEqual({
-        user: casualUserMock,
+        user: casualUserForJWT,
         accessToken: tokensMock.access_token,
         iat: expect.any(Number),
         exp: expect.any(Number),
@@ -36,7 +49,11 @@ describe("AuthService", () => {
 
   describe("getData", () => {
     it("should return validated data with the correct token", () => {
-      const payload = { user: casualUserMock, accessToken: tokensMock.access_token }
+      const casualUserForJWT = {
+        ...casualUserMock,
+        university: casualUserMock.university as University | null | undefined,
+      }
+      const payload = { user: casualUserForJWT, accessToken: tokensMock.access_token }
       const options = { expiresIn: TOKEN_EXPIRY_TIME } as const
 
       const token = authService.signJWT(payload, options)
@@ -44,7 +61,7 @@ describe("AuthService", () => {
       const data = authService.getData(token, JWTEncryptedUserSchema)
 
       expect(data).toEqual({
-        user: casualUserMock,
+        user: casualUserForJWT,
         accessToken: tokensMock.access_token,
       })
     })

@@ -1,4 +1,9 @@
-import { GoogleUserInfoResponseSchema, MembershipType, TOKEN_EXPIRY_TIME } from "@repo/shared"
+import {
+  GoogleUserInfoResponseSchema,
+  MembershipType,
+  TOKEN_EXPIRY_TIME,
+  type University,
+} from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
@@ -136,9 +141,13 @@ export const GET = async (req: NextRequest) => {
    * Expires in 1 hour (same duration as Google access token)
    */
   const { remainingSessions: _omit, ...userWithoutSessions } = user
+  const userForJWT = {
+    ...userWithoutSessions,
+    university: userWithoutSessions.university as University | null | undefined,
+  }
   const token = authService.signJWT(
     {
-      user: userWithoutSessions,
+      user: userForJWT,
       accessToken: tokens.access_token,
     },
     { expiresIn: TOKEN_EXPIRY_TIME },
