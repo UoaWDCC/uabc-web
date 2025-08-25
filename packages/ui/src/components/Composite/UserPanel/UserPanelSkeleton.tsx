@@ -8,12 +8,12 @@ import {
   CardHeader,
   Center,
   Float,
-  IconButton,
   Skeleton,
   Text,
   VStack,
 } from "@yamada-ui/react"
 import type { FC } from "react"
+import { IconButton } from "../../Primitive"
 
 export const UserPanelSkeleton: FC = () => {
   return (
@@ -30,7 +30,7 @@ export const UserPanelSkeleton: FC = () => {
             <Avatar size="xl" />
           </Skeleton>
           <Float offset={[4, 4]} placement="end-end">
-            <IconButton aria-label="Edit" disabled icon={<PencilIcon />} rounded="full" size="sm" />
+            <IconButton aria-label="Edit" disabled icon={<PencilIcon />} rounded="full" size="xs" />
           </Float>
         </Box>
         <VStack>

@@ -1,6 +1,5 @@
-import { TextInput } from "@repo/ui/components/Primitive"
+import { IconButton, TextInput } from "@repo/ui/components/Primitive"
 import { XIcon } from "@yamada-ui/lucide"
-import { IconButton } from "@yamada-ui/react"
 import { useManagementTable } from "../MemberManagementContext"
 import { BaseFilterControl } from "./BaseFilterControl"
 import type { FieldFiltersFromConfig, FilterBarConfig, FilterInputProps } from "./types"
@@ -58,7 +57,7 @@ export function FilterInput<
                 icon={<XIcon />}
                 onClick={onClear}
                 rounded="md"
-                size="xs"
+                size="2xs"
               />
             )
           }

@@ -23,6 +23,7 @@ export const FooterSocialLinks = memo<FooterSocialLinksProps>(
             key={link.label}
             rel="noopener noreferrer"
             target="_blank"
+            variant="ghost"
             {...iconButtonProps}
           >
             <Icon color="muted" fontSize="2xl" {...iconProps} />

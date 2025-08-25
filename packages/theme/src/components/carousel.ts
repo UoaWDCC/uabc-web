@@ -1,11 +1,15 @@
 import type { ComponentMultiStyle } from "@yamada-ui/core"
 
+import { IconButton } from "./icon-button"
+
 export const Carousel: ComponentMultiStyle<"Carousel"> = {
   baseStyle: {
     container: {
       w: "100%",
     },
-    control: {},
+    control: {
+      aspectRatio: "1",
+    },
     indicator: ({ orientation: o }) => ({
       bg: ["whiteAlpha.400", "blackAlpha.400"],
       rounded: "full",
@@ -66,6 +70,9 @@ export const Carousel: ComponentMultiStyle<"Carousel"> = {
       inner: {
         h: "sm",
       },
+      control: {
+        ...IconButton.sizes?.xs,
+      },
     },
     md: {
       indicators: ({ orientation: o }) => ({
@@ -73,6 +80,9 @@ export const Carousel: ComponentMultiStyle<"Carousel"> = {
       }),
       inner: {
         h: "md",
+      },
+      control: {
+        ...IconButton.sizes?.sm,
       },
     },
     lg: {
@@ -82,6 +92,9 @@ export const Carousel: ComponentMultiStyle<"Carousel"> = {
       inner: {
         h: "lg",
       },
+      control: {
+        ...IconButton.sizes?.md,
+      },
     },
     xl: {
       indicators: ({ orientation: o }) => ({
@@ -89,6 +102,9 @@ export const Carousel: ComponentMultiStyle<"Carousel"> = {
       }),
       inner: {
         h: "xl",
+      },
+      control: {
+        ...IconButton.sizes?.lg,
       },
     },
   },

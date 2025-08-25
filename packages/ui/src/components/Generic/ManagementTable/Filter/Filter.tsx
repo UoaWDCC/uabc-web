@@ -1,8 +1,7 @@
 "use client"
 
-import { HStack, Stack, VStack, Wrap } from "@yamada-ui/react"
+import { Stack, VStack, Wrap } from "@yamada-ui/react"
 import { FilterActions } from "./FilterActions"
-import { FilterColumnVisibility } from "./FilterColumnVisibility"
 import { FilterInput } from "./FilterInput"
 import { FilterMultiSelect } from "./FilterMultiSelect"
 import { FilterSelect } from "./FilterSelect"
@@ -84,10 +83,7 @@ export const Filter = <
             return null
           })}
         </Wrap>
-        <HStack alignItems={{ base: "start", xl: "center" }} order={{ base: 1, xl: 2 }}>
-          <FilterColumnVisibility columns={columnsConfig} />
-          <FilterActions />
-        </HStack>
+        <FilterActions columns={columnsConfig} />
       </Stack>
     </VStack>
   )
