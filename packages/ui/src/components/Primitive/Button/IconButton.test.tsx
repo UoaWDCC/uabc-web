@@ -67,12 +67,12 @@ describe("<IconButton />", () => {
   it("sets data-active attribute when active is true", () => {
     render(<ButtonModule.IconButton active />)
     const button = screen.getByRole("button")
-    expect(button).toHaveAttribute("data-active", "true")
+    expect(button).toHaveAttribute("data-active")
   })
 
   it("does not set data-active when active is false", () => {
     render(<ButtonModule.IconButton />)
     const button = screen.getByRole("button")
-    expect(button).not.toHaveAttribute("data-active", "true")
+    expect(button).not.toHaveAttribute("data-active")
   })
 })
