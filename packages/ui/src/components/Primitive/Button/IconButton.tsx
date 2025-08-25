@@ -1,12 +1,15 @@
 "use client"
 import {
+  dataAttr,
   type HTMLUIProps,
+  Loading,
+  type LoadingProps,
   omitThemeProps,
   type ThemeProps,
   ui,
   useComponentStyle,
 } from "@yamada-ui/react"
-import { forwardRef, memo } from "react"
+import { forwardRef, memo, useMemo } from "react"
 
 /**
  * Additional options for the IconButton component
@@ -40,6 +43,18 @@ type IconButtonOptions = {
    * The icon to display in the button
    */
   icon: React.ReactNode
+  /**
+   * If `true`, the button is loading.
+   */
+  loading?: boolean
+  /**
+   * The icon to display when the button is loading.
+   */
+  loadingIcon?: LoadingProps["variant"] | React.ReactNode
+  /**
+   * If `true`, the button is active.
+   */
+  active?: boolean
 }
 
 export interface IconButtonProps
@@ -80,19 +95,28 @@ export interface IconButtonProps
  * />
  */
 export const IconButton = memo(
-  forwardRef<HTMLButtonElement, IconButtonProps>(({ icon, ...props }, ref) => {
-    const [styles, mergedProps] = useComponentStyle("IconButton", {
-      ...props,
-    })
+  forwardRef<HTMLButtonElement, IconButtonProps>(
+    ({ icon, loadingIcon, loading, active, ...props }, ref) => {
+      const [styles, mergedProps] = useComponentStyle("IconButton", {
+        ...props,
+      })
 
-    const rest = omitThemeProps(mergedProps)
+      const rest = omitThemeProps(mergedProps)
 
-    return (
-      <ui.button __css={styles} ref={ref} {...rest}>
-        {icon}
-      </ui.button>
-    )
-  }),
+      const element = useMemo(() => {
+        if (typeof loadingIcon === "string") {
+          return <Loading color="current" variant={loadingIcon as LoadingProps["variant"]} />
+        }
+        return loadingIcon || <Loading color="current" />
+      }, [loadingIcon])
+
+      return (
+        <ui.button __css={styles} data-active={dataAttr(active)} ref={ref} {...rest}>
+          {loading ? element : icon}
+        </ui.button>
+      )
+    },
+  ),
 )
 
 IconButton.displayName = "IconButton"

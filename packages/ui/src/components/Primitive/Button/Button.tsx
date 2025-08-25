@@ -1,6 +1,9 @@
 "use client"
-import type { HTMLUIProps, ThemeProps } from "@yamada-ui/react"
-import { omitThemeProps, ui, useComponentStyle } from "@yamada-ui/react"
+import {
+  type ThemeProps,
+  Button as UIButton,
+  type ButtonProps as UIButtonProps,
+} from "@yamada-ui/react"
 import { forwardRef, memo } from "react"
 
 /**
@@ -24,7 +27,10 @@ type ButtonOptions = {
   href?: string
 }
 
-export interface ButtonProps extends HTMLUIProps<"button">, ThemeProps<"Button">, ButtonOptions {}
+export interface ButtonProps
+  extends Omit<UIButtonProps, keyof ThemeProps<"Button">>,
+    ThemeProps<"Button">,
+    ButtonOptions {}
 
 /**
  * Generic Button component based on Yamada UI Button
@@ -42,10 +48,7 @@ export interface ButtonProps extends HTMLUIProps<"button">, ThemeProps<"Button">
  */
 export const Button = memo(
   forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-    const [styles, mergedProps] = useComponentStyle("Button", { ...props })
-    const rest = omitThemeProps(mergedProps)
-
-    return <ui.button __css={styles} ref={ref} {...rest} />
+    return <UIButton ref={ref} {...props} />
   }),
 )
 

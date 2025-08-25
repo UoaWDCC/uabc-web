@@ -69,6 +69,7 @@ export const Button: ComponentStyle<"Button"> = {
       color: [`${c}.600`, `${c}.500`],
       height: "auto",
       lineHeight: "normal",
+      bg: "transparent",
       minW: "auto",
       padding: 0,
       verticalAlign: "baseline",
@@ -135,7 +136,7 @@ export const Button: ComponentStyle<"Button"> = {
             ? [isAccessible(c) ? `${c}.600` : `${c}.700`, `${c}.800`]
             : [isAccessible(c) ? `${c}.400` : `${c}.500`, `${c}.600`],
       backdropFilter: "blur(15px)",
-      borderRadius: "12px",
+      rounded: "xl",
       boxShadow:
         "0px 1.5px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.10)",
       color: [isGray(c) || isAccessible(c) ? "black" : "white", "white"],
@@ -185,7 +186,7 @@ export const Button: ComponentStyle<"Button"> = {
           ? `${c}Gradient`
           : `linear-gradient(270deg, ${c}.500 16.5%, ${c}.700 105%)`,
       bgSize: "100% 100%",
-      borderRadius: "12px",
+      rounded: "xl",
       boxShadow:
         "0px 1.5px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.10)",
       color: "white",
