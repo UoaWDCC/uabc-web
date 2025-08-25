@@ -1,11 +1,12 @@
 "use client"
 import {
   type HTMLUIProps,
-  IconButton as UIIconButton,
-  type IconButtonProps as UIIconButtonProps,
+  omitThemeProps,
+  type ThemeProps,
+  ui,
+  useComponentStyle,
 } from "@yamada-ui/react"
-import { forwardRef, memo, useMemo } from "react"
-import { styles } from "./icon-button.style"
+import { forwardRef, memo } from "react"
 
 /**
  * Additional options for the IconButton component
@@ -35,9 +36,16 @@ type IconButtonOptions = {
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attr-target}
    */
   target?: string
+  /**
+   * The icon to display in the button
+   */
+  icon: React.ReactNode
 }
 
-export type IconButtonProps = UIIconButtonProps & IconButtonOptions
+export interface IconButtonProps
+  extends HTMLUIProps<"button">,
+    ThemeProps<"IconButton">,
+    IconButtonOptions {}
 
 /**
  * IconButton component for displaying icon-only buttons based on Yamada UI IconButton
@@ -72,23 +80,18 @@ export type IconButtonProps = UIIconButtonProps & IconButtonOptions
  * />
  */
 export const IconButton = memo(
-  forwardRef<HTMLButtonElement, IconButtonProps>((props, ref) => {
-    const { size = "md" } = props
+  forwardRef<HTMLButtonElement, IconButtonProps>(({ icon, ...props }, ref) => {
+    const [styles, mergedProps] = useComponentStyle("IconButton", {
+      ...props,
+    })
 
-    const iconButtonStyles: HTMLUIProps<"button"> = useMemo(
-      () => ({
-        aspectRatio: "1",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        h: "auto",
-        ...(!Object.hasOwn(styles, size as keyof typeof styles) && styles.base),
-        ...(styles[size as keyof typeof styles] ?? {}),
-      }),
-      [size],
+    const rest = omitThemeProps(mergedProps)
+
+    return (
+      <ui.button __css={styles} ref={ref} {...rest}>
+        {icon}
+      </ui.button>
     )
-
-    return <UIIconButton ref={ref} {...iconButtonStyles} {...props} />
   }),
 )
 
