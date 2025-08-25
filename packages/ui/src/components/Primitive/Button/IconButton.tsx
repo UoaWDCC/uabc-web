@@ -42,7 +42,7 @@ type IconButtonOptions = {
   /**
    * The icon to display in the button
    */
-  icon: React.ReactNode
+  icon?: React.ReactNode
   /**
    * If `true`, the button is loading.
    */
@@ -96,7 +96,7 @@ export interface IconButtonProps
  */
 export const IconButton = memo(
   forwardRef<HTMLButtonElement, IconButtonProps>(
-    ({ icon, loadingIcon, loading, active, ...props }, ref) => {
+    ({ icon, loadingIcon, loading, active, children, ...props }, ref) => {
       const [styles, mergedProps] = useComponentStyle("IconButton", {
         ...props,
       })
@@ -112,7 +112,7 @@ export const IconButton = memo(
 
       return (
         <ui.button __css={styles} data-active={dataAttr(active)} ref={ref} {...rest}>
-          {loading ? element : icon}
+          {loading ? element : icon || children}
         </ui.button>
       )
     },
