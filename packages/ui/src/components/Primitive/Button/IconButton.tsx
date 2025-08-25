@@ -62,7 +62,15 @@ export interface IconButtonProps
     ThemeProps<"IconButton">,
     IconButtonOptions {}
 
-const loadingVariants = ["dots", "grid", "audio", "circles", "oval", "puff", "rings"] as const
+const loadingVariants = [
+  "dots",
+  "grid",
+  "audio",
+  "circles",
+  "oval",
+  "puff",
+  "rings",
+] as const satisfies LoadingProps["variant"][]
 
 type LoadingVariant = (typeof loadingVariants)[number]
 

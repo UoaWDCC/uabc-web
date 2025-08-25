@@ -39,4 +39,40 @@ describe("<IconButton />", () => {
     expect(screen.getByTestId("icon")).toBeInTheDocument()
     expect(screen.queryByTestId("loading")).not.toBeInTheDocument()
   })
+
+  it("renders Loading with valid string variant when loading", () => {
+    render(<ButtonModule.IconButton loading loadingIcon="dots" />)
+    const el = screen.getByTestId("loading")
+    expect(el).toBeInTheDocument()
+  })
+
+  it("renders default Loading when loadingIcon string is invalid", () => {
+    render(<ButtonModule.IconButton loading loadingIcon="invalid" />)
+    const el = screen.getByTestId("loading")
+    expect(el).toBeInTheDocument()
+  })
+
+  it("renders default Loading when loading and loadingIcon not provided", () => {
+    render(<ButtonModule.IconButton loading />)
+    const el = screen.getByTestId("loading")
+    expect(el).toBeInTheDocument()
+    expect(el).toHaveAttribute("data-color", "current")
+  })
+
+  it("renders children when provided and not loading", () => {
+    render(<ButtonModule.IconButton>child</ButtonModule.IconButton>)
+    expect(screen.getByText("child")).toBeInTheDocument()
+  })
+
+  it("sets data-active attribute when active is true", () => {
+    render(<ButtonModule.IconButton active />)
+    const button = screen.getByRole("button")
+    expect(button).toHaveAttribute("data-active", "true")
+  })
+
+  it("does not set data-active when active is false", () => {
+    render(<ButtonModule.IconButton />)
+    const button = screen.getByRole("button")
+    expect(button).not.toHaveAttribute("data-active", "true")
+  })
 })
