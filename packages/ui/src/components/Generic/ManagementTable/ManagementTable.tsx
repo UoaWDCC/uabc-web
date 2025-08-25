@@ -1,9 +1,10 @@
 "use client"
 
 import { EllipsisVerticalIcon } from "@yamada-ui/lucide"
-import { IconButton, Menu, MenuButton, MenuItem, MenuList } from "@yamada-ui/react"
+import { Menu, MenuButton, MenuItem, MenuList } from "@yamada-ui/react"
 import type { Column } from "@yamada-ui/table"
 import { memo, useMemo } from "react"
+import { IconButton } from "../../Primitive"
 import { Filter, type FilterBarConfig } from "./Filter"
 import type { ManagementTableProviderProps } from "./MemberManagementContext"
 import { ManagementTableProvider } from "./MemberManagementContext"
@@ -63,7 +64,7 @@ function createActionsColumn<TData>(
           as={IconButton}
           icon={<EllipsisVerticalIcon />}
           onClick={handleMenuClick}
-          size="sm"
+          size="xs"
           variant="ghost"
         />
         <MenuList onClick={(e) => e.stopPropagation()}>

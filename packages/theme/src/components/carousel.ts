@@ -5,7 +5,11 @@ export const Carousel: ComponentMultiStyle<"Carousel"> = {
     container: {
       w: "100%",
     },
-    control: {},
+    control: {
+      aspectRatio: "1",
+      minW: "2.5rem",
+      h: "2.5rem",
+    },
     indicator: ({ orientation: o }) => ({
       bg: ["whiteAlpha.400", "blackAlpha.400"],
       rounded: "full",

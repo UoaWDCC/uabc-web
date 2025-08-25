@@ -1,7 +1,6 @@
 import { FilterIcon } from "@yamada-ui/lucide"
 import {
   Checkbox,
-  IconButton,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -9,6 +8,7 @@ import {
   Text,
   VStack,
 } from "@yamada-ui/react"
+import { IconButton } from "../../../Primitive"
 import { useManagementTable } from "../MemberManagementContext"
 import type { ColumnConfig } from "../types"
 
@@ -21,7 +21,7 @@ export const FilterColumnVisibility = <TData,>({ columns }: { columns: ColumnCon
   return (
     <Popover lazy>
       <PopoverTrigger>
-        <IconButton aria-label="Toggle column visibility" icon={<FilterIcon />} size="sm" />
+        <IconButton aria-label="Toggle column visibility" icon={<FilterIcon />} size="xs" />
       </PopoverTrigger>
       <PopoverContent>
         <PopoverBody>
