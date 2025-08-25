@@ -62,6 +62,13 @@ export interface IconButtonProps
     ThemeProps<"IconButton">,
     IconButtonOptions {}
 
+const loadingVariants = ["dots", "grid", "audio", "circles", "oval", "puff", "rings"] as const
+
+type LoadingVariant = (typeof loadingVariants)[number]
+
+const isLoadingVariant = (value: string): value is LoadingVariant =>
+  (loadingVariants as readonly string[]).includes(value)
+
 /**
  * IconButton component for displaying icon-only buttons based on Yamada UI IconButton
  *
@@ -105,7 +112,10 @@ export const IconButton = memo(
 
       const element = useMemo(() => {
         if (typeof loadingIcon === "string") {
-          return <Loading color="current" variant={loadingIcon as LoadingProps["variant"]} />
+          if (isLoadingVariant(loadingIcon)) {
+            return <Loading color="current" variant={loadingIcon} />
+          }
+          return <Loading color="current" />
         }
         return loadingIcon || <Loading color="current" />
       }, [loadingIcon])
