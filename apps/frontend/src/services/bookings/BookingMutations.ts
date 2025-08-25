@@ -14,9 +14,6 @@ export const useCreateBooking = () => {
   const { token } = useAuth()
   return useMutation({
     mutationFn: (data: CreateBookingRequest) => {
-      if (!token) {
-        throw new Error("No token provided")
-      }
       return BookingService.createBooking(data, token)
     },
     onSuccess: () => {

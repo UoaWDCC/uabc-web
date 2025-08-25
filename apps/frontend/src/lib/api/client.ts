@@ -6,11 +6,21 @@ type ApiResponse<T> =
   | { success: true; data: T; status: number }
   | { success: false; error: Error; status: number | null }
 
-type RequestOptions = {
-  headers?: Record<string, string>
-  tags?: string[]
-  revalidate?: number | false
-}
+type RequestOptions =
+  | {
+      requiresAuth: true
+      token: string | null
+      headers?: Record<string, string>
+      tags?: string[]
+      revalidate?: number | false
+    }
+  | {
+      requiresAuth?: false
+      token?: string | null
+      headers?: Record<string, string>
+      tags?: string[]
+      revalidate?: number | false
+    }
 
 /**
  * ApiClient is a simple HTTP client for making API requests with runtime validation using zod schemas.
@@ -27,6 +37,7 @@ export class ApiClient {
    * Creates an instance of ApiClient.
    *
    * @param baseUrl The base URL for the API. If not provided, uses NEXT_PUBLIC_API_URL from environment variables.
+   * @param getCurrentToken Optional function to get the current token. If not provided, no token will be used.
    * @throws If no base URL is provided or found in environment variables.
    */
   constructor(baseUrl?: string) {
@@ -65,12 +76,24 @@ export class ApiClient {
     body?: unknown,
     options: RequestOptions = {},
   ): RequestInit & { next?: { tags: string[]; revalidate?: number | false } } {
-    const { headers = {}, tags = [], revalidate } = options
+    const { requiresAuth = false, token = null, headers = {}, tags = [], revalidate } = options
+
+    // Frontend validation: Check if auth is required but no token is available
+    const baseHeaders: Record<string, string> = {
+      "Content-Type": "application/json",
+    }
+
+    if (requiresAuth) {
+      if (typeof token !== "string" || token.trim() === "") {
+        throw new Error("No token provided")
+      }
+      baseHeaders.Authorization = `Bearer ${token}`
+    }
 
     const fetchOptions: RequestInit & { next?: { tags: string[]; revalidate?: number | false } } = {
       method,
       headers: {
-        "Content-Type": "application/json",
+        ...baseHeaders,
         ...headers,
       },
       next: {

@@ -1,4 +1,9 @@
+import type {
+  CreateGameSessionScheduleRequest,
+  UpdateGameSessionScheduleRequest,
+} from "@repo/shared/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useAuth } from "@/context/AuthContext"
 import { QueryKeys } from "@/services"
 import AdminGameSessionScheduleService from "./AdminGameSessionScheduleService"
 
@@ -9,8 +14,10 @@ import AdminGameSessionScheduleService from "./AdminGameSessionScheduleService"
  */
 export const useCreateGameSessionSchedule = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
-    mutationFn: AdminGameSessionScheduleService.createGameSessionSchedule,
+    mutationFn: (data: CreateGameSessionScheduleRequest) =>
+      AdminGameSessionScheduleService.createGameSessionSchedule({ data, token }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         // TODO: when get by id is implemented, only invalidate the updated id for get by id
@@ -30,8 +37,10 @@ export const useCreateGameSessionSchedule = () => {
  */
 export const useUpdateGameSessionSchedule = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
-    mutationFn: AdminGameSessionScheduleService.updateGameSessionSchedule,
+    mutationFn: ({ id, data }: { id: string; data: UpdateGameSessionScheduleRequest }) =>
+      AdminGameSessionScheduleService.updateGameSessionSchedule({ id, data, token }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         // TODO: when get by id is implemented, only invalidate the updated id for get by id
@@ -51,8 +60,10 @@ export const useUpdateGameSessionSchedule = () => {
  */
 export const useDeleteGameSessionSchedule = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
-    mutationFn: AdminGameSessionScheduleService.deleteGameSessionSchedule,
+    mutationFn: (id: string) =>
+      AdminGameSessionScheduleService.deleteGameSessionSchedule({ id, token }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         // TODO: when get by id is implemented, only invalidate the updated id for get by id
