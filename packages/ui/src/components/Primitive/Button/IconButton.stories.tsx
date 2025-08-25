@@ -55,14 +55,6 @@ const meta: Meta<typeof IconButton> = {
         defaultValue: { summary: "false" },
       },
     },
-    fullRounded: {
-      control: "boolean",
-      description: "Whether the icon button is fully rounded",
-      table: {
-        type: { summary: "boolean" },
-        defaultValue: { summary: "false" },
-      },
-    },
     active: {
       control: "boolean",
       description: "Whether the icon button is in active state",
@@ -203,8 +195,8 @@ export const FullRounded: Story = (args) => {
           <IconButton
             aria-label={`Full rounded ${row} ${column} icon button`}
             colorScheme={row}
-            fullRounded
             key={key}
+            rounded="full"
             variant={column}
             {...args}
           />
