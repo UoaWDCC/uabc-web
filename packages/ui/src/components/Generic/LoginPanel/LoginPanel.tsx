@@ -160,11 +160,11 @@ export const LoginPanel = memo(
           <ButtonGroup gap="sm">
             <IconButton
               aria-label="Google"
-              as={Link}
+              as={googleHref ? Link : undefined}
               colorScheme="secondary"
               disabled={!googleHref}
-              fullRounded
-              href={googleHref ?? "#"}
+              href={googleHref}
+              rounded="full"
               variant="gradient"
             >
               <GoogleLogo fontSize="2xl" />
@@ -175,7 +175,7 @@ export const LoginPanel = memo(
                 aria-label="Apple"
                 colorScheme="secondary"
                 disabled
-                fullRounded
+                rounded="full"
                 variant="gradient"
               >
                 <AppleIcon fontSize="2xl" />
