@@ -1,13 +1,23 @@
-import { render, screen } from "@repo/ui/test-utils"
+import { render } from "@repo/ui/test-utils"
+import { screen } from "@testing-library/react"
 import { isValidElement } from "react"
-import { IconButton } from "./IconButton"
-import { styles } from "./icon-button.style"
+import { vi } from "vitest"
 import * as ButtonModule from "./index"
+
+vi.mock("@yamada-ui/react", async () => {
+  const actual = await vi.importActual<typeof import("@yamada-ui/react")>("@yamada-ui/react")
+  return {
+    ...actual,
+    Loading: ({ variant, color }: { variant?: string; color?: string }) => (
+      <div data-color={color ?? ""} data-testid="loading" data-variant={variant ?? ""} />
+    ),
+  }
+})
 
 describe("<IconButton />", () => {
   it("should re-export the IconButton component and check if IconButton exists", () => {
     expect(ButtonModule.IconButton).toBeDefined()
-    expect(isValidElement(<ButtonModule.IconButton />)).toBeTruthy()
+    expect(isValidElement(<ButtonModule.IconButton />)).toBe(true)
   })
 
   it("should forward ref correctly", () => {
@@ -16,53 +26,53 @@ describe("<IconButton />", () => {
     expect(ref.current).toBeInstanceOf(HTMLButtonElement)
   })
 
-  describe("size fallback logic", () => {
-    it.each(["xs", "sm", "md", "lg", "xl"] as const)(
-      "should apply size-specific styles when size exists in styles object",
-      (size) => {
-        render(<IconButton aria-label="Test Icon Button" size={size} />)
-        const button = screen.getByRole("button")
-        expect(button).toBeInTheDocument()
-
-        expect(Object.hasOwn(styles, size)).toBe(true)
-      },
+  it("renders provided ReactNode when loadingIcon is a node", () => {
+    render(
+      <ButtonModule.IconButton loading loadingIcon={<span data-testid="custom-loading">X</span>} />,
     )
+    expect(screen.queryByTestId("loading")).not.toBeInTheDocument()
+    expect(screen.getByTestId("custom-loading")).toBeInTheDocument()
+  })
 
-    it.each(["invalid", "huge", "tiny", "2xl", "enormous"] as const)(
-      "should apply base styles when size does not exist in styles object",
-      (size) => {
-        // biome-ignore lint/suspicious/noExplicitAny: for testing
-        render(<IconButton aria-label="Test Icon Button" size={size as any} />)
-        const button = screen.getByRole("button")
-        expect(button).toBeInTheDocument()
+  it("renders icon when not loading", () => {
+    render(<ButtonModule.IconButton icon={<span data-testid="icon" />} />)
+    expect(screen.getByTestId("icon")).toBeInTheDocument()
+    expect(screen.queryByTestId("loading")).not.toBeInTheDocument()
+  })
 
-        expect(Object.hasOwn(styles, size)).toBe(false)
-      },
-    )
+  it("renders Loading with valid string variant when loading", () => {
+    render(<ButtonModule.IconButton loading loadingIcon="dots" />)
+    const el = screen.getByTestId("loading")
+    expect(el).toBeInTheDocument()
+  })
 
-    it("should use default md size when no size prop is provided", () => {
-      render(<IconButton aria-label="Test Icon Button" />)
-      const button = screen.getByRole("button")
-      expect(button).toBeInTheDocument()
+  it("renders default Loading when loadingIcon string is invalid", () => {
+    render(<ButtonModule.IconButton loading loadingIcon="invalid" />)
+    const el = screen.getByTestId("loading")
+    expect(el).toBeInTheDocument()
+  })
 
-      expect(Object.hasOwn(styles, "md")).toBe(true)
-    })
+  it("renders default Loading when loading and loadingIcon not provided", () => {
+    render(<ButtonModule.IconButton loading />)
+    const el = screen.getByTestId("loading")
+    expect(el).toBeInTheDocument()
+    expect(el).toHaveAttribute("data-color", "current")
+  })
 
-    it("should handle undefined size gracefully", () => {
-      render(<IconButton aria-label="Test Icon Button" size={undefined} />)
-      const button = screen.getByRole("button")
-      expect(button).toBeInTheDocument()
+  it("renders children when provided and not loading", () => {
+    render(<ButtonModule.IconButton>child</ButtonModule.IconButton>)
+    expect(screen.getByText("child")).toBeInTheDocument()
+  })
 
-      expect(Object.hasOwn(styles, "md")).toBe(true)
-    })
+  it("sets data-active attribute when active is true", () => {
+    render(<ButtonModule.IconButton active />)
+    const button = screen.getByRole("button")
+    expect(button).toHaveAttribute("data-active")
+  })
 
-    it("should verify that IconButton styles object has correct structure", () => {
-      expect(Object.hasOwn(styles, "base")).toBe(true)
-      expect(Object.hasOwn(styles, "xs")).toBe(true)
-      expect(Object.hasOwn(styles, "sm")).toBe(true)
-      expect(Object.hasOwn(styles, "md")).toBe(true)
-      expect(Object.hasOwn(styles, "lg")).toBe(true)
-      expect(Object.hasOwn(styles, "xl")).toBe(true)
-    })
+  it("does not set data-active when active is false", () => {
+    render(<ButtonModule.IconButton />)
+    const button = screen.getByRole("button")
+    expect(button).not.toHaveAttribute("data-active")
   })
 })
