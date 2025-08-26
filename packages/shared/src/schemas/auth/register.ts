@@ -64,7 +64,7 @@ export const BasicInfoForm1Schema = z.object({
   /**
    * Last name of the new user.
    */
-  lastName: z.string().min(1, "Field is required"),
+  lastName: z.string(),
 })
 
 export const BasicInfoForm2Schema = z.object({
