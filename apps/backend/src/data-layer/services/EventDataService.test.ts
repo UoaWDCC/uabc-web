@@ -2,9 +2,9 @@ import { eventCreateMock } from "@/test-config/mocks/Event.mock"
 import { payload } from "../adapters/Payload"
 import EventDataService from "./EventDataService"
 
-const eventDataService = new EventDataService()
-
 describe("EventDataService", () => {
+  const eventDataService = new EventDataService()
+
   describe("getEventById", () => {
     it("should get a event by ID", async () => {
       const newEvent = await payload.create({
@@ -15,7 +15,7 @@ describe("EventDataService", () => {
       expect(newEvent).toEqual(fetchedEvent)
     })
 
-    it("should throw a Not Found error when a event is not found by ID", async () => {
+    it("should throw a NotFound error when a event is not found by ID", async () => {
       const fetchedEvent = eventDataService.getEventById("nonexistentid")
       await expect(fetchedEvent).rejects.toThrow("Not Found")
     })
@@ -35,6 +35,7 @@ describe("EventDataService", () => {
       expect(fetchedEvents.length).toStrictEqual(2)
       expect(fetchedEvents).toStrictEqual(expect.arrayContaining([newEvent1, newEvent2]))
     })
+
     it("should return an empty array when no events", async () => {
       expect(await eventDataService.getAllEvents()).toStrictEqual([])
     })

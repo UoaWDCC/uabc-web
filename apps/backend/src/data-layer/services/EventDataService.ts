@@ -12,7 +12,6 @@ export default class EventDataService {
     return (
       await payload.find({
         collection: "event",
-
         pagination: false,
       })
     ).docs
