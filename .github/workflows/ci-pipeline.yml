@@ -149,8 +149,6 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Storybook
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
@@ -175,8 +173,6 @@ jobs:
     if: ${{ always() && (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     name: Preview Storybook
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     outputs:
       deployment-url: ${{ steps.deploy-storybook.outputs.deployment-url }}
     steps:
@@ -189,7 +185,6 @@ jobs:
         with:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Comment Result
         uses: ./.github/ci-actions/comment/
@@ -204,8 +199,6 @@ jobs:
     if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     name: Preview Frontend
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     outputs:
       deployment-url: ${{ steps.deploy-frontend.outputs.deployment-url }}
     steps:
@@ -219,7 +212,6 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: preview
           APP_INDEX_MODE: NOINDEX
           project-name: uabc
