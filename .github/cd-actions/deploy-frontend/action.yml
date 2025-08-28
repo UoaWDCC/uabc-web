@@ -76,8 +76,8 @@ runs:
       run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
 
-    - name: Create Cloudflare static Next build
-      run: pnpm turbo run build --filter=frontend
+    - name: Create Cloudflare Worker build
+      run: pnpm turbo run worker:build --filter=frontend
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
@@ -92,7 +92,7 @@ runs:
         apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
-        command: pages deploy apps/frontend/out --project-name=${{ inputs.project-name }}
+        command: pnpm --filter=frontend worker:deploy
 
     - name: Output deployment url
       shell: bash

@@ -13,6 +13,12 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "public/dist/**"]
     },
+    "worker:build": {
+      "cache": true,
+      "dependsOn": ["^worker:build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "public/dist/**", ".open-next/**"]
+    },
     "pages:build": {
       "cache": true,
       "dependsOn": ["^pages:build", "@repo/test-config#build"],

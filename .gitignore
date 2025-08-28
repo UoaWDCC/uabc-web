@@ -154,6 +154,8 @@ node-compile-cache
 
 .vercel
 .wrangler
+.open-next
+.dev.vars
 
 .cspellcache
 

@@ -7,9 +7,12 @@
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --turbopack --port=3001",
     "build": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation next build",
     "start": "next start --port=3001",
-    "pages:build": "pnpx @cloudflare/next-on-pages",
-    "preview": "pnpm run pages:build && wrangler pages dev",
-    "deploy": "pnpm run pages:build && wrangler pages deploy",
+    "worker:build": "opennextjs-cloudflare build",
+    "worker:preview": "opennextjs-cloudflare preview",
+    "worker:deploy": "opennextjs-cloudflare deploy",
+    "preview": "pnpm run worker:preview",
+    "deploy": "pnpm run worker:deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "lint": "next lint",
     "test": "cross-env NODE_ENV=test vitest run",
     "test:watch": "cross-env NODE_ENV=test vitest",
@@ -19,9 +22,10 @@
   },
   "dependencies": {
     "@hookform/resolvers": "5.1.1",
+    "@opennextjs/cloudflare": "^1.6.5",
     "@repo/shared": "workspace:*",
-    "@repo/ui": "workspace:*",
     "@repo/theme": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@tanstack/react-query": "5.81.5",
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.8",
@@ -34,12 +38,12 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "1.13.12",
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "22.15.21",
     "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "wrangler": "^4.33.0"
   }
 }
