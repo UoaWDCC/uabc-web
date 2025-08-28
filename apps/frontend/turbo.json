@@ -4,6 +4,9 @@
   "tasks": {
     "build": {
       "dependsOn": ["@repo/test-config#build", "^build"]
+    },
+    "worker:build": {
+      "dependsOn": ["@repo/test-config#build", "^worker:build"]
     }
   }
 }

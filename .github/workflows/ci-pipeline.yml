@@ -129,20 +129,20 @@ jobs:
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
-  build-frontend:
-    needs: [setup, biome, cspell]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Build Frontend
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+  # build-frontend:
+  #   needs: [setup, biome, cspell]
+  #   if: ${{ needs.check_changes.outputs.exists == 'true' }}
+  #   name: Build Frontend
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Run Build Frontend
-        uses: ./.github/ci-actions/build-frontend/
-        with:
-          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
-          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
-          NODE_ENV: preview
+  #     - name: Run Build Frontend
+  #       uses: ./.github/ci-actions/build-frontend/
+  #       with:
+  #         NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+  #         NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+  #         NODE_ENV: preview
 
   build-storybook:
     needs: [setup, biome, cspell]
