@@ -149,6 +149,8 @@ jobs:
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Build Storybook
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
@@ -173,6 +175,8 @@ jobs:
     if: ${{ always() && (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     name: Preview Storybook
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     outputs:
       deployment-url: ${{ steps.deploy-storybook.outputs.deployment-url }}
     steps:
