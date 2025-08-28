@@ -189,6 +189,7 @@ jobs:
         with:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Comment Result
         uses: ./.github/ci-actions/comment/
@@ -216,6 +217,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: preview
           APP_INDEX_MODE: NOINDEX
           project-name: uabc
