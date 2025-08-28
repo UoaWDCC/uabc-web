@@ -204,6 +204,8 @@ jobs:
     if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     name: Preview Frontend
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     outputs:
       deployment-url: ${{ steps.deploy-frontend.outputs.deployment-url }}
     steps:
