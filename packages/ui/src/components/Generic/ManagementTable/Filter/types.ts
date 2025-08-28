@@ -116,6 +116,10 @@ export type FilterProps<TData, TConfigs extends readonly FilterBarConfig<TData>[
    * The column configurations for the table.
    */
   columnsConfig: ColumnConfig<TData>[]
+  /**
+   * Whether to show the filter actions.
+   */
+  showFilterActions?: boolean
 }
 
 /**
