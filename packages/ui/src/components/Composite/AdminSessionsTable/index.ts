@@ -1,2 +1,2 @@
-export * from "./AdminTable"
+export * from "./AdminSessionsTable"
 export * from "./Columns"

@@ -41,6 +41,7 @@ export const AdminSessionsTable = memo(({ data }: { data: SessionData[] }) => {
           key: ["name", "email"],
           type: "text",
           placeholder: "Search by name or email...",
+          variant: "stylised",
         },
         {
           key: "role",
@@ -55,6 +56,7 @@ export const AdminSessionsTable = memo(({ data }: { data: SessionData[] }) => {
           onChange: () => {
             console.log("onChange")
           },
+          variant: "stylised",
         },
         {
           key: "level",
@@ -67,6 +69,7 @@ export const AdminSessionsTable = memo(({ data }: { data: SessionData[] }) => {
           ],
           label: "All Play Levels",
           w: "md",
+          variant: "stylised",
         },
       ]}
       rowId="id"
