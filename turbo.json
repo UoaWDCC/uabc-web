@@ -17,7 +17,7 @@
       "cache": true,
       "dependsOn": ["^worker:build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "public/dist/**", ".open-next/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**", ".open-next/**"]
     },
     "pages:build": {
       "cache": true,

@@ -68,7 +68,7 @@ runs:
       with:
         path: |
           apps/frontend/.next/cache
-        key: ${{ runner.os }}-nextjs-frontend-${{ hashFiles('apps/frontend/*') }}
+        key: ${{ runner.os }}-nextjs-frontend-${{ hashFiles('apps/frontend/package.json', 'apps/frontend/next.config.ts', 'apps/frontend/turbo.json') }}
         restore-keys: |
           ${{ runner.os }}-nextjs-frontend
 
@@ -83,6 +83,8 @@ runs:
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
         NODE_ENV: ${{ inputs.NODE_ENV }}
         APP_INDEX_MODE: ${{ inputs.APP_INDEX_MODE }}
+        WORKER_NAME: ${{ inputs.project-name }}-${{ github.ref_name }}
+        GITHUB_REF_NAME: ${{ github.ref_name }}
       shell: bash
 
     - name: Deploy frontend to Cloudflare
@@ -96,4 +98,6 @@ runs:
         CLOUDFLARE_API_TOKEN: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         CLOUDFLARE_ACCOUNT_ID: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         GH_TOKEN: ${{ inputs.GH_TOKEN }}
+        WORKER_NAME: ${{ inputs.project-name }}-${{ github.ref_name }}
+        GITHUB_REF_NAME: ${{ github.ref_name }}
       shell: bash
