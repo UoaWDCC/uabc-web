@@ -1,5 +1,5 @@
 import { mockSessions } from "@repo/shared/mocks"
-import type { Meta, StoryObj } from "@storybook/nextjs"
+import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { QuickBook } from "./QuickBook"
 
 type Story = StoryObj<typeof QuickBook>

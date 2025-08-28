@@ -1,4 +1,4 @@
-import type { Meta, StoryFn } from "@storybook/nextjs"
+import type { Meta, StoryFn } from "@storybook/nextjs-vite"
 import { Center, Container } from "@yamada-ui/react"
 import { AboutUsCarousel } from "./AboutUsCarousel"
 

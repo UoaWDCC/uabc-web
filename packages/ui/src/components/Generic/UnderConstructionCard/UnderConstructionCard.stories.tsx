@@ -1,4 +1,4 @@
-import type { Meta, StoryFn } from "@storybook/nextjs"
+import type { Meta, StoryFn } from "@storybook/nextjs-vite"
 import { Box } from "@yamada-ui/react"
 import { UnderConstructionCard } from "./UnderConstructionCard"
 
