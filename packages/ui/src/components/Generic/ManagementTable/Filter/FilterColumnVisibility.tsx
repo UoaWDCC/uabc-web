@@ -1,3 +1,4 @@
+import { IconButton } from "@repo/ui/components/Primitive"
 import { FilterIcon } from "@yamada-ui/lucide"
 import {
   Checkbox,
@@ -8,7 +9,6 @@ import {
   Text,
   VStack,
 } from "@yamada-ui/react"
-import { IconButton } from "../../../Primitive"
 import { useManagementTable } from "../MemberManagementContext"
 import type { ColumnConfig } from "../types"
 

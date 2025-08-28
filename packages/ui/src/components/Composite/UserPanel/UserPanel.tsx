@@ -1,5 +1,6 @@
 import type { User } from "@repo/shared/payload-types"
 import { ShuttleIcon } from "@repo/ui/components/Icon"
+import { IconButton, type IconButtonProps } from "@repo/ui/components/Primitive"
 import { PencilIcon } from "@yamada-ui/lucide"
 import {
   Avatar,
@@ -16,7 +17,6 @@ import {
   VStack,
 } from "@yamada-ui/react"
 import type { FC } from "react"
-import { IconButton, type IconButtonProps } from "../../Primitive"
 import { InfoField } from "./InfoField"
 import { StatusBadge } from "./StatusBadge"
 import { getImageUrl } from "./UserPanelUtils"

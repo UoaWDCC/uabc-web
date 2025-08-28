@@ -1,3 +1,4 @@
+import { IconButton } from "@repo/ui/components/Primitive"
 import { PencilIcon } from "@yamada-ui/lucide"
 import {
   Avatar,
@@ -13,7 +14,6 @@ import {
   VStack,
 } from "@yamada-ui/react"
 import type { FC } from "react"
-import { IconButton } from "../../Primitive"
 
 export const UserPanelSkeleton: FC = () => {
   return (
