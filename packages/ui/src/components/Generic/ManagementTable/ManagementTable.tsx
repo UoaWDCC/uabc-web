@@ -9,6 +9,7 @@ import { Filter, type FilterBarConfig } from "./Filter"
 import type { ManagementTableProviderProps } from "./MemberManagementContext"
 import { ManagementTableProvider } from "./MemberManagementContext"
 import { PagingTable } from "./PagingTable"
+import type { TableOptions } from "./Table"
 import type { ColumnConfig } from "./types"
 
 export type ManagementTableProps<TData> = {
@@ -48,6 +49,14 @@ export type ManagementTableProps<TData> = {
    * The column key to use for the empty state cell.
    */
   emptyStateColumnKey: keyof TData
+  /**
+   * Whether to show the filter actions.
+   */
+  showFilterActions?: boolean
+  /**
+   * Optional props to pass to the table.
+   */
+  tableProps?: TableOptions
 }
 
 function createActionsColumn<TData>(
@@ -111,6 +120,8 @@ export function ManagementTable<TData>({
   filterConfigs = [],
   emptyStateText,
   emptyStateColumnKey,
+  showFilterActions,
+  tableProps,
 }: ManagementTableProps<TData>) {
   const allColumnKeys = useMemo(() => {
     let keys = columnsConfig.map((c) => c.key as keyof TData & string)
@@ -136,12 +147,17 @@ export function ManagementTable<TData>({
       rowId={rowId}
       {...providerProps}
     >
-      <Filter columnsConfig={columnsConfig} filterConfigs={filterConfigs} />
+      <Filter
+        columnsConfig={columnsConfig}
+        filterConfigs={filterConfigs}
+        showFilterActions={showFilterActions}
+      />
       <PagingTable
         columns={columnsWithActions}
         emptyStateColumnKey={emptyStateColumnKey}
         emptyStateText={emptyStateText}
         rowId={rowId}
+        tableProps={tableProps}
       />
     </ManagementTableProvider>
   )

@@ -45,6 +45,7 @@ export const Filter = <
 >({
   filterConfigs,
   columnsConfig,
+  showFilterActions = true,
 }: FilterProps<TData, TConfigs>) => {
   return (
     <VStack gap="md" w="full">
@@ -83,7 +84,7 @@ export const Filter = <
             return null
           })}
         </Wrap>
-        <FilterActions columns={columnsConfig} />
+        {showFilterActions && <FilterActions columns={columnsConfig} />}
       </Stack>
     </VStack>
   )
