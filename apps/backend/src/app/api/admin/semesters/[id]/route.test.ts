@@ -1,16 +1,23 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
+import { gameSessionMock, gameSessionScheduleMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import type { NextRequest } from "next/server"
 import { describe, expect, it } from "vitest"
+import BookingDataService from "@/data-layer/services/BookingDataService"
+import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
+import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { DELETE, PATCH } from "./route"
 
 describe("/api/admin/semesters/[id]", async () => {
   const semesterDataService = new SemesterDataService()
+  const gameSessionDataService = new GameSessionDataService()
+  const bookingDataService = new BookingDataService()
+
   const cookieStore = await cookies()
 
   describe("DELETE", () => {
@@ -50,6 +57,37 @@ describe("/api/admin/semesters/[id]", async () => {
       await expect(semesterDataService.getSemesterById(newSemester.id)).rejects.toThrow("Not Found")
     })
 
+    it("should delete semester and related documents if user is admin and deleteRelatedDocs is true", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+      const newSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleMock,
+        semester: newSemester,
+      })
+      const newGameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionMock,
+        gameSessionSchedule: newGameSessionSchedule,
+      })
+      const newBooking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: newGameSession,
+      })
+
+      const res = await DELETE({} as NextRequest, {
+        params: Promise.resolve({ id: newSemester.id }),
+      })
+
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+      await expect(semesterDataService.getSemesterById(newSemester.id)).rejects.toThrow("Not Found")
+      await expect(
+        gameSessionDataService.getGameSessionScheduleById(newGameSessionSchedule.id),
+      ).rejects.toThrow("Not Found")
+      await expect(gameSessionDataService.getGameSessionById(newGameSession.id)).rejects.toThrow(
+        "Not Found",
+      )
+      await expect(bookingDataService.getBookingById(newBooking.id)).rejects.toThrow("Not Found")
+    })
+
     it("should return 404 if semester is non-existent", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
@@ -58,6 +96,8 @@ describe("/api/admin/semesters/[id]", async () => {
       })
 
       expect(res.status).toBe(StatusCodes.NOT_FOUND)
+      const json = await res.json()
+      expect(json.error).toEqual("Semester not found")
     })
 
     it("should handle errors and return 500 status", async () => {
@@ -73,6 +113,43 @@ describe("/api/admin/semesters/[id]", async () => {
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+    })
+
+    it("should rollback transaction if error occurs in transaction", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const newSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleMock,
+        semester: newSemester,
+      })
+      const newGameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionMock,
+        gameSessionSchedule: newGameSessionSchedule,
+      })
+      const newBooking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: newGameSession,
+      })
+
+      vi.spyOn(SemesterDataService.prototype, "deleteRelatedDocsForSemester").mockRejectedValueOnce(
+        new Error("Cascade deletion failed"),
+      )
+
+      await DELETE({} as NextRequest, {
+        params: Promise.resolve({ id: "test" }),
+      })
+
+      const existingSemester = await semesterDataService.getSemesterById(newSemester.id)
+      const existingGameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(
+        newGameSessionSchedule.id,
+      )
+      const existingGameSession = await gameSessionDataService.getGameSessionById(newGameSession.id)
+      const existingBooking = await bookingDataService.getBookingById(newBooking.id)
+      expect(existingSemester).toBeDefined()
+      expect(existingGameSessionSchedule).toBeDefined()
+      expect(existingGameSession).toBeDefined()
+      expect(existingBooking).toBeDefined()
     })
   })
 

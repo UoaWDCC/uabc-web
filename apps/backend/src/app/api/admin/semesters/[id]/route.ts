@@ -4,6 +4,11 @@ import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
+import {
+  commitCascadeTransaction,
+  createTransactionId,
+  rollbackCascadeTransaction,
+} from "@/data-layer/adapters/Transaction"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 
 class SemesterRouteWrapper {
@@ -14,22 +19,43 @@ class SemesterRouteWrapper {
    * @returns No content status code
    */
   @Security("jwt", ["admin"])
-  static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  static async DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
+    let cascadeTransactionId: string | number | undefined
+    const deleteRelatedDocs = req.nextUrl.searchParams.get("deleteRelatedDocs") !== "false"
+
     try {
-      const { id } = await params
       const semesterDataService = new SemesterDataService()
-      await semesterDataService.deleteSemester(id)
+
+      // check if semester exists, otherwise throw notfound error
+      const semester = await semesterDataService.getSemesterById(id)
+      if (!semester) {
+        throw new NotFound()
+      }
+
+      if (deleteRelatedDocs) {
+        cascadeTransactionId = await createTransactionId()
+        await semesterDataService.deleteRelatedDocsForSemester(id, cascadeTransactionId)
+      }
+      await semesterDataService.deleteSemester(id, cascadeTransactionId)
+
+      await commitCascadeTransaction(cascadeTransactionId)
+
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
+      await rollbackCascadeTransaction(cascadeTransactionId)
+
       if (error instanceof NotFound) {
         return NextResponse.json({ error: "Semester not found" }, { status: StatusCodes.NOT_FOUND })
       }
+      console.error(error)
       return NextResponse.json(
         { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
         { status: StatusCodes.INTERNAL_SERVER_ERROR },
       )
     }
   }
+
   /**
    * PATCH method to update a semester.
    *
