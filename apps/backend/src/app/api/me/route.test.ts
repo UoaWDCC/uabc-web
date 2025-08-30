@@ -19,7 +19,15 @@ describe("api/me", async () => {
 
       expect(response.status).toBe(StatusCodes.OK)
       const json = await response.json()
-      expect(json.data).toEqual(casualUserMock)
+      expect(json.data).toEqual({
+        ...casualUserMock,
+        emailVerification: [
+          {
+            ...casualUserMock.emailVerification[0],
+            id: expect.any(String),
+          },
+        ],
+      })
     })
 
     it("should return 500 and log error if an unexpected error occurs", async () => {

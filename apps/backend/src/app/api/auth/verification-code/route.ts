@@ -6,6 +6,10 @@ import AuthService from "@/business-layer/services/AuthService"
 import MailService from "@/business-layer/services/MailService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
+import {
+  getVerificationCodeCoolDownDate,
+  getVerificationCodeExpiryDate,
+} from "@/data-layer/utils/DateUtils"
 
 export const POST = async (req: NextRequest) => {
   const userDataService = new UserDataService()
@@ -27,14 +31,45 @@ export const POST = async (req: NextRequest) => {
 
     try {
       const user = await userDataService.getUserByEmail(email)
+
+      // check that latest verification code is past cool down period
+      const latestVerification = user.emailVerification?.[0] || null
+      if (
+        latestVerification &&
+        getVerificationCodeCoolDownDate(new Date(latestVerification.createdAt)) > new Date()
+      ) {
+        return NextResponse.json(
+          {
+            error:
+              "A verification code has already been sent recently. Please wait before requesting another one.",
+          },
+          { status: StatusCodes.TOO_MANY_REQUESTS },
+        )
+      }
+
+      const newCodes = [
+        {
+          verificationCode: code,
+          createdAt: new Date().toISOString(), // Use current date for createdAt
+          expiresAt: getVerificationCodeExpiryDate().toISOString(),
+        },
+        ...(user.emailVerification || []).slice(0, 4), // Keep only the latest 5 codes
+      ]
+
       await userDataService.updateUser(user.id, {
-        emailVerificationCode: code,
+        emailVerification: newCodes,
       })
     } catch {
       await userDataService.createUser({
         firstName: email,
         email,
-        emailVerificationCode: code,
+        emailVerification: [
+          {
+            verificationCode: code,
+            createdAt: new Date().toISOString(), // Use current date for createdAt
+            expiresAt: getVerificationCodeExpiryDate().toISOString(),
+          },
+        ],
         role: MembershipType.casual,
       })
     }
