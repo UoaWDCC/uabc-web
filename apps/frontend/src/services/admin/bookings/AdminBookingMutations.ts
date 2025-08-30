@@ -14,10 +14,7 @@ export const useDeleteBooking = () => {
   const { token } = useAuth()
   return useMutation({
     mutationFn: (bookingId: string) => {
-      if (!token) {
-        throw new Error("No token provided")
-      }
-      return AdminBookingService.deleteBooking(bookingId, token)
+      return AdminBookingService.deleteBooking({ bookingId, token })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -34,9 +31,10 @@ export const useDeleteBooking = () => {
  */
 export const useUpdateBooking = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
     mutationFn: ({ bookingId, data }: { bookingId: string; data: UpdateBookingRequest }) =>
-      AdminBookingService.updateBooking(bookingId, data),
+      AdminBookingService.updateBooking({ bookingId, data, token }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.BOOKINGS_QUERY_KEY],

@@ -19,8 +19,8 @@ import { Container, Grid, GridItem, useDisclosure, useNotice } from "@yamada-ui/
 import { memo, useState } from "react"
 import type { AuthContextValue } from "@/context/AuthContext"
 import { useDeleteBooking } from "@/services/admin/bookings/AdminBookingMutations"
-import { useUpdateSelfMutation } from "@/services/auth/useUpdateSelfMutation"
-import { useMyBookings } from "@/services/bookings/BookingQuery"
+import { useUpdateSelfMutation } from "@/services/auth/AuthMutations"
+import { useMyBookings } from "@/services/bookings/BookingQueries"
 
 export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
   const { user } = auth
