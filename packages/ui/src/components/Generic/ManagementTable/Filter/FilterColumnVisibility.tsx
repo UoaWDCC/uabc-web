@@ -1,7 +1,7 @@
+import { IconButton } from "@repo/ui/components/Primitive"
 import { FilterIcon } from "@yamada-ui/lucide"
 import {
   Checkbox,
-  IconButton,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -21,7 +21,7 @@ export const FilterColumnVisibility = <TData,>({ columns }: { columns: ColumnCon
   return (
     <Popover lazy>
       <PopoverTrigger>
-        <IconButton aria-label="Toggle column visibility" icon={<FilterIcon />} size="sm" />
+        <IconButton aria-label="Toggle column visibility" icon={<FilterIcon />} size="xs" />
       </PopoverTrigger>
       <PopoverContent>
         <PopoverBody>

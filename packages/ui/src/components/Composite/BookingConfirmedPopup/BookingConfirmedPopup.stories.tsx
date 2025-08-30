@@ -1,4 +1,4 @@
-import { MembershipType } from "@repo/shared"
+import { MembershipType, Popup } from "@repo/shared"
 import type { Meta, StoryObj } from "@storybook/react"
 import { NuqsAdapter } from "nuqs/adapters/react"
 import { BookingConfirmedPopup } from "./BookingConfirmedPopup"
@@ -15,7 +15,7 @@ const meta: Meta<typeof BookingConfirmedPopup> = {
   ],
   parameters: {
     query: {
-      "booking-confirmed-popup": "open",
+      [Popup.BOOKING_CONFIRMED]: "open",
     },
   },
   args: {

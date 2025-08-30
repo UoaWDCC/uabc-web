@@ -1,4 +1,4 @@
-import type { Meta, StoryFn } from "@storybook/nextjs"
+import type { Meta, StoryFn } from "@storybook/nextjs-vite"
 import { BookingCard } from "./BookingCard"
 
 const meta: Meta<typeof BookingCard> = {

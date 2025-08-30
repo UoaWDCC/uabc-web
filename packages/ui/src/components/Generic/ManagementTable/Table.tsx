@@ -7,7 +7,11 @@ import { useCallback, useMemo } from "react"
 import type { FilterBarConfig } from "./Filter"
 import { useManagementTable } from "./MemberManagementContext"
 
-export type ManagementTableProps<TData> = {
+export type TableOptions = {
+  selection?: boolean
+}
+
+export type ManagementTableProps<TData> = TableOptions & {
   /**
    * The columns to display in the table.
    */
@@ -31,6 +35,7 @@ export function ManagementTable<TData>({
   rowId,
   emptyStateText = "No data found.",
   emptyStateColumnKey,
+  selection = true,
 }: ManagementTableProps<TData>) {
   const { selectedRows, setSelectedRows, paginatedData, visibleColumns } = useManagementTable<
     TData,
@@ -110,12 +115,13 @@ export function ManagementTable<TData>({
       cellProps={composedCellProps}
       columns={filteredColumns as Column<TData & { empty?: boolean }>[]}
       data={resolvedData as (TData & { empty?: boolean })[]}
-      highlightOnHover={hasData}
-      highlightOnSelected={hasData}
-      onChangeSelect={handleSelectionChange}
+      highlightOnHover={hasData && selection}
+      highlightOnSelected={hasData && selection}
+      onChangeSelect={selection ? handleSelectionChange : undefined}
       rounded="md"
       rowId={rowId}
-      rowsClickSelect={hasData}
+      rowsClickSelect={hasData && selection}
+      selectColumnProps={!selection ? false : undefined}
       selectedRowIds={selectedRowIds}
       sx={{ "tbody > tr:last-of-type > td": { borderBottomWidth: "0px" } }}
     />
