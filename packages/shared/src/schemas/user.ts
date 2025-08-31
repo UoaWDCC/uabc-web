@@ -115,7 +115,7 @@ export const OnboardedUserSchema = z.object({
   firstName: z.string(),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
-  emailVerificationCode: z.string().nullable().optional(),
+  emailVerification: EmailVerificationCodeSchema,
   phoneNumber: z.string(),
   role: z.enum(["admin", "member", "casual"]),
   playLevel: z.enum(["beginner", "intermediate", "advanced"]),
