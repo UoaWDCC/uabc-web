@@ -18,7 +18,7 @@ const BookingService = {
   getMyBookings: async (token: string | null) => {
     const response = await apiClient.get("/api/me/bookings", GetBookingsResponseSchema, {
       requiresAuth: true,
-      token: token,
+      token,
     })
     return ApiClient.throwIfError(response)
   },
@@ -32,7 +32,7 @@ const BookingService = {
   createBooking: async (data: CreateBookingRequest, token: string | null) => {
     const response = await apiClient.post("/api/bookings", data, CreateBookingResponseSchema, {
       requiresAuth: true,
-      token: token,
+      token,
     })
     return ApiClient.throwIfError(response)
   },

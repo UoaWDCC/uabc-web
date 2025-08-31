@@ -19,7 +19,7 @@ export const useGetPaginatedGameSessionSchedules = (query: PaginationQuery) => {
       const response = await AdminGameSessionScheduleService.getPaginatedGameSessionSchedules({
         ...query,
         page: pageParam,
-        token: token,
+        token,
       })
       return response
     },
