@@ -1,8 +1,8 @@
 import { casualUserMock } from "@repo/shared/mocks"
+import type { AuthContextValue } from "@repo/shared/types/auth"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { vi } from "vitest"
-import type { AuthContextValue } from "@/context/AuthContext"
 import * as useUpdateSelfMutationModule from "@/services/auth/AuthMutations"
 import { ProfileSection } from "./ProfileSection"
 
