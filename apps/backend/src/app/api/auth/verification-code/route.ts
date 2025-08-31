@@ -33,7 +33,7 @@ export const POST = async (req: NextRequest) => {
       const user = await userDataService.getUserByEmail(email)
 
       // check that latest verification code is past cool down period
-      const latestVerification = user.emailVerification?.[0] || null
+      const latestVerification = user.emailVerification[0] || null
       if (
         latestVerification &&
         getVerificationCodeCoolDownDate(new Date(latestVerification.createdAt)) > new Date()
