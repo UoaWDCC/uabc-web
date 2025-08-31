@@ -69,8 +69,8 @@ const AdminGameSessionScheduleService = {
    * Updates a game session schedule by ID with partial game session schedule data.
    *
    * @param id The game session schedule ID.
-   * @param token The auth token to use for the request (may be null).
    * @param data The game session schedule data to update.
+   * @param token The auth token to use for the request (may be null).
    * @returns A promise that resolves to the updated game session schedule.
    */
   updateGameSessionSchedule: async ({
