@@ -27,7 +27,7 @@ export const MemberUser: Story = {
     title: "Select Your Sessions",
     sessions: [
       {
-        date: "Monday, 12th May",
+        date: "2025-05-12T17:00:00.000Z",
         attendees: 32,
         casualAttendees: 4,
         id: "monday-session",
@@ -39,7 +39,7 @@ export const MemberUser: Story = {
         casualCapacity: 5,
       },
       {
-        date: "Wednesday, 14th May",
+        date: "2025-05-14T19:30:00.000Z",
         attendees: 28,
         casualAttendees: 2,
         id: "wednesday-session",
@@ -51,7 +51,7 @@ export const MemberUser: Story = {
         casualCapacity: 5,
       },
       {
-        date: "Thursday, 15th May",
+        date: "2025-05-15T19:30:00.000Z",
         attendees: 25,
         casualAttendees: 3,
         id: "thursday-session",
@@ -63,7 +63,7 @@ export const MemberUser: Story = {
         casualCapacity: 5,
       },
       {
-        date: "Friday, 16th May",
+        date: "2025-05-16T19:30:00.000Z",
         attendees: 30,
         casualAttendees: 1,
         id: "friday-session",
@@ -75,7 +75,7 @@ export const MemberUser: Story = {
         casualCapacity: 5,
       },
       {
-        date: "Saturday, 17th May",
+        date: "2025-05-17T16:00:00.000Z",
         attendees: 20,
         casualAttendees: 2,
         id: "saturday-session",
@@ -102,7 +102,7 @@ export const CasualUser: Story = {
     title: "Choose Your Session",
     sessions: [
       {
-        date: "Monday, 12th May",
+        date: "2025-05-12T17:00:00.000Z",
         attendees: 32,
         casualAttendees: 4,
         id: "monday-casual",
@@ -114,7 +114,7 @@ export const CasualUser: Story = {
         casualCapacity: 5,
       },
       {
-        date: "Wednesday, 14th May",
+        date: "2025-05-14T19:30:00.000Z",
         attendees: 28,
         casualAttendees: 2,
         id: "wednesday-casual",
@@ -126,7 +126,7 @@ export const CasualUser: Story = {
         casualCapacity: 5,
       },
       {
-        date: "Thursday, 15th May",
+        date: "2025-05-15T19:30:00.000Z",
         attendees: 25,
         casualAttendees: 3,
         id: "thursday-casual",
@@ -138,7 +138,7 @@ export const CasualUser: Story = {
         casualCapacity: 5,
       },
       {
-        date: "Friday, 16th May",
+        date: "2025-05-16T19:30:00.000Z",
         attendees: 30,
         casualAttendees: 1,
         id: "friday-casual",
@@ -150,7 +150,7 @@ export const CasualUser: Story = {
         casualCapacity: 5,
       },
       {
-        date: "Saturday, 17th May",
+        date: "2025-05-17T16:00:00.000Z",
         attendees: 20,
         casualAttendees: 2,
         id: "saturday-casual",
