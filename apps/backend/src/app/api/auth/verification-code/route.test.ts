@@ -1,4 +1,4 @@
-import { casualUserMock, userCreateMock } from "@repo/shared/mocks"
+import { casualUserMock, userCreateMock, VERIFICATION_CODE_MOCK } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import AuthService from "@/business-layer/services/AuthService"
 import MailService from "@/business-layer/services/MailService"
@@ -25,8 +25,7 @@ describe("/api/auth/verification-code", () => {
   })
 
   it("should create a user and send a verification code email", async () => {
-    const code = "123456"
-    vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(code)
+    vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(VERIFICATION_CODE_MOCK)
     const sendEmailMock = vi
       .spyOn(MailService, "sendEmailVerificationCode")
       .mockResolvedValueOnce({ success: true })
@@ -37,24 +36,23 @@ describe("/api/auth/verification-code", () => {
     const user = await userDataService.getUserByEmail(email)
     expect(user.emailVerification).toContainEqual({
       id: expect.any(String),
-      verificationCode: code,
+      verificationCode: VERIFICATION_CODE_MOCK,
       createdAt: expect.any(String),
       expiresAt: expect.any(String),
     })
-    expect(sendEmailMock).toHaveBeenCalledWith(email, code)
+    expect(sendEmailMock).toHaveBeenCalledWith(email, VERIFICATION_CODE_MOCK)
     expect(res.status).toBe(StatusCodes.OK)
     expect(await res.json()).toEqual({ message: "Verification code sent" })
   })
 
   it("should add a the verification code if a user already exists", async () => {
-    const code = "123456"
-    const code2 = "234567"
+    const VERIFICATION_CODE_MOCK_2 = `${VERIFICATION_CODE_MOCK}-2`
     // Mock the first time (current time)
     const firstTime = new Date()
     vi.useFakeTimers()
     vi.setSystemTime(firstTime)
 
-    vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(code)
+    vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(VERIFICATION_CODE_MOCK)
     vi.spyOn(MailService, "sendEmailVerificationCode").mockResolvedValue({ success: true })
 
     const res = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
@@ -64,7 +62,7 @@ describe("/api/auth/verification-code", () => {
     let user = await userDataService.getUserByEmail(email)
     expect(user.emailVerification).toContainEqual({
       id: expect.any(String),
-      verificationCode: code,
+      verificationCode: VERIFICATION_CODE_MOCK,
       createdAt: expect.any(String),
       expiresAt: expect.any(String),
     })
@@ -72,7 +70,9 @@ describe("/api/auth/verification-code", () => {
     const secondTime = new Date(firstTime.getTime() + 6 * 60 * 1000) // 6 minutes later
     vi.setSystemTime(secondTime)
 
-    vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(code2)
+    vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(
+      VERIFICATION_CODE_MOCK_2,
+    )
 
     const res2 = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
 
@@ -81,7 +81,7 @@ describe("/api/auth/verification-code", () => {
     user = await userDataService.getUserByEmail(email)
     expect(user.emailVerification).toContainEqual({
       id: expect.any(String),
-      verificationCode: code2,
+      verificationCode: VERIFICATION_CODE_MOCK_2,
       createdAt: expect.any(String),
       expiresAt: expect.any(String),
     })
@@ -95,8 +95,7 @@ describe("/api/auth/verification-code", () => {
       email,
     })
 
-    const code = "123456"
-    vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(code)
+    vi.spyOn(AuthService, "generateVerificationCode").mockResolvedValueOnce(VERIFICATION_CODE_MOCK)
     vi.spyOn(MailService, "sendEmailVerificationCode").mockResolvedValue({ success: true })
 
     const res = await POST(createMockNextRequest("/api/auth/verification-code", "POST", { email }))
@@ -107,7 +106,7 @@ describe("/api/auth/verification-code", () => {
     const user = await userDataService.getUserByEmail(email)
     expect(user.emailVerification).toContainEqual({
       id: expect.any(String),
-      verificationCode: code,
+      verificationCode: VERIFICATION_CODE_MOCK,
       createdAt: expect.any(String),
       expiresAt: expect.any(String),
     })
@@ -141,7 +140,7 @@ describe("/api/auth/verification-code", () => {
       ...casualUserMock,
       emailVerification: [
         {
-          verificationCode: "333555",
+          verificationCode: VERIFICATION_CODE_MOCK,
           createdAt: verificationCreatedAt.toISOString(),
           expiresAt: getVerificationCodeExpiryDate(verificationCreatedAt).toISOString(),
         },

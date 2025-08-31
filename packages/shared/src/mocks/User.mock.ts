@@ -5,8 +5,10 @@ export const CASUAL_USER_UID = "000000000000000000000001"
 export const MEMBER_USER_UID = "000000000000000000000002"
 export const ADMIN_USER_UID = "000000000000000000000003"
 
+export const VERIFICATION_CODE_MOCK = "mock-code"
+
 const validEmailVerification = {
-  verificationCode: "mock-code",
+  verificationCode: VERIFICATION_CODE_MOCK,
   expiresAt: new Date(1970, 1, 1).toISOString(), // irrelevant time
   createdAt: new Date(1970, 1, 1).toISOString(), //irrelevant time
 }
