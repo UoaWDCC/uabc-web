@@ -374,11 +374,11 @@ export interface User {
    */
   image?: (string | null) | Media;
   /**
-   * The email verification codes of the user
+   * The email verification code for the user
    */
   emailVerification: {
     /**
-     * A verification code of the user
+     * The most recent verification code for the user
      */
     verificationCode: string;
     /**
@@ -389,8 +389,7 @@ export interface User {
      * The date when this email verification code was created
      */
     createdAt: string;
-    id?: string | null;
-  }[];
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -740,7 +739,6 @@ export interface UserSelect<T extends boolean = true> {
         verificationCode?: T;
         expiresAt?: T;
         createdAt?: T;
-        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

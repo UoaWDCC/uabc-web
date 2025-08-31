@@ -34,8 +34,7 @@ describe("/api/auth/verification-code", () => {
     const res = await POST(req)
 
     const user = await userDataService.getUserByEmail(email)
-    expect(user.emailVerification).toContainEqual({
-      id: expect.any(String),
+    expect(user.emailVerification).toStrictEqual({
       verificationCode: VERIFICATION_CODE_MOCK,
       createdAt: expect.any(String),
       expiresAt: expect.any(String),
@@ -60,8 +59,7 @@ describe("/api/auth/verification-code", () => {
     expect(res.status).toBe(StatusCodes.OK)
     expect(await res.json()).toEqual({ message: "Verification code sent" })
     let user = await userDataService.getUserByEmail(email)
-    expect(user.emailVerification).toContainEqual({
-      id: expect.any(String),
+    expect(user.emailVerification).toStrictEqual({
       verificationCode: VERIFICATION_CODE_MOCK,
       createdAt: expect.any(String),
       expiresAt: expect.any(String),
@@ -79,8 +77,7 @@ describe("/api/auth/verification-code", () => {
     expect(res2.status).toBe(StatusCodes.OK)
     expect(await res2.json()).toEqual({ message: "Verification code sent" })
     user = await userDataService.getUserByEmail(email)
-    expect(user.emailVerification).toContainEqual({
-      id: expect.any(String),
+    expect(user.emailVerification).toStrictEqual({
       verificationCode: VERIFICATION_CODE_MOCK_2,
       createdAt: expect.any(String),
       expiresAt: expect.any(String),
@@ -104,8 +101,7 @@ describe("/api/auth/verification-code", () => {
     expect(await res.json()).toEqual({ message: "Verification code sent" })
 
     const user = await userDataService.getUserByEmail(email)
-    expect(user.emailVerification).toContainEqual({
-      id: expect.any(String),
+    expect(user.emailVerification).toStrictEqual({
       verificationCode: VERIFICATION_CODE_MOCK,
       createdAt: expect.any(String),
       expiresAt: expect.any(String),
@@ -138,13 +134,11 @@ describe("/api/auth/verification-code", () => {
     const verificationCreatedAt = new Date() // Use current date for createdAt
     vi.spyOn(UserDataService.prototype, "getUserByEmail").mockResolvedValueOnce({
       ...casualUserMock,
-      emailVerification: [
-        {
-          verificationCode: VERIFICATION_CODE_MOCK,
-          createdAt: verificationCreatedAt.toISOString(),
-          expiresAt: getVerificationCodeExpiryDate(verificationCreatedAt).toISOString(),
-        },
-      ],
+      emailVerification: {
+        verificationCode: VERIFICATION_CODE_MOCK,
+        createdAt: verificationCreatedAt.toISOString(),
+        expiresAt: getVerificationCodeExpiryDate(verificationCreatedAt).toISOString(),
+      },
     })
     const req = createMockNextRequest("/api/auth/verification-code", "POST", { email })
     const res = await POST(req)

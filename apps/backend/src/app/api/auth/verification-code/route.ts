@@ -33,10 +33,8 @@ export const POST = async (req: NextRequest) => {
       const user = await userDataService.getUserByEmail(email)
 
       // check that latest verification code is past cool down period
-      const latestVerification = user.emailVerification[0] || null
       if (
-        latestVerification &&
-        getVerificationCodeCoolDownDate(new Date(latestVerification.createdAt)) > new Date()
+        getVerificationCodeCoolDownDate(new Date(user.emailVerification.createdAt)) > new Date()
       ) {
         return NextResponse.json(
           {
@@ -47,29 +45,24 @@ export const POST = async (req: NextRequest) => {
         )
       }
 
-      const newCodes = [
-        {
-          verificationCode: code,
-          createdAt: new Date().toISOString(), // Use current date for createdAt
-          expiresAt: getVerificationCodeExpiryDate().toISOString(),
-        },
-        ...(user.emailVerification || []).slice(0, 4), // Keep only the latest 5 codes
-      ]
+      const newCode = {
+        verificationCode: code,
+        createdAt: new Date().toISOString(), // Use current date for createdAt
+        expiresAt: getVerificationCodeExpiryDate().toISOString(),
+      }
 
       await userDataService.updateUser(user.id, {
-        emailVerification: newCodes,
+        emailVerification: newCode,
       })
     } catch {
       await userDataService.createUser({
         firstName: email,
         email,
-        emailVerification: [
-          {
-            verificationCode: code,
-            createdAt: new Date().toISOString(), // Use current date for createdAt
-            expiresAt: getVerificationCodeExpiryDate().toISOString(),
-          },
-        ],
+        emailVerification: {
+          verificationCode: code,
+          createdAt: new Date().toISOString(), // Use current date for createdAt
+          expiresAt: getVerificationCodeExpiryDate().toISOString(),
+        },
         role: MembershipType.casual,
       })
     }

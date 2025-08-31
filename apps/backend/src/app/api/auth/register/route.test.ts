@@ -24,13 +24,11 @@ describe("tests /api/auth/register", () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerification: [
-        {
-          verificationCode: registerBody.emailVerificationCode,
-          createdAt: createdAt,
-          expiresAt: expiresAt,
-        },
-      ],
+      emailVerification: {
+        verificationCode: registerBody.emailVerificationCode,
+        createdAt: createdAt,
+        expiresAt: expiresAt,
+      },
       role: MembershipType.casual,
     })
 
@@ -50,13 +48,11 @@ describe("tests /api/auth/register", () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerification: [
-        {
-          verificationCode: "333555",
-          createdAt: createdAt,
-          expiresAt: expiresAt,
-        },
-      ],
+      emailVerification: {
+        verificationCode: "333555",
+        createdAt: createdAt,
+        expiresAt: expiresAt,
+      },
       role: MembershipType.casual,
     })
 
@@ -72,13 +68,11 @@ describe("tests /api/auth/register", () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerification: [
-        {
-          verificationCode: registerBody.emailVerificationCode,
-          createdAt: expiredTime.toISOString(),
-          expiresAt: getVerificationCodeExpiryDate(expiredTime).toISOString(),
-        },
-      ],
+      emailVerification: {
+        verificationCode: registerBody.emailVerificationCode,
+        createdAt: expiredTime.toISOString(),
+        expiresAt: getVerificationCodeExpiryDate(expiredTime).toISOString(),
+      },
       role: MembershipType.casual,
     })
 
@@ -101,13 +95,11 @@ describe("tests /api/auth/register", () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerification: [
-        {
-          verificationCode: registerBody.emailVerificationCode,
-          createdAt: createdAt,
-          expiresAt: expiresAt,
-        },
-      ],
+      emailVerification: {
+        verificationCode: registerBody.emailVerificationCode,
+        createdAt: createdAt,
+        expiresAt: expiresAt,
+      },
       role: MembershipType.casual,
     })
 

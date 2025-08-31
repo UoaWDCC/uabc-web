@@ -24,7 +24,7 @@ export const UserSchema = z.object({
   firstName: z.string(),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
-  emailVerification: z.array(EmailVerificationCodeSchema),
+  emailVerification: EmailVerificationCodeSchema,
   phoneNumber: z.string().nullable().optional(),
   // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
   role: z.enum(["admin", "member", "casual"]),
@@ -44,7 +44,7 @@ export const CreateUserRequestSchema = z.object({
   firstName: z.string().min(1).max(30),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
-  emailVerification: z.array(EmailVerificationCodeSchema),
+  emailVerification: EmailVerificationCodeSchema,
   role: z.nativeEnum(MembershipType),
   phoneNumber: z.string().nullable().optional(),
   playLevel: z.nativeEnum(PlayLevel).nullable().optional(),
