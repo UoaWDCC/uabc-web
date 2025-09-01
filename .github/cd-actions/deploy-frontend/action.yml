@@ -96,6 +96,7 @@ runs:
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
         command: deploy --name=${{ inputs.worker-name }}
+        workingDirectory: apps/frontend
 
     - name: Output deployment url
       shell: bash
