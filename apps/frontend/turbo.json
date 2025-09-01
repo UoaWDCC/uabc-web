@@ -4,6 +4,10 @@
   "tasks": {
     "build": {
       "dependsOn": ["@repo/test-config#build", "^build"]
+    },
+    "workers:build": {
+      "dependsOn": ["^workers:build"],
+      "outputs": [".open-next/**"]
     }
   }
 }

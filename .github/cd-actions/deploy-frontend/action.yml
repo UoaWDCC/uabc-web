@@ -1,5 +1,5 @@
 name: Deploy Frontend
-description: Deploy frontend to Cloudflare
+description: Deploy frontend to Cloudflare Workers
 
 inputs:
   # Environment variables
@@ -28,6 +28,9 @@ inputs:
   # Additional variables
   project-name:
     description: 'Project name'
+    required: true
+  worker-name:
+    description: 'Cloudflare Worker name'
     required: true
 
 outputs:
@@ -76,8 +79,8 @@ runs:
       run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
 
-    - name: Create Cloudflare static Next build
-      run: pnpm turbo run build --filter=frontend
+    - name: Create Cloudflare Workers Next build
+      run: pnpm turbo run --filter=frontend workers:build
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
@@ -85,15 +88,15 @@ runs:
         APP_INDEX_MODE: ${{ inputs.APP_INDEX_MODE }}
       shell: bash
 
-    - name: Publish frontend to cloudflare
+    - name: Deploy frontend to Cloudflare Workers
       uses: cloudflare/wrangler-action@v3
       id: deploy
       with:
         apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
-        command: pages deploy apps/frontend/out --project-name=${{ inputs.project-name }}
+        command: deploy --name=${{ inputs.worker-name }}
 
     - name: Output deployment url
       shell: bash
-      run: echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
+      run: echo "deployment-url=https://${{ inputs.worker-name }}.${{ inputs.CLOUDFLARE_ACCOUNT_ID }}.workers.dev" >> $GITHUB_OUTPUT

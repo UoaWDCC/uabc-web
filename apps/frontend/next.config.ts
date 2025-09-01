@@ -1,4 +1,4 @@
-import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev"
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare"
 import type { NextConfig } from "next"
 import type { RemotePattern } from "next/dist/shared/lib/image-config"
 
@@ -6,8 +6,9 @@ const env = process.env.NEXT_CONFIG_ENV || "development"
 
 const config = (async () => {
   if (env === "development") {
-    await setupDevPlatform()
+    initOpenNextCloudflareForDev()
   }
+
   const remotePatterns: RemotePattern[] = [
     // TODO: remove once actual images implemented
     {
@@ -27,12 +28,11 @@ const config = (async () => {
   }
 
   const nextConfig: NextConfig = {
-    output: "export",
     images: {
       remotePatterns,
     },
-    // Need this to allow static site generation to work with SSG hosting
-    trailingSlash: true,
+    // Remove output: "export" as OpenNext handles the build output
+    // Remove trailingSlash as it's not needed for OpenNext
   }
 
   return nextConfig
