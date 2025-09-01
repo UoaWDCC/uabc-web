@@ -99,4 +99,4 @@ runs:
 
     - name: Output deployment url
       shell: bash
-      run: echo "deployment-url=https://${{ inputs.worker-name }}.${{ inputs.CLOUDFLARE_ACCOUNT_ID }}.workers.dev" >> $GITHUB_OUTPUT
+      run: echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
