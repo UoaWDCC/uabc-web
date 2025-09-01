@@ -375,7 +375,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [build-backend, build-storybook, test, merge-coverage, codegen, typecheck]
+    needs: [build-backend, build-storybook, test, merge-coverage, codegen, typecheck, preview-frontend]
     runs-on: ubuntu-latest
     if: >
       always() &&
