@@ -7,7 +7,7 @@ const defaultProps = {
   gameSession: {
     id: "session-123",
     day: "Tuesday",
-    status: GameSessionStatus.ongoing,
+    status: GameSessionStatus.ONGOING,
     startTime: "2025-01-21T19:30:00Z",
     endTime: "2025-01-21T22:00:00Z",
     name: "UoA Rec Centre",
@@ -40,7 +40,7 @@ describe("AdminGameSessionCard", () => {
     const { rerender } = render(
       <AdminGameSessionCard
         {...defaultProps}
-        gameSession={{ ...defaultProps.gameSession, status: GameSessionStatus.upcoming }}
+        gameSession={{ ...defaultProps.gameSession, status: GameSessionStatus.UPCOMING }}
       />,
     )
     expect(screen.getByText("Upcoming")).toBeInTheDocument()
@@ -48,7 +48,7 @@ describe("AdminGameSessionCard", () => {
     rerender(
       <AdminGameSessionCard
         {...defaultProps}
-        gameSession={{ ...defaultProps.gameSession, status: GameSessionStatus.past }}
+        gameSession={{ ...defaultProps.gameSession, status: GameSessionStatus.PAST }}
       />,
     )
     expect(screen.getByText("Past")).toBeInTheDocument()

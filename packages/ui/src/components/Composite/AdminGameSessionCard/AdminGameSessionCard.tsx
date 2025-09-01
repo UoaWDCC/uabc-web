@@ -1,7 +1,8 @@
 "use client"
 
-import { type AdminGameSession, GameSessionStatus } from "@repo/shared"
+import type { AdminGameSession } from "@repo/shared"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
+import { formatTime, getStatusColor } from "@repo/ui/utils"
 import { ClockIcon, MapPinIcon, UsersRoundIcon } from "@yamada-ui/lucide"
 import {
   Card,
@@ -53,41 +54,6 @@ export interface AdminGameSessionCardProps extends Omit<CardProps, "children"> {
  */
 export const AdminGameSessionCard = memo(
   ({ gameSession, onExport, ...cardProps }: AdminGameSessionCardProps) => {
-    const getStatusColor = (status: GameSessionStatus) => {
-      switch (status) {
-        case GameSessionStatus.ongoing:
-          return "green"
-        case GameSessionStatus.upcoming:
-          return "blue"
-        case GameSessionStatus.past:
-          return "gray"
-        default:
-          return "gray"
-      }
-    }
-
-    const getStatusText = (status: GameSessionStatus) => {
-      switch (status) {
-        case GameSessionStatus.ongoing:
-          return "Ongoing"
-        case GameSessionStatus.upcoming:
-          return "Upcoming"
-        case GameSessionStatus.past:
-          return "Past"
-        default:
-          return status
-      }
-    }
-
-    const formatTime = (timeString: string) => {
-      const date = new Date(timeString)
-      return date.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      })
-    }
-
     const { day, status, startTime, endTime, name, location, attendees, capacity } = gameSession
 
     return (
@@ -113,7 +79,7 @@ export const AdminGameSessionCard = memo(
               rounded="full"
               variant="outline"
             >
-              {getStatusText(status)}
+              {status}
             </Tag>
           </HStack>
         </CardHeader>

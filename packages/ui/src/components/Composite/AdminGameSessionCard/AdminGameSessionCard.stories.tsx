@@ -22,7 +22,7 @@ type Story = StoryObj<typeof meta>
 const baseGameSession = {
   id: "session-123",
   day: "Tuesday",
-  status: GameSessionStatus.ongoing,
+  status: GameSessionStatus.ONGOING,
   startTime: "2025-01-21T19:30:00Z",
   endTime: "2025-01-21T22:00:00Z",
   name: "UoA Rec Centre",
@@ -47,7 +47,7 @@ export const Upcoming: Story = {
   args: {
     gameSession: {
       ...baseGameSession,
-      status: GameSessionStatus.upcoming,
+      status: GameSessionStatus.UPCOMING,
       attendees: 25,
     },
   },
@@ -57,7 +57,7 @@ export const Past: Story = {
   args: {
     gameSession: {
       ...baseGameSession,
-      status: GameSessionStatus.past,
+      status: GameSessionStatus.PAST,
       attendees: 40,
     },
   },
