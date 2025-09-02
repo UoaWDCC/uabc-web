@@ -69,7 +69,7 @@ runs:
         apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
-        command: deploy --name=${{ inputs.worker-name }}
+        command: deploy --name=${{ inputs.worker-name && inputs.worker-name.replace('/', '.') }}
         workingDirectory: apps/frontend
         packageManager: pnpm
 
