@@ -3,8 +3,7 @@
   "compatibility_date": "2024-09-23",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
-    "directory": "out",
-    "binding": "ASSETS"
+    "directory": "out"
   },
   "preview_urls": true
 }
