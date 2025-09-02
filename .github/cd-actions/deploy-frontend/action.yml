@@ -93,21 +93,29 @@ runs:
         APP_INDEX_MODE: ${{ inputs.APP_INDEX_MODE }}
       shell: bash
 
-    - name: Deploy frontend to Cloudflare Workers
+    - name: Deploy frontend to Cloudflare Workers (Preview)
+      if: inputs.is-preview == 'true'
       uses: cloudflare/wrangler-action@v3
       id: deploy
       with:
         apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
-        command: ${{ inputs.is-preview == 'true' && 'deploy --preview' || 'deploy --name=' + inputs.worker-name }}
+        command: deploy --preview
+        workingDirectory: apps/frontend
+
+    - name: Deploy frontend to Cloudflare Workers (Production)
+      if: inputs.is-preview != 'true'
+      uses: cloudflare/wrangler-action@v3
+      id: deploy
+      with:
+        apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
+        gitHubToken: ${{ inputs.GH_TOKEN }}
+        command: deploy --name=${{ inputs.worker-name }}
         workingDirectory: apps/frontend
 
     - name: Output deployment url
       shell: bash
       run: |
-        if [ "${{ inputs.is-preview }}" = "true" ]; then
-          echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
-        else
-          echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
-        fi
+        echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
