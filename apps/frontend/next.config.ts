@@ -26,6 +26,15 @@ const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
   distDir: "out",
+  experimental: {
+    optimizePackageImports: [
+      "@yamada-ui/lucide",
+      "@yamada-ui/react",
+      "@tanstack/react-query",
+      "react-hook-form",
+      "zod",
+    ],
+  },
 }
 
 export default nextConfig
