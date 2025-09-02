@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Welcome to the homepage of UABC, New Zealand's largest student badminton club. We run weekly badminton sessions and fun social events to connect like-minded badminton people!",
 }
 
-export default async function Home() {
+export default function Home() {
   return (
     <VStack as="main">
       <HeaderSection />
@@ -23,5 +23,3 @@ export default async function Home() {
     </VStack>
   )
 }
-
-Home.displayName = "Home"

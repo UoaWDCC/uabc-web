@@ -71,9 +71,10 @@ runs:
       with:
         path: |
           apps/frontend/.next/cache
-        key: ${{ runner.os }}-nextjs-frontend-${{ hashFiles('apps/frontend/*') }}
+        key: ${{ runner.os }}-nextjs-frontend-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('apps/frontend/package.json') }}
         restore-keys: |
-          ${{ runner.os }}-nextjs-frontend
+          ${{ runner.os }}-nextjs-frontend-${{ hashFiles('**/pnpm-lock.yaml') }}-
+          ${{ runner.os }}-nextjs-frontend-
 
     - name: Install dependencies if cache misses
       run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts

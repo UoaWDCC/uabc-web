@@ -31,8 +31,8 @@ const config = (async () => {
     images: {
       remotePatterns,
     },
-    // Remove output: "export" as OpenNext handles the build output
-    // Remove trailingSlash as it's not needed for OpenNext
+    output: "export",
+    trailingSlash: true,
   }
 
   return nextConfig
