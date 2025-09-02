@@ -56,6 +56,8 @@ export const AdminGameSessionCard = memo(
   ({ gameSession, onExport, ...cardProps }: AdminGameSessionCardProps) => {
     const { day, status, startTime, endTime, name, location, attendees, capacity } = gameSession
 
+    const colorScheme = getStatusColor(status)
+
     return (
       <Card
         bg={["secondary.50", "secondary.900"]}
@@ -73,7 +75,7 @@ export const AdminGameSessionCard = memo(
             </Heading.h3>
             <Spacer />
             <Tag
-              colorScheme={getStatusColor(status)}
+              colorScheme={colorScheme}
               fontSize="sm"
               fontWeight="medium"
               rounded="full"
@@ -90,8 +92,8 @@ export const AdminGameSessionCard = memo(
               label={`${formatTime(startTime)} - ${formatTime(endTime)}`}
             />
             <VStack align="flex-start" gap="xs">
-              <IconWithText icon={<MapPinIcon fontSize="lg" />} label={name || ""} />
-              <IconWithText icon={<MapPinIcon fontSize="lg" />} label={location || ""} />
+              {name && <IconWithText icon={<MapPinIcon fontSize="lg" />} label={name} />}
+              {location && <IconWithText icon={<MapPinIcon fontSize="lg" />} label={location} />}
             </VStack>
             <IconWithText
               icon={<UsersRoundIcon fontSize="lg" />}
