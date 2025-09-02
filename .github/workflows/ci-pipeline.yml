@@ -201,7 +201,6 @@ jobs:
           APP_INDEX_MODE: NOINDEX
           project-name: uabc
           worker-name: uabc-frontend
-          is-preview: true
 
       - name: Comment Result
         uses: ./.github/ci-actions/comment/
