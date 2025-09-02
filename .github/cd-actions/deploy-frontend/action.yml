@@ -55,6 +55,7 @@ runs:
         gitHubToken: ${{ inputs.GH_TOKEN }}
         command: deploy --name=${{ inputs.worker-name }}
         workingDirectory: apps/frontend
+        packageManager: pnpm
 
     - name: Output deployment url
       shell: bash

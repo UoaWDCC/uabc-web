@@ -212,7 +212,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           project-name: uabc
-          worker-name: uabc-frontend
+          worker-name: ${{ github.head_ref }}-uabc-frontend
 
       - name: Comment Result
         uses: ./.github/ci-actions/comment/
