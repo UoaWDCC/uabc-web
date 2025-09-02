@@ -15,6 +15,11 @@ inputs:
     description: "The app index mode."
     required: false
 
+outputs:
+  artifact-name:
+    description: "The name of the uploaded artifact"
+    value: "frontend-build"
+
 runs:
   using: composite
   steps:
@@ -63,3 +68,10 @@ runs:
         NODE_ENV: ${{ inputs.NODE_ENV }}
         APP_INDEX_MODE: ${{ inputs.APP_INDEX_MODE }}
       run: pnpm build --filter frontend
+
+    - name: Upload frontend build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-build
+        path: apps/frontend/out
+        retention-days: 1

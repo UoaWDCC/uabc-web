@@ -140,6 +140,22 @@ jobs:
       - name: Build Storybook
         uses: ./.github/ci-actions/build-storybook/
 
+  build-frontend:
+    needs: [setup, biome, cspell]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Frontend
+        uses: ./.github/ci-actions/build-frontend/
+        with:
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          NODE_ENV: preview
+          APP_INDEX_MODE: NOINDEX
+
   pre-comment:
     name: Pre Comment
     needs: [setup]
@@ -180,7 +196,7 @@ jobs:
           preview-storybook: ${{ steps.preview-storybook.outputs.deployment-url }}
 
   preview-frontend:
-    needs: [setup, cspell, biome]
+    needs: [build-frontend]
     if: ${{ (github.ref != 'refs/heads/master') && needs.check_changes.outputs.exists == 'true' }}
     name: Preview Frontend
     runs-on: ubuntu-latest
@@ -195,10 +211,6 @@ jobs:
         with:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
-          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
-          NODE_ENV: preview
-          APP_INDEX_MODE: NOINDEX
           project-name: uabc
           worker-name: uabc-frontend
 
@@ -375,7 +387,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [build-backend, build-storybook, test, merge-coverage, codegen, typecheck, preview-frontend]
+    needs: [build-backend, build-storybook, build-frontend, test, merge-coverage, codegen, typecheck, preview-frontend]
     runs-on: ubuntu-latest
     if: >
       always() &&
