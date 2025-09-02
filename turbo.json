@@ -11,19 +11,7 @@
       "dependsOn": ["^build"],
       "env": ["TURBO_TEAM", "TURBO_TOKEN"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "public/dist/**"]
-    },
-    "workers:build": {
-      "cache": true,
-      "dependsOn": ["^workers:build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "public/dist/**", "!.next/cache/**"]
-    },
-    "pages:build": {
-      "cache": true,
-      "dependsOn": ["^pages:build", "@repo/test-config#build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".vercel/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types", "@repo/test-config#build", "@repo/shared#build"],

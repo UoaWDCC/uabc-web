@@ -10,7 +10,6 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "workers:build": "turbo run workers:build",
     "check-types": "turbo run check-types",
     "dev": "turbo run dev",
     "clean": "pnpm -r --parallel exec rimraf dist .turbo *.log coverage node_modules .next storybook-static .wrangler",

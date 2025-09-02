@@ -8,9 +8,6 @@
     "build": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation next build",
     "start": "next start --port=3001",
     "pages:build": "pnpx @cloudflare/next-on-pages",
-    "workers:build": "opennextjs-cloudflare build",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "lint": "next lint",
     "test": "cross-env NODE_ENV=test vitest run",
     "test:watch": "cross-env NODE_ENV=test vitest",
@@ -35,7 +32,6 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.7.0",
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "22.15.21",

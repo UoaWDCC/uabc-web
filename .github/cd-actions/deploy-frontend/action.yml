@@ -32,6 +32,10 @@ inputs:
   worker-name:
     description: 'Cloudflare Worker name'
     required: true
+  is-preview:
+    description: 'Whether this is a preview deployment'
+    required: false
+    default: 'false'
 
 outputs:
   deployment-url:
@@ -81,7 +85,7 @@ runs:
       shell: bash
 
     - name: Create Cloudflare Workers Next build
-      run: pnpm turbo run --filter=frontend workers:build
+      run: pnpm turbo run --filter=frontend build
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
@@ -96,9 +100,14 @@ runs:
         apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
-        command: deploy --name=${{ inputs.worker-name }}
+        command: ${{ inputs.is-preview == 'true' && 'deploy --preview' || 'deploy --name=' + inputs.worker-name }}
         workingDirectory: apps/frontend
 
     - name: Output deployment url
       shell: bash
-      run: echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
+      run: |
+        if [ "${{ inputs.is-preview }}" = "true" ]; then
+          echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
+        else
+          echo "deployment-url=${{ steps.deploy.outputs.deployment-url }}" >> $GITHUB_OUTPUT
+        fi

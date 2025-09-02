@@ -3,11 +3,8 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "dependsOn": ["@repo/test-config#build", "^build"]
-    },
-    "workers:build": {
-      "dependsOn": ["@repo/test-config#build", "^workers:build"],
-      "outputs": [".open-next/**"]
+      "dependsOn": ["@repo/test-config#build", "^build"],
+      "outputs": ["out/**"]
     }
   }
 }

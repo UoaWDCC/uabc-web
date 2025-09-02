@@ -200,7 +200,8 @@ jobs:
           NODE_ENV: preview
           APP_INDEX_MODE: NOINDEX
           project-name: uabc
-          worker-name: uabc-frontend-preview-${{ github.event.number || github.ref_name }}
+          worker-name: uabc-frontend
+          is-preview: true
 
       - name: Comment Result
         uses: ./.github/ci-actions/comment/

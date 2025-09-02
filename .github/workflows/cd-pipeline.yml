@@ -73,7 +73,9 @@ jobs:
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
           NODE_ENV: staging
           project-name: uabc-staging
+          worker-name: uabc-frontend-staging
           APP_INDEX_MODE: NOINDEX
+          is-preview: true
 
   deploy-backend-production:
     name: Deploy Backend Production
@@ -133,4 +135,6 @@ jobs:
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
           NODE_ENV: production
           project-name: uabc
-          APP_INDEX_MODE: NOINDEX
+          worker-name: uabc-frontend
+          APP_INDEX_MODE: INDEX
+          is-preview: false
