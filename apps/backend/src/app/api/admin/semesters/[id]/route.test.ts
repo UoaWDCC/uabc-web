@@ -45,19 +45,21 @@ describe("/api/admin/semesters/[id]", async () => {
       expect(await res.json()).toStrictEqual({ error: "No scope" })
     })
 
-    it("should delete semester if user is admin", async () => {
+    it("should delete semester if user is admin and deleteRelatedDocs is set to false", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
 
-      const res = await DELETE({} as NextRequest, {
-        params: Promise.resolve({ id: newSemester.id }),
-      })
-
+      const res = await DELETE(
+        createMockNextRequest(`/api/admin/semester/${newSemester.id}?deleteRelatedDocs=false`),
+        {
+          params: Promise.resolve({ id: newSemester.id }),
+        },
+      )
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
       await expect(semesterDataService.getSemesterById(newSemester.id)).rejects.toThrow("Not Found")
     })
 
-    it("should delete semester and related documents if user is admin and deleteRelatedDocs is true", async () => {
+    it("should delete semester and related documents if user is admin and deleteRelatedDocs is unspecified", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
@@ -73,7 +75,7 @@ describe("/api/admin/semesters/[id]", async () => {
         gameSession: newGameSession,
       })
 
-      const res = await DELETE({} as NextRequest, {
+      const res = await DELETE(createMockNextRequest(`/api/admin/semester/${newSemester.id}`), {
         params: Promise.resolve({ id: newSemester.id }),
       })
 
@@ -87,6 +89,8 @@ describe("/api/admin/semesters/[id]", async () => {
       )
       await expect(bookingDataService.getBookingById(newBooking.id)).rejects.toThrow("Not Found")
     })
+
+    // should i create another test case here for "if user is admin and deleteRelatedDocs is set to true"? it'll be repeating code though so is it fine to put it in the same test case as above
 
     it("should return 404 if semester is non-existent", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
@@ -115,7 +119,7 @@ describe("/api/admin/semesters/[id]", async () => {
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
     })
 
-    it("should rollback transaction if error occurs in transaction", async () => {
+    it("should rollback semester and related document deletion if error occurs in transaction", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
@@ -132,24 +136,21 @@ describe("/api/admin/semesters/[id]", async () => {
         gameSession: newGameSession,
       })
 
-      vi.spyOn(SemesterDataService.prototype, "deleteRelatedDocsForSemester").mockRejectedValueOnce(
-        new Error("Cascade deletion failed"),
-      )
+      vi.spyOn(
+        GameSessionDataService.prototype,
+        "deleteAllGameSessionSchedulesBySemesterId",
+      ).mockRejectedValueOnce(new Error("Error in cascade deletion"))
 
       await DELETE({} as NextRequest, {
-        params: Promise.resolve({ id: "test" }),
+        params: Promise.resolve({ id: newSemester.id }),
       })
 
-      const existingSemester = await semesterDataService.getSemesterById(newSemester.id)
-      const existingGameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(
-        newGameSessionSchedule.id,
-      )
-      const existingGameSession = await gameSessionDataService.getGameSessionById(newGameSession.id)
-      const existingBooking = await bookingDataService.getBookingById(newBooking.id)
-      expect(existingSemester).toBeDefined()
-      expect(existingGameSessionSchedule).toBeDefined()
-      expect(existingGameSession).toBeDefined()
-      expect(existingBooking).toBeDefined()
+      expect(await semesterDataService.getSemesterById(newSemester.id)).toBeDefined()
+      expect(
+        await gameSessionDataService.getGameSessionScheduleById(newGameSessionSchedule.id),
+      ).toBeDefined()
+      expect(await gameSessionDataService.getGameSessionById(newGameSession.id)).toBeDefined()
+      expect(await bookingDataService.getBookingById(newBooking.id)).toBeDefined()
     })
   })
 

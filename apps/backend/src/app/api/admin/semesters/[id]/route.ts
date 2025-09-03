@@ -1,3 +1,4 @@
+// write test cases for transaction.ts
 import { UpdateSemesterRequestSchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
@@ -9,6 +10,8 @@ import {
   createTransactionId,
   rollbackCascadeTransaction,
 } from "@/data-layer/adapters/Transaction"
+import BookingDataService from "@/data-layer/services/BookingDataService"
+import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 
 class SemesterRouteWrapper {
@@ -26,21 +29,40 @@ class SemesterRouteWrapper {
 
     try {
       const semesterDataService = new SemesterDataService()
+      const gameSessionDataService = new GameSessionDataService()
+      const bookingDataService = new BookingDataService()
 
       // check if semester exists, otherwise throw notfound error
-      const semester = await semesterDataService.getSemesterById(id)
-      if (!semester) {
-        throw new NotFound()
-      }
+      await semesterDataService.getSemesterById(id)
 
       if (deleteRelatedDocs) {
         cascadeTransactionId = await createTransactionId()
-        await semesterDataService.deleteRelatedDocsForSemester(id, cascadeTransactionId)
+
+        const schedules = await gameSessionDataService.getAllGameSessionSchedulesBySemesterId(
+          id,
+          cascadeTransactionId,
+        )
+        const scheduleIds = schedules.map((schedule) => schedule.id)
+        const sessions = await gameSessionDataService.getAllGameSessionsByGameSessionScheduleIds(
+          scheduleIds,
+          cascadeTransactionId,
+        )
+        const sessionIds = sessions.map((sessions) => sessions.id)
+
+        await bookingDataService.deleteBookingsByGameSessionIds(sessionIds, cascadeTransactionId)
+        await gameSessionDataService.deleteAllGameSessionsByGameSessionSchedules(
+          scheduleIds,
+          cascadeTransactionId,
+        )
+        await gameSessionDataService.deleteAllGameSessionSchedulesBySemesterId(
+          id,
+          cascadeTransactionId,
+        )
       }
+
       await semesterDataService.deleteSemester(id, cascadeTransactionId)
 
       await commitCascadeTransaction(cascadeTransactionId)
-
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
       await rollbackCascadeTransaction(cascadeTransactionId)

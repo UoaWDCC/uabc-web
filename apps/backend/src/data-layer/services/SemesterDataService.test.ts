@@ -1,15 +1,8 @@
 import { payload } from "@/data-layer/adapters/Payload"
-import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
-import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
-import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
-import BookingDataService from "./BookingDataService"
-import GameSessionDataService from "./GameSessionDataService"
 import SemesterDataService from "./SemesterDataService"
 
 const semesterDataService = new SemesterDataService()
-const gameSessionDataService = new GameSessionDataService()
-const bookingDataService = new BookingDataService()
 
 describe("SemesterDataService", () => {
   describe("createSemester", () => {
@@ -165,37 +158,6 @@ describe("SemesterDataService", () => {
 
     it("should return null when deleting non-existent semester", async () => {
       await expect(semesterDataService.deleteSemester("nonexistentid")).rejects.toThrow("Not Found")
-    })
-  })
-
-  describe("deleteRelatedDocsForSemester", () => {
-    it("should delete a semester and related documents", async () => {
-      const newSemester = await semesterDataService.createSemester(semesterCreateMock)
-
-      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
-        ...gameSessionScheduleCreateMock,
-        semester: newSemester,
-      })
-      const newGameSession = await gameSessionDataService.createGameSession({
-        ...gameSessionCreateMock,
-        gameSessionSchedule: newGameSessionSchedule,
-      })
-      const newBooking = await bookingDataService.createBooking({
-        ...bookingCreateMock,
-        gameSession: newGameSession,
-      })
-
-      await semesterDataService.deleteRelatedDocsForSemester(newSemester.id)
-
-      await expect(
-        gameSessionDataService.getGameSessionScheduleById(newGameSessionSchedule.id),
-      ).rejects.toThrowError("Not Found")
-      await expect(
-        gameSessionDataService.getGameSessionById(newGameSession.id),
-      ).rejects.toThrowError("Not Found")
-      await expect(bookingDataService.getBookingById(newBooking.id)).rejects.toThrowError(
-        "Not Found",
-      )
     })
   })
 })

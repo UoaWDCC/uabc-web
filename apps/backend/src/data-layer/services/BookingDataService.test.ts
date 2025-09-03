@@ -231,4 +231,42 @@ describe("bookingDataService", () => {
       )
     })
   })
+
+  describe("deleteBookingsByGameSessionIds", () => {
+    it("should delete bookings by game session IDs successfully", async () => {
+      const createdGameSession1 =
+        await gameSessionDataService.createGameSession(gameSessionCreateMock)
+      const createdGameSession2 =
+        await gameSessionDataService.createGameSession(gameSessionCreateMock)
+
+      const createdBooking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: createdGameSession1,
+      })
+      const createdBooking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: createdGameSession2,
+      })
+
+      const deletedBookings = await bookingDataService.deleteBookingsByGameSessionIds([
+        createdGameSession1.id,
+        createdGameSession2.id,
+      ])
+      expect(deletedBookings).not.toBeNull()
+      expect(deletedBookings).toEqual(expect.arrayContaining([createdBooking1, createdBooking2]))
+
+      await expect(bookingDataService.getBookingById(createdBooking1.id)).rejects.toThrowError(
+        "Not Found",
+      )
+      await expect(bookingDataService.getBookingById(createdBooking2.id)).rejects.toThrowError(
+        "Not Found",
+      )
+    })
+
+    it("should throw a NotFound error if no bookings exist when deleting by a game session IDs", async () => {
+      await expect(
+        bookingDataService.deleteBookingsByGameSessionIds(["Not a valid game session ID"]),
+      ).rejects.toThrowError("Not Found")
+    })
+  })
 })
