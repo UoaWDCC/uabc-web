@@ -28,7 +28,7 @@ export const FILTER_CONFIGS: readonly FilterBarConfig<UserData>[] = [
         value: role,
       })),
     ],
-    label: "All",
+    label: "User Role",
     onChange: () => {
       console.log("onChange")
     },

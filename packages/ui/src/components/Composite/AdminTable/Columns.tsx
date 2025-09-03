@@ -65,11 +65,7 @@ export const columns: Column<UserData>[] = [
   {
     accessorKey: "joined",
     header: "Joined",
-    cell: ({ getValue }) => (
-      <Text as="span" float="right">
-        {getValue<string>()}
-      </Text>
-    ),
+    cell: ({ getValue }) => <Text as="span">{getValue<string>()}</Text>,
     css: {
       minW: "xs",
     },
