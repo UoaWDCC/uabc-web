@@ -62,6 +62,13 @@ runs:
         name: frontend-build
         path: apps/frontend/out
 
+    - name: Transform worker name
+      shell: bash
+      run: |
+        # Replace forward slashes with dots for Cloudflare Worker naming
+        WORKER_NAME=$(echo "${{ inputs.worker-name }}" | tr '/' '-')
+        echo "WORKER_NAME=$WORKER_NAME" >> $GITHUB_ENV
+
     - name: Deploy frontend to Cloudflare Workers
       uses: cloudflare/wrangler-action@v3
       id: deploy
@@ -69,7 +76,7 @@ runs:
         apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
-        command: deploy --name=${{ inputs.worker-name && inputs.worker-name.replace('/', '.') }}
+        command: deploy --name=${{ env.WORKER_NAME }}
         workingDirectory: apps/frontend
         packageManager: pnpm
 
