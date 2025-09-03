@@ -6,19 +6,16 @@ import { useAuth } from "@/context/AuthContext"
 import AuthService from "./AuthService"
 
 export function useUpdateSelfMutation() {
-  const { token } = useAuth()
   const queryClient = useQueryClient()
+  const { token } = useAuth()
 
   return useMutation({
     mutationFn: async (data: EditSelfData) => {
-      if (!token) {
-        throw new Error("No token provided")
-      }
       const parsed = UpdateSelfRequestSchema.parse(data)
       return await AuthService.patchMe(parsed, token)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auth", "me", token] })
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] })
     },
   })
 }

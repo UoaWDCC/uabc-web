@@ -2,7 +2,7 @@ import { isGameSessionObject, type PaginationQuery, TimeframeFilter } from "@rep
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { QueryKeys } from "@/services"
-import { useMyBookings } from "../bookings/BookingQuery"
+import { useMyBookings } from "../bookings/BookingQueries"
 import GameSessionService from "./GameSessionService"
 
 /**
