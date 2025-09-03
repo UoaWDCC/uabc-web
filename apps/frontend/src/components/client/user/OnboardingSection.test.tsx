@@ -11,7 +11,7 @@ vi.mock("@/context/AuthContext", () => ({
 }))
 
 const mockMutateAsync = vi.fn()
-vi.mock("@/services/auth/useUpdateSelfMutation", () => ({
+vi.mock("@/services/auth/AuthMutations", () => ({
   useUpdateSelfMutation: () => ({
     mutateAsync: mockMutateAsync,
     isLoading: false,
