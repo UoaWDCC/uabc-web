@@ -1,6 +1,7 @@
 "use client"
 
 import type { AdminGameSession } from "@repo/shared"
+import { capitalize } from "@repo/shared"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
 import { formatTime, getStatusColor } from "@repo/ui/utils"
 import { ClockIcon, MapPinIcon, UsersRoundIcon } from "@yamada-ui/lucide"
@@ -58,6 +59,8 @@ export const AdminGameSessionCard = memo(
 
     const colorScheme = getStatusColor(status)
 
+    const displayDay = capitalize(day)
+
     return (
       <Card
         bg={["secondary.50", "secondary.900"]}
@@ -71,7 +74,7 @@ export const AdminGameSessionCard = memo(
         <CardHeader>
           <HStack w="full">
             <Heading.h3 fontSize="xl" fontWeight="semibold">
-              {day.charAt(0).toUpperCase() + day.slice(1)}
+              {displayDay}
             </Heading.h3>
             <Spacer />
             <Tag
