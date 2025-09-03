@@ -101,7 +101,6 @@ export const CodeVerificationPopup: FC<CodeVerificationPopupProps> = ({
   return (
     <Modal
       as="form"
-      onClose={close}
       onSubmit={handleSubmit(handleSubmission)}
       p="lg"
       ref={formRef}
