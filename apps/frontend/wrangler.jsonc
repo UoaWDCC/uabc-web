@@ -1,9 +1,12 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "uabc-frontend",
-  "compatibility_date": "2024-09-23",
+  "compatibility_date": "2024-12-30",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "main": ".open-next/worker/index.js",
+  "preview_urls": true,
   "assets": {
-    "directory": "out"
-  },
-  "preview_urls": true
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  }
 }

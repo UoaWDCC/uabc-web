@@ -6,6 +6,8 @@ import { Providers } from "@/app/providers"
 import { FooterServerSection } from "@/components/server/FooterServerSection"
 import { NavigationBarServerSection } from "@/components/server/NavigationBarServerSection"
 
+export const dynamic = "force-static"
+
 const geistSans = Geist({
   subsets: ["latin"],
   variable: "--font-geist-sans",

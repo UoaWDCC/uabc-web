@@ -13,10 +13,16 @@
     "test:watch": "cross-env NODE_ENV=test vitest",
     "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
     "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage",
-    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
+    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage",
+    "preview": "opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "build:workers": "pnpx opennextjs-cloudflare build"
   },
   "dependencies": {
     "@hookform/resolvers": "5.1.1",
+    "@opennextjs/cloudflare": "^1.7.1",
     "@repo/shared": "workspace:*",
     "@repo/theme": "workspace:*",
     "@repo/ui": "workspace:*",

@@ -23,9 +23,6 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns,
   },
-  output: "export",
-  trailingSlash: true,
-  distDir: "out",
   experimental: {
     optimizePackageImports: [
       "@yamada-ui/lucide",
@@ -38,3 +35,7 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
+
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare"
+
+initOpenNextCloudflareForDev()
