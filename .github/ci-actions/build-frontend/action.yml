@@ -68,16 +68,3 @@ runs:
         NODE_ENV: ${{ inputs.NODE_ENV }}
         APP_INDEX_MODE: ${{ inputs.APP_INDEX_MODE }}
       run: pnpm turbo run build:workers --filter frontend
-
-    - name: Verify output
-      shell: bash
-      run: |
-        ls -la apps/frontend/.open-next
-        test -d apps/frontend/.open-next
-
-    - name: Upload frontend build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: frontend-build
-        path: apps/frontend/.open-next
-        retention-days: 1

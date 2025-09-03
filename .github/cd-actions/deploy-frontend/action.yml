@@ -28,40 +28,6 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version-file: '.nvmrc'
-
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: latest
-        run_install: false
-
-    - name: Restore node_modules cache
-      uses: actions/cache/restore@v4
-      id: cache
-      with:
-        path: |
-          node_modules
-          */node_modules
-          packages/*/node_modules
-          apps/*/node_modules
-        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-node_modules-
-
-    - name: Install dependencies if cache misses
-      run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts
-      shell: bash
-
-    - name: Download frontend build artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: frontend-build
-        path: apps/frontend/.open-next
-
     - name: Transform worker name
       shell: bash
       run: |
