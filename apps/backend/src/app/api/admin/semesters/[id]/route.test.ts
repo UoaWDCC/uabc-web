@@ -96,7 +96,7 @@ describe("/api/admin/semesters/[id]", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       vi.spyOn(SemesterDataService.prototype, "getSemesterById").mockRejectedValueOnce(
-        new Error("Database error"),
+        new Error("Not found"),
       )
 
       const res = await DELETE({} as NextRequest, {

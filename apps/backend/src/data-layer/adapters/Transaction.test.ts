@@ -52,25 +52,23 @@ describe("Transaction", () => {
       ...gameSessionCreateMock,
       gameSessionSchedule: createdGameSessionSchedule.id,
     })
-    const createdBooking = await bookingDataService.createBooking({
+    const createdBooking1 = await bookingDataService.createBooking({
+      ...bookingCreateMock,
+      gameSession: createdGameSession,
+    })
+    const createdBooking2 = await bookingDataService.createBooking({
       ...bookingCreateMock,
       gameSession: createdGameSession,
     })
 
     const transactionId = await createTransactionId()
 
-    await bookingDataService.deleteBookingsByGameSessionIds([createdGameSession.id], transactionId)
-
-    vi.spyOn(
-      GameSessionDataService.prototype,
-      "deleteAllGameSessionsByGameSessionSchedules",
-    ).mockRejectedValueOnce(new Error("Database error"))
+    vi.spyOn(BookingDataService.prototype, "deleteBookingsByGameSessionIds").mockRejectedValueOnce(
+      new Error("Database error"),
+    )
 
     await expect(
-      gameSessionDataService.deleteAllGameSessionsByGameSessionSchedules(
-        [createdGameSessionSchedule.id],
-        transactionId,
-      ),
+      bookingDataService.deleteBookingsByGameSessionIds([createdGameSession.id], transactionId),
     ).rejects.toThrow("Database error")
 
     await rollbackCascadeTransaction(transactionId)
@@ -79,6 +77,7 @@ describe("Transaction", () => {
       await gameSessionDataService.getGameSessionScheduleById(createdGameSessionSchedule.id),
     ).toBeDefined()
     expect(await gameSessionDataService.getGameSessionById(createdGameSession.id)).toBeDefined()
-    expect(await bookingDataService.getBookingById(createdBooking.id)).toBeDefined()
+    expect(await bookingDataService.getBookingById(createdBooking1.id)).toBeDefined()
+    expect(await bookingDataService.getBookingById(createdBooking2.id)).toBeDefined()
   })
 })
