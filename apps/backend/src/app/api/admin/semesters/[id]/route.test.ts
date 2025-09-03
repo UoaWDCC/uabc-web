@@ -3,6 +3,7 @@ import { gameSessionMock, gameSessionScheduleMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import type { NextRequest } from "next/server"
+import { NotFound } from "payload"
 import { describe, expect, it } from "vitest"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
@@ -96,7 +97,7 @@ describe("/api/admin/semesters/[id]", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       vi.spyOn(SemesterDataService.prototype, "getSemesterById").mockRejectedValueOnce(
-        new Error("Not found"),
+        new NotFound(),
       )
 
       const res = await DELETE({} as NextRequest, {
