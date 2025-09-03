@@ -3,66 +3,15 @@
 import type { LoginFormData, RegisterRequestBody } from "@repo/shared"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
+import type { AuthActions, AuthContextValue, AuthState } from "@repo/shared/types/auth"
 import { noticeOptions } from "@repo/theme"
 import { useLocalStorage } from "@repo/ui/hooks"
-import { type UseMutationResult, useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useNotice } from "@yamada-ui/react"
 import { StatusCodes } from "http-status-codes"
 import { createContext, type ReactNode, useContext } from "react"
 import { ApiClientError } from "@/lib/api/ApiClientError"
 import AuthService from "@/services/auth/AuthService"
-
-type AuthState = {
-  user: User | null
-  isLoading: boolean
-  isPending: boolean
-  error: string | null
-  token: string | null
-  isAvailable: boolean
-}
-
-type AuthActions = {
-  login: UseMutationResult<
-    {
-      data?: string | undefined
-      error?: string | undefined
-      message?: string | undefined
-    },
-    Error,
-    {
-      email: string
-      password: string
-      rememberMe: boolean
-    },
-    unknown
-  >
-  emailVerificationCode: UseMutationResult<
-    {
-      error?: string | undefined
-      message?: string | undefined
-    },
-    Error,
-    string,
-    unknown
-  >
-  register: UseMutationResult<
-    {
-      message?: string | undefined
-      error?: string | undefined
-    },
-    Error,
-    {
-      email: string
-      password: string
-      emailVerificationCode: string
-    },
-    unknown
-  >
-  setToken: (token: string | null) => void
-  logout: () => void
-}
-
-export type AuthContextValue = AuthState & AuthActions
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 

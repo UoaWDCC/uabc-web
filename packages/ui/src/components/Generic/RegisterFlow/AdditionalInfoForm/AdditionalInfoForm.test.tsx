@@ -33,7 +33,7 @@ describe("<AdditionalInfoForm />", () => {
 
     expect(handleSubmit).toReturnWith({
       gender: Gender.female,
-      skillLevel: PlayLevel.advanced,
+      playLevel: PlayLevel.advanced,
       dietaryRequirements: sampleDietaryRequirements,
     })
   })

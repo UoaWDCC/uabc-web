@@ -7,6 +7,7 @@ import {
   Popup,
   type SessionItem,
 } from "@repo/shared"
+import type { AuthContextValueWithUser } from "@repo/shared/types/auth"
 import type { SelectACourtNextData } from "@repo/ui/components/Composite"
 import { BookingConfirmation, SelectACourt } from "@repo/ui/components/Composite"
 import { BookACourt } from "@repo/ui/components/Generic"
@@ -17,7 +18,6 @@ import { CircleAlertIcon } from "@yamada-ui/lucide"
 import { EmptyState, useNotice, VStack } from "@yamada-ui/react"
 import NextLink from "next/link"
 import { type FC, useEffect, useReducer } from "react"
-import type { AuthContextValueWithUser } from "@/context/RoleWrappers"
 import { QueryKeys } from "@/services"
 import { useCreateBooking } from "@/services/bookings/BookingMutations"
 import { createBookingFlowReducer, initialState } from "./bookingFlowReducer"
