@@ -6,7 +6,7 @@ import { RegisterFlow } from "@repo/ui/components/Generic"
 import { useRegisterFlowStorage } from "@repo/ui/hooks/storage/registerFlowStorage"
 import { Container } from "@yamada-ui/react"
 import { useEffect } from "react"
-import { useUpdateSelfMutation } from "@/services/auth/useUpdateSelfMutation"
+import { useUpdateSelfMutation } from "@/services/auth/AuthMutations"
 
 export const OnboardingSection = ({ auth }: { auth: AuthContextValueWithUser }) => {
   const { user } = auth
