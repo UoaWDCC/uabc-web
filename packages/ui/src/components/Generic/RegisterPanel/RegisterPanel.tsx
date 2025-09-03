@@ -145,8 +145,8 @@ export const RegisterPanel = memo(({ onSubmit, googleHref }: RegisterPanelProps)
             as={Link}
             colorScheme="secondary"
             disabled={!googleHref}
-            fullRounded
             href={googleHref ?? "#"}
+            rounded="full"
             variant="gradient"
           >
             <GoogleLogo fontSize="2xl" />
@@ -157,7 +157,7 @@ export const RegisterPanel = memo(({ onSubmit, googleHref }: RegisterPanelProps)
               aria-label="Apple"
               colorScheme="secondary"
               disabled
-              fullRounded
+              rounded="full"
               variant="gradient"
             >
               <AppleIcon fontSize="2xl" />

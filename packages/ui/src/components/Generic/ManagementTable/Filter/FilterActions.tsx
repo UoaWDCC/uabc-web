@@ -1,13 +1,18 @@
 import { Button } from "@repo/ui/components/Primitive"
 import { DownloadIcon, PlusIcon } from "@yamada-ui/lucide"
 import { ButtonGroup } from "@yamada-ui/react"
-import { type FC, memo } from "react"
 import { useManagementTable } from "../MemberManagementContext"
+import type { ColumnConfig } from "../types"
+import { FilterColumnVisibility } from "./FilterColumnVisibility"
+
+interface FilterActionsProps<TData> {
+  columns: ColumnConfig<TData>[]
+}
 
 /**
  * Action buttons for the filter bar, including add and export actions.
  */
-export const FilterActions: FC = memo(() => {
+export const FilterActions = <TData,>({ columns }: FilterActionsProps<TData>) => {
   const { selectedRows, filteredData } = useManagementTable()
 
   const handleAddMember = () => {
@@ -29,7 +34,8 @@ export const FilterActions: FC = memo(() => {
   }
 
   return (
-    <ButtonGroup gap="sm">
+    <ButtonGroup alignItems={{ base: "start", xl: "center" }} gap="sm" order={{ base: 1, xl: 2 }}>
+      <FilterColumnVisibility columns={columns} />
       <Button colorScheme="primary" onClick={handleAddMember} size="sm" startIcon={<PlusIcon />}>
         Add
       </Button>
@@ -43,6 +49,6 @@ export const FilterActions: FC = memo(() => {
       </Button>
     </ButtonGroup>
   )
-})
+}
 
 FilterActions.displayName = "FilterActions"
