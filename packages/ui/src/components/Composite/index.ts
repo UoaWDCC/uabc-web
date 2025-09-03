@@ -1,5 +1,6 @@
 export * from "./AboutUsSection"
 export * from "./AdditionalInfo"
+export * from "./AdminGameSessionCard"
 export * from "./AdminTable"
 export * from "./BookingConfirmation"
 export * from "./BookingConfirmedPopup"

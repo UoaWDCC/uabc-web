@@ -53,3 +53,9 @@ export enum SessionType {
   ongoing = "Ongoing",
   oneOff = "One off",
 }
+
+export enum GameSessionStatus {
+  ONGOING = "Ongoing",
+  UPCOMING = "Upcoming",
+  PAST = "Past",
+}
