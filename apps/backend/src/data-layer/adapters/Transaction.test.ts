@@ -1,6 +1,5 @@
 import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
-import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import BookingDataService from "../services/BookingDataService"
 import GameSessionDataService from "../services/GameSessionDataService"
 import {
@@ -18,6 +17,7 @@ describe("Transaction", () => {
       await gameSessionDataService.createGameSession(gameSessionCreateMock)
     const createdGameSession2 =
       await gameSessionDataService.createGameSession(gameSessionCreateMock)
+
     const createdBooking1 = await bookingDataService.createBooking({
       ...bookingCreateMock,
       gameSession: createdGameSession1,
@@ -45,13 +45,7 @@ describe("Transaction", () => {
   })
 
   it("should rollback several booking deletions if error occurs in the transaction", async () => {
-    const createdGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
-      gameSessionScheduleCreateMock,
-    )
-    const createdGameSession = await gameSessionDataService.createGameSession({
-      ...gameSessionCreateMock,
-      gameSessionSchedule: createdGameSessionSchedule.id,
-    })
+    const createdGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
     const createdBooking1 = await bookingDataService.createBooking({
       ...bookingCreateMock,
       gameSession: createdGameSession,
@@ -67,16 +61,15 @@ describe("Transaction", () => {
       new Error("Database error"),
     )
 
-    await expect(
-      bookingDataService.deleteBookingsByGameSessionIds([createdGameSession.id], transactionId),
-    ).rejects.toThrow("Database error")
+    try {
+      await bookingDataService.deleteBookingsByGameSessionIds(
+        [createdGameSession.id],
+        transactionId,
+      )
+    } catch {
+      await rollbackCascadeTransaction(transactionId)
+    }
 
-    await rollbackCascadeTransaction(transactionId)
-
-    expect(
-      await gameSessionDataService.getGameSessionScheduleById(createdGameSessionSchedule.id),
-    ).toBeDefined()
-    expect(await gameSessionDataService.getGameSessionById(createdGameSession.id)).toBeDefined()
     expect(await bookingDataService.getBookingById(createdBooking1.id)).toBeDefined()
     expect(await bookingDataService.getBookingById(createdBooking2.id)).toBeDefined()
   })

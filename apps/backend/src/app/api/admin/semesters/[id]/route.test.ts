@@ -95,13 +95,6 @@ describe("/api/admin/semesters/[id]", async () => {
     it("should return 404 if semester is non-existent", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
-      // vi.spyOn(SemesterDataService.prototype, "getSemesterById").mockRejectedValueOnce(
-      //   new NotFound(),
-      // )
-
-      // const res = await DELETE({} as NextRequest, {
-      //   params: Promise.resolve({ id: "non-existent" }),
-      // })
       const res = await DELETE(createMockNextRequest("", "DELETE", { name: "Deleted Semester" }), {
         params: Promise.resolve({ id: "does not exist" }),
       })
