@@ -56,9 +56,11 @@ runs:
       run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
 
-    - name: Build frontend with OpenNext
-      run: pnpm turbo run --filter frontend build:workers
-      shell: bash
+    - name: Download frontend build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: frontend-build
+        path: apps/frontend/.open-next
 
     - name: Transform worker name
       shell: bash

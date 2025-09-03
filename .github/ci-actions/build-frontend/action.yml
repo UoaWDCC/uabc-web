@@ -67,11 +67,11 @@ runs:
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
         NODE_ENV: ${{ inputs.NODE_ENV }}
         APP_INDEX_MODE: ${{ inputs.APP_INDEX_MODE }}
-      run: pnpm build --filter frontend
+      run: pnpm turbo run build:workers --filter frontend
 
     - name: Upload frontend build artifact
       uses: actions/upload-artifact@v4
       with:
         name: frontend-build
-        path: apps/frontend/out
+        path: apps/frontend/.open-next
         retention-days: 1
