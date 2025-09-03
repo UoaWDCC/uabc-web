@@ -1,3 +1,4 @@
+export * from "./AdminGameSession.mock"
 export * from "./Booking.mock"
 export * from "./GameSession.mock"
 export * from "./gameSessionSchedule.mock"
