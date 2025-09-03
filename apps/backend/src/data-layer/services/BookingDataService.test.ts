@@ -263,10 +263,10 @@ describe("bookingDataService", () => {
       )
     })
 
-    it("should throw a NotFound error if no bookings exist when deleting by a game session IDs", async () => {
+    it("should return an empty array if no bookings exist when deleting by a game session IDs", async () => {
       await expect(
         bookingDataService.deleteBookingsByGameSessionIds(["Not a valid game session ID"]),
-      ).rejects.toThrowError("Not Found")
+      ).toStrictEqual([])
     })
   })
 })

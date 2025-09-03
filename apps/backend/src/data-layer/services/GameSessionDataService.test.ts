@@ -253,12 +253,12 @@ describe("GameSessionDataService", () => {
       ).rejects.toThrowError("Not Found")
     })
 
-    it("should throw a NotFound error if no game sessions exist when deleting by a game session schedule", async () => {
+    it("should return an empty array if no game sessions exist when deleting by a game session schedule", async () => {
       await expect(
         gameSessionDataService.deleteAllGameSessionsByGameSessionSchedules([
-          "Not a valid semester ID",
+          "Not a valid game session schedule ID",
         ]),
-      ).rejects.toThrowError("Not Found")
+      ).toStrictEqual([])
     })
   })
 
@@ -556,10 +556,10 @@ describe("GameSessionDataService", () => {
       ).rejects.toThrowError("Not Found")
     })
 
-    it("should throw a NotFound error if no game session schedules exist when searching by a semester ID", async () => {
+    it("should return an empty array if no game session schedules exist when searching by a semester ID", async () => {
       await expect(
         gameSessionDataService.deleteAllGameSessionSchedulesBySemesterId("Not a valid semester ID"),
-      ).rejects.toThrowError("Not Found")
+      ).toStrictEqual([])
     })
   })
 })
