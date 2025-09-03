@@ -50,7 +50,7 @@ describe("/api/admin/semesters/[id]", async () => {
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
 
       const res = await DELETE(
-        createMockNextRequest(`/api/admin/semester/${newSemester.id}?deleteRelatedDocs=false`),
+        createMockNextRequest(`/api/admin/semesters/${newSemester.id}?deleteRelatedDocs=false`),
         {
           params: Promise.resolve({ id: newSemester.id }),
         },
@@ -75,7 +75,7 @@ describe("/api/admin/semesters/[id]", async () => {
         gameSession: newGameSession,
       })
 
-      const res = await DELETE(createMockNextRequest(`/api/admin/semester/${newSemester.id}`), {
+      const res = await DELETE(createMockNextRequest(`/api/admin/semesters/${newSemester.id}`), {
         params: Promise.resolve({ id: newSemester.id }),
       })
 
