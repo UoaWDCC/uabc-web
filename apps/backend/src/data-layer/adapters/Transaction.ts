@@ -3,7 +3,6 @@ import { payload } from "./Payload"
 /**
  * Creates a transaction ID for cascading deletes
  *
- * @param shouldDeleteRelated indicates whether related bookings should be deleted
  * @returns the identifier for the transaction or null if one cannot be established
  */
 export async function createTransactionId(): Promise<string | number | undefined> {
