@@ -8,7 +8,7 @@ import type {
   GetPaginatedGameSessionsResponseSchema,
   UpdateGameSessionRequestSchema,
 } from "../schemas"
-import type { GameSessionStatus } from "./enums"
+import type { GameSessionStatus, Weekday } from "./enums"
 
 export type GameSessionSchedule = z.infer<typeof GameSessionScheduleSchema>
 export type UpdateGameSessionRequest = z.infer<typeof UpdateGameSessionRequestSchema>
@@ -33,7 +33,7 @@ export type AdminGameSession = GameSessionWithCounts & {
   /**
    * The day of the week for the game session
    */
-  day: string
+  day: Weekday
   /**
    * The status of the game session
    */

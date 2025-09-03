@@ -1,31 +1,12 @@
 import { GameSessionStatus } from "@repo/shared"
+import { adminGameSessionBaseMock } from "@repo/shared/mocks"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { AdminGameSessionCard } from "./AdminGameSessionCard"
 
-const defaultProps = {
-  gameSession: {
-    id: "session-123",
-    day: "Tuesday",
-    status: GameSessionStatus.ONGOING,
-    startTime: "2025-01-21T19:30:00Z",
-    endTime: "2025-01-21T22:00:00Z",
-    name: "UoA Rec Centre",
-    location: "17 Symonds Street",
-    attendees: 39,
-    capacity: 40,
-    casualAttendees: 5,
-    casualCapacity: 10,
-    openTime: "2025-01-21T18:30:00Z",
-    semester: "semester-123",
-    updatedAt: "2025-01-21T00:00:00Z",
-    createdAt: "2025-01-21T00:00:00Z",
-  },
-}
-
 describe("AdminGameSessionCard", () => {
   it("renders all required information", () => {
-    render(<AdminGameSessionCard {...defaultProps} />)
+    render(<AdminGameSessionCard gameSession={adminGameSessionBaseMock} />)
 
     expect(screen.getByText("Tuesday")).toBeInTheDocument()
     expect(screen.getByText("Ongoing")).toBeInTheDocument()
@@ -39,16 +20,14 @@ describe("AdminGameSessionCard", () => {
   it("displays correct status badge for different statuses", () => {
     const { rerender } = render(
       <AdminGameSessionCard
-        {...defaultProps}
-        gameSession={{ ...defaultProps.gameSession, status: GameSessionStatus.UPCOMING }}
+        gameSession={{ ...adminGameSessionBaseMock, status: GameSessionStatus.UPCOMING }}
       />,
     )
     expect(screen.getByText("Upcoming")).toBeInTheDocument()
 
     rerender(
       <AdminGameSessionCard
-        {...defaultProps}
-        gameSession={{ ...defaultProps.gameSession, status: GameSessionStatus.PAST }}
+        gameSession={{ ...adminGameSessionBaseMock, status: GameSessionStatus.PAST }}
       />,
     )
     expect(screen.getByText("Past")).toBeInTheDocument()
@@ -58,7 +37,7 @@ describe("AdminGameSessionCard", () => {
     const mockOnExport = vi.fn()
     const user = userEvent.setup()
 
-    render(<AdminGameSessionCard {...defaultProps} onExport={mockOnExport} />)
+    render(<AdminGameSessionCard gameSession={adminGameSessionBaseMock} onExport={mockOnExport} />)
 
     const exportButton = screen.getByRole("button", { name: /export member list as csv/i })
     await user.click(exportButton)
@@ -69,8 +48,7 @@ describe("AdminGameSessionCard", () => {
   it("renders with correct attendance information", () => {
     render(
       <AdminGameSessionCard
-        {...defaultProps}
-        gameSession={{ ...defaultProps.gameSession, attendees: 15, capacity: 40 }}
+        gameSession={{ ...adminGameSessionBaseMock, attendees: 15, capacity: 40 }}
       />,
     )
     expect(screen.getByText("15/40 attendees")).toBeInTheDocument()
@@ -79,8 +57,7 @@ describe("AdminGameSessionCard", () => {
   it("renders with full capacity", () => {
     render(
       <AdminGameSessionCard
-        {...defaultProps}
-        gameSession={{ ...defaultProps.gameSession, attendees: 40, capacity: 40 }}
+        gameSession={{ ...adminGameSessionBaseMock, attendees: 40, capacity: 40 }}
       />,
     )
     expect(screen.getByText("40/40 attendees")).toBeInTheDocument()

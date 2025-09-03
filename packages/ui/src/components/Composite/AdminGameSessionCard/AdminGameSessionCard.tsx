@@ -71,7 +71,7 @@ export const AdminGameSessionCard = memo(
         <CardHeader>
           <HStack w="full">
             <Heading.h3 fontSize="xl" fontWeight="semibold">
-              {day}
+              {day.charAt(0).toUpperCase() + day.slice(1)}
             </Heading.h3>
             <Spacer />
             <Tag
