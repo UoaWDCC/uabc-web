@@ -264,8 +264,8 @@ describe("bookingDataService", () => {
     })
 
     it("should return an empty array if no bookings exist when deleting by a game session IDs", async () => {
-      await expect(
-        bookingDataService.deleteBookingsByGameSessionIds(["Not a valid game session ID"]),
+      expect(
+        await bookingDataService.deleteBookingsByGameSessionIds(["Not a valid game session ID"]),
       ).toStrictEqual([])
     })
   })
