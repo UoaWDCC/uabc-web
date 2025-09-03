@@ -7,7 +7,7 @@
     },
     "build:workers": {
       "dependsOn": ["@repo/test-config#build"],
-      "outputs": [".open-next/**"]
+      "outputs": [".open-next/**", ".next/**", "!.next/cache/**", "public/dist/**"]
     }
   }
 }
