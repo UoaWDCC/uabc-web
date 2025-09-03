@@ -3,7 +3,6 @@ import { gameSessionMock, gameSessionScheduleMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import type { NextRequest } from "next/server"
-import { NotFound } from "payload"
 import { describe, expect, it } from "vitest"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
@@ -96,12 +95,15 @@ describe("/api/admin/semesters/[id]", async () => {
     it("should return 404 if semester is non-existent", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
-      vi.spyOn(SemesterDataService.prototype, "getSemesterById").mockRejectedValueOnce(
-        new NotFound(),
-      )
+      // vi.spyOn(SemesterDataService.prototype, "getSemesterById").mockRejectedValueOnce(
+      //   new NotFound(),
+      // )
 
-      const res = await DELETE({} as NextRequest, {
-        params: Promise.resolve({ id: "non-existent" }),
+      // const res = await DELETE({} as NextRequest, {
+      //   params: Promise.resolve({ id: "non-existent" }),
+      // })
+      const res = await DELETE(createMockNextRequest("", "DELETE", { name: "Deleted Semester" }), {
+        params: Promise.resolve({ id: "does not exist" }),
       })
 
       expect(res.status).toBe(StatusCodes.NOT_FOUND)
