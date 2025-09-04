@@ -4,7 +4,8 @@ import type { AdminGameSession } from "@repo/shared"
 import type { CalendarProps } from "@yamada-ui/calendar"
 import { Calendar } from "@yamada-ui/calendar"
 import { Center, dataAttr, Float, Tag, useComponentStyle } from "@yamada-ui/react"
-import { memo, useCallback, useMemo } from "react"
+import { memo } from "react"
+import { useAdminSessionsCalendar } from "../../../hooks/useAdminSessionsCalendar"
 
 export interface AdminSessionsCalendarProps {
   /**
@@ -86,42 +87,19 @@ export const AdminSessionsCalendar = memo(
       size: "xs",
     })
 
-    const sessionsByDate = useMemo(() => {
-      const map = new Map<string, AdminGameSession[]>()
-      for (const session of gameSessions) {
-        const dateString = new Date(session.startTime).toISOString().split("T")[0]
-        const existingSessions = map.get(dateString) || []
-        existingSessions.push(session)
-        map.set(dateString, existingSessions)
-      }
-      return map
-    }, [gameSessions])
-
-    const getSessionsForDate = useCallback(
-      (date: Date) => {
-        const dateString = date.toISOString().split("T")[0]
-        return sessionsByDate.get(dateString) || []
+    const { getSessionsForDate, isDateActive, getTotalAttendeesForDate } = useAdminSessionsCalendar(
+      {
+        gameSessions,
       },
-      [sessionsByDate],
-    )
-
-    const isDateActive = useCallback(
-      (date: Date) => {
-        return getSessionsForDate(date).length > 0
-      },
-      [getSessionsForDate],
     )
 
     return (
       <Calendar
         borderWidth="1px"
-        controlProps={{
-          __css: styles,
-          borderWidth: "0",
-        }}
+        controlProps={{ w: "$sizes.10 !important", h: "$sizes.10 !important" }}
         dayProps={{
           h: "auto",
-          p: "1.5",
+          p: "1",
           _selected: {},
           _hover: {},
           _active: {},
@@ -133,7 +111,7 @@ export const AdminSessionsCalendar = memo(
           component: ({ date, selected }) => {
             const sessions = getSessionsForDate(date)
             const active = isDateActive(date)
-            const totalAttendees = sessions.reduce((sum, session) => sum + session.attendees, 0)
+            const totalAttendees = getTotalAttendeesForDate(date)
 
             return (
               <Center
@@ -143,14 +121,14 @@ export const AdminSessionsCalendar = memo(
                 }}
                 data-disabled={dataAttr(!active)}
                 data-selected={dataAttr(selected && active)}
-                h="2rem"
+                minH={{ base: "9", sm: "10" }}
+                minW={{ base: "9", sm: "10" }}
                 overflow="visible"
-                w="2rem"
               >
                 {date.getDate()}
                 {sessions.length > 0 && (
                   <Float>
-                    <Tag fontSize="2xs" lineHeight="1" minH="4" minW="4" p="1" size="sm">
+                    <Tag fontSize="xs" lineHeight="1" minH="4" minW="4" p="1" size="sm">
                       {totalAttendees}
                     </Tag>
                   </Float>
@@ -161,12 +139,10 @@ export const AdminSessionsCalendar = memo(
         }}
         excludeDate={(date) => !isDateActive(date)}
         labelProps={{ pointerEvents: "none", icon: { display: "none" } }}
-        nextProps={{ variant: "outline", w: "8", h: "8" }}
         onChange={onDateSelect}
-        p="md"
-        prevProps={{ variant: "outline", w: "8", h: "8" }}
+        p="sm"
         rounded="md"
-        today
+        size={{ base: "md", sm: "lg" }}
         value={selectedDate}
         {...calendarProps}
       />

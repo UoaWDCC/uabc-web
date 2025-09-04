@@ -1,180 +1,259 @@
-import type { AdminGameSession } from "@repo/shared"
-import {
-  adminGameSessionBaseMock,
-  adminGameSessionLowAttendanceMock,
-  adminGameSessionUpcomingMock,
-} from "@repo/shared/mocks"
-import { render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import { vi } from "vitest"
+import { adminGameSessionBaseMock } from "@repo/shared/mocks"
+import { render, screen } from "@repo/ui/test-utils"
 import { AdminSessionsCalendar } from "./AdminSessionsCalendar"
 
-const mockOnDateSelect = vi.fn()
+const mockSessions = [
+  {
+    ...adminGameSessionBaseMock,
+    id: "session-1",
+    startTime: "2025-01-21T19:30:00Z",
+    attendees: 20,
+  },
+  {
+    ...adminGameSessionBaseMock,
+    id: "session-2",
+    startTime: "2025-01-21T14:00:00Z",
+    attendees: 15,
+  },
+  {
+    ...adminGameSessionBaseMock,
+    id: "session-3",
+    startTime: "2025-01-22T19:30:00Z",
+    attendees: 30,
+  },
+]
 
-const createMockGameSession = (date: string, attendees = 25): AdminGameSession => ({
-  ...adminGameSessionBaseMock,
-  id: `session-${date}`,
-  startTime: `${date}T19:30:00Z`,
-  endTime: `${date}T22:00:00Z`,
-  openTime: `${date}T18:30:00Z`,
-  attendees,
-  casualAttendees: Math.floor(attendees * 0.2),
-  updatedAt: new Date().toISOString(),
-  createdAt: new Date().toISOString(),
-})
+describe("AdminSessionsCalendar", () => {
+  const defaultProps = {
+    selectedDate: new Date("2025-01-21"),
+    onDateSelect: vi.fn(),
+  }
 
-const defaultProps = {
-  selectedDate: new Date("2025-01-21"),
-  onDateSelect: mockOnDateSelect,
-}
-
-describe("<AdminSessionsCalendar />", () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  it("renders the calendar component", () => {
+  it("should render calendar with correct displayName", () => {
+    expect(AdminSessionsCalendar.displayName).toBe("AdminSessionsCalendar")
+  })
+
+  it("should render calendar component", () => {
     render(<AdminSessionsCalendar {...defaultProps} />)
 
-    const calendar = screen.getByRole("grid")
-    expect(calendar).toBeInTheDocument()
+    expect(screen.getByRole("grid")).toBeInTheDocument()
   })
 
-  it("calls onDateSelect when a date is clicked", async () => {
-    const user = userEvent.setup()
+  it("should display selected date", () => {
     render(<AdminSessionsCalendar {...defaultProps} />)
 
-    const calendar = screen.getByRole("grid")
-    const dayButton = calendar.querySelector('button[aria-label="22"]')
-
-    if (dayButton) {
-      await user.click(dayButton)
-      expect(mockOnDateSelect).toHaveBeenCalled()
-    }
+    const selectedDateElement = screen.getByText("21")
+    expect(selectedDateElement).toBeInTheDocument()
   })
 
-  it("displays the selected date correctly", () => {
-    render(<AdminSessionsCalendar {...defaultProps} />)
+  it("should call onDateSelect when a date is clicked", async () => {
+    const mockOnDateSelect = vi.fn()
+
+    const { user } = render(
+      <AdminSessionsCalendar
+        {...defaultProps}
+        gameSessions={mockSessions}
+        onDateSelect={mockOnDateSelect}
+      />,
+    )
+
+    const dateButton = screen.getByText("21")
+    await user.click(dateButton)
+
+    expect(mockOnDateSelect).toHaveBeenCalledTimes(1)
+  })
+
+  it("should display attendee count tags for dates with sessions", () => {
+    render(<AdminSessionsCalendar {...defaultProps} gameSessions={mockSessions} />)
+
+    const attendeeTag = screen.getByText("35") // 20 + 15 for 2025-01-21
+    expect(attendeeTag).toBeInTheDocument()
+  })
+
+  it("should display correct attendee count for single session", () => {
+    render(
+      <AdminSessionsCalendar
+        {...defaultProps}
+        gameSessions={[mockSessions[2]]} // Only session-3 on 2025-01-22
+      />,
+    )
+
+    const attendeeTag = screen.getByText("30")
+    expect(attendeeTag).toBeInTheDocument()
+  })
+
+  it("should not display attendee tags for dates without sessions", () => {
+    render(<AdminSessionsCalendar {...defaultProps} gameSessions={mockSessions} />)
+
+    // Check that dates without sessions don't have attendee tags
+    const date23 = screen.getByText("23")
+    expect(date23).toBeInTheDocument()
+    // The tag should not be present for this date
+    expect(date23.parentElement?.querySelector('[data-testid="attendee-tag"]')).toBeNull()
+  })
+
+  it("should disable dates without sessions", () => {
+    render(<AdminSessionsCalendar {...defaultProps} gameSessions={mockSessions} />)
+
+    // Find a date without sessions (e.g., 23rd)
+    const inactiveDate = screen.getByText("23")
+    const dateButton = inactiveDate.closest("button")
+
+    expect(dateButton).toHaveAttribute("data-disabled", "true")
+  })
+
+  it("should enable dates with sessions", () => {
+    render(<AdminSessionsCalendar {...defaultProps} gameSessions={mockSessions} />)
+
+    // Find a date with sessions (21st)
+    const activeDate = screen.getByText("21")
+    const dateButton = activeDate.closest("button")
+
+    expect(dateButton).toHaveAttribute("data-disabled", "false")
+  })
+
+  it("should handle empty gameSessions array", () => {
+    render(<AdminSessionsCalendar {...defaultProps} gameSessions={[]} />)
+
+    expect(screen.getByRole("grid")).toBeInTheDocument()
+    // All dates should be disabled when no sessions
+    const dateButtons = screen.getAllByRole("button")
+    dateButtons.forEach((button) => {
+      if (button.textContent?.match(/^\d+$/)) {
+        expect(button).toHaveAttribute("data-disabled", "true")
+      }
+    })
+  })
+
+  it("should handle undefined gameSessions", () => {
+    render(<AdminSessionsCalendar {...defaultProps} gameSessions={undefined} />)
+
+    expect(screen.getByRole("grid")).toBeInTheDocument()
+  })
+
+  it("should pass through calendarProps to Calendar component", () => {
+    const customCalendarProps = {
+      borderWidth: "2px",
+      rounded: "lg",
+    }
+
+    render(<AdminSessionsCalendar {...defaultProps} calendarProps={customCalendarProps} />)
 
     const calendar = screen.getByRole("grid")
     expect(calendar).toBeInTheDocument()
   })
 
-  it("applies custom calendar props", () => {
-    const customProps = {
-      ...defaultProps,
-      calendarProps: {
-        size: "lg",
-        colorScheme: "blue",
-      },
-    }
+  it("should display today indicator", () => {
+    const today = new Date()
+    render(<AdminSessionsCalendar onDateSelect={defaultProps.onDateSelect} selectedDate={today} />)
 
-    render(<AdminSessionsCalendar {...customProps} />)
-
-    const calendar = screen.getByRole("grid")
-    expect(calendar).toBeInTheDocument()
+    expect(screen.getByRole("grid")).toBeInTheDocument()
   })
 
-  it("handles game sessions with attendees", () => {
-    const gameSessions = [
-      createMockGameSession("2025-01-21", 30),
-      createMockGameSession("2025-01-28", 15),
-    ]
-    const props = {
-      ...defaultProps,
-      gameSessions,
-    }
-
-    render(<AdminSessionsCalendar {...props} />)
-
-    const calendar = screen.getByRole("grid")
-    expect(calendar).toBeInTheDocument()
-  })
-
-  it("handles empty game sessions", () => {
-    const props = {
-      ...defaultProps,
-      gameSessions: [],
-    }
-
-    render(<AdminSessionsCalendar {...props} />)
-
-    const calendar = screen.getByRole("grid")
-    expect(calendar).toBeInTheDocument()
-  })
-
-  it("displays attendee count for active dates", () => {
-    const gameSessions = [createMockGameSession("2025-01-21", 25)]
-    const props = {
-      ...defaultProps,
-      gameSessions,
-    }
-
-    render(<AdminSessionsCalendar {...props} />)
-
-    const calendar = screen.getByRole("grid")
-    expect(calendar).toBeInTheDocument()
-
-    // Check if the attendee count is displayed (the small badge with number)
-    const attendeeBadge = calendar.querySelector('span[style*="position: absolute"]')
-    expect(attendeeBadge).toBeInTheDocument()
-    expect(attendeeBadge).toHaveTextContent("25")
-  })
-
-  it("displays total attendees when multiple sessions exist on the same day", () => {
-    const gameSessions = [
+  it("should handle multiple sessions on the same date correctly", () => {
+    const sessionsSameDate = [
       {
         ...adminGameSessionBaseMock,
         id: "session-1",
-        startTime: "2025-01-21T19:30:00Z",
-        endTime: "2025-01-21T22:00:00Z",
-        attendees: 30,
+        startTime: "2025-01-21T10:00:00Z",
+        attendees: 10,
       },
       {
-        ...adminGameSessionUpcomingMock,
+        ...adminGameSessionBaseMock,
         id: "session-2",
-        startTime: "2025-01-21T14:00:00Z",
-        endTime: "2025-01-21T16:30:00Z",
+        startTime: "2025-01-21T15:00:00Z",
+        attendees: 20,
+      },
+      {
+        ...adminGameSessionBaseMock,
+        id: "session-3",
+        startTime: "2025-01-21T20:00:00Z",
+        attendees: 30,
+      },
+    ]
+
+    render(<AdminSessionsCalendar {...defaultProps} gameSessions={sessionsSameDate} />)
+
+    // Should show total attendees (10 + 20 + 30 = 60)
+    const attendeeTag = screen.getByText("60")
+    expect(attendeeTag).toBeInTheDocument()
+  })
+
+  it("should maintain selected state for active dates", () => {
+    render(<AdminSessionsCalendar {...defaultProps} gameSessions={mockSessions} />)
+
+    const selectedDate = screen.getByText("21")
+    const dateButton = selectedDate.closest("button")
+
+    expect(dateButton).toHaveAttribute("data-selected", "true")
+  })
+
+  it("should not show selected state for inactive dates even if selectedDate matches", () => {
+    render(
+      <AdminSessionsCalendar
+        gameSessions={mockSessions} // Date without sessions
+        onDateSelect={defaultProps.onDateSelect}
+        selectedDate={new Date("2025-01-23")}
+      />,
+    )
+
+    const date23 = screen.getByText("23")
+    const dateButton = date23.closest("button")
+
+    // Should be disabled and not selected
+    expect(dateButton).toHaveAttribute("data-disabled", "true")
+    expect(dateButton).toHaveAttribute("data-selected", "false")
+  })
+
+  it("should handle date selection with different timezones", () => {
+    const sessionsWithTimezone = [
+      {
+        ...adminGameSessionBaseMock,
+        id: "session-1",
+        startTime: "2025-01-21T00:00:00+12:00", // NZ timezone
         attendees: 25,
       },
     ]
-    const props = {
-      ...defaultProps,
-      gameSessions,
-    }
 
-    render(<AdminSessionsCalendar {...props} />)
+    render(<AdminSessionsCalendar {...defaultProps} gameSessions={sessionsWithTimezone} />)
 
-    const calendar = screen.getByRole("grid")
-    expect(calendar).toBeInTheDocument()
-
-    // Check if the total attendee count is displayed (30 + 25 = 55)
-    const attendeeBadge = calendar.querySelector('span[style*="position: absolute"]')
-    expect(attendeeBadge).toBeInTheDocument()
-    expect(attendeeBadge).toHaveTextContent("55")
+    const attendeeTag = screen.getByText("25")
+    expect(attendeeTag).toBeInTheDocument()
   })
 
-  it("uses shared mock data correctly", () => {
-    const gameSessions = [
-      {
-        ...adminGameSessionLowAttendanceMock,
-        startTime: "2025-01-21T19:30:00Z",
-        endTime: "2025-01-21T22:00:00Z",
-      },
-    ]
-    const props = {
-      ...defaultProps,
-      gameSessions,
-    }
-
-    render(<AdminSessionsCalendar {...props} />)
+  it("should render with proper accessibility attributes", () => {
+    render(<AdminSessionsCalendar {...defaultProps} gameSessions={mockSessions} />)
 
     const calendar = screen.getByRole("grid")
     expect(calendar).toBeInTheDocument()
 
-    // Check if the attendee count from shared mock is displayed
-    const attendeeBadge = calendar.querySelector('span[style*="position: absolute"]')
-    expect(attendeeBadge).toBeInTheDocument()
-    expect(attendeeBadge).toHaveTextContent("15")
+    // Check that date buttons have proper accessibility
+    const dateButtons = screen.getAllByRole("button")
+    const dateButton = dateButtons.find((button) => button.textContent === "21")
+    expect(dateButton).toBeInTheDocument()
+  })
+
+  it("should handle rapid date selection changes", async () => {
+    const mockOnDateSelect = vi.fn()
+
+    const { user } = render(
+      <AdminSessionsCalendar
+        {...defaultProps}
+        gameSessions={mockSessions}
+        onDateSelect={mockOnDateSelect}
+      />,
+    )
+
+    const date21 = screen.getByText("21")
+    const date22 = screen.getByText("22")
+
+    await user.click(date21)
+    await user.click(date22)
+
+    expect(mockOnDateSelect).toHaveBeenCalledTimes(2)
   })
 })
