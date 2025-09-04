@@ -1,3 +1,4 @@
+import type { CreateUserRequest, UpdateUserRequest } from "@repo/shared/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAuth } from "@/context/AuthContext"
 import { QueryKeys } from "@/services"
@@ -10,8 +11,9 @@ import AdminUserService from "./AdminUserService"
  */
 export const useCreateUser = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
-    mutationFn: AdminUserService.createUser,
+    mutationFn: (data: CreateUserRequest) => AdminUserService.createUser({ data, token }),
     // TODO: when get by id is implemented, do not invalidate get by id queries
     onSuccess: () =>
       queryClient.invalidateQueries({
@@ -27,8 +29,10 @@ export const useCreateUser = () => {
  */
 export const useUpdateUser = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
-    mutationFn: AdminUserService.updateUser,
+    mutationFn: ({ id, data }: { id: string; data: UpdateUserRequest }) =>
+      AdminUserService.updateUser({ id, data, token }),
     // TODO: When get by id is implemented, only invalidate the one id for get by id or update the specific query with the updated data
     onSuccess: () =>
       queryClient.invalidateQueries({
@@ -45,12 +49,13 @@ export const useUpdateUser = () => {
 export const useDeleteUser = () => {
   const { token } = useAuth()
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
     mutationFn: async (id: string) => {
       if (!token) {
         throw new Error("No token provided")
       }
-      return await AdminUserService.deleteUser(id, token)
+      return await AdminUserService.deleteUser({ id, token })
     },
     // TODO: When get by id is implemented, only invalidate the one id for get by id
     onSuccess: () =>

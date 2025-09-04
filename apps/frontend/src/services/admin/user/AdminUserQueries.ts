@@ -16,16 +16,11 @@ export const useGetPaginatedUsers = (query: PaginationQuery) => {
     queryKey: [QueryKeys.USER_QUERY_KEY],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
-      if (!token) {
-        throw new Error("No token provided")
-      }
-      const response = await AdminUserService.getPaginatedUsers(
-        {
-          ...query,
-          page: pageParam,
-        },
+      const response = await AdminUserService.getPaginatedUsers({
+        ...query,
+        page: pageParam,
         token,
-      )
+      })
       return response
     },
     getNextPageParam: (lastPage) => lastPage.data?.nextPage,
