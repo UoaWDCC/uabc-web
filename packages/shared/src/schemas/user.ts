@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { User } from "../payload-types"
+import type { EmailVerification, User } from "../payload-types"
 import {
   type CreateUserData,
   type EditSelfData,
@@ -17,7 +17,7 @@ export const EmailVerificationCodeSchema = z.object({
   verificationCode: z.string(),
   createdAt: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   expiresAt: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-})
+}) satisfies z.ZodType<EmailVerification>
 
 export const UserSchema = z.object({
   id: z.string(),

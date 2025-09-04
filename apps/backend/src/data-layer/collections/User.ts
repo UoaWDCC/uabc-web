@@ -1,5 +1,4 @@
 import { Gender, MembershipType, PlayLevel, University } from "@repo/shared"
-import { VERIFICATION_CODE_MOCK } from "@repo/shared/mocks"
 import type { CollectionConfig } from "payload"
 
 export const User: CollectionConfig = {
@@ -119,15 +118,9 @@ export const User: CollectionConfig = {
     },
     {
       name: "emailVerification",
+      interfaceName: "EmailVerification",
       type: "group",
       required: true,
-      defaultValue: [
-        {
-          verificationCode: VERIFICATION_CODE_MOCK,
-          expiresAt: new Date(1970, 1, 1).toISOString(),
-          createdAt: new Date(1970, 1, 1).toISOString(),
-        },
-      ],
       fields: [
         {
           name: "verificationCode",

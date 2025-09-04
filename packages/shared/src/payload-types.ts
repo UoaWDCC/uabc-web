@@ -373,24 +373,28 @@ export interface User {
    * The image of the user
    */
   image?: (string | null) | Media;
-  /**
-   * The email verification code for the user
-   */
-  emailVerification: {
-    /**
-     * The most recent verification code for the user
-     */
-    verificationCode: string;
-    /**
-     * The current expiration date of this email verification code
-     */
-    expiresAt: string;
-    /**
-     * The date when this email verification code was created
-     */
-    createdAt: string;
-  };
+  emailVerification: EmailVerification;
   updatedAt: string;
+  createdAt: string;
+}
+/**
+ * The email verification code for the user
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EmailVerification".
+ */
+export interface EmailVerification {
+  /**
+   * The most recent verification code for the user
+   */
+  verificationCode: string;
+  /**
+   * The current expiration date of this email verification code
+   */
+  expiresAt: string;
+  /**
+   * The date when this email verification code was created
+   */
   createdAt: string;
 }
 /**
@@ -733,14 +737,17 @@ export interface UserSelect<T extends boolean = true> {
   university?: T;
   remainingSessions?: T;
   image?: T;
-  emailVerification?:
-    | T
-    | {
-        verificationCode?: T;
-        expiresAt?: T;
-        createdAt?: T;
-      };
+  emailVerification?: T | EmailVerificationSelect<T>;
   updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EmailVerification_select".
+ */
+export interface EmailVerificationSelect<T extends boolean = true> {
+  verificationCode?: T;
+  expiresAt?: T;
   createdAt?: T;
 }
 /**
