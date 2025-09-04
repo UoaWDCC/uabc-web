@@ -33,10 +33,12 @@ export const LocationBubbleMobileCard = ({
   locationTitle,
   locationDetails,
   locationTimes,
-  buttonLink = "#",
+  button,
   open,
   onClose,
 }: LocationBubbleMobileCardProps) => {
+  const { label: buttonLabel = "Learn more", url: buttonUrl = "#" } = button || {}
+
   return (
     <Drawer
       borderTopRadius="26px"
@@ -84,12 +86,12 @@ export const LocationBubbleMobileCard = ({
             {locationTimes &&
               Object.entries(locationTimes).map(([day, time]) => (
                 <Text bgClip="text" bgGradient="textGradient" key={day}>
-                  {day}: {time}
+                  {day.charAt(0).toUpperCase() + day.slice(1)}: {time.join(" - ")}
                 </Text>
               ))}
           </VStack>
-          <Button as={Link} colorScheme="primary" href={buttonLink} size="lg">
-            Learn More
+          <Button as={Link} colorScheme="primary" href={buttonUrl} size="lg">
+            {buttonLabel}
           </Button>
         </VStack>
       </DrawerBody>

@@ -112,10 +112,11 @@ describe("<LocationBubble />", () => {
     expect(screen.getByTestId("location-bubble-circle-trigger")).toBeInTheDocument()
   })
 
-  it("falls back to '#' for href if no path is provided in LocationBubbleDesktopCard", async () => {
+  it("falls back to '#' and 'Learn More' when no button data is provided in LocationBubbleDesktopCard", async () => {
     render(<LocationBubbleDesktopCard {...LOCATION_BUBBLE_TEST_CONSTANTS} />)
 
     const button = screen.getByRole("link", { name: /learn more/i })
+    expect(button).toBeInTheDocument()
     expect(button).toHaveAttribute("href", "#")
   })
 
@@ -129,10 +130,11 @@ describe("<LocationBubble />", () => {
     expect(await screen.findByTestId("location-bubble-mobile-card")).toBeInTheDocument()
   })
 
-  it("falls back to '#' for href if no path is provided in LocationBubbleMobileCard", async () => {
+  it("falls back to '#' and 'Learn More' when no button data is provided in LocationBubbleMobileCard", async () => {
     render(<LocationBubbleMobileCard {...LOCATION_BUBBLE_TEST_CONSTANTS_MOBILE} />)
 
     const button = screen.getByRole("link", { name: /learn more/i })
+    expect(button).toBeInTheDocument()
     expect(button).toHaveAttribute("href", "#")
   })
 
