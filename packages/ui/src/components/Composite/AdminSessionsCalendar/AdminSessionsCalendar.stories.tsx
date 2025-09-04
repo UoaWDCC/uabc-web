@@ -1,5 +1,10 @@
 import type { AdminGameSession } from "@repo/shared"
-import { GameSessionStatus, Weekday } from "@repo/shared"
+import {
+  adminGameSessionBaseMock,
+  adminGameSessionFullCapacityMock,
+  adminGameSessionLowAttendanceMock,
+  adminGameSessionUpcomingMock,
+} from "@repo/shared/mocks"
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { useState } from "react"
 import { AdminSessionsCalendar } from "./AdminSessionsCalendar"
@@ -31,19 +36,13 @@ const createGameSession = (daysFromNow: number, attendees = 25): AdminGameSessio
   openTime.setHours(18, 30, 0, 0)
 
   return {
+    ...adminGameSessionBaseMock,
     id: `session-${daysFromNow}`,
-    day: Weekday.tuesday,
-    status: GameSessionStatus.ONGOING,
     startTime: startTime.toISOString(),
     endTime: endTime.toISOString(),
     openTime: openTime.toISOString(),
-    name: "UoA Rec Centre",
-    location: "17 Symonds Street",
     attendees,
-    capacity: 40,
     casualAttendees: Math.floor(attendees * 0.2),
-    casualCapacity: 10,
-    semester: "semester-123",
     updatedAt: new Date().toISOString(),
     createdAt: new Date().toISOString(),
   }
@@ -93,6 +92,56 @@ export const HighAttendance: Story = {
       createGameSession(1, 38), // Nearly full
       createGameSession(2, 40), // Completely full
       createGameSession(3, 35), // High attendance
+    ]
+
+    return <AdminSessionsCalendarWithState gameSessions={gameSessions} />
+  },
+}
+
+export const MultipleSessionsPerDay: Story = {
+  render: () => {
+    const today = new Date()
+    const todayISO = today.toISOString().split("T")[0]
+
+    const gameSessions = [
+      {
+        ...adminGameSessionBaseMock,
+        id: "session-morning",
+        startTime: `${todayISO}T14:00:00Z`,
+        endTime: `${todayISO}T16:30:00Z`,
+        attendees: 25,
+      },
+      {
+        ...adminGameSessionUpcomingMock,
+        id: "session-evening",
+        startTime: `${todayISO}T19:30:00Z`,
+        endTime: `${todayISO}T22:00:00Z`,
+        attendees: 30,
+      },
+    ]
+
+    return <AdminSessionsCalendarWithState gameSessions={gameSessions} />
+  },
+}
+
+export const UsingSharedMocks: Story = {
+  render: () => {
+    const today = new Date()
+    const todayISO = today.toISOString().split("T")[0]
+
+    const gameSessions = [
+      {
+        ...adminGameSessionLowAttendanceMock,
+        id: "low-attendance",
+        startTime: `${todayISO}T19:30:00Z`,
+        endTime: `${todayISO}T22:00:00Z`,
+      },
+      {
+        ...adminGameSessionFullCapacityMock,
+        id: "full-capacity",
+        startTime: `${todayISO}T14:00:00Z`,
+        endTime: `${todayISO}T16:30:00Z`,
+      },
     ]
 
     return <AdminSessionsCalendarWithState gameSessions={gameSessions} />

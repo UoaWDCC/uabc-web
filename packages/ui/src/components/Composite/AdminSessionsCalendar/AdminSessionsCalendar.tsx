@@ -29,7 +29,8 @@ export interface AdminSessionsCalendarProps {
  * AdminSessionsCalendar component for displaying a calendar interface
  *
  * Provides a custom calendar view where admins can only select dates that have active sessions.
- * Inactive dates are disabled and cannot be selected. Tooltips show session information for each date.
+ * Inactive dates are disabled and cannot be selected. When multiple sessions exist on the same day,
+ * the tag displays the total number of attendees across all sessions for that date.
  *
  * @param selectedDate Currently selected date
  * @param onDateSelect Callback when a date is selected
@@ -55,6 +56,19 @@ export interface AdminSessionsCalendarProps {
  *       capacity: 40,
  *       casualAttendees: 5,
  *       casualCapacity: 10
+ *     },
+ *     {
+ *       id: "session-124",
+ *       day: "Tuesday",
+ *       status: "ongoing",
+ *       startTime: "2025-01-21T14:00:00Z",
+ *       endTime: "2025-01-21T16:30:00Z",
+ *       name: "UoA Rec Centre",
+ *       location: "17 Symonds Street",
+ *       attendees: 25,
+ *       capacity: 30,
+ *       casualAttendees: 3,
+ *       casualCapacity: 5
  *     }
  *   ]}
  * />
@@ -73,27 +87,29 @@ export const AdminSessionsCalendar = memo(
     })
 
     const sessionsByDate = useMemo(() => {
-      const map = new Map<string, AdminGameSession>()
-      gameSessions.forEach((session) => {
+      const map = new Map<string, AdminGameSession[]>()
+      for (const session of gameSessions) {
         const dateString = new Date(session.startTime).toISOString().split("T")[0]
-        map.set(dateString, session)
-      })
+        const existingSessions = map.get(dateString) || []
+        existingSessions.push(session)
+        map.set(dateString, existingSessions)
+      }
       return map
     }, [gameSessions])
 
-    const getSessionForDate = useCallback(
+    const getSessionsForDate = useCallback(
       (date: Date) => {
         const dateString = date.toISOString().split("T")[0]
-        return sessionsByDate.get(dateString)
+        return sessionsByDate.get(dateString) || []
       },
       [sessionsByDate],
     )
 
     const isDateActive = useCallback(
       (date: Date) => {
-        return getSessionForDate(date) !== undefined
+        return getSessionsForDate(date).length > 0
       },
-      [getSessionForDate],
+      [getSessionsForDate],
     )
 
     return (
@@ -115,8 +131,9 @@ export const AdminSessionsCalendar = memo(
           transitionProperty: "none",
           overflow: "visible",
           component: ({ date, selected }) => {
-            const session = getSessionForDate(date)
+            const sessions = getSessionsForDate(date)
             const active = isDateActive(date)
+            const totalAttendees = sessions.reduce((sum, session) => sum + session.attendees, 0)
 
             return (
               <Center
@@ -131,10 +148,10 @@ export const AdminSessionsCalendar = memo(
                 w="2rem"
               >
                 {date.getDate()}
-                {session && (
+                {sessions.length > 0 && (
                   <Float>
                     <Tag fontSize="2xs" lineHeight="1" minH="4" minW="4" p="1" size="sm">
-                      {session.attendees}
+                      {totalAttendees}
                     </Tag>
                   </Float>
                 )}
