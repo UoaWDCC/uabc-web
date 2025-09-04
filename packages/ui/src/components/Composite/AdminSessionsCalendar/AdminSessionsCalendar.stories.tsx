@@ -1,10 +1,5 @@
 import type { AdminGameSession } from "@repo/shared"
-import {
-  adminGameSessionBaseMock,
-  adminGameSessionFullCapacityMock,
-  adminGameSessionLowAttendanceMock,
-  adminGameSessionUpcomingMock,
-} from "@repo/shared/mocks"
+import { adminGameSessionBaseMock, adminGameSessionUpcomingMock } from "@repo/shared/mocks"
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { useState } from "react"
 import { AdminSessionsCalendar } from "./AdminSessionsCalendar"
@@ -122,43 +117,4 @@ export const MultipleSessionsPerDay: Story = {
 
     return <AdminSessionsCalendarWithState gameSessions={gameSessions} />
   },
-}
-
-export const UsingSharedMocks: Story = {
-  render: () => {
-    const today = new Date()
-    const todayISO = today.toISOString().split("T")[0]
-
-    const gameSessions = [
-      {
-        ...adminGameSessionLowAttendanceMock,
-        id: "low-attendance",
-        startTime: `${todayISO}T19:30:00Z`,
-        endTime: `${todayISO}T22:00:00Z`,
-      },
-      {
-        ...adminGameSessionFullCapacityMock,
-        id: "full-capacity",
-        startTime: `${todayISO}T14:00:00Z`,
-        endTime: `${todayISO}T16:30:00Z`,
-      },
-    ]
-
-    return <AdminSessionsCalendarWithState gameSessions={gameSessions} />
-  },
-}
-
-export const CustomStyling: Story = {
-  render: () => (
-    <AdminSessionsCalendar
-      calendarProps={{
-        size: "lg",
-        colorScheme: "blue",
-        borderWidth: "2px",
-      }}
-      gameSessions={[createGameSession(1, 20)]}
-      onDateSelect={() => {}}
-      selectedDate={new Date()}
-    />
-  ),
 }

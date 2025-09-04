@@ -3,7 +3,7 @@
 import type { AdminGameSession } from "@repo/shared"
 import type { CalendarProps } from "@yamada-ui/calendar"
 import { Calendar } from "@yamada-ui/calendar"
-import { Center, dataAttr, Float, Tag, useComponentStyle } from "@yamada-ui/react"
+import { Center, dataAttr, Float, Tag, Tooltip, useComponentStyle } from "@yamada-ui/react"
 import { memo } from "react"
 import { useAdminSessionsCalendar } from "../../../hooks/useAdminSessionsCalendar"
 
@@ -87,11 +87,10 @@ export const AdminSessionsCalendar = memo(
       size: "xs",
     })
 
-    const { getSessionsForDate, isDateActive, getTotalAttendeesForDate } = useAdminSessionsCalendar(
-      {
+    const { getSessionsForDate, isDateActive, getTotalAttendeesForDate, getTotalCapacityForDate } =
+      useAdminSessionsCalendar({
         gameSessions,
-      },
-    )
+      })
 
     return (
       <Calendar
@@ -112,6 +111,10 @@ export const AdminSessionsCalendar = memo(
             const sessions = getSessionsForDate(date)
             const active = isDateActive(date)
             const totalAttendees = getTotalAttendeesForDate(date)
+            const totalCapacity = getTotalCapacityForDate(date)
+            const tooltipLabel = `${totalAttendees} / ${totalCapacity} attendees`
+
+            const colorScheme = totalAttendees >= totalCapacity ? "danger" : "success"
 
             return (
               <Center
@@ -128,9 +131,19 @@ export const AdminSessionsCalendar = memo(
                 {date.getDate()}
                 {sessions.length > 0 && (
                   <Float>
-                    <Tag fontSize="xs" lineHeight="1" minH="4" minW="4" p="1" size="sm">
-                      {totalAttendees}
-                    </Tag>
+                    <Tooltip label={tooltipLabel}>
+                      <Tag
+                        colorScheme={colorScheme}
+                        fontSize="xs"
+                        lineHeight="1"
+                        minH="4"
+                        minW="4"
+                        p="1"
+                        size="sm"
+                      >
+                        {totalAttendees}
+                      </Tag>
+                    </Tooltip>
                   </Float>
                 )}
               </Center>

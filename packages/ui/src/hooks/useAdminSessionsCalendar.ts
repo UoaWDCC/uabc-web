@@ -10,6 +10,7 @@ export interface UseAdminSessionsCalendarReturn {
   getSessionsForDate: (date: Date) => AdminGameSession[]
   isDateActive: (date: Date) => boolean
   getTotalAttendeesForDate: (date: Date) => number
+  getTotalCapacityForDate: (date: Date) => number
 }
 
 /**
@@ -44,6 +45,9 @@ export const useAdminSessionsCalendar = ({
 
   const getSessionsForDate = useCallback(
     (date: Date) => {
+      if (Number.isNaN(date.getTime())) {
+        return []
+      }
       const dateString = date.toISOString().split("T")[0]
       return sessionsByDate.get(dateString) || []
     },
@@ -65,10 +69,19 @@ export const useAdminSessionsCalendar = ({
     [getSessionsForDate],
   )
 
+  const getTotalCapacityForDate = useCallback(
+    (date: Date) => {
+      const sessions = getSessionsForDate(date)
+      return sessions.reduce((sum, session) => sum + session.capacity, 0)
+    },
+    [getSessionsForDate],
+  )
+
   return {
     sessionsByDate,
     getSessionsForDate,
     isDateActive,
     getTotalAttendeesForDate,
+    getTotalCapacityForDate,
   }
 }

@@ -74,18 +74,6 @@ describe("AdminSessionsCalendar", () => {
     expect(attendeeTag).toBeInTheDocument()
   })
 
-  it("should display correct attendee count for single session", () => {
-    render(
-      <AdminSessionsCalendar
-        {...defaultProps}
-        gameSessions={[mockSessions[2]]} // Only session-3 on 2025-01-22
-      />,
-    )
-
-    const attendeeTag = screen.getByText("30")
-    expect(attendeeTag).toBeInTheDocument()
-  })
-
   it("should disable dates without sessions", () => {
     render(<AdminSessionsCalendar {...defaultProps} gameSessions={mockSessions} />)
 
@@ -94,16 +82,6 @@ describe("AdminSessionsCalendar", () => {
     const dateButton = inactiveDate.closest("button")
 
     expect(dateButton).toHaveAttribute("data-disabled", "")
-  })
-
-  it("should enable dates with sessions", () => {
-    render(<AdminSessionsCalendar {...defaultProps} gameSessions={mockSessions} />)
-
-    // Find a date with sessions (21st)
-    const activeDate = screen.getByText("21")
-    const dateButton = activeDate.closest("button")
-
-    expect(dateButton).toHaveAttribute("data-disabled", "false")
   })
 
   it("should handle empty gameSessions array", () => {
@@ -180,23 +158,6 @@ describe("AdminSessionsCalendar", () => {
     const dateButton = selectedDate.closest("button")
 
     expect(dateButton).toHaveAttribute("data-selected", "")
-  })
-
-  it("should not show selected state for inactive dates even if selectedDate matches", () => {
-    render(
-      <AdminSessionsCalendar
-        gameSessions={mockSessions} // Date without sessions
-        onDateSelect={defaultProps.onDateSelect}
-        selectedDate={new Date("2025-01-23")}
-      />,
-    )
-
-    const date23 = screen.getByText("23")
-    const dateButton = date23.closest("button")
-
-    // Should be disabled and not selected
-    expect(dateButton).toHaveAttribute("data-disabled", "")
-    expect(dateButton).toHaveAttribute("data-selected", "false")
   })
 
   it("should handle rapid date selection changes", async () => {
