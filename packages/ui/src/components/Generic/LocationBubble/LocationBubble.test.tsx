@@ -10,6 +10,9 @@ vi.mock("@yamada-ui/react", async () => {
 import {
   LOCATION_BUBBLE_TEST_CONSTANTS,
   LOCATION_BUBBLE_TEST_CONSTANTS_MOBILE,
+  LOCATION_BUBBLE_TEST_CONSTANTS_WITH_BUTTON_LABEL,
+  LOCATION_BUBBLE_TEST_CONSTANTS_WITH_BUTTON_LINK,
+  LOCATION_BUBBLE_TEST_CONSTANTS_WITH_TIMES,
 } from "@repo/ui/test-config/mocks/LocationBubble.mock"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { useBreakpointValue, useReducedMotion } from "@yamada-ui/react"
@@ -133,9 +136,39 @@ describe("<LocationBubble />", () => {
   it("falls back to '#' and 'Learn More' when no button data is provided in LocationBubbleMobileCard", async () => {
     render(<LocationBubbleMobileCard {...LOCATION_BUBBLE_TEST_CONSTANTS_MOBILE} />)
 
-    const button = screen.getByRole("link", { name: /learn more/i })
+    const button = screen.getByRole("link", { name: /learn More/i })
     expect(button).toBeInTheDocument()
     expect(button).toHaveAttribute("href", "#")
+  })
+
+  it("falls back to '#' when no button link provided", async () => {
+    const { user } = render(
+      <LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS_WITH_BUTTON_LABEL} />,
+    )
+    const bubble = screen.getByTestId("location-bubble-circle-trigger")
+
+    await user.click(bubble)
+    vi.advanceTimersToNextTimer()
+
+    expect(await screen.findByTestId("location-bubble-mobile-card")).toBeInTheDocument()
+
+    const button = screen.getByRole("link", { name: /label/i })
+    expect(button).toBeInTheDocument()
+    expect(button).toHaveAttribute("href", "#")
+  })
+
+  it("falls back to 'Learn More' when no button label provided", async () => {
+    const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS_WITH_BUTTON_LINK} />)
+    const bubble = screen.getByTestId("location-bubble-circle-trigger")
+
+    await user.click(bubble)
+    vi.advanceTimersToNextTimer()
+
+    expect(await screen.findByTestId("location-bubble-mobile-card")).toBeInTheDocument()
+
+    const button = screen.getByRole("link", { name: /learn more/i })
+    expect(button).toBeInTheDocument()
+    expect(button).toHaveAttribute("href", "link")
   })
 
   it("LocationBubble doesn't move when prefers-reduced-motion is true", async () => {
@@ -186,5 +219,18 @@ describe("<LocationBubble />", () => {
 
     expect(screen.queryByTestId("location-bubble-desktop-card")).not.toBeInTheDocument()
     expect(screen.getByTestId("location-bubble-circle-trigger")).toBeInTheDocument()
+  })
+
+  it("displays times correctly if not times is not an array", async () => {
+    const { user } = render(<LocationBubble {...LOCATION_BUBBLE_TEST_CONSTANTS_WITH_TIMES} />)
+    const bubble = screen.getByTestId("location-bubble-circle-trigger")
+
+    await user.hover(bubble)
+    vi.advanceTimersToNextTimer()
+
+    expect(await screen.findByTestId("location-bubble-desktop-card")).toBeInTheDocument()
+
+    expect(screen.getByText(/Monday/)).toBeInTheDocument()
+    expect(screen.getByText(/12:00PM - 2:00PM/)).toBeInTheDocument()
   })
 })

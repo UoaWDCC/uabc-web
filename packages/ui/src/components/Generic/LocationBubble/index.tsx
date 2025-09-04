@@ -56,9 +56,7 @@ export const LocationBubble = ({
   const locationTimeData = locationTimes
     ? Object.entries(locationTimes).reduce(
         (acc, [day, times]) => {
-          acc[day] = Array.isArray(times)
-            ? times.map((time) => dayjs(new Date(time)).format("h:mmA"))
-            : [times]
+          acc[day] = times.map((time) => dayjs(new Date(time)).format("h:mmA"))
           return acc
         },
         {} as Record<string, string[]>,
