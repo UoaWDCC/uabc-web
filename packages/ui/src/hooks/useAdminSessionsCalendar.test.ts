@@ -136,7 +136,7 @@ describe("useAdminSessionsCalendar", () => {
   it("should update when gameSessions change", () => {
     const { result, rerender } = renderHook(
       ({ gameSessions }) => useAdminSessionsCalendar({ gameSessions }),
-      { initialProps: { gameSessions: [] } },
+      { initialProps: { gameSessions: [] as typeof mockSessions } },
     )
 
     expect(result.current.sessionsByDate.size).toBe(0)
