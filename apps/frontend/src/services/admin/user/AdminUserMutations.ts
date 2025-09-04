@@ -47,14 +47,10 @@ export const useUpdateUser = () => {
  * @returns A mutation hook for deleting a user.
  */
 export const useDeleteUser = () => {
-  const { token } = useAuth()
   const queryClient = useQueryClient()
   const { token } = useAuth()
   return useMutation({
     mutationFn: async (id: string) => {
-      if (!token) {
-        throw new Error("No token provided")
-      }
       return await AdminUserService.deleteUser({ id, token })
     },
     // TODO: When get by id is implemented, only invalidate the one id for get by id
