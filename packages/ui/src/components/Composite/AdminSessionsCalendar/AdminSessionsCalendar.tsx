@@ -119,6 +119,12 @@ export const AdminSessionsCalendar = memo(
             return (
               <Center
                 __css={styles}
+                _disabled={{
+                  bg: "transparent !important",
+                  _before: {
+                    display: "none",
+                  },
+                }}
                 _selected={{
                   bg: "$colors.primary !important",
                 }}
@@ -133,6 +139,7 @@ export const AdminSessionsCalendar = memo(
                   <Float>
                     <Tooltip label={tooltipLabel}>
                       <Tag
+                        aria-label={tooltipLabel}
                         colorScheme={colorScheme}
                         fontSize="xs"
                         lineHeight="1"

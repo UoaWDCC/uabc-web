@@ -1,4 +1,5 @@
 import type { AdminGameSession } from "@repo/shared"
+import { getISODateKey } from "@repo/shared"
 import { useCallback, useMemo } from "react"
 
 export interface UseAdminSessionsCalendarProps {
@@ -35,7 +36,7 @@ export const useAdminSessionsCalendar = ({
   const sessionsByDate = useMemo(() => {
     const map = new Map<string, AdminGameSession[]>()
     for (const session of gameSessions) {
-      const dateString = new Date(session.startTime).toISOString().split("T")[0]
+      const dateString = getISODateKey(session.startTime)
       const existingSessions = map.get(dateString) || []
       existingSessions.push(session)
       map.set(dateString, existingSessions)
@@ -48,7 +49,7 @@ export const useAdminSessionsCalendar = ({
       if (Number.isNaN(date.getTime())) {
         return []
       }
-      const dateString = date.toISOString().split("T")[0]
+      const dateString = getISODateKey(date)
       return sessionsByDate.get(dateString) || []
     },
     [sessionsByDate],
