@@ -19,8 +19,8 @@ import { ConfirmationPopUp } from "@repo/ui/components/Generic"
 import { Container, Grid, GridItem, useDisclosure, useNotice } from "@yamada-ui/react"
 import { memo, useState } from "react"
 import { useDeleteBooking } from "@/services/admin/bookings/AdminBookingMutations"
-import { useUpdateSelfMutation } from "@/services/auth/useUpdateSelfMutation"
-import { useMyBookings } from "@/services/bookings/BookingQuery"
+import { useUpdateSelfMutation } from "@/services/auth/AuthMutations"
+import { useMyBookings } from "@/services/bookings/BookingQueries"
 
 export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
   const { user } = auth
