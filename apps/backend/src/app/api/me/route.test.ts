@@ -19,13 +19,6 @@ describe("api/me", async () => {
 
       expect(response.status).toBe(StatusCodes.OK)
       const json = await response.json()
-      // expect(json.data).toEqual({
-      //   ...casualUserMock,
-      //   emailVerification: {
-      //     ...casualUserMock.emailVerification,
-      //     id: expect.any(String),
-      //   },
-      // })
       expect(json.data).toEqual(casualUserMock)
     })
 
