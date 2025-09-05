@@ -13,8 +13,12 @@ dayjs.extend(timezone)
 dayjs.tz.setDefault("Pacific/Auckland")
 
 export const AdminMembersSection = () => {
-  const { open: open1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
-  const { open: open2, onOpen: onOpen2, onClose: onClose2 } = useDisclosure()
+  const { open: openConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
+  const {
+    open: openDoubleConfirm,
+    onOpen: onOpenDoubleConfirm,
+    onClose: onCloseDoubleConfirm,
+  } = useDisclosure()
   const notice = useNotice()
 
   const deleteUserMutation = useDeleteUser()
@@ -23,13 +27,13 @@ export const AdminMembersSection = () => {
     page: 1,
   })
 
-  const handleResetConfirm1 = () => {
-    onClose1()
-    onOpen2()
+  const handleResetConfirm = () => {
+    onCloseConfirm()
+    onOpenDoubleConfirm()
   }
 
-  const handleResetConfirm2 = () => {
-    onClose2()
+  const handleResetDoubleConfirm = () => {
+    onCloseDoubleConfirm()
     notice({
       title: "TODO: Reset Memberships",
     })
@@ -41,7 +45,7 @@ export const AdminMembersSection = () => {
         .flatMap((page) => page.data.docs)
         .map((page) => ({
           id: page.id,
-          name: page.firstName + (page.lastName ? ` ${page.lastName}` : ""),
+          name: `${page.firstName} ${page.lastName || ""}`,
           email: page.email,
           remaining: String(page.remainingSessions),
           joined: dayjs(page.createdAt).format("DD MMM YYYY hh:mm A"),
@@ -75,16 +79,16 @@ export const AdminMembersSection = () => {
           })
         }}
       />
-      <Button colorScheme="danger" onClick={onOpen1} placeSelf="start">
+      <Button colorScheme="danger" onClick={onOpenConfirm} placeSelf="start">
         Reset Memberships
       </Button>
       <Dialog
         cancel="Cancel"
         header="Are you sure?"
-        onCancel={onClose1}
-        onClose={onClose1}
-        onSuccess={handleResetConfirm1}
-        open={open1}
+        onCancel={onCloseConfirm}
+        onClose={onCloseConfirm}
+        onSuccess={handleResetConfirm}
+        open={openConfirm}
         success={{
           children: "Reset",
           colorScheme: "danger",
@@ -95,10 +99,10 @@ export const AdminMembersSection = () => {
       <Dialog
         cancel="Cancel"
         header="Are you really sure?"
-        onCancel={onClose2}
-        onClose={onClose2}
-        onSuccess={handleResetConfirm2}
-        open={open2}
+        onCancel={onCloseDoubleConfirm}
+        onClose={onCloseDoubleConfirm}
+        onSuccess={handleResetDoubleConfirm}
+        open={openDoubleConfirm}
         success={{
           children: "Reset",
           colorScheme: "danger",

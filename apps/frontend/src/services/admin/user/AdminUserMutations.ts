@@ -50,9 +50,7 @@ export const useDeleteUser = () => {
   const queryClient = useQueryClient()
   const { token } = useAuth()
   return useMutation({
-    mutationFn: async (id: string) => {
-      return await AdminUserService.deleteUser({ id, token })
-    },
+    mutationFn: (id: string) => AdminUserService.deleteUser({ id, token }),
     // TODO: When get by id is implemented, only invalidate the one id for get by id
     onSuccess: () =>
       queryClient.invalidateQueries({

@@ -6,6 +6,9 @@ import { type FC, memo, useState } from "react"
 import { columns, type UserData } from "./Columns"
 import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
 
+/**
+ * Props for admin table component.
+ */
 export interface AdminTableProps {
   data: UserData[]
   onDelete?: (id: string) => void
