@@ -17,7 +17,7 @@ export const FILTER_CONFIGS: readonly FilterBarConfig<UserData>[] = [
   {
     key: ["name", "email"],
     type: "text",
-    placeholder: "Filter...",
+    placeholder: "Search by name or email",
   },
   {
     key: "role",
@@ -29,9 +29,6 @@ export const FILTER_CONFIGS: readonly FilterBarConfig<UserData>[] = [
       })),
     ],
     label: "User Role",
-    onChange: () => {
-      console.log("onChange")
-    },
   },
   {
     key: "university",

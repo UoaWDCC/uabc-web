@@ -15,9 +15,9 @@ dayjs.tz.setDefault("Pacific/Auckland")
 export const AdminMembersSection = () => {
   const { open: openConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const {
-    open: openDoubleConfirm,
-    onOpen: onOpenDoubleConfirm,
-    onClose: onCloseDoubleConfirm,
+    open: openFinalConfirm,
+    onOpen: onOpenFinalConfirm,
+    onClose: onCloseFinalConfirm,
   } = useDisclosure()
   const notice = useNotice()
 
@@ -29,11 +29,11 @@ export const AdminMembersSection = () => {
 
   const handleResetConfirm = () => {
     onCloseConfirm()
-    onOpenDoubleConfirm()
+    onOpenFinalConfirm()
   }
 
-  const handleResetDoubleConfirm = () => {
-    onCloseDoubleConfirm()
+  const handleResetFinalConfirm = () => {
+    onCloseFinalConfirm()
     notice({
       title: "TODO: Reset Memberships",
     })
@@ -99,10 +99,10 @@ export const AdminMembersSection = () => {
       <Dialog
         cancel="Cancel"
         header="Are you really sure?"
-        onCancel={onCloseDoubleConfirm}
-        onClose={onCloseDoubleConfirm}
-        onSuccess={handleResetDoubleConfirm}
-        open={openDoubleConfirm}
+        onCancel={onCloseFinalConfirm}
+        onClose={onCloseFinalConfirm}
+        onSuccess={handleResetFinalConfirm}
+        open={openFinalConfirm}
         success={{
           children: "Reset",
           colorScheme: "danger",
