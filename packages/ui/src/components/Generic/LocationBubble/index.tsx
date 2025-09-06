@@ -63,6 +63,12 @@ export const LocationBubble = ({
       )
     : { [dayjs().format("dddd")]: [`${dayjs().format("h:mmA")}`] }
 
+  // workaround until images uploads are properly configured
+  locationImage = {
+    ...locationImage,
+    src: `${process.env.NEXT_PUBLIC_API_URL}${locationImage.src}`,
+  }
+
   const [hovering, setHovering] = useState(false)
   const hoverDebounce = useRef<ReturnType<typeof setTimeout> | null>(null)
 
