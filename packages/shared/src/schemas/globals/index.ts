@@ -1,5 +1,6 @@
 export * from "./about-us-info"
 export * from "./faq"
 export * from "./footer"
+export * from "./location-bubble"
 export * from "./navbar"
 export * from "./terms-of-service"

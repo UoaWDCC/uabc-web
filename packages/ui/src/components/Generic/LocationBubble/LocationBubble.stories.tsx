@@ -1,5 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/react"
 import { Box } from "@yamada-ui/react"
+import dayjs from "dayjs"
 import { LocationBubble } from "."
 import { LocationBubbleCircle } from "./LocationBubbleCircle"
 import { LocationBubbleDesktopCard } from "./LocationBubbleDesktopCard"
@@ -31,6 +32,11 @@ const meta: Meta<typeof LocationBubble> = {
       description: "Props for the location image, including `src` and others",
       table: { type: { summary: "ImageProps" } },
     },
+    button: {
+      control: "object",
+      description: "Button configuration with `label` and `url` properties",
+      table: { type: { summary: "{ label?: string; url?: string }" } },
+    },
   },
   args: {
     locationTitle: "Uoa Recreation Centre",
@@ -38,11 +44,17 @@ const meta: Meta<typeof LocationBubble> = {
       src: "https://placehold.co/300x200/png",
       alt: "Placeholder image for location",
     },
-    buttonLink: "#",
     locationDetails: "17 Symonds Street",
     locationTimes: {
-      Tuesday: "7:30pm - 10pm",
-      Friday: "7:30pm - 10pm",
+      Tuesday: [new Date(1970, 1, 1, 10).toISOString(), new Date(1970, 1, 1, 11).toISOString()],
+      Friday: [
+        new Date(1970, 1, 1, 10, 30).toISOString(),
+        new Date(1970, 1, 1, 11, 30).toISOString(),
+      ],
+    },
+    button: {
+      label: "Learn more",
+      url: "#",
     },
   },
 }
@@ -62,17 +74,40 @@ export const Circle: Story = (args) => {
 }
 
 export const DesktopCard: Story = (args) => {
+  const locationTimes = Object.entries(args.locationTimes || {}).reduce(
+    (acc, [day, times]) => {
+      if (Array.isArray(times) && times.length >= 2) {
+        acc[day] = [dayjs(times[0]).format("h:mmA"), dayjs(times[1]).format("h:mmA")]
+      }
+      return acc
+    },
+    {} as Record<string, string[]>,
+  )
   return (
     <Box height="fit-content" width="fit-content">
-      <LocationBubbleDesktopCard {...args} />
+      <LocationBubbleDesktopCard {...args} locationTimes={locationTimes} />
     </Box>
   )
 }
 
 export const MobileCard: Story = (args) => {
+  const locationTimes = Object.entries(args.locationTimes || {}).reduce(
+    (acc, [day, times]) => {
+      if (Array.isArray(times) && times.length >= 2) {
+        acc[day] = [dayjs(times[0]).format("h:mmA"), dayjs(times[1]).format("h:mmA")]
+      }
+      return acc
+    },
+    {} as Record<string, string[]>,
+  )
   return (
     <Box height="500px" width="480px">
-      <LocationBubbleMobileCard {...args} onClose={() => {}} open={true} />
+      <LocationBubbleMobileCard
+        {...args}
+        locationTimes={locationTimes}
+        onClose={() => {}}
+        open={true}
+      />
     </Box>
   )
 }
