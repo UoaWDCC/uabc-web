@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { User } from "../payload-types"
+import type { EmailVerification, User } from "../payload-types"
 import {
   type CreateUserData,
   type EditSelfData,
@@ -12,12 +12,19 @@ import { UniversityZodEnum } from "../types/enums"
 import { MediaSchema } from "./media"
 import { PaginationDataSchema } from "./query"
 
+export const EmailVerificationCodeSchema = z.object({
+  id: z.string().nullable().optional(),
+  verificationCode: z.string(),
+  createdAt: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  expiresAt: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+}) satisfies z.ZodType<EmailVerification>
+
 export const UserSchema = z.object({
   id: z.string(),
   firstName: z.string(),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
-  emailVerificationCode: z.string().nullable().optional(),
+  emailVerification: EmailVerificationCodeSchema,
   phoneNumber: z.string().nullable().optional(),
   // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
   role: z.enum(["admin", "member", "casual"]),
@@ -40,6 +47,7 @@ export const CreateUserRequestSchema = z.object({
   firstName: z.string().min(1).max(30),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
+  emailVerification: EmailVerificationCodeSchema,
   role: z.nativeEnum(MembershipType),
   phoneNumber: z.string().nullable().optional(),
   playLevel: z.nativeEnum(PlayLevel).nullable().optional(),
@@ -107,7 +115,7 @@ export const OnboardedUserSchema = z.object({
   firstName: z.string(),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
-  emailVerificationCode: z.string().nullable().optional(),
+  emailVerification: EmailVerificationCodeSchema,
   phoneNumber: z.string(),
   role: z.enum(["admin", "member", "casual"]),
   playLevel: z.enum(["beginner", "intermediate", "advanced"]),
