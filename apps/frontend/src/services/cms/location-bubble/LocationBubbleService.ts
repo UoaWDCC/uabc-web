@@ -17,6 +17,5 @@ export const getLocationBubble = cache(async () => {
       tags: [QueryKeys.LOCATION_BUBBLE_QUERY_KEY],
     },
   )
-  console.log("Location Bubble response:", response)
   return ApiClient.throwIfError(response)
 })
