@@ -121,6 +121,45 @@ describe("GameSessionDataService", () => {
     })
   })
 
+  describe("getGameSessionByGameSessionSchedules", () => {
+    it("should get all game sessions by games session schedules", async () => {
+      const createdGameSessionSchedule1 = await gameSessionDataService.createGameSessionSchedule(
+        gameSessionScheduleCreateMock,
+      )
+      const createdGameSessionSchedule2 = await gameSessionDataService.createGameSessionSchedule(
+        gameSessionScheduleCreateMock,
+      )
+
+      const createdGameSession1 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        gameSessionSchedule: createdGameSessionSchedule1.id,
+      })
+      const createdGameSession2 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        gameSessionSchedule: createdGameSessionSchedule2.id,
+      })
+
+      const fetchedGameSessions =
+        await gameSessionDataService.getAllGameSessionsByGameSessionScheduleIds([
+          createdGameSessionSchedule1.id,
+          createdGameSessionSchedule2.id,
+        ])
+
+      expect(fetchedGameSessions.length).toEqual(2)
+      expect(fetchedGameSessions).toEqual(
+        expect.arrayContaining([createdGameSession1, createdGameSession2]),
+      )
+    })
+
+    it("should return an empty array when no game sessions are found for the passed game session schedule IDs", async () => {
+      expect(
+        await gameSessionDataService.getAllGameSessionsByGameSessionScheduleIds([
+          "Not a valid game session schedule ID",
+        ]),
+      ).toStrictEqual([])
+    })
+  })
+
   describe("updateGameSession", () => {
     it("should update a game session", async () => {
       const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
@@ -176,6 +215,51 @@ describe("GameSessionDataService", () => {
     })
     expect(fetchedGameSessionSchedule).not.toBeNull()
     expect(fetchedGameSessionSchedule.id).toEqual(newGameSessionSchedule.id)
+  })
+
+  describe("deleteAllGameSessionsByGameSessionSchedules", () => {
+    it("should delete all game sessions by games session schedules", async () => {
+      const createdGameSessionSchedule1 = await gameSessionDataService.createGameSessionSchedule(
+        gameSessionScheduleCreateMock,
+      )
+      const createdGameSessionSchedule2 = await gameSessionDataService.createGameSessionSchedule(
+        gameSessionScheduleCreateMock,
+      )
+
+      const createdGameSession1 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        gameSessionSchedule: createdGameSessionSchedule1.id,
+      })
+      const createdGameSession2 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        gameSessionSchedule: createdGameSessionSchedule2.id,
+      })
+
+      const deletedGameSessions =
+        await gameSessionDataService.deleteAllGameSessionsByGameSessionSchedules([
+          createdGameSessionSchedule1.id,
+          createdGameSessionSchedule2.id,
+        ])
+      expect(deletedGameSessions).not.toBeNull()
+      expect(deletedGameSessions).toEqual(
+        expect.arrayContaining([createdGameSession1, createdGameSession2]),
+      )
+
+      await expect(
+        gameSessionDataService.getGameSessionById(createdGameSession1.id),
+      ).rejects.toThrowError("Not Found")
+      await expect(
+        gameSessionDataService.getGameSessionById(createdGameSession2.id),
+      ).rejects.toThrowError("Not Found")
+    })
+
+    it("should return an empty array if no game sessions exist when deleting by a game session schedule", async () => {
+      expect(
+        await gameSessionDataService.deleteAllGameSessionsByGameSessionSchedules([
+          "Not a valid game session schedule ID",
+        ]),
+      ).toStrictEqual([])
+    })
   })
 
   describe("getGameSessionsBySemesterId", () => {
@@ -366,6 +450,34 @@ describe("GameSessionDataService", () => {
     })
   })
 
+  describe("getAllGameSessionSchedulesBySemesterId", () => {
+    it("should get a game session schedule by a semester ID", async () => {
+      const createdSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const createdGameSessionSchedule1 = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleCreateMock,
+        semester: createdSemester.id,
+      })
+      const createdGameSessionSchedule2 = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleCreateMock,
+        semester: createdSemester.id,
+      })
+
+      const fetchedGameSessionSchedules =
+        await gameSessionDataService.getAllGameSessionSchedulesBySemesterId(createdSemester.id)
+      expect(fetchedGameSessionSchedules).toEqual(
+        expect.arrayContaining([createdGameSessionSchedule1, createdGameSessionSchedule2]),
+      )
+    })
+
+    it("should return an empty array when no game sessions schedules are found for a semester ID", async () => {
+      expect(
+        await gameSessionDataService.getAllGameSessionsByGameSessionScheduleIds([
+          "Not a valid semester ID",
+        ]),
+      ).toStrictEqual([])
+    })
+  })
+
   describe("updateGameSessionSchedule", () => {
     it("should update a game session schedule", async () => {
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
@@ -414,6 +526,42 @@ describe("GameSessionDataService", () => {
       await expect(gameSessionDataService.deleteGameSessionSchedule("fakeid")).rejects.toThrowError(
         "Not Found",
       )
+    })
+  })
+
+  describe("deleteAllGameSessionSchedulesBySemesterId", () => {
+    it("should delete all game session schedules by a semester ID", async () => {
+      const createdSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const createdGameSessionSchedule1 = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleCreateMock,
+        semester: createdSemester.id,
+      })
+      const createdGameSessionSchedule2 = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleCreateMock,
+        semester: createdSemester.id,
+      })
+
+      const deletedGameSessionSchedules =
+        await gameSessionDataService.deleteAllGameSessionSchedulesBySemesterId(createdSemester.id)
+      expect(deletedGameSessionSchedules).not.toBeNull()
+      expect(deletedGameSessionSchedules).toEqual(
+        expect.arrayContaining([createdGameSessionSchedule1, createdGameSessionSchedule2]),
+      )
+
+      await expect(
+        gameSessionDataService.getGameSessionScheduleById(createdGameSessionSchedule1.id),
+      ).rejects.toThrowError("Not Found")
+      await expect(
+        gameSessionDataService.getGameSessionScheduleById(createdGameSessionSchedule2.id),
+      ).rejects.toThrowError("Not Found")
+    })
+
+    it("should return an empty array if no game session schedules exist when searching by a semester ID", async () => {
+      expect(
+        await gameSessionDataService.deleteAllGameSessionSchedulesBySemesterId(
+          "Not a valid semester ID",
+        ),
+      ).toStrictEqual([])
     })
   })
 })

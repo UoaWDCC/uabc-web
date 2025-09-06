@@ -1,9 +1,17 @@
+// write test cases for transaction.ts
 import { UpdateSemesterRequestSchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
+import {
+  commitCascadeTransaction,
+  createTransactionId,
+  rollbackCascadeTransaction,
+} from "@/data-layer/adapters/Transaction"
+import BookingDataService from "@/data-layer/services/BookingDataService"
+import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 
 class SemesterRouteWrapper {
@@ -14,22 +22,62 @@ class SemesterRouteWrapper {
    * @returns No content status code
    */
   @Security("jwt", ["admin"])
-  static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  static async DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
+    let cascadeTransactionId: string | number | undefined
+    const deleteRelatedDocs = req.nextUrl.searchParams.get("deleteRelatedDocs") !== "false"
+
     try {
-      const { id } = await params
       const semesterDataService = new SemesterDataService()
-      await semesterDataService.deleteSemester(id)
+      const gameSessionDataService = new GameSessionDataService()
+      const bookingDataService = new BookingDataService()
+
+      // check if semester exists, otherwise throw notfound error
+      await semesterDataService.getSemesterById(id)
+
+      if (deleteRelatedDocs) {
+        cascadeTransactionId = await createTransactionId()
+
+        const schedules = await gameSessionDataService.getAllGameSessionSchedulesBySemesterId(
+          id,
+          cascadeTransactionId,
+        )
+        const scheduleIds = schedules.map((schedule) => schedule.id)
+        const sessions = await gameSessionDataService.getAllGameSessionsByGameSessionScheduleIds(
+          scheduleIds,
+          cascadeTransactionId,
+        )
+        const sessionIds = sessions.map((sessions) => sessions.id)
+
+        await bookingDataService.deleteBookingsByGameSessionIds(sessionIds, cascadeTransactionId)
+        await gameSessionDataService.deleteAllGameSessionsByGameSessionSchedules(
+          scheduleIds,
+          cascadeTransactionId,
+        )
+        await gameSessionDataService.deleteAllGameSessionSchedulesBySemesterId(
+          id,
+          cascadeTransactionId,
+        )
+      }
+
+      await semesterDataService.deleteSemester(id, cascadeTransactionId)
+
+      await commitCascadeTransaction(cascadeTransactionId)
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
+      await rollbackCascadeTransaction(cascadeTransactionId)
+
       if (error instanceof NotFound) {
         return NextResponse.json({ error: "Semester not found" }, { status: StatusCodes.NOT_FOUND })
       }
+      console.error(error)
       return NextResponse.json(
         { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
         { status: StatusCodes.INTERNAL_SERVER_ERROR },
       )
     }
   }
+
   /**
    * PATCH method to update a semester.
    *

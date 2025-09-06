@@ -164,4 +164,28 @@ export default class BookingDataService {
       id,
     })
   }
+
+  /**
+   * Deletes {@link Booking}s given an array of {@link GameSession} IDs
+   *
+   * @param sessionIds the IDs of the {@link GameSession}s whose corresponding bookings we want to delete.
+   * @param transactionID an optional transaction ID for the request, useful for tracing
+   * @returns the deleted {@link Booking} documents if it exists, otherwise throws a {@link NotFound} error
+   */
+  public async deleteBookingsByGameSessionIds(
+    sessionIds: string[],
+    transactionID?: string | number,
+  ): Promise<Booking[]> {
+    return (
+      await payload.delete({
+        collection: "booking",
+        where: {
+          gameSession: {
+            in: sessionIds,
+          },
+        },
+        req: { transactionID },
+      })
+    ).docs
+  }
 }
