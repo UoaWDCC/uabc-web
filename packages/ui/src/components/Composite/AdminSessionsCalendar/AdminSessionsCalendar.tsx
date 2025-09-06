@@ -1,11 +1,11 @@
 "use client"
 
 import type { AdminGameSession } from "@repo/shared"
+import { useAdminSessionsCalendar } from "@repo/ui/hooks"
 import type { CalendarProps } from "@yamada-ui/calendar"
 import { Calendar } from "@yamada-ui/calendar"
 import { Center, dataAttr, Float, Tag, Tooltip, useComponentStyle } from "@yamada-ui/react"
 import { memo } from "react"
-import { useAdminSessionsCalendar } from "../../../hooks/useAdminSessionsCalendar"
 
 export interface AdminSessionsCalendarProps {
   /**
