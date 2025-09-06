@@ -7,7 +7,7 @@ post-merge:
   commands:
     pnpm:
       glob: "{package.json,pnpm-lock.yaml}"
-      run: pnpm install
+      run: pnpm exec cross-env COREPACK_ENABLE_DOWNLOAD_PROMPT=0 pnpm install
 
 pre-commit:
   parallel: true
