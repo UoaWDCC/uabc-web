@@ -1,2 +1,1 @@
-export * from "./AdminSessionsTable"
-export * from "./Columns"
+export { AdminSessionsTable } from "./AdminSessionsTable"
