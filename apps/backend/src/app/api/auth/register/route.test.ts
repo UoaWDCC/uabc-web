@@ -2,6 +2,7 @@ import { MembershipType, type RegisterRequestBody } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
+import { getVerificationCodeExpiryDate } from "@/data-layer/utils/DateUtils"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { POST } from "./route"
 
@@ -15,11 +16,19 @@ describe("tests /api/auth/register", () => {
     emailVerificationCode: "123456",
   } satisfies RegisterRequestBody
 
+  const now = new Date() // Use current date for createdAt
+  const createdAt = now.toISOString()
+  const expiresAt = getVerificationCodeExpiryDate(now).toISOString()
+
   it("should register a new user", async () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerificationCode: registerBody.emailVerificationCode,
+      emailVerification: {
+        verificationCode: registerBody.emailVerificationCode,
+        createdAt: createdAt,
+        expiresAt: expiresAt,
+      },
       role: MembershipType.casual,
     })
 
@@ -31,9 +40,6 @@ describe("tests /api/auth/register", () => {
     const json = await res.json()
     expect(json.message).toBe("User registered successfully")
 
-    const user = await userDataService.getUserByEmail(registerBody.email)
-    expect(user).toBeDefined()
-
     const auth = await authDataService.getAuthByEmail(registerBody.email)
     expect(auth.password).not.toEqual(registerBody.password)
   })
@@ -42,7 +48,11 @@ describe("tests /api/auth/register", () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerificationCode: "333555",
+      emailVerification: {
+        verificationCode: "333555",
+        createdAt: createdAt,
+        expiresAt: expiresAt,
+      },
       role: MembershipType.casual,
     })
 
@@ -51,6 +61,26 @@ describe("tests /api/auth/register", () => {
 
     expect(res.status).toBe(StatusCodes.BAD_REQUEST)
     expect(json.error).toBe("Invalid email verification code")
+  })
+
+  it("should return a 400 if a user submits an expired verification code", async () => {
+    const expiredTime = new Date(Date.now() - 60 * 60 * 1000) // 1 hour ago
+    await userDataService.createUser({
+      firstName: registerBody.email,
+      email: registerBody.email,
+      emailVerification: {
+        verificationCode: registerBody.emailVerificationCode,
+        createdAt: expiredTime.toISOString(),
+        expiresAt: getVerificationCodeExpiryDate(expiredTime).toISOString(),
+      },
+      role: MembershipType.casual,
+    })
+
+    const res = await POST(createMockNextRequest("", "POST", registerBody))
+    const json = await res.json()
+
+    expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+    expect(json.error).toBe("Latest email verification code has expired")
   })
 
   it("should return a 403 if the user hasn't created a verification code request", async () => {
@@ -65,7 +95,11 @@ describe("tests /api/auth/register", () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerificationCode: registerBody.emailVerificationCode,
+      emailVerification: {
+        verificationCode: registerBody.emailVerificationCode,
+        createdAt: createdAt,
+        expiresAt: expiresAt,
+      },
       role: MembershipType.casual,
     })
 

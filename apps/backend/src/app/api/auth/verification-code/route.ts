@@ -6,6 +6,10 @@ import AuthService from "@/business-layer/services/AuthService"
 import MailService from "@/business-layer/services/MailService"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
+import {
+  getVerificationCodeCoolDownDate,
+  getVerificationCodeExpiryDate,
+} from "@/data-layer/utils/DateUtils"
 
 export const POST = async (req: NextRequest) => {
   const userDataService = new UserDataService()
@@ -27,14 +31,38 @@ export const POST = async (req: NextRequest) => {
 
     try {
       const user = await userDataService.getUserByEmail(email)
+
+      // check that latest verification code is past cool down period
+      if (
+        getVerificationCodeCoolDownDate(new Date(user.emailVerification.createdAt)) > new Date()
+      ) {
+        return NextResponse.json(
+          {
+            error:
+              "A verification code has already been sent recently. Please wait before requesting another one.",
+          },
+          { status: StatusCodes.TOO_MANY_REQUESTS },
+        )
+      }
+
+      const newCode = {
+        verificationCode: code,
+        createdAt: new Date().toISOString(), // Use current date for createdAt
+        expiresAt: getVerificationCodeExpiryDate().toISOString(),
+      }
+
       await userDataService.updateUser(user.id, {
-        emailVerificationCode: code,
+        emailVerification: newCode,
       })
     } catch {
       await userDataService.createUser({
         firstName: email,
         email,
-        emailVerificationCode: code,
+        emailVerification: {
+          verificationCode: code,
+          createdAt: new Date().toISOString(), // Use current date for createdAt
+          expiresAt: getVerificationCodeExpiryDate().toISOString(),
+        },
         role: MembershipType.casual,
       })
     }
