@@ -1,90 +1,77 @@
 "use client"
 
-import { MembershipType, PlayLevel, University } from "@repo/shared"
 import { ManagementTable } from "@repo/ui/components/Generic"
-import { memo } from "react"
+import { Dialog, useDisclosure } from "@yamada-ui/react"
+import { type FC, memo, useState } from "react"
 import { columns, type UserData } from "./Columns"
+import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
+
+/**
+ * Props for admin table component.
+ */
+export interface AdminTableProps {
+  data: UserData[]
+  onDelete?: (id: string) => void
+}
 
 /**
  * A table for admin to manage users.
  */
-export const AdminTable = memo(({ data }: { data: UserData[] }) => {
+export const AdminTable: FC<AdminTableProps> = memo(({ data, onDelete }) => {
+  const { open, onOpen, onClose } = useDisclosure()
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null)
+
+  const handleDeleteClick = (row: UserData) => {
+    setSelectedUser(row)
+    onOpen()
+  }
+
+  const handleDeleteConfirm = () => {
+    if (selectedUser && onDelete) {
+      onDelete(selectedUser.id)
+    }
+    onClose()
+  }
+
   return (
-    <ManagementTable
-      actions={[
-        {
-          text: "Edit",
-          onClick: (row: UserData) => {
-            console.log("Edit", row)
+    <>
+      <ManagementTable
+        actions={[
+          {
+            text: "Edit",
+            onClick: (row: UserData) => {
+              console.log("Edit", row)
+            },
           },
-        },
-        {
-          text: "Delete",
-          onClick: (row: UserData) => {
-            console.log("Delete", row)
+          {
+            text: "Delete",
+            onClick: handleDeleteClick,
           },
-        },
-      ]}
-      columns={columns}
-      columnsConfig={[
-        { key: "name", label: "Name", required: true },
-        { key: "email", label: "Email" },
-        { key: "role", label: "Role" },
-        { key: "level", label: "Play Level" },
-        { key: "remaining", label: "Remaining" },
-        { key: "university", label: "University" },
-        { key: "joined", label: "Joined" },
-      ]}
-      data={data}
-      emptyStateColumnKey="name"
-      emptyStateText="No users found."
-      filterConfigs={[
-        {
-          key: ["name", "email", "university", "role", "remaining", "joined"],
-          type: "text",
-          placeholder: "Filter...",
-        },
-        {
-          key: "role",
-          type: "multiselect",
-          items: [
-            ...Object.values(MembershipType).map((role) => ({
-              label: role,
-              value: role,
-            })),
-          ],
-          label: "All",
-          onChange: () => {
-            console.log("onChange")
-          },
-        },
-        {
-          key: "university",
-          type: "multiselect",
-          items: [
-            ...Object.values(University).map((university) => ({
-              label: university,
-              value: university,
-            })),
-          ],
-          label: "University",
-          w: "md",
-        },
-        {
-          key: "level",
-          type: "multiselect",
-          items: [
-            ...Object.values(PlayLevel).map((level) => ({
-              label: level,
-              value: level,
-            })),
-          ],
-          label: "Play Level",
-          w: "md",
-        },
-      ]}
-      rowId="id"
-    />
+        ]}
+        columns={columns}
+        columnsConfig={COLUMNS_CONFIG}
+        data={data}
+        emptyStateColumnKey="name"
+        emptyStateText="No users found."
+        filterConfigs={FILTER_CONFIGS}
+        rowId="id"
+      />
+
+      <Dialog
+        cancel="Cancel"
+        header="Are you sure?"
+        onCancel={onClose}
+        onClose={onClose}
+        onSuccess={handleDeleteConfirm}
+        open={open}
+        success={{
+          children: "Delete",
+          colorScheme: "danger",
+        }}
+      >
+        You cannot undo this action.
+      </Dialog>
+    </>
   )
 })
 
