@@ -85,6 +85,14 @@ export default buildConfig({
       : undefined,
   sharp,
   plugins: [
-    // storage-adapter-placeholder
+    uploadthingStorage({
+      collections: {
+        media: true,
+      },
+      options: {
+        token: process.env.UPLOADTHING_TOKEN,
+        acl: "public-read",
+      },
+    }),
   ],
 })
