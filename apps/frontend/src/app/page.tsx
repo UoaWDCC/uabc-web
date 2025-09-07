@@ -2,8 +2,8 @@ import { VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
 import { FaqSection } from "@/components/client/FaqSection"
 import { HeaderSection } from "@/components/client/HeaderSection"
-import { LocationBubbleSection } from "@/components/client/LocationBubbleSection"
 import { AboutUsServerSection } from "@/components/server/AboutUsServerSection"
+import { LocationBubbleServerSection } from "@/components/server/LocationBubbleServerSection"
 import { QuickBookServerSection } from "@/components/server/QuickBookServerSection"
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default async function Home() {
     <VStack as="main">
       <HeaderSection />
       <QuickBookServerSection />
-      <LocationBubbleSection />
+      <LocationBubbleServerSection />
       <AboutUsServerSection />
       <FaqSection />
     </VStack>
