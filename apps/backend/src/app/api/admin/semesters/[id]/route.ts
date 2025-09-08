@@ -25,7 +25,8 @@ class SemesterRouteWrapper {
   static async DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     let cascadeTransactionId: string | number | undefined
-    const deleteRelatedDocs = req.nextUrl.searchParams.get("deleteRelatedDocs") !== "false"
+    const deleteRelatedDocs =
+      (req.nextUrl.searchParams.get("deleteRelatedDocs") || "true") === "true"
 
     try {
       const semesterDataService = new SemesterDataService()
