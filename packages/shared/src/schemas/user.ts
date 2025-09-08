@@ -14,9 +14,17 @@ import { PaginationDataSchema } from "./query"
 
 export const EmailVerificationCodeSchema = z.object({
   id: z.string().nullable().optional(),
-  verificationCode: z.string(),
-  createdAt: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  expiresAt: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  verificationCode: z.string().nullable().optional(),
+  createdAt: z
+    .string()
+    .datetime({ message: "Invalid date format, should be in ISO 8601 format" })
+    .nullable()
+    .optional(),
+  expiresAt: z
+    .string()
+    .datetime({ message: "Invalid date format, should be in ISO 8601 format" })
+    .nullable()
+    .optional(),
 }) satisfies z.ZodType<EmailVerification>
 
 export const UserSchema = z.object({
@@ -24,7 +32,7 @@ export const UserSchema = z.object({
   firstName: z.string(),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
-  emailVerification: EmailVerificationCodeSchema,
+  emailVerification: EmailVerificationCodeSchema.optional(),
   phoneNumber: z.string().nullable().optional(),
   // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
   role: z.enum(["admin", "member", "casual"]),
