@@ -120,12 +120,11 @@ export const User: CollectionConfig = {
       name: "emailVerification",
       interfaceName: "EmailVerification",
       type: "group",
-      required: true,
+      required: false,
       fields: [
         {
           name: "verificationCode",
           type: "text",
-          required: true,
           admin: {
             description: "The most recent verification code for the user",
           },
@@ -133,7 +132,6 @@ export const User: CollectionConfig = {
         {
           name: "expiresAt",
           type: "date",
-          required: true,
           admin: {
             date: {
               pickerAppearance: "dayAndTime",
@@ -144,7 +142,6 @@ export const User: CollectionConfig = {
         {
           name: "createdAt",
           type: "date",
-          required: true,
           admin: {
             date: {
               pickerAppearance: "dayAndTime",
