@@ -31,7 +31,10 @@
     "merge": "turbo run merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
     "postinstall": "pnpm theme",
-    "commitlint": "commitlint --edit"
+    "commitlint": "commitlint --edit",
+    "frontend": "turbo run -F frontend --ui=stream",
+    "backend": "turbo run -F backend --ui=stream",
+    "ui": "turbo run -F ui --ui=stream"
   },
   "dependencies": {
     "cross-env": "7.0.3"
@@ -63,7 +66,7 @@
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.2.4"
   },
-  "packageManager": "pnpm@10.15.0",
+  "packageManager": "pnpm@10.15.1",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@swc/core",

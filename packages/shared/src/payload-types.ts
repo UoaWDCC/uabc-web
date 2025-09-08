@@ -374,7 +374,7 @@ export interface User {
    * The image of the user
    */
   image?: (string | null) | Media;
-  emailVerification: EmailVerification;
+  emailVerification?: EmailVerification;
   updatedAt: string;
   createdAt: string;
 }
@@ -388,15 +388,15 @@ export interface EmailVerification {
   /**
    * The most recent verification code for the user
    */
-  verificationCode: string;
+  verificationCode?: string | null;
   /**
    * The current expiration date of this email verification code
    */
-  expiresAt: string;
+  expiresAt?: string | null;
   /**
    * The date when this email verification code was created
    */
-  createdAt: string;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
