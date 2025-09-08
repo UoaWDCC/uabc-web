@@ -34,6 +34,9 @@ describe("Transaction", () => {
       transactionId,
     )
 
+    expect(await bookingDataService.getBookingById(createdBooking1.id)).toBeDefined()
+    expect(await bookingDataService.getBookingById(createdBooking2.id)).toBeDefined()
+
     await commitCascadeTransaction(transactionId)
 
     await expect(bookingDataService.getBookingById(createdBooking1.id)).rejects.toThrowError(

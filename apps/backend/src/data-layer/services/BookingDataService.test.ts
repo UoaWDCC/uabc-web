@@ -252,7 +252,7 @@ describe("bookingDataService", () => {
         createdGameSession1.id,
         createdGameSession2.id,
       ])
-      expect(deletedBookings).not.toBeNull()
+      expect(deletedBookings.length).toEqual(2)
       expect(deletedBookings).toEqual(expect.arrayContaining([createdBooking1, createdBooking2]))
 
       await expect(bookingDataService.getBookingById(createdBooking1.id)).rejects.toThrowError(

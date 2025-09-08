@@ -98,14 +98,14 @@ export default class SemesterDataService {
    * Deletes a {@link Semester} document
    *
    * @param id The ID of the {@link Semester} to delete
-   * @param transactionID An optional transaction ID for the request, useful for tracing
+   * @param transactionId An optional transaction ID for the request, useful for tracing
    * @returns The deleted {@link Semester} document if successful, otherwise throws a {@link NotFound} error
    */
-  public async deleteSemester(id: string, transactionID?: string | number): Promise<Semester> {
+  public async deleteSemester(id: string, transactionId?: string | number): Promise<Semester> {
     return await payload.delete({
       collection: "semester",
       id,
-      req: { transactionID },
+      req: { transactionID: transactionId },
     })
   }
 }
