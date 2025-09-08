@@ -1,5 +1,4 @@
 import { GoogleUserInfoResponseSchema, MembershipType, TOKEN_EXPIRY_TIME } from "@repo/shared"
-import { VERIFICATION_CODE_MOCK } from "@repo/shared/mocks"
 import type { User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
@@ -97,11 +96,6 @@ export const GET = async (req: NextRequest) => {
         lastName: family_name,
         role: MembershipType.casual,
         email,
-        emailVerification: {
-          verificationCode: VERIFICATION_CODE_MOCK,
-          expiresAt: new Date(1970, 1, 1).toISOString(),
-          createdAt: new Date(1970, 1, 1).toISOString(),
-        },
       })
     } else {
       throw error
