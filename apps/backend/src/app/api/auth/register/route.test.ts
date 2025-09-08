@@ -80,7 +80,9 @@ describe("tests /api/auth/register", () => {
     const json = await res.json()
 
     expect(res.status).toBe(StatusCodes.BAD_REQUEST)
-    expect(json.error).toBe("Latest email verification code has expired")
+    expect(json.error).toBe(
+      "Latest email verification code has expired. Please request a new code. ",
+    )
   })
 
   it("should return a 403 if the user hasn't created a verification code request", async () => {
