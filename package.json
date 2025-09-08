@@ -31,7 +31,10 @@
     "merge": "turbo run merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
     "postinstall": "pnpm theme",
-    "commitlint": "commitlint --edit"
+    "commitlint": "commitlint --edit",
+    "frontend": "turbo run -F frontend --ui=stream",
+    "backend": "turbo run -F backend --ui=stream",
+    "ui": "turbo run -F ui --ui=stream"
   },
   "dependencies": {
     "cross-env": "7.0.3"

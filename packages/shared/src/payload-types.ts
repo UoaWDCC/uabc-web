@@ -290,6 +290,7 @@ export interface Event {
 export interface Media {
   id: string;
   alt: string;
+  _key?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -373,11 +374,28 @@ export interface User {
    * The image of the user
    */
   image?: (string | null) | Media;
-  /**
-   * The email verification token of the user
-   */
-  emailVerificationCode?: string | null;
+  emailVerification: EmailVerification;
   updatedAt: string;
+  createdAt: string;
+}
+/**
+ * The email verification code for the user
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EmailVerification".
+ */
+export interface EmailVerification {
+  /**
+   * The most recent verification code for the user
+   */
+  verificationCode: string;
+  /**
+   * The current expiration date of this email verification code
+   */
+  expiresAt: string;
+  /**
+   * The date when this email verification code was created
+   */
   createdAt: string;
 }
 /**
@@ -720,8 +738,17 @@ export interface UserSelect<T extends boolean = true> {
   university?: T;
   remainingSessions?: T;
   image?: T;
-  emailVerificationCode?: T;
+  emailVerification?: T | EmailVerificationSelect<T>;
   updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EmailVerification_select".
+ */
+export interface EmailVerificationSelect<T extends boolean = true> {
+  verificationCode?: T;
+  expiresAt?: T;
   createdAt?: T;
 }
 /**
@@ -730,6 +757,7 @@ export interface UserSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  _key?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

@@ -29,7 +29,17 @@ export const POST = async (req: NextRequest) => {
 
     const user = await userDataService.getUserByEmail(email)
 
-    if (user?.emailVerificationCode !== emailVerificationCode) {
+    if (
+      !user.emailVerification.expiresAt ||
+      new Date(user.emailVerification.expiresAt) < new Date()
+    ) {
+      return NextResponse.json(
+        { error: "Latest email verification code has expired" },
+        { status: StatusCodes.BAD_REQUEST },
+      )
+    }
+
+    if (user.emailVerification.verificationCode !== emailVerificationCode) {
       return NextResponse.json(
         { error: "Invalid email verification code" },
         { status: StatusCodes.BAD_REQUEST },
