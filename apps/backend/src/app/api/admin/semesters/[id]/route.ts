@@ -38,22 +38,8 @@ class SemesterRouteWrapper {
       if (deleteRelatedDocs) {
         cascadeTransactionId = await createTransactionId()
 
-        const schedules = await gameSessionDataService.getAllGameSessionSchedulesBySemesterId(
-          id,
-          cascadeTransactionId,
-        )
-        const scheduleIds = schedules.map((schedule) => schedule.id)
-        const sessions = await gameSessionDataService.getAllGameSessionsByGameSessionScheduleIds(
-          scheduleIds,
-          cascadeTransactionId,
-        )
-        const sessionIds = sessions.map((sessions) => sessions.id)
-
-        await bookingDataService.deleteBookingsByGameSessionIds(sessionIds, cascadeTransactionId)
-        await gameSessionDataService.deleteAllGameSessionsByGameSessionSchedules(
-          scheduleIds,
-          cascadeTransactionId,
-        )
+        await bookingDataService.deleteBookingsBySemesterId(id, cascadeTransactionId)
+        await gameSessionDataService.deleteAllGameSessionsBySemesterId(id, cascadeTransactionId)
         await gameSessionDataService.deleteAllGameSessionSchedulesBySemesterId(
           id,
           cascadeTransactionId,

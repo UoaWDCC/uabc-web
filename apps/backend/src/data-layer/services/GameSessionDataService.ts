@@ -58,31 +58,6 @@ export default class GameSessionDataService {
   }
 
   /**
-   * Gets {@link GameSession}s by an array of {@link GameSessionSchedule} IDs
-   *
-   * @param scheduleIds the IDs of the game session schedules that have {@link GameSessions}s you want to fetch
-   * @param transactionId an optional transaction ID for the request, useful for tracing
-   * @returns all game sessions filtered from an array of game session schedules
-   */
-  public async getAllGameSessionsByGameSessionScheduleIds(
-    scheduleIds: string[],
-    transactionId?: string | number,
-  ): Promise<GameSession[]> {
-    return (
-      await payload.find({
-        collection: "gameSession",
-        where: {
-          gameSessionSchedule: {
-            in: scheduleIds,
-          },
-        },
-        pagination: false,
-        req: { transactionID: transactionId },
-      })
-    ).docs
-  }
-
-  /**
    * Updates a {@link GameSession} by it's ID
    *
    * @param id the ID of the {@link GameSession} to update
@@ -116,22 +91,22 @@ export default class GameSessionDataService {
   }
 
   /**
-   * Deletes all {@link GameSession}s for an array of {@link GameSessionSchedule}s
+   * Deletes all {@link GameSession}s for a {@link Semester}
    *
-   * @param scheduleIds the IDs of the game session schedules that have {@link GameSessions}s you want to delete
+   * @param semesterId the ID of the semester with {@link GameSession}s to be deleted
    * @param transactionId an optional transaction ID for the request, useful for tracing
    * @returns the deleted {@link GameSessions} documents if it exists, otherwise returns an empty array
    */
-  public async deleteAllGameSessionsByGameSessionSchedules(
-    scheduleIds: string[],
+  public async deleteAllGameSessionsBySemesterId(
+    semesterId: string,
     transactionId?: string | number,
   ): Promise<GameSession[]> {
     return (
       await payload.delete({
         collection: "gameSession",
         where: {
-          gameSessionSchedule: {
-            in: scheduleIds,
+          semester: {
+            equals: semesterId,
           },
         },
         req: { transactionID: transactionId },
@@ -290,31 +265,6 @@ export default class GameSessionDataService {
       collection: "gameSessionSchedule",
       id,
     })
-  }
-
-  /**
-   * Get's {@link GameSessionSchedule}s by a semesterId
-   *
-   * @param semesterId the ID of the semester that has {@link GameSessionSchedule}s you want to fetch
-   * @param transactionId an optional transaction ID for the request, useful for tracing
-   * @returns an array of game session schedules for a specific semester
-   */
-  public async getAllGameSessionSchedulesBySemesterId(
-    semesterId: string,
-    transactionId?: string | number,
-  ): Promise<GameSessionSchedule[]> {
-    return (
-      await payload.find({
-        collection: "gameSessionSchedule",
-        where: {
-          semester: {
-            equals: semesterId,
-          },
-        },
-        pagination: false,
-        req: { transactionID: transactionId },
-      })
-    ).docs
   }
 
   /**
