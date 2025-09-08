@@ -1,4 +1,3 @@
-// write test cases for transaction.ts
 import { UpdateSemesterRequestSchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
