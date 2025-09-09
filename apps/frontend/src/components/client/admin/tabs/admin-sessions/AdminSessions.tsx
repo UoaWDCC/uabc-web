@@ -1,7 +1,7 @@
 "use client"
 
 import type { AdminGameSession, GameSessionWithCounts } from "@repo/shared"
-import { GameSessionStatus, Weekday } from "@repo/shared"
+import { GameSessionStatus, type PlayLevel, Weekday } from "@repo/shared"
 import type { Booking, User } from "@repo/shared/payload-types"
 import {
   AdminGameSessionCard,
@@ -31,7 +31,7 @@ const transformBookingToSessionData = (booking: Booking): SessionData => {
     name: fullName,
     email: user.email,
     role: user.role,
-    level: booking.playerLevel,
+    level: booking.playerLevel as PlayLevel,
     sessions: user.remainingSessions?.toString() || "0",
   }
 }
@@ -119,7 +119,6 @@ export const AdminSessions = () => {
 
   // Transform bookings to session data for the table
   const selectedSessionAttendees = useMemo(() => {
-    console.log("bookingsData", bookingsData)
     if (!bookingsData?.data) {
       return []
     }

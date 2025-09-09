@@ -11,7 +11,7 @@ export interface AdminSessionsCalendarProps {
   /**
    * Currently selected date
    */
-  selectedDate: Date
+  selectedDate?: Date
   /**
    * Callback when a date is selected
    */
