@@ -1,7 +1,7 @@
 "use client"
 
 import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
-import { Container, TabPanel } from "@yamada-ui/react"
+import { Container, TabPanel, VStack } from "@yamada-ui/react"
 import { memo } from "react"
 import { AdminMembers, AdminSessions } from "./tabs"
 
@@ -15,10 +15,14 @@ export const AdminSection = memo(() => {
     >
       <AdminTabBar lazy lazyBehavior="unmount">
         <TabPanel px="0">
-          <AdminMembers />
+          <VStack>
+            <AdminMembers />
+          </VStack>
         </TabPanel>
         <TabPanel px="0">
-          <AdminSessions />
+          <VStack>
+            <AdminSessions />
+          </VStack>
         </TabPanel>
         <TabPanel px="0">
           <Container centerContent layerStyle="container">

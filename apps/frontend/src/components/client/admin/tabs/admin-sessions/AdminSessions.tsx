@@ -132,12 +132,13 @@ export const AdminSessions = () => {
 
   const handleExport = () => {
     if (selectedSession) {
+      // TODO: Implement export functionality
       console.log("Exporting member list for session:", selectedSession.id)
     }
   }
 
   return (
-    <Grid gap="lg" h="full" minH="600px" templateColumns={{ base: "1fr", lg: "400px 1fr" }}>
+    <Grid gap="lg" h="full" minH="600px" templateColumns={{ base: "1fr", lg: "25rem 1fr" }}>
       {/* Left Panel - Calendar and Session Details */}
       <GridItem>
         <VStack gap="lg" h="full">
