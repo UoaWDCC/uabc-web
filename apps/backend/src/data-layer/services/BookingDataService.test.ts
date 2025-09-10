@@ -237,7 +237,7 @@ describe("bookingDataService", () => {
   })
 
   describe("deleteBookingsBySemesterId", () => {
-    it.skip("should delete bookings by a semester ID successfully", async () => {
+    it("should delete bookings by a semester ID successfully", async () => {
       const createdSemester = await semesterDataService.createSemester(semesterCreateMock)
       const createdGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
         ...gameSessionScheduleCreateMock,
@@ -273,7 +273,7 @@ describe("bookingDataService", () => {
       )
     })
 
-    it.skip("should return an empty array if no bookings exist when deleting by a semester ID", async () => {
+    it("should return an empty array if no bookings exist when deleting by a semester ID", async () => {
       expect(
         await bookingDataService.deleteBookingsBySemesterId("Not a valid semester ID"),
       ).toStrictEqual([])

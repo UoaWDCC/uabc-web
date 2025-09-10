@@ -73,24 +73,6 @@ export default class GameSessionDataService {
   }
 
   /**
-   * Deletes a {@link GameSession} given its ID
-   *
-   * @param id the ID of the {@link GameSession} to delete
-   * @param transactionId An optional transaction ID for the request, useful for tracing
-   * @returns the deleted {@link GameSession} document if it exists, otherwise throws a {@link NotFound} error
-   */
-  public async deleteGameSession(
-    id: string,
-    transactionId?: string | number,
-  ): Promise<GameSession> {
-    return await payload.delete({
-      collection: "gameSession",
-      id,
-      req: { transactionID: transactionId },
-    })
-  }
-
-  /**
    * Deletes all {@link GameSession}s for a {@link Semester}
    *
    * @param semesterId the ID of the semester with {@link GameSession}s to be deleted
@@ -282,24 +264,6 @@ export default class GameSessionDataService {
       collection: "gameSessionSchedule",
       id,
       data,
-    })
-  }
-
-  /**
-   * Deletes a {@link GameSessionSchedule} given its ID
-   *
-   * @param id the ID of the {@link GameSessionSchedule} to delete
-   * @param transactionId An optional transaction ID for the request, useful for tracing
-   * @returns the deleted {@link GameSessionSchedule} document if it exists, otherwise throws a {@link NotFound} error
-   */
-  public async deleteGameSessionSchedule(
-    id: string,
-    transactionId?: string | number,
-  ): Promise<GameSessionSchedule> {
-    return await payload.delete({
-      collection: "gameSessionSchedule",
-      id,
-      req: { transactionID: transactionId },
     })
   }
 
