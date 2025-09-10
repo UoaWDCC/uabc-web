@@ -73,6 +73,22 @@ export default class GameSessionDataService {
   }
 
   /**
+<<<<<<< HEAD
+=======
+   * Deletes a {@link GameSession} given its ID
+   *
+   * @param id the ID of the {@link GameSession} to delete
+   * @returns the deleted {@link GameSession} document if it exists, otherwise throws a {@link NotFound} error
+   */
+  public async deleteGameSession(id: string): Promise<GameSession> {
+    return await payload.delete({
+      collection: "gameSession",
+      id,
+    })
+  }
+
+  /**
+>>>>>>> 5ab19e71 (fix: add back deleted methods)
    * Deletes all {@link GameSession}s for a {@link Semester}
    *
    * @param semesterId the ID of the semester with {@link GameSession}s to be deleted
@@ -268,6 +284,22 @@ export default class GameSessionDataService {
   }
 
   /**
+<<<<<<< HEAD
+=======
+   * Deletes a {@link GameSessionSchedule} given its ID
+   *
+   * @param id the ID of the {@link GameSessionSchedule} to delete
+   * @returns the deleted {@link GameSessionSchedule} document if it exists, otherwise throws a {@link NotFound} error
+   */
+  public async deleteGameSessionSchedule(id: string): Promise<GameSessionSchedule> {
+    return await payload.delete({
+      collection: "gameSessionSchedule",
+      id,
+    })
+  }
+
+  /**
+>>>>>>> 5ab19e71 (fix: add back deleted methods)
    * Deletes all GameSessionSchedules for a {@link Semester}
    *
    * @param semesterId the ID of the semester with game session schedules to be deleted
