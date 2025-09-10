@@ -3,6 +3,9 @@ import type {
   AdditionalInfoSchema,
   CreateUserRequestSchema,
   GetAllUsersResponseSchema,
+  ImportErrorSchema,
+  ImportResultSchema,
+  ImportUsersResponseSchema,
   ProfileDetailsSchema,
   UpdateUserRequestSchema,
 } from "../schemas"
@@ -12,3 +15,6 @@ export type UpdateUserRequest = z.infer<typeof UpdateUserRequestSchema>
 export type GetAllUsersResponse = z.infer<typeof GetAllUsersResponseSchema>
 export type ProfileDetailsForm = z.infer<typeof ProfileDetailsSchema>
 export type AdditionalInfoForm = z.infer<typeof AdditionalInfoSchema>
+export type ImportError = z.infer<typeof ImportErrorSchema>
+export type ImportResult = z.infer<typeof ImportResultSchema>
+export type ImportUsersResponse = z.infer<typeof ImportUsersResponseSchema>
