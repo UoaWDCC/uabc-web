@@ -180,7 +180,7 @@ export default class BookingDataService {
       await payload.delete({
         collection: "booking",
         where: {
-          "gameSession.semester": {
+          "gameSession.gameSessionSchedule.semester": {
             equals: semesterId,
           },
         },
