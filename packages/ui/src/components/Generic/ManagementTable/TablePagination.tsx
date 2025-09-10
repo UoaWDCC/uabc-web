@@ -1,10 +1,18 @@
 import { Select } from "@repo/ui/components/Primitive"
 import { Grid, GridItem, Option, Pagination } from "@yamada-ui/react"
-import type { FC } from "react"
 import { memo, useCallback } from "react"
 import { useManagementTable } from "./MemberManagementContext"
 
-export const TablePagination: FC = memo(() => {
+interface TablePaginationProps {
+  /**
+   * If `true`, will show the first and last page buttons.
+   *
+   * @default true
+   */
+  withEdges?: boolean
+}
+
+export const TablePagination = memo(({ withEdges = true }: TablePaginationProps) => {
   const { currentPage, setCurrentPage, perPage, setPerPage, totalPages } = useManagementTable()
 
   const handlePageChange = useCallback(
@@ -31,7 +39,7 @@ export const TablePagination: FC = memo(() => {
           onChange={handlePageChange}
           page={currentPage}
           total={totalPages}
-          withEdges
+          withEdges={withEdges}
         />
       </GridItem>
       <GridItem display="grid" placeSelf="end">

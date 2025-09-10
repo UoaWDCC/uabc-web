@@ -78,6 +78,7 @@ export const AdminMembersSection = () => {
             },
           })
         }}
+        paginationWithEdges={false}
       />
       <Button colorScheme="danger" onClick={onOpenConfirm} placeSelf="start">
         Reset Memberships

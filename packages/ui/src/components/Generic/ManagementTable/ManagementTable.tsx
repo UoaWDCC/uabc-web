@@ -57,6 +57,12 @@ export type ManagementTableProps<TData> = {
    * Optional props to pass to the table.
    */
   tableProps?: TableOptions
+  /**
+   * If `true`, will show the first and last page buttons in pagination.
+   *
+   * @default true
+   */
+  paginationWithEdges?: boolean
 }
 
 function createActionsColumn<TData>(
@@ -122,6 +128,7 @@ export function ManagementTable<TData>({
   emptyStateColumnKey,
   showFilterActions,
   tableProps,
+  paginationWithEdges,
 }: ManagementTableProps<TData>) {
   const allColumnKeys = useMemo(() => {
     let keys = columnsConfig.map((c) => c.key as keyof TData & string)
@@ -156,6 +163,7 @@ export function ManagementTable<TData>({
         columns={columnsWithActions}
         emptyStateColumnKey={emptyStateColumnKey}
         emptyStateText={emptyStateText}
+        paginationWithEdges={paginationWithEdges}
         rowId={rowId}
         tableProps={tableProps}
       />
