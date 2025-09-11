@@ -58,6 +58,14 @@ export type ManagementTableProps<TData> = {
    */
   tableProps?: TableOptions
   /**
+   * Optional pagination metadata to inform the pagination component.
+   */
+  paginationMetadata?: {
+    totalPages: number
+    hasNextPage: boolean
+    hasPrevPage: boolean
+  }
+  /**
    * If `true`, will show the first and last page buttons in pagination.
    *
    * @default true
@@ -128,6 +136,7 @@ export function ManagementTable<TData>({
   emptyStateColumnKey,
   showFilterActions,
   tableProps,
+  paginationMetadata,
   paginationWithEdges,
 }: ManagementTableProps<TData>) {
   const allColumnKeys = useMemo(() => {
@@ -163,6 +172,7 @@ export function ManagementTable<TData>({
         columns={columnsWithActions}
         emptyStateColumnKey={emptyStateColumnKey}
         emptyStateText={emptyStateText}
+        paginationMetadata={paginationMetadata}
         paginationWithEdges={paginationWithEdges}
         rowId={rowId}
         tableProps={tableProps}

@@ -25,6 +25,14 @@ type PagingTableProps<TData> = {
    */
   tableProps?: TableOptions
   /**
+   * Optional pagination metadata to inform the pagination component.
+   */
+  paginationMetadata?: {
+    totalPages: number
+    hasNextPage: boolean
+    hasPrevPage: boolean
+  }
+  /**
    * If `true`, will show the first and last page buttons in pagination.
    *
    * @default true
@@ -38,6 +46,7 @@ export function PagingTable<TData>({
   emptyStateText,
   emptyStateColumnKey,
   tableProps,
+  paginationMetadata,
   paginationWithEdges = true,
 }: PagingTableProps<TData>) {
   return (
@@ -51,7 +60,7 @@ export function PagingTable<TData>({
           {...tableProps}
         />
       </TableContainer>
-      <TablePagination withEdges={paginationWithEdges} />
+      <TablePagination paginationMetadata={paginationMetadata} withEdges={paginationWithEdges} />
     </VStack>
   )
 }
