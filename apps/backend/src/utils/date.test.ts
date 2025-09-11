@@ -117,7 +117,7 @@ describe("getGameSessionOpenDay", () => {
     const startTime = new Date(Date.UTC(2024, 0, 15, 14, 0, 0)) // Monday
 
     const result = getGameSessionOpenDay(semester, startTime)
-    const expected = new Date(Date.UTC(2024, 0, 12, 9, 0, 0))
+    const expected = new Date(Date.UTC(2024, 0, 5, 9, 0, 0))
     expect(result).toEqual(expected)
   })
 
@@ -130,11 +130,11 @@ describe("getGameSessionOpenDay", () => {
     const startTime = new Date(Date.UTC(2024, 0, 21, 15, 0, 0)) // Sunday
 
     const result = getGameSessionOpenDay(semester, startTime)
-    const expected = new Date(Date.UTC(2024, 0, 17, 10, 0, 0))
+    const expected = new Date(Date.UTC(2024, 0, 10, 10, 0, 0))
     expect(result).toEqual(expected)
   })
 
-  it("should calculate the correct open date when session and open day are the same", () => {
+  it("should calculate the open date one week before when session and open day are the same", () => {
     const semester: Semester = {
       ...semesterMock,
       bookingOpenDay: Weekday.tuesday,
@@ -143,7 +143,7 @@ describe("getGameSessionOpenDay", () => {
     const startTime = new Date(Date.UTC(2024, 0, 16, 13, 0, 0)) // Tuesday
 
     const result = getGameSessionOpenDay(semester, startTime)
-    const expected = new Date(Date.UTC(2024, 0, 16, 8, 0, 0))
+    const expected = new Date(Date.UTC(2024, 0, 9, 8, 0, 0))
     expect(result).toEqual(expected)
   })
 
@@ -156,7 +156,7 @@ describe("getGameSessionOpenDay", () => {
     const startTime = new Date(Date.UTC(2024, 0, 20, 16, 0, 0)) // Saturday
 
     const result = getGameSessionOpenDay(semester, startTime)
-    const expected = new Date(Date.UTC(2024, 0, 18, 14, 30, 45)) // Thursday before
+    const expected = new Date(Date.UTC(2024, 0, 11, 14, 30, 45)) // Thursday
     expect(result).toEqual(expected)
   })
 
@@ -169,7 +169,7 @@ describe("getGameSessionOpenDay", () => {
     const startTime = new Date(Date.UTC(2024, 0, 18, 18, 0, 0)) // Thursday
 
     const result = getGameSessionOpenDay(semester, startTime)
-    const expected = new Date(Date.UTC(2024, 0, 15, 12, 0, 0)) // Monday before
+    const expected = new Date(Date.UTC(2024, 0, 8, 12, 0, 0)) // Monday
     expect(result).toEqual(expected)
   })
 })
