@@ -4,6 +4,7 @@ import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
 import { Container, TabPanel, VStack } from "@yamada-ui/react"
 import { memo } from "react"
 import { AdminMembersSection } from "./AdminMembersSection"
+import { AdminSemesterSection } from "./AdminSemesterSection"
 
 export const AdminSection = memo(() => {
   return (
@@ -26,7 +27,7 @@ export const AdminSection = memo(() => {
         </TabPanel>
         <TabPanel px="0">
           <Container centerContent layerStyle="container">
-            <UnderConstructionCard title="View Semesters is Under Construction 🔧" />
+            <AdminSemesterSection />
           </Container>
         </TabPanel>
       </AdminTabBar>
