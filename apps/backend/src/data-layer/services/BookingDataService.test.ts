@@ -246,6 +246,7 @@ describe("bookingDataService", () => {
       const createdGameSession1 = await gameSessionDataService.createGameSession({
         ...gameSessionCreateMock,
         gameSessionSchedule: createdGameSessionSchedule,
+        semester: createdSemester.id,
       })
       const createdGameSession2 = await gameSessionDataService.createGameSession({
         ...gameSessionCreateMock,
