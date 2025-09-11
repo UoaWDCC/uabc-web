@@ -8,6 +8,7 @@ export const AdminSemesterSection = () => {
   const [isCreating, setIsCreating] = useState(false)
 
   return (
+    // Just a simple section with a button to start creating a new semester
     <VStack alignItems="flex-start" as="section" w="full">
       {isCreating ? (
         <AdminSemesterFlow onCancel={() => setIsCreating(false)} />
