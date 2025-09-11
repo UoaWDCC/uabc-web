@@ -7,6 +7,7 @@ import {
   FolderPenIcon,
   IdCardIcon,
   MailIcon,
+  TicketsIcon,
   UniversityIcon,
   UserIcon,
   VenusAndMarsIcon,
@@ -22,6 +23,8 @@ import {
   DialogOverlay,
   type DialogProps,
   FormControl,
+  Grid,
+  GridItem,
   VStack,
 } from "@yamada-ui/react"
 import type { FC } from "react"
@@ -174,166 +177,182 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
       </DialogHeader>
       <DialogBody overflow="visible" w="full">
         <Center w="full">
-          <VStack gap="6" maxW="md" w="full">
-            <FormControl errorMessage={errors.firstName?.message} invalid={!!errors.firstName}>
-              <TextInput
-                data-testid="first-name"
-                defaultValue={defaultValues?.firstName}
-                placeholder="First name"
-                size="lg"
-                startElement={<FolderPenIcon />}
-                type={InputType.Text}
-                {...register("firstName")}
-              />
-            </FormControl>
-            <FormControl errorMessage={errors.lastName?.message} invalid={!!errors.lastName}>
-              <TextInput
-                data-testid="last-name"
-                defaultValue={defaultValues?.lastName}
-                placeholder="Lastname"
-                size="lg"
-                startElement={<FolderPenIcon />}
-                type={InputType.Text}
-                {...register("lastName")}
-              />
-            </FormControl>
-            <FormControl errorMessage={errors.email?.message} invalid={!!errors.email}>
-              <TextInput
-                autoComplete={AutoCompleteType.Email}
-                data-testid="email"
-                defaultValue={defaultValues?.email}
-                placeholder="Email Address"
-                startElement={<MailIcon />}
-                type={InputType.Email}
-                {...register("email")}
-              />
-            </FormControl>
-            <FormControl errorMessage={errors.phoneNumber?.message} invalid={!!errors.phoneNumber}>
-              <TextInput
-                data-testid="phone-number"
-                defaultValue={defaultValues?.phoneNumber}
-                placeholder="12 345 6789"
-                size="lg"
-                startAddon={"+64"}
-                type={InputType.Tel}
-                {...register("phoneNumber")}
-              />
-            </FormControl>
-            <FormControl errorMessage={errors.university?.message} invalid={!!errors.university}>
-              <Controller
-                control={control}
-                defaultValue={defaultValues?.university}
-                name="university"
-                render={({ field }) => (
-                  <Select
-                    data-testid="university"
-                    icon={<UniversityIcon />}
-                    items={universityOptions}
-                    label="University"
-                    {...field}
+          <VStack gap="6" w="full">
+            <Grid gap="lg" templateColumns={{ base: "1fr", lg: "1fr 1fr" }} w="full">
+              <GridItem as={VStack} gap="md">
+                <FormControl errorMessage={errors.firstName?.message} invalid={!!errors.firstName}>
+                  <TextInput
+                    data-testid="first-name"
+                    defaultValue={defaultValues?.firstName}
+                    placeholder="First name"
+                    size="lg"
+                    startElement={<FolderPenIcon />}
+                    type={InputType.Text}
+                    {...register("firstName")}
                   />
-                )}
-              />
-            </FormControl>
-            <FormControl errorMessage={errors.studentId?.message} invalid={!!errors.studentId}>
-              <TextInput
-                data-testid="student-id"
-                defaultValue={defaultValues?.studentId}
-                disabled={watch("university") !== University.uoa}
-                placeholder="Student ID"
-                size="lg"
-                startElement={<UserIcon />}
-                type={InputType.Number}
-                {...register("studentId")}
-              />
-            </FormControl>
-            <FormControl errorMessage={errors.studentUpi?.message} invalid={!!errors.studentUpi}>
-              <TextInput
-                data-testid="student-upi"
-                defaultValue={defaultValues?.studentUpi}
-                disabled={watch("university") !== University.uoa}
-                placeholder="UPI"
-                size="lg"
-                startElement={<UserIcon />}
-                type={InputType.Text}
-                {...register("studentUpi")}
-              />
-            </FormControl>
-            <FormControl errorMessage={errors.gender?.message} invalid={!!errors.gender}>
-              <Controller
-                control={control}
-                defaultValue={defaultValues?.gender}
-                name="gender"
-                render={({ field }) => (
-                  <Select
-                    data-testid="gender"
-                    icon={<VenusAndMarsIcon />}
-                    items={genderOptions}
-                    label="Gender"
-                    {...field}
+                </FormControl>
+                <FormControl errorMessage={errors.email?.message} invalid={!!errors.email}>
+                  <TextInput
+                    autoComplete={AutoCompleteType.Email}
+                    data-testid="email"
+                    defaultValue={defaultValues?.email}
+                    placeholder="Email Address"
+                    startElement={<MailIcon />}
+                    type={InputType.Email}
+                    {...register("email")}
                   />
-                )}
-              />
-            </FormControl>
-            <FormControl errorMessage={errors.playLevel?.message} invalid={!!errors.playLevel}>
-              <Controller
-                control={control}
-                defaultValue={defaultValues?.playLevel}
-                name="playLevel"
-                render={({ field }) => (
-                  <Select
-                    data-testid="skill-level"
-                    icon={<IdCardIcon />}
-                    items={playLevelOptions}
-                    label="Skill level"
-                    {...field}
+                </FormControl>
+                <FormControl
+                  errorMessage={errors.university?.message}
+                  invalid={!!errors.university}
+                >
+                  <Controller
+                    control={control}
+                    defaultValue={defaultValues?.university}
+                    name="university"
+                    render={({ field }) => (
+                      <Select
+                        data-testid="university"
+                        icon={<UniversityIcon />}
+                        items={universityOptions}
+                        label="University"
+                        {...field}
+                      />
+                    )}
                   />
-                )}
-              />
-            </FormControl>
-            <FormControl
-              errorMessage={errors.dietaryRequirements?.message}
-              invalid={!!errors.dietaryRequirements}
-            >
-              <TextInput
-                data-testid="dietary-requirements"
-                defaultValue={defaultValues?.dietaryRequirements}
-                placeholder="Dietary requirements"
-                size="lg"
-                startElement={<BeanOffIcon />}
-                type={InputType.Text}
-                {...register("dietaryRequirements")}
-              />
-            </FormControl>
-            <FormControl errorMessage={errors.role?.message} invalid={!!errors.role}>
-              <Controller
-                control={control}
-                defaultValue={defaultValues?.role}
-                name="role"
-                render={({ field }) => (
-                  <Select
-                    data-testid="role"
-                    icon={<IdCardIcon />}
-                    items={roleOptions}
-                    label="Role"
-                    {...field}
+                </FormControl>
+                <FormControl
+                  errorMessage={errors.studentUpi?.message}
+                  invalid={!!errors.studentUpi}
+                >
+                  <TextInput
+                    data-testid="student-upi"
+                    defaultValue={defaultValues?.studentUpi}
+                    disabled={watch("university") !== University.uoa}
+                    placeholder="UPI"
+                    size="lg"
+                    startElement={<UserIcon />}
+                    type={InputType.Text}
+                    {...register("studentUpi")}
                   />
-                )}
-              />
-            </FormControl>
-            <FormControl
-              errorMessage={errors.remainingSessions?.message}
-              invalid={!!errors.remainingSessions}
-            >
-              <TextInput
-                data-testid="remaining-sessions"
-                defaultValue={defaultValues?.remainingSessions}
-                placeholder="Remaining Sessions"
-                size="lg"
-                type={InputType.Number}
-                {...register("remainingSessions")}
-              />
-            </FormControl>
+                </FormControl>
+                <FormControl errorMessage={errors.playLevel?.message} invalid={!!errors.playLevel}>
+                  <Controller
+                    control={control}
+                    defaultValue={defaultValues?.playLevel}
+                    name="playLevel"
+                    render={({ field }) => (
+                      <Select
+                        data-testid="skill-level"
+                        icon={<IdCardIcon />}
+                        items={playLevelOptions}
+                        label="Skill level"
+                        {...field}
+                      />
+                    )}
+                  />
+                </FormControl>
+                <FormControl errorMessage={errors.role?.message} invalid={!!errors.role}>
+                  <Controller
+                    control={control}
+                    defaultValue={defaultValues?.role}
+                    name="role"
+                    render={({ field }) => (
+                      <Select
+                        data-testid="role"
+                        icon={<IdCardIcon />}
+                        items={roleOptions}
+                        label="Role"
+                        {...field}
+                      />
+                    )}
+                  />
+                </FormControl>
+              </GridItem>
+              <GridItem as={VStack} gap="md">
+                <FormControl errorMessage={errors.lastName?.message} invalid={!!errors.lastName}>
+                  <TextInput
+                    data-testid="last-name"
+                    defaultValue={defaultValues?.lastName}
+                    placeholder="Last name"
+                    size="lg"
+                    startElement={<FolderPenIcon />}
+                    type={InputType.Text}
+                    {...register("lastName")}
+                  />
+                </FormControl>
+                <FormControl
+                  errorMessage={errors.phoneNumber?.message}
+                  invalid={!!errors.phoneNumber}
+                >
+                  <TextInput
+                    data-testid="phone-number"
+                    defaultValue={defaultValues?.phoneNumber}
+                    placeholder="12 345 6789"
+                    size="lg"
+                    startAddon={"+64"}
+                    type={InputType.Tel}
+                    {...register("phoneNumber")}
+                  />
+                </FormControl>
+                <FormControl errorMessage={errors.studentId?.message} invalid={!!errors.studentId}>
+                  <TextInput
+                    data-testid="student-id"
+                    defaultValue={defaultValues?.studentId}
+                    disabled={watch("university") !== University.uoa}
+                    placeholder="Student ID"
+                    size="lg"
+                    startElement={<UserIcon />}
+                    type={InputType.Number}
+                    {...register("studentId")}
+                  />
+                </FormControl>
+                <FormControl errorMessage={errors.gender?.message} invalid={!!errors.gender}>
+                  <Controller
+                    control={control}
+                    defaultValue={defaultValues?.gender}
+                    name="gender"
+                    render={({ field }) => (
+                      <Select
+                        data-testid="gender"
+                        icon={<VenusAndMarsIcon />}
+                        items={genderOptions}
+                        label="Gender"
+                        {...field}
+                      />
+                    )}
+                  />
+                </FormControl>
+                <FormControl
+                  errorMessage={errors.dietaryRequirements?.message}
+                  invalid={!!errors.dietaryRequirements}
+                >
+                  <TextInput
+                    data-testid="dietary-requirements"
+                    defaultValue={defaultValues?.dietaryRequirements}
+                    placeholder="Dietary requirements"
+                    size="lg"
+                    startElement={<BeanOffIcon />}
+                    type={InputType.Text}
+                    {...register("dietaryRequirements")}
+                  />
+                </FormControl>
+                <FormControl
+                  errorMessage={errors.remainingSessions?.message}
+                  invalid={!!errors.remainingSessions}
+                >
+                  <TextInput
+                    data-testid="remaining-sessions"
+                    defaultValue={defaultValues?.remainingSessions}
+                    placeholder="Remaining Sessions"
+                    size="lg"
+                    startElement={<TicketsIcon />}
+                    type={InputType.Number}
+                    {...register("remainingSessions")}
+                  />
+                </FormControl>
+              </GridItem>
+            </Grid>
           </VStack>
         </Center>
       </DialogBody>

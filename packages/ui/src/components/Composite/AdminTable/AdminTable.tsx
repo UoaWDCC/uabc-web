@@ -3,6 +3,7 @@
 import { ManagementTable } from "@repo/ui/components/Generic"
 import { Dialog, useDisclosure } from "@yamada-ui/react"
 import { type FC, memo, useState } from "react"
+import { CreateMemberPopUp } from "../../Generic/CreateMemberPopUp/CreateMemberPopUp"
 import { columns, type UserData } from "./Columns"
 import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
 
@@ -11,28 +12,41 @@ import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
  */
 export interface AdminTableProps {
   data: UserData[]
+  onEdit?: (id: string) => void
   onDelete?: (id: string) => void
 }
 
 /**
  * A table for admin to manage users.
  */
-export const AdminTable: FC<AdminTableProps> = memo(({ data, onDelete }) => {
-  const { open, onOpen, onClose } = useDisclosure()
-  const [selectedUser, setSelectedUser] = useState<UserData | null>(null)
+export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete }) => {
+  const { open: openEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure()
+  const { open: openDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure()
 
-  const handleEditClick = (row: UserData) => {}
+  const [selectedUserData, setSelectedUserData] = useState<UserData | null>(null)
+
+  const handleEditClick = (row: UserData) => {
+    setSelectedUserData(row)
+    onOpenEdit()
+  }
+
+  const handleEditConfirm = () => {
+    if (selectedUserData && onEdit) {
+      onEdit(selectedUserData.id)
+    }
+    onCloseEdit()
+  }
 
   const handleDeleteClick = (row: UserData) => {
-    setSelectedUser(row)
-    onOpen()
+    setSelectedUserData(row)
+    onOpenDelete()
   }
 
   const handleDeleteConfirm = () => {
-    if (selectedUser && onDelete) {
-      onDelete(selectedUser.id)
+    if (selectedUserData && onDelete) {
+      onDelete(selectedUserData.id)
     }
-    onClose()
+    onCloseDelete()
   }
 
   return (
@@ -57,13 +71,25 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onDelete }) => {
         rowId="id"
       />
 
+      <CreateMemberPopUp
+        defaultValues={{
+          firstName: selectedUserData?.name,
+          lastName: "Pre-filled last name",
+          email: selectedUserData?.email,
+          phoneNumber: "123456789",
+        }}
+        onClose={onCloseEdit}
+        onConfirm={handleEditConfirm}
+        open={openEdit}
+      />
+
       <Dialog
         cancel="Cancel"
         header="Are you sure?"
-        onCancel={onClose}
-        onClose={onClose}
+        onCancel={onCloseDelete}
+        onClose={onCloseDelete}
         onSuccess={handleDeleteConfirm}
-        open={open}
+        open={openDelete}
         success={{
           children: "Delete",
           colorScheme: "danger",
