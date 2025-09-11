@@ -21,6 +21,8 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onDelete }) => {
   const { open, onOpen, onClose } = useDisclosure()
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null)
 
+  const handleEditClick = (row: UserData) => {}
+
   const handleDeleteClick = (row: UserData) => {
     setSelectedUser(row)
     onOpen()
@@ -39,9 +41,7 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onDelete }) => {
         actions={[
           {
             text: "Edit",
-            onClick: (row: UserData) => {
-              console.log("Edit", row)
-            },
+            onClick: handleEditClick,
           },
           {
             text: "Delete",
