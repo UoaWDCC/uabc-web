@@ -13,7 +13,7 @@ interface FilterActionsProps<TData> {
  * Action buttons for the filter bar, including add and export actions.
  */
 export const FilterActions = <TData,>({ columns }: FilterActionsProps<TData>) => {
-  const { selectedRows, filteredData } = useManagementTable()
+  const { selectedRows, filteredData, totalItems } = useManagementTable()
 
   const handleAddMember = () => {
     // TODO: Implement add member functionality
@@ -30,7 +30,7 @@ export const FilterActions = <TData,>({ columns }: FilterActionsProps<TData>) =>
     if (selectedRows.size > 0) {
       return `Export ${selectedRows.size} selected`
     }
-    return `Export ${filteredData.length} users`
+    return `Export ${totalItems} users`
   }
 
   return (
