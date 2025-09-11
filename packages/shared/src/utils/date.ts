@@ -66,7 +66,7 @@ export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date
 
   const dayIndex = startTime.getUTCDay()
   const day = Object.values(Weekday)[dayIndex] as Weekday
-  const daysToSubtract = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day)
+  const daysToSubtract = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day) + 7
 
   openDate.setUTCDate(startTime.getUTCDate() - daysToSubtract)
   openDate.setUTCHours(
@@ -77,25 +77,6 @@ export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date
   )
 
   return openDate
-}
-
-/**
- * Calculates the open date for a game session to be exactly one week (7 days) earlier
- * than the session start time, preserving the semester's booking open time.
- *
- * @param semester The {@link Semester} object containing booking open time
- * @param startTime The start time of the game session
- * @returns The calculated booking open date exactly one week earlier
- */
-export function getGameSessionOpenDateOneWeekEarlier(semester: Semester, startTime: Date): Date {
-  // First, get the normal booking open date using existing logic
-  const normalOpenDate = getGameSessionOpenDay(semester, startTime)
-
-  // Then subtract exactly 7 days from that date
-  const oneWeekEarlierDate = new Date(normalOpenDate)
-  oneWeekEarlierDate.setUTCDate(normalOpenDate.getUTCDate() - 7)
-
-  return oneWeekEarlierDate
 }
 
 /**

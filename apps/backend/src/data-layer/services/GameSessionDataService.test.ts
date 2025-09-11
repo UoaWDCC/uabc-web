@@ -54,11 +54,9 @@ describe("GameSessionDataService", () => {
         const openDate = new Date(session.openTime)
         const semesterBookingOpenTime = new Date(newSemester.bookingOpenTime)
 
-        const normalOpenDate = getGameSessionOpenDay(newSemester, sessionDate)
+        const expectedOpenDate = getGameSessionOpenDay(newSemester, sessionDate)
 
-        // open date should be exactly 7 days before the booking open date (of same week)
-        const weekInMs = 7 * 24 * 60 * 60 * 1000
-        const expectedOpenDate = new Date(normalOpenDate.getTime() - weekInMs)
+        // open date should match the result of getGameSessionOpenDay
         expect(openDate.getUTCFullYear()).toBe(expectedOpenDate.getUTCFullYear())
         expect(openDate.getUTCMonth()).toBe(expectedOpenDate.getUTCMonth())
         expect(openDate.getUTCDate()).toBe(expectedOpenDate.getUTCDate())
