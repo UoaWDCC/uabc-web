@@ -1,4 +1,4 @@
-import { TimeframeFilter, Weekday } from "@repo/shared"
+import { getGameSessionOpenDay, TimeframeFilter, Weekday } from "@repo/shared"
 import { payload } from "@/data-layer/adapters/Payload"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
@@ -52,14 +52,21 @@ describe("GameSessionDataService", () => {
         expect(sessionDate < breakStart || sessionDate > breakEnd).toBe(true)
 
         const openDate = new Date(session.openTime)
-        const semesterBookingOpenDay = Object.values(Weekday).indexOf(
-          newSemester.bookingOpenDay as Weekday,
-        )
         const semesterBookingOpenTime = new Date(newSemester.bookingOpenTime)
-        expect(openDate <= sessionDate).toBe(true)
-        expect(openDate.getUTCDay() === semesterBookingOpenDay).toBe(true)
-        expect(openDate.getUTCHours() === semesterBookingOpenTime.getUTCHours()).toBe(true)
-        expect(openDate.getUTCMinutes() === semesterBookingOpenTime.getUTCMinutes()).toBe(true)
+
+        const normalOpenDate = getGameSessionOpenDay(newSemester, sessionDate)
+
+        // open date should be exactly 7 days before the booking open date (of same week)
+        const weekInMs = 7 * 24 * 60 * 60 * 1000
+        const expectedOpenDate = new Date(normalOpenDate.getTime() - weekInMs)
+        expect(openDate.getUTCFullYear()).toBe(expectedOpenDate.getUTCFullYear())
+        expect(openDate.getUTCMonth()).toBe(expectedOpenDate.getUTCMonth())
+        expect(openDate.getUTCDate()).toBe(expectedOpenDate.getUTCDate())
+
+        // open time should match semester's booking open time
+        expect(openDate.getUTCHours()).toBe(semesterBookingOpenTime.getUTCHours())
+        expect(openDate.getUTCMinutes()).toBe(semesterBookingOpenTime.getUTCMinutes())
+        expect(openDate.getUTCSeconds()).toBe(semesterBookingOpenTime.getUTCSeconds())
       }
     })
   })

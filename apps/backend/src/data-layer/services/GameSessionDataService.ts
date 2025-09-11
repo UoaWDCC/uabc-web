@@ -1,7 +1,7 @@
 import {
   type CreateGameSessionData,
   type CreateGameSessionScheduleData,
-  getGameSessionOpenDay,
+  getGameSessionOpenDateOneWeekEarlier,
   TimeframeFilter,
   type UpdateGameSessionData,
   type UpdateGameSessionScheduleData,
@@ -211,7 +211,7 @@ export default class GameSessionDataService {
         ...gameSessionTimes,
         capacity: schedule.capacity,
         casualCapacity: schedule.casualCapacity,
-        openTime: getGameSessionOpenDay(
+        openTime: getGameSessionOpenDateOneWeekEarlier(
           semester,
           new Date(gameSessionTimes.startTime),
         ).toISOString(),

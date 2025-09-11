@@ -1,6 +1,7 @@
 import {
   calculateOpenDate,
   getDaysBetweenWeekdays,
+  getGameSessionOpenDateOneWeekEarlier,
   getGameSessionOpenDay,
   Weekday,
 } from "@repo/shared"
@@ -170,6 +171,90 @@ describe("getGameSessionOpenDay", () => {
 
     const result = getGameSessionOpenDay(semester, startTime)
     const expected = new Date(Date.UTC(2024, 0, 15, 12, 0, 0)) // Monday before
+    expect(result).toEqual(expected)
+  })
+})
+
+describe("getGameSessionOpenDateOneWeekEarlier", () => {
+  it("should calculate the correct open date and be one week for a Monday session", () => {
+    const semester: Semester = {
+      ...semesterMock,
+      bookingOpenDay: Weekday.friday,
+      bookingOpenTime: new Date(Date.UTC(2024, 0, 1, 9, 0, 0)).toISOString(), // 9 AM
+    }
+    const startTime = new Date(Date.UTC(2024, 0, 15, 14, 0, 0)) // Monday Jan 15
+
+    const result = getGameSessionOpenDateOneWeekEarlier(semester, startTime)
+    // Friday Jan 12, one week earlier is Friday Jan 5
+    const expected = new Date(Date.UTC(2024, 0, 5, 9, 0, 0))
+    expect(result).toEqual(expected)
+  })
+
+  it("should calculate the correct open date and be one week for a Friday session", () => {
+    const semester: Semester = {
+      ...semesterMock,
+      bookingOpenDay: Weekday.monday,
+      bookingOpenTime: new Date(Date.UTC(2024, 0, 1, 10, 30, 0)).toISOString(), // 10:30 AM
+    }
+    const startTime = new Date(Date.UTC(2024, 0, 19, 18, 0, 0)) // Friday Jan 19
+
+    const result = getGameSessionOpenDateOneWeekEarlier(semester, startTime)
+    // Monday Jan 15, one week earlier is Monday Jan 8
+    const expected = new Date(Date.UTC(2024, 0, 8, 10, 30, 0))
+    expect(result).toEqual(expected)
+  })
+
+  it("should calculate the open date one week before the normal booking open day for a Sunday session", () => {
+    const semester: Semester = {
+      ...semesterMock,
+      bookingOpenDay: Weekday.wednesday,
+      bookingOpenTime: new Date(Date.UTC(2024, 0, 1, 8, 15, 30)).toISOString(), // 8:15:30 AM
+    }
+    const startTime = new Date(Date.UTC(2024, 0, 21, 15, 0, 0)) // Sunday Jan 21
+
+    const result = getGameSessionOpenDateOneWeekEarlier(semester, startTime)
+    // Wednesday Jan 17, so one week earlier is Wednesday Jan 10
+    const expected = new Date(Date.UTC(2024, 0, 10, 8, 15, 30))
+    expect(result).toEqual(expected)
+  })
+
+  it("should preserve the exact time from bookingOpenTime", () => {
+    const semester: Semester = {
+      ...semesterMock,
+      bookingOpenDay: Weekday.thursday,
+      bookingOpenTime: new Date(Date.UTC(2024, 0, 1, 14, 30, 45)).toISOString(), // 2:30:45 PM
+    }
+    const startTime = new Date(Date.UTC(2024, 0, 20, 20, 0, 0)) // Saturday Jan 20 at 8 PM
+
+    const result = getGameSessionOpenDateOneWeekEarlier(semester, startTime)
+    const expected = new Date(Date.UTC(2024, 0, 11, 14, 30, 45))
+    expect(result).toEqual(expected)
+  })
+
+  it("should handle bookingOpenTime as a string", () => {
+    const semester: Semester = {
+      ...semesterMock,
+      bookingOpenDay: Weekday.monday,
+      bookingOpenTime: "2024-01-01T12:00:00.000Z",
+    }
+    const startTime = new Date(Date.UTC(2024, 0, 18, 16, 0, 0)) // Thursday Jan 18
+
+    const result = getGameSessionOpenDateOneWeekEarlier(semester, startTime)
+    const expected = new Date(Date.UTC(2024, 0, 8, 12, 0, 0))
+    expect(result).toEqual(expected)
+  })
+
+  it("should work across month boundaries", () => {
+    const semester: Semester = {
+      ...semesterMock,
+      bookingOpenDay: Weekday.friday,
+      bookingOpenTime: new Date(Date.UTC(2024, 0, 1, 11, 0, 0)).toISOString(), // 11 AM
+    }
+    const startTime = new Date(Date.UTC(2024, 1, 5, 19, 0, 0)) // Monday Feb 5
+
+    const result = getGameSessionOpenDateOneWeekEarlier(semester, startTime)
+    // Normal booking open would be Friday Feb 2, so one week earlier is Friday Jan 26
+    const expected = new Date(Date.UTC(2024, 0, 26, 11, 0, 0))
     expect(result).toEqual(expected)
   })
 })
