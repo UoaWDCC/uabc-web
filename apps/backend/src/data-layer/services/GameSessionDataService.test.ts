@@ -145,6 +145,27 @@ describe("GameSessionDataService", () => {
     })
   })
 
+  describe("deleteGameSession", () => {
+    it("should delete a game session", async () => {
+      const newGameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+
+      const deletedGameSession = await gameSessionDataService.deleteGameSession(newGameSession.id)
+      expect(deletedGameSession).not.toBeNull()
+      expect(deletedGameSession).toEqual(newGameSession)
+
+      // check that the document is deleted
+      await expect(
+        gameSessionDataService.getGameSessionById(deletedGameSession.id),
+      ).rejects.toThrowError("Not Found")
+    })
+
+    it("should throw a NotFound error if game session does not exist when deleting", async () => {
+      await expect(
+        gameSessionDataService.deleteGameSession("Not a game Session ID"),
+      ).rejects.toThrowError("Not Found")
+    })
+  })
+
   describe("createGameSessionSchedule", () => {
     it("should create a game session schedule document", async () => {
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
@@ -410,6 +431,31 @@ describe("GameSessionDataService", () => {
       await expect(
         gameSessionDataService.updateGameSessionSchedule("fakeid", { capacity: 1 }),
       ).rejects.toThrowError("Not Found")
+    })
+  })
+
+  describe("deleteGameSessionSchedule", () => {
+    it("should delete a game session schedule", async () => {
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
+        gameSessionScheduleCreateMock,
+      )
+
+      const deletedGameSessionSchedule = await gameSessionDataService.deleteGameSessionSchedule(
+        newGameSessionSchedule.id,
+      )
+      expect(deletedGameSessionSchedule).not.toBeNull()
+      expect(deletedGameSessionSchedule).toEqual(newGameSessionSchedule)
+
+      // check that the document is deleted
+      await expect(
+        gameSessionDataService.getGameSessionScheduleById(deletedGameSessionSchedule.id),
+      ).rejects.toThrowError("Not Found")
+    })
+
+    it("should throw a NotFound error if game session schedule does not exist when deleting", async () => {
+      await expect(gameSessionDataService.deleteGameSessionSchedule("fakeid")).rejects.toThrowError(
+        "Not Found",
+      )
     })
   })
 

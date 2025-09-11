@@ -73,8 +73,6 @@ export default class GameSessionDataService {
   }
 
   /**
-<<<<<<< HEAD
-=======
    * Deletes a {@link GameSession} given its ID
    *
    * @param id the ID of the {@link GameSession} to delete
@@ -88,7 +86,6 @@ export default class GameSessionDataService {
   }
 
   /**
->>>>>>> 5ab19e71 (fix: add back deleted methods)
    * Deletes all {@link GameSession}s for a {@link Semester}
    *
    * @param semesterId the ID of the semester with {@link GameSession}s to be deleted
@@ -284,8 +281,6 @@ export default class GameSessionDataService {
   }
 
   /**
-<<<<<<< HEAD
-=======
    * Deletes a {@link GameSessionSchedule} given its ID
    *
    * @param id the ID of the {@link GameSessionSchedule} to delete
@@ -299,7 +294,6 @@ export default class GameSessionDataService {
   }
 
   /**
->>>>>>> 5ab19e71 (fix: add back deleted methods)
    * Deletes all GameSessionSchedules for a {@link Semester}
    *
    * @param semesterId the ID of the semester with game session schedules to be deleted
