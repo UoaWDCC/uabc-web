@@ -2,12 +2,16 @@ import type { EditBookingData } from "@repo/shared"
 import { casualUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
+import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
+import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import { payload } from "../adapters/Payload"
 import BookingDataService from "./BookingDataService"
 import GameSessionDataService from "./GameSessionDataService"
+import SemesterDataService from "./SemesterDataService"
 
 const bookingDataService = new BookingDataService()
 const gameSessionDataService = new GameSessionDataService()
+const semesterDataService = new SemesterDataService()
 
 describe("bookingDataService", () => {
   describe("createBooking", () => {
@@ -229,6 +233,55 @@ describe("bookingDataService", () => {
       await expect(() => bookingDataService.deleteBooking("Not a booking ID")).rejects.toThrowError(
         "Not Found",
       )
+    })
+  })
+
+  describe("deleteBookingsBySemesterId", () => {
+    it("should delete bookings by a semester ID successfully", async () => {
+      const createdSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const createdGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleCreateMock,
+        semester: createdSemester.id,
+      })
+      const createdGameSession1 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        gameSessionSchedule: createdGameSessionSchedule,
+        semester: createdGameSessionSchedule.semester,
+      })
+      const createdGameSession2 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: createdSemester.id,
+      })
+
+      const createdBooking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: createdGameSession1,
+      })
+      const createdBooking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: createdGameSession2,
+      })
+      const createdBooking3 = await bookingDataService.createBooking(bookingCreateMock)
+
+      const deletedBookings = await bookingDataService.deleteBookingsBySemesterId(
+        createdSemester.id,
+      )
+      expect(deletedBookings.length).toEqual(2)
+      expect(deletedBookings).toEqual(expect.arrayContaining([createdBooking1, createdBooking2]))
+
+      expect(await bookingDataService.getBookingById(createdBooking3.id)).toBeDefined()
+      await expect(bookingDataService.getBookingById(createdBooking1.id)).rejects.toThrowError(
+        "Not Found",
+      )
+      await expect(bookingDataService.getBookingById(createdBooking2.id)).rejects.toThrowError(
+        "Not Found",
+      )
+    })
+
+    it("should return an empty array if no bookings exist when deleting by a semester ID", async () => {
+      expect(
+        await bookingDataService.deleteBookingsBySemesterId("Not a valid semester ID"),
+      ).toStrictEqual([])
     })
   })
 })
