@@ -111,7 +111,9 @@ describe("/api/me/bookings/[id]", async () => {
       })
 
       expect(res.status).toBe(StatusCodes.BAD_REQUEST)
-      expect((await res.json()).error).toBe("The booking game session start time has already past")
+      expect((await res.json()).error).toBe(
+        "The booking game session start time has already passed",
+      )
     })
 
     it("should return a 200 if only a play level update is made", async () => {

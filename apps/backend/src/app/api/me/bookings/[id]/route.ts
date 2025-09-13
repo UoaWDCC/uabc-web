@@ -28,17 +28,16 @@ class RouteWrapper {
       if (getPayloadObjectId(initialBooking.user) !== req.user.id) {
         throw new NotFound()
       }
-      // Check if the booking date has past
       if (new Date((initialBooking.gameSession as GameSession).startTime) < new Date()) {
         return NextResponse.json(
-          { error: "The booking game session start time has already past" },
+          { error: "The booking game session start time has already passed" },
           { status: StatusCodes.BAD_REQUEST },
         )
       }
 
       const parsedBody = UpdateBookingRequestSchema.parse(await req.json())
 
-      // Only update if gameSession is specified and different to the existing booking,
+      // Only update if gameSession is specified and different from the existing booking,
       // else can be updating other fields such as playLevel
       if (
         parsedBody.gameSession &&
