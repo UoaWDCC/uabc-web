@@ -1,6 +1,13 @@
-import { MembershipType, type RequestWithUser, UpdateBookingRequestSchema } from "@repo/shared"
+import {
+  getPayloadObjectId,
+  MembershipType,
+  type RequestWithUser,
+  UpdateBookingRequestSchema,
+} from "@repo/shared"
+import type { GameSession } from "@repo/shared/payload-types"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { NextResponse } from "next/server"
+import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import BookingDataService from "@/data-layer/services/BookingDataService"
@@ -16,56 +23,84 @@ class RouteWrapper {
     const bookingDataService = new BookingDataService()
 
     try {
+      const initialBooking = await bookingDataService.getBookingById(id)
+      // Throw payload not found when the user doesn't own this booking
+      if (getPayloadObjectId(initialBooking.user) !== req.user.id) {
+        throw new NotFound()
+      }
+      // Check if the booking date has past
+      if (new Date((initialBooking.gameSession as GameSession).startTime) < new Date()) {
+        return NextResponse.json(
+          { error: "The booking game session start time has already past" },
+          { status: StatusCodes.BAD_REQUEST },
+        )
+      }
+
       const parsedBody = UpdateBookingRequestSchema.parse(await req.json())
 
-      const gameSession =
-        typeof parsedBody.gameSession === "string"
-          ? await gameSessionDataService.getGameSessionById(parsedBody.gameSession)
-          : parsedBody.gameSession
-
-      if (!gameSession) {
-        return NextResponse.json(
-          { error: "Game session not found" },
-          { status: StatusCodes.NOT_FOUND },
-        )
-      }
-
-      const sessionStartTime = new Date(gameSession.openTime)
-      const now = new Date()
-      if (now < sessionStartTime) {
-        return NextResponse.json(
-          { error: "Booking is not open yet for this session" },
-          { status: StatusCodes.FORBIDDEN },
-        )
-      }
-
-      const bookings = await bookingDataService.getAllBookingsBySessionId(gameSession.id)
-      // Refetch user data as JWT stored data could be outdated
-      const userData = await userDataService.getUserById(req.user.id)
-
+      // Only update if gameSession is specified and different to the existing booking,
+      // else can be updating other fields such as playLevel
       if (
-        (userData.role === MembershipType.casual &&
-          bookings.length >= gameSession.casualCapacity) ||
-        (userData.role === MembershipType.member && bookings.length >= gameSession.capacity)
-      )
-        return NextResponse.json(
-          { error: "Session is full for the selected user role" },
-          { status: StatusCodes.FORBIDDEN },
-        )
+        parsedBody.gameSession &&
+        getPayloadObjectId(parsedBody.gameSession) !==
+          getPayloadObjectId(initialBooking.gameSession)
+      ) {
+        let gameSession: GameSession
+        try {
+          gameSession =
+            typeof parsedBody.gameSession === "string"
+              ? await gameSessionDataService.getGameSessionById(parsedBody.gameSession)
+              : parsedBody.gameSession
+        } catch (error) {
+          if (error instanceof NotFound) {
+            return NextResponse.json(
+              { error: "The updated booking's game session was not found" },
+              { status: StatusCodes.NOT_FOUND },
+            )
+          }
+          throw error
+        }
 
-      if (
-        (await bookingDataService.getAllUserBookingsBySessionId(userData.id, gameSession.id))
-          .length > 0
-      )
-        return NextResponse.json(
-          { error: "Session already booked" },
-          { status: StatusCodes.CONFLICT },
+        const sessionStartTime = new Date(gameSession.openTime)
+        const now = new Date()
+        if (now < sessionStartTime) {
+          return NextResponse.json(
+            { error: "Booking is not open yet for this session" },
+            { status: StatusCodes.FORBIDDEN },
+          )
+        }
+
+        const bookings = await bookingDataService.getAllBookingsBySessionId(gameSession.id)
+        // Refetch user data as JWT stored data could be outdated
+        const userData = await userDataService.getUserById(req.user.id)
+        // TODO: recycle bookings object so another db operation is redundant
+        if (
+          (await bookingDataService.getAllUserBookingsBySessionId(userData.id, gameSession.id))
+            .length > 0
         )
+          return NextResponse.json(
+            { error: "A booking with that session has already been made" },
+            { status: StatusCodes.CONFLICT },
+          )
+
+        if (
+          (userData.role === MembershipType.casual &&
+            bookings.length >= gameSession.casualCapacity) ||
+          (userData.role === MembershipType.member && bookings.length >= gameSession.capacity)
+        )
+          return NextResponse.json(
+            { error: "Session is full for the selected user role" },
+            { status: StatusCodes.FORBIDDEN },
+          )
+      }
 
       const updatedBooking = await bookingDataService.updateBooking(id, parsedBody)
 
       return NextResponse.json({ data: updatedBooking }, { status: StatusCodes.OK })
     } catch (error) {
+      if (error instanceof NotFound) {
+        return NextResponse.json({ error: "Booking not found" }, { status: StatusCodes.NOT_FOUND })
+      }
       if (error instanceof ZodError) {
         return NextResponse.json(
           { error: "Invalid request body", details: error.flatten() },
