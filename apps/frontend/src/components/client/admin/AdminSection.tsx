@@ -3,7 +3,7 @@
 import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
 import { Container, TabPanel, VStack } from "@yamada-ui/react"
 import { memo } from "react"
-import { AdminMembersSection } from "./AdminMembersSection"
+import { AdminMembers, AdminSessions } from "./tabs"
 
 export const AdminSection = memo(() => {
   return (
@@ -15,14 +15,14 @@ export const AdminSection = memo(() => {
     >
       <AdminTabBar lazy lazyBehavior="unmount">
         <TabPanel px="0">
-          <VStack as="section">
-            <AdminMembersSection />
+          <VStack>
+            <AdminMembers />
           </VStack>
         </TabPanel>
         <TabPanel px="0">
-          <Container centerContent layerStyle="container">
-            <UnderConstructionCard title="View Sessions is Under Construction 🔧" />
-          </Container>
+          <VStack>
+            <AdminSessions />
+          </VStack>
         </TabPanel>
         <TabPanel px="0">
           <Container centerContent layerStyle="container">

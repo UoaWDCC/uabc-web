@@ -12,7 +12,7 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.tz.setDefault("Pacific/Auckland")
 
-export const AdminMembersSection = () => {
+export const AdminMembers = () => {
   const { open: openConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const {
     open: openFinalConfirm,

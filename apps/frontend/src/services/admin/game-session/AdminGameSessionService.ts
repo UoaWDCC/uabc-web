@@ -12,7 +12,7 @@ const AdminGameSessionService = {
    */
   getAllGameSessionBookings: async (id: string, token: string | null) => {
     const response = await apiClient.get(
-      `/admin/game-sessions/${id}/bookings`,
+      `/api/admin/game-sessions/${id}/bookings`,
       GetBookingsResponseSchema,
       { requiresAuth: true, token },
     )
@@ -35,7 +35,7 @@ const AdminGameSessionService = {
     token: string | null
   }) => {
     const response = await apiClient.post(
-      "/admin/game-sessions",
+      "/api/admin/game-sessions",
       data,
       GetGameSessionResponseSchema,
       { requiresAuth: true, token },
@@ -61,7 +61,7 @@ const AdminGameSessionService = {
     token: string | null
   }) => {
     const response = await apiClient.patch(
-      `/admin/game-sessions/${id}`,
+      `/api/admin/game-sessions/${id}`,
       data,
       GetGameSessionResponseSchema,
       { requiresAuth: true, token },
@@ -76,7 +76,7 @@ const AdminGameSessionService = {
    * @param token The auth token to use for the request (may be null).
    */
   deleteGameSession: async (id: string, token: string | null) => {
-    const response = await apiClient.delete(`/admin/game-sessions/${id}`, undefined, {
+    const response = await apiClient.delete(`/api/admin/game-sessions/${id}`, undefined, {
       requiresAuth: true,
       token,
     })
