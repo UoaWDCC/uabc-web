@@ -22,6 +22,7 @@ export const NavigationBarDesktop = ({
   user,
 }: NavigationBarProps) => {
   const src = typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""
+  const name = user?.firstName || ""
   const admin = user?.role === MembershipType.admin
 
   return (
@@ -61,7 +62,7 @@ export const NavigationBarDesktop = ({
       <Spacer />
       <Box>
         {user ? (
-          <NavigationBarUserMenu admin={admin} avatarProps={{ name: user.firstName, src: src }} />
+          <NavigationBarUserMenu admin={admin} avatarProps={{ name, src }} />
         ) : (
           <NavigationBarButton colorScheme="primary" {...rightSideSingleButton} />
         )}
