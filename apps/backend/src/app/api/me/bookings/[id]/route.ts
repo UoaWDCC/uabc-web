@@ -73,11 +73,7 @@ class RouteWrapper {
         const bookings = await bookingDataService.getAllBookingsBySessionId(gameSession.id)
         // Refetch user data as JWT stored data could be outdated
         const userData = await userDataService.getUserById(req.user.id)
-        // TODO: recycle bookings object so another db operation is redundant
-        if (
-          (await bookingDataService.getAllUserBookingsBySessionId(userData.id, gameSession.id))
-            .length > 0
-        )
+        if (bookings.some((booking) => getPayloadObjectId(booking.user) === userData.id))
           return NextResponse.json(
             { error: "A booking with that session has already been made" },
             { status: StatusCodes.CONFLICT },
