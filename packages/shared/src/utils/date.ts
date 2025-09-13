@@ -66,7 +66,7 @@ export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date
 
   const dayIndex = startTime.getUTCDay()
   const day = Object.values(Weekday)[dayIndex] as Weekday
-  const daysToSubtract = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day)
+  const daysToSubtract = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day) + 7
 
   openDate.setUTCDate(startTime.getUTCDate() - daysToSubtract)
   openDate.setUTCHours(
@@ -77,4 +77,11 @@ export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date
   )
 
   return openDate
+}
+
+/**
+ * Formats a date-like value into a stable YYYY-MM-DD key (UTC-safe).
+ */
+export function getISODateKey(dateLike: string | number | Date): string {
+  return format(new Date(dateLike), "yyyy-MM-dd")
 }

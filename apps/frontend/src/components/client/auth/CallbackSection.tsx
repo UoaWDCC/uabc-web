@@ -29,7 +29,7 @@ export const CallbackSection = () => {
 
       setHasProcessed(true)
 
-      const response = await AuthService.getUserFromToken(token)
+      const response = await AuthService.getUserInfo(token)
 
       if (response.data) {
         setToken(token)

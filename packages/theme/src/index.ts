@@ -1,5 +1,5 @@
 import type { ThemeConfig, UsageTheme } from "@yamada-ui/core"
-import { extendConfig, extendTheme } from "@yamada-ui/theme-tools"
+import { extendBaseTheme, extendConfig } from "@yamada-ui/theme-tools"
 import { components } from "./components"
 import { breakpoint, initialColorMode, noticeOptions } from "./config"
 import { semantics } from "./semantics"
@@ -21,6 +21,6 @@ export const defaultTheme: UsageTheme = {
   ...tokens,
 }
 
-export const theme = extendTheme(defaultTheme)()
+export const theme = extendBaseTheme(defaultTheme)()
 
 export { components, semantics, tokens, noticeOptions }

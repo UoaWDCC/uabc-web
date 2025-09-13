@@ -12,6 +12,7 @@ import {
   useTime,
   useTransform,
 } from "@yamada-ui/react"
+import dayjs from "dayjs"
 import { useRef, useState } from "react"
 import { LocationBubbleCircle } from "./LocationBubbleCircle"
 import { LocationBubbleDesktopCard } from "./LocationBubbleDesktopCard"
@@ -24,8 +25,11 @@ export interface LocationBubbleProps {
   locationImage: ImageProps
   locationTitle: string
   locationDetails?: string
-  locationTimes?: Record<string, string>
-  buttonLink?: string
+  locationTimes?: Record<string, string[]>
+  button?: {
+    label?: string
+    url?: string
+  }
 }
 
 /**
@@ -34,9 +38,8 @@ export interface LocationBubbleProps {
  * @param locationImage The image source for the location, can be a URL or a static import.
  * @param locationTitle The title of the location.
  * @param locationDetails Optional details about the location, such as address or description.
- * @param locationTimes Optional object containing days and times for the location, e.g.,
- * `{ Tuesday: "7:30pm - 10pm", Friday: "7:30pm - 10pm" }`.
- * @param buttonLink Optional link for a button to learn more about the location, defaults to `"#"`.
+ * @param locationTimes Optional object mapping days to the times for the location.
+ * @param button Optional button configuration with label and URL properties. Defaults to `{ label: "Learn more", url: "#" }`.
  * @returns A `LocationBubble` component that displays a floating circular bubble, and expands to show more details on hover or click.
  */
 export const LocationBubble = ({
@@ -44,8 +47,28 @@ export const LocationBubble = ({
   locationTitle,
   locationDetails,
   locationTimes,
-  buttonLink = "#",
+  button = { label: "Learn more", url: "#" },
 }: LocationBubbleProps) => {
+  const buttonData = {
+    label: button?.label || "Learn more",
+    url: button?.url || "#",
+  }
+  const locationTimeData = locationTimes
+    ? Object.entries(locationTimes).reduce(
+        (acc, [day, times]) => {
+          acc[day] = times.map((time) => dayjs(new Date(time)).format("h:mmA"))
+          return acc
+        },
+        {} as Record<string, string[]>,
+      )
+    : { [dayjs().format("dddd")]: [`${dayjs().format("h:mmA")}`] }
+
+  // workaround until images uploads are properly configured
+  locationImage = {
+    ...locationImage,
+    src: `${process.env.NEXT_PUBLIC_API_URL}${locationImage.src}`,
+  }
+
   const [hovering, setHovering] = useState(false)
   const hoverDebounce = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -98,10 +121,10 @@ export const LocationBubble = ({
           >
             {hovering ? (
               <LocationBubbleDesktopCard
-                buttonLink={buttonLink}
+                button={buttonData}
                 locationDetails={locationDetails}
                 locationImage={locationImage}
-                locationTimes={locationTimes}
+                locationTimes={locationTimeData}
                 locationTitle={locationTitle}
               />
             ) : (
@@ -133,10 +156,10 @@ export const LocationBubble = ({
         </LayoutGroup>
       </Box>
       <LocationBubbleMobileCard
-        buttonLink={buttonLink}
+        button={buttonData}
         locationDetails={locationDetails}
         locationImage={locationImage}
-        locationTimes={locationTimes}
+        locationTimes={locationTimeData}
         locationTitle={locationTitle}
         onClose={onClose}
         open={open}

@@ -1,4 +1,4 @@
-import type { Meta, StoryFn } from "@storybook/nextjs"
+import type { Meta, StoryFn } from "@storybook/nextjs-vite"
 import { Box, Button, useDisclosure } from "@yamada-ui/react"
 import { InputPopUp, type InputPopUpProps } from "./InputPopUp"
 

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/nextjs"
+import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { RegisterPanel } from "./RegisterPanel"
 
 type Story = StoryObj<typeof RegisterPanel>

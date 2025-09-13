@@ -7,22 +7,27 @@ post-merge:
   commands:
     pnpm:
       glob: "{package.json,pnpm-lock.yaml}"
-      run: pnpm install
+      run: pnpm cross-env COREPACK_ENABLE_DOWNLOAD_PROMPT=0 pnpm install
 
 pre-commit:
   parallel: true
-  exclude:
-    - "apps/portal/**"
-    - "pnpm-lock.yaml"
-    - "**/importMap.js"
-    - "**/payload-types.ts"
   commands:
     biome:
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
+      exclude:
+        - "apps/portal/**"
+        - "pnpm-lock.yaml"
+        - "**/importMap.js"
+        - "**/payload-types.ts"
       run: |
         pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
       stage_fixed: true
     cspell:
       glob: "*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx,css,scss,yaml,yml}"
+      exclude:
+        - "apps/portal/**"
+        - "pnpm-lock.yaml"
+        - "**/importMap.js"
+        - "**/payload-types.ts"
       run: |
         pnpm cspell {staged_files} --cache --cache-strategy=content --cache-location=.cspellcache

@@ -1,64 +1,59 @@
+import type { LocationBubbleItem, Media } from "@repo/shared/payload-types"
+import type { GameSessionSchedule } from "@repo/shared/types"
 import { LocationBubble, type LocationBubbleProps } from "@repo/ui/components/Generic"
 import { Image } from "@repo/ui/components/Primitive"
 import { Box, Container } from "@yamada-ui/react"
 import locationBubbleImage from "@/assets/images/DSC9269.webp"
 
-const mockBubble1: LocationBubbleProps = {
-  locationImage: {
-    src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
-    alt: "Badminton court",
-  },
-  locationTitle: "Uoa Recreation Centre",
-  locationDetails: "17 Symonds Street",
-  locationTimes: {
-    Tuesday: "7:30pm - 10pm",
-    Friday: "7:30pm - 10pm",
-  },
+interface LocationBubbleSectionProps {
+  locationBubbleItems: LocationBubbleItem
 }
 
-const mockBubble2: LocationBubbleProps = {
-  locationImage: {
-    src: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=600",
-    alt: "Badminton court",
-  },
-  locationTitle: "Kings College",
-  locationDetails: "17 Symonds Street",
-  locationTimes: {
-    Tuesday: "7:30pm - 10pm",
-    Friday: "7:30pm - 10pm",
-  },
-}
+export const LocationBubbleSection = ({ locationBubbleItems }: LocationBubbleSectionProps) => {
+  const locationBubbles: LocationBubbleProps[] = locationBubbleItems.map((item) => ({
+    locationImage: {
+      src: (item.locationImage as Media)?.url || "",
+      alt: (item.locationImage as Media)?.alt || "Location Image",
+    },
+    locationTitle: (item.gameSessionSchedule[0] as GameSessionSchedule)?.name || "UABC",
+    locationDetails: (item.gameSessionSchedule[0] as GameSessionSchedule)?.location,
+    locationTimes: item.gameSessionSchedule.reduce(
+      (acc: Record<string, string[]>, curr) => {
+        const schedule = curr as GameSessionSchedule
+        if (schedule.day && schedule.startTime && schedule.endTime) {
+          acc[schedule.day] = [schedule.startTime, schedule.endTime]
+        }
+        return acc
+      },
+      {} as Record<string, string[]>,
+    ),
+    button: item.button,
+  }))
+  const positions = [
+    { left: "25%", top: "33%" },
+    { left: "75%", top: "50%" },
+    { left: "33%", top: "75%" },
+  ]
 
-const mockBubble3: LocationBubbleProps = {
-  locationImage: {
-    src: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=600",
-    alt: "Badminton court",
-  },
-  locationTitle: "Auckland Badminton",
-  locationDetails: "17 Symonds Street",
-  locationTimes: {
-    Tuesday: "7:30pm - 10pm",
-    Friday: "7:30pm - 10pm",
-  },
-}
-
-export const LocationBubbleSection = () => {
   return (
     <Container
       centerContent
       layerStyle="container"
       minH={{ base: "3xl", md: "5xl" }}
       position="relative"
+      top="-3xl"
     >
-      <Box left="25%" position="absolute" top="33%" transform="translate(-50%, -50%)" zIndex={25}>
-        <LocationBubble {...mockBubble1} />
-      </Box>
-      <Box left="75%" position="absolute" top="50%" transform="translate(-50%, -50%)" zIndex={25}>
-        <LocationBubble {...mockBubble2} />
-      </Box>
-      <Box left="33%" position="absolute" top="75%" transform="translate(-50%, -50%)" zIndex={25}>
-        <LocationBubble {...mockBubble3} />
-      </Box>
+      {locationBubbles.map((item, index) => (
+        <Box
+          key={`location-bubble-${item.locationTitle}`}
+          position="absolute"
+          transform="translate(-50%, -50%)"
+          zIndex={25}
+          {...positions[index]}
+        >
+          <LocationBubble {...item} />
+        </Box>
+      ))}
       <Image
         alt="Person smashing shuttlecock"
         borderTopRadius="3xl"
@@ -71,7 +66,6 @@ export const LocationBubbleSection = () => {
         pointerEvents="none"
         position="absolute"
         src={locationBubbleImage}
-        top="-3xl"
         userSelect="none"
         w="100svw"
         width={400}

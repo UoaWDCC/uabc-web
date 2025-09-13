@@ -19,8 +19,9 @@ describe("<RegisterFlow />", () => {
     expect(RegisterFlow.displayName).toBe("RegisterFlow")
   })
 
-  it("should progress through the entire register flow and display the Register Success Panel once complete", async () => {
-    const { user } = render(<RegisterFlow />)
+  it("should progress through the entire register flow and display the Register Success Panel and handle submission once complete", async () => {
+    const handleComplete = vi.fn()
+    const { user } = render(<RegisterFlow handleComplete={handleComplete} />)
 
     // Basic Info Form 1
     expect(screen.getByTestId("go-back")).toBeDisabled()
@@ -50,6 +51,8 @@ describe("<RegisterFlow />", () => {
     // Casual Info Form
     await user.click(await screen.findByTestId("agree"))
     await user.click(screen.getByText("Continue"))
+
+    expect(handleComplete).toHaveBeenCalled()
 
     // Register Success Panel
     expect(screen.getByTestId("go-back")).toBeDisabled()

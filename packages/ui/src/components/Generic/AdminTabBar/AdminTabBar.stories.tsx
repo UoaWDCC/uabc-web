@@ -1,4 +1,4 @@
-import type { Meta, StoryFn } from "@storybook/nextjs"
+import type { Meta, StoryFn } from "@storybook/nextjs-vite"
 import { PropsTable } from "@storybook-config/components"
 import { TabPanel } from "@yamada-ui/react"
 import { TABS_VARIANTS } from "node_modules/@repo/theme/src/components/tabs"
