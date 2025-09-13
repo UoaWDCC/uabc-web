@@ -3,7 +3,7 @@ import { MembershipType } from "@repo/shared"
 import { UabcLogo } from "@repo/ui/components/Icon"
 import { Box, HStack, Motion, Spacer } from "@yamada-ui/react"
 import Link from "next/link"
-import { memo, useMemo } from "react"
+import { memo } from "react"
 import type { NavigationBarProps } from "./NavigationBar"
 import { NavigationBarButton } from "./NavigationBarButton"
 import { NavigationBarUserMenu } from "./NavigationBarUserMenu"
@@ -21,14 +21,9 @@ export const NavigationBarDesktop = ({
   rightSideSingleButton,
   user,
 }: NavigationBarProps) => {
-  const fullName = useMemo(() => {
-    return `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim()
-  }, [user])
-  const src = useMemo(
-    () => (typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""),
-    [user],
-  )
-  const admin = useMemo(() => user?.role === MembershipType.admin, [user])
+  const src = typeof user?.image === "string" ? user?.image : user?.image?.thumbnailURL || ""
+  const name = user?.firstName || ""
+  const admin = user?.role === MembershipType.admin
 
   return (
     <HStack
@@ -67,7 +62,7 @@ export const NavigationBarDesktop = ({
       <Spacer />
       <Box>
         {user ? (
-          <NavigationBarUserMenu admin={admin} avatarProps={{ name: fullName, src: src }} />
+          <NavigationBarUserMenu admin={admin} avatarProps={{ name, src }} />
         ) : (
           <NavigationBarButton colorScheme="primary" {...rightSideSingleButton} />
         )}
