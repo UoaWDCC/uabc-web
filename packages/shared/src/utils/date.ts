@@ -66,7 +66,7 @@ export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date
 
   const dayIndex = startTime.getUTCDay()
   const day = Object.values(Weekday)[dayIndex] as Weekday
-  const daysToSubtract = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day)
+  const daysToSubtract = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day) + 7
 
   openDate.setUTCDate(startTime.getUTCDate() - daysToSubtract)
   openDate.setUTCHours(
