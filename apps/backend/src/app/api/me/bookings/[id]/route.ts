@@ -28,7 +28,10 @@ class RouteWrapper {
       if (getPayloadObjectId(initialBooking.user) !== req.user.id) {
         throw new NotFound()
       }
-      if (new Date((initialBooking.gameSession as GameSession).startTime) < new Date()) {
+
+      const now = new Date()
+
+      if (new Date((initialBooking.gameSession as GameSession).startTime) < now) {
         return NextResponse.json(
           { error: "The booking game session start time has already passed" },
           { status: StatusCodes.BAD_REQUEST },
@@ -61,7 +64,6 @@ class RouteWrapper {
         }
 
         const sessionStartTime = new Date(gameSession.openTime)
-        const now = new Date()
         if (now < sessionStartTime) {
           return NextResponse.json(
             { error: "Booking is not open yet for this session" },
