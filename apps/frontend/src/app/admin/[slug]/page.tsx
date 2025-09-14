@@ -1,4 +1,4 @@
-import { validSlugs } from "@repo/shared"
+import { type AdminTabBarSlug, validSlugs } from "@repo/shared"
 import { notFound } from "next/navigation"
 import { AdminClient } from "@/components/client/admin/AdminClient"
 
@@ -15,7 +15,7 @@ export default async function AdminSlugPage({ params }: AdminSlugPageProps) {
     notFound()
   }
 
-  return <AdminClient slug={slug} />
+  return <AdminClient slug={slug as AdminTabBarSlug} />
 }
 
 export function generateStaticParams() {
