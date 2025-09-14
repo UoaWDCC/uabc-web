@@ -8,14 +8,14 @@ import { AdminSection } from "./AdminSection"
 
 interface AdminClientProps {
   slug?: AdminTabBarSlug
+  activeIndex?: number
 }
 
-export const AdminClient = ({ slug }: AdminClientProps) => {
+export const AdminClient = ({ slug, activeIndex }: AdminClientProps) => {
   return (
     <RoleGuard
       fallback={
         <NotAuthorised
-          as="section"
           description="You must be an admin to view this page."
           title="Access Denied"
         />
@@ -27,7 +27,7 @@ export const AdminClient = ({ slug }: AdminClientProps) => {
       }
       scope={["admin"]}
     >
-      {() => <AdminSection slug={slug} />}
+      {() => <AdminSection activeIndex={activeIndex} slug={slug} />}
     </RoleGuard>
   )
 }

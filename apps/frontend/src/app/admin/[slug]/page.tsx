@@ -1,4 +1,5 @@
 import { type AdminTabBarSlug, validSlugs } from "@repo/shared"
+import { VStack } from "@yamada-ui/react"
 import { notFound } from "next/navigation"
 import { AdminClient } from "@/components/client/admin/AdminClient"
 
@@ -11,11 +12,17 @@ type AdminSlugPageProps = {
 export default async function AdminSlugPage({ params }: AdminSlugPageProps) {
   const { slug } = await params
 
-  if (!validSlugs.includes(slug as (typeof validSlugs)[number])) {
+  const activeIndex = validSlugs.findIndex((s) => s === slug)
+
+  if (activeIndex === -1) {
     notFound()
   }
 
-  return <AdminClient slug={slug as AdminTabBarSlug} />
+  return (
+    <VStack as="main" pt="md">
+      <AdminClient activeIndex={activeIndex} slug={slug as AdminTabBarSlug} />
+    </VStack>
+  )
 }
 
 export function generateStaticParams() {
