@@ -80,15 +80,23 @@ class RouteWrapper {
             { status: StatusCodes.CONFLICT },
           )
 
-        if (
-          (userData.role === MembershipType.casual &&
-            bookings.length >= gameSession.casualCapacity) ||
-          (userData.role === MembershipType.member && bookings.length >= gameSession.capacity)
-        )
+        let sessionFull = false
+
+        switch (userData.role) {
+          case MembershipType.casual:
+            sessionFull = bookings.length >= gameSession.casualCapacity
+            break
+          case MembershipType.member:
+            sessionFull = bookings.length >= gameSession.capacity
+            break
+        }
+
+        if (sessionFull) {
           return NextResponse.json(
             { error: "Session is full for the selected user role" },
             { status: StatusCodes.FORBIDDEN },
           )
+        }
       }
 
       const updatedBooking = await bookingDataService.updateBooking(id, parsedBody)
