@@ -1,7 +1,7 @@
 "use client"
 
 import type { AdminGameSession, GameSessionWithCounts } from "@repo/shared"
-import { GameSessionStatus, type PlayLevel, Weekday } from "@repo/shared"
+import { dayjs, GameSessionStatus, type PlayLevel, Weekday } from "@repo/shared"
 import type { Booking, User } from "@repo/shared/payload-types"
 import {
   AdminGameSessionCard,
@@ -10,14 +10,10 @@ import {
 } from "@repo/ui/components/Composite"
 import type { SessionData } from "@repo/ui/components/Composite/AdminSessionsTable/Columns"
 import { Grid, GridItem, VStack } from "@yamada-ui/react"
-import dayjs from "dayjs"
-import timezone from "dayjs/plugin/timezone"
 import { parseAsString, useQueryState } from "nuqs"
 import { useMemo } from "react"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
 import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
-
-dayjs.extend(timezone)
 
 /**
  * Transform booking data to SessionData format for the table

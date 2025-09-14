@@ -1,16 +1,10 @@
+import { dayjs } from "@repo/shared"
 import { AdminTable, type UserData } from "@repo/ui/components/Composite"
 import { Button } from "@repo/ui/components/Primitive"
 import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
-import dayjs from "dayjs"
-import timezone from "dayjs/plugin/timezone"
-import utc from "dayjs/plugin/utc"
 import { useMemo } from "react"
 import { useDeleteUser } from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.tz.setDefault("Pacific/Auckland")
 
 export const AdminMembers = () => {
   const { open: openConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
