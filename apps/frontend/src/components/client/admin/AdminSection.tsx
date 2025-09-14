@@ -1,6 +1,7 @@
 "use client"
 
 import type { AdminTabBarSlug } from "@repo/shared"
+import { Routes } from "@repo/shared"
 import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
 import { Center, Container, VStack } from "@yamada-ui/react"
 import { memo } from "react"
@@ -19,7 +20,15 @@ export const AdminSection = memo(({ slug, activeIndex }: AdminSectionProps) => {
       layerStyle="container"
       py={{ base: "0", sm: "0", lg: "0" }}
     >
-      <AdminTabBar activeIndex={activeIndex} slug={slug as AdminTabBarSlug} />
+      <AdminTabBar
+        activeIndex={activeIndex}
+        slug={slug as AdminTabBarSlug}
+        tabs={[
+          { slug: Routes.ADMIN_MEMBERS, label: "View Members" },
+          { slug: Routes.ADMIN_SESSIONS, label: "View Sessions" },
+          { slug: Routes.ADMIN_SEMESTERS, label: "View Semesters" },
+        ]}
+      />
       <VStack
         maxW={{
           base: "calc(100vw - $spaces.md * 2)",

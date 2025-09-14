@@ -15,14 +15,21 @@ import Link from "next/link"
 import { memo } from "react"
 
 /**
+ * Tab configuration with matching slugs and labels
+ */
+export interface TabConfig {
+  slug: string
+  label: string
+}
+
+/**
  * Props for {@link AdminTabBar} component
  */
 export interface AdminTabBarProps extends BoxProps {
-  tabSlugs?: string[]
   /**
-   * Labels for the tabs
+   * Array of tab configurations with matching slugs and labels
    */
-  tabLabels?: string[]
+  tabs: TabConfig[]
 
   /**
    * Slug for the tab
@@ -54,53 +61,45 @@ export interface AdminTabBarProps extends BoxProps {
  *
  * @example
  * <AdminTabBar
- *   tabUrl0="/admin/members"
- *   tabUrl1="/admin/sessions"
- *   tabUrl2="/admin/semesters"
- *   slug="members"
+ *   tabs={[
+ *     { slug: "/admin/members", label: "View Members" },
+ *     { slug: "/admin/sessions", label: "View Sessions" },
+ *     { slug: "/admin/semesters", label: "View Semesters" }
+ *   ]}
  * />
  *
- * @remarks Currently, only 3 tabs are currently permitted.
  * @remarks Uses Next.js Link for navigation.
  */
 export const AdminTabBar = memo(
-  ({
-    tabLabels = ["View Members", "View Sessions", "View Semesters"],
-    tabSlugs = ["/admin/members", "/admin/sessions", "/admin/semesters"],
-    slug,
-    tabsProps,
-    tabProps,
-    activeIndex,
-    ...props
-  }: AdminTabBarProps) => {
+  ({ tabs, slug, tabsProps, tabProps, activeIndex, ...props }: AdminTabBarProps) => {
     return (
       <Box as="nav" w="full" {...props}>
         <Tabs as="ul" index={activeIndex} {...tabsProps}>
           <TabList
             display="grid"
-            gridTemplateColumns="repeat(3, 1fr)"
+            gridTemplateColumns={`repeat(${tabs.length}, 1fr)`}
             maxW={{
               base: "calc(100vw - $spaces.md)",
               sm: "calc(100vw - $spaces.lg)",
               lg: "calc(100vw - $spaces.2xl)",
             }}
           >
-            {tabSlugs.map((slug, index) => (
-              <Tab as="li" key={slug} p="0" {...tabProps}>
+            {tabs.map((tabConfig) => (
+              <Tab as="li" key={tabConfig.slug} p="0" {...tabProps}>
                 <UILink
                   _hover={{
                     textDecoration: "inherit",
                   }}
                   as={Link}
                   color="inherit"
-                  href={slug}
+                  href={tabConfig.slug}
                   px="md"
                   py="sm"
                   textAlign="center"
                   w="full"
                   whiteSpace="nowrap"
                 >
-                  {tabLabels[index]}
+                  {tabConfig.label}
                 </UILink>
               </Tab>
             ))}

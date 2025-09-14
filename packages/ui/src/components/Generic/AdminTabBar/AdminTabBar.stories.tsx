@@ -15,13 +15,39 @@ const meta = {
 export default meta
 
 export const Default: Story = ({ ...args }) => {
-  return <AdminTabBar {...args} />
+  return (
+    <AdminTabBar
+      {...args}
+      tabs={[
+        { slug: "/admin/members", label: "View Members" },
+        { slug: "/admin/sessions", label: "View Sessions" },
+        { slug: "/admin/semesters", label: "View Semesters" },
+      ]}
+    />
+  )
+}
+
+export const WithCustomTabs: Story = ({ ...args }) => {
+  return (
+    <AdminTabBar
+      {...args}
+      tabs={[
+        { slug: "/admin/dashboard", label: "Dashboard" },
+        { slug: "/admin/settings", label: "Settings" },
+      ]}
+    />
+  )
 }
 
 export const WithTabPanels: Story = ({ ...args }) => {
   return (
     <AdminTabBar
       {...args}
+      tabs={[
+        { slug: "/admin/members", label: "View Members" },
+        { slug: "/admin/sessions", label: "View Sessions" },
+        { slug: "/admin/semesters", label: "View Semesters" },
+      ]}
       tabsProps={{
         tabPanelsProps: { bgColor: "secondary" },
         children: (
@@ -40,7 +66,18 @@ export const Variant: Story = ({ ...args }) => {
   return (
     <PropsTable rows={TABS_VARIANTS} variant="column">
       {(_column, row, key) => {
-        return <AdminTabBar key={key} tabsProps={{ variant: row }} {...args} />
+        return (
+          <AdminTabBar
+            key={key}
+            {...args}
+            tabs={[
+              { slug: "/admin/members", label: "View Members" },
+              { slug: "/admin/sessions", label: "View Sessions" },
+              { slug: "/admin/semesters", label: "View Semesters" },
+            ]}
+            tabsProps={{ variant: row }}
+          />
+        )
       }}
     </PropsTable>
   )
