@@ -8,5 +8,6 @@ export const useGetAllGameSessionBookings = (id: string) => {
   return useQuery({
     queryKey: [QueryKeys.BOOKINGS_QUERY_KEY, QueryKeys.GAME_SESSION_QUERY_KEY, id],
     queryFn: () => AdminGameSessionService.getAllGameSessionBookings(id, token),
+    enabled: !!token && !!id,
   })
 }

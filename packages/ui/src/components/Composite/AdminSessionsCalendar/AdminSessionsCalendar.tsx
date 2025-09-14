@@ -11,7 +11,7 @@ export interface AdminSessionsCalendarProps {
   /**
    * Currently selected date
    */
-  selectedDate: Date
+  selectedDate?: Date
   /**
    * Callback when a date is selected
    */
@@ -105,6 +105,7 @@ export const AdminSessionsCalendar = memo(
           _ripple: {
             display: "none",
           },
+
           transitionProperty: "none",
           overflow: "visible",
           component: ({ date, selected }) => {
@@ -124,6 +125,7 @@ export const AdminSessionsCalendar = memo(
                   _before: {
                     display: "none",
                   },
+                  cursor: "not-allowed",
                 }}
                 _selected={{
                   bg: "$colors.primary !important",
