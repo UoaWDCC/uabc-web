@@ -22,14 +22,13 @@ describe("<AdminTabBar />", () => {
     expect(screen.getByText("View Semesters")).toBeInTheDocument()
   })
 
-  it("should call onChange when a user clicks on a tab", async () => {
-    const onChange = vi.fn()
+  it("should render custom tab labels correctly", () => {
+    const customLabels = ["Custom Tab 1", "Custom Tab 2", "Custom Tab 3"]
 
-    const { user } = render(<AdminTabBar onChange={onChange} tabLabel2="tab-to-select" />)
+    render(<AdminTabBar tabLabels={customLabels} />)
 
-    const tabToSelect = screen.getByText("tab-to-select")
-    await user.click(tabToSelect)
-
-    expect(onChange).toBeCalledWith(2)
+    expect(screen.getByText("Custom Tab 1")).toBeInTheDocument()
+    expect(screen.getByText("Custom Tab 2")).toBeInTheDocument()
+    expect(screen.getByText("Custom Tab 3")).toBeInTheDocument()
   })
 })

@@ -20,7 +20,7 @@ export const Default: Story = ({ ...args }) => {
 
 export const WithTabPanels: Story = ({ ...args }) => {
   return (
-    <AdminTabBar {...args} tabPanelsProps={{ bgColor: "secondary" }}>
+    <AdminTabBar {...args} tabsProps={{ tabPanelsProps: { bgColor: "secondary" } }}>
       <TabPanel>Panel 0</TabPanel>
       <TabPanel>Panel 1</TabPanel>
       <TabPanel>Panel 2</TabPanel>
@@ -30,9 +30,9 @@ export const WithTabPanels: Story = ({ ...args }) => {
 
 export const Variant: Story = ({ ...args }) => {
   return (
-    <PropsTable columns={[""]} rows={TABS_VARIANTS}>
+    <PropsTable rows={TABS_VARIANTS} variant="column">
       {(_column, row, key) => {
-        return <AdminTabBar key={key} variant={row} {...args} />
+        return <AdminTabBar key={key} tabsProps={{ variant: row }} {...args} />
       }}
     </PropsTable>
   )
