@@ -13,7 +13,12 @@ interface AdminSectionProps {
 
 export const AdminSection = memo(({ slug, activeIndex }: AdminSectionProps) => {
   return (
-    <Container gap="lg" layerStyle="container" py={{ base: "0", sm: "0", lg: "0" }}>
+    <Container
+      gap="lg"
+      justifyContent="start"
+      layerStyle="container"
+      py={{ base: "0", sm: "0", lg: "0" }}
+    >
       <AdminTabBar activeIndex={activeIndex} slug={slug as AdminTabBarSlug} />
       <VStack
         maxW={{

@@ -96,6 +96,8 @@ export const AdminTabBar = memo(
                   href={slug}
                   px="md"
                   py="sm"
+                  textAlign="center"
+                  w="full"
                   whiteSpace="nowrap"
                 >
                   {tabLabels[index]}
