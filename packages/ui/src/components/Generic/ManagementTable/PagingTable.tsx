@@ -34,7 +34,7 @@ export function PagingTable<TData>({
   tableProps,
 }: PagingTableProps<TData>) {
   return (
-    <VStack gap="md" maxW="full" overflowX="auto" w="full">
+    <VStack gap="md" w="full">
       <TableContainer>
         <ManagementTable
           columns={columns}

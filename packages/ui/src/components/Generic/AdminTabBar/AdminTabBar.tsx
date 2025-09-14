@@ -1,63 +1,110 @@
 "use client"
 
-import { memo, Tab, TabList, TabPanel, TabPanels, Tabs, type TabsProps } from "@yamada-ui/react"
+import type { AdminTabBarSlug } from "@repo/shared"
+import {
+  Box,
+  type BoxProps,
+  Tab,
+  TabList,
+  type TabProps,
+  Tabs,
+  type TabsProps,
+  Link as UILink,
+} from "@yamada-ui/react"
+import Link from "next/link"
+import { memo } from "react"
 
 /**
  * Props for {@link AdminTabBar} component
  */
-export interface AdminTabBarProps extends TabsProps {
+export interface AdminTabBarProps extends BoxProps {
+  tabSlugs?: string[]
   /**
-   * Label for the first tab (left side)
+   * Labels for the tabs
    */
-  tabLabel0?: string
+  tabLabels?: string[]
 
   /**
-   * Label for the second tab (middle)
+   * Slug for the tab
    */
-  tabLabel1?: string
+  slug?: AdminTabBarSlug
 
   /**
-   * Label for the third tab (right side)
+   * Props for the Tabs component
    */
-  tabLabel2?: string
+  tabsProps?: TabsProps
+
+  /**
+   * Props for the Tab component
+   */
+  tabProps?: TabProps
+
+  /**
+   * Index of the active tab
+   */
+  activeIndex?: number
 }
 
 /**
- * Admin Tab Bar component for desktop only.
+ * Admin Navigation Bar component for desktop only.
+ * Uses Link navigation instead of TabPanels.
  *
- * @param props AdminTabBar component props
- * @returns The Admin Tab Bar component
+ * @param props AdminNavigationBar component props
+ * @returns The Admin Navigation Bar component
  *
  * @example
- * <AdminTabBar tabPanelsProps={{ bgColor: "secondary" }}>
- *    <TabPanel>Panel 0</TabPanel>
- *    <TabPanel>Panel 1</TabPanel>
- *    <TabPanel>Panel 2</TabPanel>
- * </AdminTabBar>
+ * <AdminTabBar
+ *   tabUrl0="/admin/members"
+ *   tabUrl1="/admin/sessions"
+ *   tabUrl2="/admin/semesters"
+ *   slug="members"
+ * />
  *
  * @remarks Currently, only 3 tabs are currently permitted.
- * @remarks Only {@link TabPanel}s should be added as children.
+ * @remarks Uses Next.js Link for navigation.
  */
 export const AdminTabBar = memo(
   ({
-    children,
-    tabLabel0 = "View Members",
-    tabLabel1 = "View Sessions",
-    tabLabel2 = "View Semesters",
-    tabListProps,
-    tabPanelsProps,
+    tabLabels = ["View Members", "View Sessions", "View Semesters"],
+    tabSlugs = ["/admin/members", "/admin/sessions", "/admin/semesters"],
+    slug,
+    tabsProps,
+    tabProps,
+    activeIndex,
     ...props
   }: AdminTabBarProps) => {
     return (
-      <Tabs {...props}>
-        <TabList {...tabListProps}>
-          <Tab>{tabLabel0}</Tab>
-          <Tab>{tabLabel1}</Tab>
-          <Tab>{tabLabel2}</Tab>
-        </TabList>
-
-        <TabPanels {...tabPanelsProps}>{children}</TabPanels>
-      </Tabs>
+      <Box as="nav" w="full" {...props}>
+        <Tabs as="ul" index={activeIndex} {...tabsProps}>
+          <TabList
+            display="grid"
+            gridTemplateColumns="repeat(3, 1fr)"
+            maxW={{
+              base: "calc(100vw - $spaces.md)",
+              sm: "calc(100vw - $spaces.lg)",
+              lg: "calc(100vw - $spaces.2xl)",
+            }}
+          >
+            {tabSlugs.map((slug, index) => (
+              <Tab as="li" key={slug} p="0" {...tabProps}>
+                <UILink
+                  _hover={{
+                    textDecoration: "inherit",
+                  }}
+                  as={Link}
+                  color="inherit"
+                  href={slug}
+                  px="md"
+                  py="sm"
+                  whiteSpace="nowrap"
+                >
+                  {tabLabels[index]}
+                </UILink>
+              </Tab>
+            ))}
+          </TabList>
+        </Tabs>
+      </Box>
     )
   },
 )

@@ -1,11 +1,15 @@
 "use client"
 
-import { NotAuthorised } from "@repo/ui/components/Generic"
+import { type AdminTabBarSlug, NotAuthorised } from "@repo/ui/components/Generic"
 import { Center, Loading } from "@yamada-ui/react"
 import { RoleGuard } from "@/context/RoleWrappers"
 import { AdminSection } from "./AdminSection"
 
-export const AdminClient = () => {
+interface AdminClientProps {
+  slug?: AdminTabBarSlug
+}
+
+export const AdminClient = ({ slug }: AdminClientProps) => {
   return (
     <RoleGuard
       fallback={
@@ -22,7 +26,7 @@ export const AdminClient = () => {
       }
       scope={["admin"]}
     >
-      {() => <AdminSection />}
+      {() => <AdminSection slug={slug} />}
     </RoleGuard>
   )
 }
