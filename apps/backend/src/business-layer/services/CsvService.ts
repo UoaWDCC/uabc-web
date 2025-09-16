@@ -21,7 +21,19 @@ interface CsvUserRow {
   sessionsLeft: string
 }
 
+/**
+ * The CsvService class provides functionality for parsing CSV user data and mapping it to CreateUserData objects.
+ */
 export default class CsvService {
+  /**
+   * Parses a CSV string into an array of CreateUserData objects.
+
+   * @param csvContent The CSV content to parse.
+   * @returns An ImportResult object containing the parsed data.
+   * @example
+   * timestamp,email,firstName,lastName,gender,skillLevel,uoaStudentOrStaff,uoaIdNumber,university,sessionsLeft,extraField
+   * 21/07/2025 10:04:35,straight@zhao.com,Straight,Zhao,Female,Beginner (just starting out to a few months of playing),Yes,1234569,UoA,69,extraValue1
+   */
   public parseCsvUsers(csvContent: string): ImportResult {
     const result: ImportResult = { success: [], errors: [] }
 
@@ -51,6 +63,13 @@ export default class CsvService {
     return result
   }
 
+  /**
+   * Maps a CSV row to a CreateUserData object.
+   *
+   * @param row The CSV row to map.
+   * @param errors An array to collect errors.
+   * @returns The mapped CreateUserData object.
+   */
   public mapCsvRowToUserData(row: CsvUserRow, errors: string[]): CreateUserData {
     if (!row.email || !row.email.trim()) {
       errors.push("Email is required")
@@ -83,6 +102,12 @@ export default class CsvService {
     }
   }
 
+  /**
+   * Maps a gender string to a Gender enum value.
+   *
+   * @param genderStr The gender string to map.
+   * @returns The mapped Gender enum value, or null if the string is invalid.
+   */
   private mapGender(genderStr: string): Gender | null {
     const gender = genderStr.trim().toLowerCase()
     switch (gender) {
@@ -97,6 +122,12 @@ export default class CsvService {
     }
   }
 
+  /**
+   * Maps a skill level string to a PlayLevel enum value.
+   *
+   * @param skillStr The skill level string to map.
+   * @returns The mapped PlayLevel enum value, or null if the string is invalid.
+   */
   private mapSkillLevel(skillStr: string): PlayLevel | null {
     const skill = skillStr.trim().toLowerCase()
     if (skill.includes("beginner")) {
@@ -111,6 +142,14 @@ export default class CsvService {
     return null
   }
 
+  /**
+   * Maps a university string to a University enum value.
+   *
+   * @param universityStr The university string to map.
+   * @param uoaStudentOrStaffStr The UOA student or staff string to map.
+   * @param _errors The array of errors to add to.
+   * @returns The mapped University enum value, or null if the string is invalid.
+   */
   private mapUniversity(
     universityStr: string,
     uoaStudentOrStaffStr: string,
@@ -157,8 +196,8 @@ export default class CsvService {
   /**
    * Method to check if an email is valid
    *
-   * @param email
-   * @returns
+   * @param email The email string to check.
+   * @returns True if the email is valid, false otherwise.
    */
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
