@@ -7,7 +7,12 @@
       "format_on_save": "on"
     }
   },
-  "language_servers": ["...", "!eslint", "!tailwindcss-language-server"],
+  "language_servers": [
+    "...",
+    "!eslint",
+    "!tailwindcss-language-server",
+    "!typescript-language-server"
+  ],
   "formatter": {
     "language_server": {
       "name": "biome"
