@@ -10,7 +10,6 @@ describe("CsvService", () => {
         21/07/2025 10:04:35,test@example.com,John,Doe,Female,Beginner (just starting out to a few months of playing),Yes,12345678,UoA,5`
 
       const result = csvService.parseCsvUsers(csvContent)
-      console.log(result.errors)
 
       expect(result.errors).toHaveLength(0)
       const user = result.success[0]
@@ -103,6 +102,22 @@ describe("CsvService", () => {
         21/07/2025 10:04:35,test@example.com,John,Doe,Female,Beginner (just starting out to a few months of playing),No,,Massey,5
         21/07/2025 10:04:35,test@example.com,John,Doe,Female,Beginner (just starting out to a few months of playing),No,,Working,5
         21/07/2025 10:04:35,test@example.com,John,Doe,Female,Beginner (just starting out to a few months of playing),No,,N/A,5`
+
+      const result = csvService.parseCsvUsers(csvContent)
+
+      expect(result.success[0].gender).toBe(Gender.preferNotToAnswer)
+      // University edge cases
+      expect(result.success[1].university).toBe(University.massey)
+      expect(result.success[2].university).toBe(University.working)
+      expect(result.success[3].university).toBe(University.notAStudent)
+    })
+
+    it("should handle unused extra fields", () => {
+      const csvContent = `timestamp,email,firstName,lastName,gender,skillLevel,uoaStudentOrStaff,uoaIdNumber,university,sessionsLeft,extraField1,extraField2
+        21/07/2025 10:04:35,straight@zhao.com,John,Doe,Prefer not to say,sz (just starting out to a few months of playing),Yes,12345678,UoA,5,extraValue1,extraValue2
+        21/07/2025 10:04:35,test@example.com,John,Doe,Female,Beginner (just starting out to a few months of playing),No,,Massey,5,extraValue3,extraValue4
+        21/07/2025 10:04:35,test@example.com,John,Doe,Female,Beginner (just starting out to a few months of playing),No,,Working,5,extraValue5,extraValue6
+        21/07/2025 10:04:35,test@example.com,John,Doe,Female,Beginner (just starting out to a few months of playing),No,,N/A,5,extraValue7,extraValue8`
 
       const result = csvService.parseCsvUsers(csvContent)
 

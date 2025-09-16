@@ -16,7 +16,7 @@ interface CsvUserRow {
   gender: string
   skillLevel: string
   uoaStudentOrStaff: string
-  uoaId?: string
+  uoaIdNumber?: string
   university: string
   sessionsLeft: string
 }
@@ -26,21 +26,9 @@ export default class CsvService {
     const result: ImportResult = { success: [], errors: [] }
 
     const records = parse(csvContent, {
-      columns: [
-        "timestamp",
-        "email",
-        "firstName",
-        "lastName",
-        "gender",
-        "skillLevel",
-        "uoaStudentOrStaff",
-        "uoaId",
-        "university",
-        "sessionsLeft",
-      ],
+      columns: true,
       skip_empty_lines: true,
       trim: true,
-      from_line: 2,
     }) as CsvUserRow[]
 
     records.forEach((record, index) => {
@@ -89,7 +77,7 @@ export default class CsvService {
       role: remainingSessions > 0 ? MembershipType.member : MembershipType.casual,
       playLevel,
       gender,
-      studentId: row.uoaId?.trim() || null,
+      studentId: row.uoaIdNumber?.trim() || null,
       university,
       remainingSessions,
     }
