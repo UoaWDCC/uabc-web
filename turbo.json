@@ -3,8 +3,7 @@
   "globalDependencies": [".env", ".env.local"],
   "globalEnv": [],
   "remoteCache": {
-    "enabled": true,
-    "signature": true
+    "enabled": true
   },
   "globalPassThroughEnv": ["NODE_OPTIONS", "NODE_ENV"],
   "tasks": {
