@@ -39,7 +39,6 @@ const config = (async () => {
       // Reduce memory usage during build
       webpackBuildWorker: true,
     },
-    serverExternalPackages: ["@yamada-ui/react", "@tanstack/react-query"],
     turbopack: {
       rules: {
         "*.svg": {
