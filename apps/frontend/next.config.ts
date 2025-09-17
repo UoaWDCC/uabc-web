@@ -35,7 +35,8 @@ const config = (async () => {
     trailingSlash: true,
     // Performance optimizations
     experimental: {
-      optimizePackageImports: ["@yamada-ui/react", "@yamada-ui/lucide"],
+      // Better tree shaking
+      optimizePackageImports: ["@yamada-ui/react", "@yamada-ui/lucide", "@tanstack/react-query"],
     },
     // Turbopack configuration (now stable)
     turbopack: {
@@ -57,6 +58,7 @@ const config = (async () => {
         config.watchOptions = {
           poll: 1000,
           aggregateTimeout: 300,
+          ignored: /node_modules/,
         }
         config.cache = {
           type: "filesystem",
@@ -66,7 +68,26 @@ const config = (async () => {
             packageJson: ["./package.json"],
           },
         }
+        // Optimize resolve
+        config.resolve.symlinks = false
+        config.resolve.cacheWithContext = false
       }
+
+      // Optimize for both dev and production
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: "all",
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: "vendors",
+              chunks: "all",
+            },
+          },
+        },
+      }
+
       return config
     },
   }
