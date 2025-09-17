@@ -8,6 +8,7 @@ const config = (async () => {
   if (env === "development") {
     await setupDevPlatform()
   }
+
   const remotePatterns: RemotePattern[] = [
     // TODO: remove once actual images implemented
     {
@@ -31,14 +32,17 @@ const config = (async () => {
     images: {
       remotePatterns,
     },
-    // Need this to allow static site generation to work with SSG hosting
     trailingSlash: true,
-    // Performance optimizations
     experimental: {
       // Better tree shaking
       optimizePackageImports: ["@yamada-ui/react", "@yamada-ui/lucide", "@tanstack/react-query"],
+      // Reduce memory usage during build
+      webpackBuildWorker: true,
+      // Optimize bundle analysis
+      bundlePagesRouterDependencies: true,
+      // Reduce large string serialization
+      serverComponentsExternalPackages: ["@yamada-ui/react", "@tanstack/react-query"],
     },
-    // Turbopack configuration (now stable)
     turbopack: {
       rules: {
         "*.svg": {
@@ -50,45 +54,6 @@ const config = (async () => {
     // Compiler optimizations
     compiler: {
       removeConsole: process.env.NODE_ENV === "production",
-    },
-    // Optimize bundle
-    webpack: (config, { dev }) => {
-      if (dev) {
-        // Faster development builds
-        config.watchOptions = {
-          poll: 1000,
-          aggregateTimeout: 300,
-          ignored: /node_modules/,
-        }
-        config.cache = {
-          type: "filesystem",
-          buildDependencies: {
-            config: [__filename],
-            tsconfig: ["./tsconfig.json"],
-            packageJson: ["./package.json"],
-          },
-        }
-        // Optimize resolve
-        config.resolve.symlinks = false
-        config.resolve.cacheWithContext = false
-      }
-
-      // Optimize for both dev and production
-      config.optimization = {
-        ...config.optimization,
-        splitChunks: {
-          chunks: "all",
-          cacheGroups: {
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: "vendors",
-              chunks: "all",
-            },
-          },
-        },
-      }
-
-      return config
     },
   }
 
