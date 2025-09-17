@@ -38,11 +38,8 @@ const config = (async () => {
       optimizePackageImports: ["@yamada-ui/react", "@yamada-ui/lucide", "@tanstack/react-query"],
       // Reduce memory usage during build
       webpackBuildWorker: true,
-      // Optimize bundle analysis
-      bundlePagesRouterDependencies: true,
-      // Reduce large string serialization
-      serverComponentsExternalPackages: ["@yamada-ui/react", "@tanstack/react-query"],
     },
+    serverExternalPackages: ["@yamada-ui/react", "@tanstack/react-query"],
     turbopack: {
       rules: {
         "*.svg": {
