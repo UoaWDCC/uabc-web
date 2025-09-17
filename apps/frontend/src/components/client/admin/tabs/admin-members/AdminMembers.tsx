@@ -1,17 +1,10 @@
 import { AdminTableWithPaginatedQuery } from "@repo/ui/components/Composite"
 import { Button } from "@repo/ui/components/Primitive"
 import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
-import dayjs from "dayjs"
-import timezone from "dayjs/plugin/timezone"
-import utc from "dayjs/plugin/utc"
 import { useDeleteUser } from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.tz.setDefault("Pacific/Auckland")
-
-export const AdminMembersSection = () => {
+export const AdminMembers = () => {
   const { open: openConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const {
     open: openFinalConfirm,

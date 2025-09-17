@@ -11,7 +11,7 @@ export interface AdminSessionsCalendarProps {
   /**
    * Currently selected date
    */
-  selectedDate: Date
+  selectedDate?: Date
   /**
    * Callback when a date is selected
    */
@@ -94,6 +94,7 @@ export const AdminSessionsCalendar = memo(
 
     return (
       <Calendar
+        alignItems="center"
         borderWidth="1px"
         controlProps={{ w: "$sizes.10 !important", h: "$sizes.10 !important" }}
         dayProps={{
@@ -105,6 +106,7 @@ export const AdminSessionsCalendar = memo(
           _ripple: {
             display: "none",
           },
+
           transitionProperty: "none",
           overflow: "visible",
           component: ({ date, selected }) => {
@@ -124,6 +126,7 @@ export const AdminSessionsCalendar = memo(
                   _before: {
                     display: "none",
                   },
+                  cursor: "not-allowed",
                 }}
                 _selected={{
                   bg: "$colors.primary !important",
@@ -158,6 +161,7 @@ export const AdminSessionsCalendar = memo(
           },
         }}
         excludeDate={(date) => !isDateActive(date)}
+        justifyContent="center"
         labelProps={{ pointerEvents: "none", icon: { display: "none" } }}
         onChange={onDateSelect}
         p="sm"

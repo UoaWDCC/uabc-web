@@ -34,14 +34,22 @@ export const FilterActions = <TData,>({ columns }: FilterActionsProps<TData>) =>
   }
 
   return (
-    <ButtonGroup alignItems={{ base: "start", xl: "center" }} gap="sm" order={{ base: 1, xl: 2 }}>
+    <ButtonGroup alignItems="flex-end" gap="sm" order={{ base: 1, xl: 2 }}>
       <FilterColumnVisibility columns={columns} />
-      <Button colorScheme="primary" onClick={handleAddMember} size="sm" startIcon={<PlusIcon />}>
+      <Button
+        colorScheme="primary"
+        minW="0"
+        onClick={handleAddMember}
+        px="md"
+        size="sm"
+        startIcon={<PlusIcon />}
+      >
         Add
       </Button>
       <Button
         colorScheme="secondary"
         onClick={handleExportData}
+        px="md"
         size="sm"
         startIcon={<DownloadIcon />}
       >
