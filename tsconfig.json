@@ -9,6 +9,7 @@
       "@repo/ui/*": ["packages/ui/*"],
       "@repo/theme/*": ["packages/theme/*"],
       "@repo/shared/*": ["packages/shared/*"]
-    }
+    },
+    "types": ["vitest/globals"]
   }
 }

@@ -13,12 +13,12 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "zod": "3.25.76"
+    "zod": "catalog:"
   },
   "dependencies": {
-    "@tanstack/react-query": "5.81.5",
+    "@tanstack/react-query": "catalog:",
     "date-fns": "4.1.0",
-    "dayjs": "1.11.18",
-    "next": "15.3.5"
+    "dayjs": "catalog:",
+    "next": "catalog:"
   }
 }

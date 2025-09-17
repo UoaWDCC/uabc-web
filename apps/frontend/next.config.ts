@@ -33,6 +33,42 @@ const config = (async () => {
     },
     // Need this to allow static site generation to work with SSG hosting
     trailingSlash: true,
+    // Performance optimizations
+    experimental: {
+      optimizePackageImports: ["@yamada-ui/react", "@yamada-ui/lucide"],
+    },
+    // Turbopack configuration (now stable)
+    turbopack: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
+        },
+      },
+    },
+    // Compiler optimizations
+    compiler: {
+      removeConsole: process.env.NODE_ENV === "production",
+    },
+    // Optimize bundle
+    webpack: (config, { dev }) => {
+      if (dev) {
+        // Faster development builds
+        config.watchOptions = {
+          poll: 1000,
+          aggregateTimeout: 300,
+        }
+        config.cache = {
+          type: "filesystem",
+          buildDependencies: {
+            config: [__filename],
+            tsconfig: ["./tsconfig.json"],
+            packageJson: ["./package.json"],
+          },
+        }
+      }
+      return config
+    },
   }
 
   return nextConfig
