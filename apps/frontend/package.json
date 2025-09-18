@@ -35,12 +35,12 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "1.13.12",
+    "@cloudflare/next-on-pages": "1.13.16",
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "22.15.21",
-    "@types/react": "19.1.5",
-    "@types/react-dom": "19.1.5",
+    "@types/node": "22.18.3",
+    "@types/react": "19.1.13",
+    "@types/react-dom": "19.1.9",
     "typescript": "5.9.2"
   }
 }
