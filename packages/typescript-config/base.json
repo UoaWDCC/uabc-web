@@ -14,7 +14,25 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2022"
+    "target": "ES2022",
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "assumeChangesOnlyAffectDirectDependencies": true,
+    "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": false,
+    "exactOptionalPropertyTypes": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitOverride": true
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "**/node_modules",
+    "**/.next",
+    "**/dist",
+    "**/build",
+    "**/coverage",
+    "**/.turbo",
+    "**/storybook-static"
+  ]
 }

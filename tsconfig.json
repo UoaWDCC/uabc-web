@@ -9,6 +9,16 @@
       "@repo/ui/*": ["packages/ui/*"],
       "@repo/theme/*": ["packages/theme/*"],
       "@repo/shared/*": ["packages/shared/*"]
-    }
-  }
+    },
+    "types": ["vitest/globals"]
+  },
+  "references": [
+    { "path": "./packages/shared" },
+    { "path": "./packages/ui" },
+    { "path": "./packages/theme" },
+    { "path": "./packages/typescript-config" },
+    { "path": "./packages/test-config" },
+    { "path": "./apps/frontend" },
+    { "path": "./apps/backend" }
+  ]
 }

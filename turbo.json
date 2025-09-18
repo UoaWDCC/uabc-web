@@ -5,6 +5,7 @@
   "remoteCache": {
     "enabled": true
   },
+  "globalPassThroughEnv": ["NODE_OPTIONS", "NODE_ENV"],
   "tasks": {
     "build": {
       "cache": true,

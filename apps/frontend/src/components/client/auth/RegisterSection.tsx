@@ -33,7 +33,9 @@ export const RegisterSection = () => {
           status: "success",
         })
         open()
+        return { success: true }
       }
+      return { error: "Failed to send verification code" }
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "Login failed",

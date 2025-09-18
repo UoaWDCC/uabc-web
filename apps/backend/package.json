@@ -4,13 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
-    "check-types": "tsc --noEmit",
-    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --port 3000",
+    "build": "next build",
+    "check-types": "tsc --noEmit --incremental",
+    "dev": "next dev --port 3000",
     "start": "next start --port 3000",
-    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
-    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
-    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "generate:importmap": "payload generate:importmap",
+    "generate:types": "payload generate:types",
+    "payload": "payload",
     "test": "cross-env NODE_ENV=test vitest run",
     "test:watch": "cross-env NODE_ENV=test vitest",
     "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
@@ -26,24 +26,24 @@
     "@types/nodemailer": "6.4.19",
     "bcryptjs": "3.0.2",
     "googleapis": "150.0.1",
-    "http-status-codes": "2.3.0",
+    "http-status-codes": "catalog:",
     "jsonwebtoken": "9.0.2",
-    "next": "15.3.5",
+    "next": "catalog:",
     "nodemailer": "7.0.5",
     "payload": "3.45.0",
-    "react": "19.1.1",
-    "react-dom": "19.1.1",
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "sharp": "0.34.3",
-    "zod": "3.25.76"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@repo/shared": "workspace:*",
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/jsonwebtoken": "9.0.9",
-    "@types/node": "22.15.21",
-    "@types/react": "19.1.5",
-    "@types/react-dom": "19.1.5",
-    "typescript": "5.9.2"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:"
   }
 }

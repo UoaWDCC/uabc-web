@@ -8,6 +8,7 @@ const config = (async () => {
   if (env === "development") {
     await setupDevPlatform()
   }
+
   const remotePatterns: RemotePattern[] = [
     // TODO: remove once actual images implemented
     {
@@ -31,8 +32,25 @@ const config = (async () => {
     images: {
       remotePatterns,
     },
-    // Need this to allow static site generation to work with SSG hosting
     trailingSlash: true,
+    experimental: {
+      // Better tree shaking
+      optimizePackageImports: ["@yamada-ui/react", "@yamada-ui/lucide", "@tanstack/react-query"],
+      // Reduce memory usage during build
+      webpackBuildWorker: true,
+    },
+    turbopack: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
+        },
+      },
+    },
+    // Compiler optimizations
+    compiler: {
+      removeConsole: process.env.NODE_ENV === "production",
+    },
   }
 
   return nextConfig
