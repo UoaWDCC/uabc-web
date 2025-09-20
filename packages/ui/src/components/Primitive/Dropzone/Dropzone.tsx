@@ -40,7 +40,7 @@ export const Dropzone: FC<DropzoneProps> = memo(
     return (
       <UIDropzone {...props}>
         <VStack alignItems="center">
-          <FolderUpIcon color="white" fontSize={"9xl"} strokeWidth="1.2" />
+          <FolderUpIcon color="white" fontSize="9xl" strokeWidth="1.2" />
           <VStack gap="md" textAlign="center">
             <Heading.h2 color="white" fontWeight="semibold">
               {header}
