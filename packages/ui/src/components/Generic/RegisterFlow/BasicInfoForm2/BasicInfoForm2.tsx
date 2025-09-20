@@ -56,7 +56,7 @@ export const BasicInfoForm2: FC<BasicInfoForm2Props> = memo(({ defaultValues, on
             defaultValue={defaultValues?.phoneNumber}
             placeholder="12 345 6789"
             size="lg"
-            startAddon={"+64"}
+            startAddon="+64"
             type={InputType.Tel}
             {...register("phoneNumber")}
           />

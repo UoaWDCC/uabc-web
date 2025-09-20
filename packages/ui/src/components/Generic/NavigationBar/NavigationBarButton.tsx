@@ -107,7 +107,7 @@ export const NavigationBarHoverIndicator = () => {
       layoutId="navigation-bar-indicator"
       position="absolute"
       px="md"
-      transform={"translateY(-0.75px)"}
+      transform="translateY(-0.75px)"
       transition={{
         layout: { type: "spring", stiffness: 275, damping: 25 },
         default: { duration: 0.3, ease: "easeOut" },
