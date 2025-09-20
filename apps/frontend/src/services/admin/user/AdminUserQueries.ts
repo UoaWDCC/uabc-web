@@ -7,17 +7,17 @@ import AdminUserService from "./AdminUserService"
 /**
  * Retrieves and caches paginated users.
  *
- * @param query The pagination query parameters.
+ * @param limit The amount of docs at most to fetch in a page.
  * @returns A query hook that fetches a page of users.
  */
-export const useGetPaginatedUsers = (query: PaginationQuery) => {
+export const useGetPaginatedUsers = (limit: PaginationQuery["limit"]) => {
   const { token } = useAuth()
   return useInfiniteQuery({
     queryKey: [QueryKeys.USER_QUERY_KEY],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
       const response = await AdminUserService.getPaginatedUsers({
-        ...query,
+        limit,
         page: pageParam,
         token,
       })
