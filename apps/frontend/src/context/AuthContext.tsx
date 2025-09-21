@@ -6,10 +6,10 @@ import type { User } from "@repo/shared/payload-types"
 import type { AuthActions, AuthContextValue, AuthState } from "@repo/shared/types/auth"
 import { noticeOptions } from "@repo/theme"
 import { useLocalStorage } from "@repo/ui/hooks"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNotice } from "@yamada-ui/react"
 import { StatusCodes } from "http-status-codes"
-import { createContext, type ReactNode, useContext } from "react"
+import { createContext, type ReactNode, useCallback, useContext } from "react"
 import { ApiClientError } from "@/lib/api/ApiClientError"
 import AuthService from "@/services/auth/AuthService"
 
@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isAvailable,
   } = useLocalStorage<string>(AUTH_COOKIE_NAME)
   const notice = useNotice(noticeOptions)
+  const queryClient = useQueryClient()
 
   const {
     data: user,
@@ -59,11 +60,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = useMutation({
     mutationFn: async (credentials: LoginFormData) => {
+      // Remove queries and reset token to avoid potential conflicts during login
+      setToken(null)
+      queryClient.cancelQueries({ queryKey: ["auth", "me"] })
+      queryClient.removeQueries({ queryKey: ["auth", "me"] })
+
       const response = await AuthService.login(credentials.email, credentials.password)
-      if (response.data) {
-        setToken(response.data)
-      }
+
       return response
+    },
+    onSettled: (response) => {
+      if (response?.data) {
+        setToken(response?.data)
+      }
     },
     onError: (error) => {
       notice({
@@ -100,17 +109,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
   })
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setToken(null)
+    queryClient.cancelQueries({ queryKey: ["auth", "me"] })
+    queryClient.removeQueries({ queryKey: ["auth", "me"] })
+
     notice({
       title: "Logged out",
       description: "You have been logged out successfully.",
       status: "success",
     })
-  }
+  }, [setToken, notice, queryClient])
 
   const authState: AuthState = {
-    user: user ?? null,
+    user: token ? (user ?? null) : null,
     isLoading: isLoading || login.isPending,
     isPending: isPending || login.isPending,
     error: error ? error.message : null,

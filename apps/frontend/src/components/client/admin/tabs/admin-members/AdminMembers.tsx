@@ -5,7 +5,7 @@ import { useMemo } from "react"
 import { useDeleteUser } from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
-export const AdminMembersSection = () => {
+export const AdminMembers = () => {
   const { open: openConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const {
     open: openFinalConfirm,
