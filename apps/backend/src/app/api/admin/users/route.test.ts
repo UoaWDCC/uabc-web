@@ -62,6 +62,33 @@ describe("/api/admin/users", async () => {
       expect(json.data.totalPages).toBeGreaterThanOrEqual(2)
     })
 
+    it("should allow queries to name and email", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const emailTestUser = await userDataService.createUser({
+        ...userCreateMock,
+        email: "abcd@defg.com",
+      })
+      const nameTestUser = await userDataService.createUser({
+        ...userCreateMock,
+        email: "eufheiu@straight.zhao",
+        firstName: "foo",
+        lastName: "bar",
+      })
+
+      const reqByEmail = createMockNextRequest(
+        "/api/admin/users?limit=10&page=1&query=abcd@defg.com",
+      )
+      const resByEmail = await GET(reqByEmail)
+      const emailResJson = await resByEmail.json()
+      expect(emailResJson.data.docs).toStrictEqual([emailTestUser])
+
+      const reqByName = createMockNextRequest("/api/admin/users?query=foo bar")
+      const resByName = await GET(reqByName)
+      const nameResJson = await resByName.json()
+      expect(nameResJson.data.docs).toStrictEqual([nameTestUser])
+    })
+
     it("should use default pagination if params are missing", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
