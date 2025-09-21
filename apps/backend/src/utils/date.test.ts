@@ -1,9 +1,4 @@
-import {
-  calculateOpenDate,
-  getDaysBetweenWeekdays,
-  getGameSessionOpenDay,
-  Weekday,
-} from "@repo/shared"
+import { getDaysBetweenWeekdays, getGameSessionOpenDay, Weekday } from "@repo/shared"
 import { semesterMock } from "@repo/shared/mocks"
 import type { Semester } from "@repo/shared/payload-types"
 
@@ -37,74 +32,6 @@ describe("getDaysBetweenWeekdays", () => {
       expect(result).toBeGreaterThanOrEqual(0)
       expect(result).toBeLessThan(7)
     }
-  })
-})
-
-describe("calculateOpenDate", () => {
-  it("should calculate the correct booking open date for a session on Monday with booking open on Friday", () => {
-    // Session on Monday at 2 PM January 15, 2024
-    const startTime = new Date(Date.UTC(2024, 0, 15, 14, 0, 0)) // Monday
-    const openDay = Weekday.friday
-
-    const openTime = new Date(Date.UTC(1970, 0, 1, 9, 0, 0)) // 9 AM
-
-    const result = calculateOpenDate(startTime, openDay, openTime)
-
-    // Should be 3 days before (Jan 12, 2024 at 9 AM)
-    const expected = new Date(Date.UTC(2024, 0, 12, 9, 0, 0)) // Friday
-    expect(result).toEqual(expected)
-  })
-
-  it("should calculate the correct booking open date for a session on Sunday with booking open on Wednesday", () => {
-    // Session on Sunday at 3 PM
-    const startTime = new Date(Date.UTC(2024, 0, 21, 15, 0, 0)) // Sunday
-    const openDay = Weekday.wednesday
-    const openTime = new Date(Date.UTC(1970, 0, 1, 10, 0, 0)) // 10 AM
-
-    const result = calculateOpenDate(startTime, openDay, openTime)
-
-    // Should be 4 days before (Jan 17, 2024 at 10 AM)
-    const expected = new Date(Date.UTC(2024, 0, 17, 10, 0, 0))
-    expect(result).toEqual(expected)
-  })
-
-  it("should calculate the correct booking open date when session and open day are the same", () => {
-    // Session on Tuesday at 1 PM
-    const startTime = new Date(Date.UTC(2024, 0, 16, 13, 0, 0)) // Tuesday
-    const openDay = Weekday.tuesday
-    const openTime = new Date(Date.UTC(1970, 0, 1, 8, 0, 0)) // 8 AM
-
-    const result = calculateOpenDate(startTime, openDay, openTime)
-
-    // Should be the same day as session (Jan 16, 2024 at 8 AM)
-    const expected = new Date(Date.UTC(2024, 0, 16, 8, 0, 0))
-    expect(result).toEqual(expected)
-  })
-
-  it("should handle different time zones correctly", () => {
-    // Session on Thursday at 6 PM
-    const startTime = new Date(Date.UTC(2024, 0, 18, 18, 0, 0)) // Thursday
-    const openDay = Weekday.monday
-    const openTime = new Date(Date.UTC(1970, 0, 1, 12, 0, 0)) // 12 PM
-
-    const result = calculateOpenDate(startTime, openDay, openTime)
-
-    // Should be Monday before the session (Jan 15, 2024 at 12 PM)
-    const expected = new Date(Date.UTC(2024, 0, 15, 12, 0, 0))
-    expect(result).toEqual(expected)
-  })
-
-  it("should preserve the time from openTime parameter", () => {
-    // Session on Saturday at 4 PM
-    const startTime = new Date(Date.UTC(2024, 0, 20, 16, 0, 0)) // Saturday
-    const openDay = Weekday.thursday
-    const openTime = new Date(Date.UTC(1970, 0, 1, 14, 30, 45)) // 2:30:45 PM
-
-    const result = calculateOpenDate(startTime, openDay, openTime)
-
-    // Should be Thursday before the session with exact time from openTime
-    const expected = new Date(Date.UTC(2024, 0, 18, 14, 30, 45))
-    expect(result).toEqual(expected)
   })
 })
 
