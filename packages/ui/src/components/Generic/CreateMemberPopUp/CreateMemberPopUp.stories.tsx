@@ -1,6 +1,7 @@
 import type { Meta, StoryFn } from "@storybook/nextjs-vite"
 import { Box, Button, useDisclosure } from "@yamada-ui/react"
 import { CreateMemberPopUp, type CreateMemberPopUpProps } from "./CreateMemberPopUp"
+import { User } from "@repo/shared/payload-types"
 
 const meta: Meta<CreateMemberPopUpProps> = {
   title: "Generic Components / CreateMemberPopUp",
@@ -25,12 +26,14 @@ export const Default: Story = () => {
     <Box maxW={{ base: "none", md: "33%" }}>
       <Button onClick={onOpen}>Open</Button>
       <CreateMemberPopUp
-        defaultValues={{
-          firstName: "Pre-filled first name",
-          lastName: "Pre-filled last name",
-          email: "email@gmail.com",
-          phoneNumber: "123456789",
-        }}
+        defaultValues={
+          {
+            firstName: "Pre-filled first name",
+            lastName: "Pre-filled last name",
+            email: "email@gmail.com",
+            phoneNumber: "123456789",
+          } as User
+        }
         onClose={onClose}
         onConfirm={(val) => console.log("Confirmed:", val)}
         open={open}
