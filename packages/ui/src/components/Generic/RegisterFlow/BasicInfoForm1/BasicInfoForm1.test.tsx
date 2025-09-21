@@ -43,7 +43,7 @@ describe("<BasicInfoForm1 />", () => {
     const { user } = render(<BasicInfoForm1 onSubmit={handleSubmit} />)
 
     const firstNameInput = screen.getByTestId("first-name")
-    await user.type(firstNameInput, "Brandon")
+    expect(firstNameInput).toHaveValue("")
 
     const submitButton = screen.getByText("Continue")
     await user.click(submitButton)

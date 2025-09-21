@@ -1,5 +1,5 @@
 import { SEMANTIC_COLOR_SCHEMES } from "@repo/theme/semantics"
-import type { Meta, StoryObj } from "@storybook/nextjs"
+import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { PropsTable } from "@storybook-config/components"
 import { LoadingStateBar } from "./LoadingStateBar"
 

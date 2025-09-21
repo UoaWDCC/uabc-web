@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { User } from "../payload-types"
+import type { EmailVerification, User } from "../payload-types"
 import {
   type CreateUserData,
   type EditSelfData,
@@ -7,17 +7,32 @@ import {
   Gender,
   MembershipType,
   PlayLevel,
-  University,
 } from "../types"
+import { UniversityZodEnum } from "../types/enums"
 import { MediaSchema } from "./media"
 import { PaginationDataSchema } from "./query"
+
+export const EmailVerificationCodeSchema = z.object({
+  id: z.string().nullable().optional(),
+  verificationCode: z.string().nullable().optional(),
+  createdAt: z
+    .string()
+    .datetime({ message: "Invalid date format, should be in ISO 8601 format" })
+    .nullable()
+    .optional(),
+  expiresAt: z
+    .string()
+    .datetime({ message: "Invalid date format, should be in ISO 8601 format" })
+    .nullable()
+    .optional(),
+}) satisfies z.ZodType<EmailVerification>
 
 export const UserSchema = z.object({
   id: z.string(),
   firstName: z.string(),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
-  emailVerificationCode: z.string().nullable().optional(),
+  emailVerification: EmailVerificationCodeSchema.optional(),
   phoneNumber: z.string().nullable().optional(),
   // Payload generates a hard coded role type, the `satisfies` operator is used to ensure the type matches
   role: z.enum(["admin", "member", "casual"]),
@@ -27,6 +42,9 @@ export const UserSchema = z.object({
     .nullable()
     .optional(),
   dietaryRequirements: z.string().nullable().optional(),
+  studentId: z.string().nullable().optional(),
+  studentUpi: z.string().nullable().optional(),
+  university: UniversityZodEnum.nullable().optional(),
   remainingSessions: z.number().nullable().optional(),
   image: z.union([z.string(), MediaSchema]).nullable().optional(),
   updatedAt: z.string(),
@@ -37,6 +55,7 @@ export const CreateUserRequestSchema = z.object({
   firstName: z.string().min(1).max(30),
   lastName: z.string().nullable().optional(),
   email: z.string().email(),
+  emailVerification: EmailVerificationCodeSchema,
   role: z.nativeEnum(MembershipType),
   phoneNumber: z.string().nullable().optional(),
   playLevel: z.nativeEnum(PlayLevel).nullable().optional(),
@@ -44,7 +63,7 @@ export const CreateUserRequestSchema = z.object({
   dietaryRequirements: z.string().nullable().optional(),
   studentId: z.string().nullable().optional(),
   studentUpi: z.string().nullable().optional(),
-  university: z.nativeEnum(University).nullable().optional(),
+  university: UniversityZodEnum.nullable().optional(),
   remainingSessions: z.number().nullable().optional(),
   image: z.union([z.string(), MediaSchema]).nullable(),
 }) satisfies z.ZodType<CreateUserData>
@@ -98,3 +117,23 @@ export const GetAllUsersResponseSchema = z.object({
 export const GetUserResponseSchema = z.object({
   data: UserSchema,
 })
+
+export const OnboardedUserSchema = z.object({
+  id: z.string(),
+  firstName: z.string(),
+  lastName: z.string().nullable().optional(),
+  email: z.string().email(),
+  emailVerification: EmailVerificationCodeSchema,
+  phoneNumber: z.string(),
+  role: z.enum(["admin", "member", "casual"]),
+  playLevel: z.enum(["beginner", "intermediate", "advanced"]),
+  gender: z.enum(["male", "female", "non-binary", "other", "prefer-not-to-answer"]),
+  dietaryRequirements: z.string().nullable().optional(),
+  studentId: z.string().nullable().optional(),
+  studentUpi: z.string().nullable().optional(),
+  university: UniversityZodEnum,
+  remainingSessions: z.number().nullable().optional(),
+  image: z.union([z.string(), MediaSchema]).nullable().optional(),
+  updatedAt: z.string(),
+  createdAt: z.string(),
+}) satisfies z.ZodType<User>

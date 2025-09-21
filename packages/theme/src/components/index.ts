@@ -46,6 +46,7 @@ import { FormatNumber } from "./format-number"
 import { Heading } from "./heading"
 import { HueSlider } from "./hue-slider"
 import { Icon } from "./icon"
+import { IconButton } from "./icon-button"
 import { Image } from "./image"
 import { Indicator } from "./indicator"
 import { InfiniteScrollArea } from "./infinite-scroll-area"
@@ -120,6 +121,7 @@ export const components = {
   Blockquote,
   Breadcrumb,
   Button,
+  IconButton,
   Calendar,
   Card,
   Carousel,
