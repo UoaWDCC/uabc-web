@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     mutationFn: async (credentials: LoginFormData) => {
       // Remove queries and reset token to avoid potential conflicts during login
       setToken(null)
+      queryClient.cancelQueries({ queryKey: ["auth", "me"] })
       queryClient.removeQueries({ queryKey: ["auth", "me"] })
 
       const response = await AuthService.login(credentials.email, credentials.password)
