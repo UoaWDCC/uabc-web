@@ -282,7 +282,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                     defaultValue={defaultValues?.phoneNumber ?? undefined}
                     placeholder="12 345 6789"
                     size="lg"
-                    startAddon={"+64"}
+                    startAddon="+64"
                     type={InputType.Tel}
                     {...register("phoneNumber")}
                   />
