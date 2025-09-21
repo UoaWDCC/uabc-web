@@ -40,10 +40,9 @@ export const POST = async (req: NextRequest) => {
     await authDataService.createAuth({
       email: email,
       password: hash,
-      user: user,
     })
     return NextResponse.json(
-      { message: "User registered successfully", data: user },
+      { message: "User registered successfully" },
       {
         status: StatusCodes.CREATED,
       },

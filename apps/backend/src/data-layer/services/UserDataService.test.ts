@@ -26,7 +26,7 @@ describe("UserDataService", () => {
 
     it("should return null if user does not exist when searching by email", async () => {
       const fetchedUser = userDataService.getUserByEmail("nonexistent@example.com")
-      expect(fetchedUser).rejects.toThrow(
+      await expect(fetchedUser).rejects.toThrow(
         "A user with the email: nonexistent@example.com was not found.",
       )
     })
@@ -41,7 +41,7 @@ describe("UserDataService", () => {
 
     it("should return null for non-existent ID", async () => {
       const fetchedUser = userDataService.getUserById("nonexistentid")
-      expect(fetchedUser).rejects.toThrow("Not Found")
+      await expect(fetchedUser).rejects.toThrow("Not Found")
     })
   })
 

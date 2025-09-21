@@ -71,7 +71,10 @@ export const RegisterSection = () => {
         open={isOpen}
         title="Verify Your Email"
       />
-      <RegisterPanel onSubmit={handleSendVerificationCode} />
+      <RegisterPanel
+        googleHref={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
+        onSubmit={handleSendVerificationCode}
+      />
     </Container>
   )
 }

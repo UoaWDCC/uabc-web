@@ -1,6 +1,8 @@
 import {
   type GetAllSemestersResponse,
   GetAllSemestersResponseSchema,
+  type GetCurrentSemesterResponse,
+  GetCurrentSemesterResponseSchema,
   type GetSemesterResponse,
   GetSemesterResponseSchema,
 } from "@repo/shared"
@@ -28,6 +30,16 @@ const SemesterService = {
    */
   getAllSemesters: async (): Promise<GetAllSemestersResponse | undefined> => {
     const response = await apiClient.get("/api/semesters", GetAllSemestersResponseSchema)
+    return ApiClient.throwIfError(response)
+  },
+
+  /**
+   * Retrieve the current semester based on the current date.
+   *
+   * @returns The current semester data if one exists.
+   */
+  getCurrentSemester: async (): Promise<GetCurrentSemesterResponse | undefined> => {
+    const response = await apiClient.get("/api/semesters/current", GetCurrentSemesterResponseSchema)
     return ApiClient.throwIfError(response)
   },
 } as const

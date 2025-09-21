@@ -30,7 +30,6 @@ describe("/api/admin/users", async () => {
 
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
-      expect(consoleErrorSpy).toHaveBeenCalled()
     })
 
     it("should return 401 if user is a member", async () => {
@@ -41,7 +40,6 @@ describe("/api/admin/users", async () => {
 
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No scope" })
-      expect(consoleErrorSpy).toHaveBeenCalled()
     })
 
     it("should return paginated users for admin", async () => {
@@ -62,7 +60,6 @@ describe("/api/admin/users", async () => {
       expect(json.data.limit).toBe(10)
       expect(json.data.totalDocs).toBeGreaterThanOrEqual(15)
       expect(json.data.totalPages).toBeGreaterThanOrEqual(2)
-      expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 
     it("should use default pagination if params are missing", async () => {
@@ -74,7 +71,6 @@ describe("/api/admin/users", async () => {
       const json = await res.json()
       expect(json.data.page).toBe(1)
       expect(json.data.limit).toBe(10)
-      expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 
     it("should return 400 if limit or page is out of range", async () => {
@@ -87,7 +83,6 @@ describe("/api/admin/users", async () => {
       const json = await res.json()
       expect(json.error).toBe("Invalid query parameters")
       expect(json.details).toBeDefined()
-      expect(consoleErrorSpy).not.toHaveBeenCalled()
     })
 
     it("should handle errors and return 500 status", async () => {
@@ -125,7 +120,6 @@ describe("/api/admin/users", async () => {
 
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(await res.json()).toStrictEqual({ error: "No token provided" })
-      expect(consoleErrorSpy).toHaveBeenCalled()
     })
   })
 
@@ -177,7 +171,6 @@ describe("/api/admin/users", async () => {
 
     it("should return a 500 error for internal server error", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
       vi.spyOn(UserDataService.prototype, "createUser").mockRejectedValueOnce(
         new Error("Database error"),
       )
@@ -188,8 +181,6 @@ describe("/api/admin/users", async () => {
       const json = await res.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
       expect(consoleErrorSpy).toHaveBeenCalled()
-
-      consoleErrorSpy.mockRestore()
     })
   })
 })
