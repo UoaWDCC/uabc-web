@@ -60,11 +60,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = useMutation({
     mutationFn: async (credentials: LoginFormData) => {
+      // Remove queries and reset token to avoid potential conflicts during login
+      setToken(null)
+      queryClient.removeQueries({ queryKey: ["auth", "me"] })
+
       const response = await AuthService.login(credentials.email, credentials.password)
-      if (response.data) {
-        setToken(response.data)
-      }
+
       return response
+    },
+    onSettled: (response) => {
+      if (response?.data) {
+        setToken(response?.data)
+      }
     },
     onError: (error) => {
       notice({
@@ -103,13 +110,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = useCallback(() => {
     setToken(null)
+    queryClient.cancelQueries({ queryKey: ["auth", "me"] })
+    queryClient.removeQueries({ queryKey: ["auth", "me"] })
+
     notice({
       title: "Logged out",
       description: "You have been logged out successfully.",
       status: "success",
     })
-    queryClient.cancelQueries({ queryKey: ["auth", "me"] })
-    queryClient.invalidateQueries({ queryKey: ["auth", "me"] })
   }, [setToken, notice, queryClient])
 
   const authState: AuthState = {
