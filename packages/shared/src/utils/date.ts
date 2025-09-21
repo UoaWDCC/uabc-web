@@ -25,8 +25,10 @@ export function getDaysBetweenWeekdays(fromDay: Weekday, toDay: Weekday): number
  */
 export function calculateOpenDate(startTime: Date, openDay: Weekday, openTime: Date): Date {
   const openDate = new Date(startTime)
+
   const dayIndex = startTime.getUTCDay()
   const day = Object.values(Weekday)[dayIndex] as Weekday
+
   const daysToSubtract = getDaysBetweenWeekdays(openDay, day)
 
   openDate.setUTCDate(startTime.getUTCDate() - daysToSubtract)
@@ -66,7 +68,18 @@ export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date
 
   const dayIndex = startTime.getUTCDay()
   const day = Object.values(Weekday)[dayIndex] as Weekday
-  const daysToSubtract = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day) + 7
+  let daysToSubtract = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day)
+
+  // If the session is on the same day as bookingOpenDay, check the time
+  if (daysToSubtract === 0) {
+    // Compare the time of startTime and bookingOpenTime (UTC)
+    const startMinutes = startTime.getUTCHours() * 60 + startTime.getUTCMinutes()
+    const openMinutes = openTime.getUTCHours() * 60 + openTime.getUTCMinutes()
+    if (startMinutes < openMinutes) {
+      // If the session starts before the open time on the same day, subtract a week
+      daysToSubtract = 7
+    }
+  }
 
   openDate.setUTCDate(startTime.getUTCDate() - daysToSubtract)
   openDate.setUTCHours(
