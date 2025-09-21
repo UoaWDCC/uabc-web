@@ -5,6 +5,11 @@ import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import { payload } from "@/data-layer/adapters/Payload"
+import {
+  commitCascadeTransaction,
+  createTransactionId,
+  rollbackCascadeTransaction,
+} from "@/data-layer/adapters/Transaction"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 
 class RouteWrapper {
@@ -88,7 +93,7 @@ class RouteWrapper {
       const { id } = await params
       const cascade = req.nextUrl.searchParams.get("cascade") === "true"
       const gameSessionDataService = new GameSessionDataService()
-      const transactionID = await RouteWrapper.getTransactionId(!!cascade)
+      const transactionID = cascade && (await createTransactionId())
 
       if (transactionID) {
         try {
@@ -104,13 +109,9 @@ class RouteWrapper {
           await gameSessionDataService.deleteGameSessionSchedule(id)
           await gameSessionDataService.deleteGameSession(gameSession.id)
           // await RouteWrapper.deleteRelatedBookingsForSession(gameSession.id, transactionID)
-          if (transactionID) {
-            await payload.db.commitTransaction(transactionID)
-          }
+          await commitCascadeTransaction(transactionID)
         } catch {
-          if (transactionID) {
-            await payload.db.rollbackTransaction(transactionID)
-          }
+          await rollbackCascadeTransaction(transactionID)
         }
       } else {
         await gameSessionDataService.deleteGameSessionSchedule(id)
@@ -130,20 +131,6 @@ class RouteWrapper {
         { status: StatusCodes.INTERNAL_SERVER_ERROR },
       )
     }
-  }
-
-  /**
-   * Retrieves a transaction ID for cascading deletes if related bookings should be deleted.
-   * @param shouldDeleteRelated indicates whether related bookings should be deleted
-   * @private
-   *
-   * @remarks it should be noted that this method will return undefined if the `deleteRelatedBookings` parameter is false or if transaction support is not enabled in Payload.
-   */
-  private static async getTransactionId(
-    shouldDeleteRelated: boolean,
-  ): Promise<string | number | undefined> {
-    if (!shouldDeleteRelated) return undefined
-    return (await payload.db.beginTransaction()) ?? undefined
   }
 }
 
