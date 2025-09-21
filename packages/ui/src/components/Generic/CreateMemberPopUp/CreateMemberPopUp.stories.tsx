@@ -1,7 +1,7 @@
+import type { User } from "@repo/shared/payload-types"
 import type { Meta, StoryFn } from "@storybook/nextjs-vite"
 import { Box, Button, useDisclosure } from "@yamada-ui/react"
 import { CreateMemberPopUp, type CreateMemberPopUpProps } from "./CreateMemberPopUp"
-import { User } from "@repo/shared/payload-types"
 
 const meta: Meta<CreateMemberPopUpProps> = {
   title: "Generic Components / CreateMemberPopUp",
