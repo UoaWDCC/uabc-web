@@ -36,6 +36,18 @@ export const isUserObject = (user: User | string | null | undefined): user is Us
 }
 
 /**
+ * Returns a payload object ID if the object is an object with an id property, otherwise returns the string itself.
+ *
+ * @param stringOrObject The possible object or string
+ * @returns The document ID
+ */
+export const getPayloadObjectId = <T extends { id: string } | string>(
+  stringOrObject: T,
+): string => {
+  return typeof stringOrObject === "object" ? stringOrObject.id : stringOrObject
+}
+
+/**
  * Type guard to check if a value is a GameSession object with required properties
  *
  * @param gameSession The value to check

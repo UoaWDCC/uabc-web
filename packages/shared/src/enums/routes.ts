@@ -20,4 +20,11 @@ export enum Routes {
 
   // User pages
   PROFILE = "/profile",
+  ONBOARDING = "/onboarding",
+
+  // Admin pages
+  ADMIN = "/admin",
+  ADMIN_MEMBERS = "/admin/members",
+  ADMIN_SESSIONS = "/admin/sessions",
+  ADMIN_SEMESTERS = "/admin/semesters",
 }

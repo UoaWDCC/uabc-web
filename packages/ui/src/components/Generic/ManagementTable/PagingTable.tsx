@@ -1,6 +1,6 @@
 import { TableContainer, VStack } from "@yamada-ui/react"
 import type { Column } from "@yamada-ui/table"
-import { ManagementTable } from "./Table"
+import { ManagementTable, type TableOptions } from "./Table"
 import { TablePagination } from "./TablePagination"
 
 type PagingTableProps<TData> = {
@@ -20,6 +20,10 @@ type PagingTableProps<TData> = {
    * The column key to use for the empty state cell.
    */
   emptyStateColumnKey: keyof TData
+  /**
+   * Optional props to pass to the table.
+   */
+  tableProps?: TableOptions
 }
 
 export function PagingTable<TData>({
@@ -27,6 +31,7 @@ export function PagingTable<TData>({
   rowId,
   emptyStateText,
   emptyStateColumnKey,
+  tableProps,
 }: PagingTableProps<TData>) {
   return (
     <VStack gap="md" w="full">
@@ -36,6 +41,7 @@ export function PagingTable<TData>({
           emptyStateColumnKey={emptyStateColumnKey}
           emptyStateText={emptyStateText}
           rowId={rowId}
+          {...tableProps}
         />
       </TableContainer>
       <TablePagination />

@@ -1,14 +1,11 @@
 "use client"
-import type { MembershipType } from "@repo/shared"
+import { type MembershipType, OnboardedUserSchema, Routes } from "@repo/shared"
+import type { AuthContextValueWithUser } from "@repo/shared/types/auth"
 import { NavigationUtils } from "@repo/ui/utils"
 import { useUpdateEffect } from "@yamada-ui/react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { type ReactNode, useMemo } from "react"
-import { type AuthContextValue, useAuth } from "./AuthContext"
-
-export type AuthContextValueWithUser = AuthContextValue & {
-  user: NonNullable<AuthContextValue["user"]>
-}
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { type ReactNode, useEffect, useMemo } from "react"
+import { useAuth } from "./AuthContext"
 
 export type RoleGuardProps = {
   /**
@@ -47,6 +44,20 @@ export const RoleGuard = ({
 }: RoleGuardProps) => {
   const auth = useAuth()
   const scopeSet = useMemo(() => new Set(scope), [scope])
+  const router = useRouter()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    if (!auth.user || auth.isLoading) return
+
+    try {
+      if (pathname !== Routes.ONBOARDING) {
+        OnboardedUserSchema.parse(auth.user)
+      }
+    } catch (_err) {
+      router.push(Routes.ONBOARDING)
+    }
+  }, [auth, pathname, router])
 
   if (auth.isLoading || !auth.isAvailable) {
     return loading

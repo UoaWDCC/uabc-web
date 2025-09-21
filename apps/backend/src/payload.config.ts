@@ -1,9 +1,9 @@
 import path from "node:path"
 import { fileURLToPath } from "node:url"
-// storage-adapter-import-placeholder
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
+import { uploadthingStorage } from "@payloadcms/storage-uploadthing"
 import type { Config } from "@repo/shared/payload-types"
 import { buildConfig } from "payload"
 import sharp from "sharp"
@@ -86,6 +86,14 @@ export default buildConfig({
       : undefined,
   sharp,
   plugins: [
-    // storage-adapter-placeholder
+    uploadthingStorage({
+      collections: {
+        media: true,
+      },
+      options: {
+        token: process.env.UPLOADTHING_TOKEN,
+        acl: "public-read",
+      },
+    }),
   ],
 })

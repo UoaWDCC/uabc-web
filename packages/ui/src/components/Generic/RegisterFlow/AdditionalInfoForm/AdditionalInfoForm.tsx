@@ -38,7 +38,7 @@ const genderOptions = Object.values(Gender).map((value) => ({
 /**
  * Options for the Skill Level Select component, using enum values from {@link PlayLevel}.
  */
-const skillLevelOptions = Object.values(PlayLevel).map((playLevel) => ({
+const playLevelOptions = Object.values(PlayLevel).map((playLevel) => ({
   value: playLevel,
   label: playLevel,
 }))
@@ -89,16 +89,16 @@ export const AdditionalInfoForm: FC<AdditionalInfoFormProps> = memo(
               )}
             />
           </FormControl>
-          <FormControl errorMessage={errors.skillLevel?.message} invalid={!!errors.skillLevel}>
+          <FormControl errorMessage={errors.playLevel?.message} invalid={!!errors.playLevel}>
             <Controller
               control={control}
-              defaultValue={defaultValues?.skillLevel}
-              name="skillLevel"
+              defaultValue={defaultValues?.playLevel}
+              name="playLevel"
               render={({ field }) => (
                 <Select
                   data-testid="skill-level"
                   icon={<IdCardIcon />}
-                  items={skillLevelOptions}
+                  items={playLevelOptions}
                   label="Skill level"
                   {...field}
                 />

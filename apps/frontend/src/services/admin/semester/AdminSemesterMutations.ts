@@ -1,4 +1,6 @@
+import type { CreateSemesterRequest, UpdateSemesterRequest } from "@repo/shared/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useAuth } from "@/context/AuthContext"
 import { QueryKeys } from "@/services"
 import AdminSemesterService from "./AdminSemesterService"
 
@@ -9,8 +11,10 @@ import AdminSemesterService from "./AdminSemesterService"
  */
 export const useCreateSemester = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
-    mutationFn: AdminSemesterService.createSemester,
+    mutationFn: (data: CreateSemesterRequest) =>
+      AdminSemesterService.createSemester({ data, token }),
     // TODO: when get by id is implemented, do not invalidate get by id queries
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -30,8 +34,10 @@ export const useCreateSemester = () => {
  */
 export const useUpdateSemester = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
-    mutationFn: AdminSemesterService.updateSemester,
+    mutationFn: ({ id, data }: { id: string; data: UpdateSemesterRequest }) =>
+      AdminSemesterService.updateSemester({ id, data, token }),
     // TODO: when get by id is implemented, only invalidate the updated id for get by id or update the specific query with the updated data
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -51,8 +57,9 @@ export const useUpdateSemester = () => {
  */
 export const useDeleteSemester = () => {
   const queryClient = useQueryClient()
+  const { token } = useAuth()
   return useMutation({
-    mutationFn: AdminSemesterService.deleteSemester,
+    mutationFn: (id: string) => AdminSemesterService.deleteSemester({ id, token }),
     // TODO: when get by id is implemented, only invalidate the updated id for get by id
     onSuccess: () => {
       queryClient.invalidateQueries({
