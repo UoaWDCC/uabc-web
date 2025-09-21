@@ -1,4 +1,11 @@
-import { Gender, MembershipType, PlayLevel, University } from "@repo/shared"
+import {
+  type CreateMemberPopUpFormValues,
+  Gender,
+  MembershipType,
+  PlayLevel,
+  University,
+} from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
 import { Button, Heading, Select, TextInput } from "@repo/ui/components/Primitive"
 import { AutoCompleteType, InputType } from "@repo/ui/components/Primitive/TextInput/types"
 import {
@@ -30,33 +37,18 @@ import {
 import type { FC } from "react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 
-interface FormData {
-  firstName: string
-  lastName: string
-  email: string
-  phoneNumber: string
-  gender: Gender
-  playLevel: PlayLevel
-  university: University
-  studentId: string
-  studentUpi: string
-  role: MembershipType
-  dietaryRequirements: string
-  remainingSessions: number
-}
-
 export interface CreateMemberPopUpProps extends DialogProps {
   /**
    * The title to display in the dialog header
    */
   title?: string
 
-  defaultValues?: Partial<FormData>
+  defaultValues?: User | null
 
   /**
    * The function to call when the form is submitted
    */
-  onConfirm: (value: FormData) => void
+  onConfirm: (value: CreateMemberPopUpFormValues) => void
 }
 
 /**
@@ -134,13 +126,13 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
     reset,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>()
+  } = useForm<CreateMemberPopUpFormValues>()
 
   const handleClose = () => {
     reset()
     props.onClose?.()
   }
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+  const onSubmit: SubmitHandler<CreateMemberPopUpFormValues> = (data) => {
     onConfirm(data)
     reset()
     props.onClose?.()
@@ -208,7 +200,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                 >
                   <Controller
                     control={control}
-                    defaultValue={defaultValues?.university}
+                    defaultValue={defaultValues?.university ?? undefined}
                     name="university"
                     render={({ field }) => (
                       <Select
@@ -227,7 +219,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                 >
                   <TextInput
                     data-testid="student-upi"
-                    defaultValue={defaultValues?.studentUpi}
+                    defaultValue={defaultValues?.studentUpi ?? undefined}
                     disabled={watch("university") !== University.uoa}
                     placeholder="UPI"
                     size="lg"
@@ -239,7 +231,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                 <FormControl errorMessage={errors.playLevel?.message} invalid={!!errors.playLevel}>
                   <Controller
                     control={control}
-                    defaultValue={defaultValues?.playLevel}
+                    defaultValue={defaultValues?.playLevel ?? undefined}
                     name="playLevel"
                     render={({ field }) => (
                       <Select
@@ -273,7 +265,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                 <FormControl errorMessage={errors.lastName?.message} invalid={!!errors.lastName}>
                   <TextInput
                     data-testid="last-name"
-                    defaultValue={defaultValues?.lastName}
+                    defaultValue={defaultValues?.lastName ?? undefined}
                     placeholder="Last name"
                     size="lg"
                     startElement={<FolderPenIcon />}
@@ -287,7 +279,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                 >
                   <TextInput
                     data-testid="phone-number"
-                    defaultValue={defaultValues?.phoneNumber}
+                    defaultValue={defaultValues?.phoneNumber ?? undefined}
                     placeholder="12 345 6789"
                     size="lg"
                     startAddon={"+64"}
@@ -298,7 +290,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                 <FormControl errorMessage={errors.studentId?.message} invalid={!!errors.studentId}>
                   <TextInput
                     data-testid="student-id"
-                    defaultValue={defaultValues?.studentId}
+                    defaultValue={defaultValues?.studentId ?? undefined}
                     disabled={watch("university") !== University.uoa}
                     placeholder="Student ID"
                     size="lg"
@@ -310,7 +302,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                 <FormControl errorMessage={errors.gender?.message} invalid={!!errors.gender}>
                   <Controller
                     control={control}
-                    defaultValue={defaultValues?.gender}
+                    defaultValue={defaultValues?.gender ?? undefined}
                     name="gender"
                     render={({ field }) => (
                       <Select
@@ -329,7 +321,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                 >
                   <TextInput
                     data-testid="dietary-requirements"
-                    defaultValue={defaultValues?.dietaryRequirements}
+                    defaultValue={defaultValues?.dietaryRequirements ?? undefined}
                     placeholder="Dietary requirements"
                     size="lg"
                     startElement={<BeanOffIcon />}
@@ -343,7 +335,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                 >
                   <TextInput
                     data-testid="remaining-sessions"
-                    defaultValue={defaultValues?.remainingSessions}
+                    defaultValue={defaultValues?.remainingSessions ?? undefined}
                     placeholder="Remaining Sessions"
                     size="lg"
                     startElement={<TicketsIcon />}

@@ -1,17 +1,25 @@
 "use client"
 
+import type { User } from "@repo/shared/payload-types"
 import { ManagementTable } from "@repo/ui/components/Generic"
 import { Dialog, useDisclosure } from "@yamada-ui/react"
-import { type FC, memo, useState } from "react"
+import dayjs from "dayjs"
+import timezone from "dayjs/plugin/timezone"
+import utc from "dayjs/plugin/utc"
+import { type FC, memo, useMemo, useState } from "react"
 import { CreateMemberPopUp } from "../../Generic/CreateMemberPopUp/CreateMemberPopUp"
 import { columns, type UserData } from "./Columns"
 import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.tz.setDefault("Pacific/Auckland")
 
 /**
  * Props for admin table component.
  */
 export interface AdminTableProps {
-  data: UserData[]
+  data: User[]
   onEdit?: (id: string) => void
   onDelete?: (id: string) => void
 }
@@ -23,28 +31,50 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
   const { open: openEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure()
   const { open: openDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure()
 
-  const [selectedUserData, setSelectedUserData] = useState<UserData | null>(null)
+  const userData = useMemo(
+    () =>
+      data.map((user) => ({
+        id: user.id,
+        name: `${user.firstName} ${user.lastName || ""}`,
+        email: user.email,
+        remaining: String(user.remainingSessions),
+        joined: dayjs(user.createdAt).format("DD MMM YYYY hh:mm A"),
+        role: user.role,
+        university: user.university,
+        level: user.playLevel,
+      })),
+    [data],
+  )
+
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   const handleEditClick = (row: UserData) => {
-    setSelectedUserData(row)
-    onOpenEdit()
+    const user = data.find((user) => user.id === row.id)
+    console.log(user?.firstName)
+    if (user) {
+      setSelectedUser(user)
+      onOpenEdit()
+    }
   }
 
   const handleEditConfirm = () => {
-    if (selectedUserData && onEdit) {
-      onEdit(selectedUserData.id)
+    if (selectedUser && onEdit) {
+      onEdit(selectedUser.id)
     }
     onCloseEdit()
   }
 
   const handleDeleteClick = (row: UserData) => {
-    setSelectedUserData(row)
-    onOpenDelete()
+    const user = data.find((user) => user.id === row.id)
+    if (user) {
+      setSelectedUser(user)
+      onOpenDelete()
+    }
   }
 
   const handleDeleteConfirm = () => {
-    if (selectedUserData && onDelete) {
-      onDelete(selectedUserData.id)
+    if (selectedUser && onDelete) {
+      onDelete(selectedUser.id)
     }
     onCloseDelete()
   }
@@ -64,7 +94,7 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
         ]}
         columns={columns}
         columnsConfig={COLUMNS_CONFIG}
-        data={data}
+        data={userData as UserData[]}
         emptyStateColumnKey="name"
         emptyStateText="No users found."
         filterConfigs={FILTER_CONFIGS}
@@ -72,13 +102,12 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
       />
 
       <CreateMemberPopUp
-        defaultValues={{
-          firstName: selectedUserData?.name,
-          lastName: "Pre-filled last name",
-          email: selectedUserData?.email,
-          phoneNumber: "123456789",
+        defaultValues={selectedUser}
+        key={selectedUser?.id}
+        onClose={() => {
+          setSelectedUser(null)
+          onCloseEdit()
         }}
-        onClose={onCloseEdit}
         onConfirm={handleEditConfirm}
         open={openEdit}
       />
@@ -87,7 +116,10 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
         cancel="Cancel"
         header="Are you sure?"
         onCancel={onCloseDelete}
-        onClose={onCloseDelete}
+        onClose={() => {
+          setSelectedUser(null)
+          onCloseDelete()
+        }}
         onSuccess={handleDeleteConfirm}
         open={openDelete}
         success={{

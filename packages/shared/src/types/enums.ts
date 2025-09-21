@@ -6,6 +6,8 @@ export enum MembershipType {
   admin = "admin",
 }
 
+export const MembershipTypeZodEnum = z.enum(["member", "casual", "admin"])
+
 export enum Weekday {
   sunday = "sunday",
   monday = "monday",
@@ -23,6 +25,12 @@ export enum PlayLevel {
   advanced = "advanced",
 }
 
+export const PlayLevelZodEnum = z.enum(["beginner", "intermediate", "advanced"], {
+  errorMap: () => ({
+    message: "Please select a play level",
+  }),
+})
+
 export enum Gender {
   male = "male",
   female = "female",
@@ -30,6 +38,15 @@ export enum Gender {
   other = "other",
   preferNotToAnswer = "prefer-not-to-answer",
 }
+
+export const GenderZodEnum = z.enum(
+  ["male", "female", "non-binary", "other", "prefer-not-to-answer"],
+  {
+    errorMap: () => ({
+      message: "Please select a gender",
+    }),
+  },
+)
 
 export enum University {
   uoa = "UoA",
@@ -40,14 +57,14 @@ export enum University {
   notAStudent = "Not a student",
 }
 
-export const UniversityZodEnum = z.enum([
-  "UoA",
-  "AUT",
-  "Massey University",
-  "Other",
-  "Working",
-  "Not a student",
-])
+export const UniversityZodEnum = z.enum(
+  ["UoA", "AUT", "Massey University", "Other", "Working", "Not a student"],
+  {
+    errorMap: () => ({
+      message: "Please select a University",
+    }),
+  },
+)
 
 export enum SessionType {
   ongoing = "Ongoing",
