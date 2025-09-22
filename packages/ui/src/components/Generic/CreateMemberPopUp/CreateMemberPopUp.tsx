@@ -1,4 +1,6 @@
+import { zodResolver } from "@hookform/resolvers/zod"
 import {
+  CreateMemberPopUpFormDataSchema,
   type CreateMemberPopUpFormValues,
   Gender,
   MembershipType,
@@ -126,7 +128,9 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
     reset,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<CreateMemberPopUpFormValues>()
+  } = useForm<CreateMemberPopUpFormValues>({
+    resolver: zodResolver(CreateMemberPopUpFormDataSchema),
+  })
 
   const handleClose = () => {
     reset()

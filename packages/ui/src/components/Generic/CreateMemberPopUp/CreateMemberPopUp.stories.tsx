@@ -26,11 +26,26 @@ export const Default: Story = () => {
     <Box maxW={{ base: "none", md: "33%" }}>
       <Button onClick={onOpen}>Open</Button>
       <CreateMemberPopUp
+        onClose={onClose}
+        onConfirm={(val) => console.log("Confirmed:", val)}
+        open={open}
+      />
+    </Box>
+  )
+}
+
+export const PrefilledData: Story = () => {
+  const { open, onOpen, onClose } = useDisclosure()
+
+  return (
+    <Box maxW={{ base: "none", md: "33%" }}>
+      <Button onClick={onOpen}>Open</Button>
+      <CreateMemberPopUp
         defaultValues={
           {
-            firstName: "Pre-filled first name",
-            lastName: "Pre-filled last name",
-            email: "email@gmail.com",
+            firstName: "Alice",
+            lastName: "Smith",
+            email: "alice@example.com",
             phoneNumber: "123456789",
           } as User
         }
