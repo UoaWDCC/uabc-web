@@ -49,7 +49,7 @@ export const CreateMemberPopUpFormDataSchema = z
     remainingSessions: z
       .string()
       .min(1, "Field is required")
-      .regex(/\d/, "Not a number")
+      .regex(/^\d+$/, "Not a number")
       .optional(),
   })
   .superRefine(({ university, studentId, studentUpi }, ctx) => {

@@ -99,20 +99,14 @@ const roleOptions = Object.values(MembershipType).map((membershipType) => ({
  /**
   * Example usage:
   * 
-  * <CreateSessionPopUp
-  *   isOpen={isOpen}
-  *   onClose={handleClose}
-  *   title="Create New Session"
-  *   description="Fill in the details below to create a new session."
-  *   startTime={new Date()}
-  *   endTime={new Date()}
-  *   memberCapacity={20}
-  *   casualCapacity={10}
-  *   inputPlaceholder="Enter Number"
-  *   onConfirm={(value) => {
-  *     // handle the confirmed value
-  *     console.log("Session name:", value)
+  * <CreateMemberPopUp
+  *   defaultValues={defaultValues}
+  *   key={selectedUser?.id}
+  *   onClose={() => {
+  *     onCloseEdit()
   *   }}
+  *   onConfirm={(values) => handleEditConfirm(values)}
+  *   open={openEdit}
   * />
   */
 export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({

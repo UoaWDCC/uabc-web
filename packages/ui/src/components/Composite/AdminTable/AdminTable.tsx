@@ -58,7 +58,6 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
 
   const handleEditClick = (row: UserData) => {
     const user = data.find((user) => user.id === row.id)
-    console.log(user?.firstName)
     if (user) {
       setSelectedUser(user)
       onOpenEdit()
@@ -132,6 +131,7 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
         }}
         onConfirm={(values) => handleEditConfirm(values)}
         open={openEdit}
+        title="Edit Member"
       />
 
       <Dialog
