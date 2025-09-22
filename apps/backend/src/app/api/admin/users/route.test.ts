@@ -89,6 +89,16 @@ describe("/api/admin/users", async () => {
       expect(nameResJson.data.docs).toStrictEqual([nameTestUser])
     })
 
+    it("should handle empty query strings", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const res = await GET(createMockNextRequest("/api/admin/users?query="))
+
+      expect(res.status).toBe(StatusCodes.OK)
+      const json = await res.json()
+      expect(json.data.docs.length).toBeGreaterThan(0) // Should return all users
+    })
+
     it("should use default pagination if params are missing", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 

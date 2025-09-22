@@ -19,7 +19,7 @@ class UsersRouteWrapper {
       const result = PaginationQuerySchema.safeParse({
         limit: searchParams.get("limit") ?? 10,
         page: searchParams.get("page") ?? 1,
-        query: searchParams.get("query") ?? undefined,
+        query: searchParams.get("query") || undefined,
       })
       if (!result.success) {
         return NextResponse.json(
