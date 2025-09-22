@@ -1,5 +1,8 @@
+import { render } from "@react-email/components"
+import { dayjs } from "@repo/shared"
+import type { Booking, GameSession, GameSessionSchedule, User } from "@repo/shared/payload-types"
 import { payload } from "@/data-layer/adapters/Payload"
-
+import { BookingConfirmationEmail } from "./BookingConfirmationEmail"
 export default class MailService {
   /**
    * Send an email verification code to the user's email address.
@@ -12,6 +15,36 @@ export default class MailService {
       to: email,
       subject: "Email verification code",
       text: `Here is your email verification code: ${verificationCode}. This code will expire in 10 minutes.`,
+    })
+  }
+
+  /**
+   * Sends a booking confirmation email to the user.
+   *
+   * @param booking The booking details.
+   */
+  public static async sendBookingConfirmation(booking: Booking) {
+    const email = (booking.user as User).email
+    const gameSession = booking.gameSession as GameSession
+    const gameSessionSchedule = gameSession.gameSessionSchedule as GameSessionSchedule | undefined
+
+    const rawWeekday = gameSessionSchedule?.day || dayjs(gameSession.startTime).format("dddd")
+    const weekday = rawWeekday.charAt(0).toUpperCase() + rawWeekday.slice(1)
+    const time = gameSession.openTime
+    const sessionName = gameSessionSchedule?.name || gameSession.name || "UABC"
+    const sessionLocation = gameSessionSchedule?.location || gameSession.location || undefined
+    const html = await render(
+      BookingConfirmationEmail({
+        weekday,
+        time,
+        sessionName,
+        sessionLocation,
+      }),
+    )
+    return await payload.sendEmail({
+      to: email,
+      subject: `UABC - ${weekday} Booking Confirmation`,
+      html: html,
     })
   }
 }
