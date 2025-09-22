@@ -1,5 +1,6 @@
 import type { CreateGameSessionData } from "@repo/shared"
 import type { GameSession } from "@repo/shared/payload-types"
+import { gameSessionScheduleMock } from "./GameSessionSchedule.mock"
 import { semesterMock } from "./Semester.mock"
 
 export const gameSessionCreateMock: CreateGameSessionData = {
@@ -32,4 +33,11 @@ export const gameSessionMock: GameSession = {
   casualCapacity: 8,
   updatedAt: new Date(2025, 0, 1).toISOString(),
   createdAt: new Date(2025, 0, 1).toISOString(),
+}
+
+export const gameSessionWithScheduleMock: GameSession = {
+  ...gameSessionMock,
+  gameSessionSchedule: {
+    ...gameSessionScheduleMock,
+  },
 }
