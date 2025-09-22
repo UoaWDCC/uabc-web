@@ -10,7 +10,14 @@ export const create = async (): Promise<MongoMemoryReplSet> => {
     replSet: {
       count: 1,
       storageEngine: "wiredTiger",
+      dbName: "test",
+      oplogSize: 1,
     },
+    instanceOpts: [
+      {
+        storageEngine: "wiredTiger",
+      },
+    ],
   })
   return mongod
 }

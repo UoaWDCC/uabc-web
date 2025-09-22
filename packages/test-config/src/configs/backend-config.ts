@@ -7,7 +7,8 @@ export const backendConfig = mergeConfig(baseConfig, {
     setupFiles: ["@repo/test-config/setups/mongodb"],
     globalSetup: ["@repo/test-config/setups/global-setup"],
     globalTeardown: ["@repo/test-config/setups/global-teardown"],
-    maxWorkers: process.env.CI === "true" ? 1 : undefined,
+    // Use single worker in CI or when testing transactions to avoid race conditions
+    maxWorkers: process.env.CI === "true" || process.env.TEST_TRANSACTIONS === "true" ? 1 : undefined,
     coverage: {
       thresholds: {
         branches: 50,
