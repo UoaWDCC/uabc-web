@@ -16,7 +16,7 @@ describe("Transaction", () => {
   const gameSessionDataService = new GameSessionDataService()
   const semesterDataService = new SemesterDataService()
 
-  it.skip("should commit several booking deletions successfully in the transaction", async () => {
+  it("should commit several booking deletions successfully in the transaction", async () => {
     const createdSemester = await semesterDataService.createSemester(semesterCreateMock)
     const createdGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
       ...gameSessionScheduleCreateMock,
@@ -53,7 +53,7 @@ describe("Transaction", () => {
     )
   })
 
-  it.skip("should rollback several booking deletions if error occurs in the transaction", async () => {
+  it("should rollback several booking deletions if error occurs in the transaction", async () => {
     const createdSemester = await semesterDataService.createSemester(semesterCreateMock)
     const createdGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
       ...gameSessionScheduleCreateMock,
