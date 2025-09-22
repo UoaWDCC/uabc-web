@@ -1,5 +1,5 @@
-import type { Onboarding } from "src/payload-types"
 import z from "zod"
+import type { Onboarding } from "../../payload-types"
 import { SerializedEditorStateSchema } from "../payload"
 
 export const OnboardingGlobalSchema = z.object({
