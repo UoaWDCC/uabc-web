@@ -11,7 +11,7 @@ export const create = async (): Promise<MongoMemoryReplSet> => {
       count: 1,
       storageEngine: "wiredTiger",
       dbName: "test",
-      oplogSize: 1,
+      args: ["--oplogSize", "2"],
     },
     instanceOpts: [
       {

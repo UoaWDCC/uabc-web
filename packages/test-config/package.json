@@ -6,7 +6,9 @@
     "./backend": "./dist/configs/backend-config.js",
     "./frontend": "./dist/configs/frontend-config.js",
     "./setups/dom": "./dist/setups/dom-setup.js",
-    "./setups/mongodb": "./dist/setups/mongodb-setup.js"
+    "./setups/mongodb": "./dist/setups/mongodb-setup.js",
+    "./setups/global-setup": "./dist/setups/global-setup.js",
+    "./setups/global-teardown": "./dist/setups/global-teardown.js"
   },
   "scripts": {
     "check-types": "tsc --noEmit",

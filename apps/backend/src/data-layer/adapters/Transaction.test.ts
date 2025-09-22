@@ -24,6 +24,7 @@ describe("Transaction", () => {
     })
     const createdGameSession = await gameSessionDataService.createGameSession({
       ...gameSessionCreateMock,
+      semester: createdSemester.id, // Use the created semester ID
       gameSessionSchedule: createdGameSessionSchedule,
     })
 
@@ -61,6 +62,7 @@ describe("Transaction", () => {
     })
     const createdGameSession = await gameSessionDataService.createGameSession({
       ...gameSessionCreateMock,
+      semester: createdSemester.id, // Use the created semester ID
       gameSessionSchedule: createdGameSessionSchedule,
     })
 
