@@ -2,6 +2,7 @@
 
 import type { User } from "@repo/shared/payload-types"
 import type {
+  CreateMemberPopUpFormValues,
   Gender,
   MembershipType,
   PlayLevel,
@@ -64,21 +65,21 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
     }
   }
 
-  const handleEditConfirm = () => {
+  const handleEditConfirm = (values: CreateMemberPopUpFormValues) => {
     if (selectedUser && onEdit) {
       // TODO: improve the creation of UpdateUserRequest
       const updateUserRequest: UpdateUserRequest = {
-        firstName: selectedUser.firstName,
-        lastName: selectedUser.lastName,
-        email: selectedUser.email,
-        role: selectedUser.role as MembershipType,
-        phoneNumber: selectedUser.phoneNumber,
-        playLevel: selectedUser.playLevel as PlayLevel,
-        gender: selectedUser.gender as Gender,
-        dietaryRequirements: selectedUser.dietaryRequirements,
-        studentId: selectedUser.studentId,
-        studentUpi: selectedUser.studentUpi,
-        university: selectedUser.university as University,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        role: values.role as MembershipType,
+        phoneNumber: values.phoneNumber,
+        playLevel: values.playLevel as PlayLevel,
+        gender: values.gender as Gender,
+        dietaryRequirements: values.dietaryRequirements,
+        studentId: values.studentId,
+        studentUpi: values.studentUpi,
+        university: values.university as University,
       }
       onEdit(selectedUser.id, updateUserRequest)
     }
@@ -129,7 +130,7 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
           setSelectedUser(null)
           onCloseEdit()
         }}
-        onConfirm={handleEditConfirm}
+        onConfirm={(values) => handleEditConfirm(values)}
         open={openEdit}
       />
 

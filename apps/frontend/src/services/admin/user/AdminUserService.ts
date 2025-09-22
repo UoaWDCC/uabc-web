@@ -75,6 +75,7 @@ const AdminUserService = {
       requiresAuth: true,
       token,
     })
+    console.log("we are here")
     return ApiClient.throwIfError(response)
   },
   /**
