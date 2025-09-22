@@ -86,7 +86,6 @@ class LocalStorageManager<T> {
       }
     } catch (error) {
       console.error(`Error setting localStorage key ${this.key}:`, error)
-      throw error
     }
   }
 
