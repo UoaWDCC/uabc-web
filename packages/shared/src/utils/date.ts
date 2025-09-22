@@ -16,31 +16,6 @@ export function getDaysBetweenWeekdays(fromDay: Weekday, toDay: Weekday): number
 }
 
 /**
- * Calculates the open date for a session based on the start time, open day, and open time.
- *
- * @param startTime The start time
- * @param openDay The day of the week it opens
- * @param openTime The time of day it opens
- * @returns The calculated booking open date
- */
-export function calculateOpenDate(startTime: Date, openDay: Weekday, openTime: Date): Date {
-  const openDate = new Date(startTime)
-  const dayIndex = startTime.getUTCDay()
-  const day = Object.values(Weekday)[dayIndex] as Weekday
-  const daysToSubtract = getDaysBetweenWeekdays(openDay, day)
-
-  openDate.setUTCDate(startTime.getUTCDate() - daysToSubtract)
-  openDate.setUTCHours(
-    openTime.getUTCHours(),
-    openTime.getUTCMinutes(),
-    openTime.getUTCSeconds(),
-    0,
-  )
-
-  return openDate
-}
-
-/**
  * Formats a date string or Date object into the format "Day, Xth of Month"
  * Uses date-fns format with 'do' token for industry-standard ordinal formatting
  *
@@ -66,9 +41,20 @@ export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date
 
   const dayIndex = startTime.getUTCDay()
   const day = Object.values(Weekday)[dayIndex] as Weekday
-  const daysToSubtract = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day) + 7
+  let daysDifference = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day)
 
-  openDate.setUTCDate(startTime.getUTCDate() - daysToSubtract)
+  // If the session is on the same day as bookingOpenDay, check the time
+  if (daysDifference === 0) {
+    // Compare the time of startTime and bookingOpenTime (UTC)
+    const startMinutes = startTime.getUTCHours() * 60 + startTime.getUTCMinutes()
+    const openMinutes = openTime.getUTCHours() * 60 + openTime.getUTCMinutes()
+    if (startMinutes < openMinutes) {
+      // If the session starts before the open time on the same day, subtract a week
+      daysDifference = 7
+    }
+  }
+
+  openDate.setUTCDate(startTime.getUTCDate() - daysDifference)
   openDate.setUTCHours(
     openTime.getUTCHours(),
     openTime.getUTCMinutes(),
