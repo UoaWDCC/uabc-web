@@ -2,7 +2,7 @@ import { AdminTable } from "@repo/ui/components/Composite"
 import { Button } from "@repo/ui/components/Primitive"
 import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
 import { useMemo } from "react"
-import { useDeleteUser } from "@/services/admin/user/AdminUserMutations"
+import { useDeleteUser, useUpdateUser } from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembers = () => {
@@ -19,6 +19,7 @@ export const AdminMembers = () => {
     limit: 20,
     page: 1,
   })
+  const updateUserMutation = useUpdateUser()
 
   const handleResetConfirm = () => {
     onCloseConfirm()
@@ -55,6 +56,27 @@ export const AdminMembers = () => {
               })
             },
           })
+        }}
+        onEdit={(id, data) => {
+          updateUserMutation.mutate(
+            { id, data },
+            {
+              onSuccess: () => {
+                notice({
+                  title: "Update successful",
+                  description: "User has been updated",
+                  status: "success",
+                })
+              },
+              onError: () => {
+                notice({
+                  title: "Update failed",
+                  description: "Failed to update user",
+                  status: "error",
+                })
+              },
+            },
+          )
         }}
       />
       <Button colorScheme="danger" onClick={onOpenConfirm} placeSelf="start">
