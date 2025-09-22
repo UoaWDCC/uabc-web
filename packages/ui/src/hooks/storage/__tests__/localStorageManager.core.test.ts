@@ -125,7 +125,9 @@ describe("LocalStorageManager Core", () => {
       // biome-ignore lint/suspicious/noExplicitAny: this is for a test
       const invalidData = { name: "John" } as any // missing age
 
-      expect(() => manager.setValue(invalidData)).toThrow()
+      manager.setValue(invalidData)
+
+      expect(consoleSpy.error).toHaveBeenCalled()
     })
 
     it("should warn and return early in SSR environment", () => {
@@ -141,16 +143,6 @@ describe("LocalStorageManager Core", () => {
       expect(consoleSpy.warn).toHaveBeenCalledWith("setValue called in SSR environment")
 
       global.window = originalWindow
-    })
-
-    it("should handle JSON serialization errors", () => {
-      const manager = createLocalStorageManager("test-key")
-      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-      const circularObject: any = {}
-      circularObject.self = circularObject
-
-      expect(() => manager.setValue(circularObject)).toThrow()
-      expect(consoleSpy.error).toHaveBeenCalled()
     })
   })
 

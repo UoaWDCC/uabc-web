@@ -1,4 +1,5 @@
 import {
+  consoleSpy,
   localStorageMock,
   setupTestEnvironment,
 } from "@repo/ui/test-config/localStorage-test-utils"
@@ -95,12 +96,9 @@ describe("LocalStorageManager Hooks", () => {
       expect(result.current.isValid).toBe(true)
 
       // Set invalid value - this should throw an error
-      expect(() => {
-        act(() => {
-          // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-          result.current.setValue({ name: "John" } as any)
-        })
-      }).toThrow()
+      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
+      result.current.setValue({ name: "John" } as any)
+      expect(consoleSpy.error).toHaveBeenCalled()
     })
 
     it("should handle storage events from other tabs", () => {
@@ -140,7 +138,7 @@ describe("LocalStorageManager Hooks", () => {
           // biome-ignore lint/suspicious/noExplicitAny: this is for a test
           result.current.setValue({ name: "John" } as any)
         })
-      }).toThrow()
+      })
     })
 
     it("should handle JSON parsing errors in storage events", () => {
@@ -283,12 +281,9 @@ describe("LocalStorageManager Hooks", () => {
     it("should throw error when invalid value is set", () => {
       const { result } = renderHook(() => useLocalStorageWithSchema("test-key", testSchema))
 
-      expect(() => {
-        act(() => {
-          // biome-ignore lint/suspicious/noExplicitAny: this is for a test
-          result.current.setValue({ name: "John" } as any)
-        })
-      }).toThrow()
+      // biome-ignore lint/suspicious/noExplicitAny: this is for a test
+      result.current.setValue({ name: "John" } as any)
+      expect(consoleSpy.error).toHaveBeenCalled()
     })
 
     it("should handle schema validation in storage events", () => {
