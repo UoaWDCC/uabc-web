@@ -182,6 +182,7 @@ export interface Config {
     navbar: Navbar;
     termsOfService: TermsOfService;
     aboutUsInfo: AboutUsInfo;
+    onboarding: Onboarding;
   };
   globalsSelect: {
     faq: FaqSelect<false> | FaqSelect<true>;
@@ -190,6 +191,7 @@ export interface Config {
     navbar: NavbarSelect<false> | NavbarSelect<true>;
     termsOfService: TermsOfServiceSelect<false> | TermsOfServiceSelect<true>;
     aboutUsInfo: AboutUsInfoSelect<false> | AboutUsInfoSelect<true>;
+    onboarding: OnboardingSelect<false> | OnboardingSelect<true>;
   };
   locale: null;
   user: Admin & {
@@ -1086,6 +1088,33 @@ export interface AboutUsInfo {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "onboarding".
+ */
+export interface Onboarding {
+  id: string;
+  /**
+   * The casual member information to be displayed on user signup flow.
+   */
+  casualMemberInformation: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faq_select".
  */
 export interface FaqSelect<T extends boolean = true> {
@@ -1227,6 +1256,16 @@ export interface AboutUsInfoItemsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "onboarding_select".
+ */
+export interface OnboardingSelect<T extends boolean = true> {
+  casualMemberInformation?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
