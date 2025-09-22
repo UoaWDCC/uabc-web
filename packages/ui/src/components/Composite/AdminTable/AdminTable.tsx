@@ -1,7 +1,13 @@
 "use client"
 
 import type { User } from "@repo/shared/payload-types"
-import type { UpdateUserRequest } from "@repo/shared/types"
+import type {
+  Gender,
+  MembershipType,
+  PlayLevel,
+  University,
+  UpdateUserRequest,
+} from "@repo/shared/types"
 import { ManagementTable } from "@repo/ui/components/Generic"
 import { Dialog, useDisclosure } from "@yamada-ui/react"
 import dayjs from "dayjs"
@@ -60,7 +66,21 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
 
   const handleEditConfirm = () => {
     if (selectedUser && onEdit) {
-      onEdit(selectedUser.id, selectedUser as UpdateUserRequest)
+      // TODO: improve the creation of UpdateUserRequest
+      const updateUserRequest: UpdateUserRequest = {
+        firstName: selectedUser.firstName,
+        lastName: selectedUser.lastName,
+        email: selectedUser.email,
+        role: selectedUser.role as MembershipType,
+        phoneNumber: selectedUser.phoneNumber,
+        playLevel: selectedUser.playLevel as PlayLevel,
+        gender: selectedUser.gender as Gender,
+        dietaryRequirements: selectedUser.dietaryRequirements,
+        studentId: selectedUser.studentId,
+        studentUpi: selectedUser.studentUpi,
+        university: selectedUser.university as University,
+      }
+      onEdit(selectedUser.id, updateUserRequest)
     }
     onCloseEdit()
   }
