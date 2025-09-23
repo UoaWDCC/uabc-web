@@ -50,7 +50,7 @@ export interface CreateMemberPopUpProps extends DialogProps {
   /**
    * The function to call when the form is submitted
    */
-  onConfirm: (value: CreateMemberPopUpFormValues) => void
+  onConfirm?: (value: CreateMemberPopUpFormValues) => void
 }
 
 /**
@@ -131,7 +131,9 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
     props.onClose?.()
   }
   const onSubmit: SubmitHandler<CreateMemberPopUpFormValues> = (data) => {
-    onConfirm(data)
+    if (onConfirm) {
+      onConfirm(data)
+    }
     reset()
     props.onClose?.()
   }
