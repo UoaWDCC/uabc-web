@@ -37,7 +37,5 @@ export const gameSessionMock: GameSession = {
 
 export const gameSessionWithScheduleMock: GameSession = {
   ...gameSessionMock,
-  gameSessionSchedule: {
-    ...gameSessionScheduleMock,
-  },
+  gameSessionSchedule: gameSessionScheduleMock,
 }
