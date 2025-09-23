@@ -86,7 +86,7 @@ const BookingConfirmationEmail = ({
             Your booking for our {weekday} session at {sessionName} has been confirmed!
           </Preview>
           <Container className="m-0 w-full max-w-2xl p-4">
-            <Heading className="m-0 text-5xl text-primary">Booking Confirmation</Heading>
+            <Heading className="m-0 text-5xl text-blue-500">Booking Confirmation</Heading>
             <Hr className="my-4" style={{ borderTopColor: "#303030" }} />
             <Section>
               <Text className="m-0 mb-2 font-medium text-md">
