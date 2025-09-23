@@ -53,73 +53,88 @@ describe("MailService", () => {
       })
       expect(result).toEqual({ success: true })
     })
-  })
 
-  it.for([
-    "Your booking for our Monday session at UoA Rec Center has been confirmed!",
-    "Date: <!-- -->Monday<!-- --> <!-- -->23 September",
-    `Time: <!-- -->${NOW.format("HH:mm")}<!-- --> - <!-- -->${NOW.format("HH:mm")}`,
-    "Location:<!-- --> <!-- -->UoA Rec Center<!-- -->, 17 Symonds Street",
-  ])("should handle bookings with a game session schedule", async (expectedString) => {
-    const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
+    it("should handle bookings with a game session schedule", async () => {
+      const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 
-    const result = await MailService.sendBookingConfirmation(bookingWithGameSessionScheduleMock)
+      await MailService.sendBookingConfirmation(bookingWithGameSessionScheduleMock)
 
-    expect(sendEmailMock).toHaveBeenCalledWith({
-      to: "straight.zhao@casual.com",
-      subject: "UABC - Monday Booking Confirmation",
-      html: expect.stringContaining(expectedString),
+      const htmlContent = sendEmailMock.mock.calls[0][0].html
+
+      const expectedStrings = [
+        "Your booking for our Monday session at UoA Rec Center has been confirmed!",
+        `Date: <!-- -->Monday<!-- --> <!-- -->${NOW.format("D MMMM")}`,
+        `Time: <!-- -->${NOW.format("HH:mm")}<!-- --> - <!-- -->${NOW.format("HH:mm")}`,
+        "Location:<!-- --> <!-- -->UoA Rec Center<!-- -->, 17 Symonds Street",
+      ]
+
+      expectedStrings.forEach((expectedString) => {
+        expect(htmlContent).toContain(expectedString)
+      })
+
+      expect(sendEmailMock).toHaveBeenCalledWith({
+        to: "straight.zhao@casual.com",
+        subject: "UABC - Monday Booking Confirmation",
+        html: expect.any(String),
+      })
     })
-    expect(result).toEqual({ success: true })
-  })
 
-  it.for([
-    `Your booking for our ${NOW.format("dddd")} session at UABC has been confirmed!`,
-    `Date: <!-- -->${NOW.format("dddd").charAt(0) + NOW.format("dddd").slice(1)}<!-- --> <!-- -->23 September`,
-    `Time: <!-- -->${NOW.format("HH:mm")}<!-- --> - <!-- -->${NOW.format("HH:mm")}`,
-  ])("should handle bookings without a game session schedule", async (expectedString) => {
-    const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
+    it("should handle bookings without a game session schedule", async () => {
+      const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 
-    const result = await MailService.sendBookingConfirmation(bookingMock)
+      await MailService.sendBookingConfirmation(bookingMock)
 
-    expect(sendEmailMock).toHaveBeenCalledWith({
-      to: "straight.zhao@casual.com",
-      subject: `UABC - ${NOW.format("dddd")} Booking Confirmation`,
-      html: expect.stringContaining(expectedString),
-    })
-    expect(result).toEqual({ success: true })
-  })
+      const htmlContent = sendEmailMock.mock.calls[0][0].html
 
-  it("should handle bookings without any location details", async () => {
-    const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
-
-    const mockBookingWithoutLocation = {
-      ...bookingMock,
-      gameSession: {
-        ...(bookingMock.gameSession as GameSession),
-        name: undefined,
-        location: undefined,
-      },
-    }
-
-    const result = await MailService.sendBookingConfirmation(mockBookingWithoutLocation)
-
-    expect(sendEmailMock).toHaveBeenCalledWith({
-      to: "straight.zhao@casual.com",
-      subject: `UABC - ${NOW.format("dddd")} Booking Confirmation`,
-      html: expect.stringContaining(
+      const expectedStrings = [
+        `Your booking for our ${NOW.format("dddd")} session at UABC has been confirmed!`,
+        `Date: <!-- -->${NOW.format("dddd").charAt(0) + NOW.format("dddd").slice(1)}<!-- --> <!-- -->${NOW.format("D MMMM")}`,
         "Location:<!-- --> <!-- -->Please contact UABC to find out where this session will be!",
-      ),
+        `Time: <!-- -->${NOW.format("HH:mm")}<!-- --> - <!-- -->${NOW.format("HH:mm")}`,
+      ]
+
+      expectedStrings.forEach((expectedString) => {
+        expect(htmlContent).toContain(expectedString)
+      })
+
+      expect(sendEmailMock).toHaveBeenCalledWith({
+        to: "straight.zhao@casual.com",
+        subject: `UABC - ${NOW.format("dddd")} Booking Confirmation`,
+        html: expect.any(String),
+      })
     })
-    expect(result).toEqual({ success: true })
-  })
 
-  it("should propagate errors from payload.sendEmail", async () => {
-    const error = new Error("Send failed")
-    vi.spyOn(payload, "sendEmail").mockRejectedValueOnce(error)
+    it("should handle bookings without any location details", async () => {
+      const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 
-    await expect(
-      MailService.sendBookingConfirmation(bookingWithGameSessionScheduleMock),
-    ).rejects.toThrow("Send failed")
+      const mockBookingWithoutLocation = {
+        ...bookingMock,
+        gameSession: {
+          ...(bookingMock.gameSession as GameSession),
+          name: undefined,
+          location: undefined,
+        },
+      }
+
+      const result = await MailService.sendBookingConfirmation(mockBookingWithoutLocation)
+
+      expect(sendEmailMock).toHaveBeenCalledWith({
+        to: "straight.zhao@casual.com",
+        subject: `UABC - ${NOW.format("dddd")} Booking Confirmation`,
+        html: expect.stringContaining(
+          "Location:<!-- --> <!-- -->Please contact UABC to find out where this session will be!",
+        ),
+      })
+      expect(result).toEqual({ success: true })
+    })
+
+    it("should propagate errors from payload.sendEmail", async () => {
+      const error = new Error("Send failed")
+      vi.spyOn(payload, "sendEmail").mockRejectedValueOnce(error)
+
+      await expect(
+        MailService.sendBookingConfirmation(bookingWithGameSessionScheduleMock),
+      ).rejects.toThrow("Send failed")
+    })
   })
 })
