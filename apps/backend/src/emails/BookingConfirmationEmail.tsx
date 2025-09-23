@@ -14,6 +14,7 @@ import {
 import { TailwindConfig } from "./_components/TailwindConfig"
 
 export interface BookingConfirmationEmailProps {
+  date: string
   weekday: string
   time: string
   sessionName: string
@@ -21,6 +22,7 @@ export interface BookingConfirmationEmailProps {
 }
 
 const BookingConfirmationEmail = ({
+  date,
   weekday,
   time,
   sessionName,
@@ -56,9 +58,15 @@ const BookingConfirmationEmail = ({
                 The details for your session are as follows:
               </Row>
               <ul className="m-0 list-disc">
-                <li className="my-0.5">Date: {weekday}</li>
+                <li className="my-0.5">
+                  Date: {weekday} {date}
+                </li>
                 <li className="my-0.5">Time: {time}</li>
-                {sessionLocation && <li className="my-0.5">Location: {sessionLocation}</li>}
+                {sessionLocation && (
+                  <li className="my-0.5">
+                    Location: {sessionName}, {sessionLocation}
+                  </li>
+                )}
               </ul>
             </Section>
             <Text className="my-4 font-medium text-md">We'll see you on the courts! 🏸</Text>
@@ -74,10 +82,11 @@ const BookingConfirmationEmail = ({
 }
 
 BookingConfirmationEmail.PreviewProps = {
+  date: "24th November",
   weekday: "Monday",
   time: "18:30",
   sessionName: "UoA Rec Center",
-  sessionLocation: "UoA Rec Center, 123 University Rd, City",
+  sessionLocation: "123 University Rd, City",
 } satisfies BookingConfirmationEmailProps
 
 export default BookingConfirmationEmail
