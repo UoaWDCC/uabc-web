@@ -125,13 +125,4 @@ const BookingConfirmationEmail = ({
   )
 }
 
-BookingConfirmationEmail.PreviewProps = {
-  date: "24th November",
-  weekday: "Monday",
-  startTime: "18:30",
-  endTime: "20:30",
-  sessionName: "UoA Rec Center",
-  sessionLocation: "123 University Rd, City",
-} satisfies BookingConfirmationEmailProps
-
 export default BookingConfirmationEmail
