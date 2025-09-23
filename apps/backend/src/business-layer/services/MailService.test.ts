@@ -51,6 +51,21 @@ describe("MailService", () => {
     })
   })
 
+  it("should handle bookings with a game session schedule", async () => {
+    const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
+
+    const result = await MailService.sendBookingConfirmation(bookingWithGameSessionScheduleMock)
+
+    expect(sendEmailMock).toHaveBeenCalledWith({
+      to: "straight.zhao@casual.com",
+      subject: "UABC - Monday Booking Confirmation",
+      html: expect.stringContaining(
+        "Your booking for our Monday session at UoA Rec Center has been confirmed!",
+      ),
+    })
+    expect(result).toEqual({ success: true })
+  })
+
   it("should handle bookings without a game session schedule", async () => {
     const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 
