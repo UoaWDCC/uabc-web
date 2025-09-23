@@ -62,11 +62,13 @@ const BookingConfirmationEmail = ({
                   Date: {weekday} {date}
                 </li>
                 <li className="my-0.5">Time: {time}</li>
-                {sessionLocation && (
-                  <li className="my-0.5">
-                    Location: {sessionName}, {sessionLocation}
-                  </li>
-                )}
+                <li className="my-0.5">
+                  Location:{" "}
+                  {sessionName !== "UABC" || sessionLocation
+                    ? sessionName
+                    : "Please contact UABC to find out where this session will be"}
+                  , {sessionLocation && `, ${sessionLocation}`}
+                </li>
               </ul>
             </Section>
             <Text className="my-4 font-medium text-md">We'll see you on the courts! 🏸</Text>
