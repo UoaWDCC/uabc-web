@@ -58,7 +58,7 @@ describe("MailService", () => {
   it.for([
     "Your booking for our Monday session at UoA Rec Center has been confirmed!",
     "Date: <!-- -->Monday<!-- --> <!-- -->23 September",
-    `Time: <!-- -->${NOW.format("HH:mm")}`,
+    `Time: <!-- -->${NOW.format("HH:mm")}<!-- --> - <!-- -->${NOW.format("HH:mm")}`,
     "Location:<!-- --> <!-- -->UoA Rec Center<!-- -->, 17 Symonds Street",
   ])("should handle bookings with a game session schedule", async (expectedString) => {
     const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
@@ -76,7 +76,7 @@ describe("MailService", () => {
   it.for([
     `Your booking for our ${NOW.format("dddd")} session at UABC has been confirmed!`,
     `Date: <!-- -->${NOW.format("dddd").charAt(0) + NOW.format("dddd").slice(1)}<!-- --> <!-- -->23 September`,
-    `Time: <!-- -->${NOW.format("HH:mm")}`,
+    `Time: <!-- -->${NOW.format("HH:mm")}<!-- --> - <!-- -->${NOW.format("HH:mm")}`,
   ])("should handle bookings without a game session schedule", async (expectedString) => {
     const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 

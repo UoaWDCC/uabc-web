@@ -32,14 +32,16 @@ export default class MailService {
     const date = dayjs(gameSession.startTime).format("D MMMM")
     const rawWeekday = gameSessionSchedule?.day || dayjs(gameSession.startTime).format("dddd")
     const weekday = rawWeekday.charAt(0).toUpperCase() + rawWeekday.slice(1)
-    const time = dayjs(gameSession.openTime).format("HH:mm")
+    const startTime = dayjs(gameSession.startTime).format("HH:mm")
+    const endTime = dayjs(gameSession.startTime).format("HH:mm")
     const sessionName = gameSessionSchedule?.name || gameSession.name || "UABC"
     const sessionLocation = gameSessionSchedule?.location || gameSession.location || undefined
     const html = await render(
       BookingConfirmationEmail({
         date,
         weekday,
-        time,
+        startTime,
+        endTime,
         sessionName,
         sessionLocation,
       }),
