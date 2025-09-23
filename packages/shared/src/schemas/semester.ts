@@ -50,3 +50,17 @@ export const GetAllSemestersResponseSchema = z.object({
 export const GetCurrentSemesterResponseSchema = z.object({
   data: SemesterSchema,
 })
+
+export const SemesterNamePopUpSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+})
+
+export const SemesterDatePopUpSchema = z.object({
+  startDate: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  endDate: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+})
+
+export const SemesterBreakPopUpSchema = z.object({
+  breakStart: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+  breakEnd: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
+})
