@@ -58,7 +58,7 @@ export interface BookingConfirmationEmailProps {
  * @param endTime The end time of the booking (e.g., "20:30")
  * @param sessionName The name of the session (e.g., "UoA Rec Center")
  * @param sessionLocation The location of the session (e.g., "17 Symonds Street")
- * @returns
+ * @returns The booking confirmation email template.
  */
 const BookingConfirmationEmail = ({
   date,
