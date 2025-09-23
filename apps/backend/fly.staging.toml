@@ -4,6 +4,7 @@ primary_region = 'syd'
 [build]
   context = "."
   dockerfile = "Dockerfile"
+  swap_size_mb = 512
 
 [http_service]
   internal_port = 3000
