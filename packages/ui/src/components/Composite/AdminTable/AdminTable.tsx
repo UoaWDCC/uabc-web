@@ -64,21 +64,21 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
     }
   }
 
-  const handleEditConfirm = (values: CreateMemberPopUpFormValues) => {
+  const handleEditConfirm = (data: CreateMemberPopUpFormValues) => {
     if (selectedUser && onEdit) {
       // TODO: improve the creation of UpdateUserRequest
       const updateUserRequest: UpdateUserRequest = {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        role: values.role as MembershipType,
-        phoneNumber: values.phoneNumber,
-        playLevel: values.playLevel as PlayLevel,
-        gender: values.gender as Gender,
-        dietaryRequirements: values.dietaryRequirements,
-        studentId: values.studentId,
-        studentUpi: values.studentUpi,
-        university: values.university as University,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        role: data.role as MembershipType,
+        phoneNumber: data.phoneNumber,
+        playLevel: data.playLevel as PlayLevel,
+        gender: data.gender as Gender,
+        dietaryRequirements: data.dietaryRequirements,
+        studentId: data.studentId,
+        studentUpi: data.studentUpi,
+        university: data.university as University,
       }
       onEdit(selectedUser.id, updateUserRequest)
     }
@@ -129,7 +129,7 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
           setSelectedUser(null)
           onCloseEdit()
         }}
-        onConfirm={(values) => handleEditConfirm(values)}
+        onConfirm={(data) => handleEditConfirm(data)}
         open={openEdit}
         title="Edit Member"
       />

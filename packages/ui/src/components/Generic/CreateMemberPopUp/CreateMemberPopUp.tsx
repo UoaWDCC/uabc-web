@@ -41,16 +41,19 @@ import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 
 export interface CreateMemberPopUpProps extends DialogProps {
   /**
-   * The title to display in the dialog header
+   * The title to display in the dialog header.
    */
   title?: string
 
+  /**
+   * Default values to pre-fill the form.
+   */
   defaultValues?: User | null
 
   /**
-   * The function to call when the form is submitted
+   * The function to call when the form is submitted.
    */
-  onConfirm?: (value: CreateMemberPopUpFormValues) => void
+  onConfirm?: (data: CreateMemberPopUpFormValues) => void
 }
 
 /**
@@ -130,13 +133,12 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
     reset()
     props.onClose?.()
   }
+
   const onSubmit: SubmitHandler<CreateMemberPopUpFormValues> = (data) => {
-    if (onConfirm) {
-      onConfirm(data)
-    }
-    reset()
-    props.onClose?.()
+    onConfirm?.(data)
+    handleClose()
   }
+
   return (
     <Dialog
       alignItems="center"
@@ -356,6 +358,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
         >
           <Button
             colorScheme="secondary"
+            data-testId="back"
             leftIcon={<ArrowLeftIcon />}
             onClick={handleClose}
             size="lg"
@@ -363,7 +366,14 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
           >
             Back
           </Button>
-          <Button colorScheme="primary" loading={isSubmitting} size="lg" type="submit" w="full">
+          <Button
+            colorScheme="primary"
+            data-testId="submit"
+            loading={isSubmitting}
+            size="lg"
+            type="submit"
+            w="full"
+          >
             Confirm
           </Button>
         </ButtonGroup>
