@@ -368,7 +368,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
           </Button>
           <Button
             colorScheme="primary"
-            data-testId="submit"
+            data-testid="submit"
             loading={isSubmitting}
             size="lg"
             type="submit"
