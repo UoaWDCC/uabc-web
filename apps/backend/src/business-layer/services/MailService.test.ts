@@ -1,6 +1,10 @@
+import { dayjs } from "@repo/shared"
+import type { GameSession } from "@repo/shared/payload-types"
 import { payload } from "@/data-layer/adapters/Payload"
 import { bookingMock, bookingWithGameSessionScheduleMock } from "@/test-config/mocks/Booking.mock"
 import MailService from "./MailService"
+
+const NOW = dayjs(new Date())
 
 describe("MailService", () => {
   afterEach(() => {
@@ -51,7 +55,12 @@ describe("MailService", () => {
     })
   })
 
-  it("should handle bookings with a game session schedule", async () => {
+  it.for([
+    "Your booking for our Monday session at UoA Rec Center has been confirmed!",
+    "Date: <!-- -->Monday<!-- --> <!-- -->23 September",
+    `Time: <!-- -->${NOW.format("HH:mm")}`,
+    "Location:<!-- --> <!-- -->UoA Rec Center<!-- -->, 17 Symonds Street",
+  ])("should handle bookings with a game session schedule", async (expectedString) => {
     const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 
     const result = await MailService.sendBookingConfirmation(bookingWithGameSessionScheduleMock)
@@ -59,23 +68,47 @@ describe("MailService", () => {
     expect(sendEmailMock).toHaveBeenCalledWith({
       to: "straight.zhao@casual.com",
       subject: "UABC - Monday Booking Confirmation",
-      html: expect.stringContaining(
-        "Your booking for our Monday session at UoA Rec Center has been confirmed!",
-      ),
+      html: expect.stringContaining(expectedString),
     })
     expect(result).toEqual({ success: true })
   })
 
-  it("should handle bookings without a game session schedule", async () => {
+  it.for([
+    `Your booking for our ${NOW.format("dddd")} session at UABC has been confirmed!`,
+    `Date: <!-- -->${NOW.format("dddd").charAt(0) + NOW.format("dddd").slice(1)}<!-- --> <!-- -->23 September`,
+    `Time: <!-- -->${NOW.format("HH:mm")}`,
+  ])("should handle bookings without a game session schedule", async (expectedString) => {
     const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 
     const result = await MailService.sendBookingConfirmation(bookingMock)
 
     expect(sendEmailMock).toHaveBeenCalledWith({
       to: "straight.zhao@casual.com",
-      subject: "UABC - Tuesday Booking Confirmation",
+      subject: `UABC - ${NOW.format("dddd")} Booking Confirmation`,
+      html: expect.stringContaining(expectedString),
+    })
+    expect(result).toEqual({ success: true })
+  })
+
+  it("should handle bookings without any location details", async () => {
+    const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
+
+    const mockBookingWithoutLocation = {
+      ...bookingMock,
+      gameSession: {
+        ...(bookingMock.gameSession as GameSession),
+        name: undefined,
+        location: undefined,
+      },
+    }
+
+    const result = await MailService.sendBookingConfirmation(mockBookingWithoutLocation)
+
+    expect(sendEmailMock).toHaveBeenCalledWith({
+      to: "straight.zhao@casual.com",
+      subject: `UABC - ${NOW.format("dddd")} Booking Confirmation`,
       html: expect.stringContaining(
-        "Your booking for our Tuesday session at UABC has been confirmed!",
+        "Location:<!-- --> <!-- -->Please contact UABC to find out where this session will be!",
       ),
     })
     expect(result).toEqual({ success: true })

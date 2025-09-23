@@ -66,8 +66,8 @@ const BookingConfirmationEmail = ({
                   Location:{" "}
                   {sessionName !== "UABC" || sessionLocation
                     ? sessionName
-                    : "Please contact UABC to find out where this session will be"}
-                  , {sessionLocation && `, ${sessionLocation}`}
+                    : "Please contact UABC to find out where this session will be!"}
+                  {sessionLocation && `, ${sessionLocation}`}
                 </li>
               </ul>
             </Section>
