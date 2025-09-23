@@ -33,7 +33,7 @@ export default class MailService {
     const rawWeekday = gameSessionSchedule?.day || dayjs(gameSession.startTime).format("dddd")
     const weekday = rawWeekday.charAt(0).toUpperCase() + rawWeekday.slice(1)
     const startTime = dayjs(gameSession.startTime).format("HH:mm")
-    const endTime = dayjs(gameSession.startTime).format("HH:mm")
+    const endTime = dayjs(gameSession.endTime).format("HH:mm")
     const sessionName = gameSessionSchedule?.name || gameSession.name || "UABC"
     const sessionLocation = gameSessionSchedule?.location || gameSession.location || undefined
     const html = await render(
