@@ -13,15 +13,53 @@ import {
 } from "@react-email/components"
 import { TailwindConfig } from "./_components/TailwindConfig"
 
+/**
+ * Props for the booking confirmation email template.
+ */
 export interface BookingConfirmationEmailProps {
+  /**
+   * The date of the booking
+   * Intended to be in D MMMM dayjs format (e.g., "24th November")
+   */
   date: string
+  /**
+   * The day of the week the booking falls on
+   * Intended to be in dddd dayjs format and pre-capitalized (e.g., "Monday")
+   */
   weekday: string
+  /**
+   * The start time of the booking
+   * Intended to be in HH:mm dayjs format or similar (e.g., "18:30")
+   */
   startTime: string
+  /**
+   * The end time of the booking
+   * Intended to be in HH:mm dayjs format or similar (e.g., "20:30")
+   */
   endTime: string
+  /**
+   * The name of the session the booking is for
+   * E.g., "UoA Rec Center"
+   */
   sessionName: string
+  /**
+   * The location of the session the booking is for
+   * E.g., "17 Symonds Street"
+   */
   sessionLocation?: string
 }
 
+/**
+ * The template for the booking confirmation email sent to users.
+ *
+ * @param date The date of the booking (e.g., "24th November")
+ * @param weekday The day of the week (e.g., "Monday")
+ * @param startTime The start time of the booking (e.g., "18:30")
+ * @param endTime The end time of the booking (e.g., "20:30")
+ * @param sessionName The name of the session (e.g., "UoA Rec Center")
+ * @param sessionLocation The location of the session (e.g., "17 Symonds Street")
+ * @returns
+ */
 const BookingConfirmationEmail = ({
   date,
   weekday,
