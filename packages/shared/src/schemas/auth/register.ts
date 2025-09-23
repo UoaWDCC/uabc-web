@@ -46,11 +46,7 @@ export const CreateMemberPopUpFormDataSchema = z
     playLevel: PlayLevelZodEnum.optional(),
     dietaryRequirements: z.string().optional(),
     role: MembershipTypeZodEnum.optional(),
-    remainingSessions: z
-      .string()
-      .min(1, "Field is required")
-      .regex(/^\d+$/, "Not a number")
-      .optional(),
+    remainingSessions: z.coerce.number().optional(),
   })
   .superRefine(({ university, studentId, studentUpi }, ctx) => {
     if (university === University.uoa) {

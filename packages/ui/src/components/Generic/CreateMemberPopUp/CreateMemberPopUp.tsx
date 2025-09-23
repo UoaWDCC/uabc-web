@@ -333,7 +333,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                 >
                   <TextInput
                     data-testid="remaining-sessions"
-                    defaultValue={defaultValues?.remainingSessions ?? undefined}
+                    defaultValue={defaultValues?.remainingSessions ?? 0}
                     placeholder="Remaining Sessions"
                     size="lg"
                     startElement={<TicketsIcon />}
