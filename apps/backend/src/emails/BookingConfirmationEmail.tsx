@@ -7,7 +7,7 @@ export interface BookingConfirmationEmailProps {
   sessionLocation?: string
 }
 
-export const BookingConfirmationEmail = ({
+const BookingConfirmationEmail = ({
   weekday,
   time,
   sessionName,
@@ -37,3 +37,12 @@ export const BookingConfirmationEmail = ({
     </Html>
   )
 }
+
+BookingConfirmationEmail.PreviewProps = {
+  weekday: "Monday",
+  time: "18:30",
+  sessionName: "UoA Rec Center",
+  sessionLocation: "UoA Rec Center, 123 University Rd, City",
+}
+
+export default BookingConfirmationEmail

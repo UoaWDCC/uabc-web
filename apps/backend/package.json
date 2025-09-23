@@ -15,7 +15,8 @@
     "test:watch": "cross-env NODE_ENV=test vitest",
     "test:coverage": "cross-env NODE_ENV=test vitest run --coverage",
     "test:coverage:watch": "cross-env NODE_ENV=test vitest --coverage",
-    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
+    "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage",
+    "email:preview": "email dev --port 8080 --dir=./src/emails"
   },
   "dependencies": {
     "@payloadcms/db-mongodb": "3.45.0",
@@ -38,6 +39,7 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@react-email/preview-server": "4.2.11",
     "@repo/shared": "workspace:*",
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",

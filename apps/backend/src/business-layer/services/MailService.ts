@@ -2,7 +2,8 @@ import { render } from "@react-email/components"
 import { dayjs } from "@repo/shared"
 import type { Booking, GameSession, GameSessionSchedule, User } from "@repo/shared/payload-types"
 import { payload } from "@/data-layer/adapters/Payload"
-import { BookingConfirmationEmail } from "./BookingConfirmationEmail"
+import BookingConfirmationEmail from "@/emails/BookingConfirmationEmail"
+
 export default class MailService {
   /**
    * Send an email verification code to the user's email address.
