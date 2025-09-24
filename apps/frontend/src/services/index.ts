@@ -14,4 +14,5 @@ export enum QueryKeys {
   MY_BOOKINGS_QUERY_KEY = "my-bookings",
   BOOKINGS_QUERY_KEY = "bookings",
   LOCATION_BUBBLE_QUERY_KEY = "location-bubble",
+  ONBOARDING = "onboarding",
 }
