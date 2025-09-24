@@ -1,4 +1,4 @@
-import { OnboardingGlobalSchema } from "@repo/shared/schemas"
+import { OnboardingGlobalSchema } from "@repo/shared"
 import { cache } from "react"
 import { ApiClient, apiClient } from "@/lib/api/client"
 import { QueryKeys } from "@/services"
