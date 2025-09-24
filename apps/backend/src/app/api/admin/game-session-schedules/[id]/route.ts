@@ -10,6 +10,7 @@ import {
   createTransactionId,
   rollbackCascadeTransaction,
 } from "@/data-layer/adapters/Transaction"
+import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 
 class RouteWrapper {
@@ -108,7 +109,7 @@ class RouteWrapper {
           const gameSession = docs[0]
           await gameSessionDataService.deleteGameSessionSchedule(id)
           await gameSessionDataService.deleteGameSession(gameSession.id)
-          // await RouteWrapper.deleteRelatedBookingsForSession(gameSession.id, transactionID)
+          await BookingDataService.deleteRelatedBookingsForSession(gameSession.id, transactionID)
           await commitCascadeTransaction(transactionID)
         } catch {
           await rollbackCascadeTransaction(transactionID)
