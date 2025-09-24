@@ -34,7 +34,7 @@ describe("<CreateSessionPopUp />", () => {
   })
 
   /**
-   * TODO: undo .skip() once CreateSessionPopUp has been sufficiently improved
+   * TODO: remove .skip() once CreateSessionPopUp has been sufficiently improved
    */
   it.skip("should call onConfirm when a user clicks the submit button and there were no errors", async () => {
     const handleSubmit = vi.fn((data: CreateSessionPopUpModule.FormData) => data)
@@ -52,6 +52,9 @@ describe("<CreateSessionPopUp />", () => {
       />,
     )
     await user.click(screen.getByText("Open pop up"))
+    await waitFor(() => {
+      expect(screen.getByRole("dialog")).toBeInTheDocument()
+    })
 
     await user.click(screen.getByTestId("submit"))
     expect(handleSubmit).toBeCalled()
@@ -61,8 +64,8 @@ describe("<CreateSessionPopUp />", () => {
     const { user } = render(<CreateSessionPopUpExample />)
     await user.click(screen.getByText("Open pop up"))
 
-    await user.click(screen.getByTestId("back"))
     await waitFor(() => {
+      user.click(screen.getByTestId("back"))
       expect(screen.getByRole("dialog")).not.toBeVisible()
     })
   })
