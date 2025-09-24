@@ -19,6 +19,13 @@ export const RouteGroups = {
   },
   user: {
     profile: Routes.PROFILE,
+    onboarding: Routes.ONBOARDING,
+  },
+  admin: {
+    root: Routes.ADMIN,
+    members: Routes.ADMIN_MEMBERS,
+    sessions: Routes.ADMIN_SESSIONS,
+    semesters: Routes.ADMIN_SEMESTERS,
   },
 } as const
 

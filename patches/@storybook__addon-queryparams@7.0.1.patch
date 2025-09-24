@@ -1,0 +1,36 @@
+diff --git a/dist/preview.cjs b/dist/preview.cjs
+index 14828e7620c96fec4acdb43e8ce9070c22b38004..8226b51f04cbebb81d9e901c8eb1e84282b56dd8 100644
+--- a/dist/preview.cjs
++++ b/dist/preview.cjs
+@@ -1,6 +1,6 @@
+ 'use strict';
+ 
+-var previewApi = require('@storybook/preview-api');
++var previewApi = require('storybook/preview-api');
+ 
+ var r="query";var i=e=>{let t=previewApi.useParameter(r,null),{location:n}=document,a=new URLSearchParams(n.search);if(t){let c=typeof t=="string"?new URLSearchParams(t):t,o=new URL(document.location.href);o.search=new URLSearchParams({...a,...c}).toString(),history.replaceState({},document.title,o.toString());}return e()},y=[i];
+ 
+diff --git a/dist/preview.js b/dist/preview.js
+index 614876605a658688d7c81be401b9538695309168..f8065f3ca987aeec4dd2f29875418a7a27946842 100644
+--- a/dist/preview.js
++++ b/dist/preview.js
+@@ -1,4 +1,4 @@
+-import { useParameter } from '@storybook/preview-api';
++import { useParameter } from 'storybook/preview-api';
+ 
+ var r="query";var i=e=>{let t=useParameter(r,null),{location:n}=document,a=new URLSearchParams(n.search);if(t){let c=typeof t=="string"?new URLSearchParams(t):t,o=new URL(document.location.href);o.search=new URLSearchParams({...a,...c}).toString(),history.replaceState({},document.title,o.toString());}return e()},y=[i];
+ 
+diff --git a/package.json b/package.json
+index 0ab11de551a57875e5e7d8fef5aee943be789fea..24d9abcf6293b04d4afd4f8fc638367fcdcfe9e6 100644
+--- a/package.json
++++ b/package.json
+@@ -64,8 +64,7 @@
+     "vite": "^5.1.5"
+   },
+   "peerDependencies": {
+-    "@storybook/manager-api": "^7.0.0 || ^8.0.0 || ^8.0.0-rc.0",
+-    "@storybook/preview-api": "^7.0.0 || ^8.0.0 || ^8.0.0-rc.0"
++    "storybook": "^9.0.0"
+   },
+   "publishConfig": {
+     "access": "public"

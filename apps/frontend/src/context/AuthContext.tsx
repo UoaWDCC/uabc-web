@@ -3,66 +3,15 @@
 import type { LoginFormData, RegisterRequestBody } from "@repo/shared"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
+import type { AuthActions, AuthContextValue, AuthState } from "@repo/shared/types/auth"
 import { noticeOptions } from "@repo/theme"
 import { useLocalStorage } from "@repo/ui/hooks"
-import { type UseMutationResult, useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNotice } from "@yamada-ui/react"
 import { StatusCodes } from "http-status-codes"
-import { createContext, type ReactNode, useContext } from "react"
+import { createContext, type ReactNode, useCallback, useContext } from "react"
 import { ApiClientError } from "@/lib/api/ApiClientError"
 import AuthService from "@/services/auth/AuthService"
-
-type AuthState = {
-  user: User | null
-  isLoading: boolean
-  isPending: boolean
-  error: string | null
-  token: string | null
-  isAvailable: boolean
-}
-
-type AuthActions = {
-  login: UseMutationResult<
-    {
-      data?: string | undefined
-      error?: string | undefined
-      message?: string | undefined
-    },
-    Error,
-    {
-      email: string
-      password: string
-      rememberMe: boolean
-    },
-    unknown
-  >
-  emailVerificationCode: UseMutationResult<
-    {
-      error?: string | undefined
-      message?: string | undefined
-    },
-    Error,
-    string,
-    unknown
-  >
-  register: UseMutationResult<
-    {
-      message?: string | undefined
-      error?: string | undefined
-    },
-    Error,
-    {
-      email: string
-      password: string
-      emailVerificationCode: string
-    },
-    unknown
-  >
-  setToken: (token: string | null) => void
-  logout: () => void
-}
-
-export type AuthContextValue = AuthState & AuthActions
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
@@ -78,6 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isAvailable,
   } = useLocalStorage<string>(AUTH_COOKIE_NAME)
   const notice = useNotice(noticeOptions)
+  const queryClient = useQueryClient()
 
   const {
     data: user,
@@ -85,13 +35,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isPending,
     error,
   } = useQuery<User | null, Error, User | null>({
-    queryKey: ["auth", "me", token],
+    queryKey: ["auth", "me"],
     queryFn: async (): Promise<User | null> => {
       if (!token) {
         return null
       }
       try {
-        const response = await AuthService.getUserFromToken(token)
+        const response = await AuthService.getUserInfo(token)
         return response.data
       } catch (err) {
         if (err instanceof ApiClientError && err.status === StatusCodes.UNAUTHORIZED) {
@@ -110,11 +60,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = useMutation({
     mutationFn: async (credentials: LoginFormData) => {
+      // Remove queries and reset token to avoid potential conflicts during login
+      setToken(null)
+      queryClient.cancelQueries({ queryKey: ["auth", "me"] })
+      queryClient.removeQueries({ queryKey: ["auth", "me"] })
+
       const response = await AuthService.login(credentials.email, credentials.password)
-      if (response.data) {
-        setToken(response.data)
-      }
+
       return response
+    },
+    onSettled: (response) => {
+      if (response?.data) {
+        setToken(response?.data)
+      }
     },
     onError: (error) => {
       notice({
@@ -151,17 +109,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
   })
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setToken(null)
+    queryClient.cancelQueries({ queryKey: ["auth", "me"] })
+    queryClient.removeQueries({ queryKey: ["auth", "me"] })
+
     notice({
       title: "Logged out",
       description: "You have been logged out successfully.",
       status: "success",
     })
-  }
+  }, [setToken, notice, queryClient])
 
   const authState: AuthState = {
-    user: user ?? null,
+    user: token ? (user ?? null) : null,
     isLoading: isLoading || login.isPending,
     isPending: isPending || login.isPending,
     error: error ? error.message : null,

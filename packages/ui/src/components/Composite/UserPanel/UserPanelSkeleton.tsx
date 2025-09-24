@@ -1,3 +1,4 @@
+import { IconButton } from "@repo/ui/components/Primitive"
 import { PencilIcon } from "@yamada-ui/lucide"
 import {
   Avatar,
@@ -8,7 +9,6 @@ import {
   CardHeader,
   Center,
   Float,
-  IconButton,
   Skeleton,
   Text,
   VStack,
@@ -30,7 +30,7 @@ export const UserPanelSkeleton: FC = () => {
             <Avatar size="xl" />
           </Skeleton>
           <Float offset={[4, 4]} placement="end-end">
-            <IconButton aria-label="Edit" disabled icon={<PencilIcon />} rounded="full" size="sm" />
+            <IconButton aria-label="Edit" disabled icon={<PencilIcon />} rounded="full" size="xs" />
           </Float>
         </Box>
         <VStack>

@@ -18,7 +18,8 @@
     ".gitignore",
     "tsconfig.tsbuildinfo",
     "patches/**",
-    "**/*.svg"
+    "**/*.svg",
+    "**/package.json"
   ],
   "words": [
     "adipiscing",
@@ -135,6 +136,8 @@
     "universityofauckland",
     "unstub",
     "unstylised",
+    "uploadthing",
+    "UPLOADTHING",
     "vegeta",
     "vehicula",
     "vercel",

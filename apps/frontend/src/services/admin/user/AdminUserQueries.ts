@@ -1,5 +1,6 @@
 import type { PaginationQuery } from "@repo/shared"
 import { useInfiniteQuery } from "@tanstack/react-query"
+import { useAuth } from "@/context/AuthContext"
 import { QueryKeys } from "@/services"
 import AdminUserService from "./AdminUserService"
 
@@ -10,6 +11,7 @@ import AdminUserService from "./AdminUserService"
  * @returns A query hook that fetches a page of users.
  */
 export const useGetPaginatedUsers = (query: PaginationQuery) => {
+  const { token } = useAuth()
   return useInfiniteQuery({
     queryKey: [QueryKeys.USER_QUERY_KEY],
     initialPageParam: 1,
@@ -17,6 +19,7 @@ export const useGetPaginatedUsers = (query: PaginationQuery) => {
       const response = await AdminUserService.getPaginatedUsers({
         ...query,
         page: pageParam,
+        token,
       })
       return response
     },

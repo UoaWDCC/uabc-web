@@ -7,6 +7,6 @@ describe("<FilterActions />", () => {
   })
 
   it("should be a valid React element", () => {
-    expect(isValidElement(<FilterActions />)).toBeTruthy()
+    expect(isValidElement(<FilterActions columns={[]} />)).toBeTruthy()
   })
 })

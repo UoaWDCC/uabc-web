@@ -1,3 +1,5 @@
+import { z } from "zod"
+
 export enum MembershipType {
   member = "member",
   casual = "casual",
@@ -38,7 +40,22 @@ export enum University {
   notAStudent = "Not a student",
 }
 
+export const UniversityZodEnum = z.enum([
+  "UoA",
+  "AUT",
+  "Massey University",
+  "Other",
+  "Working",
+  "Not a student",
+])
+
 export enum SessionType {
   ongoing = "Ongoing",
   oneOff = "One off",
+}
+
+export enum GameSessionStatus {
+  ONGOING = "Ongoing",
+  UPCOMING = "Upcoming",
+  PAST = "Past",
 }

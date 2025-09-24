@@ -53,3 +53,25 @@ export function createGameSessionTimes(schedule: GameSessionSchedule, date: Date
     endTime: end.toISOString(),
   }
 }
+
+/**
+ * Returns a date that is 10 minutes from now, used for verification code expiry
+ *
+ * @param verificationCreatedAt The date when the verification code was created, defaults to now
+ * @returns A date that is 10 minutes from now, used for verification code expiry
+ */
+export function getVerificationCodeExpiryDate(verificationCreatedAt?: Date): Date {
+  const createdAt = verificationCreatedAt || new Date()
+  return new Date(createdAt.getTime() + 10 * 60 * 1000) // 10 minutes from now
+}
+
+/**
+ * Returns a date that is 5 minutes from now, used for verification code cool down
+ *
+ * @param verificationCreatedAt The date when the verification code was created, defaults to now
+ * @returns A date that is 5 minutes from now, used for verification code cool down
+ */
+export function getVerificationCodeCoolDownDate(verificationCreatedAt?: Date): Date {
+  const createdAt = verificationCreatedAt || new Date()
+  return new Date(createdAt.getTime() + 5 * 60 * 1000) // 5 minutes from now
+}

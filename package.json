@@ -31,7 +31,10 @@
     "merge": "turbo run merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
     "postinstall": "pnpm theme",
-    "commitlint": "commitlint --edit"
+    "commitlint": "commitlint --edit",
+    "frontend": "turbo run -F frontend --ui=stream",
+    "backend": "turbo run -F backend --ui=stream",
+    "ui": "turbo run -F ui --ui=stream"
   },
   "dependencies": {
     "cross-env": "7.0.3"
@@ -59,10 +62,11 @@
     "rimraf": "6.0.1",
     "turbo": "2.5.3",
     "typescript": "5.9.2",
+    "vite": "6.3.5",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.2.4"
   },
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.17.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@swc/core",
@@ -70,14 +74,16 @@
       "esbuild",
       "lefthook",
       "mongodb-memory-server",
+      "rolldown",
       "sharp",
       "workerd"
     ],
     "patchedDependencies": {
-      "storybook-dark-mode": "patches/storybook-dark-mode.patch"
+      "storybook-dark-mode": "patches/storybook-dark-mode.patch",
+      "@storybook/addon-queryparams@7.0.1": "patches/@storybook__addon-queryparams@7.0.1.patch"
     }
   },
   "volta": {
-    "node": "22.18.0"
+    "node": "22.19.0"
   }
 }
