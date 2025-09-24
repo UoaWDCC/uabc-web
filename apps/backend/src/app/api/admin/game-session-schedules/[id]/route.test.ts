@@ -201,7 +201,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       expect(await res.json()).toStrictEqual({ error: "No scope" })
     })
 
-    it("should delete gameSessionSchedule if user is admin", async () => {
+    it("should delete gameSessionSchedule if user is admin and cascade is false", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
         gameSessionScheduleCreateMock,
