@@ -19,6 +19,7 @@ class UsersRouteWrapper {
       const result = PaginationQuerySchema.safeParse({
         limit: searchParams.get("limit") ?? 10,
         page: searchParams.get("page") ?? 1,
+        query: searchParams.get("query") || undefined,
       })
       if (!result.success) {
         return NextResponse.json(
@@ -26,9 +27,12 @@ class UsersRouteWrapper {
           { status: StatusCodes.BAD_REQUEST },
         )
       }
-      const { limit, page } = result.data
+
+      const { limit, page, query } = result.data
+
       const userDataService = new UserDataService()
-      const paginatedUsers = await userDataService.getPaginatedUsers(limit, page)
+      const paginatedUsers = await userDataService.getPaginatedUsers({ limit, page, query })
+
       return NextResponse.json({ data: paginatedUsers })
     } catch (error) {
       console.error(error)
