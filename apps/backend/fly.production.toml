@@ -1,10 +1,10 @@
 app = 'wdcc-uabc-backend'
 primary_region = 'syd'
+swap_size_mb = 512
 
 [build]
   context = "."
   dockerfile = "Dockerfile"
-  swap_size_mb = 512
 
 [http_service]
   internal_port = 3000
