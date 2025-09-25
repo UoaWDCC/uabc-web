@@ -11,11 +11,11 @@ const sharedTheme = {
   // TODO: Change link to frontend folder once
   brandTitle: `
     <div style="display: flex; align-items: center; gap: 0.5rem;">
-      <img src="https://raw.githubusercontent.com/UoaWDCC/uabc-web/refs/heads/master/apps/portal/public/svgs/logo.svg" width="20px" height="20px"/>
+      <img src="https://raw.githubusercontent.com/UoaWDCC/uabc-web/refs/heads/master/apps/frontend/public/logo.svg" width="20px" height="20px"/>
       UABC
     </div>
   `,
-  brandUrl: "https://wdcc-uabc-staging.fly.dev",
+  brandUrl: "https://uoabadminton.co.nz",
   // If prefer image over title
   // brandImage:
   //   "https://raw.githubusercontent.com/UoaWDCC/uabc-web/refs/heads/master/public/svgs/logo.svg",
