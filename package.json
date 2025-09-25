@@ -40,7 +40,7 @@
     "cross-env": "7.0.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.6",
+    "@biomejs/biome": "2.2.4",
     "@commitlint/cli": "19.8.1",
     "@commitlint/config-conventional": "19.8.1",
     "@testing-library/dom": "10.4.0",
