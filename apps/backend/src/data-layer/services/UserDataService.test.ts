@@ -1,4 +1,5 @@
-import { userCreateMock } from "@repo/shared/mocks"
+import { MembershipType } from "@repo/shared"
+import { memberUserCreateMock, userCreateMock } from "@repo/shared/mocks"
 import { payload } from "@/data-layer/adapters/Payload"
 import { clearCollection } from "@/test-config/backend-utils"
 import UserDataService from "./UserDataService"
@@ -63,6 +64,50 @@ describe("UserDataService", () => {
       const updateData = { firstName: "Updated" }
       const updateNotFoundUser = userDataService.updateUser("nonexistentid", updateData)
       await expect(updateNotFoundUser).rejects.toThrow("Not Found")
+    })
+  })
+
+  describe("resetAllMemberships", () => {
+    it("should reset all memberships of users who are either members or have more than 0 remaining sessions or both", async () => {
+      const usersToCreate = Array.from({ length: 3 }, (_, i) => ({
+        ...memberUserCreateMock,
+        email: `straight.zhao${i}@gmail.com`,
+        remainingSessions: Math.floor(Math.random() * 100),
+      }))
+      const userIds = await Promise.all(
+        usersToCreate.map(async (u) => {
+          const user = await userDataService.createUser(u)
+          return user.id
+        }),
+      )
+
+      await userDataService.resetAllMemberships()
+
+      const users = await Promise.all(
+        userIds.map(async (id) => {
+          const user = await userDataService.getUserById(id)
+          return {
+            role: user.role,
+            remainingSessions: user.remainingSessions,
+          }
+        }),
+      )
+
+      expect(users).toEqual(
+        Array.from({ length: usersToCreate.length }, () => ({
+          role: MembershipType.casual,
+          remainingSessions: 0,
+        })),
+      )
+    })
+
+    it("should update no users if none meet specified criteria", async () => {
+      await userDataService.createUser({
+        ...userCreateMock,
+        remainingSessions: 0,
+      }) // create a user that shouldn't be updated
+      const updatedUsers = await userDataService.resetAllMemberships()
+      expect(updatedUsers).toHaveLength(3) // created user isn't updated (length 3 for the 3 user tokens)
     })
   })
 

@@ -61,3 +61,13 @@ export const userCreateMock: CreateUserData = {
   image: null,
   emailVerification: validEmailVerification,
 }
+
+export const memberUserCreateMock: CreateUserData = {
+  firstName: "straight",
+  lastName: "zhao",
+  email: "straight.zhao@example.com",
+  role: MembershipType.member,
+  remainingSessions: 7,
+  image: null,
+  emailVerification: validEmailVerification,
+}

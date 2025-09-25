@@ -1,4 +1,4 @@
-import type { CreateUserData, EditUserData } from "@repo/shared"
+import { type CreateUserData, type EditUserData, MembershipType } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import type { PaginatedDocs } from "payload"
 import { NotFound } from "payload"
@@ -83,6 +83,28 @@ export default class UserDataService {
       id,
       data,
     })
+  }
+
+  /**
+   * Resets all memberships and/or sessions for {@link User} documents
+   * @returns The updated {@link User} documents
+   */
+  public async resetAllMemberships(): Promise<User[]> {
+    const { docs } = await payload.update({
+      collection: "user",
+      where: {
+        or: [
+          { role: { equals: MembershipType.member } },
+          { remainingSessions: { greater_than: 0 } },
+        ],
+      },
+      data: {
+        role: MembershipType.casual,
+        remainingSessions: 0,
+      },
+    })
+
+    return docs
   }
 
   /**
