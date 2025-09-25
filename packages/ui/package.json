@@ -27,6 +27,7 @@
     "@hookform/resolvers": "5.1.1",
     "@repo/shared": "workspace:*",
     "@repo/theme": "workspace:*",
+    "@storybook-community/storybook-dark-mode": "^6.0.0",
     "@storybook/nextjs-vite": "9.1.8",
     "@tanstack/react-query": "5.81.5",
     "@tanstack/react-query-devtools": "5.81.5",
@@ -57,7 +58,6 @@
     "@types/node": "22.15.21",
     "@types/react": "19.1.5",
     "@types/react-dom": "19.1.5",
-    "storybook-dark-mode": "4.0.2",
     "typescript": "5.9.2"
   }
 }
