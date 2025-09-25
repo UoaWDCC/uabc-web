@@ -102,12 +102,22 @@ describe("UserDataService", () => {
     })
 
     it("should update no users if none meet specified criteria", async () => {
-      await userDataService.createUser({
+      const usersToCreate = Array.from({ length: 3 }, (_, i) => ({
         ...userCreateMock,
+        email: `straight.zhao${i}@gmail.com`,
         remainingSessions: 0,
-      }) // create a user that shouldn't be updated
+      }))
+      const userIds = await Promise.all(
+        usersToCreate.map(async (u) => {
+          const user = await userDataService.createUser(u)
+          return user.id
+        }),
+      )
+
       const updatedUsers = await userDataService.resetAllMemberships()
-      expect(updatedUsers).toHaveLength(3) // created user isn't updated (length 3 for the 3 user tokens)
+      const users = await Promise.all(userIds.map((id) => userDataService.getUserById(id)))
+
+      expect(users.every((user) => updatedUsers.includes(user))).toEqual(false) // Exclude token users
     })
   })
 

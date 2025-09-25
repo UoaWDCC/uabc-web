@@ -112,9 +112,14 @@ export default class UserDataService {
     const { docs } = await payload.update({
       collection: "user",
       where: {
-        or: [
-          { role: { equals: MembershipType.member } },
-          { remainingSessions: { greater_than: 0 } },
+        and: [
+          { role: { not_equals: MembershipType.admin } },
+          {
+            or: [
+              { remainingSessions: { not_equals: 0 } },
+              { role: { equals: MembershipType.member } },
+            ],
+          },
         ],
       },
       data: {

@@ -1,5 +1,11 @@
 import { AUTH_COOKIE_NAME, MembershipType } from "@repo/shared"
-import { memberUserCreateMock, userCreateMock } from "@repo/shared/mocks"
+import {
+  adminUserMock,
+  casualUserMock,
+  memberUserCreateMock,
+  memberUserMock,
+  userCreateMock,
+} from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import UserDataService from "@/data-layer/services/UserDataService"
@@ -63,19 +69,30 @@ describe("/api/admin/memberships", async () => {
           remainingSessions: 0,
         })),
       )
-      expect(res.status).toBe(StatusCodes.OK)
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+      expect(await res.json()).toBeUndefined() // No content
     })
 
     it("should update no users if none meet specified criteria", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
-      await userDataService.createUser({
+      const usersToDelete = [casualUserMock, memberUserMock, adminUserMock]
+      await Promise.all(usersToDelete.map((user) => userDataService.deleteUser(user.id)))
+
+      const usersToCreate = Array.from({ length: 3 }, (_, i) => ({
         ...userCreateMock,
+        email: `straight.zhao${i}@gmail.com`,
         remainingSessions: 0,
-      }) // create a user that shouldn't be updated
+      }))
+      const createdUsers = await Promise.all(
+        usersToCreate.map((u) => userDataService.createUser(u)),
+      )
+
       const res = await PATCH(createMockNextRequest("", "PATCH"))
-      expect(res.status).toBe(StatusCodes.OK)
-      expect((await res.json()).data).toHaveLength(3) // created user isn't updated (length 3 for the 3 user tokens)
+      const users = await Promise.all(createdUsers.map((u) => userDataService.getUserById(u.id)))
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+      expect(await res.json()).toBeUndefined() // No content
+      expect(users).toEqual(createdUsers)
     })
 
     it("should return 500 for internal server error", async () => {
@@ -85,7 +102,6 @@ describe("/api/admin/memberships", async () => {
       )
 
       const res = await PATCH(createMockNextRequest("", "PATCH"))
-
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
       expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))

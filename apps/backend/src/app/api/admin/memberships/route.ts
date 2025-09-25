@@ -9,9 +9,9 @@ class MembershipsWrapper {
     const userDataService = new UserDataService()
 
     try {
-      const updatedUsers = await userDataService.resetAllMemberships()
+      await userDataService.resetAllMemberships()
 
-      return NextResponse.json({ data: updatedUsers }, { status: StatusCodes.OK })
+      return NextResponse.json({ status: StatusCodes.NO_CONTENT })
     } catch (error) {
       console.error(error)
       return NextResponse.json(
