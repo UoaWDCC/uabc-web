@@ -70,7 +70,6 @@ describe("/api/admin/memberships", async () => {
         })),
       )
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
-      expect(await res.json()).toBeUndefined() // No content
     })
 
     it("should update no users if none meet specified criteria", async () => {
@@ -91,7 +90,6 @@ describe("/api/admin/memberships", async () => {
       const res = await PATCH(createMockNextRequest("", "PATCH"))
       const users = await Promise.all(createdUsers.map((u) => userDataService.getUserById(u.id)))
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
-      expect(await res.json()).toBeUndefined() // No content
       expect(users).toEqual(createdUsers)
     })
 

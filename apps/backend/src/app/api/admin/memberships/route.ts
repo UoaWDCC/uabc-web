@@ -11,7 +11,7 @@ class MembershipsWrapper {
     try {
       await userDataService.resetAllMemberships()
 
-      return NextResponse.json({ status: StatusCodes.NO_CONTENT })
+      return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
       console.error(error)
       return NextResponse.json(
