@@ -5,7 +5,7 @@ const config: StorybookConfig = {
   addons: [
     "@storybook/addon-docs",
     "@storybook/addon-a11y",
-    "storybook-dark-mode",
+    "@storybook-community/storybook-dark-mode",
     "@storybook/addon-queryparams",
   ],
   core: { disableTelemetry: true },
