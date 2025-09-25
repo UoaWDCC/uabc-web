@@ -34,7 +34,7 @@ export const FilterActions = <TData,>({ columns }: FilterActionsProps<TData>) =>
   }
 
   return (
-    <ButtonGroup alignItems={{ base: "start", xl: "center" }} gap="sm" order={{ base: 1, xl: 2 }}>
+    <ButtonGroup alignItems="flex-end" gap="sm" order={{ base: 1, xl: 2 }}>
       <FilterColumnVisibility columns={columns} />
       <Button
         colorScheme="primary"

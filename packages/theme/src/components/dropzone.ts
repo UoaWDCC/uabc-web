@@ -94,6 +94,51 @@ export const Dropzone: ComponentMultiStyle<"Dropzone"> = {
         },
       }
     },
+    "gradient-dashed": ({
+      colorMode: m,
+      errorBorderColor: ec = ["danger.500", "danger.400"],
+      focusBorderColor: fc = "focus",
+      theme: t,
+    }) => {
+      const focusBorderColor = isArray(fc)
+        ? mode(getColor(fc[0], fc[0])(t, m), getColor(fc[1], fc[1])(t, m))(m)
+        : getColor(fc, fc)(t, m)
+      const errorBorderColor = isArray(ec)
+        ? mode(getColor(ec[0], ec[0])(t, m), getColor(ec[1], ec[1])(t, m))(m)
+        : getColor(ec, ec)(t, m)
+
+      return {
+        container: {
+          borderStyle: "dashed",
+          borderWidth: "2px",
+          borderColor: "gray.400",
+          borderRadius: "26px",
+          _focus: {
+            borderColor: focusBorderColor,
+            boxShadow: `0 0 0 1px ${focusBorderColor}`,
+            zIndex: "yamcha",
+          },
+          _focusVisible: {
+            borderColor: focusBorderColor,
+            boxShadow: `0 0 0 1px ${focusBorderColor}`,
+            zIndex: "yamcha",
+          },
+          _invalid: {
+            borderColor: errorBorderColor,
+            boxShadow: `0 0 0 1px ${errorBorderColor}`,
+          },
+          _before: {
+            content: '""',
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+            background:
+              "radial-gradient(44.61% 59.53% at 50% 50%, rgba(162, 161, 161, 0.10) 0%, rgba(3, 3, 3, 0.10) 100%)",
+            opacity: 1,
+          },
+        },
+      }
+    },
     solid: ({
       colorMode: m,
       errorBorderColor: ec = ["danger.500", "danger.400"],
@@ -159,6 +204,6 @@ export const Dropzone: ComponentMultiStyle<"Dropzone"> = {
 
   defaultProps: {
     size: "sm",
-    variant: "dashed",
+    variant: "gradient-dashed",
   },
 }
