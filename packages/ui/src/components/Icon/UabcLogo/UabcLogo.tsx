@@ -78,6 +78,7 @@ export const UabcLogo: FC<UabcLogoProps> = memo((props) => {
         fill="#0B1523"
         stroke="#FAFAFA"
       />
+      {/** biome-ignore lint/correctness/useUniqueElementIds: needed for the mask after */}
       <mask fill="white" id="path-16-inside-1_4616_1722">
         <path d="M11.8427 34.4699L11.748 34.5746C11.6434 34.6904 11.6528 34.8686 11.769 34.9728L20.8147 43.0855C20.9309 43.1897 21.1099 43.1804 21.2145 43.0646L21.3092 42.9599C21.4138 42.8442 21.4045 42.6659 21.2883 42.5617L12.2425 34.449C12.1263 34.3448 11.9473 34.3542 11.8427 34.4699Z" />
       </mask>
