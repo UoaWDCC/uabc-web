@@ -66,7 +66,7 @@
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.2.4"
   },
-  "packageManager": "pnpm@10.17.0",
+  "packageManager": "pnpm@10.17.1",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@swc/core",
@@ -79,7 +79,6 @@
       "workerd"
     ],
     "patchedDependencies": {
-      "storybook-dark-mode": "patches/storybook-dark-mode.patch",
       "@storybook/addon-queryparams@7.0.1": "patches/@storybook__addon-queryparams@7.0.1.patch"
     }
   },

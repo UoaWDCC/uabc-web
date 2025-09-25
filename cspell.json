@@ -18,8 +18,7 @@
     ".gitignore",
     "tsconfig.tsbuildinfo",
     "patches/**",
-    "**/*.svg",
-    "**/package.json"
+    "**/*.svg"
   ],
   "words": [
     "adipiscing",
