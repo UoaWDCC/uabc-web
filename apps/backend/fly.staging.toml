@@ -1,6 +1,6 @@
 app = 'wdcc-uabc-backend-staging'
 primary_region = 'syd'
-swap_size_mb = 512
+swap_size_mb = 256
 
 [build]
   context = "."
@@ -16,4 +16,4 @@ swap_size_mb = 512
 [[vm]]
   cpu_kind = 'shared'
   cpus = 1
-  memory_mb = 512
+  memory_mb = 256
