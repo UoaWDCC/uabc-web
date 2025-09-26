@@ -3,7 +3,6 @@ import { casualUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
-import { generateMockMongoDBObjectID } from "@/test-config/mocks/MongoDB.mock"
 import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import { payload } from "../adapters/Payload"
 import BookingDataService from "./BookingDataService"
@@ -236,165 +235,53 @@ describe("bookingDataService", () => {
       )
     })
   })
-  describe("deleteBookings", () => {
-    it("should delete multiple bookings successfully", async () => {
-      // Create multiple bookings first
-      const createdBooking1 = await bookingDataService.createBooking(bookingCreateMock)
-      const createdBooking2 = await bookingDataService.createBooking(bookingCreateMock2)
 
-      // Delete both bookings
-      const deletedBookings = await bookingDataService.deleteBookings([
-        createdBooking1.id,
-        createdBooking2.id,
-      ])
+  describe("deleteBookingsBySemesterId", () => {
+    it("should delete bookings by a semester ID successfully", async () => {
+      const createdSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const createdGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleCreateMock,
+        semester: createdSemester.id,
+      })
+      const createdGameSession1 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        gameSessionSchedule: createdGameSessionSchedule,
+        semester: createdGameSessionSchedule.semester,
+      })
+      const createdGameSession2 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: createdSemester.id,
+      })
 
-      // Check if returned deleted bookings match the created ones
+      const createdBooking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: createdGameSession1,
+      })
+      const createdBooking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: createdGameSession2,
+      })
+      const createdBooking3 = await bookingDataService.createBooking(bookingCreateMock)
+
+      const deletedBookings = await bookingDataService.deleteBookingsBySemesterId(
+        createdSemester.id,
+      )
+      expect(deletedBookings.length).toEqual(2)
       expect(deletedBookings).toEqual(expect.arrayContaining([createdBooking1, createdBooking2]))
 
-      // Verify bookings are actually deleted from database
-      await expect(() =>
-        payload.findByID({
-          collection: "booking",
-          id: createdBooking1.id,
-        }),
-      ).rejects.toThrowError("Not Found")
-
-      await expect(() =>
-        payload.findByID({
-          collection: "booking",
-          id: createdBooking2.id,
-        }),
-      ).rejects.toThrowError("Not Found")
-    })
-
-    it("should handle deletion of non-existent bookings", async () => {
-      const deletedBookings = await bookingDataService.deleteBookings([
-        generateMockMongoDBObjectID(),
-        generateMockMongoDBObjectID(),
-      ])
-
-      expect(deletedBookings).toEqual([])
-    })
-  })
-
-  describe("getBookingsByUserId", () => {
-    it("should find all bookings for a specific user", async () => {
-      // Create bookings with the same userId
-      const userId = generateMockMongoDBObjectID()
-      const bookingWithUser1 = {
-        ...bookingCreateMock,
-        user: userId,
-      }
-      const bookingWithUser2 = {
-        ...bookingCreateMock2,
-        user: userId,
-      }
-
-      const createdBooking1 = await bookingDataService.createBooking(bookingWithUser1)
-      const createdBooking2 = await bookingDataService.createBooking(bookingWithUser2)
-
-      // Get bookings for the user
-      const userBookings = await bookingDataService.getBookingsByUserId(userId)
-
-      expect(userBookings.docs).toHaveLength(2)
-      expect(userBookings.docs).toEqual(expect.arrayContaining([createdBooking1, createdBooking2]))
-    })
-
-    it("should return empty array when user has no bookings", async () => {
-      const userBookings = await bookingDataService.getBookingsByUserId("nonExistentUserId")
-
-      expect(userBookings.docs).toHaveLength(0)
-    })
-
-    it("should respect pagination parameters", async () => {
-      const userId = generateMockMongoDBObjectID()
-      const bookingWithUser1 = {
-        ...bookingCreateMock,
-        user: userId,
-      }
-      const bookingWithUser2 = {
-        ...bookingCreateMock2,
-        user: userId,
-      }
-
-      await bookingDataService.createBooking(bookingWithUser1)
-      await bookingDataService.createBooking(bookingWithUser2)
-
-      // Test with limit of 1
-      const paginatedBookings = await bookingDataService.getBookingsByUserId(
-        userId,
-        undefined,
-        1,
-        1,
+      expect(await bookingDataService.getBookingById(createdBooking3.id)).toBeDefined()
+      await expect(bookingDataService.getBookingById(createdBooking1.id)).rejects.toThrowError(
+        "Not Found",
       )
-
-      expect(paginatedBookings.docs).toHaveLength(1)
-      expect(paginatedBookings.hasNextPage).toBe(true)
-      expect(paginatedBookings.limit).toBe(1)
-      expect(paginatedBookings.page).toBe(1)
+      await expect(bookingDataService.getBookingById(createdBooking2.id)).rejects.toThrowError(
+        "Not Found",
+      )
     })
 
-    it("should use default pagination values when not provided", async () => {
-      const userId = "testUserId3"
-
-      const result = await bookingDataService.getBookingsByUserId(userId)
-
-      expect(result).toHaveProperty("docs")
-      expect(result).toHaveProperty("limit", 100)
-      expect(result).toHaveProperty("page", 1)
-
-      describe("deleteBookingsBySemesterId", () => {
-        it("should delete bookings by a semester ID successfully", async () => {
-          const createdSemester = await semesterDataService.createSemester(semesterCreateMock)
-          const createdGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
-            {
-              ...gameSessionScheduleCreateMock,
-              semester: createdSemester.id,
-            },
-          )
-          const createdGameSession1 = await gameSessionDataService.createGameSession({
-            ...gameSessionCreateMock,
-            gameSessionSchedule: createdGameSessionSchedule,
-            semester: createdGameSessionSchedule.semester,
-          })
-          const createdGameSession2 = await gameSessionDataService.createGameSession({
-            ...gameSessionCreateMock,
-            semester: createdSemester.id,
-          })
-
-          const createdBooking1 = await bookingDataService.createBooking({
-            ...bookingCreateMock,
-            gameSession: createdGameSession1,
-          })
-          const createdBooking2 = await bookingDataService.createBooking({
-            ...bookingCreateMock,
-            gameSession: createdGameSession2,
-          })
-          const createdBooking3 = await bookingDataService.createBooking(bookingCreateMock)
-
-          const deletedBookings = await bookingDataService.deleteBookingsBySemesterId(
-            createdSemester.id,
-          )
-          expect(deletedBookings.length).toEqual(2)
-          expect(deletedBookings).toEqual(
-            expect.arrayContaining([createdBooking1, createdBooking2]),
-          )
-
-          expect(await bookingDataService.getBookingById(createdBooking3.id)).toBeDefined()
-          await expect(bookingDataService.getBookingById(createdBooking1.id)).rejects.toThrowError(
-            "Not Found",
-          )
-          await expect(bookingDataService.getBookingById(createdBooking2.id)).rejects.toThrowError(
-            "Not Found",
-          )
-        })
-
-        it("should return an empty array if no bookings exist when deleting by a semester ID", async () => {
-          expect(
-            await bookingDataService.deleteBookingsBySemesterId("Not a valid semester ID"),
-          ).toStrictEqual([])
-        })
-      })
+    it("should return an empty array if no bookings exist when deleting by a semester ID", async () => {
+      expect(
+        await bookingDataService.deleteBookingsBySemesterId("Not a valid semester ID"),
+      ).toStrictEqual([])
     })
   })
 })

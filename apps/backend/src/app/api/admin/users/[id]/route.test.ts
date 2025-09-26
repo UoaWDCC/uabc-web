@@ -275,7 +275,7 @@ describe("/api/admin/users/[id]", async () => {
     const bookingDataService = new BookingDataService()
     const userDataService = new UserDataService()
 
-    it("should delete user and related bookings when deleteRelatedBookings is true", async () => {
+    it("should delete user and related bookings when deleteRelatedDocs is true", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       const newUser = await userDataService.createUser(userCreateMock)
@@ -289,7 +289,7 @@ describe("/api/admin/users/[id]", async () => {
       })
 
       const res = await DELETE(
-        createMockNextRequest("/api/admin/users?deleteRelatedBookings=true", "DELETE"),
+        createMockNextRequest("/api/admin/users?deleteRelatedDocs=true", "DELETE"),
         {
           params: Promise.resolve({
             id: newUser.id,
@@ -315,17 +315,17 @@ describe("/api/admin/users/[id]", async () => {
 
     it.for([
       // Test case 1: Explicit false boolean parameter
-      "/api/admin/users?deleteRelatedBookings=false",
+      "/api/admin/users?deleteRelatedDocs=false",
       // Test case 2: Invalid boolean value (string instead of true/false)
-      "/api/admin/users?deleteRelatedBookings=straightZhao",
+      "/api/admin/users?deleteRelatedDocs=straightZhao",
       // Test case 3: Flag parameter without value (equivalent to true in query params)
-      "/api/admin/users?deleteRelatedBookings",
+      "/api/admin/users?deleteRelatedDocs",
       // Test case 4: Unrelated query parameter (testing irrelevant params)
       "/api/admin/users?straightZhao",
       // Test case 5: Base URL with no query parameters
       "/api/admin/users",
     ] as const)(
-      "should only delete user (and not bookings) when deleteRelatedBookings is false",
+      "should only delete user (and not bookings) when deleteRelatedDocs is false",
       async (route) => {
         cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
@@ -370,11 +370,11 @@ describe("/api/admin/users/[id]", async () => {
 
       // Mock deleteBookings to throw an error
       const mockDeleteBookings = vi
-        .spyOn(BookingDataService.prototype, "deleteBookings")
+        .spyOn(BookingDataService.prototype, "deleteBookingsByUserId")
         .mockRejectedValueOnce(new Error("Delete failed"))
 
       const res = await DELETE(
-        createMockNextRequest("/api/admin/users?deleteRelatedBookings=true", "DELETE"),
+        createMockNextRequest("/api/admin/users?deleteRelatedDocs=true", "DELETE"),
         {
           params: Promise.resolve({
             id: newUser.id,
@@ -416,7 +416,7 @@ describe("/api/admin/users/[id]", async () => {
       })
 
       const res = await DELETE(
-        createMockNextRequest("/api/admin/users/deleteRelatedBookings=true", "DELETE"),
+        createMockNextRequest("/api/admin/users?deleteRelatedDocs=true", "DELETE"),
         {
           params: Promise.resolve({
             id: newUser.id,
