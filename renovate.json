@@ -35,7 +35,7 @@
     {
       "description": "Group Storybook-related packages",
       "groupName": "storybook",
-      "matchPackageNames": ["@storybook*", "storybook*"],
+      "matchPackageNames": ["@storybook/*", "storybook*"],
       "automerge": false
     }
   ],
