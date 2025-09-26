@@ -1,11 +1,5 @@
 import { AUTH_COOKIE_NAME, MembershipType } from "@repo/shared"
-import {
-  adminUserMock,
-  casualUserMock,
-  memberUserCreateMock,
-  memberUserMock,
-  userCreateMock,
-} from "@repo/shared/mocks"
+import { adminUserMock, memberUserCreateMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import UserDataService from "@/data-layer/services/UserDataService"
@@ -75,22 +69,11 @@ describe("/api/admin/memberships", async () => {
     it("should update no users if none meet specified criteria", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
-      const usersToDelete = [casualUserMock, memberUserMock, adminUserMock]
-      await Promise.all(usersToDelete.map((user) => userDataService.deleteUser(user.id)))
-
-      const usersToCreate = Array.from({ length: 3 }, (_, i) => ({
-        ...userCreateMock,
-        email: `straight.zhao${i}@gmail.com`,
-        remainingSessions: 0,
-      }))
-      const createdUsers = await Promise.all(
-        usersToCreate.map((u) => userDataService.createUser(u)),
-      )
-
       const res = await PATCH(createMockNextRequest("", "PATCH"))
-      const users = await Promise.all(createdUsers.map((u) => userDataService.getUserById(u.id)))
+      const admin = await userDataService.getUserById(adminUserMock.id) // Check if admin token user is unchanged
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
-      expect(users).toEqual(createdUsers)
+      expect(admin.remainingSessions).toEqual(adminUserMock.remainingSessions)
+      expect(admin.role).toEqual(adminUserMock.role)
     })
 
     it("should return 500 for internal server error", async () => {

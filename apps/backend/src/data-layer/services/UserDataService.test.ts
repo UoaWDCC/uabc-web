@@ -1,5 +1,5 @@
 import { MembershipType } from "@repo/shared"
-import { memberUserCreateMock, userCreateMock } from "@repo/shared/mocks"
+import { adminUserMock, memberUserCreateMock, userCreateMock } from "@repo/shared/mocks"
 import { payload } from "@/data-layer/adapters/Payload"
 import { clearCollection } from "@/test-config/backend-utils"
 import UserDataService from "./UserDataService"
@@ -102,22 +102,10 @@ describe("UserDataService", () => {
     })
 
     it("should update no users if none meet specified criteria", async () => {
-      const usersToCreate = Array.from({ length: 3 }, (_, i) => ({
-        ...userCreateMock,
-        email: `straight.zhao${i}@gmail.com`,
-        remainingSessions: 0,
-      }))
-      const userIds = await Promise.all(
-        usersToCreate.map(async (u) => {
-          const user = await userDataService.createUser(u)
-          return user.id
-        }),
-      )
-
-      const updatedUsers = await userDataService.resetAllMemberships()
-      const users = await Promise.all(userIds.map((id) => userDataService.getUserById(id)))
-
-      expect(users.every((user) => updatedUsers.includes(user))).toEqual(false) // Exclude token users
+      await userDataService.resetAllMemberships()
+      const admin = await userDataService.getUserById(adminUserMock.id) // Check if admin token user is unchanged
+      expect(admin.remainingSessions).toEqual(adminUserMock.remainingSessions)
+      expect(admin.role).toEqual(adminUserMock.role)
     })
   })
 

@@ -106,10 +106,9 @@ export default class UserDataService {
 
   /**
    * Resets all memberships and/or sessions for {@link User} documents
-   * @returns The updated {@link User} documents
    */
-  public async resetAllMemberships(): Promise<User[]> {
-    const { docs } = await payload.update({
+  public async resetAllMemberships(): Promise<void> {
+    await payload.update({
       collection: "user",
       where: {
         and: [
@@ -127,8 +126,6 @@ export default class UserDataService {
         remainingSessions: 0,
       },
     })
-
-    return docs
   }
 
   /**
