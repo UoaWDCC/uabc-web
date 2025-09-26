@@ -1,5 +1,5 @@
 import { AUTH_COOKIE_NAME, MembershipType } from "@repo/shared"
-import { adminUserMock, memberUserCreateMock } from "@repo/shared/mocks"
+import { adminUserMock, memberUserCreateMock, userCreateMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import UserDataService from "@/data-layer/services/UserDataService"
@@ -30,14 +30,10 @@ describe("/api/admin/memberships", async () => {
       expect(await res.json()).toStrictEqual({ error: "No scope" })
     })
 
-    it("should reset all memberships of users who are either members or have more than 0 remaining sessions or both", async () => {
+    it("should reset members and their session count and casuals if they have more than 0 sessions", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
-      const usersToCreate = Array.from({ length: 3 }, (_, i) => ({
-        ...memberUserCreateMock,
-        email: `straight.zhao${i}@gmail.com`,
-        remainingSessions: Math.floor(Math.random() * 100),
-      }))
+      const usersToCreate = [userCreateMock, memberUserCreateMock]
       const userIds = await Promise.all(
         usersToCreate.map(async (u) => {
           const user = await userDataService.createUser(u)
@@ -46,6 +42,7 @@ describe("/api/admin/memberships", async () => {
       )
 
       const res = await PATCH(createMockNextRequest("", "PATCH"))
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
 
       const users = await Promise.all(
         userIds.map(async (id) => {
@@ -63,7 +60,6 @@ describe("/api/admin/memberships", async () => {
           remainingSessions: 0,
         })),
       )
-      expect(res.status).toBe(StatusCodes.NO_CONTENT)
     })
 
     it("should update no users if none meet specified criteria", async () => {

@@ -68,12 +68,8 @@ describe("UserDataService", () => {
   })
 
   describe("resetAllMemberships", () => {
-    it("should reset all memberships of users who are either members or have more than 0 remaining sessions or both", async () => {
-      const usersToCreate = Array.from({ length: 3 }, (_, i) => ({
-        ...memberUserCreateMock,
-        email: `straight.zhao${i}@gmail.com`,
-        remainingSessions: Math.floor(Math.random() * 100),
-      }))
+    it("should reset members and their session count and casuals if they have more than 0 sessions", async () => {
+      const usersToCreate = [userCreateMock, memberUserCreateMock]
       const userIds = await Promise.all(
         usersToCreate.map(async (u) => {
           const user = await userDataService.createUser(u)
