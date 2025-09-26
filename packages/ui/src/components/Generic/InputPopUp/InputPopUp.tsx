@@ -107,7 +107,6 @@ export const InputPopUp: React.FC<InputPopUpProps> = ({
             w={{ base: "full", sm: "sm" }}
           >
             <TextInput
-              id="name"
               placeholder={description.split(":")[0]}
               size="lg"
               {...register("name", { required: "This field is required." })}

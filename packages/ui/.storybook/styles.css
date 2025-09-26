@@ -1,3 +1,4 @@
 .sb-main-fullscreen {
+  /* biome-ignore lint/complexity/noImportantStyles: required for full screen stories */
   min-height: unset !important;
 }

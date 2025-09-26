@@ -7,7 +7,6 @@
   "prHourlyLimit": 2,
   "rebaseWhen": "conflicted",
   "dependencyDashboard": true,
-  "ignorePaths": ["apps/portal/**"],
   "packageRules": [
     {
       "description": "Group devDependencies",

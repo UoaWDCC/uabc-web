@@ -162,7 +162,7 @@ export const SizeVariations: Story = {
     return (
       <PropsTable columns={values.map((v) => `${v}%`)} rows={sizes}>
         {(column, row, key) => {
-          const value = Number.parseInt(column.replace("%", ""))
+          const value = Number.parseInt(column.replace("%", ""), 10)
           return <LoadingStateBar {...args} key={key} size={row} value={value} />
         }}
       </PropsTable>
