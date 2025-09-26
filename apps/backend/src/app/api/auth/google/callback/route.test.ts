@@ -41,11 +41,27 @@ vi.mock("@/business-layer/provider/google", async () => {
   }
 })
 
-import { AUTH_COOKIE_NAME, JWTEncryptedUserSchema } from "@repo/shared"
+import { JWTEncryptedUserSchema } from "@repo/shared"
 import { cookies } from "next/headers"
+import { NotFound } from "payload"
 import { GET as callback } from "@/app/api/auth/google/callback/route"
+import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
+
+vi.mock("@/data-layer/services/AuthDataService", () => {
+  const actual = vi.importActual<typeof import("@/data-layer/services/AuthDataService")>(
+    "@/data-layer/services/AuthDataService",
+  )
+  return {
+    ...actual,
+    default: vi.fn().mockImplementation(() => ({
+      createAuth: vi.fn().mockResolvedValue(googleUserMock),
+      getAuthByEmail: vi.fn().mockResolvedValue(googleUserMock),
+      updateAuth: vi.fn().mockResolvedValue(googleUserMock),
+    })),
+  }
+})
 
 describe("GET /api/auth/google/callback", async () => {
   const cookieStore = await cookies()
@@ -64,7 +80,7 @@ describe("GET /api/auth/google/callback", async () => {
     )
   })
 
-  it("redirects user and sets JWT token to cookies on success auth", async () => {
+  it("redirects user and sets JWT token as query parameter on success auth", async () => {
     cookieStore.set("state", STATE_MOCK)
 
     const req = createMockNextRequest(
@@ -73,18 +89,73 @@ describe("GET /api/auth/google/callback", async () => {
     const response = await callback(req)
 
     expect(response.status).toBe(StatusCodes.TEMPORARY_REDIRECT)
-    expect(response.headers.get("location")).toBe("http://localhost:3000/onboarding/name")
 
-    const token = response.cookies.get(AUTH_COOKIE_NAME)?.value
-    expect(token).toBeDefined()
+    const location = response.headers.get("location")
+    expect(location).toBeDefined()
 
-    const authService = new AuthService()
-    const data = authService.getData(token as string, JWTEncryptedUserSchema)
-    const userMock = await userDataService.getUserByEmail(googleUserMock.email)
-    expect(data).toMatchObject({
-      user: userMock,
-      accessToken: tokensMock.access_token,
-    })
+    if (location) {
+      const redirectUrl = new URL(location)
+      expect(redirectUrl.pathname).toBe("/auth/callback")
+      expect(redirectUrl.searchParams.get("token")).toBeDefined()
+
+      const token = redirectUrl.searchParams.get("token")
+      const authService = new AuthService()
+      const data = authService.getData(token as string, JWTEncryptedUserSchema)
+
+      const userMock = await userDataService.getUserByEmail(
+        googleUserMock.email ?? "straight.zhao@example.com",
+      )
+      const { remainingSessions: _omit, ...userMockWithoutSessions } = userMock
+      expect(data).toMatchObject({
+        user: userMockWithoutSessions,
+        accessToken: tokensMock.access_token,
+      })
+    }
+  })
+
+  it("creates a new authentication document for the user when auth document can't be found", async () => {
+    vi.mocked(AuthDataService).mockImplementationOnce(() => ({
+      getAuthByEmail: vi
+        .fn()
+        .mockRejectedValue(
+          new NotFound(
+            () => `Authentication with the email: ${googleUserMock.email} was not found`,
+          ),
+        ),
+      createAuth: vi.fn().mockResolvedValue(googleUserMock),
+      updateAuth: vi.fn().mockResolvedValue(googleUserMock),
+    }))
+
+    cookieStore.set("state", STATE_MOCK)
+
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
+    )
+
+    const response = await callback(req)
+    expect(response.status).toBe(StatusCodes.TEMPORARY_REDIRECT)
+
+    const location = response.headers.get("location")
+    expect(location).toBeDefined()
+
+    if (location) {
+      const redirectUrl = new URL(location)
+      expect(redirectUrl.pathname).toBe("/auth/callback")
+      expect(redirectUrl.searchParams.get("token")).toBeDefined()
+
+      const token = redirectUrl.searchParams.get("token")
+      const authService = new AuthService()
+      const data = authService.getData(token as string, JWTEncryptedUserSchema)
+
+      const userMock = await userDataService.getUserByEmail(
+        googleUserMock.email ?? "straight.zhao@example.com",
+      )
+      const { remainingSessions: _omit, ...userMockWithoutSessions } = userMock
+      expect(data).toMatchObject({
+        user: userMockWithoutSessions,
+        accessToken: tokensMock.access_token,
+      })
+    }
   })
 
   it("returns 400 if state does not match", async () => {
@@ -94,9 +165,9 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?code=${CODE_MOCK}&state=wrong_state&scope=${SCOPES}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+    const json = await response.json()
     expect(json.error).toMatch(/state/i)
   })
 
@@ -107,9 +178,9 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?state=${STATE_MOCK}&scope=${SCOPES}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+    const json = await response.json()
     expect(json.error).toMatch("No code provided")
   })
 
@@ -120,9 +191,9 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+    const json = await response.json()
     expect(json.error).toMatch("No scope or invalid scopes provided")
   })
 
@@ -133,9 +204,9 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=invalid_scope`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+    const json = await response.json()
     expect(json.error).toMatch(/scope/i)
   })
 
@@ -146,9 +217,9 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?code=${INVALID_CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    const json = await response.json()
     expect(json.error).toBe("Error invalid google auth")
   })
 
@@ -159,9 +230,29 @@ describe("GET /api/auth/google/callback", async () => {
       `/api/auth/google/callback?code=${INVALID_USER_CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
     )
     const response = await callback(req)
-    const json = await response.json()
 
     expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    const json = await response.json()
     expect(json.error).toBeDefined()
+  })
+
+  it("returns 500 if response can't be parsed", async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      json: () => Promise.resolve("Invalid JSON"),
+      ok: true,
+      status: 200,
+    })
+    vi.stubGlobal("fetch", mockFetch)
+
+    cookieStore.set("state", STATE_MOCK)
+
+    const req = createMockNextRequest(
+      `/api/auth/google/callback?code=${CODE_MOCK}&state=${STATE_MOCK}&scope=${SCOPES}`,
+    )
+    const response = await callback(req)
+
+    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    const json = await response.json()
+    expect(json.error).toBe("Error parsing user info response")
   })
 })

@@ -26,7 +26,7 @@ describe("UserDataService", () => {
 
     it("should return null if user does not exist when searching by email", async () => {
       const fetchedUser = userDataService.getUserByEmail("nonexistent@example.com")
-      expect(fetchedUser).rejects.toThrow(
+      await expect(fetchedUser).rejects.toThrow(
         "A user with the email: nonexistent@example.com was not found.",
       )
     })
@@ -41,7 +41,7 @@ describe("UserDataService", () => {
 
     it("should return null for non-existent ID", async () => {
       const fetchedUser = userDataService.getUserById("nonexistentid")
-      expect(fetchedUser).rejects.toThrow("Not Found")
+      await expect(fetchedUser).rejects.toThrow("Not Found")
     })
   })
 
@@ -103,12 +103,32 @@ describe("UserDataService", () => {
         email: `user${i}@test.com`,
       }))
       await Promise.all(usersToCreate.map((u) => userDataService.createUser(u)))
-      const result = await userDataService.getPaginatedUsers(5, 3)
+      const result = await userDataService.getPaginatedUsers({ limit: 5, page: 3 })
       expect(result.docs.length).toBeLessThanOrEqual(5)
       expect(result.page).toBe(3)
       expect(result.limit).toBe(5)
       expect(result.totalDocs).toBeGreaterThanOrEqual(12)
       expect(result.totalPages).toBeGreaterThanOrEqual(3)
+    })
+
+    it("should filter down users based on query", async () => {
+      const usersToCreate = Array.from({ length: 8 }, (_, i) => ({
+        ...userCreateMock,
+        email: `user${i}@test.com`,
+      }))
+      await Promise.all(usersToCreate.map((u) => userDataService.createUser(u)))
+
+      const user = await userDataService.createUser({
+        ...userCreateMock,
+        firstName: "casual",
+        lastName: "test",
+      })
+
+      const result = await userDataService.getPaginatedUsers({ query: "casual" })
+      expect(result.docs).toStrictEqual([user])
+
+      const result2 = await userDataService.getPaginatedUsers({ query: "@test.com" })
+      expect(result2.totalDocs).toBe(8)
     })
 
     it("should return empty docs if no users exist", async () => {

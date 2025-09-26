@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/nextjs"
+import { mockSessions } from "@repo/shared/mocks"
+import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { QuickBook } from "./QuickBook"
-import { locationAndTimeOptionsMock } from "./QuickBook.mock"
 
 type Story = StoryObj<typeof QuickBook>
 
@@ -17,6 +17,6 @@ export default meta
 
 export const Default: Story = {
   args: {
-    locationAndTimeOptions: locationAndTimeOptionsMock,
+    sessions: mockSessions,
   },
 }

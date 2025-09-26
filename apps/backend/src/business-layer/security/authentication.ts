@@ -32,23 +32,17 @@ export default async function authenticate(securityName: "jwt", scopes?: string[
       const { user } = decodedToken
 
       if (!scopes?.length) {
-        // No scopes provided, resolve immediately
         return user
       }
       for (const scope of scopes) {
         if (user.role.includes(scope)) {
-          // Resolve if any of the scopes match
           return user
         }
       }
 
       throw new UnauthorizedAuthError("No scope")
     } catch (error) {
-      if (process.env.NODE_ENV !== "production") {
-        console.error("Authentication error:", error)
-      } else {
-        console.error("Authentication error occurred.")
-      }
+      if (!(error instanceof UnauthorizedAuthError)) console.error(error)
       throw error
     }
   }

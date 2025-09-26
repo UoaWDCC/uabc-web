@@ -63,12 +63,21 @@ runs:
         restore-keys: |
           ${{ runner.os }}-node_modules-
 
+    - name: Restore Next.js cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          apps/frontend/.next/cache
+        key: ${{ runner.os }}-nextjs-frontend-${{ hashFiles('apps/frontend/*') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-frontend
+
     - name: Install dependencies if cache misses
       run: NODE_ENV=${{ inputs.NODE_ENV }} pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
 
     - name: Create Cloudflare static Next build
-      run: pnpm turbo run pages:build
+      run: pnpm turbo run build --filter=frontend
       env:
         NEXT_PUBLIC_URL: ${{ inputs.NEXT_PUBLIC_URL }}
         NEXT_PUBLIC_API_URL: ${{ inputs.NEXT_PUBLIC_API_URL }}
@@ -83,7 +92,7 @@ runs:
         apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         gitHubToken: ${{ inputs.GH_TOKEN }}
-        command: pages deploy apps/frontend/.vercel/output/static --project-name=${{ inputs.project-name }}
+        command: pages deploy apps/frontend/out --project-name=${{ inputs.project-name }}
 
     - name: Output deployment url
       shell: bash

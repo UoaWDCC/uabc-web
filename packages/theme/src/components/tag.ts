@@ -33,6 +33,8 @@ export const Tag: ComponentMultiStyle<"Tag"> = {
       _focusVisible: {
         boxShadow: "outline",
       },
+      alignItems: "center",
+      justifyContent: "center",
     },
     label: {
       overflow: "visible",

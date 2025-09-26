@@ -1,45 +1,17 @@
 "use client"
 
-import type { LoginFormData } from "@repo/shared"
+import type { LoginFormData, RegisterRequestBody } from "@repo/shared"
 import { AUTH_COOKIE_NAME } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
-import {
-  type UseMutationResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query"
+import type { AuthActions, AuthContextValue, AuthState } from "@repo/shared/types/auth"
+import { noticeOptions } from "@repo/theme"
+import { useLocalStorage } from "@repo/ui/hooks"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNotice } from "@yamada-ui/react"
-import { createContext, type ReactNode, useContext } from "react"
-import type { ApiResponse } from "@/lib/api/client"
-import { useLocalStorage } from "@/lib/storage"
+import { StatusCodes } from "http-status-codes"
+import { createContext, type ReactNode, useCallback, useContext } from "react"
+import { ApiClientError } from "@/lib/api/ApiClientError"
 import AuthService from "@/services/auth/AuthService"
-
-type AuthState = {
-  user: User | null
-  isLoading: boolean
-  isPending: boolean
-  error: string | null
-}
-
-type AuthActions = {
-  login: UseMutationResult<
-    ApiResponse<{
-      message?: string | undefined
-      data?: string | undefined
-      error?: string | undefined
-    }>,
-    Error,
-    {
-      email: string
-      password: string
-      rememberMe: boolean
-    },
-    unknown
-  >
-}
-
-type AuthContextValue = AuthState & AuthActions
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
@@ -49,38 +21,57 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
  * and mutations.
  */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { value: token, setValue: setToken } = useLocalStorage<string>(AUTH_COOKIE_NAME)
+  const {
+    value: token,
+    setValue: setToken,
+    isAvailable,
+  } = useLocalStorage<string>(AUTH_COOKIE_NAME)
+  const notice = useNotice(noticeOptions)
   const queryClient = useQueryClient()
-  const notice = useNotice()
 
   const {
     data: user,
     isLoading,
     isPending,
     error,
-  } = useQuery<User | null, Error>({
-    queryKey: ["auth", "me", token],
+  } = useQuery<User | null, Error, User | null>({
+    queryKey: ["auth", "me"],
     queryFn: async (): Promise<User | null> => {
       if (!token) {
         return null
       }
-      return await AuthService.getUserFromToken(token)
+      try {
+        const response = await AuthService.getUserInfo(token)
+        return response.data
+      } catch (err) {
+        if (err instanceof ApiClientError && err.status === StatusCodes.UNAUTHORIZED) {
+          setToken(null)
+          return null
+        }
+        throw err
+      }
     },
     staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
     refetchOnMount: true,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    enabled: isAvailable && !!token,
   })
 
   const login = useMutation({
     mutationFn: async (credentials: LoginFormData) => {
-      return await AuthService.login(credentials.email, credentials.password)
+      // Remove queries and reset token to avoid potential conflicts during login
+      setToken(null)
+      queryClient.cancelQueries({ queryKey: ["auth", "me"] })
+      queryClient.removeQueries({ queryKey: ["auth", "me"] })
+
+      const response = await AuthService.login(credentials.email, credentials.password)
+
+      return response
     },
-    onSuccess: async (data) => {
-      if (data.success && data.data?.data) {
-        setToken(data.data.data)
-        queryClient.removeQueries({ queryKey: ["auth", "me"] })
-      } else {
-        throw new Error(data.success ? data.data?.error : data.error?.message || "Login failed")
+    onSettled: (response) => {
+      if (response?.data) {
+        setToken(response?.data)
       }
     },
     onError: (error) => {
@@ -92,15 +83,59 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
   })
 
+  const emailVerificationCode = useMutation({
+    mutationFn: async (email: string) => {
+      return await AuthService.sendEmailVerificationCode(email)
+    },
+    onError: (error) => {
+      notice({
+        title: "Email Verification Code Failed",
+        description: error.message,
+        status: "error",
+      })
+    },
+  })
+
+  const register = useMutation({
+    mutationFn: async (data: RegisterRequestBody) => {
+      return await AuthService.register(data.email, data.password, data.emailVerificationCode)
+    },
+    onError: (error) => {
+      notice({
+        title: "Email Verification Code Failed",
+        description: error.message,
+        status: "error",
+      })
+    },
+  })
+
+  const logout = useCallback(() => {
+    setToken(null)
+    queryClient.cancelQueries({ queryKey: ["auth", "me"] })
+    queryClient.removeQueries({ queryKey: ["auth", "me"] })
+
+    notice({
+      title: "Logged out",
+      description: "You have been logged out successfully.",
+      status: "success",
+    })
+  }, [setToken, notice, queryClient])
+
   const authState: AuthState = {
-    user: user ?? null,
+    user: token ? (user ?? null) : null,
     isLoading: isLoading || login.isPending,
     isPending: isPending || login.isPending,
     error: error ? error.message : null,
+    token: token ?? null,
+    isAvailable,
   }
 
   const authActions: AuthActions = {
     login,
+    emailVerificationCode,
+    register,
+    setToken,
+    logout,
   }
 
   return (

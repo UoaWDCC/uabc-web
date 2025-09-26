@@ -57,147 +57,150 @@ export interface LoginPanelProps {
  * @param props LoginPanel component props
  * @returns A login panel component
  */
-export const LoginPanel = memo(({ errorMessage, onSubmit, isLoading }: LoginPanelProps) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(LoginFormDataSchema),
-  })
+export const LoginPanel = memo(
+  ({ errorMessage, onSubmit, googleHref, isLoading }: LoginPanelProps) => {
+    const {
+      register,
+      handleSubmit,
+      formState: { errors, isSubmitting },
+    } = useForm<LoginFormData>({
+      resolver: zodResolver(LoginFormDataSchema),
+    })
 
-  const handleLogin = async (data: LoginFormData) => {
-    await onSubmit?.(data)
-  }
+    const handleLogin = async (data: LoginFormData) => {
+      await onSubmit?.(data)
+    }
 
-  const isButtonLoading = isLoading ?? isSubmitting
+    const isButtonLoading = isLoading ?? isSubmitting
 
-  return (
-    <VStack
-      as="form"
-      bgColor="secondary.900"
-      borderRadius={{ base: undefined, md: "3xl" }}
-      layerStyle={{ base: undefined, md: "gradientBorder" }}
-      onSubmit={handleSubmit(handleLogin)}
-      p={{ base: "md", lg: "lg" }}
-      w={{ base: "full", md: "md" }}
-    >
-      <Center py={{ base: "md", md: "unset" }}>
-        {/* TODO: replace with correct logo */}
-        <UabcLogo />
-      </Center>
+    return (
+      <VStack
+        as="form"
+        bg="gray.900"
+        layerStyle="gradientBorder"
+        maxW="lg"
+        onSubmit={handleSubmit(handleLogin)}
+        p="lg"
+        rounded="3xl"
+        w="full"
+      >
+        <Center>
+          {/* TODO: replace with correct logo */}
+          <UabcLogo />
+        </Center>
 
-      <Center display={{ base: "none", md: "block" }} textAlign="center">
-        <VStack>
-          <Heading.h2>Welcome back</Heading.h2>
-          <Text>Please enter your details to sign in</Text>
-        </VStack>
-      </Center>
+        <Center textAlign="center">
+          <VStack>
+            <Heading.h2>Welcome back</Heading.h2>
+            <Text>Please enter your details to login</Text>
+          </VStack>
+        </Center>
 
-      <FormControl errorMessage={errors.email?.message} invalid={!!errors.email}>
-        <TextInput
-          autoComplete={AutoCompleteType.Email}
-          data-testid="email"
-          placeholder="Email Address"
-          startElement={<MailIcon />}
-          type={InputType.Email}
-          {...register("email")}
-        />
-      </FormControl>
-      <FormControl errorMessage={errors.password?.message} invalid={!!errors.password}>
-        <TextInput
-          autoComplete={AutoCompleteType.CurrentPassword}
-          data-testid="password"
-          placeholder="Password"
-          startElement={<LockIcon />}
-          type={InputType.Password}
-          {...register("password")}
-        />
-      </FormControl>
-      {errorMessage && <Text color={["danger.500", "danger.400"]}>{errorMessage}</Text>}
-      <HStack color="gray.100" fontSize="sm">
-        <Checkbox label="Remember me" size="sm" textAlign="start" {...register("rememberMe")} />
-        <Spacer />
-        <UILink
-          _hover={{ color: "white" }}
-          as={Link}
-          color="gray.100"
-          href="/auth/forgot-password"
-          textDecoration="underline"
-        >
-          Forgot Password?
-        </UILink>
-      </HStack>
-      <Button colorScheme="primary" loading={isButtonLoading} type="submit">
-        Sign In
-      </Button>
-
-      <Center position="relative">
-        <Text
-          bg="secondary.900"
-          color="muted"
-          display="inline-block"
-          fontSize="xs"
-          px="md"
-          textTransform="uppercase"
-          z={1}
-        >
-          or
-        </Text>
-        <Box
-          color="white"
-          layerStyle="fadeFromMiddle"
-          left="0"
-          position="absolute"
-          right="0"
-          w="full"
-        />
-      </Center>
-
-      <Center>
-        <ButtonGroup gap="sm">
-          <Tooltip label="Not ready yet" placement="top">
-            <IconButton
-              aria-label="Google"
-              colorScheme="secondary"
-              disabled
-              fullRounded
-              variant="gradient"
-            >
-              <GoogleLogo fontSize="2xl" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip label="Not ready yet" placement="top">
-            {/* TODO: implement Apple auth or remove Apple icon button */}
-            <IconButton
-              aria-label="Apple"
-              colorScheme="secondary"
-              disabled
-              fullRounded
-              variant="gradient"
-            >
-              <AppleIcon fontSize="2xl" />
-            </IconButton>
-          </Tooltip>
-        </ButtonGroup>
-      </Center>
-
-      <Center color="gray.100" fontSize="sm" textAlign="center">
-        <Text>
-          Don't have an account?&nbsp;
+        <FormControl errorMessage={errors.email?.message} invalid={!!errors.email}>
+          <TextInput
+            autoComplete={AutoCompleteType.Email}
+            data-testid="email"
+            placeholder="Email Address"
+            startElement={<MailIcon />}
+            type={InputType.Email}
+            {...register("email")}
+          />
+        </FormControl>
+        <FormControl errorMessage={errors.password?.message} invalid={!!errors.password}>
+          <TextInput
+            autoComplete={AutoCompleteType.CurrentPassword}
+            data-testid="password"
+            placeholder="Password"
+            startElement={<LockIcon />}
+            type={InputType.Password}
+            {...register("password")}
+          />
+        </FormControl>
+        {errorMessage && <Text color={["danger.500", "danger.400"]}>{errorMessage}</Text>}
+        <HStack color="gray.100" fontSize="sm">
+          <Checkbox label="Remember me" size="sm" textAlign="start" {...register("rememberMe")} />
+          <Spacer />
           <UILink
             _hover={{ color: "white" }}
             as={Link}
             color="gray.100"
-            href="/auth/signup"
+            href="/auth/forgot-password"
             textDecoration="underline"
           >
-            Create Account
+            Forgot Password?
           </UILink>
-        </Text>
-      </Center>
-    </VStack>
-  )
-})
+        </HStack>
+        <Button colorScheme="primary" loading={isButtonLoading} type="submit">
+          Login
+        </Button>
+
+        <Center position="relative">
+          <Text
+            bg="secondary.900"
+            color="muted"
+            display="inline-block"
+            fontSize="xs"
+            px="md"
+            textTransform="uppercase"
+            z={1}
+          >
+            or
+          </Text>
+          <Box
+            color="white"
+            layerStyle="fadeFromMiddle"
+            left="0"
+            position="absolute"
+            right="0"
+            w="full"
+          />
+        </Center>
+
+        <Center>
+          <ButtonGroup gap="sm">
+            <IconButton
+              aria-label="Google"
+              as={googleHref ? Link : undefined}
+              colorScheme="secondary"
+              disabled={!googleHref}
+              href={googleHref}
+              rounded="full"
+              variant="gradient"
+            >
+              <GoogleLogo fontSize="2xl" />
+            </IconButton>
+            <Tooltip label="Not ready yet" placement="top">
+              {/* TODO: implement Apple auth or remove Apple icon button */}
+              <IconButton
+                aria-label="Apple"
+                colorScheme="secondary"
+                disabled
+                rounded="full"
+                variant="gradient"
+              >
+                <AppleIcon fontSize="2xl" />
+              </IconButton>
+            </Tooltip>
+          </ButtonGroup>
+        </Center>
+
+        <Center color="gray.100" fontSize="sm" textAlign="center">
+          <Text>
+            Don't have an account?&nbsp;
+            <UILink
+              _hover={{ color: "white" }}
+              as={Link}
+              color="gray.100"
+              href="/auth/register"
+              textDecoration="underline"
+            >
+              Create Account
+            </UILink>
+          </Text>
+        </Center>
+      </VStack>
+    )
+  },
+)
 
 LoginPanel.displayName = "LoginPanel"

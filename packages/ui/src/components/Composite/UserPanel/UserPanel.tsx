@@ -1,5 +1,6 @@
 import type { User } from "@repo/shared/payload-types"
 import { ShuttleIcon } from "@repo/ui/components/Icon"
+import { IconButton, type IconButtonProps } from "@repo/ui/components/Primitive"
 import { PencilIcon } from "@yamada-ui/lucide"
 import {
   Avatar,
@@ -11,9 +12,8 @@ import {
   type CardProps,
   Center,
   Float,
-  IconButton,
-  type IconButtonProps,
   Text,
+  Tooltip,
   VStack,
 } from "@yamada-ui/react"
 import type { FC } from "react"
@@ -76,7 +76,6 @@ export const UserPanel: FC<UserPanelProps> = ({ user, iconButtonProps, ...props 
     <Card
       bg={["secondary.50", "secondary.900"]}
       layerStyle="gradientBorder"
-      p={{ base: "md", md: "0", lg: "md" }}
       rounded="2xl"
       size="lg"
       {...props}
@@ -85,13 +84,16 @@ export const UserPanel: FC<UserPanelProps> = ({ user, iconButtonProps, ...props 
         <Box position="relative">
           <Avatar name={firstName} size="xl" src={getImageUrl(image)} />
           <Float offset={[4, 4]} placement="end-end">
-            <IconButton
-              aria-label="Edit"
-              icon={<PencilIcon />}
-              rounded="full"
-              size="sm"
-              {...iconButtonProps}
-            />
+            <Tooltip label="This feature is not available yet" placement="top">
+              <IconButton
+                aria-label="Edit"
+                disabled
+                icon={<PencilIcon />}
+                rounded="full"
+                size="xs"
+                {...iconButtonProps}
+              />
+            </Tooltip>
           </Float>
         </Box>
         <VStack gap="xs">
@@ -103,7 +105,7 @@ export const UserPanel: FC<UserPanelProps> = ({ user, iconButtonProps, ...props 
       </CardHeader>
       <CardBody alignItems="center" gap="md">
         <InfoField label="Email" value={email} />
-        <InfoField label="Phone" value={phoneNumber} />
+        <InfoField label="Phone" value={phoneNumber?.length ? phoneNumber : "N/A"} />
       </CardBody>
       <CardFooter gap="sm" justifyContent="center">
         <ShuttleIcon fontSize="sm" />

@@ -1,7 +1,8 @@
-import { MembershipType, type RegisterDetails } from "@repo/shared"
+import { MembershipType, type RegisterRequestBody } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import AuthDataService from "@/data-layer/services/AuthDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
+import { getVerificationCodeExpiryDate } from "@/data-layer/utils/DateUtils"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { POST } from "./route"
 
@@ -13,25 +14,31 @@ describe("tests /api/auth/register", () => {
     email: "johndoe@example.com",
     password: "Password123!",
     emailVerificationCode: "123456",
-  } satisfies RegisterDetails
+  } satisfies RegisterRequestBody
+
+  const now = new Date() // Use current date for createdAt
+  const createdAt = now.toISOString()
+  const expiresAt = getVerificationCodeExpiryDate(now).toISOString()
 
   it("should register a new user", async () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerificationCode: registerBody.emailVerificationCode,
+      emailVerification: {
+        verificationCode: registerBody.emailVerificationCode,
+        createdAt: createdAt,
+        expiresAt: expiresAt,
+      },
       role: MembershipType.casual,
     })
+
     const res = await POST(
-      createMockNextRequest("/api/auth/register", "POST", registerBody satisfies RegisterDetails),
+      createMockNextRequest("", "POST", registerBody satisfies RegisterRequestBody),
     )
-    const json = await res.json()
 
     expect(res.status).toBe(StatusCodes.CREATED)
+    const json = await res.json()
     expect(json.message).toBe("User registered successfully")
-
-    const user = await userDataService.getUserById(json.data.id)
-    expect(user).toStrictEqual(json.data)
 
     const auth = await authDataService.getAuthByEmail(registerBody.email)
     expect(auth.password).not.toEqual(registerBody.password)
@@ -41,21 +48,48 @@ describe("tests /api/auth/register", () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerificationCode: "333555",
+      emailVerification: {
+        verificationCode: "333555",
+        createdAt: createdAt,
+        expiresAt: expiresAt,
+      },
       role: MembershipType.casual,
     })
-    const res = await POST(createMockNextRequest("/api/auth/register", "POST", registerBody))
+
+    const res = await POST(createMockNextRequest("", "POST", registerBody))
     const json = await res.json()
 
     expect(res.status).toBe(StatusCodes.BAD_REQUEST)
     expect(json.error).toBe("Invalid email verification code")
   })
 
-  it("should return a 403 if the user hasn't created a verification code request", async () => {
-    const res = await POST(createMockNextRequest("/api/auth/register", "POST", registerBody))
+  it("should return a 400 if a user submits an expired verification code", async () => {
+    const expiredTime = new Date(Date.now() - 60 * 60 * 1000) // 1 hour ago
+    await userDataService.createUser({
+      firstName: registerBody.email,
+      email: registerBody.email,
+      emailVerification: {
+        verificationCode: registerBody.emailVerificationCode,
+        createdAt: expiredTime.toISOString(),
+        expiresAt: getVerificationCodeExpiryDate(expiredTime).toISOString(),
+      },
+      role: MembershipType.casual,
+    })
+
+    const res = await POST(createMockNextRequest("", "POST", registerBody))
     const json = await res.json()
 
+    expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+    expect(json.error).toBe(
+      "Latest email verification code has expired. Please request a new code. ",
+    )
+  })
+
+  it("should return a 403 if the user hasn't created a verification code request", async () => {
+    const res = await POST(createMockNextRequest("", "POST", registerBody))
+
     expect(res.status).toBe(StatusCodes.FORBIDDEN)
+    const json = await res.json()
     expect(json.error).toBe("Email not verified")
   })
 
@@ -63,40 +97,54 @@ describe("tests /api/auth/register", () => {
     await userDataService.createUser({
       firstName: registerBody.email,
       email: registerBody.email,
-      emailVerificationCode: registerBody.emailVerificationCode,
+      emailVerification: {
+        verificationCode: registerBody.emailVerificationCode,
+        createdAt: createdAt,
+        expiresAt: expiresAt,
+      },
       role: MembershipType.casual,
     })
-    await POST(createMockNextRequest("/api/auth/register", "POST", registerBody))
+
+    await POST(createMockNextRequest("", "POST", registerBody))
 
     const res = await POST(createMockNextRequest("/api/register", "POST", registerBody))
-    const json = await res.json()
-
     expect(res.status).toBe(StatusCodes.CONFLICT)
+    const json = await res.json()
     expect(json.error).toBe("A user with that email already exists")
   })
 
   it("should return a 400 bad request if the payload is invalid", async () => {
     const res = await POST(
-      createMockNextRequest("/api/auth/register", "POST", {
+      createMockNextRequest("", "POST", {
         ...registerBody,
         password: undefined,
       }),
     )
-    const json = await res.json()
 
     expect(res.status).toBe(StatusCodes.BAD_REQUEST)
+    const json = await res.json()
     expect(json.error).toBe("Invalid request body")
   })
 
   it("should return 500 if createUser throws unexpected error", async () => {
     const error = new Error("Simulated internal error")
-
     vi.spyOn(UserDataService.prototype, "getUserByEmail").mockRejectedValueOnce(error)
 
-    const res = await POST(createMockNextRequest("/api/auth/register", "POST", registerBody))
-    const json = await res.json()
+    const res = await POST(createMockNextRequest("", "POST", registerBody))
 
     expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    const json = await res.json()
+    expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+  })
+
+  it("should return 500 if getAuthByEmail throws unexpected error", async () => {
+    const error = new Error("Simulated internal error")
+    vi.spyOn(AuthDataService.prototype, "getAuthByEmail").mockRejectedValueOnce(error)
+
+    const res = await POST(createMockNextRequest("", "POST", registerBody))
+
+    expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+    const json = await res.json()
     expect(json.error).toBe(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
   })
 })

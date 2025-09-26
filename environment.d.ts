@@ -20,6 +20,11 @@ declare global {
       JWT_SECRET: string
 
       /**
+       * The uploadthing.com token for Media collection files
+       */
+      UPLOADTHING_TOKEN: string
+
+      /**
        * The public URL of the frontend
        */
       NEXT_PUBLIC_URL: string

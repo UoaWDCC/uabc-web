@@ -15,6 +15,7 @@ import {
   VStack,
 } from "@yamada-ui/react"
 import type { DefaultValues } from "react-hook-form"
+import type { ZodTypeAny } from "zod"
 import { FieldGroup } from "./FieldGroup"
 import type { Field, NullableFormData } from "./types"
 import { UserProfileProvider, useUserProfile } from "./UserProfileContext"
@@ -34,6 +35,10 @@ export interface UserProfileCardProps<T extends readonly Field[] = readonly Fiel
   fields: T
   defaultValues?: Partial<NullableFormData<T>>
   onSave?: (data: NullableFormData<T>) => Promise<void>
+  /**
+   * Optional Zod schema for form validation.
+   */
+  schema?: ZodTypeAny
 }
 
 /**
@@ -47,6 +52,7 @@ export const UserProfileCard = <T extends readonly Field[]>({
   fields,
   defaultValues,
   onSave,
+  schema,
   ...props
 }: UserProfileCardProps<T>) => {
   return (
@@ -54,6 +60,7 @@ export const UserProfileCard = <T extends readonly Field[]>({
       defaultValues={defaultValues as DefaultValues<NullableFormData<T>>}
       fields={fields}
       onSave={onSave}
+      schema={schema}
     >
       <UserProfileContent fields={fields} title={title} {...props} />
     </UserProfileProvider>
@@ -93,7 +100,7 @@ const UserProfileContent = <T extends readonly Field[]>({
       layerStyle="gradientBorder"
       onSubmit={form.handleSubmit(saveChanges)}
       size="lg"
-      w="min(4xl, 100%)"
+      w="full"
       {...props}
     >
       <CardHeader>

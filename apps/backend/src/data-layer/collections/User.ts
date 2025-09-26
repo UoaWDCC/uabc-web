@@ -3,6 +3,9 @@ import type { CollectionConfig } from "payload"
 
 export const User: CollectionConfig = {
   slug: "user",
+  admin: {
+    useAsTitle: "email",
+  },
   fields: [
     {
       name: "firstName",
@@ -99,6 +102,7 @@ export const User: CollectionConfig = {
       name: "remainingSessions",
       type: "number",
       required: false,
+      defaultValue: 0,
       admin: {
         description: "The number of remaining sessions the user has",
       },
@@ -113,11 +117,41 @@ export const User: CollectionConfig = {
       },
     },
     {
-      name: "emailVerificationCode",
-      type: "text",
+      name: "emailVerification",
+      interfaceName: "EmailVerification",
+      type: "group",
       required: false,
+      fields: [
+        {
+          name: "verificationCode",
+          type: "text",
+          admin: {
+            description: "The most recent verification code for the user",
+          },
+        },
+        {
+          name: "expiresAt",
+          type: "date",
+          admin: {
+            date: {
+              pickerAppearance: "dayAndTime",
+            },
+            description: "The current expiration date of this email verification code",
+          },
+        },
+        {
+          name: "createdAt",
+          type: "date",
+          admin: {
+            date: {
+              pickerAppearance: "dayAndTime",
+            },
+            description: "The date when this email verification code was created",
+          },
+        },
+      ],
       admin: {
-        description: "The email verification token of the user",
+        description: "The email verification code for the user",
       },
     },
   ],

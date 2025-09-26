@@ -1,5 +1,6 @@
+import { VStack } from "@yamada-ui/react"
 import type { Metadata } from "next"
-import { ProfileSection } from "@/components/client/user/ProfileSection"
+import { ProfileClient } from "@/components/client/user/ProfileClient"
 
 export const metadata: Metadata = {
   title: "User Profile",
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 }
 
 export default function Profile() {
-  return <ProfileSection />
+  return (
+    <VStack as="main">
+      <ProfileClient />
+    </VStack>
+  )
 }

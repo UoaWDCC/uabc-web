@@ -53,6 +53,37 @@ export type LinkArray = {
   id?: string | null;
 }[];
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationBubbleItem".
+ */
+export type LocationBubbleItem = {
+  /**
+   * The image displayed for the location of game session.
+   */
+  locationImage: string | Media;
+  /**
+   * The game session schedule displayed for location bubble description, e.g. location, session time
+   */
+  gameSessionSchedule: (string | GameSessionSchedule)[];
+  button: Link;
+  id?: string | null;
+}[];
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutUsInfoItems".
+ */
+export type AboutUsInfoItems = {
+  /**
+   * The title displayed for about us info items, e.g. Who We Are.
+   */
+  title: string;
+  /**
+   * The content displayed for about us info items.
+   */
+  description: string;
+  id?: string | null;
+}[];
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -147,14 +178,20 @@ export interface Config {
   globals: {
     faq: Faq;
     footer: Footer;
+    locationBubble: LocationBubble;
     navbar: Navbar;
     termsOfService: TermsOfService;
+    aboutUsInfo: AboutUsInfo;
+    onboarding: Onboarding;
   };
   globalsSelect: {
     faq: FaqSelect<false> | FaqSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    locationBubble: LocationBubbleSelect<false> | LocationBubbleSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
     termsOfService: TermsOfServiceSelect<false> | TermsOfServiceSelect<true>;
+    aboutUsInfo: AboutUsInfoSelect<false> | AboutUsInfoSelect<true>;
+    onboarding: OnboardingSelect<false> | OnboardingSelect<true>;
   };
   locale: null;
   user: Admin & {
@@ -255,6 +292,7 @@ export interface Event {
 export interface Media {
   id: string;
   alt: string;
+  _key?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -338,12 +376,29 @@ export interface User {
    * The image of the user
    */
   image?: (string | null) | Media;
-  /**
-   * The email verification token of the user
-   */
-  emailVerificationCode?: string | null;
+  emailVerification?: EmailVerification;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * The email verification code for the user
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EmailVerification".
+ */
+export interface EmailVerification {
+  /**
+   * The most recent verification code for the user
+   */
+  verificationCode?: string | null;
+  /**
+   * The current expiration date of this email verification code
+   */
+  expiresAt?: string | null;
+  /**
+   * The date when this email verification code was created
+   */
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -374,7 +429,7 @@ export interface Semester {
   /**
    * The day when booking opens for this semester
    */
-  bookingOpenDay: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+  bookingOpenDay: 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
   /**
    * The time when booking opens for this semester
    */
@@ -403,7 +458,7 @@ export interface GameSessionSchedule {
   /**
    * The day of the week this game session schedule belongs to
    */
-  day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+  day: 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
   /**
    * The start time of the game session
    */
@@ -445,6 +500,10 @@ export interface GameSession {
    * The location of the game session (in case this is a one off session), e.g. 17 Symonds Street
    */
   location?: string | null;
+  /**
+   * The open time of the game session
+   */
+  openTime: string;
   /**
    * The start time of the game session
    */
@@ -491,10 +550,6 @@ export interface Booking {
  */
 export interface Authentication {
   id: string;
-  /**
-   * The user who owns this authentication
-   */
-  user: string | User;
   /**
    * The user email that's related to this auth
    */
@@ -685,8 +740,17 @@ export interface UserSelect<T extends boolean = true> {
   university?: T;
   remainingSessions?: T;
   image?: T;
-  emailVerificationCode?: T;
+  emailVerification?: T | EmailVerificationSelect<T>;
   updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EmailVerification_select".
+ */
+export interface EmailVerificationSelect<T extends boolean = true> {
+  verificationCode?: T;
+  expiresAt?: T;
   createdAt?: T;
 }
 /**
@@ -695,6 +759,7 @@ export interface UserSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  _key?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -747,6 +812,7 @@ export interface GameSessionSelect<T extends boolean = true> {
   semester?: T;
   name?: T;
   location?: T;
+  openTime?: T;
   startTime?: T;
   endTime?: T;
   capacity?: T;
@@ -770,7 +836,6 @@ export interface BookingSelect<T extends boolean = true> {
  * via the `definition` "authentication_select".
  */
 export interface AuthenticationSelect<T extends boolean = true> {
-  user?: T;
   email?: T;
   password?: T;
   provider?: T;
@@ -879,6 +944,18 @@ export interface LinkGroup {
    */
   title: string;
   links: LinkArray;
+}
+/**
+ * Location bubbles that will be displayed on the homepage
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locationBubble".
+ */
+export interface LocationBubble {
+  id: string;
+  locationBubbleItems: LocationBubbleItem;
+  updatedAt?: string | null;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1001,6 +1078,43 @@ export interface Disclaimer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aboutUsInfo".
+ */
+export interface AboutUsInfo {
+  id: string;
+  items: AboutUsInfoItems;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "onboarding".
+ */
+export interface Onboarding {
+  id: string;
+  /**
+   * The casual member information to be displayed on user signup flow.
+   */
+  casualMemberInformation: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faq_select".
  */
 export interface FaqSelect<T extends boolean = true> {
@@ -1056,6 +1170,26 @@ export interface LinkArraySelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locationBubble_select".
+ */
+export interface LocationBubbleSelect<T extends boolean = true> {
+  locationBubbleItems?: T | LocationBubbleItemSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationBubbleItem_select".
+ */
+export interface LocationBubbleItemSelect<T extends boolean = true> {
+  locationImage?: T;
+  gameSessionSchedule?: T;
+  button?: T | LinkSelect<T>;
+  id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navbar_select".
  */
 export interface NavbarSelect<T extends boolean = true> {
@@ -1103,6 +1237,35 @@ export interface SessionRulesSelect<T extends boolean = true> {
 export interface DisclaimerSelect<T extends boolean = true> {
   title?: T;
   disclaimer?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aboutUsInfo_select".
+ */
+export interface AboutUsInfoSelect<T extends boolean = true> {
+  items?: T | AboutUsInfoItemsSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutUsInfoItems_select".
+ */
+export interface AboutUsInfoItemsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "onboarding_select".
+ */
+export interface OnboardingSelect<T extends boolean = true> {
+  casualMemberInformation?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

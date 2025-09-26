@@ -1,0 +1,89 @@
+import { isGameSessionObject, type PaginationQuery, TimeframeFilter } from "@repo/shared"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
+import { QueryKeys } from "@/services"
+import { useMyBookings } from "../bookings/BookingQueries"
+import GameSessionService from "./GameSessionService"
+
+/**
+ * Retrieves and caches paginated game sessions.
+ *
+ * @param query The pagination query parameters.
+ * @returns A query hook that fetches a page of game sessions.
+ */
+export const useGetPaginatedGameSessions = (query: PaginationQuery) => {
+  return useInfiniteQuery({
+    queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY, { limit: query.limit }],
+    initialPageParam: 1,
+    queryFn: async ({ pageParam }) => {
+      const response = await GameSessionService.getPaginatedGameSessions({
+        ...query,
+        page: pageParam,
+      })
+      return response
+    },
+    getNextPageParam: (lastPage) => lastPage.data?.nextPage,
+    getPreviousPageParam: (firstPage) => firstPage.data?.prevPage,
+  })
+}
+
+/**
+ * Retrieves and caches all game sessions for a specific semester.
+ *
+ * @param id The ID of the semester to retrieve game sessions for.
+ * @param sessionTimeFrame Optional timeframe for filtering game sessions.
+ * @returns A query hook that fetches all game sessions for the specified semester.
+ */
+export const useGetAllGameSessionsBySemester = (id: string, sessionTimeFrame?: TimeframeFilter) => {
+  return useQuery({
+    queryKey: [
+      QueryKeys.GAME_SESSION_QUERY_KEY,
+      QueryKeys.SEMESTER_QUERY_KEY,
+      id,
+      sessionTimeFrame,
+    ],
+    queryFn: async () =>
+      await GameSessionService.getAllGameSessionsBySemester(id, sessionTimeFrame),
+  })
+}
+
+/**
+ * Retrieves and caches all current game sessions.
+ *
+ * @returns A query hook that fetches all current game sessions.
+ */
+export const useGetCurrentGameSessions = () => {
+  return useQuery({
+    queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY, TimeframeFilter.CURRENT],
+    queryFn: GameSessionService.getCurrentGameSessions,
+  })
+}
+
+/**
+ * Retrieves and caches all current available game sessions.
+ *
+ * @returns A query hook that fetches all current available game sessions.
+ */
+export const useGetCurrentAvailableGameSessions = () => {
+  const current = useGetCurrentGameSessions()
+  const bookings = useMyBookings()
+
+  const availableSessions = useMemo(
+    () =>
+      current.data?.data?.filter((session) => {
+        const isBooked = bookings.data?.data.some((booking) => {
+          if (!isGameSessionObject(booking.gameSession)) {
+            return false
+          }
+          return booking.gameSession.id === session.id
+        })
+        return !isBooked && session.capacity > 0
+      }),
+    [current.data?.data, bookings.data?.data],
+  )
+
+  return {
+    ...current,
+    data: availableSessions,
+  }
+}

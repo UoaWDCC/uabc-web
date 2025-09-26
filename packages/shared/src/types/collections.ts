@@ -1,6 +1,7 @@
 import type {
   Authentication,
   Booking,
+  Event,
   GameSession,
   GameSessionSchedule,
   Semester,
@@ -32,6 +33,11 @@ export type CreateSemesterData = Omit<Semester, "id" | "createdAt" | "updatedAt"
  */
 export type CreateUserData = Omit<User, "id" | "createdAt" | "updatedAt">
 
+/*
+ * Type for creating event data without system-generated fields
+ */
+export type CreateEventData = Omit<Event, "id" | "createdAt" | "updatedAt">
+
 /**
  * Type for creating a new {@link GameSessionSchedule} document
  */
@@ -39,6 +45,11 @@ export type CreateGameSessionScheduleData = Omit<
   GameSessionSchedule,
   "id" | "createdAt" | "updatedAt"
 >
+
+/**
+ * Type for updating {@link Authentication} document
+ */
+export type UpdateAuthenticationData = Partial<CreateAuthenticationData>
 
 /**
  * Type for updating {@link GameSession} document

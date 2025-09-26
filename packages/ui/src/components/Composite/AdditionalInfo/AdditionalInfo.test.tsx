@@ -13,12 +13,6 @@ const queryClient = new QueryClient({
   },
 })
 
-const userMock = {
-  ...casualUserMock,
-  gender: casualUserMock.gender ?? Gender.male,
-  playLevel: casualUserMock.playLevel ?? PlayLevel.beginner,
-}
-
 const createWrapper = ({ children }: { children: ReactNode }) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 )
@@ -60,19 +54,21 @@ describe("<AdditionalInfo />", () => {
     await user.click(screen.getByRole("button", { name: /edit/i }))
     const genderInput = screen.getByRole("combobox", { name: /gender/i })
     await user.click(genderInput)
-    await user.click(screen.getByRole("option", { name: userMock.gender }))
+    await user.keyboard("{ArrowDown}")
+    await user.keyboard("{Enter}")
     const playLevelInput = screen.getByRole("combobox", { name: /play level/i })
     await user.click(playLevelInput)
-    await user.click(screen.getByRole("option", { name: userMock.playLevel }))
+    await user.keyboard("{ArrowDown}")
+    await user.keyboard("{Enter}")
     await user.click(screen.getByRole("button", { name: /save changes/i }))
     await waitFor(() => {
-      expect(screen.getByDisplayValue(userMock.gender)).toBeInTheDocument()
-      expect(screen.getByDisplayValue(userMock.playLevel)).toBeInTheDocument()
+      expect(screen.getByDisplayValue(Gender.other)).toBeInTheDocument()
+      expect(screen.getByDisplayValue(PlayLevel.intermediate)).toBeInTheDocument()
     })
     expect(consoleLog).toHaveBeenCalledWith("onSave", {
-      gender: userMock.gender,
-      playLevel: userMock.playLevel,
-      dietaryRequirements: userMock.dietaryRequirements ?? "",
+      gender: Gender.other,
+      playLevel: PlayLevel.intermediate,
+      dietaryRequirements: casualUserMock.dietaryRequirements,
     })
   })
 })

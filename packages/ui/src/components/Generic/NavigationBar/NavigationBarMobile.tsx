@@ -2,22 +2,23 @@
 import { MembershipType } from "@repo/shared"
 import { UabcLogo } from "@repo/ui/components/Icon"
 import { IconButton } from "@repo/ui/components/Primitive"
+import { isPathActive } from "@repo/ui/utils/path"
 import { MenuIcon, XIcon } from "@yamada-ui/lucide"
 import {
   Box,
   Fade,
   HStack,
+  Link,
   Popover,
   PopoverAnchor,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
   Spacer,
-  Text,
   useDisclosure,
   VStack,
 } from "@yamada-ui/react"
-import Link from "next/link"
+import NextLink from "next/link"
 import { usePathname } from "next/navigation"
 import type { NavigationBarProps } from "./NavigationBar"
 
@@ -41,9 +42,9 @@ export const NavigationBarMobile = ({
       ? [
           ...(user.role === MembershipType.admin ? [{ label: "Admin", url: "/admin" }] : []),
           { label: "Profile", url: "/profile" },
-          { label: "Sign Out", url: "/auth/signout" },
+          { label: "Logout", url: "/auth/logout" },
         ]
-      : [rightSideSingleButton || { label: "Sign In", url: "/auth/signin" }]),
+      : [rightSideSingleButton || { label: "Login", url: "/auth/login" }]),
     ...navItems,
   ]
 
@@ -120,20 +121,21 @@ export const NavigationBarMobile = ({
           <PopoverBody>
             <VStack gap="xs" minH="lg">
               {allNavItems.map((item) => (
-                <Text
+                <Link
                   _hover={{ bgColor: "secondary" }}
-                  as={Link}
+                  as={NextLink}
                   borderRadius="xl"
-                  color={currentPath === item.url ? "primary" : "white"}
+                  color={isPathActive(currentPath, item.url) ? "primary" : "white"}
                   fontSize="xl"
                   fontWeight="semibold"
                   href={item.url}
                   key={item.label}
+                  onClick={onClose}
                   px="md"
                   py="sm"
                 >
                   {item.label}
-                </Text>
+                </Link>
               ))}
             </VStack>
           </PopoverBody>

@@ -36,6 +36,13 @@ export const POST = async (req: NextRequest) => {
     throw error
   }
 
+  if (auth.provider === "google") {
+    return NextResponse.json(
+      { error: "Please login with Google" },
+      { status: StatusCodes.CONFLICT },
+    )
+  }
+
   const passwordVerified = await StandardSecurity.verifyPassword(password, auth.password as string)
   if (!passwordVerified) {
     return NextResponse.json(
@@ -44,7 +51,9 @@ export const POST = async (req: NextRequest) => {
     )
   }
 
-  const token = authService.signJWT({ user }, { expiresIn: TOKEN_EXPIRY_TIME })
+  // Omit remainingSessions from user before signing JWT (type-safe)
+  const { remainingSessions: _omit, ...userWithoutSessions } = user
+  const token = authService.signJWT({ user: userWithoutSessions }, { expiresIn: TOKEN_EXPIRY_TIME })
   const response = NextResponse.json(
     {
       data: token,

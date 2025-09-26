@@ -1,4 +1,4 @@
-import { RegisterDetailsSchema } from "@repo/shared"
+import { RegisterRequestBodySchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
@@ -12,7 +12,9 @@ export const POST = async (req: NextRequest) => {
   const authDataService = new AuthDataService()
 
   try {
-    const { email, password, emailVerificationCode } = RegisterDetailsSchema.parse(await req.json())
+    const { email, password, emailVerificationCode } = RegisterRequestBodySchema.parse(
+      await req.json(),
+    )
     try {
       await authDataService.getAuthByEmail(email)
       return NextResponse.json(
@@ -27,7 +29,17 @@ export const POST = async (req: NextRequest) => {
 
     const user = await userDataService.getUserByEmail(email)
 
-    if (user?.emailVerificationCode !== emailVerificationCode) {
+    if (
+      !user?.emailVerification?.expiresAt ||
+      new Date(user.emailVerification.expiresAt) < new Date()
+    ) {
+      return NextResponse.json(
+        { error: "Latest email verification code has expired. Please request a new code. " },
+        { status: StatusCodes.BAD_REQUEST },
+      )
+    }
+
+    if (user?.emailVerification?.verificationCode !== emailVerificationCode) {
       return NextResponse.json(
         { error: "Invalid email verification code" },
         { status: StatusCodes.BAD_REQUEST },
@@ -38,10 +50,9 @@ export const POST = async (req: NextRequest) => {
     await authDataService.createAuth({
       email: email,
       password: hash,
-      user: user,
     })
     return NextResponse.json(
-      { message: "User registered successfully", data: user },
+      { message: "User registered successfully" },
       {
         status: StatusCodes.CREATED,
       },

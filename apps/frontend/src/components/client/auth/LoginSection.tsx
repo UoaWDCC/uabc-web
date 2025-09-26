@@ -2,35 +2,36 @@
 
 import type { LoginFormData, LoginResponse } from "@repo/shared"
 import { LoginPanel } from "@repo/ui/components/Generic"
-import { useNotice } from "@yamada-ui/react"
-import { useRouter } from "next/navigation"
+import { useAuthNavigation } from "@repo/ui/hooks"
+import { Container, useNotice } from "@yamada-ui/react"
 import { useAuth } from "@/context/AuthContext"
 
 export const LoginSection = () => {
-  const { login, isLoading, isPending, user } = useAuth()
-  const router = useRouter()
+  const { login } = useAuth()
   const notice = useNotice()
 
-  if (!isLoading && !isPending && user) {
-    router.push("/profile")
-  }
+  const { navigateToReturnUrl } = useAuthNavigation({
+    defaultRedirectUrl: "/profile",
+    autoRedirect: false,
+  })
 
   const handleLogin = async (data: LoginFormData): Promise<LoginResponse> => {
     try {
       const response = await login.mutateAsync(data)
 
-      if (response.success && response.data?.data) {
+      if (response.data) {
         notice({
           title: "Login successful",
           description: "You are now logged in",
           status: "success",
         })
-        router.push("/profile")
-        return response.data
+
+        // Navigate to return URL or default profile page
+        navigateToReturnUrl()
+        return response
       }
-      const errorMessage = response.success
-        ? response.data?.error
-        : response.error?.message || "Login failed"
+
+      const errorMessage = response.error || "Login failed"
       notice({
         title: "Login failed",
         description: errorMessage,
@@ -45,11 +46,13 @@ export const LoginSection = () => {
   }
 
   return (
-    <LoginPanel
-      errorMessage={login.error ? login.error.message : undefined}
-      googleHref={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
-      isLoading={login.isPending}
-      onSubmit={handleLogin}
-    />
+    <Container centerContent layerStyle="container">
+      <LoginPanel
+        errorMessage={login.error ? login.error.message : undefined}
+        googleHref={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
+        isLoading={login.isPending}
+        onSubmit={handleLogin}
+      />
+    </Container>
   )
 }

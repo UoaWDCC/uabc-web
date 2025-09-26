@@ -5,31 +5,50 @@ import { AdminTabBar } from "./AdminTabBar"
 import * as AdminTabBarModule from "./index"
 
 describe("<AdminTabBar />", () => {
+  const defaultTabs = [
+    { slug: "/admin/members", label: "View Members" },
+    { slug: "/admin/sessions", label: "View Sessions" },
+    { slug: "/admin/semesters", label: "View Semesters" },
+  ]
+
   it("should re-export the AdminTabBar component and check if AdminTabBar exists", () => {
     expect(AdminTabBarModule.AdminTabBar).toBeDefined()
-    expect(isValidElement(<AdminTabBarModule.AdminTabBar />)).toBeTruthy()
+    expect(isValidElement(<AdminTabBarModule.AdminTabBar tabs={defaultTabs} />)).toBeTruthy()
   })
 
   it("should have correct displayName", () => {
     expect(AdminTabBar.displayName).toBe("AdminTabBar")
   })
 
-  it("should render default tab labels correctly", () => {
-    render(<AdminTabBar />)
+  it("should render tabs correctly", () => {
+    render(<AdminTabBar tabs={defaultTabs} />)
 
     expect(screen.getByText("View Members")).toBeInTheDocument()
-    expect(screen.getByText("Edit/View Sessions")).toBeInTheDocument()
-    expect(screen.getByText("Create Semesters & Sessions")).toBeInTheDocument()
+    expect(screen.getByText("View Sessions")).toBeInTheDocument()
+    expect(screen.getByText("View Semesters")).toBeInTheDocument()
   })
 
-  it("should call onChange when a user clicks on a tab", async () => {
-    const onChange = vi.fn()
+  it("should render custom tabs correctly", () => {
+    const customTabs = [
+      { slug: "/admin/custom1", label: "Custom Tab 1" },
+      { slug: "/admin/custom2", label: "Custom Tab 2" },
+    ]
 
-    const { user } = render(<AdminTabBar onChange={onChange} tabLabel2="tab-to-select" />)
+    render(<AdminTabBar tabs={customTabs} />)
 
-    const tabToSelect = screen.getByText("tab-to-select")
-    await user.click(tabToSelect)
+    expect(screen.getByText("Custom Tab 1")).toBeInTheDocument()
+    expect(screen.getByText("Custom Tab 2")).toBeInTheDocument()
+  })
 
-    expect(onChange).toBeCalledWith(2)
+  it("should render different number of tabs correctly", () => {
+    const twoTabs = [
+      { slug: "/admin/dashboard", label: "Dashboard" },
+      { slug: "/admin/settings", label: "Settings" },
+    ]
+
+    render(<AdminTabBar tabs={twoTabs} />)
+
+    expect(screen.getByText("Dashboard")).toBeInTheDocument()
+    expect(screen.getByText("Settings")).toBeInTheDocument()
   })
 })

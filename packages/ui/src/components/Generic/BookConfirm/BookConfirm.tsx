@@ -87,10 +87,15 @@ export const BookConfirm = ({
           <Text>Casual members can only book one session a week!</Text>
         </VStack>
       ) : (
-        <IconWithText
-          icon={<ShuttleIcon />}
-          label={`Sessions Left After Booking: ${sessionCount - bookings.length}`}
-        />
+        <VStack align="center" gap="sm" w="full">
+          <IconWithText
+            icon={<ShuttleIcon />}
+            label={`Sessions left after booking: ${sessionCount - bookings.length}`}
+          />
+          <Text color="muted" fontSize="sm">
+            You can book up to 2 sessions per week
+          </Text>
+        </VStack>
       )}
       <Button colorScheme="primary" onClick={onConfirm} size={{ base: "md", md: "lg" }}>
         Confirm Booking

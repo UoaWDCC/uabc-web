@@ -269,61 +269,56 @@ jobs:
   test:
     needs: [setup, biome, cspell]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Test
+    name: Test (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: frontend
+            filter: frontend
+            coverage-path: apps/frontend/coverage
+            artifact-name: coverage-frontend
+            next-public-url: ${{ vars.NEXT_PUBLIC_URL }}
+          - name: backend
+            filter: backend
+            coverage-path: apps/backend/coverage
+            artifact-name: coverage-backend
+          - name: ui
+            filter: '@repo/ui'
+            coverage-path: packages/ui/coverage
+            artifact-name: coverage-ui
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Tests
+        uses: ./.github/ci-actions/test/
+        with:
+          filter: ${{ matrix.filter }}
+          coverage-path: ${{ matrix.coverage-path }}
+          artifact-name: ${{ matrix.artifact-name }}
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+
+  merge-coverage:
+    name: Merge Coverage
+    needs: [test]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-          run_install: false
-
-      - name: Restore node_modules cache
-        uses: actions/cache/restore@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-            */node_modules
-            packages/*/node_modules
-            apps/*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
-
-      - name: Install dependencies if cache is not hit
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile --ignore-scripts
-
-      - name: Test with Coverage
-        env:
-          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
-        run: |
-          mkdir -p coverage
-          pnpm test:coverage
-          pnpm merge
-
-      - name: Upload Coverage Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: local-coverage
-          path: coverage
+      - name: Run Merge Coverage
+        uses: ./.github/ci-actions/merge-coverage/
 
   vitest-coverage:
     name: Vitest Coverage
-    needs: [test]
+    needs: [merge-coverage]
+    if: ${{ needs.check_changes.outputs.exists == 'true' && needs.merge-coverage.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -394,7 +389,7 @@ jobs:
 
   verify:
     name: Verify
-    needs: [build-frontend, build-backend, build-storybook, test, codegen, typecheck]
+    needs: [build-frontend, build-backend, build-storybook, test, merge-coverage, codegen, typecheck]
     runs-on: ubuntu-latest
     if: >
       always() &&

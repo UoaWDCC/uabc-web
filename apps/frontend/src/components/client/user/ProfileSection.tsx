@@ -1,76 +1,149 @@
 "use client"
 
-import { bookingsMock } from "@repo/shared/mocks"
+import { isGender, isPlayLevel } from "@repo/shared"
+import type { User } from "@repo/shared/payload-types"
+import type { AuthContextValue } from "@repo/shared/types/auth"
 import {
   AdditionalInfo,
   AdditionalInfoFields,
+  AdditionalInfoSkeleton,
   ProfileBookingPanel,
+  ProfileBookingPanelSkeleton,
   ProfileDetails,
   ProfileDetailsFields,
+  ProfileDetailsSkeleton,
   UserPanel,
+  UserPanelSkeleton,
 } from "@repo/ui/components/Composite"
-import { Center, Grid, GridItem, Loading, VStack } from "@yamada-ui/react"
-import { redirect } from "next/navigation"
-import { memo } from "react"
-import { useAuth } from "@/context/AuthContext"
+import { ConfirmationPopUp } from "@repo/ui/components/Generic"
+import { Container, Grid, GridItem, useDisclosure, useNotice } from "@yamada-ui/react"
+import { memo, useState } from "react"
+import { useDeleteBooking } from "@/services/admin/bookings/AdminBookingMutations"
+import { useUpdateSelfMutation } from "@/services/auth/AuthMutations"
+import { useMyBookings } from "@/services/bookings/BookingQueries"
 
-export const ProfileSection = memo(() => {
-  const { user, isLoading, isPending } = useAuth()
+export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
+  const { user } = auth
+  const { data: bookings, isLoading: isBookingsLoading, isError: isBookingsError } = useMyBookings()
+  const updateSelfMutation = useUpdateSelfMutation()
+  const deleteBookingMutation = useDeleteBooking()
+  const notice = useNotice()
+  const [bookingId, setBookingId] = useState<string | null>(null)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  if (isLoading || isPending) {
-    return (
-      <Center minH="50vh">
-        <Loading boxSize="sm" />
-      </Center>
-    )
+  const handleDeleteBooking = async (bookingId: string) => {
+    setBookingId(bookingId)
+    onOpen()
   }
 
-  if (!user) {
-    redirect("/auth/login")
+  const confirmDelete = async () => {
+    if (!bookingId) return
+    try {
+      await deleteBookingMutation.mutateAsync(bookingId)
+      notice({
+        title: "Booking deleted",
+        description: "Your booking has been deleted",
+        status: "success",
+      })
+    } catch (_) {
+      notice({
+        title: "Failed to delete booking",
+        description: "Please try again later",
+        status: "error",
+      })
+    } finally {
+      onClose()
+    }
+  }
+
+  const cancelDelete = () => {
+    onClose()
   }
 
   return (
-    <VStack gap="xl" maxW="1220px">
-      <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }}>
+    <Container centerContent gap="xl" layerStyle="container">
+      <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }} w="full">
+        <GridItem>{!user ? <UserPanelSkeleton /> : <UserPanel user={user} />}</GridItem>
         <GridItem>
-          <UserPanel user={user} />
-        </GridItem>
-        <GridItem>
-          <ProfileBookingPanel bookings={bookingsMock} />
+          {isBookingsLoading || !user ? (
+            <ProfileBookingPanelSkeleton />
+          ) : (
+            <ProfileBookingPanel
+              bookings={bookings?.data ?? []}
+              error={isBookingsError}
+              onDeleteBooking={handleDeleteBooking}
+              user={user}
+            />
+          )}
         </GridItem>
       </Grid>
 
-      <ProfileDetails
-        defaultValues={{
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-        }}
-        fields={ProfileDetailsFields}
-        onSave={async (data) => {
-          // TODO: Implement update user mutation
-          console.log(data)
-        }}
-        title="Profile Details"
-        w="full"
-      />
+      {!user ? (
+        <>
+          <ProfileDetailsSkeleton />
+          <AdditionalInfoSkeleton />
+        </>
+      ) : (
+        <>
+          <ProfileDetails
+            defaultValues={{
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              phoneNumber: user.phoneNumber,
+            }}
+            fields={ProfileDetailsFields}
+            onSave={async (data) => {
+              // Only send allowed fields for PATCH /me
+              const payload: Partial<Pick<User, "firstName" | "lastName" | "phoneNumber">> = {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                phoneNumber: data.phoneNumber,
+              }
+              await updateSelfMutation.mutateAsync(payload)
+            }}
+            title="Profile Details"
+            w="full"
+          />
+          <AdditionalInfo
+            defaultValues={{
+              gender: user.gender,
+              playLevel: user.playLevel,
+              dietaryRequirements: user.dietaryRequirements,
+            }}
+            fields={AdditionalInfoFields}
+            onSave={async (data) => {
+              const payload: Partial<User> = {
+                gender: isGender(data.gender) ?? null,
+                playLevel: isPlayLevel(data.playLevel) ?? null,
+                dietaryRequirements: data.dietaryRequirements,
+              }
+              await updateSelfMutation.mutateAsync(payload)
+            }}
+            title="Additional Info"
+            w="full"
+          />
+        </>
+      )}
 
-      <AdditionalInfo
-        defaultValues={{
-          gender: user.gender,
-          playLevel: user.playLevel,
-          dietaryRequirements: user.dietaryRequirements,
+      <ConfirmationPopUp
+        cancelButton={{
+          children: "Cancel",
+          onClick: cancelDelete,
         }}
-        fields={AdditionalInfoFields}
-        onSave={async (data) => {
-          // TODO: Implement update user mutation
-          console.log(data)
+        confirmButton={{
+          children: "Delete",
+          colorScheme: "danger",
+          onClick: confirmDelete,
+          loadingText: "Deleting...",
+          loading: deleteBookingMutation.isPending,
         }}
-        title="Additional Info"
-        w="full"
+        onClose={cancelDelete}
+        open={isOpen}
+        subtitle="Are you sure you want to delete this booking? This action cannot be undone."
+        title="Delete Booking"
       />
-    </VStack>
+    </Container>
   )
 })
 

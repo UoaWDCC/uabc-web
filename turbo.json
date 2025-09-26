@@ -65,7 +65,7 @@
     },
     "test:coverage": {
       "cache": true,
-      "dependsOn": ["^test:coverage", "@repo/test-config#build"],
+      "dependsOn": ["@repo/test-config#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["coverage/**"]
     },
@@ -82,6 +82,11 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["coverage/**"],
       "persistent": true
+    },
+    "merge": {
+      "cache": true,
+      "dependsOn": ["@repo/test-config#build", "^merge"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
     }
   },
   "ui": "tui"

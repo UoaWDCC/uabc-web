@@ -28,10 +28,13 @@
     "test:coverage": "turbo run test:coverage",
     "test:coverage:watch": "turbo run test:coverage:watch",
     "test:ui": "turbo run test:ui",
-    "merge": "pnpm --filter=@repo/test-config build && pnpm --prefix=packages/test-config run merge",
+    "merge": "turbo run merge",
     "theme": "yamada-cli tokens ./packages/theme/src",
     "postinstall": "pnpm theme",
-    "commitlint": "commitlint --edit"
+    "commitlint": "commitlint --edit",
+    "frontend": "turbo run -F frontend --ui=stream",
+    "backend": "turbo run -F backend --ui=stream",
+    "ui": "turbo run -F ui --ui=stream"
   },
   "dependencies": {
     "cross-env": "7.0.3"
@@ -40,8 +43,8 @@
     "@biomejs/biome": "2.0.6",
     "@commitlint/cli": "19.8.1",
     "@commitlint/config-conventional": "19.8.1",
-    "@testing-library/dom": "10.4.0",
-    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "6.8.0",
     "@testing-library/react": "16.3.0",
     "@testing-library/user-event": "14.6.1",
     "@vitejs/plugin-react-swc": "3.10.0",
@@ -49,20 +52,20 @@
     "@vitest/coverage-istanbul": "3.2.4",
     "@vitest/ui": "3.2.4",
     "@yamada-ui/cli": "1.2.4",
-    "cspell": "9.1.5",
+    "cspell": "9.2.1",
     "dotenv": "17.0.0",
     "glob": "11.0.2",
     "jsdom": "26.1.0",
     "lefthook": "1.12.2",
-    "mongodb-memory-server": "10.1.4",
     "nyc": "17.1.0",
     "rimraf": "6.0.1",
     "turbo": "2.5.3",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
+    "vite": "6.3.5",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.2.4"
   },
-  "packageManager": "pnpm@10.12.4",
+  "packageManager": "pnpm@10.17.1",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@swc/core",
@@ -70,14 +73,15 @@
       "esbuild",
       "lefthook",
       "mongodb-memory-server",
+      "rolldown",
       "sharp",
       "workerd"
     ],
     "patchedDependencies": {
-      "storybook-dark-mode": "patches/storybook-dark-mode.patch"
+      "@storybook/addon-queryparams@7.0.1": "patches/@storybook__addon-queryparams@7.0.1.patch"
     }
   },
   "volta": {
-    "node": "22.17.0"
+    "node": "22.19.0"
   }
 }

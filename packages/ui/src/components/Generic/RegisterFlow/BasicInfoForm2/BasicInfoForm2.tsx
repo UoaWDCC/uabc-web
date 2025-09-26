@@ -12,6 +12,10 @@ import { type SubmitHandler, useForm } from "react-hook-form"
  */
 export interface BasicInfoForm2Props {
   /**
+   * Default values to pre-fill the form.
+   */
+  defaultValues?: BasicInfoForm2Values
+  /**
    * Submit handler called when user submits the form.
    */
   onSubmit?: SubmitHandler<BasicInfoForm2Values>
@@ -26,7 +30,7 @@ export interface BasicInfoForm2Props {
  * @param props BasicInfoForm2 component props
  * @returns The form component
  */
-export const BasicInfoForm2: FC<BasicInfoForm2Props> = memo(({ onSubmit }) => {
+export const BasicInfoForm2: FC<BasicInfoForm2Props> = memo(({ defaultValues, onSubmit }) => {
   const {
     register,
     handleSubmit,
@@ -49,9 +53,10 @@ export const BasicInfoForm2: FC<BasicInfoForm2Props> = memo(({ onSubmit }) => {
         <FormControl errorMessage={errors.phoneNumber?.message} invalid={!!errors.phoneNumber}>
           <TextInput
             data-testid="phone-number"
+            defaultValue={defaultValues?.phoneNumber}
             placeholder="12 345 6789"
             size="lg"
-            startAddon={"+64"}
+            startAddon="+64"
             type={InputType.Tel}
             {...register("phoneNumber")}
           />

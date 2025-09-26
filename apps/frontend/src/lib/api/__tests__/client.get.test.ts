@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
+import { ApiClientError } from "../ApiClientError"
 import { createApiClient } from "../client"
 
 global.fetch = vi.fn()
@@ -84,8 +85,13 @@ describe("ApiClient GET method", () => {
     const result = await client.get("/test", testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Resource not found")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("GET")
+        expect(result.error.url).toBe("https://api.example.com/test")
+        expect(result.error.status).toBe(404)
+      }
       expect(result.status).toBe(404)
     }
   })
@@ -103,8 +109,12 @@ describe("ApiClient GET method", () => {
     const result = await client.get("/test", testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Invalid response format")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("GET")
+        expect(result.error.url).toBe("https://api.example.com/test")
+      }
     }
   })
 
@@ -116,8 +126,12 @@ describe("ApiClient GET method", () => {
     const result = await client.get("/test", testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("Network error")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("GET")
+        expect(result.error.url).toBe("https://api.example.com/test")
+      }
       expect(result.status).toBe(null)
     }
   })
@@ -202,9 +216,67 @@ describe("ApiClient GET method", () => {
     const result = await client.get("/test", testSchema)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error)
+      expect(result.error).toBeInstanceOf(ApiClientError)
       expect(result.error.message).toBe("HTTP 500: Internal Server Error")
+      if (result.error instanceof ApiClientError) {
+        expect(result.error.method).toBe("GET")
+        expect(result.error.url).toBe("https://api.example.com/test")
+        expect(result.error.status).toBe(500)
+      }
       expect(result.status).toBe(500)
     }
+  })
+
+  it("should throw error when requiresAuth is true but no token is available", async () => {
+    const testSchema = z.object({ message: z.string() })
+
+    // Mock localStorage to return null (no token)
+    Object.defineProperty(global, "localStorage", {
+      value: {
+        getItem: vi.fn(() => null),
+      },
+      writable: true,
+    })
+
+    const result = await client.get("/test", testSchema, { requiresAuth: true, token: null })
+
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      expect(result.error).toBeInstanceOf(ApiClientError)
+      expect(result.error.message).toBe("Network error")
+      if (result.error instanceof ApiClientError && result.error.originalError instanceof Error) {
+        expect(result.error.originalError.message).toBe("No token provided")
+      }
+    }
+  })
+
+  it("should include Authorization header when requiresAuth is true and token exists", async () => {
+    const testSchema = z.object({ message: z.string() })
+    const mockResponse = { message: "success" }
+    const mockToken = "test-jwt-token"
+
+    // Mock localStorage to return a token
+    Object.defineProperty(global, "localStorage", {
+      value: {
+        getItem: vi.fn(() => mockToken),
+      },
+      writable: true,
+    })
+
+    mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)))
+
+    const result = await client.get("/test", testSchema, { requiresAuth: true, token: mockToken })
+
+    expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${mockToken}`,
+      },
+      next: {
+        tags: [],
+      },
+    })
+    expect(result.success).toBe(true)
   })
 })

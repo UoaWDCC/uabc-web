@@ -1,5 +1,6 @@
 import type { CreateSemesterData, EditSemesterData } from "@repo/shared"
 import type { Semester } from "@repo/shared/payload-types"
+import { NotFound } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
 
 export default class SemesterDataService {
@@ -27,6 +28,42 @@ export default class SemesterDataService {
       pagination: false,
     })
     return docs
+  }
+
+  /**
+   * Finds the current {@link Semester} based on the current date
+   *
+   * @returns The current {@link Semester} document if one exists for the current date
+   * @throws Error if no current semester is found
+   */
+  public async getCurrentSemester(): Promise<Semester> {
+    const currentDate = new Date().toISOString()
+
+    const { docs } = await payload.find({
+      collection: "semester",
+      where: {
+        and: [
+          {
+            startDate: {
+              less_than_equal: currentDate,
+            },
+          },
+          {
+            endDate: {
+              greater_than_equal: currentDate,
+            },
+          },
+        ],
+      },
+      limit: 1,
+    })
+
+    if (!docs.length)
+      throw new NotFound(() => {
+        return "No current semester found"
+      })
+
+    return docs[0]
   }
 
   /**
@@ -61,12 +98,14 @@ export default class SemesterDataService {
    * Deletes a {@link Semester} document
    *
    * @param id The ID of the {@link Semester} to delete
+   * @param transactionId An optional transaction ID for the request, useful for tracing
    * @returns The deleted {@link Semester} document if successful, otherwise throws a {@link NotFound} error
    */
-  public async deleteSemester(id: string): Promise<Semester> {
+  public async deleteSemester(id: string, transactionId?: string | number): Promise<Semester> {
     return await payload.delete({
       collection: "semester",
       id,
+      req: { transactionID: transactionId },
     })
   }
 }

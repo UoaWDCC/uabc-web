@@ -1,0 +1,134 @@
+import { Routes } from "../enums"
+
+/**
+ * Route groups for better organization
+ */
+export const RouteGroups = {
+  public: {
+    home: Routes.HOME,
+    about: Routes.ABOUT,
+    contact: Routes.CONTACT,
+    events: Routes.EVENTS,
+    book: Routes.BOOK,
+    terms: Routes.TERMS,
+  },
+  auth: {
+    login: Routes.AUTH_LOGIN,
+    register: Routes.AUTH_REGISTER,
+    callback: Routes.AUTH_CALLBACK,
+  },
+  user: {
+    profile: Routes.PROFILE,
+    onboarding: Routes.ONBOARDING,
+  },
+  admin: {
+    root: Routes.ADMIN,
+    members: Routes.ADMIN_MEMBERS,
+    sessions: Routes.ADMIN_SESSIONS,
+    semesters: Routes.ADMIN_SEMESTERS,
+  },
+} as const
+
+/**
+ * Compile-time check: ensure every `Routes` enum value is present in `RouteGroups`.
+ * If any enum member is missing from the groups below, TypeScript will report an error.
+ */
+type GroupValues<T extends Record<string, Record<string, unknown>>> = {
+  [K in keyof T]: T[K][keyof T[K]]
+}[keyof T]
+type RoutesInGroups = GroupValues<typeof RouteGroups>
+type AssertAllRoutesPresent<T extends never> = T
+/**
+ * Ensures at compile-time that every value in the `Routes` enum is included in one of the `RouteGroups`.
+ * If any route is missing from the groups, TypeScript will produce an error.
+ */
+type _AllEnumRoutesAreGrouped = AssertAllRoutesPresent<Exclude<Routes, RoutesInGroups>>
+
+/**
+ * Type for all valid route values
+ */
+export type RouteValue = `${Routes}`
+
+/**
+ * Type for valid href values with improved type safety
+ *
+ * Internal routes (starting with /) must match valid application routes
+ * External URLs (starting with http://, https://, etc.) are allowed
+ */
+export type ValidHref =
+  | RouteValue
+  | `https://${string}`
+  | `http://${string}`
+  | `mailto:${string}`
+  | `tel:${string}`
+
+/**
+ * Type for valid href values that allows custom internal routes
+ *
+ * When custom is true, allows any internal route starting with /
+ * Otherwise, only allows predefined routes and external URLs
+ */
+export type ValidHrefWithCustom<T extends boolean = false> = T extends true
+  ? ValidHref | `/${string}`
+  : ValidHref
+
+/**
+ * Primitive types that URL search params may take
+ */
+export type SearchParamPrimitive = string | number | boolean | null | undefined
+
+/**
+ * Allowed value type for a single search param key
+ */
+export type SearchParamValue = SearchParamPrimitive | SearchParamPrimitive[]
+
+/**
+ * Generic record type for search params
+ */
+export type SearchParamsRecord = Record<string, SearchParamValue>
+
+/**
+ * Map routes to their specific search param shapes.
+ *
+ * This interface is intentionally empty and can be augmented via
+ * declaration merging in app code to provide per-route param types.
+ *
+ * Example augmentation in your app:
+ *
+ * declare module "@repo/shared/types/routes" {
+ *   interface RouteToSearchParams {
+ *     "/events": { category?: string; page?: number }
+ *   }
+ * }
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface RouteToSearchParams {
+  /**
+   * Placeholder property to avoid empty-interface lint errors.
+   * This interface is intended for declaration merging.
+   */
+  __never__?: never
+}
+
+/**
+ * Resolve the search param type for a given route. Falls back to a generic
+ * record if the route has no specific mapping.
+ */
+export type SearchParamsFor<R extends string> = R extends keyof RouteToSearchParams
+  ? RouteToSearchParams[R]
+  : SearchParamsRecord
+
+/**
+ * Utility function to get route by enum value
+ */
+export const getRoute = (route: Routes): string => route
+
+/**
+ * Utility function to get nested route from groups
+ */
+export const getNestedRoute = <T extends keyof typeof RouteGroups>(
+  group: T,
+  key: keyof (typeof RouteGroups)[T],
+): string => {
+  return RouteGroups[group][key] as string
+}

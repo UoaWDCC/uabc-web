@@ -9,9 +9,18 @@ const AdminSemesterService = {
    * @param data The data for the new semester.
    * @returns The created semester.
    */
-  createSemester: async (data: CreateSemesterRequest) => {
-    const response = await apiClient.post("/admin/semesters", data, GetSemesterResponseSchema)
-    return ApiClient.throwIfError(response, "Failed to create semester")
+  createSemester: async ({
+    data,
+    token,
+  }: {
+    data: CreateSemesterRequest
+    token: string | null
+  }) => {
+    const response = await apiClient.post("/admin/semesters", data, GetSemesterResponseSchema, {
+      requiresAuth: true,
+      token,
+    })
+    return ApiClient.throwIfError(response)
   },
   /**
    * Update an existing semester.
@@ -20,9 +29,22 @@ const AdminSemesterService = {
    * @param data The updated data for the semester.
    * @returns The updated semester.
    */
-  updateSemester: async (id: string, data: UpdateSemesterRequest) => {
-    const response = await apiClient.put(`/admin/semesters/${id}`, data, GetSemesterResponseSchema)
-    return ApiClient.throwIfError(response, "Failed to update semester")
+  updateSemester: async ({
+    id,
+    data,
+    token,
+  }: {
+    id: string
+    data: UpdateSemesterRequest
+    token: string | null
+  }) => {
+    const response = await apiClient.put(
+      `/admin/semesters/${id}`,
+      data,
+      GetSemesterResponseSchema,
+      { requiresAuth: true, token },
+    )
+    return ApiClient.throwIfError(response)
   },
   /**
    * Delete an existing semester.
@@ -30,9 +52,12 @@ const AdminSemesterService = {
    * @param id The ID of the semester to delete.
    * @returns The deleted semester.
    */
-  deleteSemester: async (id: string) => {
-    const response = await apiClient.delete(`/admin/semesters/${id}`)
-    return ApiClient.throwIfError(response, "Failed to delete semester")
+  deleteSemester: async ({ id, token }: { id: string; token: string | null }) => {
+    const response = await apiClient.delete(`/admin/semesters/${id}`, undefined, {
+      requiresAuth: true,
+      token,
+    })
+    return ApiClient.throwIfError(response)
   },
 } as const
 

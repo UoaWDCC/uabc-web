@@ -7,7 +7,6 @@ import {
   type CheckboxCardProps,
   FormControl,
   type FormControlProps,
-  HStack,
   VStack,
 } from "@yamada-ui/react"
 import { forwardRef, memo } from "react"
@@ -18,7 +17,7 @@ import { Controller } from "react-hook-form"
  * Props for the {@link BookingTimesCardGroup} component.
  */
 
-interface BookingTimeItem extends CheckboxCardProps {
+export interface BookingTimeItem extends CheckboxCardProps {
   memberAttendees?: string
   casualAttendees?: string
 }
@@ -128,21 +127,21 @@ export const BookingTimesCardGroup = memo(
             >
               <CheckboxCardGroup
                 {...props}
-                items={items.map((item) => ({
+                items={items.map(({ memberAttendees, casualAttendees, ...item }) => ({
                   ...item,
                   addon: (
                     <VStack alignItems="flex-start" gap="2xs">
                       <IconWithText icon={<MapPinIcon />} label={item.addon} />
-                      <HStack flexWrap="wrap" gap="2xs" width="fit-content">
+                      <VStack gap="2xs">
                         <IconWithText
                           icon={<UserIcon />}
-                          label={item.memberAttendees + " members Attendees"}
+                          label={`${memberAttendees} members attendees`}
                         />
                         <IconWithText
                           icon={<UserIcon />}
-                          label={item.casualAttendees + " casuals Attendees"}
+                          label={`${casualAttendees} casuals attendees`}
                         />
-                      </HStack>
+                      </VStack>
                     </VStack>
                   ),
                   description: <IconWithText icon={<Clock10Icon />} label={item.description} />,

@@ -1,3 +1,5 @@
+import { z } from "zod"
+
 export enum MembershipType {
   member = "member",
   casual = "casual",
@@ -5,13 +7,13 @@ export enum MembershipType {
 }
 
 export enum Weekday {
+  sunday = "sunday",
   monday = "monday",
   tuesday = "tuesday",
   wednesday = "wednesday",
   thursday = "thursday",
   friday = "friday",
   saturday = "saturday",
-  sunday = "sunday",
 }
 
 // TODO: Decide if we should change PlayLevel enum values to title case
@@ -37,7 +39,23 @@ export enum University {
   working = "Working",
   notAStudent = "Not a student",
 }
+
+export const UniversityZodEnum = z.enum([
+  "UoA",
+  "AUT",
+  "Massey University",
+  "Other",
+  "Working",
+  "Not a student",
+])
+
 export enum SessionType {
   ongoing = "Ongoing",
   oneOff = "One off",
+}
+
+export enum GameSessionStatus {
+  ONGOING = "Ongoing",
+  UPCOMING = "Upcoming",
+  PAST = "Past",
 }

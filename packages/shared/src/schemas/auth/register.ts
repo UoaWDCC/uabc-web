@@ -1,7 +1,7 @@
 import z from "zod"
 import { Gender, PlayLevel, University } from "../../types"
 
-export const RegisterDetailsSchema = z.object({
+export const RegisterRequestBodySchema = z.object({
   /**
    * The user's email verification code
    * @example 123456
@@ -64,7 +64,7 @@ export const BasicInfoForm1Schema = z.object({
   /**
    * Last name of the new user.
    */
-  lastName: z.string().min(1, "Field is required"),
+  lastName: z.string(),
 })
 
 export const BasicInfoForm2Schema = z.object({
@@ -145,17 +145,30 @@ export const AdditionalInfoFormSchema = z.object({
     }),
   }),
   /**
-   * Skill level of the new user
+   * Play level of the new user
    */
-  skillLevel: z.nativeEnum(PlayLevel, {
+  playLevel: z.nativeEnum(PlayLevel, {
     errorMap: () => ({
-      message: "Please select a skill level",
+      message: "Please select a play level",
     }),
   }),
   /**
    * Dietary requirements of the new user
    */
   dietaryRequirements: z.string(),
+})
+
+export const CasualInfoFormSchema = z.object({
+  agree: z.boolean(),
+})
+
+export const RegisterFlowStateSchema = z.object({
+  step: z.number(),
+  basicInfo1: BasicInfoForm1Schema.nullable(),
+  basicInfo2: BasicInfoForm2Schema.nullable(),
+  universityInfo: UniversityInfoFormSchema.nullable(),
+  additionalInfo: AdditionalInfoFormSchema.nullable(),
+  casualInfo: CasualInfoFormSchema.nullable(),
 })
 
 export const VerificationCodeRequestSchema = z.object({

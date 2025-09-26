@@ -1,0 +1,25 @@
+import { BookingConfirmedPopup } from "@repo/ui/components/Composite"
+import { VStack } from "@yamada-ui/react"
+import type { Metadata } from "next"
+import { Suspense } from "react"
+import { BookClient } from "@/components/client/book/BookClient"
+
+export const metadata: Metadata = {
+  title: "Book a court",
+  description: "Select your play level, choose a court, and confirm your booking.",
+}
+
+export default function Book() {
+  return (
+    <VStack as="main">
+      <Suspense>
+        <BookClient />
+        <BookingConfirmedPopup
+          additionalMessage="You can now book a court"
+          message="Booking confirmed"
+          title="Booking confirmed"
+        />
+      </Suspense>
+    </VStack>
+  )
+}

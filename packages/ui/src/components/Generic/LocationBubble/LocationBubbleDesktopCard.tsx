@@ -19,8 +19,10 @@ export const LocationBubbleDesktopCard = ({
   locationTitle,
   locationDetails,
   locationTimes,
-  buttonLink = "#",
+  button,
 }: LocationBubbleProps) => {
+  const { label: buttonLabel = "Learn more", url: buttonUrl = "#" } = button || {}
+
   return (
     <Box data-testid="location-bubble-desktop-card" h="100%" position="relative" width="100%">
       <Motion
@@ -87,7 +89,7 @@ export const LocationBubbleDesktopCard = ({
                   {locationTimes &&
                     Object.entries(locationTimes).map(([day, time]) => (
                       <Text bgClip="text" bgGradient="textGradient" key={day}>
-                        {day}: {time}
+                        {day.charAt(0).toUpperCase() + day.slice(1)}: {time.join(" - ")}
                       </Text>
                     ))}
                 </VStack>
@@ -99,8 +101,8 @@ export const LocationBubbleDesktopCard = ({
               )}
             </VStack>
           </Motion>
-          <Button as={Link} colorScheme="primary" href={buttonLink} size="lg" width="full">
-            Learn More
+          <Button as={Link} colorScheme="primary" href={buttonUrl} size="lg" width="full">
+            {buttonLabel}
           </Button>
         </VStack>
       </Motion>
