@@ -11,8 +11,7 @@
     "**/node_modules": true,
     "**/bower_components": true,
     "**/*.code-search": true,
-    "**/dist": true,
-    "**/portal": true
+    "**/dist": true
   },
   "[typescript]": {
     "editor.defaultFormatter": "biomejs.biome"

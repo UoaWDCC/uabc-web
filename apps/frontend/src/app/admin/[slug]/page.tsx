@@ -12,7 +12,7 @@ type AdminSlugPageProps = {
 export default async function AdminSlugPage({ params }: AdminSlugPageProps) {
   const { slug } = await params
 
-  const activeIndex = validSlugs.findIndex((s) => s === slug)
+  const activeIndex = validSlugs.indexOf(slug as AdminTabBarSlug)
 
   if (activeIndex === -1) {
     notFound()

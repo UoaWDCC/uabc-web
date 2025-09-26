@@ -1,10 +1,10 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "includes": [
       "**",
       "!**/src/payload-types.ts",
-      "!**/pnpm-lock.yaml",
+      "!pnpm-lock.yaml",
       "!**/*.md",
       "!**/.github/",
       "!**/.next",
@@ -12,7 +12,6 @@
       "!**/.turbo",
       "!**/.vscode",
       "!**/coverage",
-      "!apps/portal",
       "!**/importMap.js",
       "!**/.vercel"
     ],

@@ -16,7 +16,7 @@ export const TablePagination: FC = memo(() => {
 
   const handlePerPageChange = useCallback(
     (value: string) => {
-      setPerPage(Number.parseInt(value))
+      setPerPage(Number.parseInt(value, 10))
     },
     [setPerPage],
   )
