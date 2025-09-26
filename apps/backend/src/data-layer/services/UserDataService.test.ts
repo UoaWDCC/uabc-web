@@ -69,39 +69,25 @@ describe("UserDataService", () => {
 
   describe("resetAllMemberships", () => {
     it("should reset members and their session count and casuals if they have more than 0 sessions", async () => {
-      const usersToCreate = [userCreateMock, memberUserCreateMock]
-      const userIds = await Promise.all(
-        usersToCreate.map(async (u) => {
-          const user = await userDataService.createUser(u)
-          return user.id
-        }),
-      )
+      const member = await userDataService.createUser(memberUserCreateMock)
+      const casualWithSessions = await userDataService.createUser(userCreateMock)
 
       await userDataService.resetAllMemberships()
 
-      const users = await Promise.all(
-        userIds.map(async (id) => {
-          const user = await userDataService.getUserById(id)
-          return {
-            role: user.role,
-            remainingSessions: user.remainingSessions,
-          }
-        }),
-      )
+      const modifiedMember = await userDataService.getUserById(member.id)
+      const modifiedCasual = await userDataService.getUserById(casualWithSessions.id)
 
-      expect(users).toEqual(
-        Array.from({ length: usersToCreate.length }, () => ({
-          role: MembershipType.casual,
-          remainingSessions: 0,
-        })),
-      )
+      expect(modifiedMember.role).toBe(MembershipType.casual)
+      expect(modifiedMember.remainingSessions).toBe(0)
+      expect(modifiedCasual.role).toBe(MembershipType.casual)
+      expect(modifiedCasual.remainingSessions).toBe(0)
     })
 
     it("should update no users if none meet specified criteria", async () => {
       await userDataService.resetAllMemberships()
-      const admin = await userDataService.getUserById(adminUserMock.id) // Check if admin token user is unchanged
-      expect(admin.remainingSessions).toEqual(adminUserMock.remainingSessions)
-      expect(admin.role).toEqual(adminUserMock.role)
+      const fetchedAdmin = await userDataService.getUserById(adminUserMock.id) // Check if admin token user is unchanged
+      expect(fetchedAdmin.remainingSessions).toEqual(adminUserMock.remainingSessions)
+      expect(fetchedAdmin.role).toEqual(adminUserMock.role)
     })
   })
 
