@@ -127,10 +127,45 @@ export const AdminSessions = () => {
   }
 
   const handleExport = () => {
-    if (selectedSession) {
-      // TODO: Implement export functionality
-      console.log("Exporting member list for session:", selectedSession.id)
+    if (!selectedSession) {
+      console.warn("No session to export")
+      return
     }
+
+    // Create CSV content
+    const headers = ["Name", "Email", "Role", "Level", "Remaining Sessions"]
+    const csvRows = [
+      headers.join(","),
+      ...selectedSessionAttendees.map((attendee) =>
+        [
+          `"${attendee.name}"`,
+          `"${attendee.email}"`,
+          `"${attendee.role}"`,
+          `"${attendee.level}"`,
+          `"${attendee.sessions}"`,
+        ].join(","),
+      ),
+    ]
+
+    const csvContent = csvRows.join("\n")
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+    const link = document.createElement("a")
+    const url = URL.createObjectURL(blob)
+
+    link.setAttribute("href", url)
+    link.setAttribute(
+      "download",
+      `session-attendees-${dayjs(selectedSession.startTime).format("YYYY-MM-DD")}.csv`,
+    )
+    link.style.visibility = "hidden"
+
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    console.log("Exported member list for session:", selectedSession.id)
   }
 
   return (
