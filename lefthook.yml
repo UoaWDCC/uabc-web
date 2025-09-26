@@ -15,7 +15,6 @@ pre-commit:
     biome:
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
       exclude:
-        - "apps/portal/**"
         - "pnpm-lock.yaml"
         - "**/importMap.js"
         - "**/payload-types.ts"
@@ -25,7 +24,6 @@ pre-commit:
     cspell:
       glob: "*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx,css,scss,yaml,yml}"
       exclude:
-        - "apps/portal/**"
         - "pnpm-lock.yaml"
         - "**/importMap.js"
         - "**/payload-types.ts"
