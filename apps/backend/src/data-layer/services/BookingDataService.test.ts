@@ -1,5 +1,5 @@
 import type { EditBookingData } from "@repo/shared"
-import { casualUserMock } from "@repo/shared/mocks"
+import { casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
@@ -282,6 +282,35 @@ describe("bookingDataService", () => {
       expect(
         await bookingDataService.deleteBookingsBySemesterId("Not a valid semester ID"),
       ).toStrictEqual([])
+    })
+  })
+
+  describe("deleteBookingsByUserId", () => {
+    it("should delete user bookings by id", async () => {
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: casualUserMock,
+      })
+
+      await bookingDataService.createBooking({
+        ...bookingCreateMock2,
+        user: casualUserMock,
+      })
+
+      await bookingDataService.deleteBookingsByUserId(casualUserMock.id)
+      expect(await bookingDataService.getAllBookingsByUserId(casualUserMock.id)).toStrictEqual([])
+    })
+
+    it("should not delete bookings not related to the user", async () => {
+      const createdBooking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: memberUserMock,
+      })
+
+      await bookingDataService.deleteBookingsByUserId(casualUserMock.id)
+      expect(await bookingDataService.getAllBookingsByUserId(memberUserMock.id)).toStrictEqual([
+        createdBooking,
+      ])
     })
   })
 })
