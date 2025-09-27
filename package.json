@@ -51,7 +51,7 @@
     "@vitest/browser": "3.2.4",
     "@vitest/coverage-istanbul": "3.2.4",
     "@vitest/ui": "3.2.4",
-    "@yamada-ui/cli": "1.2.4",
+    "@yamada-ui/cli": "1.2.6",
     "cspell": "9.2.1",
     "dotenv": "17.0.0",
     "jsdom": "26.1.0",
