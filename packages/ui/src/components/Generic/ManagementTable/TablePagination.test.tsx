@@ -21,4 +21,16 @@ describe("<TablePagination />", () => {
     expect(screen.getByRole("navigation")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /page 1/i })).toBeInTheDocument()
   })
+
+  it("should only display edge buttons when withEdges is true", () => {
+    const { rerender } = render(<TablePagination />, {
+      wrapper: createWrapper,
+    })
+    expect(screen.getByRole("button", { name: /go to first page/i })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /go to last page/i })).toBeInTheDocument()
+
+    rerender(<TablePagination withEdges={false} />)
+    expect(screen.queryByRole("button", { name: /go to first page/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: /go to last page/i })).not.toBeInTheDocument()
+  })
 })
