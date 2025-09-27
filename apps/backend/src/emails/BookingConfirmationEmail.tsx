@@ -41,7 +41,7 @@ export interface BookingConfirmationEmailProps {
    * The name of the session the booking is for
    * E.g., "UoA Rec Center"
    */
-  sessionName: string
+  sessionName?: string
   /**
    * The location of the session the booking is for
    * E.g., "17 Symonds Street"
@@ -83,7 +83,7 @@ const BookingConfirmationEmail = ({
         </Head>
         <Body className="rounded-2xl bg-white font-medium font-sans text-md">
           <Preview>
-            Your booking for our {weekday} session at {sessionName} has been confirmed!
+            Your booking for our {weekday} session at {sessionName ?? ""} has been confirmed!
           </Preview>
           <Container className="m-0 w-full max-w-2xl p-4">
             <Heading className="m-0 text-5xl text-blue-500">Booking Confirmation</Heading>
@@ -105,11 +105,7 @@ const BookingConfirmationEmail = ({
                   Time: {startTime} - {endTime}
                 </li>
                 <li className="my-0.5">
-                  Location:{" "}
-                  {sessionName !== "UABC" || sessionLocation
-                    ? sessionName
-                    : "Please contact UABC to find out where this session will be!"}
-                  {sessionLocation && `, ${sessionLocation}`}
+                  Location: {sessionName}, {sessionLocation}
                 </li>
               </ul>
             </Section>

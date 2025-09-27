@@ -26,6 +26,8 @@ export const oneOffGameSessionCreateMock: CreateGameSessionData = {
 export const gameSessionMock: GameSession = {
   id: "87efbe48887bc7ae09e305ed",
   semester: semesterMock,
+  name: "UoA Rec Center",
+  location: "17 Symonds Street",
   startTime: new Date().toISOString(),
   endTime: new Date().toISOString(),
   openTime: new Date().toISOString(),

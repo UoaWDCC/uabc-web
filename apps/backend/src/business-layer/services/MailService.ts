@@ -34,8 +34,8 @@ export default class MailService {
     const weekday = capitalize(rawWeekday)
     const startTime = dayjs(gameSession.startTime).format("HH:mm")
     const endTime = dayjs(gameSession.endTime).format("HH:mm")
-    const sessionName = gameSessionSchedule?.name || gameSession.name || "UABC"
-    const sessionLocation = gameSessionSchedule?.location || gameSession.location || undefined
+    const sessionName = (gameSessionSchedule?.name ?? gameSession.name) as string
+    const sessionLocation = (gameSessionSchedule?.location ?? gameSession.location) as string
     const html = await render(
       BookingConfirmationEmail({
         date,
@@ -49,7 +49,7 @@ export default class MailService {
     return await payload.sendEmail({
       to: email,
       subject: `UABC - ${weekday} Booking Confirmation`,
-      html: html,
+      html,
     })
   }
 }
