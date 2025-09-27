@@ -18,7 +18,7 @@
     "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
   },
   "dependencies": {
-    "@hookform/resolvers": "5.1.1",
+    "@hookform/resolvers": "5.2.2",
     "@repo/shared": "workspace:*",
     "@repo/theme": "workspace:*",
     "@repo/ui": "workspace:*",
