@@ -3,6 +3,7 @@ import { UpdateSelfRequestSchema } from "@repo/shared"
 import type { EditSelfData } from "@repo/shared/types/collections"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAuth } from "@/context/AuthContext"
+import { QueryKeys } from "../index"
 import AuthService from "./AuthService"
 
 export function useUpdateSelfMutation() {
@@ -15,7 +16,7 @@ export function useUpdateSelfMutation() {
       return await AuthService.patchMe(parsed, token)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auth", "me"] })
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.AUTH, QueryKeys.ME] })
     },
   })
 }
