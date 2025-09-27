@@ -1,5 +1,5 @@
 import { render } from "@react-email/components"
-import { dayjs } from "@repo/shared"
+import { capitalize, dayjs } from "@repo/shared"
 import type { Booking, GameSession, GameSessionSchedule, User } from "@repo/shared/payload-types"
 import { payload } from "@/data-layer/adapters/Payload"
 import BookingConfirmationEmail from "@/emails/BookingConfirmationEmail"
@@ -31,7 +31,7 @@ export default class MailService {
 
     const date = dayjs(gameSession.startTime).format("D MMMM")
     const rawWeekday = gameSessionSchedule?.day || dayjs(gameSession.startTime).format("dddd")
-    const weekday = rawWeekday.charAt(0).toUpperCase() + rawWeekday.slice(1)
+    const weekday = capitalize(rawWeekday)
     const startTime = dayjs(gameSession.startTime).format("HH:mm")
     const endTime = dayjs(gameSession.endTime).format("HH:mm")
     const sessionName = gameSessionSchedule?.name || gameSession.name || "UABC"
