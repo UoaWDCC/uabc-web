@@ -275,13 +275,13 @@ describe("/api/admin/users/[id]", async () => {
     const userDataService = new UserDataService()
 
     it.for([
-      // Test case 1: Explicit false boolean parameter
+      // Test case 1: Explicit true boolean parameter
       "/api/admin/users?deleteRelatedDocs=true",
-      // Test case 3: Flag parameter without value (equivalent to true in query params)
+      // Test case 2: Flag parameter without value (equivalent to true in query params)
       "/api/admin/users?deleteRelatedDocs",
-      // Test case 4: Unrelated query parameter (testing irrelevant params)
+      // Test case 3: Unrelated query parameter (testing irrelevant params)
       "/api/admin/users?straightZhao",
-      // Test case 5: Base URL with no query parameters
+      // Test case 4: Base URL with no query parameters
       "/api/admin/users",
     ] as const)(
       "should default to delete user and their bookings when deleteRelatedDocs is true or not specified",
@@ -337,10 +337,8 @@ describe("/api/admin/users/[id]", async () => {
 
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
 
-      // Verify user is deleted
       await expect(userDataService.getUserById(newUser.id)).rejects.toThrow("Not Found")
 
-      // Verify bookings are not deleted
       expect(await bookingDataService.getBookingById(booking1.id)).toBeDefined()
       expect(await bookingDataService.getBookingById(booking2.id)).toBeDefined()
     })
@@ -375,10 +373,8 @@ describe("/api/admin/users/[id]", async () => {
       })
 
       // Verify user and booking still exist (transaction rolled back)
-      const existingUser = await userDataService.getUserById(newUser.id)
-      const existingBooking = await bookingDataService.getBookingById(booking.id)
-      expect(existingUser).toBeDefined()
-      expect(existingBooking).toBeDefined()
+      expect(await userDataService.getUserById(newUser.id)).toBeDefined()
+      expect(await bookingDataService.getBookingById(booking.id)).toBeDefined()
 
       mockDeleteBookings.mockRestore()
     })
