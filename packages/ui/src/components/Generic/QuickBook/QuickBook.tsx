@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { QuickBookFormData, SessionItem } from "@repo/shared"
-import { PlayLevel, QuickBookFormDataSchema } from "@repo/shared"
+import { PlayLevelOptions, QuickBookFormDataSchema } from "@repo/shared"
 import { Button, Heading, Select } from "@repo/ui/components/Primitive"
 import { CalendarClockIcon, CircleGaugeIcon } from "@yamada-ui/lucide"
 import { FormControl, Grid, GridItem, memo, noop, type SelectItem, VStack } from "@yamada-ui/react"
@@ -41,14 +41,6 @@ export interface QuickBookProps {
    */
   onSubmit?: SubmitHandler<QuickBookFormData>
 }
-
-/**
- * Options for the Skill Level Select component, using enum values from {@link PlayLevel}.
- */
-const skillLevelOptions = Object.values(PlayLevel).map((playLevel) => ({
-  value: playLevel,
-  label: playLevel,
-}))
 
 /**
  * Quick Book component for both mobile and desktop screens, for the hero section of the home page.
@@ -121,7 +113,7 @@ export const QuickBook = memo(
                     }}
                     data-testid="skill-level"
                     icon={<CircleGaugeIcon fontSize={24} />}
-                    items={skillLevelOptions}
+                    items={PlayLevelOptions}
                     label="Skill Level"
                     rounded="xl"
                     variant="stylised"

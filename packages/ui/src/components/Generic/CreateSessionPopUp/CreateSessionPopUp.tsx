@@ -21,8 +21,10 @@ import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 
 /**
  * Props for {@link CreateSessionPopUp} component
+ *
+ * TODO: decide to make a schema and type for this in `shared`
  */
-interface FormData {
+export interface FormData {
   weekDay: string
   sessionType: string
   startTime: string
@@ -35,46 +37,48 @@ export interface CreateSessionPopUpProps extends DialogProps {
   /**
    * The title to display in the dialog header
    */
-  title: string
+  title?: string
 
   /**
    * The description text to display in the dialog body
    */
-  description: string
+  description?: string
+
+  // TODO: create a defaultValues prop instead of individual props for each pre-filled field
 
   /**
    * The default start time for the session.
    * Used to pre-populate the start time input.
    */
-  startTime: Date
+  startTime?: Date
 
   /**
    * The default end time for the session.
    * Used to pre-populate the end time input.
    */
-  endTime: Date
+  endTime?: Date
 
   /**
    * The default member capacity for the session.
    * Used to pre-populate the member capacity input.
    */
-  memberCapacity: number
+  memberCapacity?: number
 
   /**
    * The default casual capacity for the session.
    * Used to pre-populate the casual capacity input.
    */
-  casualCapacity: number
+  casualCapacity?: number
 
   /**
    * The function to call when the form is submitted
    */
-  onConfirm: (value: FormData) => void
+  onConfirm?: (value: FormData) => void
 
   /**
    * The placeholder text for the input fields.
    */
-  inputPlaceholder: string
+  inputPlaceholder?: string
 }
 
 /**
@@ -107,14 +111,14 @@ export interface CreateSessionPopUpProps extends DialogProps {
   * />
   */
 export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
-  title,
-  description,
+  title = "Create New Session",
+  description = "",
   onConfirm,
   startTime,
   endTime,
   memberCapacity,
   casualCapacity,
-  inputPlaceholder,
+  inputPlaceholder = "Enter number",
   ...props
 }) => {
   const {
@@ -130,11 +134,12 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
     reset()
     props.onClose?.()
   }
+
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    onConfirm(data)
-    reset()
-    props.onClose?.()
+    onConfirm?.(data)
+    handleClose()
   }
+
   return (
     <Dialog
       alignItems="center"
@@ -317,6 +322,7 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
         >
           <Button
             colorScheme="secondary"
+            data-testid="back"
             leftIcon={<ArrowLeftIcon />}
             onClick={handleClose}
             size="lg"
@@ -324,7 +330,14 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
           >
             Back
           </Button>
-          <Button colorScheme="primary" isLoading={isSubmitting} size="lg" type="submit" w="full">
+          <Button
+            colorScheme="primary"
+            data-testid="submit"
+            isLoading={isSubmitting}
+            size="lg"
+            type="submit"
+            w="full"
+          >
             Confirm
           </Button>
         </ButtonGroup>
