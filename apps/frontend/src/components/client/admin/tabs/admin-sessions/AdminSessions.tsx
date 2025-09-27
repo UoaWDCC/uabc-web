@@ -183,7 +183,9 @@ export const AdminSessions = () => {
       document.body.appendChild(link)
       link.click()
     } finally {
-      document.body.removeChild(link)
+      if (document.body.contains(link)) {
+        document.body.removeChild(link)
+      }
       URL.revokeObjectURL(url)
     }
 
