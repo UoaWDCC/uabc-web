@@ -1,12 +1,2 @@
-import * as db from "./db"
-
-beforeAll(async () => {
-  await db.create()
-})
-
-afterAll(async () => {
-  await db.close()
-})
-
-process.env.PAYLOAD_SECRET = "I love uabc!!!!"
-process.env.DATABASE_URI = await db.getUri()
+// Environment variables are set by global setup
+// This file can be used for additional test-specific MongoDB setup if needed

@@ -1,12 +1,24 @@
-import { MongoMemoryServer } from "mongodb-memory-server"
+import { MongoMemoryReplSet } from "mongodb-memory-server"
 
-let mongod: MongoMemoryServer | undefined
+let mongod: MongoMemoryReplSet | undefined
 
-export const create = async (): Promise<MongoMemoryServer> => {
+export const create = async (): Promise<MongoMemoryReplSet> => {
   if (mongod) {
     return mongod
   }
-  mongod = await MongoMemoryServer.create()
+  mongod = await MongoMemoryReplSet.create({
+    replSet: {
+      count: 1,
+      storageEngine: "wiredTiger",
+      dbName: "test",
+      args: ["--oplogSize", "2"],
+    },
+    instanceOpts: [
+      {
+        storageEngine: "wiredTiger",
+      },
+    ],
+  })
   return mongod
 }
 
