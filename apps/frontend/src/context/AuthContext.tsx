@@ -11,6 +11,7 @@ import { useNotice } from "@yamada-ui/react"
 import { StatusCodes } from "http-status-codes"
 import { createContext, type ReactNode, useCallback, useContext } from "react"
 import { ApiClientError } from "@/lib/api/ApiClientError"
+import { QueryKeys } from "@/services"
 import AuthService from "@/services/auth/AuthService"
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
@@ -35,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isPending,
     error,
   } = useQuery<User | null, Error, User | null>({
-    queryKey: ["auth", "me"],
+    queryKey: [QueryKeys.AUTH, QueryKeys.ME],
     queryFn: async (): Promise<User | null> => {
       if (!token) {
         return null
@@ -62,8 +63,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     mutationFn: async (credentials: LoginFormData) => {
       // Remove queries and reset token to avoid potential conflicts during login
       setToken(null)
-      queryClient.cancelQueries({ queryKey: ["auth", "me"] })
-      queryClient.removeQueries({ queryKey: ["auth", "me"] })
+      queryClient.cancelQueries({ queryKey: [QueryKeys.AUTH, QueryKeys.ME] })
+      queryClient.removeQueries({ queryKey: [QueryKeys.AUTH, QueryKeys.ME] })
 
       const response = await AuthService.login(credentials.email, credentials.password)
 
@@ -111,8 +112,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = useCallback(() => {
     setToken(null)
-    queryClient.cancelQueries({ queryKey: ["auth", "me"] })
-    queryClient.removeQueries({ queryKey: ["auth", "me"] })
+    queryClient.cancelQueries({ queryKey: [QueryKeys.AUTH, QueryKeys.ME] })
+    queryClient.removeQueries({ queryKey: [QueryKeys.AUTH, QueryKeys.ME] })
 
     notice({
       title: "Logged out",

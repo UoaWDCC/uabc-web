@@ -24,7 +24,7 @@
     "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
   },
   "dependencies": {
-    "@hookform/resolvers": "5.1.1",
+    "@hookform/resolvers": "5.2.2",
     "@repo/shared": "workspace:*",
     "@repo/theme": "workspace:*",
     "@storybook/nextjs-vite": "9.1.8",
@@ -38,7 +38,7 @@
     "@yamada-ui/table": "1.3.15",
     "dayjs": "1.11.18",
     "next": "15.3.5",
-    "nuqs": "2.4.3",
+    "nuqs": "2.6.0",
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "react-hook-form": "7.60.0",
@@ -46,16 +46,14 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@mdx-js/react": "3.1.0",
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@storybook/addon-a11y": "9.1.8",
     "@storybook/addon-docs": "9.1.8",
     "@storybook/addon-queryparams": "7.0.1",
     "@storybook/react": "9.1.8",
-    "@turbo/gen": "2.5.3",
-    "@types/node": "22.15.21",
-    "@types/react": "19.1.5",
+    "@types/node": "22.18.6",
+    "@types/react": "19.1.14",
     "@types/react-dom": "19.1.9",
     "storybook-dark-mode": "4.0.2",
     "typescript": "5.9.2"

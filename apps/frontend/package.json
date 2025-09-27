@@ -18,7 +18,7 @@
     "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
   },
   "dependencies": {
-    "@hookform/resolvers": "5.1.1",
+    "@hookform/resolvers": "5.2.2",
     "@repo/shared": "workspace:*",
     "@repo/theme": "workspace:*",
     "@repo/ui": "workspace:*",
@@ -28,18 +28,18 @@
     "dayjs": "1.11.18",
     "http-status-codes": "2.3.0",
     "next": "15.3.5",
-    "nuqs": "2.4.3",
+    "nuqs": "2.6.0",
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "react-hook-form": "7.60.0",
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "1.13.12",
+    "@cloudflare/next-on-pages": "1.13.16",
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "22.15.21",
-    "@types/react": "19.1.5",
+    "@types/node": "22.18.6",
+    "@types/react": "19.1.14",
     "@types/react-dom": "19.1.9",
     "typescript": "5.9.2"
   }
