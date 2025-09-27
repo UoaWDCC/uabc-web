@@ -1,7 +1,8 @@
 import type z from "zod"
-import type { GameSession } from "../payload-types"
+// import type { GameSession } from "../payload-types"
 import type {
   GameSessionScheduleSchema,
+  GameSessionSchema,
   GameSessionWithCountsSchema,
   GetAllGameSessionsBySemesterResponseSchema,
   GetCurrentGameSessionsResponseSchema,
@@ -11,6 +12,7 @@ import type {
 import type { GameSessionStatus, Weekday } from "./enums"
 
 export type GameSessionSchedule = z.infer<typeof GameSessionScheduleSchema>
+export type GameSession = z.infer<typeof GameSessionSchema>
 export type UpdateGameSessionRequest = z.infer<typeof UpdateGameSessionRequestSchema>
 export type GetPaginatedGameSessionsResponse = z.infer<
   typeof GetPaginatedGameSessionsResponseSchema
