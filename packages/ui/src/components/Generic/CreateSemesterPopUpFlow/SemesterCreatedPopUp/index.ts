@@ -1,2 +1,1 @@
 export * from "./SemesterCreatedPopUp"
-export * from "./SemesterNamePopUp"
