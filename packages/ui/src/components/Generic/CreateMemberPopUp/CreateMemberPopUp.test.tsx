@@ -39,7 +39,8 @@ describe("<CreateMemberPopUp />", () => {
 
     const { user } = render(
       <CreateMemberPopUpExample
-        defaultValues={{
+        onConfirm={handleSubmit}
+        userToEdit={{
           id: "test-id",
           firstName: "Test",
           lastName: "User",
@@ -49,7 +50,6 @@ describe("<CreateMemberPopUp />", () => {
           updatedAt: "",
           createdAt: "",
         }}
-        onConfirm={handleSubmit}
       />,
     )
     await user.click(screen.getByText("Open pop up"))

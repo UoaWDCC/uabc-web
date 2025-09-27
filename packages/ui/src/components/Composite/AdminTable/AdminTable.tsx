@@ -123,7 +123,6 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
       />
 
       <CreateMemberPopUp
-        defaultValues={selectedUser}
         key={selectedUser?.id}
         onClose={() => {
           setSelectedUser(null)
@@ -132,6 +131,7 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
         onConfirm={(data) => handleEditConfirm(data)}
         open={openEdit}
         title="Edit Member"
+        userToEdit={selectedUser}
       />
 
       <Dialog

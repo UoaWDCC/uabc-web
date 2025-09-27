@@ -8,7 +8,7 @@ const meta: Meta<CreateMemberPopUpProps> = {
   component: CreateMemberPopUp,
   argTypes: {
     title: { control: "text", description: "The dialog header title" },
-    defaultValues: { control: "object", description: "Object to pre-fill input fields" },
+    userToEdit: { control: "object", description: "Object to pre-fill input fields" },
     onConfirm: { action: "confirmed" },
   },
   args: {
@@ -41,7 +41,10 @@ export const PrefilledData: Story = () => {
     <Box maxW={{ base: "none", md: "33%" }}>
       <Button onClick={onOpen}>Open</Button>
       <CreateMemberPopUp
-        defaultValues={
+        onClose={onClose}
+        onConfirm={(val) => console.log("Confirmed:", val)}
+        open={open}
+        userToEdit={
           {
             firstName: "Alice",
             lastName: "Smith",
@@ -49,9 +52,6 @@ export const PrefilledData: Story = () => {
             phoneNumber: "123456789",
           } as User
         }
-        onClose={onClose}
-        onConfirm={(val) => console.log("Confirmed:", val)}
-        open={open}
       />
     </Box>
   )
