@@ -164,7 +164,7 @@ export const AdminSessions = () => {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
-    URL.revokeObjectURL(objectURL)
+    URL.revokeObjectURL(url)
 
     console.log("Exported member list for session:", selectedSession.id)
   }
