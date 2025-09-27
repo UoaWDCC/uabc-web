@@ -299,7 +299,9 @@ export const ManagementTableProvider = <
 
   const selectAllRows = useCallback(() => {
     const newSelection = new Set(selectedRows)
-    paginatedData.forEach((member) => newSelection.add(String(member[rowId])))
+    for (const member of paginatedData) {
+      newSelection.add(String(member[rowId]))
+    }
     setSelectedRows(newSelection)
   }, [selectedRows, paginatedData, setSelectedRows, rowId])
 
