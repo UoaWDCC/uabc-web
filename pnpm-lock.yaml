@@ -42,8 +42,8 @@ importers:
         specifier: 14.6.1
         version: 14.6.1(@testing-library/dom@10.4.1)
       '@vitejs/plugin-react-swc':
-        specifier: 3.10.0
-        version: 3.10.0(vite@6.3.6(@types/node@22.18.6)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.77.4)(terser@5.43.1)(tsx@4.20.3)(yaml@2.8.1))
+        specifier: 3.11.0
+        version: 3.11.0(vite@6.3.6(@types/node@22.18.6)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.77.4)(terser@5.43.1)(tsx@4.20.3)(yaml@2.8.1))
       '@vitest/browser':
         specifier: 3.2.4
         version: 3.2.4(vite@6.3.6(@types/node@22.18.6)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.77.4)(terser@5.43.1)(tsx@4.20.3)(yaml@2.8.1))(vitest@3.2.4)
@@ -60,8 +60,8 @@ importers:
         specifier: 9.2.1
         version: 9.2.1
       dotenv:
-        specifier: 17.0.0
-        version: 17.0.0
+        specifier: 17.2.2
+        version: 17.2.2
       jsdom:
         specifier: 26.1.0
         version: 26.1.0
@@ -2196,8 +2196,8 @@ packages:
   '@poppinss/exception@1.2.2':
     resolution: {integrity: sha512-m7bpKCD4QMlFCjA/nKTs23fuvoVFoA83brRKmObCUNmi/9tVu8Ve3w4YQAnJu4q3Tjf5fr685HYIC/IA2zHRSg==}
 
-  '@rolldown/pluginutils@1.0.0-beta.9':
-    resolution: {integrity: sha512-e9MeMtVWo186sgvFFJOPGy7/d2j2mZhLJIdVW0C/xDluuOvymEATqz6zKsP0ZmXGzQtqlyjz5sC1sYQUoJG98w==}
+  '@rolldown/pluginutils@1.0.0-beta.27':
+    resolution: {integrity: sha512-+d0F4MKMCbeVUJwG96uQ4SgAznZNSq93I3V+9NHA4OpvqG8mRCpGdKmK8l/dl02h2CCDHwW2FqilnTyDcAnqjA==}
 
   '@rollup/pluginutils@5.2.0':
     resolution: {integrity: sha512-qWJ2ZTbmumwiLFomfzTyt5Kng4hwPi9rwCYN4SHb6eaRU1KNO4ccxINHr/VhH4GgPlt1XfSTLX2LBTme8ne4Zw==}
@@ -2850,10 +2850,10 @@ packages:
   '@uploadthing/shared@7.1.1':
     resolution: {integrity: sha512-Nem3jZ6G9AJEBzzDVvwSKV/wLdpADz8LDg+woo9diJTHj1FOjWNzCwb8wMxpEFLM88TWv5Tq8Z1mQepNmC5WIQ==}
 
-  '@vitejs/plugin-react-swc@3.10.0':
-    resolution: {integrity: sha512-ZmkdHw3wo/o/Rk05YsXZs/DJAfY2CdQ5DUAjoWji+PEr+hYADdGMCGgEAILbiKj+CjspBTuTACBcWDrmC8AUfw==}
+  '@vitejs/plugin-react-swc@3.11.0':
+    resolution: {integrity: sha512-YTJCGFdNMHCMfjODYtxRNVAYmTWQ1Lb8PulP/2/f/oEEtglw8oKxKIZmmRkyXrVrHfsKOaVkAc3NT9/dMutO5w==}
     peerDependencies:
-      vite: ^4 || ^5 || ^6
+      vite: ^4 || ^5 || ^6 || ^7
 
   '@vitest/browser@3.2.4':
     resolution: {integrity: sha512-tJxiPrWmzH8a+w9nLKlQMzAKX/7VjFs50MWgcAj7p9XQ7AQ9/35fByFYptgPELyLw+0aixTnC4pUWV+APcZ/kw==}
@@ -4094,8 +4094,8 @@ packages:
     resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
     engines: {node: '>=12'}
 
-  dotenv@17.0.0:
-    resolution: {integrity: sha512-A0BJ5lrpJVSfnMMXjmeO0xUnoxqsBHWCoqqTnGwGYVdnctqXXUEhJOO7LxmgxJon9tEZFGpe0xPRX0h2v3AANQ==}
+  dotenv@17.2.2:
+    resolution: {integrity: sha512-Sf2LSQP+bOlhKWWyhFsn0UsfdK/kCWRv1iuA2gXAwt3dyNabr6QSj00I2V10pidqz69soatm9ZwZvpQMTIOd5Q==}
     engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
@@ -8992,7 +8992,7 @@ snapshots:
 
   '@poppinss/exception@1.2.2': {}
 
-  '@rolldown/pluginutils@1.0.0-beta.9': {}
+  '@rolldown/pluginutils@1.0.0-beta.27': {}
 
   '@rollup/pluginutils@5.2.0(rollup@4.45.1)':
     dependencies:
@@ -9712,9 +9712,9 @@ snapshots:
       effect: 3.10.3
       sqids: 0.3.0
 
-  '@vitejs/plugin-react-swc@3.10.0(vite@6.3.6(@types/node@22.18.6)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.77.4)(terser@5.43.1)(tsx@4.20.3)(yaml@2.8.1))':
+  '@vitejs/plugin-react-swc@3.11.0(vite@6.3.6(@types/node@22.18.6)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.77.4)(terser@5.43.1)(tsx@4.20.3)(yaml@2.8.1))':
     dependencies:
-      '@rolldown/pluginutils': 1.0.0-beta.9
+      '@rolldown/pluginutils': 1.0.0-beta.27
       '@swc/core': 1.12.14
       vite: 6.3.6(@types/node@22.18.6)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.77.4)(terser@5.43.1)(tsx@4.20.3)(yaml@2.8.1)
     transitivePeerDependencies:
@@ -11787,7 +11787,7 @@ snapshots:
 
   dotenv@16.6.1: {}
 
-  dotenv@17.0.0: {}
+  dotenv@17.2.2: {}
 
   dunder-proto@1.0.1:
     dependencies:
