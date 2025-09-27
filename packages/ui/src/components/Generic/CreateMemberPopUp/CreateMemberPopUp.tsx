@@ -323,7 +323,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
         >
           <Button
             colorScheme="secondary"
-            data-testId="back"
+            data-testid="back"
             leftIcon={<ArrowLeftIcon />}
             onClick={handleClose}
             size="lg"
