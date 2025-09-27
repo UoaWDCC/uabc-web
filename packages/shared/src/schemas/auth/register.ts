@@ -9,6 +9,8 @@ import {
   UniversityZodEnum,
 } from "../../types"
 
+export const PhoneNumberSchema = z.string().regex(/\d/, "Not a phone number")
+
 export const RegisterRequestBodySchema = z.object({
   /**
    * The user's email verification code
@@ -38,7 +40,7 @@ export const CreateMemberPopUpFormDataSchema = z
     email: z.string().email(),
     firstName: z.string().min(1, "Field is required"),
     lastName: z.string().optional(),
-    phoneNumber: z.string().regex(/\d/, "Not a phone number").optional(),
+    phoneNumber: PhoneNumberSchema.optional(),
     university: UniversityZodEnum.optional(),
     studentId: z.string().optional(),
     studentUpi: z.string().optional(),
@@ -128,7 +130,7 @@ export const BasicInfoForm2Schema = z.object({
    *
    * @remarks Current regex tests that it is a string with at least 1 number in it
    */
-  phoneNumber: z.string().regex(/\d/, "Not a phone number"),
+  phoneNumber: PhoneNumberSchema,
 })
 
 export const UniversityInfoFormSchema = z

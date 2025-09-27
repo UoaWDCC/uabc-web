@@ -2,10 +2,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   CreateMemberPopUpFormDataSchema,
   type CreateMemberPopUpFormValues,
-  Gender,
-  MembershipType,
-  PlayLevel,
+  GenderOptions,
+  PlayLevelOptions,
+  RoleOptions,
   University,
+  UniversityOptions,
 } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import { Button, Heading, Select, TextInput } from "@repo/ui/components/Primitive"
@@ -57,46 +58,10 @@ export interface CreateMemberPopUpProps extends DialogProps {
 }
 
 /**
- * Options for the University Select component, using enum values from {@link University}.
- * TODO: could perhaps put these in `shared` since it is now used in a bunch of places
- */
-const universityOptions = Object.values(University).map((university) => ({
-  value: university,
-  label: university,
-}))
-
-/**
- * Options for the Gender Select component, using enum values from {@link Gender}.
- */
-const genderOptions = Object.values(Gender).map((gender) => ({
-  value: gender,
-  label: gender,
-}))
-
-/**
- * Options for the Skill Level Select component, using enum values from {@link PlayLevel}.
- */
-const playLevelOptions = Object.values(PlayLevel).map((playLevel) => ({
-  value: playLevel,
-  label: playLevel,
-}))
-
-/**
- * Options for the Role Select component, using enum values from {@link MembershipType}
- */
-const roleOptions = Object.values(MembershipType).map((membershipType) => ({
-  value: membershipType,
-  label: membershipType,
-}))
-
-/**
- * Dialog component for collecting user input with a title and description
+ * Dialog component for creating or editing a user - expected for admin use only.
  *
- * Renders a modal dialog with a title heading, description text, and input fields,
- * designed to collect user input in a clean, accessible interface.
- *
- * @param props CreateSessionPopUp component properties
- * @returns A modal dialog with title, description, and input fields
+ * @param props CreateMemberPopUp component properties
+ * @returns A modal dialog with title and input fields (pre-filled if default values given)
  *
  * @example
  /**
@@ -208,7 +173,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                       <Select
                         data-testid="university"
                         icon={<UniversityIcon />}
-                        items={universityOptions}
+                        items={UniversityOptions}
                         label="University"
                         {...field}
                       />
@@ -239,7 +204,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                       <Select
                         data-testid="skill-level"
                         icon={<IdCardIcon />}
-                        items={playLevelOptions}
+                        items={PlayLevelOptions}
                         label="Skill level"
                         {...field}
                       />
@@ -255,7 +220,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                       <Select
                         data-testid="role"
                         icon={<IdCardIcon />}
-                        items={roleOptions}
+                        items={RoleOptions}
                         label="Role"
                         {...field}
                       />
@@ -310,7 +275,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                       <Select
                         data-testid="gender"
                         icon={<VenusAndMarsIcon />}
-                        items={genderOptions}
+                        items={GenderOptions}
                         label="Gender"
                         {...field}
                       />
