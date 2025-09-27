@@ -4,6 +4,13 @@ import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
+import { payload } from "@/data-layer/adapters/Payload"
+import {
+  commitCascadeTransaction,
+  createTransactionId,
+  rollbackCascadeTransaction,
+} from "@/data-layer/adapters/Transaction"
+import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 
 class RouteWrapper {
@@ -77,16 +84,40 @@ class RouteWrapper {
   /**
    * DELETE method to delete a game session schedule.
    *
-   * @param _req The request object
+   * @param req The request object
    * @param params Route parameters containing the GameSessionSchedule ID
    * @returns No content status code
    */
   @Security("jwt", ["admin"])
-  static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  static async DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
+      const cascade = req.nextUrl.searchParams.get("cascade") === "true"
       const gameSessionDataService = new GameSessionDataService()
-      await gameSessionDataService.deleteGameSessionSchedule(id)
+      const transactionID = cascade && (await createTransactionId())
+
+      if (transactionID) {
+        try {
+          const { docs } = await payload.find({
+            collection: "gameSession",
+            where: {
+              gameSessionSchedule: {
+                equals: id,
+              },
+            },
+          })
+          const gameSession = docs[0]
+          await gameSessionDataService.deleteGameSessionSchedule(id)
+          await gameSessionDataService.deleteGameSession(gameSession.id)
+          await BookingDataService.deleteRelatedBookingsForSession(gameSession.id, transactionID)
+          await commitCascadeTransaction(transactionID)
+        } catch {
+          await rollbackCascadeTransaction(transactionID)
+        }
+      } else {
+        await gameSessionDataService.deleteGameSessionSchedule(id)
+      }
+
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
       if (error instanceof NotFound) {
