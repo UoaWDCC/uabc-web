@@ -38,8 +38,8 @@
     "@cloudflare/next-on-pages": "1.13.12",
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "22.15.21",
-    "@types/react": "19.1.5",
+    "@types/node": "22.18.6",
+    "@types/react": "19.1.14",
     "@types/react-dom": "19.1.9",
     "typescript": "5.9.2"
   }
