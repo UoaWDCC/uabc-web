@@ -1,4 +1,5 @@
-import { userCreateMock } from "@repo/shared/mocks"
+import { MembershipType } from "@repo/shared"
+import { adminUserMock, memberUserCreateMock, userCreateMock } from "@repo/shared/mocks"
 import { payload } from "@/data-layer/adapters/Payload"
 import { clearCollection } from "@/test-config/backend-utils"
 import UserDataService from "./UserDataService"
@@ -66,6 +67,30 @@ describe("UserDataService", () => {
     })
   })
 
+  describe("resetAllMemberships", () => {
+    it("should reset members and their session count and casuals if they have more than 0 sessions", async () => {
+      const member = await userDataService.createUser(memberUserCreateMock)
+      const casualWithSessions = await userDataService.createUser(userCreateMock)
+
+      await userDataService.resetAllMemberships()
+
+      const modifiedMember = await userDataService.getUserById(member.id)
+      const modifiedCasual = await userDataService.getUserById(casualWithSessions.id)
+
+      expect(modifiedMember.role).toBe(MembershipType.casual)
+      expect(modifiedMember.remainingSessions).toBe(0)
+      expect(modifiedCasual.role).toBe(MembershipType.casual)
+      expect(modifiedCasual.remainingSessions).toBe(0)
+    })
+
+    it("should update no users if none meet specified criteria", async () => {
+      await userDataService.resetAllMemberships()
+      const fetchedAdmin = await userDataService.getUserById(adminUserMock.id) // Check if admin token user is unchanged
+      expect(fetchedAdmin.remainingSessions).toEqual(adminUserMock.remainingSessions)
+      expect(fetchedAdmin.role).toEqual(adminUserMock.role)
+    })
+  })
+
   describe("deleteUser", () => {
     it("should delete a user", async () => {
       const newUser = await userDataService.createUser(userCreateMock)
@@ -103,12 +128,32 @@ describe("UserDataService", () => {
         email: `user${i}@test.com`,
       }))
       await Promise.all(usersToCreate.map((u) => userDataService.createUser(u)))
-      const result = await userDataService.getPaginatedUsers(5, 3)
+      const result = await userDataService.getPaginatedUsers({ limit: 5, page: 3 })
       expect(result.docs.length).toBeLessThanOrEqual(5)
       expect(result.page).toBe(3)
       expect(result.limit).toBe(5)
       expect(result.totalDocs).toBeGreaterThanOrEqual(12)
       expect(result.totalPages).toBeGreaterThanOrEqual(3)
+    })
+
+    it("should filter down users based on query", async () => {
+      const usersToCreate = Array.from({ length: 8 }, (_, i) => ({
+        ...userCreateMock,
+        email: `user${i}@test.com`,
+      }))
+      await Promise.all(usersToCreate.map((u) => userDataService.createUser(u)))
+
+      const user = await userDataService.createUser({
+        ...userCreateMock,
+        firstName: "casual",
+        lastName: "test",
+      })
+
+      const result = await userDataService.getPaginatedUsers({ query: "casual" })
+      expect(result.docs).toStrictEqual([user])
+
+      const result2 = await userDataService.getPaginatedUsers({ query: "@test.com" })
+      expect(result2.totalDocs).toBe(8)
     })
 
     it("should return empty docs if no users exist", async () => {
