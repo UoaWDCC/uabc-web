@@ -126,11 +126,70 @@ export const AdminSessions = () => {
     setDateParam(dateString)
   }
 
-  const handleExport = () => {
-    if (selectedSession) {
-      // TODO: Implement export functionality
-      console.log("Exporting member list for session:", selectedSession.id)
+  /**
+   * Properly escape a value for CSV format to prevent injection attacks
+   * - Replace double quotes with two double quotes
+   * - Wrap in quotes if contains comma, quote, newline
+   */
+  const escapeCsvValue = (value: string): string => {
+    if (!value) return '""'
+
+    // Escape double quotes by doubling them
+    const escaped = value.replace(/"/g, '""')
+
+    // Wrap in quotes if contains special characters
+    if (escaped.includes(",") || escaped.includes('"') || escaped.includes("\n")) {
+      return `"${escaped}"`
     }
+
+    return escaped
+  }
+
+  const handleExport = () => {
+    if (!selectedSession) {
+      console.warn("No session to export")
+      return
+    }
+
+    // Create CSV content with proper escaping
+    const headers = ["Name", "Email", "Role", "Level", "Remaining Sessions"]
+    const csvRows = [
+      headers.map(escapeCsvValue).join(","),
+      ...selectedSessionAttendees.map((attendee) =>
+        [
+          escapeCsvValue(attendee.name),
+          escapeCsvValue(attendee.email),
+          escapeCsvValue(attendee.role),
+          escapeCsvValue(attendee.level),
+          escapeCsvValue(attendee.sessions),
+        ].join(","),
+      ),
+    ]
+
+    const csvContent = csvRows.join("\n")
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+    const link = document.createElement("a")
+    const url = URL.createObjectURL(blob)
+
+    try {
+      link.setAttribute("href", url)
+      link.setAttribute(
+        "download",
+        `session-attendees-${dayjs(selectedSession.startTime).format("YYYY-MM-DD")}.csv`,
+      )
+      link.style.visibility = "hidden"
+      document.body.appendChild(link)
+      link.click()
+    } finally {
+      if (document.body.contains(link)) {
+        document.body.removeChild(link)
+      }
+      URL.revokeObjectURL(url)
+    }
+
+    console.log("Exported member list for session:", selectedSession.id)
   }
 
   return (
