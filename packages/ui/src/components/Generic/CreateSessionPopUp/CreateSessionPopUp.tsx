@@ -93,7 +93,7 @@ export interface CreateSessionPopUpProps extends DialogProps {
  * @example
  /**
   * Example usage:
-  * 
+  *
   * <CreateSessionPopUp
   *   isOpen={isOpen}
   *   onClose={handleClose}
@@ -189,7 +189,6 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
                 name="sessionType"
                 render={({ field }) => (
                   <Select
-                    id="sessionType"
                     onChange={field.onChange}
                     placeholder="Select Session Type"
                     value={field.value}
@@ -218,7 +217,6 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
                 name="weekDay"
                 render={({ field }) => (
                   <Select
-                    id="weekDay"
                     onChange={field.onChange}
                     placeholder="Select Weekday"
                     value={field.value}
@@ -243,7 +241,6 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
               </Label>
               <TextInput
                 endElement={<Clock3Icon fontSize={24} />}
-                id="startTime"
                 placeholder={description.split(":")[0]}
                 size="lg"
                 type={InputType.Time}
@@ -256,7 +253,6 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
               </Label>
               <TextInput
                 endElement={<Clock3Icon fontSize={24} />}
-                id="endTime"
                 placeholder={description.split(":")[0]}
                 size="lg"
                 type={InputType.Time}
@@ -285,7 +281,6 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
               </Label>
               <TextInput
                 endElement={<UserRoundIcon fontSize={24} />}
-                id="memberCapacity"
                 placeholder={inputPlaceholder}
                 size="lg"
                 type={InputType.Number}
@@ -306,7 +301,6 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
               </Label>
               <TextInput
                 endElement={<UserRoundIcon fontSize={24} />}
-                id="casualCapacity"
                 placeholder={inputPlaceholder}
                 size="lg"
                 type={InputType.Number}

@@ -1,4 +1,5 @@
-import { userCreateMock } from "@repo/shared/mocks"
+import { MembershipType } from "@repo/shared"
+import { adminUserMock, memberUserCreateMock, userCreateMock } from "@repo/shared/mocks"
 import { payload } from "@/data-layer/adapters/Payload"
 import { clearCollection } from "@/test-config/backend-utils"
 import UserDataService from "./UserDataService"
@@ -63,6 +64,30 @@ describe("UserDataService", () => {
       const updateData = { firstName: "Updated" }
       const updateNotFoundUser = userDataService.updateUser("nonexistentid", updateData)
       await expect(updateNotFoundUser).rejects.toThrow("Not Found")
+    })
+  })
+
+  describe("resetAllMemberships", () => {
+    it("should reset members and their session count and casuals if they have more than 0 sessions", async () => {
+      const member = await userDataService.createUser(memberUserCreateMock)
+      const casualWithSessions = await userDataService.createUser(userCreateMock)
+
+      await userDataService.resetAllMemberships()
+
+      const modifiedMember = await userDataService.getUserById(member.id)
+      const modifiedCasual = await userDataService.getUserById(casualWithSessions.id)
+
+      expect(modifiedMember.role).toBe(MembershipType.casual)
+      expect(modifiedMember.remainingSessions).toBe(0)
+      expect(modifiedCasual.role).toBe(MembershipType.casual)
+      expect(modifiedCasual.remainingSessions).toBe(0)
+    })
+
+    it("should update no users if none meet specified criteria", async () => {
+      await userDataService.resetAllMemberships()
+      const fetchedAdmin = await userDataService.getUserById(adminUserMock.id) // Check if admin token user is unchanged
+      expect(fetchedAdmin.remainingSessions).toEqual(adminUserMock.remainingSessions)
+      expect(fetchedAdmin.role).toEqual(adminUserMock.role)
     })
   })
 
