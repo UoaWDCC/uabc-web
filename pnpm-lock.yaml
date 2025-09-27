@@ -366,9 +366,6 @@ importers:
         specifier: 3.25.76
         version: 3.25.76
     devDependencies:
-      '@mdx-js/react':
-        specifier: 3.1.0
-        version: 3.1.0(@types/react@19.1.5)(react@19.1.1)
       '@repo/test-config':
         specifier: workspace:*
         version: link:../test-config
