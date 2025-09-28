@@ -24,20 +24,30 @@ const AdminUserService = {
   /**
    * Fetches all users.
    *
-   * @param query The pagination query parameters.
+   * @param pagination The pagination query parameters.
+   * @param query The search query string.
    * @param token The auth token to use for the request (may be null).
    * @returns A promise that resolves to an array of users.
    */
   getPaginatedUsers: async ({
     limit = 100,
     page,
+    query = "",
     token,
   }: PaginationQuery & { token: string | null }) => {
-    const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
-    const response = await apiClient.get(`/api/admin/users?${query}`, GetAllUsersResponseSchema, {
-      requiresAuth: true,
-      token,
-    })
+    const searchQuery = new URLSearchParams({
+      limit: String(limit),
+      page: String(page),
+      query: String(query),
+    }).toString()
+    const response = await apiClient.get(
+      `/api/admin/users?${searchQuery}`,
+      GetAllUsersResponseSchema,
+      {
+        requiresAuth: true,
+        token,
+      },
+    )
     return ApiClient.throwIfError(response)
   },
   /**
