@@ -89,24 +89,22 @@ describe("/api/bookings", async () => {
       const endTime = new Date(startTime)
       endTime.setUTCMinutes(now.getUTCMinutes() + 59)
 
-      const gameSession = await gameSessionDataService.createGameSession({
+      const futureGameSessionCreateMock = {
         ...gameSessionCreateMock,
         startTime: startTime.toISOString(),
         endTime: endTime.toISOString(),
         semester: currentSemester,
-      })
-      const gameSession2 = await gameSessionDataService.createGameSession({
-        ...gameSessionCreateMock,
-        startTime: startTime.toISOString(),
-        endTime: endTime.toISOString(),
-        semester: currentSemester,
-      })
-      const gameSession3 = await gameSessionDataService.createGameSession({
-        ...gameSessionCreateMock,
-        startTime: startTime.toISOString(),
-        endTime: endTime.toISOString(),
-        semester: currentSemester,
-      })
+      }
+
+      const gameSession = await gameSessionDataService.createGameSession(
+        futureGameSessionCreateMock,
+      )
+      const gameSession2 = await gameSessionDataService.createGameSession(
+        futureGameSessionCreateMock,
+      )
+      const gameSession3 = await gameSessionDataService.createGameSession(
+        futureGameSessionCreateMock,
+      )
 
       await bookingDataService.createBooking({
         ...bookingCreateMock,
@@ -139,18 +137,19 @@ describe("/api/bookings", async () => {
       const endTime = new Date(startTime)
       endTime.setUTCMinutes(now.getUTCMinutes() + 59)
 
-      const gameSession = await gameSessionDataService.createGameSession({
+      const futureGameSessionCreateMock = {
         ...gameSessionCreateMock,
         startTime: startTime.toISOString(),
         endTime: endTime.toISOString(),
         semester: currentSemester,
-      })
-      const gameSession2 = await gameSessionDataService.createGameSession({
-        ...gameSessionCreateMock,
-        startTime: startTime.toISOString(),
-        endTime: endTime.toISOString(),
-        semester: currentSemester,
-      })
+      }
+
+      const gameSession = await gameSessionDataService.createGameSession(
+        futureGameSessionCreateMock,
+      )
+      const gameSession2 = await gameSessionDataService.createGameSession(
+        futureGameSessionCreateMock,
+      )
 
       await bookingDataService.createBooking({
         ...bookingCreateMock,
