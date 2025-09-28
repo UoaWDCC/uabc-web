@@ -175,7 +175,7 @@ export default class BookingDataService {
           },
           {
             "gameSession.startTime": {
-              greater_than: bookingStartPeriod.toISOString(),
+              greater_than_equal: bookingStartPeriod.toISOString(),
               less_than: bookingEndPeriod.toISOString(),
             },
           },
