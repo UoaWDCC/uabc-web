@@ -31,5 +31,5 @@ export const semesterCascadeCreateMock: CreateSemesterData = {
   breakStart: new Date(2025, 3, 14, 15, 0).toISOString(),
   breakEnd: new Date(2025, 3, 25, 12, 0).toISOString(),
   bookingOpenDay: "monday",
-  bookingOpenTime: new Date(1970, 0, 1, 12, 0).toISOString(), // 12m
+  bookingOpenTime: new Date(1970, 0, 1, 12, 0).toISOString(), // 12pm
 }

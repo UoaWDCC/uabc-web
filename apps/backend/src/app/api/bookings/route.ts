@@ -6,6 +6,7 @@ import {
 } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { NextResponse } from "next/server"
+import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import MailService from "@/business-layer/services/MailService"
@@ -99,6 +100,12 @@ class RouteWrapper {
 
       return NextResponse.json({ data: newBooking }, { status: StatusCodes.CREATED })
     } catch (error) {
+      if (error instanceof NotFound) {
+        return NextResponse.json(
+          { error: "Booking semester not found" },
+          { status: StatusCodes.NOT_FOUND },
+        )
+      }
       if (error instanceof ZodError) {
         return NextResponse.json(
           { error: "Invalid request body", details: error.flatten() },

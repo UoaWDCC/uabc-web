@@ -169,7 +169,11 @@ describe("/api/bookings", async () => {
 
     it("should call the booking confirmation email service", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const gameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+      const semester = await semesterDataService.createSemester(currentSemesterCreateMock)
+      const gameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester,
+      })
       const sendBookingConfirmationSpy = vi
         .spyOn(MailService, "sendBookingConfirmation")
         .mockResolvedValueOnce({ success: true })
