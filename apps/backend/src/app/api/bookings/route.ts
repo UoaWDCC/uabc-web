@@ -1,10 +1,16 @@
-import { CreateBookingRequestSchema, MembershipType, type RequestWithUser } from "@repo/shared"
+import {
+  CreateBookingRequestSchema,
+  getMaxBookingSize,
+  MembershipType,
+  type RequestWithUser,
+} from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { NextResponse } from "next/server"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
+import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 
 class RouteWrapper {
@@ -13,6 +19,7 @@ class RouteWrapper {
     const gameSessionDataService = new GameSessionDataService()
     const userDataService = new UserDataService()
     const bookingDataService = new BookingDataService()
+    const semesterDataService = new SemesterDataService()
 
     try {
       const parsedBody = CreateBookingRequestSchema.parse(await req.json())
@@ -59,6 +66,21 @@ class RouteWrapper {
           { error: "Session already booked" },
           { status: StatusCodes.CONFLICT },
         )
+
+      // Check if the user's booking limit has been reached
+      const currentSemester = await semesterDataService.getCurrentSemester()
+
+      const allUpcomingBookings = await bookingDataService.getAllCurrentWeekBookingsByUserId(
+        req.user.id,
+        currentSemester,
+      )
+
+      if (allUpcomingBookings.length >= getMaxBookingSize(req.user)) {
+        return NextResponse.json(
+          { error: "Weekly booking limit reached" },
+          { status: StatusCodes.FORBIDDEN },
+        )
+      }
 
       const newBooking = await bookingDataService.createBooking({
         ...parsedBody,
