@@ -8,6 +8,7 @@ import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { NextResponse } from "next/server"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
+import MailService from "@/business-layer/services/MailService"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
@@ -86,6 +87,8 @@ class RouteWrapper {
         ...parsedBody,
         user: userData,
       })
+
+      await MailService.sendBookingConfirmation(newBooking)
 
       const newRemainingSessions = (userData.remainingSessions ?? 0) - 1
       // Demote user to casual if session count is lower than or equal to 0

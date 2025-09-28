@@ -214,7 +214,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
       await expect(
         gameSessionDataService.getGameSessionScheduleById(newGameSessionSchedule.id),
-      ).rejects.toThrow(getReasonPhrase(StatusCodes.NOT_FOUND))
+      ).rejects.toThrow("Not Found")
     })
 
     it("should return 404 if gameSessionSchedule is non-existent", async () => {

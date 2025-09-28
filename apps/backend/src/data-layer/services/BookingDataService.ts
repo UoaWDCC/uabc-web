@@ -247,4 +247,28 @@ export default class BookingDataService {
       })
     ).docs
   }
+
+  /**
+   * Method to bulk delete bookings based on a target {@link User}'s id
+   *
+   * @param userId The ID of the user to bulk delete bookings for
+   * @param transactionId an optional transaction ID for the request, useful for tracing
+   * @returns the deleted {@link Booking} documents if it exists, otherwise returns an empty array
+   */
+  public async deleteBookingsByUserId(
+    userId: string,
+    transactionId?: string | number,
+  ): Promise<Booking[]> {
+    return (
+      await payload.delete({
+        collection: "booking",
+        where: {
+          user: {
+            equals: userId,
+          },
+        },
+        req: { transactionID: transactionId },
+      })
+    ).docs
+  }
 }

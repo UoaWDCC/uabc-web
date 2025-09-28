@@ -15,6 +15,7 @@ import {
 } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
+import MailService from "@/business-layer/services/MailService"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
@@ -165,6 +166,35 @@ describe("/api/bookings", async () => {
       const res = await POST(req)
       expect(res.status).toBe(StatusCodes.FORBIDDEN)
       expect(await res.json()).toStrictEqual({ error: "Weekly booking limit reached" })
+    })
+
+    it("should call the booking confirmation email service", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, casualToken)
+      const gameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+      const sendBookingConfirmationSpy = vi
+        .spyOn(MailService, "sendBookingConfirmation")
+        .mockResolvedValueOnce({ success: true })
+
+      const req = createMockNextRequest("/api/bookings", "POST", {
+        gameSession,
+        playerLevel: PlayLevel.beginner,
+      } satisfies CreateBookingRequest)
+      const res = await POST(req)
+
+      expect(res.status).toBe(StatusCodes.CREATED)
+      expect(sendBookingConfirmationSpy).toHaveBeenCalledTimes(1)
+      expect(sendBookingConfirmationSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: expect.any(String),
+          user: expect.objectContaining({
+            id: casualUserMock.id,
+            email: casualUserMock.email,
+          }),
+          gameSession: expect.objectContaining({
+            id: gameSession.id,
+          }),
+        }),
+      )
     })
 
     it("should return a 409 if the user has already made a booking for the session", async () => {
