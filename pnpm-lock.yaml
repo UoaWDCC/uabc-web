@@ -153,6 +153,9 @@ importers:
       '@repo/test-config':
         specifier: workspace:*
         version: link:../../packages/test-config
+      '@repo/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config

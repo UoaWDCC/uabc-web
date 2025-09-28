@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@repo/shared": "workspace:*",
+    "@repo/theme": "workspace:*",
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/jsonwebtoken": "9.0.10",
