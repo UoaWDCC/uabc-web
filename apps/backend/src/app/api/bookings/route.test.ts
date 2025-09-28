@@ -312,6 +312,21 @@ describe("/api/bookings", async () => {
     })
   })
 
+  it("should return a 404 if there is no current semester", async () => {
+    cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+
+    const gameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+
+    const req = createMockNextRequest("", "POST", {
+      gameSession,
+      playerLevel: PlayLevel.beginner,
+    } satisfies CreateBookingRequest)
+    const res = await POST(req)
+
+    expect(res.status).toBe(StatusCodes.NOT_FOUND)
+    expect(await res.json()).toStrictEqual({ error: "Booking semester not found" })
+  })
+
   it("should return 400 if request body is invalid", async () => {
     cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
