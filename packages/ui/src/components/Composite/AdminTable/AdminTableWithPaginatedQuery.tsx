@@ -6,16 +6,19 @@ import { ManagementTable } from "@repo/ui/components/Generic"
 import type { UseInfiniteQueryResult } from "@tanstack/react-query"
 import { Dialog, useDisclosure } from "@yamada-ui/react"
 import dayjs from "dayjs"
-import { parseAsInteger, useQueryStates } from "nuqs"
+import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from "nuqs"
 import { memo, useCallback, useEffect, useMemo, useState } from "react"
 import { columns, type UserData } from "./Columns"
 import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
+
+// Extract column keys from the config
+const ALL_COLUMN_KEYS = COLUMNS_CONFIG.map((col) => col.key)
 
 /**
  * Props for the admin table with paginated data component.
  */
 interface AdminTableWithPaginatedDataProps {
-  useGetPaginatedData: (limit: PaginationQuery["limit"]) => UseInfiniteQueryResult<
+  useGetPaginatedData: (params: Omit<PaginationQuery, "page">) => UseInfiniteQueryResult<
     {
       pages: Array<{
         data: {
@@ -53,10 +56,13 @@ export const AdminTableWithPaginatedQuery = memo(
     const { open, onOpen, onClose } = useDisclosure()
     const [selectedUser, setSelectedUser] = useState<UserData | null>(null)
     const [isFetchingPages, setIsFetchingPages] = useState(false)
-    const [searchParams, _] = useQueryStates(
+    const [searchParams, setSearchParams] = useQueryStates(
       {
         page: parseAsInteger.withDefault(1),
         perPage: parseAsInteger.withDefault(20),
+        filter: parseAsString.withDefault(""),
+        columns: parseAsArrayOf(parseAsString).withDefault(ALL_COLUMN_KEYS),
+        selectedRows: parseAsArrayOf(parseAsString).withDefault([]),
       },
       {
         clearOnDefault: true,
@@ -68,7 +74,10 @@ export const AdminTableWithPaginatedQuery = memo(
       fetchNextPage,
       hasNextPage,
       isFetchingNextPage,
-    } = useGetPaginatedData(searchParams.perPage)
+    } = useGetPaginatedData({
+      limit: searchParams.perPage,
+      query: searchParams.filter,
+    })
 
     const currentPageCount = queriedData?.pages?.length || 0
     const needsMorePages = searchParams.page > currentPageCount
@@ -181,6 +190,15 @@ export const AdminTableWithPaginatedQuery = memo(
 
     const isLoadingData = isFetchingNextPage || isFetchingPages
 
+    const handleVisibleColumnsChange = (columns: string[]) => {
+      setSearchParams({ columns: columns.length === 0 ? null : columns })
+    }
+
+    const handleSelectedRowsChange = (rows: Set<string>) => {
+      const rowArray = Array.from(rows)
+      setSearchParams({ selectedRows: rowArray.length === 0 ? null : rowArray })
+    }
+
     const handleDeleteClick = (row: UserData) => {
       setSelectedUser(row)
       onOpen()
@@ -219,8 +237,13 @@ export const AdminTableWithPaginatedQuery = memo(
           providerProps={{
             totalItems: paginationMetadata.totalDocs,
             isLoading: isLoadingData,
+            queryState: searchParams,
+            onQueryStateChange: setSearchParams,
             onCurrentPageChange: handlePageChange,
             onPerPageChange: handlePerPageChange,
+            onVisibleColumnsChange: handleVisibleColumnsChange,
+            onSelectedRowsChange: handleSelectedRowsChange,
+            allColumnKeys: ALL_COLUMN_KEYS,
           }}
           rowId="id"
         />

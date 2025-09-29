@@ -76,6 +76,22 @@ export type ManagementTableProviderProps<
   rowId: keyof TData
   allColumnKeys: (keyof TData & string)[]
   filterConfigs: TConfigs
+  queryState?: {
+    filter: string
+    columns: string[]
+    selectedRows: string[]
+    page: number
+    perPage: number
+  }
+  onQueryStateChange?: (
+    updates: Partial<{
+      filter: string | null
+      columns: string[] | null
+      selectedRows: string[] | null
+      page: number | null
+      perPage: number | null
+    }>,
+  ) => void
   onFilterChange?: (filterValue: string) => void
   onVisibleColumnsChange?: (columns: string[]) => void
   onSelectedRowsChange?: (rows: Set<string>) => void
@@ -99,6 +115,8 @@ export const ManagementTableProvider = <
   data,
   isLoading,
   rowId,
+  queryState,
+  onQueryStateChange,
   onFilterChange,
   onVisibleColumnsChange,
   onSelectedRowsChange,
@@ -109,7 +127,9 @@ export const ManagementTableProvider = <
   totalItems,
   allColumnKeys,
 }: ManagementTableProviderProps<TData, TConfigs>) => {
-  const [searchParams, setSearchParams] = useQueryStates(
+  const canUseParentQueryState = !!queryState && !!onQueryStateChange
+
+  const [internalSearchParams, setInternalSearchParams] = useQueryStates(
     {
       filter: parseAsString.withDefault(""),
       columns: parseAsArrayOf(parseAsString).withDefault(allColumnKeys),
@@ -121,6 +141,9 @@ export const ManagementTableProvider = <
       clearOnDefault: true,
     },
   )
+
+  const searchParams = canUseParentQueryState ? queryState : internalSearchParams
+  const setSearchParams = canUseParentQueryState ? onQueryStateChange : setInternalSearchParams
 
   const {
     filter: filterValue,
@@ -161,8 +184,7 @@ export const ManagementTableProvider = <
 
   const filteredData = useMemo(() => {
     let filtered = members
-    // Apply generic text filter
-    if (filterValue) {
+    if (!canUseParentQueryState && filterValue) {
       const kebabFilter = toKebabCase(filterValue)
       filtered = filtered.filter((member) => {
         return searchInFields.some((field) => {
@@ -191,11 +213,14 @@ export const ManagementTableProvider = <
       }
     })
     return Array.isArray(filtered) ? filtered : []
-  }, [members, filterValue, searchInFields, fieldFilters, toKebabCase])
+  }, [members, filterValue, searchInFields, fieldFilters, toKebabCase, canUseParentQueryState])
 
   const totalPages = useMemo(() => {
+    if (canUseParentQueryState && totalItems !== undefined) {
+      return Math.ceil(totalItems / perPage)
+    }
     return Math.ceil(filteredData.length / perPage)
-  }, [filteredData.length, perPage])
+  }, [filteredData.length, perPage, canUseParentQueryState, totalItems])
 
   const paginatedData = useMemo(() => {
     if (!Array.isArray(filteredData)) return []
@@ -356,8 +381,11 @@ export const ManagementTableProvider = <
       value: FieldFiltersFromConfig<TData, TConfigs>[K],
     ) => {
       setFieldFilters((prev) => ({ ...prev, [key]: value }))
+      setSearchParams({
+        page: 1,
+      })
     },
-    [],
+    [setSearchParams],
   )
 
   const clearFieldFilter = useCallback((key: keyof FieldFiltersFromConfig<TData, TConfigs>) => {
