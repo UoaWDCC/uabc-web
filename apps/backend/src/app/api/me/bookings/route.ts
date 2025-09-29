@@ -1,4 +1,4 @@
-import { BookingQueryType } from "@repo/shared"
+import { BookingQueryType, getPayloadObjectId } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
@@ -13,7 +13,7 @@ class RouteWrapper {
       const bookingDataService = new BookingDataService()
       const gameSessionDataService = new GameSessionDataService()
       const { searchParams } = new URL(req.url)
-      const type = searchParams.get("type") ?? BookingQueryType.ALL
+      const type = searchParams.get("type") || BookingQueryType.ALL
 
       if (!Object.values(BookingQueryType).includes(type as BookingQueryType)) {
         return NextResponse.json(
@@ -23,14 +23,19 @@ class RouteWrapper {
       }
 
       let bookings = await bookingDataService.getAllBookingsByUserId(req.user.id)
-
       if (type === BookingQueryType.FUTURE) {
-        bookings = bookings.filter(async (booking) => {
-          const gameSession = await gameSessionDataService.getGameSessionById(
-            typeof booking.gameSession === "string" ? booking.gameSession : booking.gameSession.id,
-          )
-          return new Date(gameSession.startTime).getTime() > Date.now()
-        })
+        const bookingsWithSessions = await Promise.all(
+          bookings.map(async (booking) => {
+            const gameSession = await gameSessionDataService.getGameSessionById(
+              getPayloadObjectId(booking.gameSession),
+            )
+            return { booking, gameSession }
+          }),
+        )
+
+        bookings = bookingsWithSessions
+          .filter(({ gameSession }) => Date.parse(gameSession.startTime) > Date.now())
+          .map(({ booking }) => booking)
       }
 
       return NextResponse.json({ data: bookings })

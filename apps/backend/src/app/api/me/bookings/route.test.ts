@@ -5,8 +5,11 @@ import { cookies } from "next/headers"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
-import { bookingCreateMock, futureBookingCreateMock } from "@/test-config/mocks/Booking.mock"
-import { futureGameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
+import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
+import {
+  futureGameSessionCreateMock,
+  gameSessionCreateMock,
+} from "@/test-config/mocks/GameSession.mock"
 import { casualToken } from "@/test-config/vitest.setup"
 import { GET } from "./route"
 
@@ -47,16 +50,23 @@ describe("/api/me/bookings", async () => {
     it("should return all future bookings for the current user if query type is set to future", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
 
-      const { id } = await gameSessionDataService.createGameSession(futureGameSessionCreateMock)
-      console.log(await gameSessionDataService.getGameSessionById(id))
+      const pastGameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: new Date(2020, 0, 1).toISOString(),
+        endTime: new Date(2020, 0, 1).toISOString(),
+      })
+      const futureGameSession = await gameSessionDataService.createGameSession(
+        futureGameSessionCreateMock,
+      )
 
       const bookingsToCreate = [
         ...Array.from({ length: 15 }, (_, _i) => ({
           ...bookingCreateMock,
+          gameSession: pastGameSession,
         })),
         {
-          ...futureBookingCreateMock,
-          gameSession: id,
+          ...bookingCreateMock,
+          gameSession: futureGameSession,
         },
       ]
       await Promise.all(bookingsToCreate.map((u) => bookingDataService.createBooking(u)))
@@ -67,8 +77,8 @@ describe("/api/me/bookings", async () => {
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
       expect(json.data.length).toBe(1)
-      expect(json.data[0].gameSession).toBe(id)
-      expect(new Date(json.data[0].startTime).getTime()).toBeGreaterThan(Date.now())
+      expect(json.data[0].gameSession.id).toBe(futureGameSession.id)
+      expect(Date.parse(json.data[0].gameSession.startTime)).toBeGreaterThan(Date.now())
     })
 
     it("should throw 400 if the type query is invalid", async () => {
