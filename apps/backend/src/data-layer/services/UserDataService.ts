@@ -23,32 +23,54 @@ export default class UserDataService {
    *
    * @param limit The maximum documents to be returned, defaults to 10
    * @param page The specific page number to offset to, defaults to 1
+   * @param query The search query to filter users by name or email
+   * @param filter JSON string containing field-based filters
    * @returns a {@link PaginatedDocs} object containing {@link User} documents
    */
   public async getPaginatedUsers(
-    options: { limit?: number; page?: number; query?: string } = {
+    options: { limit?: number; page?: number; query?: string; filter?: string } = {
       limit: 10,
       page: 1,
     },
   ): Promise<PaginatedDocs<User>> {
+    const whereConditions: Where[] = []
+
+    if (options.query) {
+      const queryConditions = options.query
+        .split(/ /g)
+        .filter((token) => token)
+        .map((token) => ({
+          or: [
+            { firstName: { like: token } },
+            { lastName: { like: token } },
+            { email: { like: token } },
+          ] as Where[],
+        }))
+      whereConditions.push(...queryConditions)
+    }
+
+    if (options.filter) {
+      try {
+        const filters = JSON.parse(options.filter)
+        Object.entries(filters).forEach(([field, value]) => {
+          if (value && Array.isArray(value) && value.length > 0) {
+            whereConditions.push({
+              [field === "level" ? "playLevel" : field]: { in: value },
+            } as Where)
+          }
+        })
+      } catch (_error) {
+        return Promise.reject(new Error("Invalid filter JSON"))
+      }
+    }
+
+    const finalWhere = whereConditions.length > 0 ? { and: whereConditions } : undefined
+
     return await payload.find({
       collection: "user",
       limit: options.limit,
       page: options.page,
-      where: {
-        and: options.query
-          ? options.query
-              .split(/ /g)
-              .filter((token) => token)
-              .map((token) => ({
-                or: [
-                  { firstName: { like: token } },
-                  { lastName: { like: token } },
-                  { email: { like: token } },
-                ] as Where[],
-              }))
-          : [],
-      },
+      where: finalWhere,
     })
   }
 

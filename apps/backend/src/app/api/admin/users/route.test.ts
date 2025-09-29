@@ -99,6 +99,74 @@ describe("/api/admin/users", async () => {
       expect(json.data.docs.length).toBeGreaterThan(0) // Should return all users
     })
 
+    it("should allow field-based filtering", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const levelTestUser1 = await userDataService.createUser({
+        ...userCreateMock,
+        playLevel: "beginner",
+      })
+      const levelTestUser2 = await userDataService.createUser({
+        ...userCreateMock,
+        email: "straight2@zhao.com",
+        playLevel: "intermediate",
+      })
+      const levelTestUser3 = await userDataService.createUser({
+        ...userCreateMock,
+        email: "straight3@zhao.com",
+        playLevel: "advanced",
+      })
+
+      const req = createMockNextRequest(
+        `/api/admin/users?limit=10&page=1&filter=${encodeURIComponent(
+          JSON.stringify({ playLevel: ["beginner", "advanced"] }),
+        )}`,
+      )
+      const res = await GET(req)
+      const json = await res.json()
+
+      const returnedIds = json.data.docs.map((u: { id: string }) => u.id)
+      expect(returnedIds).toContain(levelTestUser1.id)
+      expect(returnedIds).toContain(levelTestUser3.id)
+      expect(returnedIds).not.toContain(levelTestUser2.id)
+    })
+
+    it("should handle empty filter arrays", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const res = await GET(createMockNextRequest("/api/admin/users?filter="))
+
+      expect(res.status).toBe(StatusCodes.OK)
+      const json = await res.json()
+      expect(json.data.docs.length).toBeGreaterThan(0)
+    })
+
+    it("should handle query strings and filters together", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const combinedTestUser = await userDataService.createUser({
+        ...userCreateMock,
+        email: "1abcd@defg.com",
+        playLevel: "beginner",
+      })
+      const otherUser = await userDataService.createUser({
+        ...userCreateMock,
+        email: "2abcd@defg.com",
+        playLevel: "intermediate",
+      })
+
+      const req = createMockNextRequest(
+        `/api/admin/users?query=1abcd&filter=${encodeURIComponent(
+          JSON.stringify({ playLevel: ["beginner"] }),
+        )}`,
+      )
+      const res = await GET(req)
+      const json = await res.json()
+
+      expect(json.data.docs).toStrictEqual([combinedTestUser])
+      expect(json.data.docs).not.toContain(otherUser)
+    })
+
     it("should use default pagination if params are missing", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
