@@ -60,7 +60,3 @@ export const SemesterDatePopUpSchema = z.object({
   endDate: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
 })
 
-export const SemesterBreakPopUpSchema = z.object({
-  breakStart: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  breakEnd: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-})
