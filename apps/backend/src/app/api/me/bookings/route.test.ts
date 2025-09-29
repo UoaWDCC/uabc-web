@@ -6,10 +6,7 @@ import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
 import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
-import {
-  futureGameSessionCreateMock,
-  gameSessionCreateMock,
-} from "@/test-config/mocks/GameSession.mock"
+import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { casualToken } from "@/test-config/vitest.setup"
 import { GET } from "./route"
 
@@ -56,7 +53,9 @@ describe("/api/me/bookings", async () => {
         endTime: new Date(2020, 0, 1).toISOString(),
       })
       const futureGameSession = await gameSessionDataService.createGameSession(
-        futureGameSessionCreateMock,
+        ...gameSessionCreateMock,
+        startTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
+        endTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
       )
 
       const bookingsToCreate = [
