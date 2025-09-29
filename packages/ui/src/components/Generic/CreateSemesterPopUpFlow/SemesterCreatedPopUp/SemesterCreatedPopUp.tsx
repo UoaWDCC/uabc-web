@@ -28,6 +28,29 @@ export interface SemesterCreatedPopUpProps extends DialogProps {
   onClose: () => void
 }
 
+/**
+ * A dialog component that displays a confirmation pop-up after a semester is created.
+ *
+ * The `SemesterCreatedPopUp` shows a customizable title and optional subtitle,
+ * and provides a close button to dismiss the dialog. It extends the base `DialogProps`
+ * from `@yamada-ui/react` for additional dialog configuration.
+ *
+ * @remarks
+ * This component is typically used as the final step in a semester creation flow,
+ * providing feedback to the user that the process has completed successfully.
+ *
+ * @example
+ * ```tsx
+ * <SemesterCreatedPopUp
+ *   isOpen={isOpen}
+ *   onClose={handleClose}
+ *   title="Semester Created"
+ *   subtitle="The new semester has been successfully created."
+ * />
+ * ```
+ *
+ * @param props - {@link SemesterCreatedPopUpProps} including dialog configuration, title, subtitle, and close handler.
+ */
 export const SemesterCreatedPopUp = ({
   title,
   subtitle,

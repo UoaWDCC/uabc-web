@@ -40,6 +40,19 @@ export interface SemesterNamePopUpProps {
   onCancel?: () => void
 }
 
+/**
+ * A popup dialog component for creating a new semester by entering its name.
+ *
+ * This component renders a modal dialog with a form that allows the user to input
+ * the name of a new semester. It uses react-hook-form for form state management and
+ * validation with Zod schema. The dialog provides Cancel and Confirm actions.
+ *
+ * @param defaultValues - Optional default values to pre-fill the form.
+ * @param open - Controls whether the popup is open.
+ * @param onConfirm - Callback invoked when the form is submitted successfully.
+ * @param onCancel - Callback invoked when the dialog is closed or the Cancel button is clicked.
+ * @returns The SemesterNamePopUp dialog component.
+ */
 export const SemesterNamePopUp: FC<SemesterNamePopUpProps> = memo(
   ({ defaultValues, open, onConfirm, onCancel, ...props }) => {
     const {

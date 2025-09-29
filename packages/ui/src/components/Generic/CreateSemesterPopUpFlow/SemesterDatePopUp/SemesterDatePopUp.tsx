@@ -59,6 +59,27 @@ export interface SemesterDatePopUpProps {
   onClose?: () => void
 }
 
+/**
+ * A pop-up dialog component for selecting a semester date range.
+ *
+ * Displays a calendar for users to pick a start and end date for a semester,
+ * along with contextual information such as the semester name and a customizable title.
+ *
+ * The component supports navigation (back/next), cancellation, and pre-filling of date values.
+ *
+ * @component
+ * @param {SemesterDatePopUpProps} props - The properties for the SemesterDatePopUp component.
+ * @param {boolean} props.open - Whether the pop-up dialog is open.
+ * @param {string} props.title - The main title displayed in the pop-up.
+ * @param {string} [props.subtitle] - Optional subtitle or additional information.
+ * @param {string} props.semesterName - The name of the semester to display.
+ * @param {{ startDate: string; endDate: string }} [props.defaultValues] - Optional default date range to pre-fill the calendar.
+ * @param {(data: { startDate: string; endDate: string }) => void} [props.onNext] - Handler called when the user clicks the next button, receiving the selected date range.
+ * @param {() => void} [props.onBack] - Handler called when the user clicks the back button.
+ * @param {() => void} [props.onClose] - Handler called when the user cancels or closes the dialog.
+ *
+ * @returns {JSX.Element} The rendered SemesterDatePopUp dialog.
+ */
 export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
   ({ onBack, onNext, open, onClose, title, semesterName, subtitle, defaultValues, ...props }) => {
     const [selectedDate, setSelectedDate] = useState<Date | [Date?, Date?] | null>(null)
