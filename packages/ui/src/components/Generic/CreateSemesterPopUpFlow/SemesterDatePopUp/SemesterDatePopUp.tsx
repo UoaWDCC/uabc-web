@@ -1,9 +1,8 @@
-// import { zodResolver } from "@hookform/resolvers/zod"
-import type { SemesterDatePopUpValues } from "@repo/shared"
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import { Calendar } from "@yamada-ui/calendar"
-import { ArrowLeft, SquareDashedMousePointer } from "@yamada-ui/lucide"
+import { ArrowLeft, ArrowRight, SquareDashedMousePointer } from "@yamada-ui/lucide"
 import {
+  ButtonGroup,
   Dialog,
   DialogBody,
   DialogCloseButton,
@@ -15,14 +14,9 @@ import {
   Text,
   VStack,
 } from "@yamada-ui/react"
-import type { SubmitHandler } from "react-hook-form"
+import { useEffect, useState } from "react"
 
 export interface SemesterDatePopUpProps {
-  /**
-   * Default values to pre-fill the form.
-   */
-  defaultValues?: SemesterDatePopUpValues
-
   /**
    * Whether the popup is open or not.
    * @default false
@@ -40,9 +34,9 @@ export interface SemesterDatePopUpProps {
   subtitle?: string
 
   /**
-   * Submit handler called when user submits the form.
+   * Handler called when the user clicks the next button.
    */
-  onNext?: SubmitHandler<SemesterDatePopUpValues>
+  onNext?: (data: { startDate: string; endDate: string }) => void
 
   /**
    * Handler called when the user clicks the cancel button or closes the dialog.
@@ -51,14 +45,57 @@ export interface SemesterDatePopUpProps {
 }
 
 export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
-  ({ defaultValues, onNext, open, onClose, title, subtitle, ...props }) => {
-    // const {
-    //   //   register,
-    //   //   handleSubmit,
-    // } = useForm<SemesterDatePopUpValues>({
-    //   resolver: zodResolver(SemesterDatePopUpSchema),
-    //   defaultValues,
-    // })
+  ({ onNext, open, onClose, title, subtitle, ...props }) => {
+    const [selectedDate, setSelectedDate] = useState<Date | [Date?, Date?] | null>(null)
+
+    // Reset selected date when component opens
+    useEffect(() => {
+      if (open) {
+        setSelectedDate(null)
+      }
+    }, [open])
+
+    const handleCalendarChange = (date: Date | [Date?, Date?]) => {
+      setSelectedDate(date)
+    }
+
+    const handleNext = () => {
+      if (selectedDate && Array.isArray(selectedDate) && selectedDate[0] && selectedDate[1]) {
+        onNext?.({
+          startDate: selectedDate[0].toISOString(),
+          endDate: selectedDate[1].toISOString(),
+        })
+      }
+    }
+
+    const formatSelectedDate = () => {
+      if (!selectedDate) return subtitle || "Select a date range"
+
+      let dateText = ""
+      if (Array.isArray(selectedDate)) {
+        const [start, end] = selectedDate
+        if (start && end) {
+          dateText = `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`
+        } else if (start) {
+          dateText = start.toLocaleDateString()
+        } else if (end) {
+          dateText = end.toLocaleDateString()
+        }
+      } else {
+        dateText = selectedDate.toLocaleDateString()
+      }
+
+      return (
+        <>
+          You have selected:
+          <br />
+          <br />
+          <Text as="span" fontWeight="bold">
+            {dateText}
+          </Text>
+        </>
+      )
+    }
 
     return (
       <Dialog
@@ -88,18 +125,20 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
           templateColumns={{ base: "1fr", md: "6fr 0.2fr 4fr" }}
           w="full"
         >
-          <VStack
-            gap="lg"
-            h="full"
-            justifyContent="center"
-            placeItems={{ base: "center", md: "start" }}
-          >
+          <VStack gap="lg" h="full" placeItems={{ base: "center", md: "start" }}>
             <Heading.h1>Create New Semester</Heading.h1>
             <Text fontSize="2xl" fontWeight="normal">
               Semester Name{" "}
             </Text>
             <VStack w="auto">
-              <Calendar background="blackAlpha.500" layerStyle="gradientBorder" size="lg" />
+              <Calendar
+                background="blackAlpha.500"
+                enableRange
+                layerStyle="gradientBorder"
+                onChange={handleCalendarChange}
+                size="lg"
+                value={selectedDate ?? undefined}
+              />
             </VStack>
           </VStack>
           <VStack
@@ -108,7 +147,7 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
             h="full"
             justifyContent="center"
           >
-            <Divider bg="grey" h="100%" orientation="vertical" w="2px" />
+            <Divider bg="grey" h="xl" orientation="vertical" w="2px" />
           </VStack>
           <VStack
             alignItems="center"
@@ -118,19 +157,40 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
             placeItems={{ base: "center", md: "center" }}
           >
             <DialogBody alignItems="center" gap="xl" justifyContent="center">
-              <Heading.h2 fontSize="2xl" fontWeight="medium">
+              <Heading.h2
+                fontSize="2xl"
+                fontWeight="medium"
+                textAlign="center"
+                whiteSpace="pre-line"
+              >
                 {title}
               </Heading.h2>
-              <Heading.h3 fontSize="sm" fontWeight="hairline" textAlign="center">
-                {subtitle}
+              <Heading.h3
+                fontSize="sm"
+                fontWeight="hairline"
+                textAlign="center"
+                whiteSpace="pre-line"
+              >
+                {formatSelectedDate()}
               </Heading.h3>
               <SquareDashedMousePointer fontSize="120px" strokeWidth={0.5} />
             </DialogBody>
             <DialogFooter>
-              <Button gap="0" onClick={() => {}}>
-                <ArrowLeft />
-                Back
-              </Button>
+              <ButtonGroup flexDirection="column" gap="md">
+                {selectedDate &&
+                  Array.isArray(selectedDate) &&
+                  selectedDate[0] &&
+                  selectedDate[1] && (
+                    <Button colorScheme="primary" gap="0" onClick={handleNext}>
+                      Next
+                      <ArrowRight />
+                    </Button>
+                  )}
+                <Button colorScheme="secondary" gap="0" onClick={onClose}>
+                  <ArrowLeft />
+                  Back
+                </Button>
+              </ButtonGroup>
             </DialogFooter>
           </VStack>
         </SimpleGrid>

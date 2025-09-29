@@ -35,7 +35,7 @@ export const Default: Story = {
             setIsOpen(false)
           }}
           onNext={(data) => {
-            console.log("Next clicked with data:", data)
+            console.log("Next clicked with semester data:", data)
             setIsOpen(false)
           }}
           open={isOpen}
@@ -45,10 +45,34 @@ export const Default: Story = {
   },
   args: {
     title: "Start & End Dates",
-    subtitle: "Select start and end dates for [Semester Name]",
-    defaultValues: {
-      startDate: "",
-      endDate: "",
-    },
+    subtitle: "Select the start and end dates for the semester period",
+  },
+}
+
+export const BreakDates: Story = {
+  render: (args) => {
+    const [isOpen, setIsOpen] = useState(false)
+
+    return (
+      <>
+        <Button onClick={() => setIsOpen(true)}>Set Break Dates</Button>
+        <SemesterDatePopUp
+          {...args}
+          onClose={() => {
+            console.log("Closed")
+            setIsOpen(false)
+          }}
+          onNext={(data) => {
+            console.log("Next clicked with break data:", data)
+            setIsOpen(false)
+          }}
+          open={isOpen}
+        />
+      </>
+    )
+  },
+  args: {
+    title: "Semester Break\nStart & End",
+    subtitle: "Select the start and end dates for the break period",
   },
 }
