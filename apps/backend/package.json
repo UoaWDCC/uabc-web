@@ -31,7 +31,7 @@
     "jsonwebtoken": "9.0.2",
     "next": "15.3.5",
     "nodemailer": "7.0.5",
-    "payload": "3.45.0",
+    "payload": "3.57.0",
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "sharp": "0.34.4",
