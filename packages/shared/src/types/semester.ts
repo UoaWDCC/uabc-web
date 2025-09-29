@@ -4,7 +4,6 @@ import type {
   GetAllSemestersResponseSchema,
   GetCurrentSemesterResponseSchema,
   GetSemesterResponseSchema,
-  SemesterBreakPopUpSchema,
   SemesterDatePopUpSchema,
   SemesterNamePopUpSchema,
   UpdateSemesterRequestSchema,
@@ -17,4 +16,3 @@ export type GetAllSemestersResponse = z.infer<typeof GetAllSemestersResponseSche
 export type GetCurrentSemesterResponse = z.infer<typeof GetCurrentSemesterResponseSchema>
 export type SemesterNamePopUpValues = z.infer<typeof SemesterNamePopUpSchema>
 export type SemesterDatePopUpValues = z.infer<typeof SemesterDatePopUpSchema>
-export type SemesterBreakPopUpValues = z.infer<typeof SemesterBreakPopUpSchema>
