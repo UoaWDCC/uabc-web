@@ -34,9 +34,24 @@ export interface SemesterDatePopUpProps {
   subtitle?: string
 
   /**
+   * Name of the semester to display in the pop-up.
+   */
+  semesterName: string
+
+  /**
+   * Default values to pre-fill the date selection.
+   */
+  defaultValues?: { startDate: string; endDate: string }
+
+  /**
    * Handler called when the user clicks the next button.
    */
   onNext?: (data: { startDate: string; endDate: string }) => void
+
+  /**
+   * Handler called when the user clicks the back button.
+   */
+  onBack?: () => void
 
   /**
    * Handler called when the user clicks the cancel button or closes the dialog.
@@ -45,15 +60,21 @@ export interface SemesterDatePopUpProps {
 }
 
 export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
-  ({ onNext, open, onClose, title, subtitle, ...props }) => {
+  ({ onBack, onNext, open, onClose, title, semesterName, subtitle, defaultValues, ...props }) => {
     const [selectedDate, setSelectedDate] = useState<Date | [Date?, Date?] | null>(null)
 
-    // Reset selected date when component opens
+    // Reset selected date when component opens, but restore from defaultValues if available
     useEffect(() => {
       if (open) {
-        setSelectedDate(null)
+        if (defaultValues) {
+          const startDate = new Date(defaultValues.startDate)
+          const endDate = new Date(defaultValues.endDate)
+          setSelectedDate([startDate, endDate])
+        } else {
+          setSelectedDate(null)
+        }
       }
-    }, [open])
+    }, [open, defaultValues])
 
     const handleCalendarChange = (date: Date | [Date?, Date?]) => {
       setSelectedDate(date)
@@ -128,7 +149,7 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
           <VStack gap="lg" h="full" placeItems={{ base: "center", md: "start" }}>
             <Heading.h1>Create New Semester</Heading.h1>
             <Text fontSize="2xl" fontWeight="normal">
-              Semester Name{" "}
+              {semesterName}
             </Text>
             <VStack w="auto">
               <Calendar
@@ -186,7 +207,7 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
                       <ArrowRight />
                     </Button>
                   )}
-                <Button colorScheme="secondary" gap="0" onClick={onClose}>
+                <Button colorScheme="secondary" gap="0" onClick={onBack}>
                   <ArrowLeft />
                   Back
                 </Button>

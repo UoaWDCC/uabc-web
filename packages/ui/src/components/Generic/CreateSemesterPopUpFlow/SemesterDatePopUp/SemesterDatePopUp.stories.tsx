@@ -46,6 +46,7 @@ export const Default: Story = {
   args: {
     title: "Start & End Dates",
     subtitle: "Select the start and end dates for the semester period",
+    semesterName: "Fall 2024",
   },
 }
 
@@ -74,5 +75,6 @@ export const BreakDates: Story = {
   args: {
     title: "Semester Break\nStart & End",
     subtitle: "Select the start and end dates for the break period",
+    semesterName: "Fall 2024",
   },
 }
