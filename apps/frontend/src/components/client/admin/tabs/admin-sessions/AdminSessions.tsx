@@ -13,7 +13,7 @@ import type { SessionData } from "@repo/ui/components/Composite/AdminSessionsTab
 import { usePopupState } from "@repo/ui/hooks"
 import { Grid, GridItem, useNotice, VStack } from "@yamada-ui/react"
 import { parseAsString, useQueryState } from "nuqs"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { useUpdateBooking } from "@/services/admin/bookings/AdminBookingMutations"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
 import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
@@ -86,14 +86,17 @@ export const AdminSessions = () => {
     "change-session-flow-date",
     parseAsString,
   )
-  const [bookingToChange, setBookingToChange] = useState<SessionData | null>(null)
   const notice = useNotice()
 
   const changeSessionPopup = usePopupState({
     popupId: Popup.CHANGE_SESSION_FLOW,
     initialValue: "",
+    onValueChange: () => {
+      // The booking ID is now managed through the URL parameter
+    },
     onClose: () => {
-      setBookingToChange(null)
+      // Clear the booking ID from URL when closing
+      changeSessionPopup.clearValue()
     },
   })
 
@@ -146,6 +149,14 @@ export const AdminSessions = () => {
     return bookingsData.data.map(transformBookingToSessionData)
   }, [bookingsData])
 
+  const bookingToChange = useMemo(() => {
+    const bookingId = changeSessionPopup.value
+    if (!bookingId || !selectedSessionAttendees.length) {
+      return null
+    }
+    return selectedSessionAttendees.find((attendee) => attendee.id === bookingId) || null
+  }, [changeSessionPopup.value, selectedSessionAttendees])
+
   const handleDateSelect = (date: Date) => {
     const dateString = dayjs.tz(date, "Pacific/Auckland").format("YYYY-MM-DD")
     setDateParam(dateString)
@@ -171,7 +182,7 @@ export const AdminSessions = () => {
   }
 
   const handleTableChangeSession = (row: SessionData) => {
-    setBookingToChange(row)
+    changeSessionPopup.setValue(row.id)
     changeSessionPopup.open()
   }
 
@@ -194,7 +205,6 @@ export const AdminSessions = () => {
             description: "Booking updated successfully",
             status: "success",
           })
-          setBookingToChange(null)
           changeSessionPopup.close()
         },
         onError: (error) => {
