@@ -8,10 +8,23 @@ import { columns, type SessionData } from "./Columns"
 /**
  * A table for admin to manage users in a session.
  */
-export const AdminSessionsTable = memo(({ data }: { data: SessionData[] }) => {
+export interface AdminSessionsTableProps {
+  data: SessionData[]
+  onChangeSession?: (row: SessionData) => void
+}
+
+export const AdminSessionsTable = memo(({ data, onChangeSession }: AdminSessionsTableProps) => {
   return (
     <ManagementTable
       actions={[
+        ...(onChangeSession
+          ? [
+              {
+                text: "Change Session",
+                onClick: onChangeSession,
+              },
+            ]
+          : []),
         {
           text: "Edit",
           onClick: (row: SessionData) => {

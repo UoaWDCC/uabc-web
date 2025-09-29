@@ -27,6 +27,10 @@ export interface AdminGameSessionCardProps extends Omit<CardProps, "children"> {
    * Callback function when export button is clicked.
    */
   onExport?: () => void
+  /**
+   * Callback function when change session button is clicked.
+   */
+  onChangeSession?: () => void
 }
 
 /**
@@ -54,7 +58,7 @@ export interface AdminGameSessionCardProps extends Omit<CardProps, "children"> {
  * />
  */
 export const AdminGameSessionCard = memo(
-  ({ gameSession, onExport, ...cardProps }: AdminGameSessionCardProps) => {
+  ({ gameSession, onExport, onChangeSession, ...cardProps }: AdminGameSessionCardProps) => {
     const { day, status, startTime, endTime, name, location, attendees, capacity } = gameSession
 
     const colorScheme = getStatusColor(status)
@@ -105,9 +109,16 @@ export const AdminGameSessionCard = memo(
           </VStack>
         </CardBody>
         <CardFooter>
-          <Button colorScheme="primary" onClick={onExport} rounded="xl" size="md" w="full">
-            Export Member List as CSV
-          </Button>
+          <VStack gap="sm" w="full">
+            {onChangeSession && (
+              <Button colorScheme="secondary" onClick={onChangeSession} rounded="xl" size="md" w="full">
+                Change Session
+              </Button>
+            )}
+            <Button colorScheme="primary" onClick={onExport} rounded="xl" size="md" w="full">
+              Export Member List as CSV
+            </Button>
+          </VStack>
         </CardFooter>
       </Card>
     )

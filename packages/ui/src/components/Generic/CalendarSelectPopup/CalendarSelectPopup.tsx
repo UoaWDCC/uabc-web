@@ -1,16 +1,23 @@
 "use client"
 
 import { Heading, IconButton } from "@repo/ui/components/Primitive"
+import { useAdminSessionsCalendar } from "@repo/ui/hooks"
 import { Calendar } from "@yamada-ui/calendar"
 import { CalendarIcon } from "@yamada-ui/lucide"
 import {
+  Center,
   Dialog,
   DialogBody,
   DialogCloseButton,
   DialogFooter,
   DialogHeader,
+  dataAttr,
+  Float,
   SimpleGrid,
+  Tag,
   Text,
+  Tooltip,
+  useComponentStyle,
   VStack,
 } from "@yamada-ui/react"
 import { memo, useCallback, useMemo } from "react"
@@ -23,7 +30,8 @@ import { useCalendarSelectPopup } from "./useCalendarSelectPopup"
  *
  * A comprehensive calendar component that combines a calendar picker with popup dialog
  * functionality. Supports both single date and date range selection, URL state
- * synchronization, multi-step flows, and custom content areas.
+ * synchronization, multi-step flows, custom content areas, and session-aware calendar
+ * functionality for displaying game sessions.
  *
  * @param props CalendarSelectPopup component properties
  * @returns A memoized calendar popup component
@@ -45,6 +53,17 @@ import { useCalendarSelectPopup } from "./useCalendarSelectPopup"
  *   initialDate={[undefined, undefined]}
  *   calendarProps={{ enableRange: true }}
  *   onDateSelect={(dates) => console.log("Range:", dates)}
+ *   showTrigger
+ * />
+ *
+ * // Session-aware calendar with game sessions
+ * <CalendarSelectPopup
+ *   popupId="session-calendar"
+ *   title="Select Session Date"
+ *   gameSessions={sessions}
+ *   showSessionIndicators
+ *   disableInactiveDates
+ *   onDateSelect={(date) => console.log("Selected:", date)}
  *   showTrigger
  * />
  *
@@ -71,6 +90,8 @@ import { useCalendarSelectPopup } from "./useCalendarSelectPopup"
  * The component automatically handles URL state synchronization, allowing for
  * deep linking and browser navigation support. It integrates with the
  * CalendarSelectPopupContext to provide step navigation and date state to child components.
+ * When gameSessions are provided, the calendar becomes session-aware, showing session
+ * indicators and disabling dates without sessions.
  */
 export const CalendarSelectPopup = memo(
   <T extends boolean = false>(props: CalendarSelectPopupProps<T>) => {
@@ -97,6 +118,9 @@ export const CalendarSelectPopup = memo(
       trigger,
       triggerProps,
       children,
+      gameSessions = [],
+      showSessionIndicators = gameSessions.length > 0,
+      disableInactiveDates = gameSessions.length > 0,
     } = props
 
     const {
@@ -114,6 +138,16 @@ export const CalendarSelectPopup = memo(
       onDateSelect,
       onClose,
       onOpen,
+    })
+
+    const { getSessionsForDate, isDateActive, getTotalAttendeesForDate, getTotalCapacityForDate } =
+      useAdminSessionsCalendar({
+        gameSessions,
+      })
+
+    const [styles] = useComponentStyle("IconButton", {
+      colorScheme: "secondary",
+      size: "xs",
     })
 
     const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen
@@ -147,7 +181,6 @@ export const CalendarSelectPopup = memo(
       () => ({
         colorScheme: "primary" as const,
         size: "lg" as const,
-        type: "date" as const,
         locale: "nz" as const,
         ...calendarProps,
         value:
@@ -157,8 +190,86 @@ export const CalendarSelectPopup = memo(
               ? (selectedDate as [Date?, Date?] | undefined)
               : (selectedDate as Date | undefined),
         onChange: handleCalendarChange,
+        ...(disableInactiveDates && {
+          excludeDate: (date: Date) => !isDateActive(date),
+        }),
+        ...(showSessionIndicators && {
+          dayProps: {
+            h: "auto",
+            p: "1",
+            _selected: {},
+            _hover: {},
+            _active: {},
+            _ripple: {
+              display: "none",
+            },
+            transitionProperty: "none",
+            overflow: "visible",
+            component: ({ date, selected }: { date: Date; selected: boolean }) => {
+              const sessions = getSessionsForDate(date)
+              const active = isDateActive(date)
+              const totalAttendees = getTotalAttendeesForDate(date)
+              const totalCapacity = getTotalCapacityForDate(date)
+              const tooltipLabel = `${totalAttendees} / ${totalCapacity} attendees`
+
+              const colorScheme = totalAttendees >= totalCapacity ? "danger" : "success"
+
+              return (
+                <Center
+                  __css={styles}
+                  _disabled={{
+                    bg: "transparent !important",
+                    _before: {
+                      display: "none",
+                    },
+                    cursor: "not-allowed",
+                  }}
+                  _selected={{
+                    bg: "$colors.primary !important",
+                  }}
+                  data-disabled={dataAttr(!active)}
+                  data-selected={dataAttr(selected && active)}
+                  minH={{ base: "9", sm: "10" }}
+                  minW={{ base: "9", sm: "10" }}
+                  overflow="visible"
+                >
+                  {date.getDate()}
+                  {sessions.length > 0 && (
+                    <Float>
+                      <Tooltip label={tooltipLabel}>
+                        <Tag
+                          aria-label={tooltipLabel}
+                          colorScheme={colorScheme}
+                          fontSize="xs"
+                          lineHeight="1"
+                          minH="4"
+                          minW="4"
+                          p="1"
+                          size="sm"
+                        >
+                          {totalAttendees}
+                        </Tag>
+                      </Tooltip>
+                    </Float>
+                  )}
+                </Center>
+              )
+            },
+          },
+        }),
       }),
-      [calendarProps, selectedDate, handleCalendarChange],
+      [
+        calendarProps,
+        selectedDate,
+        handleCalendarChange,
+        disableInactiveDates,
+        isDateActive,
+        showSessionIndicators,
+        getSessionsForDate,
+        getTotalAttendeesForDate,
+        getTotalCapacityForDate,
+        styles,
+      ],
     )
 
     const resolvedDialogProps = useMemo(
