@@ -10,9 +10,7 @@ const meta: Meta<typeof SemesterCreatedPopUp> = {
   title: "Generic Components/CreateSemesterPopUpFlow/SemesterCreatedPopUp",
   decorators: [
     (Story) => (
-      <div
-        style={{ height: "50vh", display: "flex", alignItems: "center", justifyContent: "center" }}
-      >
+      <div>
         <Story />
       </div>
     ),
