@@ -1,5 +1,6 @@
 import { type AdminTabBarSlug, validSlugs } from "@repo/shared"
 import { VStack } from "@yamada-ui/react"
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { AdminClient } from "@/components/client/admin/AdminClient"
 
@@ -7,6 +8,15 @@ type AdminSlugPageProps = {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateMetadata({ params }: AdminSlugPageProps): Promise<Metadata> {
+  const { slug } = await params
+
+  return {
+    title: `Manage ${slug[0].toUpperCase() + slug.slice(1)}`,
+    description: `Manage ${slug} through the administrator dashboard.`,
+  }
 }
 
 export default async function AdminSlugPage({ params }: AdminSlugPageProps) {
