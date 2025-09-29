@@ -84,7 +84,8 @@ export const AdminSessions = () => {
   // Get current semester
   const { data: currentSemester } = useGetCurrentSemester()
   
-  // Get all game sessions for the current semester instead of just current sessions
+  // Get all game sessions for the current semester (past, present, and future)
+  // This allows admins to see all sessions within a semester, not just upcoming ones
   const { data: gameSessionsData } = useGetAllGameSessionsBySemester(
     currentSemester?.data?.id || ""
   )
