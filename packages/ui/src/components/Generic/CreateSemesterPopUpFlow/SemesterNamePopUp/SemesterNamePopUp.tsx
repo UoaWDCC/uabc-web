@@ -1,3 +1,5 @@
+"use client"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { SemesterNamePopUpSchema, type SemesterNamePopUpValues } from "@repo/shared"
 import { Button, Heading, TextInput } from "@repo/ui/components/Primitive"
