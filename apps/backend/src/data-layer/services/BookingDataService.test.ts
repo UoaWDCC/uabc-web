@@ -1,4 +1,5 @@
 import type { CreateSemesterData, EditBookingData } from "@repo/shared"
+import { Weekday } from "@repo/shared"
 import { casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
@@ -170,6 +171,7 @@ describe("bookingDataService", () => {
         memberUserMock.id,
         semester,
       )
+
       expect(fetchedBookings.length).toStrictEqual(2)
       expect(fetchedBookings).toEqual(expect.arrayContaining([booking1, booking2]))
     })
@@ -201,6 +203,53 @@ describe("bookingDataService", () => {
         semester,
       )
       expect(fetchedBookings.length).toStrictEqual(0)
+    })
+
+    it("should go back to previous week when on booking open day but before booking open time", async () => {
+      const now = new Date()
+
+      // Create semester with booking opening much later in the day to ensure
+      // we're always "before" the booking open time during test execution
+      const currentSemesterCreateMock: CreateSemesterData = {
+        ...semesterCreateMock,
+        startDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1)).toISOString(),
+        endDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 4, 0)).toISOString(),
+        bookingOpenDay: Weekday.monday,
+        bookingOpenTime: new Date(1970, 0, 1, 23, 59).toISOString(), // 11:59 PM
+      }
+
+      const semester = await semesterDataService.createSemester(currentSemesterCreateMock)
+
+      // Create a game session that would be in the "previous week's" booking period
+      // Since booking opens at 11:59 PM on Monday, and our test runs earlier,
+      // the method should look at the previous Monday 11:59 PM to this Monday 11:59 PM
+      const sessionStartTime = new Date(now)
+      const sessionEndTime = new Date(sessionStartTime)
+      sessionEndTime.setUTCMinutes(sessionStartTime.getUTCMinutes() + 60)
+
+      const gameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: sessionStartTime.toISOString(),
+        endTime: sessionEndTime.toISOString(),
+        semester: semester.id,
+      })
+
+      const booking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: memberUserMock,
+        gameSession: gameSession.id,
+      })
+
+      // When this method runs on Monday before 11:59 PM, it should:
+      // 1. Detect we're on Monday (booking open day) but before 11:59 PM (booking open time)
+      // 2. Add 7 days to daysDifference to look at previous week's booking period
+      // 3. Find the booking we just created since it's within that expanded range
+      const fetchedBookings = await bookingDataService.getAllCurrentWeekBookingsByUserId(
+        memberUserMock.id,
+        semester,
+      )
+
+      expect(fetchedBookings).toEqual([booking])
     })
   })
 
