@@ -21,6 +21,7 @@ import { FAQ } from "./data-layer/globals/Faq"
 import { Footer } from "./data-layer/globals/Footer"
 import { LocationBubble } from "./data-layer/globals/LocationBubble"
 import { Navbar } from "./data-layer/globals/Navbar"
+import { Onboarding } from "./data-layer/globals/Onboarding"
 import { Tos } from "./data-layer/globals/Tos"
 
 declare module "payload" {
@@ -54,7 +55,7 @@ export default buildConfig({
     Booking,
     Authentication,
   ],
-  globals: [FAQ, Footer, LocationBubble, Navbar, Tos, AboutUsInfo],
+  globals: [FAQ, Footer, LocationBubble, Navbar, Tos, AboutUsInfo, Onboarding],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
@@ -67,6 +68,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
     allowIDOnCreate: process.env.NODE_ENV === "test",
+    transactionOptions: {},
   }),
   email:
     process.env.NODE_ENV === "production"

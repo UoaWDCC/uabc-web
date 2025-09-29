@@ -4,6 +4,12 @@ import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
+import {
+  commitCascadeTransaction,
+  createTransactionId,
+  rollbackCascadeTransaction,
+} from "@/data-layer/adapters/Transaction"
+import BookingDataService from "@/data-layer/services/BookingDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 
 class UserRouteWrapper {
@@ -70,19 +76,38 @@ class UserRouteWrapper {
   /**
    * DELETE method to delete a single user by ID.
    *
-   * @param _req The request object
+   * @param req The request object containing the query parameters
    * @param params The route parameters containing the user ID
    * @returns No content response if successful, otherwise appropriate error response
    */
   @Security("jwt", ["admin"])
-  static async DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  static async DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
+
+    let cascadeTransactionId: string | number | undefined
+    const deleteRelatedDocs =
+      (req.nextUrl.searchParams.get("deleteRelatedDocs") || "true") === "true"
+
+    const userDataService = new UserDataService()
+    const bookingDataService = new BookingDataService()
     try {
-      const { id } = await params
-      const userDataService = new UserDataService()
-      await userDataService.deleteUser(id)
+      // Check if User exists, otherwise throw notfound error
+      await userDataService.getUserById(id)
+
+      if (deleteRelatedDocs) {
+        cascadeTransactionId = await createTransactionId()
+
+        await bookingDataService.deleteBookingsByUserId(id, cascadeTransactionId)
+      }
+
+      await userDataService.deleteUser(id, cascadeTransactionId)
+
+      await commitCascadeTransaction(cascadeTransactionId)
 
       return new NextResponse(null, { status: StatusCodes.NO_CONTENT })
     } catch (error) {
+      await rollbackCascadeTransaction(cascadeTransactionId)
+
       if (error instanceof NotFound) {
         return NextResponse.json({ error: "User not found" }, { status: StatusCodes.NOT_FOUND })
       }
