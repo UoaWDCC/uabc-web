@@ -22,4 +22,3 @@ export const WEEKDAY_MAP: Record<number, Weekday> = {
 export const getWeekdayFromDayIndex = (dayIndex: number): Weekday => {
   return WEEKDAY_MAP[dayIndex]
 }
-

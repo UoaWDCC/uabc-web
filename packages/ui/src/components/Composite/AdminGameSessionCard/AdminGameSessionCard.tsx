@@ -111,7 +111,13 @@ export const AdminGameSessionCard = memo(
         <CardFooter>
           <VStack gap="sm" w="full">
             {onChangeSession && (
-              <Button colorScheme="secondary" onClick={onChangeSession} rounded="xl" size="md" w="full">
+              <Button
+                colorScheme="secondary"
+                onClick={onChangeSession}
+                rounded="xl"
+                size="md"
+                w="full"
+              >
                 Change Session
               </Button>
             )}
