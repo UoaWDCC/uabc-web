@@ -1,3 +1,5 @@
+"use client"
+
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import { Calendar } from "@yamada-ui/calendar"
 import { ArrowLeft, ArrowRight, SquareDashedMousePointer } from "@yamada-ui/lucide"

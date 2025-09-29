@@ -1,3 +1,5 @@
+"use client"
+
 import type { SemesterNamePopUpValues } from "@repo/shared"
 import { memo, useReducer } from "react"
 import { SemesterCreatedPopUp } from "./SemesterCreatedPopUp"
