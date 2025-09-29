@@ -158,17 +158,17 @@ describe("bookingDataService", () => {
 
       const booking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
-        user: casualUserMock,
+        user: memberUserMock,
         gameSession: gameSession1.id,
       })
       const booking2 = await bookingDataService.createBooking({
         ...bookingCreateMock,
-        user: casualUserMock,
+        user: memberUserMock,
         gameSession: gameSession2.id,
       })
 
       const fetchedBookings = await bookingDataService.getAllCurrentWeekBookingsByUserId(
-        casualUserMock.id,
+        memberUserMock.id,
         semester,
       )
       expect(fetchedBookings.length).toStrictEqual(2)
