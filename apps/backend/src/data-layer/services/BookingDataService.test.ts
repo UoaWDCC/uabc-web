@@ -139,7 +139,6 @@ describe("bookingDataService", () => {
       const semester = await semesterDataService.createSemester(currentSemesterCreateMock)
 
       const startTime = new Date(now)
-      startTime.setUTCMinutes(now.getUTCMinutes() + 1)
       const endTime = new Date(startTime)
       endTime.setUTCMinutes(now.getUTCMinutes() + 59)
 
