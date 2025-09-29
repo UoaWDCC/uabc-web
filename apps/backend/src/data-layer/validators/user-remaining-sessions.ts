@@ -5,8 +5,8 @@ import type { BeforeChangeHook } from "node_modules/payload/dist/collections/con
 /**
  * Validates and sets the user role based on remaining sessions.
  *
- * If the user is not an admin and has more than 0 remaining sessions, set role to 'member'.
- * If the user has 0 or fewer remaining sessions, set role to 'casual'.
+ * Sets the user role to 'member' if they are not an admin and have more than 0 remaining sessions.
+ * Sets the user role to 'casual' when they have 0 or fewer remaining sessions.
  */
 export const validateUserRemainingSessions: BeforeChangeHook<User> = ({ data }) => {
   if (data.role !== MembershipType.admin) {
