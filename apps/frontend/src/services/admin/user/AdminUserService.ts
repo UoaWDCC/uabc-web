@@ -33,12 +33,14 @@ const AdminUserService = {
     limit = 100,
     page,
     query = "",
+    filter = "",
     token,
   }: PaginationQuery & { token: string | null }) => {
     const searchQuery = new URLSearchParams({
       limit: String(limit),
       page: String(page),
       query: String(query),
+      filter: String(filter),
     }).toString()
     const response = await apiClient.get(
       `/api/admin/users?${searchQuery}`,

@@ -1,6 +1,6 @@
 "use client"
 
-import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from "nuqs"
+import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryStates } from "nuqs"
 import type { ReactNode } from "react"
 import { createContext, useCallback, useContext, useMemo, useState } from "react"
 import type { FieldFiltersFromConfig, FilterBarConfig } from "./Filter"
@@ -82,6 +82,7 @@ export type ManagementTableProviderProps<
     selectedRows: string[]
     page: number
     perPage: number
+    fieldFilters: FieldFiltersFromConfig<TData, TConfigs>
   }
   onQueryStateChange?: (
     updates: Partial<{
@@ -90,6 +91,7 @@ export type ManagementTableProviderProps<
       selectedRows: string[] | null
       page: number | null
       perPage: number | null
+      fieldFilters: FieldFiltersFromConfig<TData, TConfigs> | null
     }>,
   ) => void
   onFilterChange?: (filterValue: string) => void
@@ -136,6 +138,9 @@ export const ManagementTableProvider = <
       selectedRows: parseAsArrayOf(parseAsString).withDefault([]),
       page: parseAsInteger.withDefault(1),
       perPage: parseAsInteger.withDefault(20),
+      fieldFilters: parseAsJson<FieldFiltersFromConfig<TData, TConfigs>>(
+        (value) => value as FieldFiltersFromConfig<TData, TConfigs>,
+      ).withDefault({} as FieldFiltersFromConfig<TData, TConfigs>),
     },
     {
       clearOnDefault: true,
@@ -151,15 +156,12 @@ export const ManagementTableProvider = <
     selectedRows: selectedRowIds,
     page: currentPage,
     perPage,
+    fieldFilters,
   } = searchParams
 
   const [isSelectionMode, setSelectionMode] = useState(false)
 
   const [searchInFields, setSearchFields] = useState<(keyof TData)[]>([])
-
-  const [fieldFilters, setFieldFilters] = useState<FieldFiltersFromConfig<TData, TConfigs>>(
-    {} as FieldFiltersFromConfig<TData, TConfigs>,
-  )
 
   const visibleColumns = useMemo(() => {
     return rawVisibleColumns &&
@@ -195,23 +197,25 @@ export const ManagementTableProvider = <
       })
     }
     // Apply field/group filters
-    Object.entries(fieldFilters).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        if (value.length > 0 && !value.includes("all")) {
+    if (fieldFilters && typeof fieldFilters === "object") {
+      Object.entries(fieldFilters).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          if (value.length > 0) {
+            filtered = filtered.filter((member) => {
+              const memberValue = member[key as keyof TData]
+              return value.some(
+                (filterVal) => toKebabCase(String(memberValue)) === toKebabCase(String(filterVal)),
+              )
+            })
+          }
+        } else if (value) {
           filtered = filtered.filter((member) => {
-            const memberValue = member[key as keyof TData]
-            return value.some(
-              (filterVal) => toKebabCase(String(memberValue)) === toKebabCase(String(filterVal)),
-            )
+            const fieldValue = member[key as keyof TData]
+            return toKebabCase(String(fieldValue)) === toKebabCase(String(value))
           })
         }
-      } else if (value && value !== "all") {
-        filtered = filtered.filter((member) => {
-          const fieldValue = member[key as keyof TData]
-          return toKebabCase(String(fieldValue)) === toKebabCase(String(value))
-        })
-      }
-    })
+      })
+    }
     return Array.isArray(filtered) ? filtered : []
   }, [members, filterValue, searchInFields, fieldFilters, toKebabCase, canUseParentQueryState])
 
@@ -368,8 +372,14 @@ export const ManagementTableProvider = <
   )
 
   const hasFilter = useMemo(() => {
-    return !!filterValue || visibleColumns.length < allColumnKeys.length || selectedRows.size > 0
-  }, [filterValue, visibleColumns.length, allColumnKeys.length, selectedRows.size])
+    const hasFieldFilters = fieldFilters && Object.keys(fieldFilters).length > 0
+    return (
+      !!filterValue ||
+      visibleColumns.length < allColumnKeys.length ||
+      selectedRows.size > 0 ||
+      hasFieldFilters
+    )
+  }, [filterValue, visibleColumns.length, allColumnKeys.length, selectedRows.size, fieldFilters])
 
   const selectedData = useMemo(() => {
     return data.filter((row) => selectedRows.has(String(row[rowId])))
@@ -380,21 +390,28 @@ export const ManagementTableProvider = <
       key: K,
       value: FieldFiltersFromConfig<TData, TConfigs>[K],
     ) => {
-      setFieldFilters((prev) => ({ ...prev, [key]: value }))
+      const currentFilters = fieldFilters || ({} as FieldFiltersFromConfig<TData, TConfigs>)
+      const newFilters = { ...currentFilters, [key]: value }
       setSearchParams({
-        page: 1,
+        fieldFilters: Object.keys(newFilters).length > 0 ? newFilters : null,
+        page: 1, // Reset to first page when filter changes
       })
     },
-    [setSearchParams],
+    [fieldFilters, setSearchParams],
   )
 
-  const clearFieldFilter = useCallback((key: keyof FieldFiltersFromConfig<TData, TConfigs>) => {
-    setFieldFilters((prev) => {
-      const next = { ...prev }
-      delete next[key]
-      return next
-    })
-  }, [])
+  const clearFieldFilter = useCallback(
+    (key: keyof FieldFiltersFromConfig<TData, TConfigs>) => {
+      const currentFilters = fieldFilters || ({} as FieldFiltersFromConfig<TData, TConfigs>)
+      const newFilters = { ...currentFilters }
+      delete newFilters[key]
+      setSearchParams({
+        fieldFilters: Object.keys(newFilters).length > 0 ? newFilters : null,
+        page: 1, // Reset to first page when filter changes
+      })
+    },
+    [fieldFilters, setSearchParams],
+  )
 
   const value: ManagementTableState<TData, TConfigs> = {
     // Data
@@ -411,7 +428,7 @@ export const ManagementTableProvider = <
     clearAllFilters: clearFilter, // for API compatibility, but points to clearFilter
 
     // Field/group filters
-    fieldFilters,
+    fieldFilters: fieldFilters || ({} as FieldFiltersFromConfig<TData, TConfigs>),
     setFieldFilter,
     clearFieldFilter,
 

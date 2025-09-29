@@ -6,13 +6,24 @@ import { ManagementTable } from "@repo/ui/components/Generic"
 import type { UseInfiniteQueryResult } from "@tanstack/react-query"
 import { Dialog, useDisclosure } from "@yamada-ui/react"
 import dayjs from "dayjs"
-import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from "nuqs"
+import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryStates } from "nuqs"
 import { memo, useCallback, useEffect, useMemo, useState } from "react"
+import type { FieldFiltersFromConfig } from "../../Generic/ManagementTable/Filter"
 import { columns, type UserData } from "./Columns"
 import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
 
-// Extract column keys from the config
-const ALL_COLUMN_KEYS = COLUMNS_CONFIG.map((col) => col.key)
+const ALL_COLUMN_KEYS = [
+  "name",
+  "email",
+  "remaining",
+  "joined",
+  "role",
+  "university",
+  "level",
+  "actions",
+] as (keyof UserData & string)[]
+
+type TConfigs = typeof FILTER_CONFIGS
 
 /**
  * Props for the admin table with paginated data component.
@@ -63,6 +74,9 @@ export const AdminTableWithPaginatedQuery = memo(
         filter: parseAsString.withDefault(""),
         columns: parseAsArrayOf(parseAsString).withDefault(ALL_COLUMN_KEYS),
         selectedRows: parseAsArrayOf(parseAsString).withDefault([]),
+        fieldFilters: parseAsJson<FieldFiltersFromConfig<UserData, TConfigs>>(
+          (value) => value as FieldFiltersFromConfig<UserData, TConfigs>,
+        ).withDefault({} as FieldFiltersFromConfig<UserData, TConfigs>),
       },
       {
         clearOnDefault: true,
@@ -77,6 +91,7 @@ export const AdminTableWithPaginatedQuery = memo(
     } = useGetPaginatedData({
       limit: searchParams.perPage,
       query: searchParams.filter,
+      filter: JSON.stringify(searchParams.fieldFilters),
     })
 
     const currentPageCount = queriedData?.pages?.length || 0
@@ -111,7 +126,7 @@ export const AdminTableWithPaginatedQuery = memo(
 
     const paginationMetadata = useMemo(() => {
       const totalDocs = queriedData?.pages?.[0]?.data?.totalDocs || 0
-      const currentDataCount =
+      const currenUserDataCount =
         queriedData?.pages?.reduce((total, page) => total + (page?.data?.docs?.length || 0), 0) || 0
       const totalPagesForCurrentPerPage = Math.ceil(totalDocs / searchParams.perPage)
       const currentPageForCurrentPerPage = searchParams.page
@@ -128,7 +143,7 @@ export const AdminTableWithPaginatedQuery = memo(
         hasNextPage: calculatedHasNextPage,
         hasPrevPage: currentPageForCurrentPerPage > 1,
         totalDocs: totalDocs,
-        currentDataCount: currentDataCount,
+        currenUserDataCount: currenUserDataCount,
       }
     }, [queriedData?.pages, searchParams.perPage, searchParams.page])
 

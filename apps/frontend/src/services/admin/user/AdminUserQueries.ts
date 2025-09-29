@@ -9,18 +9,20 @@ import AdminUserService from "./AdminUserService"
  *
  * @param limit The amount of docs at most to fetch in a page.
  * @param query An optional search query to filter users by.
+ * @param filter An optional filter to apply to the users.
  * @returns A query hook that fetches a page of users.
  */
-export const useGetPaginatedUsers = ({ limit, query }: Omit<PaginationQuery, "page">) => {
+export const useGetPaginatedUsers = ({ limit, query, filter }: Omit<PaginationQuery, "page">) => {
   const { token } = useAuth()
   return useInfiniteQuery({
-    queryKey: [QueryKeys.USER_QUERY_KEY, query],
+    queryKey: [QueryKeys.USER_QUERY_KEY, query, filter],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
       const response = await AdminUserService.getPaginatedUsers({
         page: pageParam,
         limit,
         query,
+        filter,
         token,
       })
       return response
