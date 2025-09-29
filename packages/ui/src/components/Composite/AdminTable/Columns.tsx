@@ -9,7 +9,7 @@ export type UserData = {
   joined: string
   role: string
   university: string
-  level: PlayLevel
+  level: PlayLevel | string
 }
 
 export const columns: Column<UserData>[] = [

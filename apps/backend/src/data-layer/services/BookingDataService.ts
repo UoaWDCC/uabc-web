@@ -1,5 +1,10 @@
-import type { CreateBookingData, EditBookingData } from "@repo/shared"
-import type { Booking } from "@repo/shared/payload-types"
+import {
+  type CreateBookingData,
+  type EditBookingData,
+  getDaysBetweenWeekdays,
+  Weekday,
+} from "@repo/shared"
+import type { Booking, Semester } from "@repo/shared/payload-types"
 import type { PaginatedDocs } from "payload"
 import { NotFound } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
@@ -127,6 +132,60 @@ export default class BookingDataService {
   }
 
   /**
+   * Finds all {@link Booking} documents for the current booking week by a {@link User}'s id
+   *
+   * The current booking week is determined by the `bookingOpenDay` and `bookingOpenTime` of the provided {@link Semester}.
+   * Bookings are fetched for the 7-day period starting from the most recent occurrence of the `bookingOpenDay` and `bookingOpenTime`.
+   *
+   * @param userId The ID of the user whose {@link Booking} you find
+   * @param semester The {@link Semester} to determine the booking week
+   *
+   * @returns all {@link Booking} documents within the current booking week, otherwise returns an empty array
+   */
+  public async getAllCurrentWeekBookingsByUserId(
+    userId: string,
+    semester: Semester,
+  ): Promise<Booking[]> {
+    const now = new Date()
+    const todayWeekday = Object.values(Weekday)[now.getUTCDay()]
+
+    const { bookingOpenDay, bookingOpenTime } = semester
+
+    const daysDifference = getDaysBetweenWeekdays(bookingOpenDay as Weekday, todayWeekday)
+
+    const bookingStartPeriod = new Date(bookingOpenTime)
+    bookingStartPeriod.setUTCFullYear(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() - daysDifference,
+    )
+
+    const bookingEndPeriod = new Date(bookingStartPeriod)
+    bookingEndPeriod.setUTCDate(bookingStartPeriod.getUTCDate() + 7)
+
+    const { docs } = await payload.find({
+      collection: "booking",
+      pagination: false,
+      where: {
+        and: [
+          {
+            user: {
+              equals: userId,
+            },
+          },
+          {
+            "gameSession.startTime": {
+              greater_than_equal: bookingStartPeriod.toISOString(),
+              less_than: bookingEndPeriod.toISOString(),
+            },
+          },
+        ],
+      },
+    })
+    return docs
+  }
+
+  /**
    * Finds a page of {@link Booking} documents.
    *
    * @param limit The maximum documents to be returned
@@ -218,6 +277,30 @@ export default class BookingDataService {
         where: {
           "gameSession.semester": {
             equals: semesterId,
+          },
+        },
+        req: { transactionID: transactionId },
+      })
+    ).docs
+  }
+
+  /**
+   * Method to bulk delete bookings based on a target {@link User}'s id
+   *
+   * @param userId The ID of the user to bulk delete bookings for
+   * @param transactionId an optional transaction ID for the request, useful for tracing
+   * @returns the deleted {@link Booking} documents if it exists, otherwise returns an empty array
+   */
+  public async deleteBookingsByUserId(
+    userId: string,
+    transactionId?: string | number,
+  ): Promise<Booking[]> {
+    return (
+      await payload.delete({
+        collection: "booking",
+        where: {
+          user: {
+            equals: userId,
           },
         },
         req: { transactionID: transactionId },

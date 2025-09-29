@@ -13,13 +13,11 @@
     ".changelog/**",
     "**/src/payload-types.ts",
     "**/.vscode/**",
-    "apps/portal/**",
     "importMap.js",
     ".gitignore",
     "tsconfig.tsbuildinfo",
     "patches/**",
-    "**/*.svg",
-    "**/package.json"
+    "**/*.svg"
   ],
   "words": [
     "adipiscing",

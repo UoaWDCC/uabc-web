@@ -9,8 +9,11 @@ import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import type { NextRequest } from "next/server"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { payload } from "@/data-layer/adapters/Payload"
+import BookingDataService from "@/data-layer/services/BookingDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
+import { bookingCreateMock } from "@/test-config/mocks/Booking.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { DELETE, GET, PATCH } from "./route"
 
@@ -165,9 +168,7 @@ describe("/api/admin/users/[id]", async () => {
       })
 
       expect(res.status).toBe(StatusCodes.NO_CONTENT)
-      await expect(userDataService.getUserById(newUser.id)).rejects.toThrow(
-        getReasonPhrase(StatusCodes.NOT_FOUND),
-      )
+      await expect(userDataService.getUserById(newUser.id)).rejects.toThrow("Not Found")
     })
 
     it("should return 404 if user is non-existent", async () => {
@@ -266,6 +267,154 @@ describe("/api/admin/users/[id]", async () => {
       expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
       const json = await res.json()
       expect(json.error).toEqual("Internal Server Error")
+    })
+  })
+
+  describe("DELETE", () => {
+    const bookingDataService = new BookingDataService()
+    const userDataService = new UserDataService()
+
+    it.for([
+      // Test case 1: Explicit true boolean parameter
+      "/api/admin/users?deleteRelatedDocs=true",
+      // Test case 2: Flag parameter without value (equivalent to true in query params)
+      "/api/admin/users?deleteRelatedDocs",
+      // Test case 3: Unrelated query parameter (testing irrelevant params)
+      "/api/admin/users?straightZhao",
+      // Test case 4: Base URL with no query parameters
+      "/api/admin/users",
+    ] as const)(
+      "should default to delete user and their bookings when deleteRelatedDocs is true or not specified",
+      async (route) => {
+        cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+        const newUser = await userDataService.createUser(userCreateMock)
+        const booking1 = await bookingDataService.createBooking({
+          ...bookingCreateMock,
+          user: newUser.id,
+        })
+        const booking2 = await bookingDataService.createBooking({
+          ...bookingCreateMock,
+          user: newUser.id,
+        })
+
+        const res = await DELETE(createMockNextRequest(route, "DELETE"), {
+          params: Promise.resolve({
+            id: newUser.id,
+          }),
+        })
+
+        expect(res.status).toBe(StatusCodes.NO_CONTENT)
+
+        await expect(userDataService.getUserById(newUser.id)).rejects.toThrow("Not Found")
+
+        await expect(bookingDataService.getBookingById(booking1.id)).rejects.toThrow("Not Found")
+        await expect(bookingDataService.getBookingById(booking2.id)).rejects.toThrow("Not Found")
+      },
+    )
+
+    it("should not delete related bookings when deleteRelatedDocs is false", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const newUser = await userDataService.createUser(userCreateMock)
+      const booking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: newUser.id,
+      })
+      const booking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: newUser.id,
+      })
+
+      const res = await DELETE(
+        createMockNextRequest("/api/admin/users?deleteRelatedDocs=false", "DELETE"),
+        {
+          params: Promise.resolve({
+            id: newUser.id,
+          }),
+        },
+      )
+
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+
+      await expect(userDataService.getUserById(newUser.id)).rejects.toThrow("Not Found")
+
+      expect(await bookingDataService.getBookingById(booking1.id)).toBeDefined()
+      expect(await bookingDataService.getBookingById(booking2.id)).toBeDefined()
+    })
+
+    it("should rollback transaction if error occurs during cascade delete", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      // Create a user and some bookings
+      const newUser = await userDataService.createUser(userCreateMock)
+      const booking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: newUser.id,
+      })
+
+      // Mock deleteBookings to throw an error
+      const mockDeleteBookings = vi
+        .spyOn(BookingDataService.prototype, "deleteBookingsByUserId")
+        .mockRejectedValueOnce(new Error("Delete failed"))
+
+      const res = await DELETE(
+        createMockNextRequest("/api/admin/users?deleteRelatedDocs=true", "DELETE"),
+        {
+          params: Promise.resolve({
+            id: newUser.id,
+          }),
+        },
+      )
+
+      expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
+      expect(await res.json()).toStrictEqual({
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+      })
+
+      // Verify user and booking still exist (transaction rolled back)
+      expect(await userDataService.getUserById(newUser.id)).toBeDefined()
+      expect(await bookingDataService.getBookingById(booking.id)).toBeDefined()
+
+      mockDeleteBookings.mockRestore()
+    })
+
+    it("should handle transaction management correctly", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      // In a test environment beginTransaction does not return a transaction ID
+      vi.spyOn(payload.db, "beginTransaction").mockResolvedValue("transaction-id")
+      vi.spyOn(payload.db, "commitTransaction").mockResolvedValue(undefined)
+      vi.spyOn(payload.db, "rollbackTransaction").mockResolvedValue(undefined)
+
+      // Spy on transaction methods
+      const beginTransactionSpy = vi.spyOn(payload.db, "beginTransaction")
+      const commitTransactionSpy = vi.spyOn(payload.db, "commitTransaction")
+      const rollbackTransactionSpy = vi.spyOn(payload.db, "rollbackTransaction")
+
+      const newUser = await userDataService.createUser(userCreateMock)
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: newUser.id,
+      })
+
+      const res = await DELETE(
+        createMockNextRequest("/api/admin/users?deleteRelatedDocs=true", "DELETE"),
+        {
+          params: Promise.resolve({
+            id: newUser.id,
+          }),
+        },
+      )
+
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+      expect(beginTransactionSpy).toHaveBeenCalled()
+      expect(commitTransactionSpy).toHaveBeenCalled()
+      expect(rollbackTransactionSpy).not.toHaveBeenCalled()
+
+      beginTransactionSpy.mockRestore()
+      commitTransactionSpy.mockRestore()
+      rollbackTransactionSpy.mockRestore()
     })
   })
 })
