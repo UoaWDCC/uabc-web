@@ -82,6 +82,10 @@ const transformToAdminGameSession = (session: GameSessionWithCounts): AdminGameS
  */
 export const AdminSessions = () => {
   const [dateParam, setDateParam] = useQueryState("date", parseAsString)
+  const [changeSessionFlowDateParam, setChangeSessionFlowDateParam] = useQueryState(
+    "change-session-flow-date",
+    parseAsString,
+  )
   const [bookingToChange, setBookingToChange] = useState<SessionData | null>(null)
   const notice = useNotice()
 
@@ -104,6 +108,16 @@ export const AdminSessions = () => {
     const parsedDate = dayjs.tz(dateParam, "YYYY-MM-DD", "Pacific/Auckland").toDate()
     return parsedDate
   }, [dateParam])
+
+  const changeSessionFlowDate = useMemo(() => {
+    if (!changeSessionFlowDateParam) {
+      return null
+    }
+    const parsedDate = dayjs
+      .tz(changeSessionFlowDateParam, "YYYY-MM-DD", "Pacific/Auckland")
+      .toDate()
+    return parsedDate
+  }, [changeSessionFlowDateParam])
 
   const adminGameSessions = useMemo(() => {
     if (!gameSessionsData?.data) {
@@ -135,6 +149,15 @@ export const AdminSessions = () => {
   const handleDateSelect = (date: Date) => {
     const dateString = dayjs.tz(date, "Pacific/Auckland").format("YYYY-MM-DD")
     setDateParam(dateString)
+  }
+
+  const handleChangeSessionDateSelect = (date: Date | null) => {
+    if (date) {
+      const dateString = dayjs.tz(date, "Pacific/Auckland").format("YYYY-MM-DD")
+      setChangeSessionFlowDateParam(dateString)
+    } else {
+      setChangeSessionFlowDateParam(null)
+    }
   }
 
   const handleExport = () => {
@@ -220,10 +243,13 @@ export const AdminSessions = () => {
       <ChangeSessionPopup
         availableSessions={adminGameSessions}
         currentSession={selectedSession}
+        isLoading={updateBookingMutation.isPending}
         isOpen={changeSessionPopup.isOpen}
         onClose={changeSessionPopup.close}
         onConfirm={handleSessionConfirm}
+        onDateSelect={handleChangeSessionDateSelect}
         popupId={Popup.CHANGE_SESSION_FLOW}
+        selectedDate={changeSessionFlowDate}
       />
     </Grid>
   )

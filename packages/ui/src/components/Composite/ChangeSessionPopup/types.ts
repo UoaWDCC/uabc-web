@@ -37,6 +37,11 @@ export interface ChangeSessionPopupProps
    */
   onDateSelect?: (date: Date | null) => void
   /**
+   * Whether the confirm button is in loading state
+   * @default false
+   */
+  isLoading?: boolean
+  /**
    * Custom title for the popup
    * @default "Change Session"
    */

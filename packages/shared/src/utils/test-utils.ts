@@ -1,5 +1,5 @@
 import type { AdminGameSession } from "@repo/shared"
-import { GameSessionStatus, Weekday } from "@repo/shared"
+import { GameSessionStatus, getWeekdayFromDayIndex } from "@repo/shared"
 import { adminGameSessionBaseMock } from "@repo/shared/mocks"
 
 /**
@@ -39,20 +39,11 @@ export const createGameSession = (
 
   // Determine day of week
   const dayOfWeek = date.getDay()
-  const weekdayMap: Record<number, Weekday> = {
-    0: Weekday.sunday,
-    1: Weekday.monday,
-    2: Weekday.tuesday,
-    3: Weekday.wednesday,
-    4: Weekday.thursday,
-    5: Weekday.friday,
-    6: Weekday.saturday,
-  }
 
   return {
     ...adminGameSessionBaseMock,
     id: `session-${daysFromNow}`,
-    day: weekdayMap[dayOfWeek],
+    day: getWeekdayFromDayIndex(dayOfWeek),
     status,
     startTime: startTime.toISOString(),
     endTime: endTime.toISOString(),

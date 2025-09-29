@@ -1,8 +1,7 @@
 import type { AdminGameSession } from "@repo/shared"
-import { GameSessionStatus, Popup } from "@repo/shared"
+import { createCurrentSession, createGameSessions, GameSessionStatus, Popup } from "@repo/shared"
 import type { Meta, StoryObj } from "@storybook/react"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
-import { createCurrentSession, createGameSessions } from "../story-utils"
 import { ChangeSessionPopup } from "./ChangeSessionPopup"
 
 const meta: Meta<typeof ChangeSessionPopup> = {

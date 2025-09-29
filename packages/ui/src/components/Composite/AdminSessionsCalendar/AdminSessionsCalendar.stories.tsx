@@ -1,7 +1,7 @@
 import type { AdminGameSession } from "@repo/shared"
+import { createGameSessions } from "@repo/shared"
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { useState } from "react"
-import { createGameSessions } from "../story-utils"
 import { AdminSessionsCalendar } from "./AdminSessionsCalendar"
 
 const meta: Meta<typeof AdminSessionsCalendar> = {

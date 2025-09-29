@@ -26,12 +26,6 @@ export const AdminSessionsTable = memo(({ data, onChangeSession }: AdminSessions
             ]
           : []),
         {
-          text: "Edit",
-          onClick: (row: SessionData) => {
-            console.log("Edit", row)
-          },
-        },
-        {
           text: "Delete",
           onClick: (row: SessionData) => {
             console.log("Delete", row)

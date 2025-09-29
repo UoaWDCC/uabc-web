@@ -30,6 +30,8 @@ const EMPTY_STATE_ICON_SIZE = "5xl"
  *   onClose={() => setIsPopupOpen(false)}
  *   availableSessions={sessions}
  *   selectedDate={selectedDate}
+ *   currentSession={currentSession}
+ *   isLoading={isChangingSession}
  *   onConfirm={(session) => handleSessionConfirm(session)}
  *   onDateSelect={(date) => handleDateSelect(date)}
  * />
@@ -44,6 +46,7 @@ export const ChangeSessionPopup = memo(
     onConfirm,
     onDateSelect,
     currentSession,
+    isLoading = false,
     title = "Change Session",
     description = "Select a new date to view available sessions",
     popupId = Popup.CHANGE_SESSION,
@@ -88,6 +91,25 @@ export const ChangeSessionPopup = memo(
       })
     }, [availableSessions, internalSelectedDate, currentSession])
 
+    const isCurrentSessionDate = useMemo(() => {
+      if (!internalSelectedDate || !currentSession) {
+        return false
+      }
+      const currentSessionDate = new Date(currentSession.startTime)
+      return currentSessionDate.toDateString() === internalSelectedDate.toDateString()
+    }, [internalSelectedDate, currentSession])
+
+    const excludeCurrentSessionDate = useCallback(
+      (date: Date) => {
+        if (!currentSession) {
+          return false
+        }
+        const currentSessionDate = new Date(currentSession.startTime)
+        return date.toDateString() === currentSessionDate.toDateString()
+      },
+      [currentSession],
+    )
+
     const selectedSessionDisplay = useMemo(() => {
       if (!internalSelectedDate) {
         return (
@@ -95,6 +117,16 @@ export const ChangeSessionPopup = memo(
             description="Select a date from the calendar to view session details"
             indicator={<CalendarIcon fontSize={EMPTY_STATE_ICON_SIZE} />}
             title="No Date Selected"
+          />
+        )
+      }
+
+      if (isCurrentSessionDate) {
+        return (
+          <EmptyState
+            description="This is the current session date. Please select a different date to change the session."
+            indicator={<CalendarIcon fontSize={EMPTY_STATE_ICON_SIZE} />}
+            title="Current Session Date"
           />
         )
       }
@@ -143,11 +175,21 @@ export const ChangeSessionPopup = memo(
           </VStack>
         </VStack>
       )
-    }, [internalSelectedDate, sessionsForSelectedDate])
+    }, [internalSelectedDate, sessionsForSelectedDate, isCurrentSessionDate])
 
     return (
       <CalendarSelectPopup.Root
         {...calendarPopupProps}
+        calendarProps={{
+          ...calendarPopupProps.calendarProps,
+          onChange: undefined, // Remove onChange to avoid type conflicts
+          excludeDate: (date: Date) => {
+            const existingExcludeDate = calendarPopupProps.calendarProps?.excludeDate
+            const isExcludedByCurrent = existingExcludeDate ? existingExcludeDate(date) : false
+            const isCurrentSessionDate = excludeCurrentSessionDate(date)
+            return isExcludedByCurrent || isCurrentSessionDate
+          },
+        }}
         closeBehavior="custom"
         description={description}
         gameSessions={availableSessions}
@@ -162,27 +204,30 @@ export const ChangeSessionPopup = memo(
         <CalendarSelectPopup.Content>
           <VStack gap="lg" h="full" w="full">
             {selectedSessionDisplay}
-            {internalSelectedDate && sessionsForSelectedDate.length > 0 && (
-              <VStack gap="sm" w="full">
-                <Button
-                  colorScheme="primary"
-                  onClick={() => handleSessionSelect(sessionsForSelectedDate[0])}
-                  size="md"
-                  w="full"
-                >
-                  Confirm
-                </Button>
-                <Button
-                  colorScheme="primary"
-                  onClick={onClose}
-                  size="md"
-                  variant="outline"
-                  w="full"
-                >
-                  Cancel
-                </Button>
-              </VStack>
-            )}
+            {internalSelectedDate &&
+              sessionsForSelectedDate.length > 0 &&
+              !isCurrentSessionDate && (
+                <VStack gap="sm" w="full">
+                  <Button
+                    colorScheme="primary"
+                    loading={isLoading}
+                    onClick={() => handleSessionSelect(sessionsForSelectedDate[0])}
+                    size="md"
+                    w="full"
+                  >
+                    Confirm
+                  </Button>
+                  <Button
+                    colorScheme="primary"
+                    onClick={onClose}
+                    size="md"
+                    variant="outline"
+                    w="full"
+                  >
+                    Cancel
+                  </Button>
+                </VStack>
+              )}
           </VStack>
         </CalendarSelectPopup.Content>
       </CalendarSelectPopup.Root>
