@@ -40,7 +40,7 @@ export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date
   const openTime = new Date(bookingOpenTime)
 
   const dayIndex = startTime.getUTCDay()
-  const day = Object.values(Weekday)[dayIndex] as Weekday
+  const day = Object.values(Weekday)[dayIndex]
   let daysDifference = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day)
 
   // If the session is on the same day as bookingOpenDay, check the time

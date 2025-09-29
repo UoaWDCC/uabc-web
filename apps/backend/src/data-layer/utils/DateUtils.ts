@@ -38,8 +38,8 @@ export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] 
  * @returns Both startTime and endTime of the game session
  */
 export function createGameSessionTimes(schedule: GameSessionSchedule, date: Date) {
-  const day = date.getDate()
-  const month = date.getMonth()
+  const day = date.getUTCDate()
+  const month = date.getUTCMonth()
   const year = date.getFullYear()
 
   const start = new Date(schedule.startTime)
