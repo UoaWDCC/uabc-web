@@ -10,8 +10,8 @@ import {
   DialogFooter,
   Divider,
   type FC,
-  HStack,
   memo,
+  SimpleGrid,
   Text,
   VStack,
 } from "@yamada-ui/react"
@@ -82,18 +82,41 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
           size="md"
           top="md"
         />
-        <HStack gap="lg" h="full" w="full">
-          <VStack gap="2xl" h="full" justifyContent="center" w="60%">
+        <SimpleGrid
+          gap={{ base: "md", md: "lg" }}
+          h="full"
+          templateColumns={{ base: "1fr", md: "6fr 0.2fr 4fr" }}
+          w="full"
+        >
+          <VStack
+            gap="lg"
+            h="full"
+            justifyContent="center"
+            placeItems={{ base: "center", md: "start" }}
+          >
             <Heading.h1>Create New Semester</Heading.h1>
-            <Text fontSize="2xl" fontWeight="normal" w="60%">
+            <Text fontSize="2xl" fontWeight="normal">
               Semester Name{" "}
             </Text>
-            <VStack mr="auto" w="auto">
+            <VStack w="auto">
               <Calendar background="blackAlpha.500" layerStyle="gradientBorder" size="lg" />
             </VStack>
           </VStack>
-          <Divider bg="white" orientation="vertical" w="2px" />
-          <VStack alignItems="center" gap="md" h="full" justifyContent="center" w="40%">
+          <VStack
+            alignItems="center"
+            display={{ base: "none", md: "flex" }}
+            h="full"
+            justifyContent="center"
+          >
+            <Divider bg="grey" h="100%" orientation="vertical" w="2px" />
+          </VStack>
+          <VStack
+            alignItems="center"
+            gap="md"
+            h="full"
+            justifyContent="center"
+            placeItems={{ base: "center", md: "center" }}
+          >
             <DialogBody alignItems="center" gap="xl" justifyContent="center">
               <Heading.h2 fontSize="2xl" fontWeight="medium">
                 {title}
@@ -110,7 +133,7 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
               </Button>
             </DialogFooter>
           </VStack>
-        </HStack>
+        </SimpleGrid>
       </Dialog>
     )
   },
