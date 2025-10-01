@@ -207,7 +207,7 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
                 textAlign="center"
                 whiteSpace="pre-line"
               >
-                {title}
+                {title.replace(/\\n/g, "\n")}
               </Heading.h2>
               <Heading.h3
                 fontSize="sm"

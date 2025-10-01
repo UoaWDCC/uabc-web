@@ -171,7 +171,7 @@ export const CreateSemesterPopUpFlow = memo(
             open={open && state.step === 2}
             semesterName={state.semesterName || "Semester"}
             subtitle={`Select the start and end dates for ${state.semesterName || "the semester"} break period`}
-            title={"Semester Break" + "\n" + "Start & End"}
+            title="Semester Break\nStart & End"
           />
         ),
       },
