@@ -1,11 +1,12 @@
 import {
+  BookingQueryType,
   type CreateBookingData,
   type EditBookingData,
   getDaysBetweenWeekdays,
   Weekday,
 } from "@repo/shared"
 import type { Booking, Semester } from "@repo/shared/payload-types"
-import type { PaginatedDocs } from "payload"
+import type { PaginatedDocs, Where } from "payload"
 import { NotFound } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
 
@@ -113,18 +114,35 @@ export default class BookingDataService {
 
   /**
    * Finds all {@link Booking} documents by a {@link User}'s id
-   *
    * @param userId The ID of the user whose {@link Booking} you find
+   * @param type The type of bookings to fetch, either all or only future bookings. Defaults to {@link BookingQueryType.ALL}
    * @returns all {@link Booking} documents if successful
    */
-  public async getAllBookingsByUserId(userId: string): Promise<Booking[]> {
+  public async getAllBookingsByUserId(
+    userId: string,
+    type: BookingQueryType = BookingQueryType.ALL,
+  ): Promise<Booking[]> {
+    const and: Where[] = [
+      {
+        user: {
+          equals: userId,
+        },
+      },
+    ]
+
+    if (type === BookingQueryType.FUTURE) {
+      and.push({
+        "gameSession.startTime": {
+          greater_than: new Date().toISOString(),
+        },
+      })
+    }
+
     return (
       await payload.find({
         collection: "booking",
         where: {
-          user: {
-            equals: userId,
-          },
+          and,
         },
         pagination: false,
       })

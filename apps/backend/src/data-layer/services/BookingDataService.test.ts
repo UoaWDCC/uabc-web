@@ -1,4 +1,9 @@
-import type { CreateSemesterData, EditBookingData } from "@repo/shared"
+import {
+  BookingQueryType,
+  type CreateSemesterData,
+  type EditBookingData,
+  type GameSession,
+} from "@repo/shared"
 import { casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
@@ -101,7 +106,7 @@ describe("bookingDataService", () => {
   })
 
   describe("getAllBookingsByUserId", () => {
-    it("should find all bookings by userId", async () => {
+    it("should find all bookings by userId if no type query is specified", async () => {
       const createdBooking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
         user: casualUserMock,
@@ -122,6 +127,42 @@ describe("bookingDataService", () => {
     it("should return empty array if there are no bookings by userId", async () => {
       const fetchedBooking = await bookingDataService.getAllBookingsByUserId("No bookings userId")
       expect(fetchedBooking).toStrictEqual([])
+    })
+
+    it("should return all future bookings for the current user if query type is set to future", async () => {
+      const pastGameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: new Date(2020, 0, 1).toISOString(),
+        endTime: new Date(2020, 0, 1).toISOString(),
+      })
+      const futureGameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
+        endTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      })
+
+      const pastBookingsToCreate = Array.from({ length: 2 }, (_, _i) => ({
+        ...bookingCreateMock,
+        gameSession: pastGameSession,
+      }))
+      await Promise.all(pastBookingsToCreate.map((u) => bookingDataService.createBooking(u)))
+
+      const futureBookingToCreate = {
+        ...bookingCreateMock,
+        gameSession: futureGameSession,
+      }
+      const futureBooking = await bookingDataService.createBooking(futureBookingToCreate)
+
+      const fetchedBookings = await bookingDataService.getAllBookingsByUserId(
+        casualUserMock.id,
+        BookingQueryType.FUTURE,
+      )
+
+      expect(fetchedBookings.length).toStrictEqual(1)
+      expect(fetchedBookings).toStrictEqual([futureBooking])
+      expect(Date.parse((fetchedBookings[0].gameSession as GameSession).startTime)).toBeGreaterThan(
+        Date.now(),
+      )
     })
   })
 
