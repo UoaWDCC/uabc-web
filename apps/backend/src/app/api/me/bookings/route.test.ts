@@ -52,11 +52,11 @@ describe("/api/me/bookings", async () => {
         startTime: new Date(2020, 0, 1).toISOString(),
         endTime: new Date(2020, 0, 1).toISOString(),
       })
-      const futureGameSession = await gameSessionDataService.createGameSession(
+      const futureGameSession = await gameSessionDataService.createGameSession({
         ...gameSessionCreateMock,
-        startTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
-        endTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
-      )
+        startTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
+        endTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      })
 
       const bookingsToCreate = [
         ...Array.from({ length: 15 }, (_, _i) => ({
