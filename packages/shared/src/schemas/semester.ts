@@ -52,7 +52,7 @@ export const GetCurrentSemesterResponseSchema = z.object({
 })
 
 export const SemesterNamePopUpSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string().trim().min(1, "Name is required"),
 })
 
 export const SemesterDatePopUpSchema = z.object({

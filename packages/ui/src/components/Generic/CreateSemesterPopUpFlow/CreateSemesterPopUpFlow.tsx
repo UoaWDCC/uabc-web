@@ -136,6 +136,7 @@ export const CreateSemesterPopUpFlow = memo(
         title: "Semester Name",
         element: (
           <SemesterNamePopUp
+            defaultValues={state.semesterName ? { name: state.semesterName } : { name: "" }}
             key="semester-name-popup"
             onCancel={handleClose}
             onConfirm={handleSemesterNameSubmit}
