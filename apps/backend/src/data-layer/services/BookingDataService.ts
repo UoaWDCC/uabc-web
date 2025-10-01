@@ -6,8 +6,7 @@ import {
   Weekday,
 } from "@repo/shared"
 import type { Booking, Semester } from "@repo/shared/payload-types"
-import type { PaginatedDocs, Where } from "payload"
-import { NotFound } from "payload"
+import type { NotFound, PaginatedDocs, Where } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
 
 export default class BookingDataService {
