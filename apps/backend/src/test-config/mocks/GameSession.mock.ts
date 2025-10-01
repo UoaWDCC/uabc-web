@@ -12,14 +12,6 @@ export const gameSessionCreateMock: CreateGameSessionData = {
   casualCapacity: 8,
 }
 
-export const futureGameSessionCreateMock: CreateGameSessionData = {
-  semester: semesterMock,
-  startTime: new Date(2026, 0, 1).toISOString(),
-  endTime: new Date(2026, 0, 1).toISOString(),
-  capacity: 10,
-  casualCapacity: 8,
-}
-
 export const oneOffGameSessionCreateMock: CreateGameSessionData = {
   semester: semesterMock,
   startTime: new Date().toISOString(),
