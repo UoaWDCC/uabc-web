@@ -191,13 +191,7 @@ export const CreateSemesterPopUpFlow = memo(
 
     if (!open) return null
 
-    return (
-      <>
-        {steps.map((step) => (
-          <div key={step.title}>{step.element}</div>
-        ))}
-      </>
-    )
+    return steps[state.step]?.element || null
   },
 )
 
