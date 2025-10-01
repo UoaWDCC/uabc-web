@@ -15,7 +15,7 @@ describe("/api/me/bookings", async () => {
   const gameSessionDataService = new GameSessionDataService()
 
   describe("GET", () => {
-    it("should return all bookings for the current user if the query type is all", async () => {
+    it("should return all bookings for the current user if no query type is set", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
       const booking1 = await bookingDataService.createBooking(bookingCreateMock)
       const booking2 = await bookingDataService.createBooking(bookingCreateMock)
@@ -51,17 +51,17 @@ describe("/api/me/bookings", async () => {
         endTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
       })
 
-      const bookingsToCreate = [
-        ...Array.from({ length: 15 }, (_, _i) => ({
-          ...bookingCreateMock,
-          gameSession: pastGameSession,
-        })),
-        {
-          ...bookingCreateMock,
-          gameSession: futureGameSession,
-        },
-      ]
-      await Promise.all(bookingsToCreate.map((u) => bookingDataService.createBooking(u)))
+      const pastBookingsToCreate = Array.from({ length: 2 }, (_, _i) => ({
+        ...bookingCreateMock,
+        gameSession: pastGameSession,
+      }))
+      await Promise.all(pastBookingsToCreate.map((u) => bookingDataService.createBooking(u)))
+
+      const futureBookingToCreate = {
+        ...bookingCreateMock,
+        gameSession: futureGameSession,
+      }
+      const futureBooking = await bookingDataService.createBooking(futureBookingToCreate)
 
       const req = createMockNextRequest("/api/me/bookings?type=future")
       const res = await GET(req)
@@ -69,7 +69,7 @@ describe("/api/me/bookings", async () => {
       expect(res.status).toBe(StatusCodes.OK)
       const json = await res.json()
       expect(json.data.length).toBe(1)
-      expect(json.data[0].gameSession.id).toBe(futureGameSession.id)
+      expect(json.data[0]).toStrictEqual(futureBooking)
       expect(Date.parse(json.data[0].gameSession.startTime)).toBeGreaterThan(Date.now())
     })
 

@@ -12,8 +12,7 @@ class RouteWrapper {
     try {
       const bookingDataService = new BookingDataService()
       const gameSessionDataService = new GameSessionDataService()
-      const { searchParams } = new URL(req.url)
-      const type = searchParams.get("type") || BookingQueryType.ALL
+      const type = req.nextUrl.searchParams.get("type") || BookingQueryType.ALL
 
       if (!Object.values(BookingQueryType).includes(type as BookingQueryType)) {
         return NextResponse.json(
