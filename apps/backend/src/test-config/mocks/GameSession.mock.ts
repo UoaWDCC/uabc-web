@@ -14,13 +14,10 @@ export const gameSessionCreateMock: CreateGameSessionData = {
 
 export const futureGameSessionCreateMock: CreateGameSessionData = {
   semester: semesterMock,
-  startTime: new Date(2030, 0, 1).toISOString(),
-  endTime: new Date(2030, 0, 1).toISOString(),
-  openTime: new Date().toISOString(),
+  startTime: new Date(2026, 0, 1).toISOString(),
+  endTime: new Date(2026, 0, 1).toISOString(),
   capacity: 10,
   casualCapacity: 8,
-  location: "240 Straight Zhao St",
-  name: "Straight Zhao Venue",
 }
 
 export const oneOffGameSessionCreateMock: CreateGameSessionData = {

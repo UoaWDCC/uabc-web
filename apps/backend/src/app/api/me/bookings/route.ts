@@ -45,3 +45,31 @@ class RouteWrapper {
 }
 
 export const { GET } = RouteWrapper
+
+// it("should return all future paginated game sessions if query type is set to future", async () => {
+//   cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+
+//   const { id } = await gameSessionDataService.createGameSession(futureGameSessionCreateMock)
+
+//   const bookingsToCreate = [
+//     ...Array.from({ length: 15 }, (_, _i) => ({
+//       ...bookingCreateMock,
+//     })),
+//     {
+//       ...futureBookingCreateMock,
+//       gameSession: id,
+//     },
+//   ]
+//   await Promise.all(bookingsToCreate.map((u) => bookingDataService.createBooking(u)))
+
+//   const req = createMockNextRequest("/api/bookings?limit=10&page=1&type=future")
+//   const res = await GET(req)
+
+//   expect(res.status).toBe(StatusCodes.OK)
+//   const json = await res.json()
+//   expect(json.data.docs.length).toBe(1)
+//   expect(json.data.page).toBe(1)
+//   expect(json.data.limit).toBe(10)
+//   expect(json.data.docs[0].gameSession).toBe(id)
+//   expect(new Date(json.data.docs[0].startTime).getTime()).toBeGreaterThan(Date.now())
+// })
