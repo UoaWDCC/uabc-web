@@ -68,6 +68,53 @@ const transformToAdminGameSession = (session: GameSessionWithCounts): AdminGameS
 }
 
 /**
+ * Build CSV content for session attendees.
+ * Dynamically extracts all available fields from the attendee data.
+ */
+const buildSessionAttendeesCsv = (attendees: Array<SessionData>): string => {
+  if (!attendees || attendees.length === 0) return ""
+
+  // Extract all unique keys from all attendee objects
+  const allKeys = new Set<string>()
+  for (const attendee of attendees) {
+    for (const key of Object.keys(attendee)) {
+      allKeys.add(key)
+    }
+  }
+
+  const headers = Array.from(allKeys)
+
+  const rows: Array<Array<string | number | null | undefined>> = [
+    headers,
+    ...attendees.map((attendee) => headers.map((key) => attendee[key as keyof SessionData])),
+  ]
+
+  return buildCsv(rows)
+}
+
+/**
+ * Download CSV content as a file with the specified filename.
+ */
+const downloadCsvFile = (csvContent: string, filename: string): void => {
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+  const link = document.createElement("a")
+  const url = URL.createObjectURL(blob)
+
+  try {
+    link.setAttribute("href", url)
+    link.setAttribute("download", filename)
+    link.style.visibility = "hidden"
+    document.body.appendChild(link)
+    link.click()
+  } finally {
+    if (document.body.contains(link)) {
+      document.body.removeChild(link)
+    }
+    URL.revokeObjectURL(url)
+  }
+}
+
+/**
  * AdminSessions component for managing and viewing game sessions
  *
  * Provides a comprehensive interface for admins to view sessions by date,
@@ -132,41 +179,10 @@ export const AdminSessions = () => {
       return
     }
 
-    // Create CSV content with proper escaping
-    const headers = ["Name", "Email", "Role", "Level", "Remaining Sessions"]
-    const rows: Array<Array<string | number | null | undefined>> = [
-      headers,
-      ...selectedSessionAttendees.map((attendee) => [
-        attendee.name,
-        attendee.email,
-        attendee.role,
-        attendee.level,
-        attendee.sessions,
-      ]),
-    ]
+    const csvContent = buildSessionAttendeesCsv(selectedSessionAttendees)
+    const filename = `session-attendees-${dayjs(selectedSession.startTime).format("YYYY-MM-DD")}.csv`
 
-    const csvContent = buildCsv(rows)
-
-    // Create and download file
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-    const link = document.createElement("a")
-    const url = URL.createObjectURL(blob)
-
-    try {
-      link.setAttribute("href", url)
-      link.setAttribute(
-        "download",
-        `session-attendees-${dayjs(selectedSession.startTime).format("YYYY-MM-DD")}.csv`,
-      )
-      link.style.visibility = "hidden"
-      document.body.appendChild(link)
-      link.click()
-    } finally {
-      if (document.body.contains(link)) {
-        document.body.removeChild(link)
-      }
-      URL.revokeObjectURL(url)
-    }
+    downloadCsvFile(csvContent, filename)
   }
 
   return (
