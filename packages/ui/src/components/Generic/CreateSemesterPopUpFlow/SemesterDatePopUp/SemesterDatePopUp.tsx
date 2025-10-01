@@ -112,22 +112,28 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
       }
     }
 
+    // Helper function to format the selected date(s) as a string
+    const getDateText = (date: Date | [Date?, Date?] | null): string => {
+      if (!date) return ""
+      if (Array.isArray(date)) {
+        const [start, end] = date
+        if (start && end) {
+          return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`
+        }
+        if (start) {
+          return start.toLocaleDateString()
+        }
+        if (end) {
+          return end.toLocaleDateString()
+        }
+        return ""
+      }
+      return date.toLocaleDateString()
+    }
+
     const formatSelectedDate = () => {
       if (!selectedDate) return subtitle || "Select a date range"
-
-      let dateText = ""
-      if (Array.isArray(selectedDate)) {
-        const [start, end] = selectedDate
-        if (start && end) {
-          dateText = `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`
-        } else if (start) {
-          dateText = start.toLocaleDateString()
-        } else if (end) {
-          dateText = end.toLocaleDateString()
-        }
-      } else {
-        dateText = selectedDate.toLocaleDateString()
-      }
+      const dateText = getDateText(selectedDate)
 
       return (
         <>
