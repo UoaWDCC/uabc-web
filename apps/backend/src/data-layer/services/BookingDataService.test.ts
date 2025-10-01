@@ -1,5 +1,5 @@
-import type { EditBookingData } from "@repo/shared"
-import { casualUserMock } from "@repo/shared/mocks"
+import type { CreateSemesterData, EditBookingData } from "@repo/shared"
+import { casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
@@ -122,6 +122,86 @@ describe("bookingDataService", () => {
     it("should return empty array if there are no bookings by userId", async () => {
       const fetchedBooking = await bookingDataService.getAllBookingsByUserId("No bookings userId")
       expect(fetchedBooking).toStrictEqual([])
+    })
+  })
+
+  describe("getAllCurrentWeekBookingsByUserId", () => {
+    const now = new Date()
+
+    // Booking start weekday is Monday
+    const currentSemesterCreateMock: CreateSemesterData = {
+      ...semesterCreateMock,
+      startDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1)).toISOString(),
+      endDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 4, 0)).toISOString(),
+    }
+
+    it("should fetch all bookings within a booking week period", async () => {
+      const semester = await semesterDataService.createSemester(currentSemesterCreateMock)
+
+      const startTime = new Date(now)
+      startTime.setUTCMinutes(now.getUTCMinutes() + 1)
+      const endTime = new Date(startTime)
+      endTime.setUTCMinutes(now.getUTCMinutes() + 59)
+
+      const gameSession1 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        semester: semester.id,
+      })
+      const gameSession2 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        semester: semester.id,
+      })
+
+      const booking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: casualUserMock,
+        gameSession: gameSession1.id,
+      })
+      const booking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: casualUserMock,
+        gameSession: gameSession2.id,
+      })
+
+      const fetchedBookings = await bookingDataService.getAllCurrentWeekBookingsByUserId(
+        casualUserMock.id,
+        semester,
+      )
+      expect(fetchedBookings.length).toStrictEqual(2)
+      expect(fetchedBookings).toEqual(expect.arrayContaining([booking1, booking2]))
+    })
+
+    it("should not fetch bookings outside of the current booking week period", async () => {
+      const semester = await semesterDataService.createSemester(currentSemesterCreateMock)
+
+      // Set start and open time to a week ago
+      const startTime = new Date(now)
+      startTime.setUTCDate(now.getUTCDate() - 9)
+      const endTime = new Date(startTime)
+      endTime.setUTCDate(now.getUTCDate() - 8)
+
+      const gameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        semester: semester.id,
+      })
+
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: casualUserMock,
+        gameSession: gameSession.id,
+      })
+
+      const fetchedBookings = await bookingDataService.getAllCurrentWeekBookingsByUserId(
+        casualUserMock.id,
+        semester,
+      )
+      expect(fetchedBookings.length).toStrictEqual(0)
     })
   })
 
@@ -282,6 +362,35 @@ describe("bookingDataService", () => {
       expect(
         await bookingDataService.deleteBookingsBySemesterId("Not a valid semester ID"),
       ).toStrictEqual([])
+    })
+  })
+
+  describe("deleteBookingsByUserId", () => {
+    it("should delete user bookings by id", async () => {
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: casualUserMock,
+      })
+
+      await bookingDataService.createBooking({
+        ...bookingCreateMock2,
+        user: casualUserMock,
+      })
+
+      await bookingDataService.deleteBookingsByUserId(casualUserMock.id)
+      expect(await bookingDataService.getAllBookingsByUserId(casualUserMock.id)).toStrictEqual([])
+    })
+
+    it("should not delete bookings not related to the user", async () => {
+      const createdBooking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: memberUserMock,
+      })
+
+      await bookingDataService.deleteBookingsByUserId(casualUserMock.id)
+      expect(await bookingDataService.getAllBookingsByUserId(memberUserMock.id)).toStrictEqual([
+        createdBooking,
+      ])
     })
   })
 })
