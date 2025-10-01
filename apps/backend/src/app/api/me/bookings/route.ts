@@ -1,4 +1,4 @@
-import { BookingQueryType, getPayloadObjectId } from "@repo/shared"
+import { BookingQuerySchema, BookingQueryType, getPayloadObjectId } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { type NextRequest, NextResponse } from "next/server"
@@ -13,8 +13,9 @@ class RouteWrapper {
       const bookingDataService = new BookingDataService()
       const gameSessionDataService = new GameSessionDataService()
       const type = req.nextUrl.searchParams.get("type") || BookingQueryType.ALL
+      const result = BookingQuerySchema.safeParse({ type })
 
-      if (!Object.values(BookingQueryType).includes(type as BookingQueryType)) {
+      if (!result.success) {
         return NextResponse.json(
           { error: "Invalid query parameters", details: "Invalid query type provided" },
           { status: StatusCodes.BAD_REQUEST },
