@@ -12,6 +12,7 @@ import type { SessionData } from "@repo/ui/components/Composite/AdminSessionsTab
 import { Grid, GridItem, VStack } from "@yamada-ui/react"
 import { parseAsString, useQueryState } from "nuqs"
 import { useMemo } from "react"
+import { buildCsv } from "@/lib/csv"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
 import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
 
@@ -126,47 +127,25 @@ export const AdminSessions = () => {
     setDateParam(dateString)
   }
 
-  /**
-   * Properly escape a value for CSV format to prevent injection attacks
-   * - Replace double quotes with two double quotes
-   * - Wrap in quotes if contains comma, quote, newline
-   */
-  const escapeCsvValue = (value: string): string => {
-    if (!value) return '""'
-
-    // Escape double quotes by doubling them
-    const escaped = value.replace(/"/g, '""')
-
-    // Wrap in quotes if contains special characters
-    if (escaped.includes(",") || escaped.includes('"') || escaped.includes("\n")) {
-      return `"${escaped}"`
-    }
-
-    return escaped
-  }
-
   const handleExport = () => {
     if (!selectedSession) {
-      console.warn("No session to export")
       return
     }
 
     // Create CSV content with proper escaping
     const headers = ["Name", "Email", "Role", "Level", "Remaining Sessions"]
-    const csvRows = [
-      headers.map(escapeCsvValue).join(","),
-      ...selectedSessionAttendees.map((attendee) =>
-        [
-          escapeCsvValue(attendee.name),
-          escapeCsvValue(attendee.email),
-          escapeCsvValue(attendee.role),
-          escapeCsvValue(attendee.level),
-          escapeCsvValue(attendee.sessions),
-        ].join(","),
-      ),
+    const rows: Array<Array<string | number | null | undefined>> = [
+      headers,
+      ...selectedSessionAttendees.map((attendee) => [
+        attendee.name,
+        attendee.email,
+        attendee.role,
+        attendee.level,
+        attendee.sessions,
+      ]),
     ]
 
-    const csvContent = csvRows.join("\n")
+    const csvContent = buildCsv(rows)
 
     // Create and download file
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
@@ -188,8 +167,6 @@ export const AdminSessions = () => {
       }
       URL.revokeObjectURL(url)
     }
-
-    console.log("Exported member list for session:", selectedSession.id)
   }
 
   return (
