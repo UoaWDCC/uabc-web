@@ -214,7 +214,7 @@ describe("bookingDataService", () => {
         ...semesterCreateMock,
         startDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1)).toISOString(),
         endDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 4, 0)).toISOString(),
-        bookingOpenDay: Weekday.monday,
+        bookingOpenDay: Object.values(Weekday)[now.getUTCDay()],
         bookingOpenTime: new Date(1970, 0, 1, 23, 59).toISOString(), // 11:59 PM
       }
 
