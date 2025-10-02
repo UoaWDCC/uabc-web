@@ -9,19 +9,13 @@ import type {
   University,
   UpdateUserRequest,
 } from "@repo/shared/types"
+import { dayjs } from "@repo/shared/utils"
 import { ManagementTable } from "@repo/ui/components/Generic"
 import { Dialog, useDisclosure } from "@yamada-ui/react"
-import dayjs from "dayjs"
-import timezone from "dayjs/plugin/timezone"
-import utc from "dayjs/plugin/utc"
 import { type FC, memo, useMemo, useState } from "react"
 import { CreateMemberPopUp } from "../../Generic/CreateMemberPopUp/CreateMemberPopUp"
 import { columns, type UserData } from "./Columns"
 import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.tz.setDefault("Pacific/Auckland")
 
 /**
  * Props for admin table component.
@@ -39,17 +33,15 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
   const { open: openEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure()
   const { open: openDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure()
 
-  const userData = useMemo(
+  const userData: UserData[] = useMemo(
     () =>
       data.map((user) => ({
-        id: user.id,
+        ...user,
         name: `${user.firstName} ${user.lastName || ""}`,
-        email: user.email,
         remaining: String(user.remainingSessions),
         joined: dayjs(user.createdAt).format("DD MMM YYYY hh:mm A"),
-        role: user.role,
-        university: user.university,
-        level: user.playLevel,
+        university: user.university as University,
+        level: user.playLevel as PlayLevel,
       })),
     [data],
   )
@@ -66,18 +58,11 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
 
   const handleEditConfirm = (data: CreateMemberPopUpFormValues) => {
     if (selectedUser && onEdit) {
-      // TODO: improve the creation of UpdateUserRequest
       const updateUserRequest: UpdateUserRequest = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
+        ...data,
         role: data.role as MembershipType,
-        phoneNumber: data.phoneNumber,
         playLevel: data.playLevel as PlayLevel,
         gender: data.gender as Gender,
-        dietaryRequirements: data.dietaryRequirements,
-        studentId: data.studentId,
-        studentUpi: data.studentUpi,
         university: data.university as University,
       }
       onEdit(selectedUser.id, updateUserRequest)
@@ -115,7 +100,7 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
         ]}
         columns={columns}
         columnsConfig={COLUMNS_CONFIG}
-        data={userData as UserData[]}
+        data={userData}
         emptyStateColumnKey="name"
         emptyStateText="No users found."
         filterConfigs={FILTER_CONFIGS}

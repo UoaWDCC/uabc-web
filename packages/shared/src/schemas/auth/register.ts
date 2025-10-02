@@ -50,8 +50,14 @@ export const CreateMemberPopUpFormDataSchema = z
     role: MembershipTypeZodEnum.optional(),
     remainingSessions: z.coerce.number().optional(),
   })
-  .superRefine(({ university, studentId, studentUpi }, ctx) => {
-    if (university === University.uoa) {
+  .superRefine(({ university, studentId, studentUpi, role }, ctx) => {
+    if (!role) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["role"],
+        message: "Role is required",
+      })
+    } else if (university === University.uoa) {
       if (!studentId) {
         ctx.addIssue({
           code: "custom",
