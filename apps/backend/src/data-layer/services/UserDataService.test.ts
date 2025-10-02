@@ -170,6 +170,7 @@ describe("UserDataService", () => {
         email: "abcde@test.com",
         playLevel: "intermediate",
         role: MembershipType.casual,
+        remainingSessions: 0,
       })
       const advancedUser = await userDataService.createUser({
         ...userCreateMock,
