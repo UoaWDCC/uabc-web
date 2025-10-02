@@ -1,4 +1,4 @@
-import { BookingSchema, DeleteResponseSchema } from "@repo/shared/schemas"
+import { DeleteResponseSchema, UpdateBookingRequestSchema } from "@repo/shared/schemas"
 import type { UpdateBookingRequest } from "@repo/shared/types/booking"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
@@ -41,7 +41,7 @@ const AdminBookingService = {
     const response = await apiClient.patch(
       `/api/admin/bookings/${bookingId}`,
       data,
-      BookingSchema,
+      UpdateBookingRequestSchema,
       { requiresAuth: true, token },
     )
     return ApiClient.throwIfError(response)
