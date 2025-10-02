@@ -126,7 +126,7 @@ export const AdminTableWithPaginatedQuery = memo(
 
     const paginationMetadata = useMemo(() => {
       const totalDocs = queriedData?.pages?.[0]?.data?.totalDocs || 0
-      const currenUserDataCount =
+      const currentUserDataCount =
         queriedData?.pages?.reduce((total, page) => total + (page?.data?.docs?.length || 0), 0) || 0
       const totalPagesForCurrentPerPage = Math.ceil(totalDocs / searchParams.perPage)
       const currentPageForCurrentPerPage = searchParams.page
@@ -143,7 +143,7 @@ export const AdminTableWithPaginatedQuery = memo(
         hasNextPage: calculatedHasNextPage,
         hasPrevPage: currentPageForCurrentPerPage > 1,
         totalDocs: totalDocs,
-        currenUserDataCount: currenUserDataCount,
+        currenUserDataCount: currentUserDataCount,
       }
     }, [queriedData?.pages, searchParams.perPage, searchParams.page])
 
