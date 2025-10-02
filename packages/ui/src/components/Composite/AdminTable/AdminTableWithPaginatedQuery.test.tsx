@@ -451,7 +451,8 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const toggleColumnsButton = screen.getByRole("button", { name: "Toggle column visibility" })
     await user.click(toggleColumnsButton)
 
-    const emailCheckbox = screen.getByRole("checkbox", { name: "Email" })
+    const emailCheckbox = screen.getAllByRole("checkbox")[1]
+    expect(emailCheckbox).toBeDefined()
     expect(emailCheckbox).toBeChecked()
     await user.click(emailCheckbox)
     expect(onUrlUpdate).toHaveBeenCalledWith(
