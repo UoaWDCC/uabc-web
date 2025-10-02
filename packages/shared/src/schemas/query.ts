@@ -1,5 +1,5 @@
-import { BookingQueryType } from "src/enums"
 import z from "zod"
+import { BookingQueryType } from "../enums"
 
 export const BookingQuerySchema = z.object({
   type: z.nativeEnum(BookingQueryType).optional(),
