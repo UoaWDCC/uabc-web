@@ -47,7 +47,7 @@ export const CreateMemberPopUpFormDataSchema = z
     gender: GenderZodEnum.optional(),
     playLevel: PlayLevelZodEnum.optional(),
     dietaryRequirements: z.string().optional(),
-    role: MembershipTypeZodEnum.optional(),
+    role: MembershipTypeZodEnum,
     remainingSessions: z.coerce.number().optional(),
   })
   .superRefine(({ university, studentId, studentUpi, role }, ctx) => {
