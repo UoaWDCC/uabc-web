@@ -301,7 +301,10 @@ describe("<AdminTableWithPaginatedQuery />", () => {
   })
 
   it("should handle edit action correctly", async () => {
-    const onEdit = vi.fn((id: string, data: UpdateUserRequest) => data)
+    const onEdit = vi.fn((id: string, data: UpdateUserRequest) => {
+      id
+      data
+    })
 
     const mockQueryWithEdit = createMockUseGetPaginatedData({
       data: mockPaginationPage1,
