@@ -1,4 +1,9 @@
 import z from "zod"
+import { BookingQueryType } from "../enums"
+
+export const BookingQuerySchema = z.object({
+  type: z.nativeEnum(BookingQueryType).optional(),
+})
 
 export const PaginationQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(10),
