@@ -12,6 +12,7 @@ import type { SessionData } from "@repo/ui/components/Composite/AdminSessionsTab
 import { Grid, GridItem, VStack } from "@yamada-ui/react"
 import { parseAsString, useQueryState } from "nuqs"
 import { useMemo } from "react"
+import { buildCsv } from "@/lib/csv"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
 import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
 
@@ -63,6 +64,53 @@ const transformToAdminGameSession = (session: GameSessionWithCounts): AdminGameS
     ...session,
     day: weekdayMap[dayOfWeek],
     status,
+  }
+}
+
+/**
+ * Build CSV content for session attendees.
+ * Dynamically extracts all available fields from the attendee data.
+ */
+const buildSessionAttendeesCsv = (attendees: Array<SessionData>): string => {
+  if (!attendees || attendees.length === 0) return ""
+
+  // Extract all unique keys from all attendee objects
+  const allKeys = new Set<string>()
+  for (const attendee of attendees) {
+    for (const key of Object.keys(attendee)) {
+      allKeys.add(key)
+    }
+  }
+
+  const headers = Array.from(allKeys)
+
+  const rows: Array<Array<string | number | null | undefined>> = [
+    headers,
+    ...attendees.map((attendee) => headers.map((key) => attendee[key as keyof SessionData])),
+  ]
+
+  return buildCsv(rows)
+}
+
+/**
+ * Download CSV content as a file with the specified filename.
+ */
+const downloadCsvFile = (csvContent: string, filename: string): void => {
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+  const link = document.createElement("a")
+  const url = URL.createObjectURL(blob)
+
+  try {
+    link.setAttribute("href", url)
+    link.setAttribute("download", filename)
+    link.style.visibility = "hidden"
+    document.body.appendChild(link)
+    link.click()
+  } finally {
+    if (document.body.contains(link)) {
+      document.body.removeChild(link)
+    }
+    URL.revokeObjectURL(url)
   }
 }
 
@@ -127,10 +175,14 @@ export const AdminSessions = () => {
   }
 
   const handleExport = () => {
-    if (selectedSession) {
-      // TODO: Implement export functionality
-      console.log("Exporting member list for session:", selectedSession.id)
+    if (!selectedSession) {
+      return
     }
+
+    const csvContent = buildSessionAttendeesCsv(selectedSessionAttendees)
+    const filename = `session-attendees-${dayjs(selectedSession.startTime).format("YYYY-MM-DD")}.csv`
+
+    downloadCsvFile(csvContent, filename)
   }
 
   return (
