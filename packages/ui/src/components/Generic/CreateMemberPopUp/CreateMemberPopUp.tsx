@@ -64,19 +64,16 @@ export interface CreateMemberPopUpProps extends DialogProps {
  * @returns A modal dialog with title and input fields (pre-filled if default values given)
  *
  * @example
- /**
-  * Example usage:
-  * 
-  * <CreateMemberPopUp
-  *   userToEdit={userToEdit}
-  *   key={selectedUser?.id}
-  *   onClose={() => {
-  *     onCloseEdit()
-  *   }}
-  *   onConfirm={(values) => handleEditConfirm(values)}
-  *   open={openEdit}
-  * />
-  */
+ * <CreateMemberPopUp
+ *   userToEdit={userToEdit}
+ *   key={selectedUser?.id}
+ *   onClose={() => {
+ *     onCloseEdit()
+ *   }}
+ *   onConfirm={(values) => handleEditConfirm(values)}
+ *   open={openEdit}
+ * />
+ */
 export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
   title = "Create New Member",
   userToEdit,
