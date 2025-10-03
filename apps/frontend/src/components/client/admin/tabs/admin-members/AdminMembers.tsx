@@ -1,10 +1,7 @@
-import { AdminTable } from "@repo/ui/components/Composite"
-import { Button } from "@repo/ui/components/Primitive"
-import { useMemo } from "react"
-import { useDeleteUser, useUpdateUser } from "@/services/admin/user/AdminUserMutations"
 import { AdminTableWithPaginatedQuery } from "@repo/ui/components/Composite"
 import { Button } from "@repo/ui/components/Primitive"
 import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
+import { useDeleteUser, useUpdateUser } from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembers = () => {
@@ -17,10 +14,6 @@ export const AdminMembers = () => {
   const notice = useNotice()
 
   const deleteUserMutation = useDeleteUser()
-  const { data } = useGetPaginatedUsers({
-    limit: 20,
-    page: 1,
-  })
   const updateUserMutation = useUpdateUser()
 
   const handleResetConfirm = () => {
@@ -55,6 +48,33 @@ export const AdminMembers = () => {
               })
             },
           })
+        }}
+        onEdit={(id, data) => {
+          updateUserMutation.mutate(
+            { id, data },
+
+            {
+              onSuccess: () => {
+                notice({
+                  title: "Update successful",
+
+                  description: "User has been updated",
+
+                  status: "success",
+                })
+              },
+
+              onError: () => {
+                notice({
+                  title: "Update failed",
+
+                  description: "Failed to update user",
+
+                  status: "error",
+                })
+              },
+            },
+          )
         }}
         paginationWithEdges={false}
         useGetPaginatedData={useGetPaginatedUsers}

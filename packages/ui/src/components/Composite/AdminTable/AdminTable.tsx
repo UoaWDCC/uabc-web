@@ -21,9 +21,8 @@ import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
  * Props for admin table component.
  */
 export interface AdminTableProps {
-  data: UserData[]
+  data: User[]
   onEdit?: (id: string, data: UpdateUserRequest) => void
-  paginationWithEdges?: boolean
   onDelete?: (id: string) => void
 }
 
@@ -79,11 +78,9 @@ export const AdminTable: FC<AdminTableProps> = memo(({ data, onEdit, onDelete })
     }
   }
 
-    const handleDeleteConfirm = () => {
-      if (selectedUser && onDelete) {
-        onDelete(selectedUser.id)
-      }
-      onClose()
+  const handleDeleteConfirm = () => {
+    if (selectedUser && onDelete) {
+      onDelete(selectedUser.id)
     }
     onCloseDelete()
   }
