@@ -68,6 +68,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
     allowIDOnCreate: process.env.NODE_ENV === "test",
+    transactionOptions: {},
   }),
   email:
     process.env.NODE_ENV === "production"
