@@ -3,6 +3,7 @@ import {
   type CreateSemesterData,
   type EditBookingData,
   type GameSession,
+  Weekday,
 } from "@repo/shared"
 import { casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
