@@ -299,8 +299,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     expect(mockOnDelete).toHaveBeenCalledWith("0")
   })
 
-  it("should handle edit action correctly", async () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {})
+  it("should open CreateMemberPopUp upon edit action", async () => {
     const mockQueryWithEdit = createMockUseGetPaginatedData({
       data: mockPaginationPage1,
     })
@@ -318,16 +317,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const editButton = screen.getByText("Edit")
     await user.click(editButton)
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      "Edit",
-      expect.objectContaining({
-        id: "0",
-        name: "User0 Lastname0",
-        email: "user0@example.com",
-      }),
-    )
-
-    consoleSpy.mockRestore()
+    expect(screen.getByText("Edit Member")).toBeInTheDocument()
   })
 
   it("should handle delete dialog cancellation", async () => {
