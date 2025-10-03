@@ -168,14 +168,30 @@ export default class BookingDataService {
 
     const { bookingOpenDay, bookingOpenTime } = semester
 
-    const daysDifference = getDaysBetweenWeekdays(bookingOpenDay as Weekday, todayWeekday)
+    let daysDifference = getDaysBetweenWeekdays(bookingOpenDay as Weekday, todayWeekday)
 
-    const bookingStartPeriod = new Date(bookingOpenTime)
-    bookingStartPeriod.setUTCFullYear(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate() - daysDifference,
-    )
+    // Get the time components from bookingOpenTime
+    const openTime = new Date(bookingOpenTime)
+    const openHours = openTime.getUTCHours()
+    const openMinutes = openTime.getUTCMinutes()
+    const openSeconds = openTime.getUTCSeconds()
+    const openMilliseconds = openTime.getUTCMilliseconds()
+
+    // If we're on the same day as booking open day but before the booking open time,
+    // we should look at the previous week's booking period
+    if (daysDifference === 0) {
+      const todayBookingTime = new Date(now)
+      todayBookingTime.setUTCHours(openHours, openMinutes, openSeconds, openMilliseconds)
+
+      if (now < todayBookingTime) {
+        daysDifference = 7 // Go back to previous week
+      }
+    }
+
+    // Calculate the date for the booking start period
+    const bookingStartPeriod = new Date(now)
+    bookingStartPeriod.setUTCDate(now.getUTCDate() - daysDifference)
+    bookingStartPeriod.setUTCHours(openHours, openMinutes, openSeconds, openMilliseconds)
 
     const bookingEndPeriod = new Date(bookingStartPeriod)
     bookingEndPeriod.setUTCDate(bookingStartPeriod.getUTCDate() + 7)
