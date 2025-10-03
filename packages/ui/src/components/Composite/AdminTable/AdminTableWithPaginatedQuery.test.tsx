@@ -1,5 +1,6 @@
 import { casualUserMock } from "@repo/shared/mocks"
 import type { User } from "@repo/shared/payload-types"
+import type { UpdateUserRequest } from "@repo/shared/types"
 import { render, screen } from "@repo/ui/test-utils"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { isValidElement } from "react"
@@ -299,13 +300,15 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     expect(mockOnDelete).toHaveBeenCalledWith("0")
   })
 
-  it("should open CreateMemberPopUp upon edit action", async () => {
+  it("should handle edit action correctly", async () => {
+    const onEdit = vi.fn((id: string, data: UpdateUserRequest) => data)
+
     const mockQueryWithEdit = createMockUseGetPaginatedData({
       data: mockPaginationPage1,
     })
 
     const { user } = render(
-      <AdminTableWithPaginatedQuery useGetPaginatedData={mockQueryWithEdit} />,
+      <AdminTableWithPaginatedQuery onEdit={onEdit} useGetPaginatedData={mockQueryWithEdit} />,
       {
         wrapper: withNuqsTestingAdapter(),
       },
@@ -316,8 +319,10 @@ describe("<AdminTableWithPaginatedQuery />", () => {
 
     const editButton = screen.getByText("Edit")
     await user.click(editButton)
-
     expect(screen.getByText("Edit Member")).toBeInTheDocument()
+
+    await user.click(screen.getByTestId("submit"))
+    expect(onEdit).toBeCalled()
   })
 
   it("should handle delete dialog cancellation", async () => {

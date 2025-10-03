@@ -21,6 +21,7 @@ export const casualUserMock: User = {
   emailVerification: validEmailVerification,
   gender: Gender.nonBinary,
   role: MembershipType.casual,
+  phoneNumber: "0123456789",
   remainingSessions: 0,
   playLevel: PlayLevel.beginner,
   dietaryRequirements: "Peanut",
