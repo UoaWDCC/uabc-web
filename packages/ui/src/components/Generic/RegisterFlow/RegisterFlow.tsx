@@ -5,6 +5,7 @@ import type {
   BasicInfoForm1Values,
   BasicInfoForm2Values,
   CasualInfoFormValues,
+  OnboardingGlobal,
   RegisterFlowState,
   UniversityInfoFormValues,
 } from "@repo/shared/types"
@@ -97,6 +98,10 @@ interface RegisterFlowProps {
    * Callback function to handle the completion of the registration flow.
    */
   handleComplete?: (state: RegisterFlowState) => Promise<void>
+  /**
+   *
+   */
+  onboardingGlobal: OnboardingGlobal
 }
 
 /**
@@ -105,7 +110,7 @@ interface RegisterFlowProps {
  * @param handleComplete Callback function to handle the completion of the registration flow.
  * @returns The RegisterFlow component with all steps and forms.
  */
-export const RegisterFlow = memo(({ handleComplete }: RegisterFlowProps) => {
+export const RegisterFlow = memo(({ handleComplete, onboardingGlobal }: RegisterFlowProps) => {
   const { value: persistedState, setValue: setPersistedState } = useRegisterFlowStorage()
 
   const [state, dispatch] = useReducer(reducer, persistedState ?? initialState)
@@ -177,6 +182,7 @@ export const RegisterFlow = memo(({ handleComplete }: RegisterFlowProps) => {
         <CasualInfoForm
           defaultValues={state.casualInfo ?? undefined}
           key="casual-info-form-1"
+          onboardingGlobal={onboardingGlobal}
           onSubmit={handleStepSubmit("SET_CASUAL_INFO")}
         />
       ),
