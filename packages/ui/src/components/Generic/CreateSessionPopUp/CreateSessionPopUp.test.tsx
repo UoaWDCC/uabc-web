@@ -64,8 +64,8 @@ describe("<CreateSessionPopUp />", () => {
     const { user } = render(<CreateSessionPopUpExample />)
     await user.click(screen.getByText("Open pop up"))
 
+    user.click(screen.getByTestId("back"))
     await waitFor(() => {
-      user.click(screen.getByTestId("back"))
       expect(screen.getByRole("dialog")).not.toBeVisible()
     })
   })
