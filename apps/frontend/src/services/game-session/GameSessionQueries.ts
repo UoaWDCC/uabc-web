@@ -44,6 +44,7 @@ export const useGetAllGameSessionsBySemester = (id: string, sessionTimeFrame?: T
     ],
     queryFn: async () =>
       await GameSessionService.getAllGameSessionsBySemester(id, sessionTimeFrame),
+    enabled: !!id, // Only run query when we have a valid semester ID
   })
 }
 

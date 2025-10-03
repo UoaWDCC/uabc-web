@@ -13,7 +13,8 @@ import { Grid, GridItem, VStack } from "@yamada-ui/react"
 import { parseAsString, useQueryState } from "nuqs"
 import { useMemo } from "react"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
-import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
+import { useGetAllGameSessionsBySemester } from "@/services/game-session/GameSessionQueries"
+import { useGetCurrentSemester } from "@/services/semester/SemesterQueries"
 
 /**
  * Transform booking data to SessionData format for the table
@@ -80,8 +81,14 @@ const transformToAdminGameSession = (session: GameSessionWithCounts): AdminGameS
 export const AdminSessions = () => {
   const [dateParam, setDateParam] = useQueryState("date", parseAsString)
 
-  // Get current game sessions with attendee counts
-  const { data: gameSessionsData } = useGetCurrentGameSessions()
+  // Get current semester
+  const { data: currentSemester } = useGetCurrentSemester()
+  
+  // Get all game sessions for the current semester (past, present, and future)
+  // This allows admins to see all sessions within a semester, not just upcoming ones
+  const { data: gameSessionsData } = useGetAllGameSessionsBySemester(
+    currentSemester?.data?.id || ""
+  )
 
   const selectedDate = useMemo(() => {
     if (!dateParam) {
