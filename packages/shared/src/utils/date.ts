@@ -1,4 +1,5 @@
 import { format } from "date-fns"
+import { getWeekdayFromDayIndex } from "../constants"
 import type { Semester } from "../payload-types"
 import { Weekday } from "../types"
 
@@ -40,7 +41,7 @@ export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date
   const openTime = new Date(bookingOpenTime)
 
   const dayIndex = startTime.getUTCDay()
-  const day = Object.values(Weekday)[dayIndex]
+  const day = getWeekdayFromDayIndex(dayIndex)
   let daysDifference = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day)
 
   // If the session is on the same day as bookingOpenDay, check the time

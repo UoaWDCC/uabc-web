@@ -1,3 +1,4 @@
+import type { AdminGameSession } from "@repo/shared"
 import type { CalendarProps } from "@yamada-ui/calendar"
 import type { ButtonProps, DialogProps } from "@yamada-ui/react"
 import type { ReactNode } from "react"
@@ -160,6 +161,21 @@ export interface CalendarSelectPopupProps<T extends boolean = false> extends Pop
    * Custom footer content for the dialog
    */
   dialogFooter?: ReactNode
+  /**
+   * Game sessions to display on the calendar
+   * When provided, the calendar becomes session-aware
+   */
+  gameSessions?: AdminGameSession[]
+  /**
+   * Whether to show session indicators on the calendar
+   * @default true when gameSessions are provided
+   */
+  showSessionIndicators?: boolean
+  /**
+   * Whether to disable dates that don't have sessions
+   * @default true when gameSessions are provided
+   */
+  disableInactiveDates?: boolean
 }
 
 /**

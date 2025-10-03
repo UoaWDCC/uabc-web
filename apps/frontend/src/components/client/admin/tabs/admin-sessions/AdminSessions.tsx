@@ -1,17 +1,20 @@
 "use client"
 
 import type { AdminGameSession, GameSessionWithCounts } from "@repo/shared"
-import { dayjs, GameSessionStatus, type PlayLevel, Weekday } from "@repo/shared"
+import { dayjs, GameSessionStatus, type PlayLevel, Popup, Weekday } from "@repo/shared"
 import type { Booking, User } from "@repo/shared/payload-types"
 import {
   AdminGameSessionCard,
   AdminSessionsCalendar,
   AdminSessionsTable,
+  ChangeSessionPopup,
 } from "@repo/ui/components/Composite"
 import type { SessionData } from "@repo/ui/components/Composite/AdminSessionsTable/Columns"
-import { Grid, GridItem, VStack } from "@yamada-ui/react"
+import { usePopupState } from "@repo/ui/hooks"
+import { Grid, GridItem, useNotice, VStack } from "@yamada-ui/react"
 import { parseAsString, useQueryState } from "nuqs"
 import { useMemo } from "react"
+import { useUpdateBooking } from "@/services/admin/bookings/AdminBookingMutations"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
 import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
 
@@ -79,8 +82,26 @@ const transformToAdminGameSession = (session: GameSessionWithCounts): AdminGameS
  */
 export const AdminSessions = () => {
   const [dateParam, setDateParam] = useQueryState("date", parseAsString)
+  const [changeSessionFlowDateParam, setChangeSessionFlowDateParam] = useQueryState(
+    "change-session-flow-date",
+    parseAsString,
+  )
+  const notice = useNotice()
 
-  // Get current game sessions with attendee counts
+  const changeSessionPopup = usePopupState({
+    popupId: Popup.CHANGE_SESSION_FLOW,
+    initialValue: "",
+    onValueChange: () => {
+      // The booking ID is now managed through the URL parameter
+    },
+    onClose: () => {
+      // Clear the booking ID from URL when closing
+      changeSessionPopup.clearValue()
+    },
+  })
+
+  const updateBookingMutation = useUpdateBooking()
+
   const { data: gameSessionsData } = useGetCurrentGameSessions()
 
   const selectedDate = useMemo(() => {
@@ -91,7 +112,16 @@ export const AdminSessions = () => {
     return parsedDate
   }, [dateParam])
 
-  // Transform game sessions to admin format
+  const changeSessionFlowDate = useMemo(() => {
+    if (!changeSessionFlowDateParam) {
+      return null
+    }
+    const parsedDate = dayjs
+      .tz(changeSessionFlowDateParam, "YYYY-MM-DD", "Pacific/Auckland")
+      .toDate()
+    return parsedDate
+  }, [changeSessionFlowDateParam])
+
   const adminGameSessions = useMemo(() => {
     if (!gameSessionsData?.data) {
       return []
@@ -110,10 +140,8 @@ export const AdminSessions = () => {
     })
   }, [selectedDate, adminGameSessions])
 
-  // Fetch bookings for the selected session
   const { data: bookingsData } = useGetAllGameSessionBookings(selectedSession?.id || "")
 
-  // Transform bookings to session data for the table
   const selectedSessionAttendees = useMemo(() => {
     if (!bookingsData?.data) {
       return []
@@ -121,16 +149,74 @@ export const AdminSessions = () => {
     return bookingsData.data.map(transformBookingToSessionData)
   }, [bookingsData])
 
+  const bookingToChange = useMemo(() => {
+    const bookingId = changeSessionPopup.value
+    if (!bookingId || !selectedSessionAttendees.length) {
+      return null
+    }
+    return selectedSessionAttendees.find((attendee) => attendee.id === bookingId) || null
+  }, [changeSessionPopup.value, selectedSessionAttendees])
+
   const handleDateSelect = (date: Date) => {
     const dateString = dayjs.tz(date, "Pacific/Auckland").format("YYYY-MM-DD")
     setDateParam(dateString)
   }
 
+  const handleChangeSessionDateSelect = (date: Date | null) => {
+    if (date) {
+      const dateString = dayjs.tz(date, "Pacific/Auckland").format("YYYY-MM-DD")
+      setChangeSessionFlowDateParam(dateString)
+    } else {
+      setChangeSessionFlowDateParam(null)
+    }
+  }
+
   const handleExport = () => {
     if (selectedSession) {
-      // TODO: Implement export functionality
       console.log("Exporting member list for session:", selectedSession.id)
     }
+  }
+
+  const handleChangeSession = () => {
+    changeSessionPopup.open()
+  }
+
+  const handleTableChangeSession = (row: SessionData) => {
+    changeSessionPopup.setValue(row.id)
+    changeSessionPopup.open()
+  }
+
+  const handleSessionConfirm = (newSession: AdminGameSession) => {
+    if (!bookingToChange) {
+      return
+    }
+
+    updateBookingMutation.mutate(
+      {
+        bookingId: bookingToChange.id,
+        data: {
+          gameSession: newSession.id,
+        },
+      },
+      {
+        onSuccess: () => {
+          notice({
+            title: "Booking updated",
+            description: "Booking updated successfully",
+            status: "success",
+          })
+          changeSessionPopup.close()
+        },
+        onError: (error) => {
+          console.error("Failed to update booking:", error)
+          notice({
+            title: "Uh oh! Something went wrong",
+            description: "An error occurred while updating the booking. Please try again.",
+            status: "error",
+          })
+        },
+      },
+    )
   }
 
   return (
@@ -144,7 +230,11 @@ export const AdminSessions = () => {
             selectedDate={selectedDate}
           />
           {selectedSession && (
-            <AdminGameSessionCard gameSession={selectedSession} onExport={handleExport} />
+            <AdminGameSessionCard
+              gameSession={selectedSession}
+              onChangeSession={handleChangeSession}
+              onExport={handleExport}
+            />
           )}
         </VStack>
       </GridItem>
@@ -152,9 +242,25 @@ export const AdminSessions = () => {
       {/* Right Panel - Attendees Table */}
       <GridItem>
         <VStack gap="md" h="full">
-          <AdminSessionsTable data={selectedSessionAttendees} />
+          <AdminSessionsTable
+            data={selectedSessionAttendees}
+            onChangeSession={handleTableChangeSession}
+          />
         </VStack>
       </GridItem>
+
+      {/* Change Session Flow */}
+      <ChangeSessionPopup
+        availableSessions={adminGameSessions}
+        currentSession={selectedSession}
+        isLoading={updateBookingMutation.isPending}
+        isOpen={changeSessionPopup.isOpen}
+        onClose={changeSessionPopup.close}
+        onConfirm={handleSessionConfirm}
+        onDateSelect={handleChangeSessionDateSelect}
+        popupId={Popup.CHANGE_SESSION_FLOW}
+        selectedDate={changeSessionFlowDate}
+      />
     </Grid>
   )
 }
