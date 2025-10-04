@@ -22,7 +22,7 @@
     "@repo/shared": "workspace:*",
     "@repo/theme": "workspace:*",
     "@repo/ui": "workspace:*",
-    "@tanstack/react-query": "5.81.5",
+    "@tanstack/react-query": "5.90.2",
     "@yamada-ui/lucide": "1.10.5",
     "@yamada-ui/react": "1.7.8",
     "dayjs": "1.11.18",
