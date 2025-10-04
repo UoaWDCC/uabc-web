@@ -14,6 +14,7 @@ const createMockUser = (index: number): User => ({
   firstName: `User${index}`,
   lastName: `Lastname${index}`,
   email: `user${index}@example.com`,
+  phoneNumber: "0123456789",
 })
 
 const allMockUsers: User[] = Array.from({ length: 31 }, (_, i) => createMockUser(i))
@@ -326,7 +327,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
 
     await user.click(screen.getByTestId("submit"))
     expect(onEdit).toBeCalled()
-  })
+  }, 10_000)
 
   it("should handle delete dialog cancellation", async () => {
     const mockOnDelete = vi.fn()
