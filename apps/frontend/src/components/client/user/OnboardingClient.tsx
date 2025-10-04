@@ -1,10 +1,11 @@
 "use client"
 
+import type { OnboardingGlobal } from "@repo/shared"
 import { NotAuthorised, RegisterFlowSkeleton } from "@repo/ui/components/Generic"
 import { OnboardingSection } from "@/components/client/user/OnboardingSection"
 import { RoleGuard } from "@/context/RoleWrappers"
 
-export const OnboardingClient = () => {
+export const OnboardingClient = ({ onboardingGlobal }: { onboardingGlobal: OnboardingGlobal }) => {
   return (
     <RoleGuard
       fallback={
@@ -18,7 +19,7 @@ export const OnboardingClient = () => {
       }
       loading={<RegisterFlowSkeleton />}
     >
-      {(auth) => <OnboardingSection auth={auth} />}
+      {(auth) => <OnboardingSection auth={auth} onboardingGlobal={onboardingGlobal} />}
     </RoleGuard>
   )
 }

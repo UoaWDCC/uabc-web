@@ -1,6 +1,12 @@
 "use client"
 
-import { type Gender, PlayLevel, type RegisterFlowState, type University } from "@repo/shared"
+import {
+  type Gender,
+  type OnboardingGlobal,
+  PlayLevel,
+  type RegisterFlowState,
+  type University,
+} from "@repo/shared"
 import type { AuthContextValueWithUser } from "@repo/shared/types/auth"
 import { RegisterFlow } from "@repo/ui/components/Generic"
 import { useRegisterFlowStorage } from "@repo/ui/hooks/storage/registerFlowStorage"
@@ -8,7 +14,13 @@ import { Container } from "@yamada-ui/react"
 import { useEffect } from "react"
 import { useUpdateSelfMutation } from "@/services/auth/AuthMutations"
 
-export const OnboardingSection = ({ auth }: { auth: AuthContextValueWithUser }) => {
+export const OnboardingSection = ({
+  auth,
+  onboardingGlobal,
+}: {
+  auth: AuthContextValueWithUser
+  onboardingGlobal: OnboardingGlobal
+}) => {
   const { user } = auth
   const { setValue } = useRegisterFlowStorage()
   const updateSelfMutation = useUpdateSelfMutation()
@@ -61,7 +73,7 @@ export const OnboardingSection = ({ auth }: { auth: AuthContextValueWithUser }) 
 
   return (
     <Container centerContent layerStyle="container">
-      <RegisterFlow handleComplete={handleComplete} />
+      <RegisterFlow handleComplete={handleComplete} onboardingGlobal={onboardingGlobal} />
     </Container>
   )
 }

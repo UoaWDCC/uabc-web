@@ -1,3 +1,4 @@
+import { mockOnboardingGlobal } from "@repo/ui/test-config/mocks/CasualInfoForm.mock"
 import type { Meta, StoryObj } from "@storybook/react"
 import { RegisterFlow } from "./RegisterFlow"
 import { RegisterFlowSkeleton } from "./RegisterFlowSkeleton"
@@ -10,7 +11,11 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof RegisterFlow>
 
-export const Default: Story = {}
+export const Default: Story = {
+  args: {
+    onboardingGlobal: mockOnboardingGlobal,
+  },
+}
 
 export const Skeleton: Story = {
   render: () => <RegisterFlowSkeleton />,

@@ -2,6 +2,7 @@ import { casualUserMock } from "@repo/shared/mocks"
 import { mockAuthContextValue } from "@repo/shared/mocks/Authentication.mock"
 import { Gender, PlayLevel, University } from "@repo/shared/types"
 import type { AuthContextValueWithUser } from "@repo/shared/types/auth"
+import { mockOnboardingGlobal } from "@repo/ui/test-config/mocks/CasualInfoForm.mock"
 import { render, screen } from "@repo/ui/test-utils"
 import { OnboardingSection } from "./OnboardingSection"
 
@@ -25,12 +26,16 @@ describe("<OnboardingSection />", () => {
   })
 
   it("renders the register flow component", () => {
-    render(<OnboardingSection auth={mockAuthContextValue} />)
+    render(
+      <OnboardingSection auth={mockAuthContextValue} onboardingGlobal={mockOnboardingGlobal} />,
+    )
     expect(screen.getByText("Basic Info")).toBeInTheDocument()
   })
 
   it("should call handleComplete when registration is complete", async () => {
-    const { user } = render(<OnboardingSection auth={mockAuthContextValue} />)
+    const { user } = render(
+      <OnboardingSection auth={mockAuthContextValue} onboardingGlobal={mockOnboardingGlobal} />,
+    )
 
     // Basic Info Form 1
     await user.click(screen.getByText("Continue"))
@@ -87,7 +92,9 @@ describe("<OnboardingSection />", () => {
       },
     }
 
-    render(<OnboardingSection auth={mockAuthMissingFields} />)
+    render(
+      <OnboardingSection auth={mockAuthMissingFields} onboardingGlobal={mockOnboardingGlobal} />,
+    )
     expect(screen.getByText("Casual member information")).toBeInTheDocument()
   })
 
@@ -108,7 +115,7 @@ describe("<OnboardingSection />", () => {
       },
     }
 
-    render(<OnboardingSection auth={userWithOnlyPhone} />)
+    render(<OnboardingSection auth={userWithOnlyPhone} onboardingGlobal={mockOnboardingGlobal} />)
     expect(screen.getByText("Basic Info")).toBeInTheDocument()
   })
 
@@ -129,7 +136,7 @@ describe("<OnboardingSection />", () => {
       },
     }
 
-    render(<OnboardingSection auth={userWithOnlyGender} />)
+    render(<OnboardingSection auth={userWithOnlyGender} onboardingGlobal={mockOnboardingGlobal} />)
     expect(screen.getByText("Basic Info")).toBeInTheDocument()
   })
 
@@ -150,7 +157,12 @@ describe("<OnboardingSection />", () => {
       },
     }
 
-    render(<OnboardingSection auth={userWithUniversityAndGender} />)
+    render(
+      <OnboardingSection
+        auth={userWithUniversityAndGender}
+        onboardingGlobal={mockOnboardingGlobal}
+      />,
+    )
     expect(screen.getByText("Basic Info")).toBeInTheDocument()
   })
 })
