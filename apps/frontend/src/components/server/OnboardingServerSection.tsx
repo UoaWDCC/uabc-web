@@ -7,7 +7,7 @@ import { OnboardingClient } from "../client/user/OnboardingClient"
  * @returns An onboarding section component.
  */
 export const OnboardingServerSection = async () => {
-  const onboardingGlobal = await getOnboarding()
+  const onboardingResponse = await getOnboarding()
 
-  return <OnboardingClient onboardingGlobal={onboardingGlobal} />
+  return <OnboardingClient onboardingGlobal={onboardingResponse.data} />
 }

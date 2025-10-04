@@ -180,10 +180,11 @@ export const RegisterFlow = memo(({ handleComplete, onboardingGlobal }: Register
       title: "Casual Member Info",
       element: (
         <CasualInfoForm
+          casualMemberInformation={onboardingGlobal.casualMemberInformation}
           defaultValues={state.casualInfo ?? undefined}
           key="casual-info-form-1"
-          onboardingGlobal={onboardingGlobal}
           onSubmit={handleStepSubmit("SET_CASUAL_INFO")}
+          richTextProps={{ mediaBaseUrl: process.env.NEXT_PUBLIC_API_URL }}
         />
       ),
     },
