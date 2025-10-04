@@ -211,8 +211,8 @@ importers:
         specifier: 15.3.5
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4)
       nuqs:
-        specifier: 2.6.0
-        version: 2.6.0(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4))(react@19.1.1)
+        specifier: 2.7.0
+        version: 2.7.0(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4))(react@19.1.1)
       react:
         specifier: 19.1.1
         version: 19.1.1
@@ -354,8 +354,8 @@ importers:
         specifier: 15.3.5
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4)
       nuqs:
-        specifier: 2.6.0
-        version: 2.6.0(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4))(react@19.1.1)
+        specifier: 2.7.0
+        version: 2.7.0(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4))(react@19.1.1)
       react:
         specifier: 19.1.1
         version: 19.1.1
@@ -5905,8 +5905,8 @@ packages:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
 
-  nuqs@2.6.0:
-    resolution: {integrity: sha512-EvIKBvfJeyL8n6lxfebxoAbkHJutNsxmy1oo4noFUYNUESbnecxWxgnxXoa0/4fYiFwdEuyMQx1Z9rV0h4bnkg==}
+  nuqs@2.7.0:
+    resolution: {integrity: sha512-p6j6AuOVbnIlMSOlymKVDQtDkSCgjKxikwrqE9zThEOrP0UMfB/dwHuc6nKCuBPveoNghbh15zwoyTTv0XLp+A==}
     peerDependencies:
       '@remix-run/react': '>=2'
       '@tanstack/react-router': ^1
@@ -14073,7 +14073,7 @@ snapshots:
 
   normalize-path@3.0.0: {}
 
-  nuqs@2.6.0(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4))(react@19.1.1):
+  nuqs@2.7.0(next@15.3.5(@babel/core@7.28.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4))(react@19.1.1):
     dependencies:
       '@standard-schema/spec': 1.0.0
       react: 19.1.1
