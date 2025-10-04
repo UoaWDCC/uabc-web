@@ -1,6 +1,6 @@
 "use client"
 
-import { AdditionalInfoSchema, Gender, PlayLevel } from "@repo/shared"
+import { AdditionalInfoSchema, GenderOptions, PlayLevelOptions } from "@repo/shared"
 import { casualUserMock } from "@repo/shared/mocks"
 import type { Field, NullableFormData } from "@repo/ui/components/Generic"
 import { UserProfileCard, type UserProfileCardProps } from "@repo/ui/components/Generic"
@@ -40,16 +40,6 @@ export const AdditionalInfo = <T extends readonly Field[]>({
   )
 }
 
-const genderOptions = Object.values(Gender).map((value) => ({
-  value,
-  label: value,
-}))
-
-const playLevelOptions = Object.values(PlayLevel).map((value) => ({
-  value,
-  label: value,
-}))
-
 export const defaultFields = [
   {
     key: "gender",
@@ -57,7 +47,7 @@ export const defaultFields = [
     label: "Gender",
     placeholder: "Enter your gender",
     inputType: InputType.Text,
-    items: genderOptions,
+    items: GenderOptions,
   },
   {
     key: "playLevel",
@@ -65,7 +55,7 @@ export const defaultFields = [
     label: "Play Level",
     placeholder: "Enter your play level",
     inputType: InputType.Text,
-    items: playLevelOptions,
+    items: PlayLevelOptions,
   },
   {
     key: "dietaryRequirements",

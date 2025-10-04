@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   AdditionalInfoFormSchema,
   type AdditionalInfoFormValues,
-  Gender,
-  PlayLevel,
+  GenderOptions,
+  PlayLevelOptions,
 } from "@repo/shared"
 import { Button, Heading, InputType, Select, TextInput } from "@repo/ui/components/Primitive"
 import { BeanOffIcon, IdCardIcon, VenusAndMarsIcon } from "@yamada-ui/lucide"
@@ -26,22 +26,6 @@ export interface AdditionalInfoFormProps {
    */
   onSubmit?: SubmitHandler<AdditionalInfoFormValues>
 }
-
-/**
- * Options for the Gender Select component, using enum values from {@link Gender}.
- */
-const genderOptions = Object.values(Gender).map((value) => ({
-  value: value,
-  label: value,
-}))
-
-/**
- * Options for the Skill Level Select component, using enum values from {@link PlayLevel}.
- */
-const playLevelOptions = Object.values(PlayLevel).map((playLevel) => ({
-  value: playLevel,
-  label: playLevel,
-}))
 
 /**
  * Form component for the additional info form of the register flow.
@@ -82,7 +66,7 @@ export const AdditionalInfoForm: FC<AdditionalInfoFormProps> = memo(
                 <Select
                   data-testid="gender"
                   icon={<VenusAndMarsIcon />}
-                  items={genderOptions}
+                  items={GenderOptions}
                   label="Gender"
                   {...field}
                 />
@@ -98,7 +82,7 @@ export const AdditionalInfoForm: FC<AdditionalInfoFormProps> = memo(
                 <Select
                   data-testid="skill-level"
                   icon={<IdCardIcon />}
-                  items={playLevelOptions}
+                  items={PlayLevelOptions}
                   label="Skill level"
                   {...field}
                 />
