@@ -52,24 +52,18 @@ export const AdminMembers = () => {
         onEdit={(id, data) => {
           updateUserMutation.mutate(
             { id, data },
-
             {
               onSuccess: () => {
                 notice({
                   title: "Update successful",
-
                   description: "User has been updated",
-
                   status: "success",
                 })
               },
-
               onError: () => {
                 notice({
                   title: "Update failed",
-
                   description: "Failed to update user",
-
                   status: "error",
                 })
               },

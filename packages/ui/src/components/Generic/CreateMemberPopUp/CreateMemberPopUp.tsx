@@ -184,7 +184,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                   <TextInput
                     data-testid="student-upi"
                     defaultValue={userToEdit?.studentUpi ?? undefined}
-                    disabled={watch("university") !== University.uoa}
+                    disabled={(watch("university") ?? userToEdit?.university) !== University.uoa}
                     placeholder="UPI"
                     size="lg"
                     startElement={<UserIcon />}
@@ -255,7 +255,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
                   <TextInput
                     data-testid="student-id"
                     defaultValue={userToEdit?.studentId ?? undefined}
-                    disabled={watch("university") !== University.uoa}
+                    disabled={(watch("university") ?? userToEdit?.university) !== University.uoa}
                     placeholder="Student ID"
                     size="lg"
                     startElement={<UserIcon />}

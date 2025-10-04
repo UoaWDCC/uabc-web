@@ -40,7 +40,7 @@ export const CreateMemberPopUpFormDataSchema = z
     email: z.string().email(),
     firstName: z.string().min(1, "Field is required"),
     lastName: z.string().optional(),
-    phoneNumber: PhoneNumberSchema.optional(),
+    phoneNumber: PhoneNumberSchema.or(z.literal("")).optional(),
     university: UniversityZodEnum.optional(),
     studentId: z.string().optional(),
     studentUpi: z.string().optional(),
@@ -50,14 +50,8 @@ export const CreateMemberPopUpFormDataSchema = z
     role: MembershipTypeZodEnum,
     remainingSessions: z.coerce.number().optional(),
   })
-  .superRefine(({ university, studentId, studentUpi, role }, ctx) => {
-    if (!role) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["role"],
-        message: "Role is required",
-      })
-    } else if (university === University.uoa) {
+  .superRefine(({ university, studentId, studentUpi }, ctx) => {
+    if (university === University.uoa) {
       if (!studentId) {
         ctx.addIssue({
           code: "custom",
@@ -136,7 +130,7 @@ export const BasicInfoForm2Schema = z.object({
    *
    * @remarks Current regex tests that it is a string with at least 1 number in it
    */
-  phoneNumber: PhoneNumberSchema,
+  phoneNumber: PhoneNumberSchema.or(z.literal("")).optional(),
 })
 
 export const UniversityInfoFormSchema = z
