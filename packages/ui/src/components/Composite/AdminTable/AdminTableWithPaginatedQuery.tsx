@@ -16,8 +16,8 @@ import { Dialog, useDisclosure } from "@yamada-ui/react"
 import dayjs from "dayjs"
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryStates } from "nuqs"
 import { memo, useCallback, useEffect, useMemo, useState } from "react"
-import type { FieldFiltersFromConfig } from "../../Generic/ManagementTable/Filter"
 import { CreateMemberPopUp } from "../../Generic/CreateMemberPopUp"
+import type { FieldFiltersFromConfig } from "../../Generic/ManagementTable/Filter"
 import { columns, type UserData } from "./Columns"
 import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
 
@@ -225,7 +225,7 @@ export const AdminTableWithPaginatedQuery = memo(
       const rowArray = Array.from(rows)
       setSearchParams({ selectedRows: rowArray.length === 0 ? null : rowArray })
     }
-            
+
     const handleEditClick = (row: UserData) => {
       const currentUsers = queriedData?.pages.flatMap((page) => page.data?.docs || []) || []
       const user = currentUsers.find((user) => user.id === row.id)
