@@ -1,7 +1,12 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { University, UniversityInfoFormSchema, type UniversityInfoFormValues } from "@repo/shared"
+import {
+  University,
+  UniversityInfoFormSchema,
+  type UniversityInfoFormValues,
+  UniversityOptions,
+} from "@repo/shared"
 import { Button, Heading, InputType, Select, TextInput } from "@repo/ui/components/Primitive"
 import { UniversityIcon, UserIcon } from "@yamada-ui/lucide"
 import { FormControl, memo, noop, VStack } from "@yamada-ui/react"
@@ -21,14 +26,6 @@ export interface UniversityInfoFormProps {
    */
   onSubmit?: SubmitHandler<UniversityInfoFormValues>
 }
-
-/**
- * Options for the University Select component, using enum values from {@link University}.
- */
-const universityOptions = Object.values(University).map((value) => ({
-  value: value,
-  label: value,
-}))
 
 /**
  * Form component for the university info form of the register flow.
@@ -70,7 +67,7 @@ export const UniversityInfoForm: FC<UniversityInfoFormProps> = memo(
                 <Select
                   data-testid="university"
                   icon={<UniversityIcon />}
-                  items={universityOptions}
+                  items={UniversityOptions}
                   label="University"
                   {...field}
                 />
