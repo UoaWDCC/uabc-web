@@ -1,7 +1,15 @@
 "use client"
 
 import type { User } from "@repo/shared/payload-types"
-import type { PaginationQuery } from "@repo/shared/types"
+import type {
+  CreateMemberPopUpFormValues,
+  Gender,
+  MembershipType,
+  PaginationQuery,
+  PlayLevel,
+  University,
+  UpdateUserRequest,
+} from "@repo/shared/types"
 import { ManagementTable } from "@repo/ui/components/Generic"
 import type { UseInfiniteQueryResult } from "@tanstack/react-query"
 import { Dialog, useDisclosure } from "@yamada-ui/react"
@@ -9,6 +17,7 @@ import dayjs from "dayjs"
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryStates } from "nuqs"
 import { memo, useCallback, useEffect, useMemo, useState } from "react"
 import type { FieldFiltersFromConfig } from "../../Generic/ManagementTable/Filter"
+import { CreateMemberPopUp } from "../../Generic/CreateMemberPopUp"
 import { columns, type UserData } from "./Columns"
 import { COLUMNS_CONFIG, FILTER_CONFIGS } from "./constants"
 
@@ -46,6 +55,7 @@ interface AdminTableWithPaginatedDataProps {
     },
     Error
   >
+  onEdit?: (id: string, data: UpdateUserRequest) => void
   onDelete?: (id: string) => void
   paginationWithEdges?: boolean
 }
@@ -62,10 +72,12 @@ export const AdminTableWithPaginatedQuery = memo(
   ({
     useGetPaginatedData,
     paginationWithEdges = true,
-    ...props
+    onEdit,
+    onDelete,
   }: AdminTableWithPaginatedDataProps) => {
-    const { open, onOpen, onClose } = useDisclosure()
-    const [selectedUser, setSelectedUser] = useState<UserData | null>(null)
+    const { open: openEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure()
+    const { open: openDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure()
+    const [selectedUser, setSelectedUser] = useState<User | null>(null)
     const [isFetchingPages, setIsFetchingPages] = useState(false)
     const [searchParams, setSearchParams] = useQueryStates(
       {
@@ -213,17 +225,44 @@ export const AdminTableWithPaginatedQuery = memo(
       const rowArray = Array.from(rows)
       setSearchParams({ selectedRows: rowArray.length === 0 ? null : rowArray })
     }
+            
+    const handleEditClick = (row: UserData) => {
+      const currentUsers = queriedData?.pages.flatMap((page) => page.data?.docs || []) || []
+      const user = currentUsers.find((user) => user.id === row.id)
+      if (user) {
+        setSelectedUser(user)
+        onOpenEdit()
+      }
+    }
+
+    const handleEditConfirm = (data: CreateMemberPopUpFormValues) => {
+      if (selectedUser && onEdit) {
+        const updateUserRequest: UpdateUserRequest = {
+          ...data,
+          role: data.role as MembershipType,
+          playLevel: data.playLevel as PlayLevel,
+          gender: data.gender as Gender,
+          university: data.university as University,
+        }
+        onEdit(selectedUser.id, updateUserRequest)
+      }
+      onCloseEdit()
+    }
 
     const handleDeleteClick = (row: UserData) => {
-      setSelectedUser(row)
-      onOpen()
+      const currentUsers = queriedData?.pages.flatMap((page) => page.data?.docs || []) || []
+      const user = currentUsers.find((user) => user.id === row.id)
+      if (user) {
+        setSelectedUser(user)
+        onOpenDelete()
+      }
     }
 
     const handleDeleteConfirm = () => {
-      if (selectedUser && props.onDelete) {
-        props.onDelete(selectedUser.id)
+      if (selectedUser && onDelete) {
+        onDelete(selectedUser.id)
       }
-      onClose()
+      onCloseDelete()
     }
 
     return (
@@ -232,9 +271,7 @@ export const AdminTableWithPaginatedQuery = memo(
           actions={[
             {
               text: "Edit",
-              onClick: (row: UserData) => {
-                console.log("Edit", row)
-              },
+              onClick: handleEditClick,
             },
             {
               text: "Delete",
@@ -263,13 +300,28 @@ export const AdminTableWithPaginatedQuery = memo(
           rowId="id"
         />
 
+        <CreateMemberPopUp
+          key={selectedUser?.id}
+          onClose={() => {
+            setSelectedUser(null)
+            onCloseEdit()
+          }}
+          onConfirm={(data) => handleEditConfirm(data)}
+          open={openEdit}
+          title="Edit Member"
+          userToEdit={selectedUser}
+        />
+
         <Dialog
           cancel="Cancel"
           header="Are you sure?"
-          onCancel={onClose}
-          onClose={onClose}
+          onCancel={onCloseDelete}
+          onClose={() => {
+            setSelectedUser(null)
+            onCloseDelete()
+          }}
           onSuccess={handleDeleteConfirm}
-          open={open}
+          open={openDelete}
           success={{
             children: "Delete",
             colorScheme: "danger",
