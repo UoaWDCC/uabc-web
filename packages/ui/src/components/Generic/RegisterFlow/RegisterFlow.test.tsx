@@ -1,5 +1,6 @@
 import { Gender, PlayLevel, University } from "@repo/shared/types"
 import { setupTestEnvironment } from "@repo/ui/test-config/localStorage-test-utils"
+import { mockOnboardingGlobal } from "@repo/ui/test-config/mocks/CasualInfoForm.mock"
 import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement } from "react"
 import * as RegisterFlowModule from "./index"
@@ -12,7 +13,9 @@ describe("<RegisterFlow />", () => {
 
   it("should re-export the RegisterFlow component and check if RegisterFlow exists", () => {
     expect(RegisterFlowModule.RegisterFlow).toBeDefined()
-    expect(isValidElement(<RegisterFlowModule.RegisterFlow />)).toBeTruthy()
+    expect(
+      isValidElement(<RegisterFlowModule.RegisterFlow onboardingGlobal={mockOnboardingGlobal} />),
+    ).toBeTruthy()
   })
 
   it("should have correct displayName", () => {
@@ -21,7 +24,9 @@ describe("<RegisterFlow />", () => {
 
   it("should progress through the entire register flow and display the Register Success Panel and handle submission once complete", async () => {
     const handleComplete = vi.fn()
-    const { user } = render(<RegisterFlow handleComplete={handleComplete} />)
+    const { user } = render(
+      <RegisterFlow handleComplete={handleComplete} onboardingGlobal={mockOnboardingGlobal} />,
+    )
 
     // Basic Info Form 1
     expect(screen.getByTestId("go-back")).toBeDisabled()
@@ -60,7 +65,7 @@ describe("<RegisterFlow />", () => {
   }, 10_000)
 
   it("should return to the previous step when the go back button is pressed, and pre-fill the fields", async () => {
-    const { user } = render(<RegisterFlow />)
+    const { user } = render(<RegisterFlow onboardingGlobal={mockOnboardingGlobal} />)
 
     const sampleFirstName = "Brandon"
     const sampleLastName = "Chan"

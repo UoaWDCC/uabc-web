@@ -1,5 +1,6 @@
 import { casualUserMock } from "@repo/shared/mocks"
 import type { User } from "@repo/shared/payload-types"
+import type { UpdateUserRequest } from "@repo/shared/types"
 import { render, screen } from "@repo/ui/test-utils"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { isValidElement } from "react"
@@ -13,6 +14,7 @@ const createMockUser = (index: number): User => ({
   firstName: `User${index}`,
   lastName: `Lastname${index}`,
   email: `user${index}@example.com`,
+  phoneNumber: "0123456789",
 })
 
 const allMockUsers: User[] = Array.from({ length: 31 }, (_, i) => createMockUser(i))
@@ -300,13 +302,17 @@ describe("<AdminTableWithPaginatedQuery />", () => {
   })
 
   it("should handle edit action correctly", async () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {})
+    const onEdit = vi.fn((id: string, data: UpdateUserRequest) => {
+      id
+      data
+    })
+
     const mockQueryWithEdit = createMockUseGetPaginatedData({
       data: mockPaginationPage1,
     })
 
     const { user } = render(
-      <AdminTableWithPaginatedQuery useGetPaginatedData={mockQueryWithEdit} />,
+      <AdminTableWithPaginatedQuery onEdit={onEdit} useGetPaginatedData={mockQueryWithEdit} />,
       {
         wrapper: withNuqsTestingAdapter(),
       },
@@ -317,18 +323,11 @@ describe("<AdminTableWithPaginatedQuery />", () => {
 
     const editButton = screen.getByText("Edit")
     await user.click(editButton)
+    expect(screen.getByText("Edit Member")).toBeInTheDocument()
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      "Edit",
-      expect.objectContaining({
-        id: "0",
-        name: "User0 Lastname0",
-        email: "user0@example.com",
-      }),
-    )
-
-    consoleSpy.mockRestore()
-  })
+    await user.click(screen.getByTestId("submit"))
+    expect(onEdit).toBeCalled()
+  }, 10_000)
 
   it("should handle delete dialog cancellation", async () => {
     const mockOnDelete = vi.fn()
