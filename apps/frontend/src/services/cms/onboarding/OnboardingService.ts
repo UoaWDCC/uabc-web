@@ -1,4 +1,4 @@
-import { OnboardingGlobalSchema } from "@repo/shared"
+import { GetOnboardingResponseSchema } from "@repo/shared"
 import { cache } from "react"
 import { ApiClient, apiClient } from "@/lib/api/client"
 import { QueryKeys } from "@/services"
@@ -10,7 +10,7 @@ import { QueryKeys } from "@/services"
  * @throws When the API request fails
  */
 export const getOnboarding = cache(async () => {
-  const response = await apiClient.get("/api/globals/onboarding", OnboardingGlobalSchema, {
+  const response = await apiClient.get("/api/globals/onboarding", GetOnboardingResponseSchema, {
     tags: [QueryKeys.ONBOARDING],
   })
   return ApiClient.throwIfError(response)
