@@ -1,7 +1,14 @@
+import type { CreateUserRequest } from "@repo/shared/types"
 import { AdminTableWithPaginatedQuery } from "@repo/ui/components/Composite"
+import { useFilterActions } from "@repo/ui/components/Generic/ManagementTable/Filter/FilterActionsContext"
 import { Button } from "@repo/ui/components/Primitive"
 import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
-import { useDeleteUser, useUpdateUser } from "@/services/admin/user/AdminUserMutations"
+import { useEffect } from "react"
+import {
+  useCreateUser,
+  useDeleteUser,
+  useUpdateUser,
+} from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembers = () => {
@@ -13,8 +20,11 @@ export const AdminMembers = () => {
   } = useDisclosure()
   const notice = useNotice()
 
+  const createUserMutation = useCreateUser()
   const deleteUserMutation = useDeleteUser()
   const updateUserMutation = useUpdateUser()
+
+  const { setAddMember } = useFilterActions()
 
   const handleResetConfirm = () => {
     onCloseConfirm()
@@ -27,6 +37,29 @@ export const AdminMembers = () => {
       title: "TODO: Reset Memberships",
     })
   }
+
+  // TODO: decide if should remove suppression
+  // biome-ignore lint/correctness/useExhaustiveDependencies: We want this to run on first render only
+  useEffect(() => {
+    setAddMember((data: CreateUserRequest) => {
+      createUserMutation.mutate(data, {
+        onSuccess: () => {
+          notice({
+            title: "Creation successful",
+            description: "User has been created",
+            status: "success",
+          })
+        },
+        onError: () => {
+          notice({
+            title: "Creation failed",
+            description: "Failed to create user",
+            status: "error",
+          })
+        },
+      })
+    })
+  }, [])
 
   return (
     <>
