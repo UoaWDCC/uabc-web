@@ -12,17 +12,18 @@ import {
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembers = () => {
+  const notice = useNotice()
+
   const { open: openConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const {
     open: openFinalConfirm,
     onOpen: onOpenFinalConfirm,
     onClose: onCloseFinalConfirm,
   } = useDisclosure()
-  const notice = useNotice()
 
   const createUserMutation = useCreateUser()
-  const deleteUserMutation = useDeleteUser()
   const updateUserMutation = useUpdateUser()
+  const deleteUserMutation = useDeleteUser()
 
   const { setAddMember } = useFilterActions()
 
@@ -57,7 +58,6 @@ export const AdminMembers = () => {
     })
   }
 
-  // TODO: decide if should remove suppression
   // biome-ignore lint/correctness/useExhaustiveDependencies: We want this to run on first render only
   useEffect(() => {
     setAddMember(() => createUser)
