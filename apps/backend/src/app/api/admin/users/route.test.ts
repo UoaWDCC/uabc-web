@@ -125,9 +125,10 @@ describe("/api/admin/users", async () => {
       const res = await GET(req)
       const json = await res.json()
 
+      expect(json.data.docs.length).toBeGreaterThanOrEqual(2)
+      expect(json.data.docs).toStrictEqual(expect.arrayContaining([levelTestUser1]))
+      expect(json.data.docs).toStrictEqual(expect.arrayContaining([levelTestUser3]))
       const returnedIds = json.data.docs.map((u: { id: string }) => u.id)
-      expect(returnedIds).toContain(levelTestUser1.id)
-      expect(returnedIds).toContain(levelTestUser3.id)
       expect(returnedIds).not.toContain(levelTestUser2.id)
     })
 
