@@ -1,10 +1,14 @@
 import { Gender, MembershipType, PlayLevel, University } from "@repo/shared"
 import type { CollectionConfig } from "payload"
+import { validateUserRemainingSessions } from "../validators/user-remaining-sessions"
 
 export const User: CollectionConfig = {
   slug: "user",
   admin: {
     useAsTitle: "email",
+  },
+  hooks: {
+    beforeChange: [validateUserRemainingSessions],
   },
   fields: [
     {

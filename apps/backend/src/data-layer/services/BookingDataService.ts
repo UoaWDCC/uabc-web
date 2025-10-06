@@ -1,12 +1,12 @@
 import {
+  BookingQueryType,
   type CreateBookingData,
   type EditBookingData,
   getDaysBetweenWeekdays,
   Weekday,
 } from "@repo/shared"
 import type { Booking, Semester } from "@repo/shared/payload-types"
-import type { PaginatedDocs } from "payload"
-import { NotFound } from "payload"
+import type { NotFound, PaginatedDocs, Where } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
 
 export default class BookingDataService {
@@ -113,18 +113,35 @@ export default class BookingDataService {
 
   /**
    * Finds all {@link Booking} documents by a {@link User}'s id
-   *
    * @param userId The ID of the user whose {@link Booking} you find
+   * @param type The type of bookings to fetch, either all or only future bookings. Defaults to {@link BookingQueryType.ALL}
    * @returns all {@link Booking} documents if successful
    */
-  public async getAllBookingsByUserId(userId: string): Promise<Booking[]> {
+  public async getAllBookingsByUserId(
+    userId: string,
+    type: BookingQueryType = BookingQueryType.ALL,
+  ): Promise<Booking[]> {
+    const and: Where[] = [
+      {
+        user: {
+          equals: userId,
+        },
+      },
+    ]
+
+    if (type === BookingQueryType.FUTURE) {
+      and.push({
+        "gameSession.startTime": {
+          greater_than: new Date().toISOString(),
+        },
+      })
+    }
+
     return (
       await payload.find({
         collection: "booking",
         where: {
-          user: {
-            equals: userId,
-          },
+          and,
         },
         pagination: false,
       })
@@ -151,14 +168,30 @@ export default class BookingDataService {
 
     const { bookingOpenDay, bookingOpenTime } = semester
 
-    const daysDifference = getDaysBetweenWeekdays(bookingOpenDay as Weekday, todayWeekday)
+    let daysDifference = getDaysBetweenWeekdays(bookingOpenDay as Weekday, todayWeekday)
 
-    const bookingStartPeriod = new Date(bookingOpenTime)
-    bookingStartPeriod.setUTCFullYear(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate() - daysDifference,
-    )
+    // Get the time components from bookingOpenTime
+    const openTime = new Date(bookingOpenTime)
+    const openHours = openTime.getUTCHours()
+    const openMinutes = openTime.getUTCMinutes()
+    const openSeconds = openTime.getUTCSeconds()
+    const openMilliseconds = openTime.getUTCMilliseconds()
+
+    // If we're on the same day as booking open day but before the booking open time,
+    // we should look at the previous week's booking period
+    if (daysDifference === 0) {
+      const todayBookingTime = new Date(now)
+      todayBookingTime.setUTCHours(openHours, openMinutes, openSeconds, openMilliseconds)
+
+      if (now < todayBookingTime) {
+        daysDifference = 7 // Go back to previous week
+      }
+    }
+
+    // Calculate the date for the booking start period
+    const bookingStartPeriod = new Date(now)
+    bookingStartPeriod.setUTCDate(now.getUTCDate() - daysDifference)
+    bookingStartPeriod.setUTCHours(openHours, openMinutes, openSeconds, openMilliseconds)
 
     const bookingEndPeriod = new Date(bookingStartPeriod)
     bookingEndPeriod.setUTCDate(bookingStartPeriod.getUTCDate() + 7)
