@@ -81,9 +81,7 @@ export const FilterActions = <TData,>({ columns }: FilterActionsProps<TData>) =>
       </ButtonGroup>
 
       <CreateMemberPopUp
-        onClose={() => {
-          onCloseCreate()
-        }}
+        onClose={onCloseCreate}
         onConfirm={(data) => handleAddConfirm(data)}
         open={openCreate}
       />
