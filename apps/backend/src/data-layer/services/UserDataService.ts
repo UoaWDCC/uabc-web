@@ -64,13 +64,11 @@ export default class UserDataService {
       }
     }
 
-    const finalWhere = whereConditions.length > 0 ? { and: whereConditions } : undefined
-
     return await payload.find({
       collection: "user",
       limit: options.limit,
       page: options.page,
-      where: finalWhere,
+      where: { and: whereConditions },
     })
   }
 
