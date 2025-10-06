@@ -23,7 +23,7 @@
     "@payloadcms/next": "3.58.0",
     "@payloadcms/richtext-lexical": "3.58.0",
     "@payloadcms/storage-uploadthing": "3.58.0",
-    "@react-email/components": "0.5.3",
+    "@react-email/components": "0.5.5",
     "@types/nodemailer": "7.0.2",
     "bcryptjs": "3.0.2",
     "googleapis": "150.0.1",
@@ -43,10 +43,10 @@
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/jsonwebtoken": "9.0.10",
-    "@types/node": "22.18.6",
-    "@types/react": "19.1.14",
-    "@types/react-dom": "19.1.9",
-    "react-email": "4.2.11",
-    "typescript": "5.9.2"
+    "@types/node": "22.18.8",
+    "@types/react": "19.2.0",
+    "@types/react-dom": "19.2.0",
+    "react-email": "4.2.12",
+    "typescript": "5.9.3"
   }
 }
