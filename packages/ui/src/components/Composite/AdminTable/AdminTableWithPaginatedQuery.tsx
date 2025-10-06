@@ -15,7 +15,7 @@ import type { UseInfiniteQueryResult } from "@tanstack/react-query"
 import { Dialog, useDisclosure } from "@yamada-ui/react"
 import dayjs from "dayjs"
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryStates } from "nuqs"
-import { memo, useCallback, useEffect, useMemo, useState } from "react"
+import { memo, useCallback, useDeferredValue, useEffect, useMemo, useState } from "react"
 import { CreateMemberPopUp } from "../../Generic/CreateMemberPopUp"
 import type { FieldFiltersFromConfig } from "../../Generic/ManagementTable/Filter"
 import { columns, type UserData } from "./Columns"
@@ -95,6 +95,9 @@ export const AdminTableWithPaginatedQuery = memo(
       },
     )
 
+    const deferredFilter = useDeferredValue(searchParams.filter)
+    const deferredFieldFilters = useDeferredValue(searchParams.fieldFilters)
+
     const {
       data: queriedData,
       fetchNextPage,
@@ -102,8 +105,8 @@ export const AdminTableWithPaginatedQuery = memo(
       isFetchingNextPage,
     } = useGetPaginatedData({
       limit: searchParams.perPage,
-      query: searchParams.filter,
-      filter: JSON.stringify(searchParams.fieldFilters),
+      query: deferredFilter,
+      filter: JSON.stringify(deferredFieldFilters),
     })
 
     const currentPageCount = queriedData?.pages?.length || 0
