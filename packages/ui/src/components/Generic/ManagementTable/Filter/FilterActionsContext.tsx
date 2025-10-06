@@ -1,4 +1,5 @@
 import type { CreateUserRequest } from "@repo/shared/types"
+import { noop } from "@yamada-ui/react"
 import {
   createContext,
   type Dispatch,
@@ -16,7 +17,7 @@ export type FilterActionsContextValue = {
 }
 
 export const FilterActionsProvider = ({ children }: { children: ReactNode }) => {
-  const [addMember, setAddMember] = useState<(data: CreateUserRequest) => void>(() => {})
+  const [addMember, setAddMember] = useState<(data: CreateUserRequest) => void>(noop)
   return <FilterActionsContext value={{ addMember, setAddMember }}>{children}</FilterActionsContext>
 }
 
