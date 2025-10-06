@@ -1,7 +1,7 @@
 import { casualUserMock } from "@repo/shared/mocks"
 import type { User } from "@repo/shared/payload-types"
 import type { UpdateUserRequest } from "@repo/shared/types"
-import { render, screen } from "@repo/ui/test-utils"
+import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { isValidElement } from "react"
 import { AdminTableWithPaginatedQuery } from "./AdminTableWithPaginatedQuery"
@@ -452,7 +452,10 @@ describe("<AdminTableWithPaginatedQuery />", () => {
 
     const emailCheckbox = screen.getAllByRole("checkbox")[1]
     expect(emailCheckbox).toBeDefined()
-    expect(emailCheckbox).toBeChecked()
+    await waitFor(() => {
+      expect(emailCheckbox).toBeInTheDocument()
+      expect(emailCheckbox).toBeChecked()
+    })
     await user.click(emailCheckbox)
     expect(onUrlUpdate).toHaveBeenCalledWith(
       expect.objectContaining({
