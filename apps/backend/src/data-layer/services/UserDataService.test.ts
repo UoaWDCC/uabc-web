@@ -183,8 +183,8 @@ describe("UserDataService", () => {
         filter: JSON.stringify({ level: ["intermediate", "advanced"] }),
       })
       expect(result.totalDocs).toBe(2)
-      expect(result.docs).toContainEqual(intermediateUser)
-      expect(result.docs).toContainEqual(advancedUser)
+      expect(result.docs).toStrictEqual(expect.arrayContaining([intermediateUser]))
+      expect(result.docs).toStrictEqual(expect.arrayContaining([advancedUser]))
 
       const roleResult = await userDataService.getPaginatedUsers({
         filter: JSON.stringify({ role: [MembershipType.member] }),
@@ -235,8 +235,8 @@ describe("UserDataService", () => {
         filter: JSON.stringify({ level: ["intermediate", "advanced"], role: [] }),
       })
       expect(result.totalDocs).toBe(2)
-      expect(result.docs).toContainEqual(intermediateUser)
-      expect(result.docs).toContainEqual(advancedUser)
+      expect(result.docs).toStrictEqual(expect.arrayContaining([intermediateUser]))
+      expect(result.docs).toStrictEqual(expect.arrayContaining([advancedUser]))
     })
 
     it("should return empty docs if no users exist", async () => {
