@@ -60,7 +60,7 @@ export const AdminMembers = () => {
   // TODO: decide if should remove suppression
   // biome-ignore lint/correctness/useExhaustiveDependencies: We want this to run on first render only
   useEffect(() => {
-    setAddMember(createUser)
+    setAddMember(() => createUser)
   }, [])
 
   return (
