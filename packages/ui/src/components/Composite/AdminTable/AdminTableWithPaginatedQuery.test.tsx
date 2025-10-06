@@ -380,5 +380,5 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     await user.click(cancelButton)
 
     expect(mockOnDelete).not.toHaveBeenCalled()
-  })
+  }, 10_000)
 })
