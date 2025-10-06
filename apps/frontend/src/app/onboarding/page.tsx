@@ -1,10 +1,10 @@
 import { VStack } from "@yamada-ui/react"
-import { OnboardingClient } from "@/components/client/user/OnboardingClient"
+import { OnboardingServerSection } from "@/components/server/OnboardingServerSection"
 
 export default function OnboardingPage() {
   return (
     <VStack as="main">
-      <OnboardingClient />
+      <OnboardingServerSection />
     </VStack>
   )
 }
