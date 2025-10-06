@@ -197,7 +197,12 @@ export const ManagementTableProvider = <
       })
     }
     // Apply field/group filters
-    if (fieldFilters && typeof fieldFilters === "object" && !Array.isArray(fieldFilters)) {
+    if (
+      !canUseParentQueryState &&
+      fieldFilters &&
+      typeof fieldFilters === "object" &&
+      !Array.isArray(fieldFilters)
+    ) {
       Object.entries(fieldFilters).forEach(([key, value]) => {
         if (Array.isArray(value)) {
           if (value.length > 0) {
