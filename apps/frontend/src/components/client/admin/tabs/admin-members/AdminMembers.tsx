@@ -38,27 +38,29 @@ export const AdminMembers = () => {
     })
   }
 
+  const createUser = (data: CreateUserRequest) => {
+    createUserMutation.mutate(data, {
+      onSuccess: () => {
+        notice({
+          title: "Creation successful",
+          description: "User has been created",
+          status: "success",
+        })
+      },
+      onError: () => {
+        notice({
+          title: "Creation failed",
+          description: "Failed to create user",
+          status: "error",
+        })
+      },
+    })
+  }
+
   // TODO: decide if should remove suppression
   // biome-ignore lint/correctness/useExhaustiveDependencies: We want this to run on first render only
   useEffect(() => {
-    setAddMember((data: CreateUserRequest) => {
-      createUserMutation.mutate(data, {
-        onSuccess: () => {
-          notice({
-            title: "Creation successful",
-            description: "User has been created",
-            status: "success",
-          })
-        },
-        onError: () => {
-          notice({
-            title: "Creation failed",
-            description: "Failed to create user",
-            status: "error",
-          })
-        },
-      })
-    })
+    setAddMember(createUser)
   }, [])
 
   return (
