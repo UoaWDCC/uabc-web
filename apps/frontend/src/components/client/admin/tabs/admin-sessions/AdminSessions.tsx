@@ -177,10 +177,6 @@ export const AdminSessions = () => {
     }
   }
 
-  const handleChangeSession = () => {
-    changeSessionPopup.open()
-  }
-
   const handleTableChangeSession = (row: SessionData) => {
     changeSessionPopup.setValue(row.id)
     changeSessionPopup.open()
@@ -230,11 +226,7 @@ export const AdminSessions = () => {
             selectedDate={selectedDate}
           />
           {selectedSession && (
-            <AdminGameSessionCard
-              gameSession={selectedSession}
-              onChangeSession={handleChangeSession}
-              onExport={handleExport}
-            />
+            <AdminGameSessionCard gameSession={selectedSession} onExport={handleExport} />
           )}
         </VStack>
       </GridItem>

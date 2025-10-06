@@ -1,10 +1,10 @@
 "use client"
 
 import type { AdminGameSession } from "@repo/shared"
-import { Popup } from "@repo/shared"
+import { compareDates, formatDate, formatTime, Popup } from "@repo/shared"
 import { CalendarSelectPopup } from "@repo/ui/components/Generic"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
-import { formatDate, formatTime, getStatusColor } from "@repo/ui/utils"
+import { getStatusColor } from "@repo/ui/utils"
 import { CalendarIcon, ClockIcon, MapPinIcon, UsersRoundIcon } from "@yamada-ui/lucide"
 import { EmptyState, Tag, Text, useUpdateEffect, VStack } from "@yamada-ui/react"
 import { memo, useCallback, useMemo, useState } from "react"
@@ -83,10 +83,8 @@ export const ChangeSessionPopup = memo(
         return []
       }
       return availableSessions.filter((session) => {
-        const sessionDate = new Date(session.startTime)
         return (
-          sessionDate.toDateString() === internalSelectedDate.toDateString() &&
-          session.id !== currentSession?.id
+          compareDates(session.startTime, internalSelectedDate) && session.id !== currentSession?.id
         )
       })
     }, [availableSessions, internalSelectedDate, currentSession])
@@ -95,8 +93,7 @@ export const ChangeSessionPopup = memo(
       if (!internalSelectedDate || !currentSession) {
         return false
       }
-      const currentSessionDate = new Date(currentSession.startTime)
-      return currentSessionDate.toDateString() === internalSelectedDate.toDateString()
+      return compareDates(currentSession.startTime, internalSelectedDate)
     }, [internalSelectedDate, currentSession])
 
     const excludeCurrentSessionDate = useCallback(
@@ -104,8 +101,7 @@ export const ChangeSessionPopup = memo(
         if (!currentSession) {
           return false
         }
-        const currentSessionDate = new Date(currentSession.startTime)
-        return date.toDateString() === currentSessionDate.toDateString()
+        return compareDates(date, currentSession.startTime)
       },
       [currentSession],
     )

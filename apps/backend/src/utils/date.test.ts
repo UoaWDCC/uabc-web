@@ -1,4 +1,11 @@
-import { getDaysBetweenWeekdays, getGameSessionOpenDay, Weekday } from "@repo/shared"
+import {
+  compareDates,
+  formatDate,
+  formatTime,
+  getDaysBetweenWeekdays,
+  getGameSessionOpenDay,
+  Weekday,
+} from "@repo/shared"
 import { semesterMock } from "@repo/shared/mocks"
 import type { Semester } from "@repo/shared/payload-types"
 
@@ -114,5 +121,100 @@ describe("getGameSessionOpenDay", () => {
     // Should be 3 days before (Jan 15, 2024 at 12 PM)
     const expected = new Date(Date.UTC(2024, 0, 15, 12, 0, 0)) // Monday
     expect(result).toEqual(expected)
+  })
+})
+
+describe("compareDates", () => {
+  it("should return true for dates on the same day with different times", () => {
+    const date1 = new Date("2024-01-15T10:30:00Z")
+    const date2 = new Date("2024-01-15T15:45:00Z")
+    expect(compareDates(date1, date2)).toBe(true)
+  })
+
+  it("should return false for dates on different days", () => {
+    const date1 = new Date("2024-01-15T10:30:00Z")
+    const date2 = new Date("2024-01-16T10:30:00Z")
+    expect(compareDates(date1, date2)).toBe(false)
+  })
+
+  it("should handle string dates", () => {
+    const date1 = "2024-01-15T10:30:00Z"
+    const date2 = "2024-01-15T15:45:00Z"
+    expect(compareDates(date1, date2)).toBe(true)
+  })
+
+  it("should handle mixed date types (Date and string)", () => {
+    const date1 = new Date("2024-01-15T10:30:00Z")
+    const date2 = "2024-01-15T15:45:00Z"
+    expect(compareDates(date1, date2)).toBe(true)
+  })
+
+  it("should handle timestamp numbers", () => {
+    const date1 = new Date("2024-01-15T10:30:00Z").getTime()
+    const date2 = new Date("2024-01-15T15:45:00Z").getTime()
+    expect(compareDates(date1, date2)).toBe(true)
+  })
+
+  it("should be timezone-safe", () => {
+    // Same moment in time, different timezone representations
+    const date1 = new Date("2024-01-15T10:30:00Z") // UTC
+    const date2 = new Date("2024-01-15T11:30:00+01:00") // UTC+1
+    expect(compareDates(date1, date2)).toBe(true)
+  })
+
+  it("should handle edge cases around midnight", () => {
+    const date1 = new Date("2024-01-15T23:59:59Z")
+    const date2 = new Date("2024-01-15T00:00:01Z")
+    expect(compareDates(date1, date2)).toBe(true)
+  })
+
+  it("should return false for dates across month boundaries", () => {
+    const date1 = new Date("2024-01-31T23:59:59Z")
+    const date2 = new Date("2024-02-01T00:00:01Z")
+    expect(compareDates(date1, date2)).toBe(false)
+  })
+
+  it("should return false for dates across year boundaries", () => {
+    const date1 = new Date("2023-12-31T23:59:59Z")
+    const date2 = new Date("2024-01-01T00:00:01Z")
+    expect(compareDates(date1, date2)).toBe(false)
+  })
+})
+
+describe("formatTime", () => {
+  it("should format morning time correctly", () => {
+    expect(formatTime("2025-01-21T09:30:00Z")).toBe("9:30 AM")
+  })
+
+  it("should format afternoon time correctly", () => {
+    expect(formatTime("2025-01-21T14:30:00Z")).toBe("2:30 PM")
+  })
+
+  it("should format evening time correctly", () => {
+    expect(formatTime("2025-01-21T19:30:00Z")).toBe("7:30 PM")
+  })
+
+  it("should format midnight correctly", () => {
+    expect(formatTime("2025-01-21T00:00:00Z")).toBe("12:00 AM")
+  })
+
+  it("should format noon correctly", () => {
+    expect(formatTime("2025-01-21T12:00:00Z")).toBe("12:00 PM")
+  })
+
+  it("should handle different timezone formats", () => {
+    expect(formatTime("2025-01-21T19:30:00+00:00")).toBe("7:30 PM")
+    expect(formatTime("2025-01-21T19:30:00.000Z")).toBe("7:30 PM")
+  })
+})
+
+describe("formatDate", () => {
+  it("should format date correctly", () => {
+    expect(formatDate(new Date("2025-01-21T19:30:00Z"))).toBe("Tuesday, 21/01/25")
+  })
+
+  it("should format different dates correctly", () => {
+    expect(formatDate(new Date("2025-12-25T12:00:00Z"))).toBe("Thursday, 25/12/25")
+    expect(formatDate(new Date("2025-06-15T09:30:00Z"))).toBe("Sunday, 15/06/25")
   })
 })

@@ -1,5 +1,5 @@
-import { GameSessionStatus } from "@repo/shared"
-import { formatDate, formatTime, getStatusColor } from "./game-session"
+import { formatDate, formatTime, GameSessionStatus } from "@repo/shared"
+import { getStatusColor } from "./game-session"
 
 describe("game-session utilities", () => {
   describe("getStatusColor", () => {

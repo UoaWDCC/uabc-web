@@ -1,9 +1,9 @@
 "use client"
 
 import type { AdminGameSession } from "@repo/shared"
-import { capitalize } from "@repo/shared"
+import { capitalize, formatTime } from "@repo/shared"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
-import { formatTime, getStatusColor } from "@repo/ui/utils"
+import { getStatusColor } from "@repo/ui/utils"
 import { ClockIcon, MapPinIcon, UsersRoundIcon } from "@yamada-ui/lucide"
 import {
   Card,
@@ -27,10 +27,6 @@ export interface AdminGameSessionCardProps extends Omit<CardProps, "children"> {
    * Callback function when export button is clicked.
    */
   onExport?: () => void
-  /**
-   * Callback function when change session button is clicked.
-   */
-  onChangeSession?: () => void
 }
 
 /**
@@ -58,7 +54,7 @@ export interface AdminGameSessionCardProps extends Omit<CardProps, "children"> {
  * />
  */
 export const AdminGameSessionCard = memo(
-  ({ gameSession, onExport, onChangeSession, ...cardProps }: AdminGameSessionCardProps) => {
+  ({ gameSession, onExport, ...cardProps }: AdminGameSessionCardProps) => {
     const { day, status, startTime, endTime, name, location, attendees, capacity } = gameSession
 
     const colorScheme = getStatusColor(status)
@@ -109,22 +105,9 @@ export const AdminGameSessionCard = memo(
           </VStack>
         </CardBody>
         <CardFooter>
-          <VStack gap="sm" w="full">
-            {onChangeSession && (
-              <Button
-                colorScheme="secondary"
-                onClick={onChangeSession}
-                rounded="xl"
-                size="md"
-                w="full"
-              >
-                Change Session
-              </Button>
-            )}
-            <Button colorScheme="primary" onClick={onExport} rounded="xl" size="md" w="full">
-              Export Member List as CSV
-            </Button>
-          </VStack>
+          <Button colorScheme="primary" onClick={onExport} rounded="xl" size="md" w="full">
+            Export Member List as CSV
+          </Button>
         </CardFooter>
       </Card>
     )

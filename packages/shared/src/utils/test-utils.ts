@@ -1,5 +1,5 @@
 import type { AdminGameSession } from "@repo/shared"
-import { GameSessionStatus, getWeekdayFromDayIndex } from "@repo/shared"
+import { GameSessionStatus, getWeekdayFromDayIndex, Weekday } from "@repo/shared"
 import { adminGameSessionBaseMock } from "@repo/shared/mocks"
 
 /**
@@ -9,7 +9,7 @@ import { adminGameSessionBaseMock } from "@repo/shared/mocks"
  */
 export const createRelativeDate = (daysFromNow: number): Date => {
   const date = new Date()
-  date.setDate(date.getDate() + daysFromNow)
+  date.setUTCDate(date.getUTCDate() + daysFromNow)
   return date
 }
 
@@ -31,14 +31,14 @@ export const createGameSession = (
 ): AdminGameSession => {
   const date = createRelativeDate(daysFromNow)
   const startTime = new Date(date)
-  startTime.setHours(startHour, 30, 0, 0)
+  startTime.setUTCHours(startHour, 30, 0, 0)
   const endTime = new Date(date)
-  endTime.setHours(endHour, 0, 0, 0)
+  endTime.setUTCHours(endHour, 0, 0, 0)
   const openTime = new Date(date)
-  openTime.setHours(startHour - 1, 0, 0, 0)
+  openTime.setUTCHours(startHour - 1, 0, 0, 0)
 
   // Determine day of week
-  const dayOfWeek = date.getDay()
+  const dayOfWeek = date.getUTCDay()
 
   return {
     ...adminGameSessionBaseMock,
@@ -94,4 +94,37 @@ export const createCurrentSession = (
   status: GameSessionStatus = GameSessionStatus.ONGOING,
 ): AdminGameSession => {
   return createGameSession(daysFromNow, attendees, status)
+}
+
+/**
+ * Creates a test admin session with specific date and configuration
+ * @param id Unique identifier for the session
+ * @param date Specific date for the session
+ * @param status Session status
+ * @param attendees Number of attendees
+ * @returns AdminGameSession object for testing
+ */
+export const createTestAdminSession = (
+  id: string,
+  date: Date,
+  status: GameSessionStatus = GameSessionStatus.UPCOMING,
+  attendees = 25,
+): AdminGameSession => {
+  const startTime = new Date(date)
+  startTime.setUTCHours(19, 30, 0, 0)
+  const endTime = new Date(date)
+  endTime.setUTCHours(22, 0, 0, 0)
+
+  return {
+    ...adminGameSessionBaseMock,
+    id,
+    day: Weekday.tuesday,
+    status,
+    startTime: startTime.toISOString(),
+    endTime: endTime.toISOString(),
+    attendees,
+    capacity: 40,
+    location: "Test Location",
+    name: "Test Session",
+  }
 }

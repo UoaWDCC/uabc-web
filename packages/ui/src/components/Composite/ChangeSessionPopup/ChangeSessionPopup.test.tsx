@@ -1,36 +1,9 @@
-import type { AdminGameSession } from "@repo/shared"
-import { GameSessionStatus, Weekday } from "@repo/shared"
-import { adminGameSessionBaseMock } from "@repo/shared/mocks"
+import { GameSessionStatus } from "@repo/shared"
+import { createTestAdminSession } from "@repo/shared/utils/test-utils"
 import { render, screen } from "@repo/ui/test-utils"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { isValidElement } from "react"
 import { ChangeSessionPopup } from "./ChangeSessionPopup"
-
-// Helper function to create test sessions
-const createTestSession = (
-  id: string,
-  date: Date,
-  status: GameSessionStatus = GameSessionStatus.UPCOMING,
-  attendees = 25,
-): AdminGameSession => {
-  const startTime = new Date(date)
-  startTime.setHours(19, 30, 0, 0)
-  const endTime = new Date(date)
-  endTime.setHours(22, 0, 0, 0)
-
-  return {
-    ...adminGameSessionBaseMock,
-    id,
-    day: Weekday.tuesday,
-    status,
-    startTime: startTime.toISOString(),
-    endTime: endTime.toISOString(),
-    attendees,
-    capacity: 40,
-    location: "Test Location",
-    name: "Test Session",
-  }
-}
 
 const defaultProps = {
   isOpen: true,
@@ -101,7 +74,7 @@ describe("<ChangeSessionPopup />", () => {
   it("should display empty state when no sessions available for selected date", () => {
     const selectedDate = new Date("2025-01-21")
     const availableSessions = [
-      createTestSession("session-1", new Date("2025-01-22")), // Different date
+      createTestAdminSession("session-1", new Date("2025-01-22")), // Different date
     ]
 
     render(
@@ -123,7 +96,7 @@ describe("<ChangeSessionPopup />", () => {
 
   it("should show confirm and cancel buttons when session is available", () => {
     const selectedDate = new Date("2025-01-21")
-    const availableSessions = [createTestSession("session-1", selectedDate)]
+    const availableSessions = [createTestAdminSession("session-1", selectedDate)]
 
     render(
       <ChangeSessionPopup
@@ -143,7 +116,7 @@ describe("<ChangeSessionPopup />", () => {
   it("should call onConfirm when confirm button is clicked", async () => {
     const onConfirm = vi.fn()
     const selectedDate = new Date("2025-01-21")
-    const availableSessions = [createTestSession("session-1", selectedDate)]
+    const availableSessions = [createTestAdminSession("session-1", selectedDate)]
 
     const { user } = render(
       <ChangeSessionPopup
@@ -166,7 +139,7 @@ describe("<ChangeSessionPopup />", () => {
   it("should call onClose when cancel button is clicked", async () => {
     const onClose = vi.fn()
     const selectedDate = new Date("2025-01-21")
-    const availableSessions = [createTestSession("session-1", selectedDate)]
+    const availableSessions = [createTestAdminSession("session-1", selectedDate)]
 
     const { user } = render(
       <ChangeSessionPopup
@@ -189,8 +162,8 @@ describe("<ChangeSessionPopup />", () => {
   it("should handle multiple sessions for the same date by showing the first one", () => {
     const selectedDate = new Date("2025-01-21")
     const availableSessions = [
-      createTestSession("session-1", selectedDate, GameSessionStatus.ONGOING, 20),
-      createTestSession("session-2", selectedDate, GameSessionStatus.UPCOMING, 35),
+      createTestAdminSession("session-1", selectedDate, GameSessionStatus.ONGOING, 20),
+      createTestAdminSession("session-2", selectedDate, GameSessionStatus.UPCOMING, 35),
     ]
 
     render(
