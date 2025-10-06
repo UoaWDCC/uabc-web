@@ -1,4 +1,4 @@
-import { Gender, PlayLevel } from "@repo/shared"
+import { Gender, GenderOptions, PlayLevel, PlayLevelOptions } from "@repo/shared"
 import { InputType } from "@repo/ui/components/Primitive"
 import type { Meta, StoryFn } from "@storybook/react"
 import { UserProfileCard } from "./UserProfileCard"
@@ -37,16 +37,6 @@ const exampleFields = [
   },
 ] as const
 
-const genderOptions = Object.values(Gender).map((value) => ({
-  value,
-  label: value,
-}))
-
-const playLevelOptions = Object.values(PlayLevel).map((value) => ({
-  value,
-  label: value,
-}))
-
 export const Default: StoryFn = () => (
   <UserProfileCard
     defaultValues={{
@@ -73,7 +63,7 @@ export const AdditionalFields: StoryFn = () => {
       label: "Gender",
       placeholder: "Select your gender",
       required: true,
-      items: genderOptions,
+      items: GenderOptions,
     },
     {
       key: "playLevel",
@@ -81,7 +71,7 @@ export const AdditionalFields: StoryFn = () => {
       label: "Play Level",
       placeholder: "Select your play level",
       required: true,
-      items: playLevelOptions,
+      items: PlayLevelOptions,
     },
     {
       key: "dietaryRequirements",
