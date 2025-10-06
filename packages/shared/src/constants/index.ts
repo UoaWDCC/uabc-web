@@ -1,4 +1,5 @@
 export type { AdminTabBarSlug } from "./admin"
 export { validSlugs } from "./admin"
 export * from "./bookings"
+export * from "./select-options"
 export * from "./weekdays"
