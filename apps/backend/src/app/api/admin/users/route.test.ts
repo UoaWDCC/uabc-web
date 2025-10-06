@@ -149,7 +149,7 @@ describe("/api/admin/users", async () => {
         email: "1abcd@defg.com",
         playLevel: "beginner",
       })
-      const otherUser = await userDataService.createUser({
+      await userDataService.createUser({
         ...userCreateMock,
         email: "2abcd@defg.com",
         playLevel: "intermediate",
@@ -164,7 +164,6 @@ describe("/api/admin/users", async () => {
       const json = await res.json()
 
       expect(json.data.docs).toStrictEqual([combinedTestUser])
-      expect(json.data.docs).not.toContain(otherUser)
     })
 
     it("should use default pagination if params are missing", async () => {
