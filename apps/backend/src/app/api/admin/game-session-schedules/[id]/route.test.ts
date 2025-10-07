@@ -186,9 +186,49 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
     const bookingDataService = new BookingDataService()
     const gameSessionDataService = new GameSessionDataService()
 
+    it("should to delete game session schedule and its game session and bookings when cascade is true", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
+        gameSessionScheduleCreateMock,
+      )
+      const newGameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        gameSessionSchedule: newGameSessionSchedule,
+      })
+      const booking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: newGameSession,
+      })
+      const booking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: newGameSession,
+      })
+
+      const res = await DELETE(
+        createMockNextRequest("/api/admin/game-session-schedules?cascade=true", "DELETE"),
+        {
+          params: Promise.resolve({
+            id: newGameSessionSchedule.id,
+          }),
+        },
+      )
+
+      expect(res.status).toBe(StatusCodes.NO_CONTENT)
+
+      await expect(
+        gameSessionDataService.getGameSessionScheduleById(newGameSessionSchedule.id),
+      ).rejects.toThrow("Not Found")
+      await expect(gameSessionDataService.getGameSessionById(newGameSession.id)).rejects.toThrow(
+        "Not Found",
+      )
+      await expect(bookingDataService.getBookingById(booking1.id)).rejects.toThrow("Not Found")
+      await expect(bookingDataService.getBookingById(booking2.id)).rejects.toThrow("Not Found")
+    })
+
     it.for([
-      // Test case 1: Explicit true boolean parameter
-      "/api/admin/game-session-schedules?cascade=true",
+      // Test case 1: Explicit false boolean parameter
+      "/api/admin/game-session-schedules?cascade=false",
       // Test case 2: Flag parameter without value (equivalent to true in query params)
       "/api/admin/game-session-schedules?cascade",
       // Test case 3: Unrelated query parameter (testing irrelevant params)
@@ -196,7 +236,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       // Test case 4: Base URL with no query parameters
       "/api/admin/game-session-schedules",
     ] as const)(
-      "should default to delete user and their bookings when deleteRelatedDocs is true or not specified",
+      "should default to not delete related game session and bookings when cascade is false or not specified",
       async (route) => {
         cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
@@ -227,51 +267,11 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
         await expect(
           gameSessionDataService.getGameSessionScheduleById(newGameSessionSchedule.id),
         ).rejects.toThrow("Not Found")
-        await expect(gameSessionDataService.getGameSessionById(newGameSession.id)).rejects.toThrow(
-          "Not Found",
-        )
-        await expect(bookingDataService.getBookingById(booking1.id)).rejects.toThrow("Not Found")
-        await expect(bookingDataService.getBookingById(booking2.id)).rejects.toThrow("Not Found")
+        expect(await gameSessionDataService.getGameSessionById(newGameSession.id)).toBeDefined()
+        expect(await bookingDataService.getBookingById(booking1.id)).toBeDefined()
+        expect(await bookingDataService.getBookingById(booking2.id)).toBeDefined()
       },
     )
-
-    it("should not delete related bookings when deleteRelatedDocs is false", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
-
-      const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
-        gameSessionScheduleCreateMock,
-      )
-      const newGameSession = await gameSessionDataService.createGameSession({
-        ...gameSessionCreateMock,
-        gameSessionSchedule: newGameSessionSchedule,
-      })
-      const booking1 = await bookingDataService.createBooking({
-        ...bookingCreateMock,
-        gameSession: newGameSession,
-      })
-      const booking2 = await bookingDataService.createBooking({
-        ...bookingCreateMock,
-        gameSession: newGameSession,
-      })
-
-      const res = await DELETE(
-        createMockNextRequest("/api/admin/game-session-schedules?cascade=false", "DELETE"),
-        {
-          params: Promise.resolve({
-            id: newGameSessionSchedule.id,
-          }),
-        },
-      )
-
-      expect(res.status).toBe(StatusCodes.NO_CONTENT)
-
-      await expect(
-        gameSessionDataService.getGameSessionScheduleById(newGameSessionSchedule.id),
-      ).rejects.toThrow("Not Found")
-      expect(await gameSessionDataService.getGameSessionById(newGameSession.id)).toBeDefined()
-      expect(await bookingDataService.getBookingById(booking1.id)).toBeDefined()
-      expect(await bookingDataService.getBookingById(booking2.id)).toBeDefined()
-    })
 
     it("should rollback transaction if error occurs during cascade delete", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
