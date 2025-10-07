@@ -95,15 +95,27 @@ class RouteWrapper {
       const cascade = req.nextUrl.searchParams.get("cascade") === "true"
       const gameSessionDataService = new GameSessionDataService()
       const transactionID = cascade && (await createTransactionId())
+      console.log(transactionID)
 
       if (transactionID) {
         try {
+          const gameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(id)
+
           const { docs } = await payload.find({
             collection: "gameSession",
             where: {
-              gameSessionSchedule: {
-                equals: id,
-              },
+              or: [
+                {
+                  gameSessionSchedule: {
+                    equals: id,
+                  },
+                },
+                {
+                  gameSessionSchedule: {
+                    equals: gameSessionSchedule,
+                  },
+                },
+              ],
             },
           })
           const gameSession = docs[0]

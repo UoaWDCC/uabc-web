@@ -186,7 +186,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
     const bookingDataService = new BookingDataService()
     const gameSessionDataService = new GameSessionDataService()
 
-    it("should to delete game session schedule and its game session and bookings when cascade is true", async () => {
+    it("should delete game session schedule and its game session and bookings when cascade is true", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
@@ -273,7 +273,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       },
     )
 
-    it("should rollback transaction if error occurs during cascade delete", async () => {
+    it("should rollback transaction if error occurs during cascade delete and return 500", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
@@ -358,6 +358,21 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       beginTransactionSpy.mockRestore()
       commitTransactionSpy.mockRestore()
       rollbackTransactionSpy.mockRestore()
+    })
+
+    it("should return 404 if game session schedule is not found", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, adminToken)
+
+      const res = await DELETE(
+        createMockNextRequest("/api/admin/game-session-schedules?cascade=true", "DELETE"),
+        {
+          params: Promise.resolve({ id: "invalid-id" }),
+        },
+      )
+
+      expect(res.status).toBe(StatusCodes.NOT_FOUND)
+      const json = await res.json()
+      expect(json.error).toEqual("Game session schedule not found")
     })
   })
 })
