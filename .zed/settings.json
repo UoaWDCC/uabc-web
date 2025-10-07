@@ -8,7 +8,12 @@
     }
   },
   // cspell:disable-next-line
-  "language_servers": ["...", "!vtsls", "!eslint", "!tailwindcss-language-server"],
+  "language_servers": [
+    "...",
+    "!typescript-language-server",
+    "!eslint",
+    "!tailwindcss-language-server"
+  ],
   "formatter": {
     "language_server": {
       "name": "biome"
