@@ -170,7 +170,7 @@ export const CalendarSelectPopup = memo(
       }
     }, [allowClose, externalIsOpen, closeBehavior, currentStep, onStepChange, onClose, close])
 
-    const handleCalendarChange = useCallback(
+    const handleOnConfirm = useCallback(
       (date: Date | [Date?, Date?]) => {
         setDate(date as DateValue<T>)
       },
@@ -189,7 +189,7 @@ export const CalendarSelectPopup = memo(
             : calendarProps.enableRange
               ? (selectedDate as [Date?, Date?] | undefined)
               : (selectedDate as Date | undefined),
-        onChange: handleCalendarChange,
+        onChange: handleOnConfirm,
         ...(disableInactiveDates && {
           excludeDate: (date: Date) => !isDateActive(date),
         }),
@@ -217,21 +217,9 @@ export const CalendarSelectPopup = memo(
               return (
                 <Center
                   __css={styles}
-                  _disabled={{
-                    bg: "transparent !important",
-                    _before: {
-                      display: "none",
-                    },
-                    cursor: "not-allowed",
-                  }}
-                  _selected={{
-                    bg: "$colors.primary !important",
-                  }}
                   data-disabled={dataAttr(!active)}
                   data-selected={dataAttr(selected && active)}
-                  minH={{ base: "9", sm: "10" }}
-                  minW={{ base: "9", sm: "10" }}
-                  overflow="visible"
+                  layerStyle="calendarDay"
                 >
                   {date.getDate()}
                   {sessions.length > 0 && (
@@ -240,12 +228,7 @@ export const CalendarSelectPopup = memo(
                         <Tag
                           aria-label={tooltipLabel}
                           colorScheme={colorScheme}
-                          fontSize="xs"
-                          lineHeight="1"
-                          minH="4"
-                          minW="4"
-                          p="1"
-                          size="sm"
+                          layerStyle="compactIndicator"
                         >
                           {totalAttendees}
                         </Tag>
@@ -261,7 +244,7 @@ export const CalendarSelectPopup = memo(
       [
         calendarProps,
         selectedDate,
-        handleCalendarChange,
+        handleOnConfirm,
         disableInactiveDates,
         isDateActive,
         showSessionIndicators,

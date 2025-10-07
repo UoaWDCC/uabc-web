@@ -1,9 +1,9 @@
 import {
-  compareDates,
   formatDate,
   formatTime,
   getDaysBetweenWeekdays,
   getGameSessionOpenDay,
+  isSameDate,
   Weekday,
 } from "@repo/shared"
 import { semesterMock } from "@repo/shared/mocks"
@@ -124,60 +124,60 @@ describe("getGameSessionOpenDay", () => {
   })
 })
 
-describe("compareDates", () => {
+describe("isSameDate", () => {
   it("should return true for dates on the same day with different times", () => {
     const date1 = new Date("2024-01-15T10:30:00Z")
     const date2 = new Date("2024-01-15T15:45:00Z")
-    expect(compareDates(date1, date2)).toBe(true)
+    expect(isSameDate(date1, date2)).toBe(true)
   })
 
   it("should return false for dates on different days", () => {
     const date1 = new Date("2024-01-15T10:30:00Z")
     const date2 = new Date("2024-01-16T10:30:00Z")
-    expect(compareDates(date1, date2)).toBe(false)
+    expect(isSameDate(date1, date2)).toBe(false)
   })
 
   it("should handle string dates", () => {
     const date1 = "2024-01-15T10:30:00Z"
     const date2 = "2024-01-15T15:45:00Z"
-    expect(compareDates(date1, date2)).toBe(true)
+    expect(isSameDate(date1, date2)).toBe(true)
   })
 
   it("should handle mixed date types (Date and string)", () => {
     const date1 = new Date("2024-01-15T10:30:00Z")
     const date2 = "2024-01-15T15:45:00Z"
-    expect(compareDates(date1, date2)).toBe(true)
+    expect(isSameDate(date1, date2)).toBe(true)
   })
 
   it("should handle timestamp numbers", () => {
     const date1 = new Date("2024-01-15T10:30:00Z").getTime()
     const date2 = new Date("2024-01-15T15:45:00Z").getTime()
-    expect(compareDates(date1, date2)).toBe(true)
+    expect(isSameDate(date1, date2)).toBe(true)
   })
 
   it("should be timezone-safe", () => {
     // Same moment in time, different timezone representations
     const date1 = new Date("2024-01-15T10:30:00Z") // UTC
     const date2 = new Date("2024-01-15T11:30:00+01:00") // UTC+1
-    expect(compareDates(date1, date2)).toBe(true)
+    expect(isSameDate(date1, date2)).toBe(true)
   })
 
   it("should handle edge cases around midnight", () => {
     const date1 = new Date("2024-01-15T23:59:59Z")
     const date2 = new Date("2024-01-15T00:00:01Z")
-    expect(compareDates(date1, date2)).toBe(true)
+    expect(isSameDate(date1, date2)).toBe(true)
   })
 
   it("should return false for dates across month boundaries", () => {
     const date1 = new Date("2024-01-31T23:59:59Z")
     const date2 = new Date("2024-02-01T00:00:01Z")
-    expect(compareDates(date1, date2)).toBe(false)
+    expect(isSameDate(date1, date2)).toBe(false)
   })
 
   it("should return false for dates across year boundaries", () => {
     const date1 = new Date("2023-12-31T23:59:59Z")
     const date2 = new Date("2024-01-01T00:00:01Z")
-    expect(compareDates(date1, date2)).toBe(false)
+    expect(isSameDate(date1, date2)).toBe(false)
   })
 })
 

@@ -75,17 +75,14 @@ export function getISODateKey(dateLike: string | number | Date): string {
 }
 
 /**
- * Compares two dates to check if they represent the same day (ignoring time).
+ * Checks if two dates represent the same day (ignoring time).
  * Uses UTC-safe comparison to avoid timezone issues.
  *
  * @param date1 First date to compare
  * @param date2 Second date to compare
  * @returns True if both dates represent the same day, false otherwise
  */
-export function compareDates(
-  date1: string | number | Date,
-  date2: string | number | Date,
-): boolean {
+export function isSameDate(date1: string | number | Date, date2: string | number | Date): boolean {
   return getISODateKey(date1) === getISODateKey(date2)
 }
 

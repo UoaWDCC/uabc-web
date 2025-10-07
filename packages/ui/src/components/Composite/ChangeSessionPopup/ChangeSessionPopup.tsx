@@ -1,7 +1,7 @@
 "use client"
 
 import type { AdminGameSession } from "@repo/shared"
-import { compareDates, formatDate, formatTime, Popup } from "@repo/shared"
+import { formatDate, formatTime, isSameDate, Popup } from "@repo/shared"
 import { CalendarSelectPopup } from "@repo/ui/components/Generic"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
 import { getStatusColor } from "@repo/ui/utils"
@@ -84,7 +84,7 @@ export const ChangeSessionPopup = memo(
       }
       return availableSessions.filter((session) => {
         return (
-          compareDates(session.startTime, internalSelectedDate) && session.id !== currentSession?.id
+          isSameDate(session.startTime, internalSelectedDate) && session.id !== currentSession?.id
         )
       })
     }, [availableSessions, internalSelectedDate, currentSession])
@@ -93,7 +93,7 @@ export const ChangeSessionPopup = memo(
       if (!internalSelectedDate || !currentSession) {
         return false
       }
-      return compareDates(currentSession.startTime, internalSelectedDate)
+      return isSameDate(currentSession.startTime, internalSelectedDate)
     }, [internalSelectedDate, currentSession])
 
     const excludeCurrentSessionDate = useCallback(
@@ -101,7 +101,7 @@ export const ChangeSessionPopup = memo(
         if (!currentSession) {
           return false
         }
-        return compareDates(date, currentSession.startTime)
+        return isSameDate(date, currentSession.startTime)
       },
       [currentSession],
     )
