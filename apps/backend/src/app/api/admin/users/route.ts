@@ -20,6 +20,7 @@ class UsersRouteWrapper {
         limit: searchParams.get("limit") ?? 10,
         page: searchParams.get("page") ?? 1,
         query: searchParams.get("query") || undefined,
+        filter: searchParams.get("filter") || undefined,
       })
       if (!result.success) {
         return NextResponse.json(
@@ -28,10 +29,10 @@ class UsersRouteWrapper {
         )
       }
 
-      const { limit, page, query } = result.data
+      const { limit, page, query, filter } = result.data
 
       const userDataService = new UserDataService()
-      const paginatedUsers = await userDataService.getPaginatedUsers({ limit, page, query })
+      const paginatedUsers = await userDataService.getPaginatedUsers({ limit, page, query, filter })
 
       return NextResponse.json({ data: paginatedUsers })
     } catch (error) {

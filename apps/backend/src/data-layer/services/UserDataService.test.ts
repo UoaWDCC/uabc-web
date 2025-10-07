@@ -156,6 +156,89 @@ describe("UserDataService", () => {
       expect(result2.totalDocs).toBe(8)
     })
 
+    it("should filter down users based on field filters", async () => {
+      const usersToCreate = Array.from({ length: 5 }, (_, i) => ({
+        ...userCreateMock,
+        email: `abcd${i}@test.com`,
+        playLevel: "beginner" as const,
+        role: MembershipType.member,
+      }))
+      await Promise.all(usersToCreate.map((u) => userDataService.createUser(u)))
+
+      const intermediateUser = await userDataService.createUser({
+        ...userCreateMock,
+        email: "abcde@test.com",
+        playLevel: "intermediate",
+        role: MembershipType.casual,
+        remainingSessions: 0,
+      })
+      const advancedUser = await userDataService.createUser({
+        ...userCreateMock,
+        email: "abcdef@test.com",
+        playLevel: "advanced",
+        role: MembershipType.admin,
+      })
+
+      const result = await userDataService.getPaginatedUsers({
+        filter: JSON.stringify({ level: ["intermediate", "advanced"] }),
+      })
+      expect(result.totalDocs).toBe(2)
+      expect(result.docs).toStrictEqual(expect.arrayContaining([intermediateUser]))
+      expect(result.docs).toStrictEqual(expect.arrayContaining([advancedUser]))
+
+      const roleResult = await userDataService.getPaginatedUsers({
+        filter: JSON.stringify({ role: [MembershipType.member] }),
+      })
+      expect(roleResult.totalDocs).toBe(5)
+      for (const user of roleResult.docs) {
+        expect(user.role).toBe(MembershipType.member)
+      }
+    })
+
+    it("should handle invalid filter JSON", async () => {
+      const usersToCreate = Array.from({ length: 3 }, (_, i) => ({
+        ...userCreateMock,
+        email: `user${i}@test.com`,
+      }))
+      await Promise.all(usersToCreate.map((u) => userDataService.createUser(u)))
+
+      await expect(
+        userDataService.getPaginatedUsers({
+          filter: "invalid json string",
+        }),
+      ).rejects.toThrow("Invalid filter JSON")
+    })
+
+    it("should handle empty array filter values by ignoring that filter", async () => {
+      const usersToCreate = Array.from({ length: 5 }, (_, i) => ({
+        ...userCreateMock,
+        email: `abcd${i}@test.com`,
+        playLevel: "beginner" as const,
+        role: MembershipType.member,
+      }))
+      await Promise.all(usersToCreate.map((u) => userDataService.createUser(u)))
+
+      const intermediateUser = await userDataService.createUser({
+        ...userCreateMock,
+        email: "abcde@test.com",
+        playLevel: "intermediate",
+        role: MembershipType.casual,
+      })
+      const advancedUser = await userDataService.createUser({
+        ...userCreateMock,
+        email: "abcdef@test.com",
+        playLevel: "advanced",
+        role: MembershipType.admin,
+      })
+
+      const result = await userDataService.getPaginatedUsers({
+        filter: JSON.stringify({ level: ["intermediate", "advanced"], role: [] }),
+      })
+      expect(result.totalDocs).toBe(2)
+      expect(result.docs).toStrictEqual(expect.arrayContaining([intermediateUser]))
+      expect(result.docs).toStrictEqual(expect.arrayContaining([advancedUser]))
+    })
+
     it("should return empty docs if no users exist", async () => {
       const result = await userDataService.getPaginatedUsers()
       expect(result.docs).toHaveLength(0)
