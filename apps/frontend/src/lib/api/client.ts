@@ -123,12 +123,17 @@ export class ApiClient {
    * @returns A consistent ApiResponse.
    * @private
    */
-  private async handleResponse<T>(
-    response: Response,
-    schema: z.Schema<T>,
-    method: string,
-    url: string,
-  ): Promise<ApiResponse<T>> {
+  private async handleResponse<T>({
+    response,
+    schema,
+    method,
+    url,
+  }: {
+    response: Response
+    schema?: z.Schema<T>
+    method: string
+    url: string
+  }): Promise<ApiResponse<T>> {
     if (!response.ok) {
       try {
         const errorData = await response.json()
@@ -164,7 +169,7 @@ export class ApiClient {
 
     try {
       const data = await response.json()
-      const parsedData = schema.parse(data)
+      const parsedData = schema ? schema.parse(data) : data
       return {
         success: true,
         data: parsedData,
@@ -203,7 +208,7 @@ export class ApiClient {
     const url = this.joinUrl(path)
     try {
       const response = await fetch(url, this.createFetchOptions("GET", undefined, options))
-      return await this.handleResponse(response, schema, "GET", url)
+      return await this.handleResponse({ response, schema, method: "GET", url })
     } catch (error) {
       return {
         success: false,
@@ -236,7 +241,7 @@ export class ApiClient {
     const url = this.joinUrl(path)
     try {
       const response = await fetch(url, this.createFetchOptions("POST", body, options))
-      return await this.handleResponse(response, schema, "POST", url)
+      return await this.handleResponse({ response, schema, method: "POST", url })
     } catch (error) {
       return {
         success: false,
@@ -269,7 +274,7 @@ export class ApiClient {
     const url = this.joinUrl(path)
     try {
       const response = await fetch(url, this.createFetchOptions("PUT", body, options))
-      return await this.handleResponse(response, schema, "PUT", url)
+      return await this.handleResponse({ response, schema, method: "PUT", url })
     } catch (error) {
       return {
         success: false,
@@ -296,13 +301,13 @@ export class ApiClient {
   public async patch<T>(
     path: string,
     body: unknown,
-    schema: z.Schema<T>,
+    schema?: z.Schema<T>,
     options: RequestOptions = {},
   ): Promise<ApiResponse<T>> {
     const url = this.joinUrl(path)
     try {
       const response = await fetch(url, this.createFetchOptions("PATCH", body, options))
-      return await this.handleResponse(response, schema, "PATCH", url)
+      return await this.handleResponse({ response, schema, method: "PATCH", url })
     } catch (error) {
       return {
         success: false,
@@ -377,7 +382,7 @@ export class ApiClient {
       }
 
       if (schema) {
-        return await this.handleResponse(response, schema, "DELETE", url)
+        return await this.handleResponse({ response, schema, method: "DELETE", url })
       }
 
       try {

@@ -89,6 +89,15 @@ const AdminUserService = {
     })
     return ApiClient.throwIfError(response)
   },
+
+  resetAllMemberships: async ({ token }: { token: string | null }) => {
+    const response = await apiClient.patch("/api/admin/memberships", undefined, undefined, {
+      requiresAuth: true,
+      token,
+    })
+    return ApiClient.throwIfError(response)
+  },
+
   /**
    * Deletes a user by ID.
    *
