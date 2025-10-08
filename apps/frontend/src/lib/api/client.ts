@@ -171,16 +171,25 @@ export class ApiClient {
       if (response.status === 204 || response.headers.get("content-length") === "0") {
         return {
           success: true,
-          data: undefined as T,
+          data: null as T,
           status: response.status,
         }
       }
-      const data = await response.json()
-      const parsedData = schema ? schema.parse(data) : data
-      return {
-        success: true,
-        data: parsedData,
-        status: response.status,
+
+      try {
+        const data = await response.json()
+        const parsedData = schema ? schema.parse(data) : data
+        return {
+          success: true,
+          data: parsedData,
+          status: response.status,
+        }
+      } catch {
+        return {
+          success: true,
+          data: undefined as T,
+          status: response.status,
+        }
       }
     } catch (err) {
       return {
