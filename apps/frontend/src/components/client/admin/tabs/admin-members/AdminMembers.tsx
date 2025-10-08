@@ -46,9 +46,6 @@ export const AdminMembers = () => {
         },
       },
     )
-    notice({
-      title: "TODO: Reset Memberships",
-    })
   }
 
   return (
