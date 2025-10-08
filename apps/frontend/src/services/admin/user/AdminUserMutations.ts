@@ -51,7 +51,6 @@ export const useResetAllMemberships = () => {
   const { token } = useAuth()
   return useMutation({
     mutationFn: () => AdminUserService.resetAllMemberships({ token }),
-
     onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.USER_QUERY_KEY],
