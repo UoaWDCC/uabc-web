@@ -1,7 +1,7 @@
 import { casualUserMock } from "@repo/shared/mocks"
 import type { User } from "@repo/shared/payload-types"
 import type { UpdateUserRequest } from "@repo/shared/types"
-import { render, screen } from "@repo/ui/test-utils"
+import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { NuqsTestingAdapter, withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { isValidElement, type ReactNode } from "react"
 import { FilterActionsProvider } from "../../Generic/ManagementTable/Filter/FilterActionsContext"
@@ -381,4 +381,109 @@ describe("<AdminTableWithPaginatedQuery />", () => {
 
     expect(mockOnDelete).not.toHaveBeenCalled()
   }, 10_000)
+
+  it("should handle querying", async () => {
+    const mockQuery = createMockUseGetPaginatedData()
+
+    const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
+      wrapper: withNuqsTestingAdapter(),
+    })
+
+    expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
+    expect(screen.getByText("User19 Lastname19")).toBeInTheDocument()
+
+    const searchBar = screen.getByRole("textbox")
+
+    await user.type(searchBar, "User1")
+    expect(searchBar).toHaveValue("User1")
+
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.objectContaining({
+        query: "User1",
+      }),
+    )
+  })
+
+  it("should handle filtering by fields", async () => {
+    const mockQuery = createMockUseGetPaginatedData()
+
+    const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
+      wrapper: withNuqsTestingAdapter(),
+    })
+
+    expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
+    expect(screen.getByText("User19 Lastname19")).toBeInTheDocument()
+
+    const roleDropdown = screen.getAllByRole("combobox")[0]
+    await user.click(roleDropdown)
+    const memberOption = screen.getAllByText("member")[0]
+    await user.click(memberOption)
+
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filter: JSON.stringify({ role: ["member"] }),
+      }),
+    )
+    const levelDropdown = screen.getByRole("combobox", { name: "Play Level" })
+    await user.click(levelDropdown)
+    const beginnerOption = screen.getAllByText("beginner")[0]
+    await user.click(beginnerOption)
+
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
+      }),
+    )
+  })
+
+  it("should handle selecting rows", async () => {
+    const mockQuery = createMockUseGetPaginatedData()
+
+    const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
+      wrapper: withNuqsTestingAdapter({ onUrlUpdate: onUrlUpdate }),
+    })
+
+    expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
+    expect(screen.getByText("User19 Lastname19")).toBeInTheDocument()
+
+    const firstRowCheckbox = screen.getAllByRole("checkbox", { name: "Select row" })[0]
+    await user.click(firstRowCheckbox)
+    expect(onUrlUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        queryString: "?selectedRows=0",
+      }),
+    )
+
+    const secondRowCheckbox = screen.getAllByRole("checkbox", { name: "Select row" })[1]
+    await user.click(secondRowCheckbox)
+    expect(onUrlUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        queryString: "?selectedRows=0,1",
+      }),
+    )
+  })
+
+  it("should handle changing visible columns", async () => {
+    const mockQuery = createMockUseGetPaginatedData()
+
+    const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
+      wrapper: withNuqsTestingAdapter({ onUrlUpdate: onUrlUpdate }),
+    })
+
+    const toggleColumnsButton = screen.getByRole("button", { name: "Toggle column visibility" })
+    await user.click(toggleColumnsButton)
+
+    const emailCheckbox = screen.getAllByRole("checkbox")[1]
+    expect(emailCheckbox).toBeDefined()
+    await waitFor(() => {
+      expect(emailCheckbox).toBeInTheDocument()
+      expect(emailCheckbox).toBeChecked()
+    })
+    await user.click(emailCheckbox)
+    expect(onUrlUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        queryString: "?columns=name,remaining,joined,role,university,level,actions",
+      }),
+    )
+  })
 })
