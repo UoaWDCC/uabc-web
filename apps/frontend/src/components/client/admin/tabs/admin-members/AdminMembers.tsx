@@ -28,24 +28,22 @@ export const AdminMembers = () => {
 
   const handleResetFinalConfirm = () => {
     onCloseFinalConfirm()
-    resetAllMembershipsMutation.mutate(
-      void {
-        onSuccess: () => {
-          notice({
-            title: "Membership reset successful",
-            description: "All user memberships have been reset",
-            status: "success",
-          })
-        },
-        onError: () => {
-          notice({
-            title: "Membership reset failed",
-            description: "Failed to reset user memberships",
-            status: "error",
-          })
-        },
+    resetAllMembershipsMutation.mutate(undefined, {
+      onSuccess: () => {
+        notice({
+          title: "Membership reset successful",
+          description: "All user memberships have been reset",
+          status: "success",
+        })
       },
-    )
+      onError: () => {
+        notice({
+          title: "Membership reset failed",
+          description: "Failed to reset user memberships",
+          status: "error",
+        })
+      },
+    })
   }
 
   return (
