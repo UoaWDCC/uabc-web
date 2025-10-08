@@ -171,7 +171,7 @@ export class ApiClient {
       if (response.status === 204 || response.headers.get("content-length") === "0") {
         return {
           success: true,
-          data: null as T,
+          data: undefined as T,
           status: response.status,
         }
       }
