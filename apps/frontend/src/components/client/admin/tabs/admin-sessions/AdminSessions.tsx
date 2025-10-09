@@ -13,6 +13,7 @@ import { Grid, GridItem, VStack } from "@yamada-ui/react"
 import { parseAsString, useQueryState } from "nuqs"
 import { useMemo } from "react"
 import { buildCsvFromRecords } from "@/lib/csv"
+import { downloadCsvFile } from "@/lib/file-download"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
 import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
 
@@ -64,28 +65,6 @@ const transformToAdminGameSession = (session: GameSessionWithCounts): AdminGameS
     ...session,
     day: weekdayMap[dayOfWeek],
     status,
-  }
-}
-
-/**
- * Download CSV content as a file with the specified filename.
- */
-const downloadCsvFile = (csvContent: string, filename: string): void => {
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-  const link = document.createElement("a")
-  const url = URL.createObjectURL(blob)
-
-  try {
-    link.setAttribute("href", url)
-    link.setAttribute("download", filename)
-    link.style.visibility = "hidden"
-    document.body.appendChild(link)
-    link.click()
-  } finally {
-    if (document.body.contains(link)) {
-      document.body.removeChild(link)
-    }
-    URL.revokeObjectURL(url)
   }
 }
 
@@ -156,7 +135,6 @@ export const AdminSessions = () => {
 
     const csvContent = buildCsvFromRecords(selectedSessionAttendees)
     const filename = `session-attendees-${dayjs(selectedSession.startTime).format("YYYY-MM-DD")}.csv`
-
     downloadCsvFile(csvContent, filename)
   }
 
