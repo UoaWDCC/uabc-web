@@ -1,6 +1,7 @@
 import { casualUserMock } from "@repo/shared/mocks"
 import type { User } from "@repo/shared/payload-types"
-import { render, screen } from "@repo/ui/test-utils"
+import type { UpdateUserRequest } from "@repo/shared/types"
+import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { isValidElement } from "react"
 import { AdminTableWithPaginatedQuery } from "./AdminTableWithPaginatedQuery"
@@ -13,6 +14,7 @@ const createMockUser = (index: number): User => ({
   firstName: `User${index}`,
   lastName: `Lastname${index}`,
   email: `user${index}@example.com`,
+  phoneNumber: "0123456789",
 })
 
 const allMockUsers: User[] = Array.from({ length: 31 }, (_, i) => createMockUser(i))
@@ -300,13 +302,17 @@ describe("<AdminTableWithPaginatedQuery />", () => {
   })
 
   it("should handle edit action correctly", async () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {})
+    const onEdit = vi.fn((id: string, data: UpdateUserRequest) => {
+      id
+      data
+    })
+
     const mockQueryWithEdit = createMockUseGetPaginatedData({
       data: mockPaginationPage1,
     })
 
     const { user } = render(
-      <AdminTableWithPaginatedQuery useGetPaginatedData={mockQueryWithEdit} />,
+      <AdminTableWithPaginatedQuery onEdit={onEdit} useGetPaginatedData={mockQueryWithEdit} />,
       {
         wrapper: withNuqsTestingAdapter(),
       },
@@ -317,18 +323,11 @@ describe("<AdminTableWithPaginatedQuery />", () => {
 
     const editButton = screen.getByText("Edit")
     await user.click(editButton)
+    expect(screen.getByText("Edit Member")).toBeInTheDocument()
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      "Edit",
-      expect.objectContaining({
-        id: "0",
-        name: "User0 Lastname0",
-        email: "user0@example.com",
-      }),
-    )
-
-    consoleSpy.mockRestore()
-  })
+    await user.click(screen.getByTestId("submit"))
+    expect(onEdit).toBeCalled()
+  }, 10_000)
 
   it("should handle delete dialog cancellation", async () => {
     const mockOnDelete = vi.fn()
@@ -358,5 +357,110 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     await user.click(cancelButton)
 
     expect(mockOnDelete).not.toHaveBeenCalled()
+  })
+
+  it("should handle querying", async () => {
+    const mockQuery = createMockUseGetPaginatedData()
+
+    const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
+      wrapper: withNuqsTestingAdapter(),
+    })
+
+    expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
+    expect(screen.getByText("User19 Lastname19")).toBeInTheDocument()
+
+    const searchBar = screen.getByRole("textbox")
+
+    await user.type(searchBar, "User1")
+    expect(searchBar).toHaveValue("User1")
+
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.objectContaining({
+        query: "User1",
+      }),
+    )
+  })
+
+  it("should handle filtering by fields", async () => {
+    const mockQuery = createMockUseGetPaginatedData()
+
+    const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
+      wrapper: withNuqsTestingAdapter(),
+    })
+
+    expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
+    expect(screen.getByText("User19 Lastname19")).toBeInTheDocument()
+
+    const roleDropdown = screen.getAllByRole("combobox")[0]
+    await user.click(roleDropdown)
+    const memberOption = screen.getAllByText("member")[0]
+    await user.click(memberOption)
+
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filter: JSON.stringify({ role: ["member"] }),
+      }),
+    )
+    const levelDropdown = screen.getByRole("combobox", { name: "Play Level" })
+    await user.click(levelDropdown)
+    const beginnerOption = screen.getAllByText("beginner")[0]
+    await user.click(beginnerOption)
+
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
+      }),
+    )
+  })
+
+  it("should handle selecting rows", async () => {
+    const mockQuery = createMockUseGetPaginatedData()
+
+    const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
+      wrapper: withNuqsTestingAdapter({ onUrlUpdate: onUrlUpdate }),
+    })
+
+    expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
+    expect(screen.getByText("User19 Lastname19")).toBeInTheDocument()
+
+    const firstRowCheckbox = screen.getAllByRole("checkbox", { name: "Select row" })[0]
+    await user.click(firstRowCheckbox)
+    expect(onUrlUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        queryString: "?selectedRows=0",
+      }),
+    )
+
+    const secondRowCheckbox = screen.getAllByRole("checkbox", { name: "Select row" })[1]
+    await user.click(secondRowCheckbox)
+    expect(onUrlUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        queryString: "?selectedRows=0,1",
+      }),
+    )
+  })
+
+  it("should handle changing visible columns", async () => {
+    const mockQuery = createMockUseGetPaginatedData()
+
+    const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
+      wrapper: withNuqsTestingAdapter({ onUrlUpdate: onUrlUpdate }),
+    })
+
+    const toggleColumnsButton = screen.getByRole("button", { name: "Toggle column visibility" })
+    await user.click(toggleColumnsButton)
+
+    const emailCheckbox = screen.getAllByRole("checkbox")[1]
+    expect(emailCheckbox).toBeDefined()
+    await waitFor(() => {
+      expect(emailCheckbox).toBeInTheDocument()
+      expect(emailCheckbox).toBeChecked()
+    })
+    await user.click(emailCheckbox)
+    expect(onUrlUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        queryString: "?columns=name,remaining,joined,role,university,level,actions",
+      }),
+    )
   })
 })
