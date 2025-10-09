@@ -3,7 +3,7 @@
  * - Replace double quotes with two double quotes
  * - Wrap in quotes if contains comma, quote, newline
  *
- * @param value - The string value to escape
+ * @param value - The value to escape (string, number, null, or undefined)
  * @returns The escaped string value
  */
 export const escapeCsvValue = (value: string | number | null | undefined): string => {
@@ -37,7 +37,9 @@ export const buildCsv = (rows: Array<Array<string | number | null | undefined>>)
  * @param records - Array of objects to convert to CSV
  * @returns CSV-formatted string with headers derived from object keys
  */
-export const buildCsvFromRecords = <T extends Record<string, any>>(records: T[]): string => {
+export const buildCsvFromRecords = <T extends Record<string, string | number | null | undefined>>(
+  records: T[],
+): string => {
   if (!records || records.length === 0) return ""
 
   // Extract all unique keys from all records
