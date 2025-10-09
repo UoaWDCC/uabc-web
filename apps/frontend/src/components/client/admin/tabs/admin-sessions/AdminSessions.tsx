@@ -1,8 +1,9 @@
 "use client"
 
 import type { AdminGameSession, GameSessionWithCounts } from "@repo/shared"
-import { dayjs, GameSessionStatus, type PlayLevel, Popup, Weekday } from "@repo/shared"
+import { GameSessionStatus, type PlayLevel, Popup, Weekday } from "@repo/shared"
 import type { Booking, User } from "@repo/shared/payload-types"
+import { formatDateToISOString, isSameDate, parseISOStringToDate } from "@repo/shared/utils/date"
 import {
   AdminGameSessionCard,
   AdminSessionsCalendar,
@@ -111,18 +112,14 @@ export const AdminSessions = () => {
     if (!dateParam) {
       return
     }
-    const parsedDate = dayjs.tz(dateParam, "YYYY-MM-DD", "Pacific/Auckland").toDate()
-    return parsedDate
+    return parseISOStringToDate(dateParam)
   }, [dateParam])
 
   const changeSessionFlowDate = useMemo(() => {
     if (!changeSessionFlowDateParam) {
       return null
     }
-    const parsedDate = dayjs
-      .tz(changeSessionFlowDateParam, "YYYY-MM-DD", "Pacific/Auckland")
-      .toDate()
-    return parsedDate
+    return parseISOStringToDate(changeSessionFlowDateParam)
   }, [changeSessionFlowDateParam])
 
   const adminGameSessions = useMemo(() => {
@@ -136,10 +133,8 @@ export const AdminSessions = () => {
     if (!selectedDate || !adminGameSessions.length) {
       return
     }
-    const dateString = dayjs(selectedDate).format("YYYY-MM-DD")
     return adminGameSessions.find((session) => {
-      const sessionDate = dayjs(session.startTime).format("YYYY-MM-DD")
-      return sessionDate === dateString
+      return isSameDate(selectedDate, new Date(session.startTime))
     })
   }, [selectedDate, adminGameSessions])
 
@@ -161,13 +156,13 @@ export const AdminSessions = () => {
   }, [changeSessionPopup.value, selectedSessionAttendees])
 
   const handleDateSelect = (date: Date) => {
-    const dateString = dayjs.tz(date, "Pacific/Auckland").format("YYYY-MM-DD")
+    const dateString = formatDateToISOString(date)
     setDateParam(dateString)
   }
 
   const handleChangeSessionDateSelect = (date: Date | null) => {
     if (date) {
-      const dateString = dayjs.tz(date, "Pacific/Auckland").format("YYYY-MM-DD")
+      const dateString = formatDateToISOString(date)
       setChangeSessionFlowDateParam(dateString)
     } else {
       setChangeSessionFlowDateParam(null)

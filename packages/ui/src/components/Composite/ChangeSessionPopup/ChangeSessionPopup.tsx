@@ -71,7 +71,7 @@ export const ChangeSessionPopup = memo(
       [onDateSelect],
     )
 
-    const handleSessionSelect = useCallback(
+    const handleOnConfirm = useCallback(
       (session: AdminGameSession) => {
         onConfirm?.(session)
       },
@@ -207,7 +207,7 @@ export const ChangeSessionPopup = memo(
                   <Button
                     colorScheme="primary"
                     loading={isLoading}
-                    onClick={() => handleSessionSelect(sessionsForSelectedDate[0])}
+                    onClick={() => handleOnConfirm(sessionsForSelectedDate[0])}
                     size="md"
                     w="full"
                   >

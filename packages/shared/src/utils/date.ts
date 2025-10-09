@@ -127,3 +127,57 @@ export function formatDate(date: Date): string {
     year: "2-digit",
   })
 }
+
+/**
+ * Formats a Date object to YYYY-MM-DD string with timezone support
+ *
+ * Converts a Date object to ISO date format string using New Zealand timezone
+ *
+ * @param date The Date object to format
+ * @returns Formatted date string in YYYY-MM-DD format
+ *
+ * @example
+ * ```ts
+ * formatDateToISOString(new Date("2025-01-21T19:30:00Z")) // Returns: "2025-01-22"
+ * ```
+ */
+export function formatDateToISOString(date: Date): string {
+  return dayjs.tz(date, "Pacific/Auckland").format("YYYY-MM-DD")
+}
+
+/**
+ * Parses a date string in YYYY-MM-DD format to Date object with timezone support
+ *
+ * Converts a date string to Date object using New Zealand timezone
+ *
+ * @param dateString The date string in YYYY-MM-DD format
+ * @returns Date object or undefined if parsing fails
+ *
+ * @example
+ * ```ts
+ * parseISOStringToDate("2025-01-21") // Returns: Date object
+ * ```
+ */
+export function parseISOStringToDate(dateString: string): Date | undefined {
+  if (!dateString) {
+    return undefined
+  }
+  return dayjs.tz(dateString, "YYYY-MM-DD", "Pacific/Auckland").toDate()
+}
+
+/**
+ * Formats a date to YYYY-MM-DD string without timezone conversion
+ *
+ * Converts a Date object to ISO date format string without timezone handling
+ *
+ * @param date The Date object to format
+ * @returns Formatted date string in YYYY-MM-DD format
+ *
+ * @example
+ * ```ts
+ * formatDateToString(new Date("2025-01-21T19:30:00Z")) // Returns: "2025-01-21"
+ * ```
+ */
+export function formatDateToString(date: Date): string {
+  return dayjs(date).format("YYYY-MM-DD")
+}
