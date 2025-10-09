@@ -29,3 +29,31 @@ export const escapeCsvValue = (value: string | number | null | undefined): strin
 export const buildCsv = (rows: Array<Array<string | number | null | undefined>>): string => {
   return rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")
 }
+
+/**
+ * Build CSV content from an array of objects.
+ * Dynamically extracts all available fields from the objects as headers.
+ *
+ * @param records - Array of objects to convert to CSV
+ * @returns CSV-formatted string with headers derived from object keys
+ */
+export const buildCsvFromRecords = <T extends Record<string, any>>(records: T[]): string => {
+  if (!records || records.length === 0) return ""
+
+  // Extract all unique keys from all records
+  const allKeys = new Set<string>()
+  for (const record of records) {
+    for (const key of Object.keys(record)) {
+      allKeys.add(key)
+    }
+  }
+
+  const headers = Array.from(allKeys)
+
+  const rows: Array<Array<string | number | null | undefined>> = [
+    headers,
+    ...records.map((record) => headers.map((key) => record[key])),
+  ]
+
+  return buildCsv(rows)
+}

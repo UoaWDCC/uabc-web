@@ -12,7 +12,7 @@ import type { SessionData } from "@repo/ui/components/Composite/AdminSessionsTab
 import { Grid, GridItem, VStack } from "@yamada-ui/react"
 import { parseAsString, useQueryState } from "nuqs"
 import { useMemo } from "react"
-import { buildCsv } from "@/lib/csv"
+import { buildCsvFromRecords } from "@/lib/csv"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
 import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
 
@@ -65,31 +65,6 @@ const transformToAdminGameSession = (session: GameSessionWithCounts): AdminGameS
     day: weekdayMap[dayOfWeek],
     status,
   }
-}
-
-/**
- * Build CSV content for session attendees.
- * Dynamically extracts all available fields from the attendee data.
- */
-const buildSessionAttendeesCsv = (attendees: Array<SessionData>): string => {
-  if (!attendees || attendees.length === 0) return ""
-
-  // Extract all unique keys from all attendee objects
-  const allKeys = new Set<string>()
-  for (const attendee of attendees) {
-    for (const key of Object.keys(attendee)) {
-      allKeys.add(key)
-    }
-  }
-
-  const headers = Array.from(allKeys)
-
-  const rows: Array<Array<string | number | null | undefined>> = [
-    headers,
-    ...attendees.map((attendee) => headers.map((key) => attendee[key as keyof SessionData])),
-  ]
-
-  return buildCsv(rows)
 }
 
 /**
@@ -179,7 +154,7 @@ export const AdminSessions = () => {
       return
     }
 
-    const csvContent = buildSessionAttendeesCsv(selectedSessionAttendees)
+    const csvContent = buildCsvFromRecords(selectedSessionAttendees)
     const filename = `session-attendees-${dayjs(selectedSession.startTime).format("YYYY-MM-DD")}.csv`
 
     downloadCsvFile(csvContent, filename)
