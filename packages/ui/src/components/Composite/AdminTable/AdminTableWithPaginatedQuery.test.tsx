@@ -460,6 +460,8 @@ describe("<AdminTableWithPaginatedQuery />", () => {
       expect(emailCheckbox).toBeInTheDocument()
       expect(emailCheckbox).toBeChecked()
     })
+
+    const emailCheckbox = screen.getByRole("checkbox", { name: "Email" })
     await user.click(emailCheckbox)
     expect(onUrlUpdate).toHaveBeenCalledWith(
       expect.objectContaining({
