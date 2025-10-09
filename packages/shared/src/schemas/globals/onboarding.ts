@@ -7,3 +7,7 @@ export const OnboardingGlobalSchema = z.object({
   updatedAt: z.string().optional().nullable(),
   createdAt: z.string().optional().nullable(),
 }) satisfies z.ZodType<Omit<Onboarding, "id">>
+
+export const GetOnboardingResponseSchema = z.object({
+  data: OnboardingGlobalSchema,
+})

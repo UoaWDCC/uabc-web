@@ -4,11 +4,13 @@ import type {
   BasicInfoForm1Schema,
   BasicInfoForm2Schema,
   CasualInfoFormSchema,
+  CreateMemberPopUpFormDataSchema,
   RegisterFlowStateSchema,
   RegisterFormDataSchema,
   UniversityInfoFormSchema,
 } from "../../schemas"
 
+export type CreateMemberPopUpFormValues = z.infer<typeof CreateMemberPopUpFormDataSchema>
 export type RegisterFormData = z.infer<typeof RegisterFormDataSchema>
 export type BasicInfoForm1Values = z.infer<typeof BasicInfoForm1Schema>
 export type BasicInfoForm2Values = z.infer<typeof BasicInfoForm2Schema>

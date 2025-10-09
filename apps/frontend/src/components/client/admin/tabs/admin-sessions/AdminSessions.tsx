@@ -15,7 +15,8 @@ import { useMemo } from "react"
 import { buildCsvFromRecords } from "@/lib/csv"
 import { downloadCsvFile } from "@/lib/file-download"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
-import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
+import { useGetAllGameSessionsBySemester } from "@/services/game-session/GameSessionQueries"
+import { useGetCurrentSemester } from "@/services/semester/SemesterQueries"
 
 /**
  * Transform booking data to SessionData format for the table
@@ -83,7 +84,8 @@ export const AdminSessions = () => {
   const [dateParam, setDateParam] = useQueryState("date", parseAsString)
 
   // Get current game sessions with attendee counts
-  const { data: gameSessionsData } = useGetCurrentGameSessions()
+  const { data: semesterData } = useGetCurrentSemester()
+  const { data: gameSessionsData } = useGetAllGameSessionsBySemester(semesterData?.data.id || "")
 
   const selectedDate = useMemo(() => {
     if (!dateParam) {
