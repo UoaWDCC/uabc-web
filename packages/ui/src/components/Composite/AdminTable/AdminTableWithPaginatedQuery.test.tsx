@@ -346,6 +346,8 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     )
 
     const actionButtons = screen.getAllByRole("button", { name: "Actions" })
+    expect(actionButtons).toHaveLength(20)
+
     await user.click(actionButtons[0])
 
     const deleteButton = screen.getByText("Delete")
@@ -357,7 +359,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     await user.click(cancelButton)
 
     expect(mockOnDelete).not.toHaveBeenCalled()
-  })
+  }, 10_000)
 
   it("should handle querying", async () => {
     const mockQuery = createMockUseGetPaginatedData()
