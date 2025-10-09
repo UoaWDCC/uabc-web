@@ -16,7 +16,8 @@ import { parseAsString, useQueryState } from "nuqs"
 import { useMemo } from "react"
 import { useUpdateBooking } from "@/services/admin/bookings/AdminBookingMutations"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
-import { useGetCurrentGameSessions } from "@/services/game-session/GameSessionQueries"
+import { useGetAllGameSessionsBySemester } from "@/services/game-session/GameSessionQueries"
+import { useGetCurrentSemester } from "@/services/semester/SemesterQueries"
 
 /**
  * Transform booking data to SessionData format for the table
@@ -102,7 +103,9 @@ export const AdminSessions = () => {
 
   const updateBookingMutation = useUpdateBooking()
 
-  const { data: gameSessionsData } = useGetCurrentGameSessions()
+  // Get current game sessions with attendee counts
+  const { data: semesterData } = useGetCurrentSemester()
+  const { data: gameSessionsData } = useGetAllGameSessionsBySemester(semesterData?.data.id || "")
 
   const selectedDate = useMemo(() => {
     if (!dateParam) {
