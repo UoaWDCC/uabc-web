@@ -11,6 +11,7 @@ const mockContains = vi.fn()
 const mockCreateElement = vi.fn()
 const mockCreateObjectURL = vi.fn()
 const mockRevokeObjectURL = vi.fn()
+const mockBlob = vi.fn()
 
 // Mock document and URL APIs
 Object.defineProperty(global, "document", {
@@ -32,12 +33,7 @@ Object.defineProperty(global, "URL", {
 })
 
 Object.defineProperty(global, "Blob", {
-  value: class MockBlob {
-    constructor(
-      public content: string[],
-      public options: { type: string },
-    ) {}
-  },
+  value: mockBlob,
 })
 
 describe("downloadFile", () => {
@@ -52,13 +48,16 @@ describe("downloadFile", () => {
     })
     mockCreateObjectURL.mockReturnValue("blob:mock-url")
     mockContains.mockReturnValue(true)
+
+    // Mock Blob constructor to return a mock object
+    mockBlob.mockImplementation(() => ({ type: "mocked-blob" }))
   })
 
   it("creates blob with correct content and mime type", () => {
     downloadFile("test content", "test.txt", "text/plain;charset=utf-8;")
 
     // Check that Blob was created with correct parameters
-    expect(global.Blob).toHaveBeenCalledWith(["test content"], {
+    expect(mockBlob).toHaveBeenCalledWith(["test content"], {
       type: "text/plain;charset=utf-8;",
     })
   })
@@ -121,6 +120,9 @@ describe("downloadCsvFile", () => {
     })
     mockCreateObjectURL.mockReturnValue("blob:mock-url")
     mockContains.mockReturnValue(true)
+
+    // Mock Blob constructor to return a mock object
+    mockBlob.mockImplementation(() => ({ type: "mocked-blob" }))
   })
 
   it("calls downloadFile with CSV mime type", () => {
@@ -129,7 +131,7 @@ describe("downloadCsvFile", () => {
     downloadCsvFile(csvContent, "users.csv")
 
     // Verify Blob was created with CSV mime type
-    expect(global.Blob).toHaveBeenCalledWith([csvContent], {
+    expect(mockBlob).toHaveBeenCalledWith([csvContent], {
       type: "text/csv;charset=utf-8;",
     })
   })
@@ -151,6 +153,9 @@ describe("error handling", () => {
       style: {},
     })
     mockCreateObjectURL.mockReturnValue("blob:mock-url")
+
+    // Mock Blob constructor to return a mock object
+    mockBlob.mockImplementation(() => ({ type: "mocked-blob" }))
   })
 
   it("still cleans up URL even if DOM manipulation fails", () => {
