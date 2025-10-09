@@ -134,7 +134,10 @@ export const AdminSessions = () => {
     }
 
     const csvContent = buildCsvFromRecords(selectedSessionAttendees)
-    const filename = `session-attendees-${dayjs(selectedSession.startTime).format("YYYY-MM-DD")}.csv`
+    const sessionDate = dayjs(selectedSession.startTime)
+    const formattedDate = sessionDate.isValid() ? sessionDate.format("YYYY-MM-DD") : "unknown-date"
+    const filename = `session-attendees-${formattedDate}.csv`
+
     downloadCsvFile(csvContent, filename)
   }
 
