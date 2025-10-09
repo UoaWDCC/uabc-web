@@ -386,7 +386,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: withNuqsTestingAdapter(),
+      wrapper: createWrapper,
     })
 
     expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
@@ -408,7 +408,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: withNuqsTestingAdapter(),
+      wrapper: createWrapper,
     })
 
     expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
@@ -440,7 +440,14 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: withNuqsTestingAdapter({ onUrlUpdate: onUrlUpdate }),
+      wrapper: ({ children }) => {
+        const NuqsTestingAdapterWithSearchParams = withNuqsTestingAdapter({ onUrlUpdate })
+        return (
+          <NuqsTestingAdapterWithSearchParams>
+            <FilterActionsProvider>{children}</FilterActionsProvider>
+          </NuqsTestingAdapterWithSearchParams>
+        )
+      },
     })
 
     expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
@@ -467,7 +474,14 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: withNuqsTestingAdapter({ onUrlUpdate: onUrlUpdate }),
+      wrapper: ({ children }) => {
+        const NuqsTestingAdapterWithSearchParams = withNuqsTestingAdapter({ onUrlUpdate })
+        return (
+          <NuqsTestingAdapterWithSearchParams>
+            <FilterActionsProvider>{children}</FilterActionsProvider>
+          </NuqsTestingAdapterWithSearchParams>
+        )
+      },
     })
 
     const toggleColumnsButton = screen.getByRole("button", { name: "Toggle column visibility" })
