@@ -396,21 +396,26 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const memberOption = screen.getAllByText("member")[0]
     await user.click(memberOption)
 
-    expect(mockQuery).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filter: JSON.stringify({ role: ["member"] }),
-      }),
-    )
+    await waitFor(() => {
+      expect(mockQuery).toHaveBeenCalledWith(
+        expect.objectContaining({
+          filter: JSON.stringify({ role: ["member"] }),
+        }),
+      )
+    })
+
     const levelDropdown = screen.getByRole("combobox", { name: "Play Level" })
     await user.click(levelDropdown)
     const beginnerOption = screen.getAllByText("beginner")[0]
     await user.click(beginnerOption)
 
-    expect(mockQuery).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
-      }),
-    )
+    await waitFor(() => {
+      expect(mockQuery).toHaveBeenCalledWith(
+        expect.objectContaining({
+          filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
+        }),
+      )
+    })
   })
 
   it("should handle selecting rows", async () => {
@@ -450,7 +455,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const toggleColumnsButton = screen.getByRole("button", { name: "Toggle column visibility" })
     await user.click(toggleColumnsButton)
 
-    const emailCheckbox = screen.getAllByRole("checkbox")[1]
+    const emailCheckbox = screen.getByRole("checkbox", { name: "Email" })
     expect(emailCheckbox).toBeDefined()
     await waitFor(() => {
       expect(emailCheckbox).toBeInTheDocument()
