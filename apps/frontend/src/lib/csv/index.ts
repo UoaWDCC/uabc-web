@@ -3,7 +3,7 @@
  * - Replace double quotes with two double quotes
  * - Wrap in quotes if contains comma, quote, newline
  *
- * @param value - The value to escape (string, number, null, or undefined)
+ * @param value The value to escape (string, number, null, or undefined)
  * @returns The escaped string value
  */
 export const escapeCsvValue = (value: string | number | null | undefined): string => {
@@ -23,7 +23,7 @@ export const escapeCsvValue = (value: string | number | null | undefined): strin
 /**
  * Converts an array of rows into CSV content, handling escaping automatically.
  *
- * @param rows - Two-dimensional array representing rows and columns.
+ * @param rows Two-dimensional array representing rows and columns.
  * @returns A CSV-formatted string.
  */
 export const buildCsv = (rows: Array<Array<string | number | null | undefined>>): string => {
@@ -34,7 +34,7 @@ export const buildCsv = (rows: Array<Array<string | number | null | undefined>>)
  * Build CSV content from an array of objects.
  * Dynamically extracts all available fields from the objects as headers.
  *
- * @param records - Array of objects to convert to CSV
+ * @param records Array of objects to convert to CSV
  * @returns CSV-formatted string with headers derived from object keys
  */
 export const buildCsvFromRecords = <T extends Record<string, string | number | null | undefined>>(

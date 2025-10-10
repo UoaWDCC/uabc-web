@@ -1,9 +1,9 @@
 /**
  * Download content as a file with the specified filename and MIME type.
  *
- * @param content - The content to download
- * @param filename - The filename for the downloaded file
- * @param mimeType - The MIME type for the file
+ * @param content The content to download
+ * @param filename The filename for the downloaded file
+ * @param mimeType The MIME type for the file
  */
 export const downloadFile = (content: string, filename: string, mimeType: string): void => {
   const blob = new Blob([content], { type: mimeType })
@@ -27,8 +27,8 @@ export const downloadFile = (content: string, filename: string, mimeType: string
 /**
  * Download CSV content as a file with the specified filename.
  *
- * @param csvContent - The CSV content to download
- * @param filename - The filename for the downloaded CSV file
+ * @param csvContent The CSV content to download
+ * @param filename The filename for the downloaded CSV file
  */
 export const downloadCsvFile = (csvContent: string, filename: string): void => {
   downloadFile(csvContent, filename, "text/csv;charset=utf-8;")
