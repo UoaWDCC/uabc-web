@@ -49,6 +49,9 @@ describe("downloadFile", () => {
     mockCreateObjectURL.mockReturnValue("blob:mock-url")
     mockContains.mockReturnValue(true)
 
+    // Reset mockAppendChild to default behavior (ensure test isolation)
+    mockAppendChild.mockImplementation(() => {})
+
     // Mock Blob constructor to return a mock object
     mockBlob.mockImplementation(() => ({ type: "mocked-blob" }))
   })
@@ -106,6 +109,15 @@ describe("downloadFile", () => {
 
     expect(mockLink.style.visibility).toBe("hidden")
   })
+
+  it("still cleans up URL even if DOM manipulation fails", () => {
+    mockAppendChild.mockImplementation(() => {
+      throw new Error("DOM error")
+    })
+
+    expect(() => downloadFile("test", "test.txt", "text/plain")).toThrow("DOM error")
+    expect(mockRevokeObjectURL).toHaveBeenCalledWith("blob:mock-url")
+  })
 })
 
 describe("downloadCsvFile", () => {
@@ -120,6 +132,9 @@ describe("downloadCsvFile", () => {
     })
     mockCreateObjectURL.mockReturnValue("blob:mock-url")
     mockContains.mockReturnValue(true)
+
+    // Reset mockAppendChild to not throw an error (fix test isolation)
+    mockAppendChild.mockImplementation(() => {})
 
     // Mock Blob constructor to return a mock object
     mockBlob.mockImplementation(() => ({ type: "mocked-blob" }))
@@ -140,30 +155,5 @@ describe("downloadCsvFile", () => {
     downloadCsvFile("test,data", "export.csv")
 
     expect(mockSetAttribute).toHaveBeenCalledWith("download", "export.csv")
-  })
-})
-
-describe("error handling", () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-
-    mockCreateElement.mockReturnValue({
-      setAttribute: mockSetAttribute,
-      click: mockClick,
-      style: {},
-    })
-    mockCreateObjectURL.mockReturnValue("blob:mock-url")
-
-    // Mock Blob constructor to return a mock object
-    mockBlob.mockImplementation(() => ({ type: "mocked-blob" }))
-  })
-
-  it("still cleans up URL even if DOM manipulation fails", () => {
-    mockAppendChild.mockImplementation(() => {
-      throw new Error("DOM error")
-    })
-
-    expect(() => downloadFile("test", "test.txt", "text/plain")).toThrow("DOM error")
-    expect(mockRevokeObjectURL).toHaveBeenCalledWith("blob:mock-url")
   })
 })

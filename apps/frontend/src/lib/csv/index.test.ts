@@ -3,6 +3,18 @@ import { describe, expect, it } from "vitest"
 import { buildCsv, buildCsvFromRecords, escapeCsvValue } from "./index"
 
 describe("escapeCsvValue", () => {
+  it("returns simple strings unchanged", () => {
+    expect(escapeCsvValue("hello world")).toBe("hello world")
+  })
+
+  it("returns numbers as strings", () => {
+    expect(escapeCsvValue(123)).toBe("123")
+  })
+
+  it("returns empty string as empty string", () => {
+    expect(escapeCsvValue("")).toBe("")
+  })
+
   it("wraps values containing commas in quotes", () => {
     expect(escapeCsvValue("hello,world")).toBe('"hello,world"')
   })
@@ -22,6 +34,16 @@ describe("escapeCsvValue", () => {
 })
 
 describe("buildCsv", () => {
+  it("builds simple CSV content", () => {
+    const rows = [
+      ["Name", "Age", "City"],
+      ["John", "30", "London"],
+      ["Jane", "25", "Paris"],
+    ]
+
+    expect(buildCsv(rows)).toBe("Name,Age,City\nJohn,30,London\nJane,25,Paris")
+  })
+
   it("builds CSV content with escaped cells", () => {
     const rows = [
       ["Name", "Value"],
