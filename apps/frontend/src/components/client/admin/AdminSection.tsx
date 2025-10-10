@@ -3,6 +3,7 @@
 import type { AdminTabBarSlug } from "@repo/shared"
 import { Routes } from "@repo/shared"
 import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
+import { FilterActionsProvider } from "@repo/ui/components/Generic/ManagementTable/Filter/FilterActionsContext"
 import { Center, Container, VStack } from "@yamada-ui/react"
 import { memo } from "react"
 import { AdminMembers, AdminSessions } from "./tabs"
@@ -36,7 +37,11 @@ export const AdminSection = memo(({ slug, activeIndex }: AdminSectionProps) => {
           lg: "calc(100vw - $spaces.2xl * 2)",
         }}
       >
-        {slug === "members" && <AdminMembers />}
+        {slug === "members" && (
+          <FilterActionsProvider>
+            <AdminMembers />
+          </FilterActionsProvider>
+        )}
         {slug === "sessions" && <AdminSessions />}
         {slug === "semesters" && (
           <Center>
