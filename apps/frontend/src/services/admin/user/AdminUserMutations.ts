@@ -42,6 +42,23 @@ export const useUpdateUser = () => {
 }
 
 /**
+ * Provides a mutation hook for resetting all user memberships and invalidates the user query cache.
+ *
+ * @returns A mutation hook that resets all user memberships.
+ */
+export const useResetAllMemberships = () => {
+  const queryClient = useQueryClient()
+  const { token } = useAuth()
+  return useMutation({
+    mutationFn: () => AdminUserService.resetAllMemberships({ token }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.USER_QUERY_KEY],
+      }),
+  })
+}
+
+/**
  * Provides a mutation hook for deleting a user and invalidates the user query cache.
  *
  * @returns A mutation hook for deleting a user.

@@ -89,6 +89,20 @@ const AdminUserService = {
     })
     return ApiClient.throwIfError(response)
   },
+
+  /**
+   * Resets all user memberships.
+   *
+   * @param token The auth token to use for the request (may be null).
+   */
+  resetAllMemberships: async ({ token }: { token: string | null }) => {
+    const response = await apiClient.patch("/api/admin/memberships", undefined, undefined, {
+      requiresAuth: true,
+      token,
+    })
+    return ApiClient.throwIfError(response)
+  },
+
   /**
    * Deletes a user by ID.
    *
