@@ -1,7 +1,7 @@
 "use client"
 
 import type { AdminGameSession, GameSessionWithCounts } from "@repo/shared"
-import { GameSessionStatus, type PlayLevel, Popup, Weekday } from "@repo/shared"
+import { dayjs, GameSessionStatus, type PlayLevel, Popup, Weekday } from "@repo/shared"
 import type { Booking, User } from "@repo/shared/payload-types"
 import { formatDateToISOString, isSameDate, parseISOStringToDate } from "@repo/shared/utils/date"
 import {
@@ -15,6 +15,8 @@ import { usePopupState } from "@repo/ui/hooks"
 import { Grid, GridItem, useNotice, VStack } from "@yamada-ui/react"
 import { parseAsString, useQueryState } from "nuqs"
 import { useMemo } from "react"
+import { buildCsvFromRecords } from "@/lib/csv"
+import { downloadCsvFile } from "@/lib/file-download"
 import { useUpdateBooking } from "@/services/admin/bookings/AdminBookingMutations"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
 import { useGetAllGameSessionsBySemester } from "@/services/game-session/GameSessionQueries"
@@ -170,9 +172,16 @@ export const AdminSessions = () => {
   }
 
   const handleExport = () => {
-    if (selectedSession) {
-      console.log("Exporting member list for session:", selectedSession.id)
+    if (!selectedSession) {
+      return
     }
+
+    const csvContent = buildCsvFromRecords(selectedSessionAttendees)
+    const sessionDate = dayjs(selectedSession.startTime)
+    const formattedDate = sessionDate.isValid() ? sessionDate.format("YYYY-MM-DD") : "unknown-date"
+    const filename = `session-attendees-${formattedDate}.csv`
+
+    downloadCsvFile(csvContent, filename)
   }
 
   const handleTableChangeSession = (row: SessionData) => {
