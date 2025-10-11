@@ -1,9 +1,9 @@
 import {
-  BookingSchema,
   type CreateBookingRequest,
   CreateBookingResponseSchema,
   GetBookingsResponseSchema,
   type UpdateBookingRequest,
+  UpdateBookingRequestSchema,
 } from "@repo/shared"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
@@ -57,10 +57,15 @@ const BookingService = {
     data: UpdateBookingRequest
     token: string | null
   }) => {
-    const response = await apiClient.patch(`/api/me/bookings/${bookingId}`, data, BookingSchema, {
-      requiresAuth: true,
-      token,
-    })
+    const response = await apiClient.patch(
+      `/api/me/bookings/${bookingId}`,
+      data,
+      UpdateBookingRequestSchema,
+      {
+        requiresAuth: true,
+        token,
+      },
+    )
     return ApiClient.throwIfError(response)
   },
 } as const
