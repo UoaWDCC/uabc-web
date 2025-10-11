@@ -12,6 +12,8 @@ import type { SessionData } from "@repo/ui/components/Composite/AdminSessionsTab
 import { Grid, GridItem, VStack } from "@yamada-ui/react"
 import { parseAsString, useQueryState } from "nuqs"
 import { useMemo } from "react"
+import { buildCsvFromRecords } from "@/lib/csv"
+import { downloadCsvFile } from "@/lib/file-download"
 import { useGetAllGameSessionBookings } from "@/services/admin/game-session/AdminGameSessionQueries"
 import { useGetAllGameSessionsBySemester } from "@/services/game-session/GameSessionQueries"
 import { useGetCurrentSemester } from "@/services/semester/SemesterQueries"
@@ -129,10 +131,16 @@ export const AdminSessions = () => {
   }
 
   const handleExport = () => {
-    if (selectedSession) {
-      // TODO: Implement export functionality
-      console.log("Exporting member list for session:", selectedSession.id)
+    if (!selectedSession) {
+      return
     }
+
+    const csvContent = buildCsvFromRecords(selectedSessionAttendees)
+    const sessionDate = dayjs(selectedSession.startTime)
+    const formattedDate = sessionDate.isValid() ? sessionDate.format("YYYY-MM-DD") : "unknown-date"
+    const filename = `session-attendees-${formattedDate}.csv`
+
+    downloadCsvFile(csvContent, filename)
   }
 
   return (
