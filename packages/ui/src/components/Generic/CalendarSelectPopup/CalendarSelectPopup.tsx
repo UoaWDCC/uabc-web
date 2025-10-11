@@ -217,9 +217,21 @@ export const CalendarSelectPopup = memo(
               return (
                 <Center
                   __css={styles}
+                  _disabled={{
+                    bg: "transparent !important",
+                    _before: {
+                      display: "none",
+                    },
+                    cursor: "not-allowed",
+                  }}
+                  _selected={{
+                    bg: "$colors.primary !important",
+                  }}
                   data-disabled={dataAttr(!active)}
                   data-selected={dataAttr(selected && active)}
-                  layerStyle="calendarDay"
+                  minH={{ base: "9", sm: "10" }}
+                  minW={{ base: "9", sm: "10" }}
+                  overflow="visible"
                 >
                   {date.getDate()}
                   {sessions.length > 0 && (
@@ -228,7 +240,12 @@ export const CalendarSelectPopup = memo(
                         <Tag
                           aria-label={tooltipLabel}
                           colorScheme={colorScheme}
-                          layerStyle="compactIndicator"
+                          fontSize="xs"
+                          lineHeight="1"
+                          minH="4"
+                          minW="4"
+                          p="1"
+                          size="sm"
                         >
                           {totalAttendees}
                         </Tag>
