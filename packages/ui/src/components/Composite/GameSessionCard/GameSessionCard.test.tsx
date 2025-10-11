@@ -1,5 +1,5 @@
-import { isValidElement } from "react"
 import { render, screen } from "@repo/ui/test-utils"
+import { isValidElement } from "react"
 import { GameSessionCard } from "./GameSessionCard"
 
 describe("<GameSessionCard />", () => {
@@ -11,11 +11,17 @@ describe("<GameSessionCard />", () => {
   it("renders labels and values", () => {
     expect(
       isValidElement(
-        <GameSessionCard session={{ name: "Test", startTime: "7:00pm", endTime: "9:00pm", type: "Ongoing" }} />,
+        <GameSessionCard
+          session={{ name: "Test", startTime: "7:00pm", endTime: "9:00pm", type: "Ongoing" }}
+        />,
       ),
     ).toBeTruthy()
 
-    render(<GameSessionCard session={{ name: "Test", startTime: "7:00pm", endTime: "9:00pm", type: "Ongoing" }} />)
+    render(
+      <GameSessionCard
+        session={{ name: "Test", startTime: "7:00pm", endTime: "9:00pm", type: "Ongoing" }}
+      />,
+    )
 
     expect(screen.getByText("Session Name")).toBeInTheDocument()
     expect(screen.getByText("Time")).toBeInTheDocument()
@@ -26,4 +32,3 @@ describe("<GameSessionCard />", () => {
     expect(screen.getByText("Ongoing")).toBeInTheDocument()
   })
 })
-

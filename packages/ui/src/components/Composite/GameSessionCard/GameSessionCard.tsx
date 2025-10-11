@@ -36,18 +36,28 @@ export const GameSessionCard = memo(({ session, ...cardProps }: GameSessionCardP
     >
       <CardBody>
         <VStack align="stretch" gap="md">
-          <VStack align="stretch" gap="sm" p="sm" rounded="lg" bg={["secondary.100", "blackAlpha.300"]}>
+          <VStack
+            align="stretch"
+            bg={["secondary.100", "blackAlpha.300"]}
+            gap="sm"
+            p="sm"
+            rounded="lg"
+          >
             <HStack justifyContent="space-between">
               <Text color="muted">Session Name</Text>
               <Text fontWeight="semibold">{name}</Text>
             </HStack>
             <HStack justifyContent="space-between">
               <Text color="muted">Time</Text>
-              <Text>{startTime} - {endTime}</Text>
+              <Text>
+                {startTime} - {endTime}
+              </Text>
             </HStack>
             <HStack justifyContent="space-between">
               <Text color="muted">Session Type</Text>
-              <Text fontWeight="semibold" color={typeColor}>{type}</Text>
+              <Text color={typeColor} fontWeight="semibold">
+                {type}
+              </Text>
             </HStack>
           </VStack>
         </VStack>

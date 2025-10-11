@@ -1,5 +1,5 @@
-import { isValidElement } from "react"
 import { render, screen } from "@repo/ui/test-utils"
+import { isValidElement } from "react"
 import { AdminSemestersTable } from "./AdminSemestersTable"
 
 describe("<AdminSemestersTable />", () => {
@@ -36,4 +36,3 @@ describe("<AdminSemestersTable />", () => {
     expect(screen.getByText("Session B")).toBeInTheDocument()
   })
 })
-

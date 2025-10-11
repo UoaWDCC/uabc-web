@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { NuqsAdapter } from "nuqs/adapters/react"
 import { AdminSemestersTable } from "./AdminSemestersTable"
+import type { SemesterSessionRow } from "./Columns"
 
 const meta: Meta<typeof AdminSemestersTable> = {
   title: "Composite Components / AdminSemestersTable",
@@ -31,9 +32,24 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const baseRows = [
-  { id: "1", sessionName: "Tues HIWA Rec Centre", time: "7:30pm - 10:00pm", sessionType: "Ongoing" },
-  { id: "2", sessionName: "Wed King's School", time: "7:30pm - 10:00pm", sessionType: "Ongoing" },
-  { id: "3", sessionName: "Fri HIWA Rec Centre", time: "7:30pm - 10:00pm", sessionType: "Ongoing" },
+  {
+    id: "1",
+    sessionName: "Tues HIWA Rec Centre",
+    time: "7:30pm - 10:00pm",
+    sessionType: "Ongoing",
+  },
+  {
+    id: "2",
+    sessionName: "Wed King's School",
+    time: "7:30pm - 10:00pm",
+    sessionType: "Ongoing",
+  },
+  {
+    id: "3",
+    sessionName: "Fri HIWA Rec Centre",
+    time: "7:30pm - 10:00pm",
+    sessionType: "Ongoing",
+  },
   { id: "4", sessionName: "Sat ABA", time: "7:30pm - 10:00pm", sessionType: "Ongoing" },
 ]
 
@@ -48,24 +64,30 @@ const makeRows = (count = 4) => {
   return [...baseRows, ...extra]
 }
 
+type StoryArgs = {
+  count: number
+  onEditRow: (row: SemesterSessionRow) => void
+  onDeleteRow: (row: SemesterSessionRow) => void
+}
+
 export const Default: Story = {
   args: { count: 4 },
-  render: (args) => (
+  render: (args: StoryArgs) => (
     <AdminSemestersTable
-      data={makeRows(args.count as number)}
-      onEditRow={args.onEditRow as any}
-      onDeleteRow={args.onDeleteRow as any}
+      data={makeRows(args.count)}
+      onDeleteRow={args.onDeleteRow}
+      onEditRow={args.onEditRow}
     />
   ),
 }
 
 export const Empty: Story = {
   args: { count: 0 },
-  render: (args) => (
+  render: (args: StoryArgs) => (
     <AdminSemestersTable
-      data={makeRows(args.count as number)}
-      onEditRow={args.onEditRow as any}
-      onDeleteRow={args.onDeleteRow as any}
+      data={makeRows(args.count)}
+      onDeleteRow={args.onDeleteRow}
+      onEditRow={args.onEditRow}
     />
   ),
 }
