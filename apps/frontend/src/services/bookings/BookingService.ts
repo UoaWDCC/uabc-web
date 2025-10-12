@@ -3,7 +3,7 @@ import {
   CreateBookingResponseSchema,
   GetBookingsResponseSchema,
   type UpdateBookingRequest,
-  UpdateBookingRequestSchema,
+  UpdateBookingResponseSchema,
 } from "@repo/shared"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
@@ -60,7 +60,7 @@ const BookingService = {
     const response = await apiClient.patch(
       `/api/me/bookings/${bookingId}`,
       data,
-      UpdateBookingRequestSchema,
+      UpdateBookingResponseSchema,
       {
         requiresAuth: true,
         token,
