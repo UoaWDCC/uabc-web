@@ -369,6 +369,8 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     )
 
     const actionButtons = screen.getAllByRole("button", { name: "Actions" })
+    expect(actionButtons).toHaveLength(20)
+
     await user.click(actionButtons[0])
 
     const deleteButton = screen.getByText("Delete")
@@ -419,21 +421,26 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const memberOption = screen.getAllByText("member")[0]
     await user.click(memberOption)
 
-    expect(mockQuery).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filter: JSON.stringify({ role: ["member"] }),
-      }),
-    )
+    await waitFor(() => {
+      expect(mockQuery).toHaveBeenCalledWith(
+        expect.objectContaining({
+          filter: JSON.stringify({ role: ["member"] }),
+        }),
+      )
+    })
+
     const levelDropdown = screen.getByRole("combobox", { name: "Play Level" })
     await user.click(levelDropdown)
     const beginnerOption = screen.getAllByText("beginner")[0]
     await user.click(beginnerOption)
 
-    expect(mockQuery).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
-      }),
-    )
+    await waitFor(() => {
+      expect(mockQuery).toHaveBeenCalledWith(
+        expect.objectContaining({
+          filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
+        }),
+      )
+    })
   })
 
   it("should handle selecting rows", async () => {
@@ -487,12 +494,13 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const toggleColumnsButton = screen.getByRole("button", { name: "Toggle column visibility" })
     await user.click(toggleColumnsButton)
 
-    const emailCheckbox = screen.getAllByRole("checkbox")[1]
-    expect(emailCheckbox).toBeDefined()
     await waitFor(() => {
+      const emailCheckbox = screen.getByRole("checkbox", { name: "Email" })
       expect(emailCheckbox).toBeInTheDocument()
       expect(emailCheckbox).toBeChecked()
     })
+
+    const emailCheckbox = screen.getByRole("checkbox", { name: "Email" })
     await user.click(emailCheckbox)
     expect(onUrlUpdate).toHaveBeenCalledWith(
       expect.objectContaining({

@@ -48,4 +48,27 @@ export const layerStyles: LayerStyles = {
     w: "full",
     flex: 1,
   },
+  calendarDay: {
+    minH: { base: "9", sm: "10" },
+    minW: { base: "9", sm: "10" },
+    overflow: "visible",
+    _disabled: {
+      bg: "transparent !important",
+      _before: {
+        display: "none",
+      },
+      cursor: "not-allowed",
+    },
+    _selected: {
+      bg: "$colors.primary !important",
+    },
+  },
+  compactIndicator: {
+    fontSize: "xs",
+    lineHeight: "1",
+    minH: "4",
+    minW: "4",
+    p: "1",
+    size: "sm",
+  },
 }
