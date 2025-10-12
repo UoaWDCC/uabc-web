@@ -24,6 +24,14 @@ export type FilterActionsContextValue = {
    * setState function to set the addMember function.
    */
   setAddMember: Dispatch<SetStateAction<(data: CreateUserRequest) => void>>
+  /**
+   * Function to export member data as a csv.
+   */
+  exportData: (selectedRows: Set<string>) => void
+  /**
+   * setState function to set the exportData function.
+   */
+  setExportData: Dispatch<SetStateAction<(selectedRows: Set<string>) => void>>
 }
 
 /**
@@ -32,7 +40,13 @@ export type FilterActionsContextValue = {
  */
 export const FilterActionsProvider = ({ children }: { children: ReactNode }) => {
   const [addMember, setAddMember] = useState<(data: CreateUserRequest) => void>(noop)
-  return <FilterActionsContext value={{ addMember, setAddMember }}>{children}</FilterActionsContext>
+  const [exportData, setExportData] = useState<(data: Set<string>) => void>(noop)
+
+  return (
+    <FilterActionsContext value={{ addMember, setAddMember, exportData, setExportData }}>
+      {children}
+    </FilterActionsContext>
+  )
 }
 
 /**

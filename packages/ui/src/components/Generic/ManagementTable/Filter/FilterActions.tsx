@@ -23,10 +23,10 @@ interface FilterActionsProps<TData> {
  * Action buttons for the filter bar, including add and export actions.
  */
 export const FilterActions = <TData,>({ columns }: FilterActionsProps<TData>) => {
-  const { selectedRows, filteredData, totalItems } = useManagementTable()
+  const { data, selectedRows, filteredData, totalItems } = useManagementTable()
   const { open: openCreate, onOpen: onOpenCreate, onClose: onCloseCreate } = useDisclosure()
 
-  const { addMember } = useFilterActions()
+  const { addMember, exportData } = useFilterActions()
 
   function handleAddConfirm(data: CreateMemberPopUpFormValues) {
     const createUserRequest: CreateUserRequest = {
@@ -43,9 +43,13 @@ export const FilterActions = <TData,>({ columns }: FilterActionsProps<TData>) =>
   }
 
   const handleExportData = () => {
-    // TODO: Implement export data functionality
-    const exportCount = selectedRows.size > 0 ? selectedRows.size : filteredData.length
-    console.log(`Export ${exportCount} users clicked`)
+    if (selectedRows.size > 0) {
+      console.log(data)
+      exportData(selectedRows)
+    } else {
+      const exportCount = selectedRows.size > 0 ? selectedRows.size : filteredData.length
+      console.log(`Export ${exportCount} users clicked`)
+    }
   }
 
   const getExportText = () => {

@@ -4,6 +4,8 @@ import { useFilterActions } from "@repo/ui/components/Generic/ManagementTable/Fi
 import { Button } from "@repo/ui/components/Primitive"
 import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
 import { useCallback, useEffect } from "react"
+import { buildCsvFromRecords } from "@/lib/csv"
+import { downloadCsvFile } from "@/lib/file-download"
 import {
   useCreateUser,
   useDeleteUser,
@@ -25,7 +27,7 @@ export const AdminMembers = () => {
   const updateUserMutation = useUpdateUser()
   const deleteUserMutation = useDeleteUser()
 
-  const { setAddMember } = useFilterActions()
+  const { setAddMember, setExportData } = useFilterActions()
 
   const handleResetConfirm = () => {
     onCloseConfirm()
@@ -61,9 +63,17 @@ export const AdminMembers = () => {
     [createUserMutation.mutate, notice],
   )
 
+  const exportData = useCallback((selectedRows: Set<string>) => {
+    const csvContent = buildCsvFromRecords([])
+    const filename = "uabc-members.csv"
+
+    downloadCsvFile(csvContent, filename)
+  }, [])
+
   useEffect(() => {
     setAddMember(() => createUser)
-  }, [setAddMember, createUser])
+    setExportData(() => exportData)
+  }, [setAddMember, createUser, setExportData, exportData])
 
   return (
     <>
