@@ -64,6 +64,7 @@ export const AdminMembers = () => {
   )
 
   const exportData = useCallback((selectedRows: Set<string>) => {
+    console.log(selectedRows)
     const csvContent = buildCsvFromRecords([])
     const filename = "uabc-members.csv"
 
