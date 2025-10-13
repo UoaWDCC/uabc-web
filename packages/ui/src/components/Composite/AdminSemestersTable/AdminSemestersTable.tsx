@@ -20,15 +20,11 @@ export const AdminSemestersTable = memo(
         actions={[
           {
             text: "Edit",
-            onClick: (row: SemesterSessionRow) => {
-              onEditRow ? onEditRow(row) : console.log("Edit", row)
-            },
+            onClick: (row: SemesterSessionRow) => onEditRow?.(row),
           },
           {
             text: "Delete",
-            onClick: (row: SemesterSessionRow) => {
-              onDeleteRow ? onDeleteRow(row) : console.log("Delete", row)
-            },
+            onClick: (row: SemesterSessionRow) => onDeleteRow?.(row),
           },
         ]}
         columns={columns}
