@@ -127,7 +127,8 @@ export const SelectACourt = memo<SelectACourtProps>(
           user.role === MembershipType.casual
             ? session.casualAttendees >= session.casualCapacity
             : session.attendees >= session.capacity
-        const capReached = selectedSessions.length >= maxBookings || isCapacityReached
+        const wouldExceedLimit = !isSelected && maxBookings === 0
+        const capReached = wouldExceedLimit || isCapacityReached
 
         return {
           value: session.id,
