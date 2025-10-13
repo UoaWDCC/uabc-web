@@ -5,7 +5,7 @@ import { ContactOurTeam } from "@repo/ui/components/Composite"
 import { LinkTreeIcon } from "@repo/ui/components/Icon"
 import { FacebookIcon, InstagramIcon } from "@yamada-ui/lucide"
 import { useCallback } from "react"
-import { useContactMutation } from "@/hooks/useContactMutation"
+import { useContactMutation } from "@/services/contact/ContactMutation"
 
 const socialLinks = [
   {
