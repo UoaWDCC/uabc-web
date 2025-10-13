@@ -1,6 +1,5 @@
 import { LinkTreeIcon } from "@repo/ui/components/Icon"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
-import userEvent from "@testing-library/user-event"
 import { FacebookIcon, InstagramIcon } from "@yamada-ui/lucide"
 import { ContactOurTeam } from "./ContactOurTeam"
 
@@ -47,12 +46,14 @@ describe("<ContactOurTeam />", () => {
     expect(screen.getByText("General Inquiries")).toBeInTheDocument()
     expect(screen.getByText("Bookings")).toBeInTheDocument()
     expect(screen.getByText("badminton.au@gmail.com")).toBeInTheDocument()
+    expect(screen.getByText("bookings@badminton.au")).toBeInTheDocument()
     expect(screen.getByText("000-000-000")).toBeInTheDocument()
   })
 
   it("should show validation errors for required fields", async () => {
-    const user = userEvent.setup()
-    render(<ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />)
+    const { user } = render(
+      <ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />,
+    )
 
     const submitButton = screen.getByRole("button", { name: "Submit" })
     await user.click(submitButton)
@@ -66,8 +67,9 @@ describe("<ContactOurTeam />", () => {
   })
 
   it("should submit form with valid data", async () => {
-    const user = userEvent.setup()
-    render(<ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />)
+    const { user } = render(
+      <ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />,
+    )
 
     await user.type(screen.getByTestId("firstName"), "John")
     await user.type(screen.getByTestId("lastName"), "Doe")
@@ -88,12 +90,13 @@ describe("<ContactOurTeam />", () => {
   })
 
   it("should show loading state when submitting", async () => {
-    const user = userEvent.setup()
     const slowOnSubmit = vi
       .fn()
       .mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)))
 
-    render(<ContactOurTeam onSubmit={slowOnSubmit} socialLinks={mockSocialLinks} />)
+    const { user } = render(
+      <ContactOurTeam onSubmit={slowOnSubmit} socialLinks={mockSocialLinks} />,
+    )
 
     await user.type(screen.getByTestId("firstName"), "John")
     await user.type(screen.getByTestId("lastName"), "Doe")
@@ -107,8 +110,9 @@ describe("<ContactOurTeam />", () => {
   })
 
   it("should reset form after successful submission", async () => {
-    const user = userEvent.setup()
-    render(<ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />)
+    const { user } = render(
+      <ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />,
+    )
 
     await user.type(screen.getByTestId("firstName"), "John")
     await user.type(screen.getByTestId("lastName"), "Doe")

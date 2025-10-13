@@ -63,7 +63,7 @@ export const ContactOurTeam = memo(
     socialLinks,
     contactInfo = {
       generalEmail: "badminton.au@gmail.com",
-      bookingsEmail: "badminton.au@gmail.com",
+      bookingsEmail: "bookings@badminton.au",
       phoneNumber: "000-000-000",
       bookingsDescription:
         "Guest bookings, date changes, any clarification about your stay at the lodge",
