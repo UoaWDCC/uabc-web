@@ -24,6 +24,7 @@ export const AdminMembers = () => {
   } = useDisclosure()
 
   const createUserMutation = useCreateUser()
+  // const getUsersByIdsMutation = useGetUsersByIds() // TODO: un-eff this
   const updateUserMutation = useUpdateUser()
   const deleteUserMutation = useDeleteUser()
 
@@ -65,6 +66,7 @@ export const AdminMembers = () => {
 
   const exportData = useCallback((selectedRows: Set<string>) => {
     console.log(selectedRows)
+
     const csvContent = buildCsvFromRecords([])
     const filename = "uabc-members.csv"
 

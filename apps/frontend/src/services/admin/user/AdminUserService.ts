@@ -4,7 +4,9 @@ import {
   GetUserResponseSchema,
   type PaginationQuery,
   type UpdateUserRequest,
+  UserSchema,
 } from "@repo/shared"
+import z from "zod"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
 const AdminUserService = {
@@ -45,6 +47,29 @@ const AdminUserService = {
     const response = await apiClient.get(
       `/api/admin/users?${searchQuery}`,
       GetAllUsersResponseSchema,
+      {
+        requiresAuth: true,
+        token,
+      },
+    )
+    return ApiClient.throwIfError(response)
+  },
+  /**
+   * Fetches multiple users by IDs.
+   *
+   * @param ids Set of IDs of users.
+   * @param token The auth token to use for the request (may be null).
+   * @returns A promise that resolves to an array of users.
+   */
+  getUsersByIds: async ({ ids, token }: { ids: Set<string>; token: string | null }) => {
+    const queryParams = new URLSearchParams()
+    for (const id of ids) {
+      queryParams.append("id", id)
+    }
+
+    const response = await apiClient.get(
+      `/api/admin/users/export?${queryParams.toString()}`,
+      z.array(UserSchema),
       {
         requiresAuth: true,
         token,

@@ -73,6 +73,29 @@ export default class UserDataService {
   }
 
   /**
+   * Finds {@link User} documents given an array of IDs.
+   *
+   * @param ids array of IDs of {@link User}s to find
+   */
+  public async getUsersByIds(ids: string[]): Promise<User[]> {
+    const { docs } = await payload.find({
+      collection: "user",
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    })
+
+    if (!docs.length)
+      throw new NotFound(() => {
+        return "No users found"
+      })
+
+    return docs
+  }
+
+  /**
    * Finds a {@link User} with target email
    *
    * @param email the email of the {@link User} to find
