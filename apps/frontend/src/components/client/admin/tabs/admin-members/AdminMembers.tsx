@@ -1,20 +1,34 @@
+import type { CreateUserRequest } from "@repo/shared/types"
 import { AdminTableWithPaginatedQuery } from "@repo/ui/components/Composite"
+import { useFilterActions } from "@repo/ui/components/Generic/ManagementTable/Filter/FilterActionsContext"
 import { Button } from "@repo/ui/components/Primitive"
 import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
-import { useDeleteUser, useUpdateUser } from "@/services/admin/user/AdminUserMutations"
+import { useCallback, useEffect } from "react"
+import { buildCsvFromRecords } from "@/lib/csv"
+import { downloadCsvFile } from "@/lib/file-download"
+import {
+  useCreateUser,
+  useDeleteUser,
+  useUpdateUser,
+} from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembers = () => {
+  const notice = useNotice()
+
   const { open: openConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const {
     open: openFinalConfirm,
     onOpen: onOpenFinalConfirm,
     onClose: onCloseFinalConfirm,
   } = useDisclosure()
-  const notice = useNotice()
 
-  const deleteUserMutation = useDeleteUser()
+  const createUserMutation = useCreateUser()
+  // const getUsersByIdsMutation = useGetUsersByIds() // TODO: un-eff this
   const updateUserMutation = useUpdateUser()
+  const deleteUserMutation = useDeleteUser()
+
+  const { setAddMember, setExportData } = useFilterActions()
 
   const handleResetConfirm = () => {
     onCloseConfirm()
@@ -27,6 +41,42 @@ export const AdminMembers = () => {
       title: "TODO: Reset Memberships",
     })
   }
+
+  const createUser = useCallback(
+    (data: CreateUserRequest) => {
+      createUserMutation.mutate(data, {
+        onSuccess: () => {
+          notice({
+            title: "Creation successful",
+            description: "User has been created",
+            status: "success",
+          })
+        },
+        onError: () => {
+          notice({
+            title: "Creation failed",
+            description: "Failed to create user",
+            status: "error",
+          })
+        },
+      })
+    },
+    [createUserMutation.mutate, notice],
+  )
+
+  const exportData = useCallback((selectedRows: Set<string>) => {
+    console.log(selectedRows)
+
+    const csvContent = buildCsvFromRecords([])
+    const filename = "uabc-members.csv"
+
+    downloadCsvFile(csvContent, filename)
+  }, [])
+
+  useEffect(() => {
+    setAddMember(() => createUser)
+    setExportData(() => exportData)
+  }, [setAddMember, createUser, setExportData, exportData])
 
   return (
     <>

@@ -5,6 +5,8 @@ export const BookingQuerySchema = z.object({
   type: z.nativeEnum(BookingQueryType).optional(),
 })
 
+export const UserIdListQuerySchema = z.array(z.string())
+
 export const PaginationQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(10),
   page: z.coerce.number().int().min(1).default(1),

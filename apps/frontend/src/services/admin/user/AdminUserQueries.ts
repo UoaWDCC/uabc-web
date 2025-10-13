@@ -1,5 +1,5 @@
 import type { PaginationQuery } from "@repo/shared"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { useAuth } from "@/context/AuthContext"
 import { QueryKeys } from "@/services"
 import AdminUserService from "./AdminUserService"
@@ -29,5 +29,20 @@ export const useGetPaginatedUsers = ({ limit, query, filter }: Omit<PaginationQu
     },
     getNextPageParam: (lastPage) => lastPage.data?.nextPage,
     getPreviousPageParam: (firstPage) => firstPage.data?.prevPage,
+  })
+}
+
+/**
+ * Retrieves multiple users by IDs.
+ *
+ * @param ids Set of IDs of users.
+ * @returns A query hook that fetches a list of users.
+ */
+export const useGetUsersByIds = (ids: Set<string>) => {
+  const { token } = useAuth()
+  return useQuery({
+    queryKey: [QueryKeys.USER_QUERY_KEY, ...ids],
+    queryFn: () => AdminUserService.getUsersByIds({ ids, token }),
+    enabled: !!token && !!ids,
   })
 }
