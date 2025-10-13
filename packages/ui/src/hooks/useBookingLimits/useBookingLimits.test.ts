@@ -27,7 +27,7 @@ describe("useBookingLimits", () => {
     )
 
     expect(result.current.isMember).toBe(true)
-    expect(result.current.maxBookings).toBe(2) // Math.min(5, MAX_MEMBER_BOOKINGS)
+    expect(result.current.maxBookings).toBe(1) // Math.min(1, 4)
     expect(result.current.sessionsLeft).toBe(1)
     expect(result.current.totalSessionsLeft).toBe(4)
     expect(result.current.weeklyLimit).toBe(MAX_MEMBER_BOOKINGS)
@@ -59,7 +59,7 @@ describe("useBookingLimits", () => {
     )
 
     expect(result.current.isMember).toBe(true)
-    expect(result.current.maxBookings).toBe(2) // Math.min(10, MAX_MEMBER_BOOKINGS)
+    expect(result.current.maxBookings).toBe(0) // Math.min(0, 8)
     expect(result.current.sessionsLeft).toBe(0)
     expect(result.current.totalSessionsLeft).toBe(8)
     expect(result.current.weeklyLimit).toBe(MAX_MEMBER_BOOKINGS)
@@ -75,9 +75,9 @@ describe("useBookingLimits", () => {
     )
 
     expect(result.current.maxBookings).toBe(0)
-    expect(result.current.sessionsLeft).toBe(0)
+    expect(result.current.sessionsLeft).toBe(2)
     expect(result.current.totalSessionsLeft).toBe(0)
-    expect(result.current.sessionsLabel).toBe("0 / 2 this week • 0 total remaining")
+    expect(result.current.sessionsLabel).toBe("2 / 2 this week • 0 total remaining")
   })
 
   it("should handle null remaining sessions", () => {
@@ -89,8 +89,38 @@ describe("useBookingLimits", () => {
     )
 
     expect(result.current.maxBookings).toBe(0)
-    expect(result.current.sessionsLeft).toBe(0)
+    expect(result.current.sessionsLeft).toBe(2)
     expect(result.current.totalSessionsLeft).toBe(0)
-    expect(result.current.sessionsLabel).toBe("0 / 2 this week • 0 total remaining")
+    expect(result.current.sessionsLabel).toBe("2 / 2 this week • 0 total remaining")
+  })
+
+  it("should handle already booked count", () => {
+    const { result } = renderHook(() =>
+      useBookingLimits({
+        user: memberUser,
+        selectedCount: 1,
+        alreadyBookedCount: 1,
+      }),
+    )
+
+    expect(result.current.maxBookings).toBe(0) // Math.min(0, 4)
+    expect(result.current.sessionsLeft).toBe(0)
+    expect(result.current.totalSessionsLeft).toBe(4)
+    expect(result.current.sessionsLabel).toBe("0 / 2 this week • 4 total remaining")
+  })
+
+  it("should handle booking limit exceeded", () => {
+    const { result } = renderHook(() =>
+      useBookingLimits({
+        user: casualUser,
+        selectedCount: 2,
+        alreadyBookedCount: 0,
+      }),
+    )
+
+    expect(result.current.maxBookings).toBe(0)
+    expect(result.current.sessionsLeft).toBe(0)
+    expect(result.current.totalSessionsLeft).toBe(1)
+    expect(result.current.sessionsLabel).toBe("0 / 1 this week • 1 total remaining")
   })
 })
