@@ -25,5 +25,6 @@ export const useGetPaginatedGameSessionSchedules = (query: PaginationQuery) => {
     },
     getNextPageParam: (lastPage) => lastPage.data?.nextPage,
     getPreviousPageParam: (firstPage) => firstPage.data?.prevPage,
+    enabled: !!token,
   })
 }
