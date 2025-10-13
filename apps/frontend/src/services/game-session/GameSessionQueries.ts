@@ -82,8 +82,25 @@ export const useGetCurrentAvailableGameSessions = () => {
     [current.data?.data, bookings.data?.data],
   )
 
+  const bookedSessions = useMemo(
+    () =>
+      current.data?.data?.filter((session) => {
+        const isBooked = bookings.data?.data.some((booking) => {
+          if (!isGameSessionObject(booking.gameSession)) {
+            return false
+          }
+          return booking.gameSession.id === session.id
+        })
+        return isBooked && session.capacity > 0
+      }),
+    [current.data?.data, bookings.data?.data],
+  )
+
   return {
     ...current,
-    data: availableSessions,
+    data: {
+      availableSessions,
+      bookedSessions,
+    },
   }
 }
