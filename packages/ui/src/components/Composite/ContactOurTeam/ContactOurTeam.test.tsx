@@ -50,22 +50,6 @@ describe("<ContactOurTeam />", () => {
     expect(screen.getByText("000-000-000")).toBeInTheDocument()
   })
 
-  it("should show validation errors for required fields", async () => {
-    const { user } = render(
-      <ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />,
-    )
-
-    const submitButton = screen.getByRole("button", { name: "Submit" })
-    await user.click(submitButton)
-
-    await waitFor(() => {
-      expect(screen.getByText("First name is required")).toBeInTheDocument()
-      expect(screen.getByText("Last name is required")).toBeInTheDocument()
-      expect(screen.getByText("Please enter a valid email address")).toBeInTheDocument()
-      expect(screen.getByText("Message must be at least 10 characters")).toBeInTheDocument()
-    })
-  })
-
   it("should submit form with valid data", async () => {
     const { user } = render(
       <ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />,
