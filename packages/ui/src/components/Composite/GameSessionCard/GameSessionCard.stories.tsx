@@ -6,10 +6,8 @@ const meta: Meta<typeof GameSessionCard> = {
   component: GameSessionCard,
   parameters: { layout: "centered" },
   argTypes: {
-    name: { control: "text", description: "Session name" },
-    startTime: { control: "text" },
-    endTime: { control: "text" },
-    type: { control: { type: "select" }, options: ["Ongoing", "Upcoming", "Past"] },
+    // Control the `session` object as a whole to keep types aligned
+    session: { control: "object", description: "Session data" },
   },
 }
 

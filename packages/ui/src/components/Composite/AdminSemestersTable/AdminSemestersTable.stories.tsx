@@ -1,9 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { NuqsAdapter } from "nuqs/adapters/react"
+import type { ComponentProps } from "react"
 import { AdminSemestersTable } from "./AdminSemestersTable"
-import type { SemesterSessionRow } from "./Columns"
 
-const meta: Meta<typeof AdminSemestersTable> = {
+type AdminSemestersTableArgs = ComponentProps<typeof AdminSemestersTable> & {
+  count: number
+}
+
+const meta = {
   title: "Composite Components / AdminSemestersTable",
   component: AdminSemestersTable,
   decorators: [
@@ -26,10 +30,10 @@ const meta: Meta<typeof AdminSemestersTable> = {
       },
     },
   },
-}
+} satisfies Meta<AdminSemestersTableArgs>
 
 export default meta
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<AdminSemestersTableArgs>
 
 const baseRows = [
   {
@@ -64,15 +68,9 @@ const makeRows = (count = 4) => {
   return [...baseRows, ...extra]
 }
 
-type StoryArgs = {
-  count: number
-  onEditRow: (row: SemesterSessionRow) => void
-  onDeleteRow: (row: SemesterSessionRow) => void
-}
-
 export const Default: Story = {
   args: { count: 4 },
-  render: (args: StoryArgs) => (
+  render: (args) => (
     <AdminSemestersTable
       data={makeRows(args.count)}
       onDeleteRow={args.onDeleteRow}
@@ -83,7 +81,7 @@ export const Default: Story = {
 
 export const Empty: Story = {
   args: { count: 0 },
-  render: (args: StoryArgs) => (
+  render: (args) => (
     <AdminSemestersTable
       data={makeRows(args.count)}
       onDeleteRow={args.onDeleteRow}
