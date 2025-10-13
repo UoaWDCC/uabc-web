@@ -2,6 +2,13 @@ import { ApiClientError } from "../ApiClientError"
 import { ApiClient } from "../client"
 
 describe("ApiClient helper methods", () => {
+  const originalConsoleError = console.error
+  beforeAll(() => {
+    vi.spyOn(console, "error").mockImplementation(() => {})
+  })
+  afterAll(() => {
+    console.error = originalConsoleError
+  })
   it("should throw error when using throwIfError with failed response", () => {
     const failedResponse = {
       success: false as const,
@@ -13,10 +20,8 @@ describe("ApiClient helper methods", () => {
       status: 400,
     }
 
-    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
     expect(() => ApiClient.throwIfError(failedResponse)).toThrow("Test error")
-    expect(errorSpy).toHaveBeenCalledWith(failedResponse.error)
-    errorSpy.mockRestore()
+    expect(console.error).toHaveBeenCalledWith(failedResponse.error)
     try {
       ApiClient.throwIfError(failedResponse)
     } catch (err) {
