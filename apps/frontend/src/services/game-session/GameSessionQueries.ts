@@ -91,7 +91,7 @@ export const useGetCurrentAvailableGameSessions = () => {
           }
           return booking.gameSession.id === session.id
         })
-        return isBooked && session.capacity > 0
+        return isBooked
       }),
     [current.data?.data, bookings.data?.data],
   )
