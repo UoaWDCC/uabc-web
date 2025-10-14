@@ -14,7 +14,7 @@ import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
 import { useQueryState } from "nuqs"
 import {
   useCreateUser,
-  useDeleteUser,
+  useResetAllMemberships,
   useUpdateUser,
 } from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
@@ -36,6 +36,7 @@ export const AdminMembers = () => {
   const createUserMutation = useCreateUser()
   const updateUserMutation = useUpdateUser()
   const deleteUserMutation = useDeleteUser()
+  const resetAllMembershipsMutation = useResetAllMemberships()
 
   function handleAddConfirm(data: CreateMemberPopUpFormValues) {
     const createUserRequest: CreateUserRequest = {
@@ -74,8 +75,21 @@ export const AdminMembers = () => {
 
   const handleResetFinalConfirm = () => {
     onCloseFinalConfirm()
-    notice({
-      title: "TODO: Reset Memberships",
+    resetAllMembershipsMutation.mutate(undefined, {
+      onSuccess: () => {
+        notice({
+          title: "Membership reset successful",
+          description: "All user memberships have been reset",
+          status: "success",
+        })
+      },
+      onError: () => {
+        notice({
+          title: "Membership reset failed",
+          description: "Failed to reset user memberships",
+          status: "error",
+        })
+      },
     })
   }
 

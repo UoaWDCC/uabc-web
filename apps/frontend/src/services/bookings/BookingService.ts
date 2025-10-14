@@ -2,6 +2,8 @@ import {
   type CreateBookingRequest,
   CreateBookingResponseSchema,
   GetBookingsResponseSchema,
+  type UpdateBookingRequest,
+  UpdateBookingResponseSchema,
 } from "@repo/shared"
 import { ApiClient, apiClient } from "@/lib/api/client"
 
@@ -34,6 +36,36 @@ const BookingService = {
       requiresAuth: true,
       token,
     })
+    return ApiClient.throwIfError(response)
+  },
+
+  /**
+   * Updates an existing booking.
+   *
+   * @param params.bookingId The ID of the booking to update.
+   * @param params.data The updated booking data.
+   * @param params.token The auth token to use for the request (may be null).
+   * @returns A promise that resolves to the updated booking.
+   * @throws An error if the update fails.
+   */
+  updateBooking: async ({
+    bookingId,
+    data,
+    token,
+  }: {
+    bookingId: string
+    data: UpdateBookingRequest
+    token: string | null
+  }) => {
+    const response = await apiClient.patch(
+      `/api/me/bookings/${bookingId}`,
+      data,
+      UpdateBookingResponseSchema,
+      {
+        requiresAuth: true,
+        token,
+      },
+    )
     return ApiClient.throwIfError(response)
   },
 } as const
