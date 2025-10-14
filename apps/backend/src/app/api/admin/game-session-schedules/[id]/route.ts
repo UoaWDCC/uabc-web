@@ -4,7 +4,6 @@ import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
-import { payload } from "@/data-layer/adapters/Payload"
 import {
   commitCascadeTransaction,
   createTransactionId,
@@ -92,24 +91,16 @@ class RouteWrapper {
   static async DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
-      const cascade = req.nextUrl.searchParams.get("cascade") === "true"
+      const cascade = req.nextUrl.searchParams.get("delateRelatedDocs") === "true"
       const gameSessionDataService = new GameSessionDataService()
+      const bookingDataService = new BookingDataService()
       const transactionID = cascade && (await createTransactionId())
 
       if (transactionID) {
         try {
-          const { docs } = await payload.find({
-            collection: "gameSession",
-            where: {
-              gameSessionSchedule: {
-                equals: id,
-              },
-            },
-          })
-          const gameSession = docs[0]
           await gameSessionDataService.deleteGameSessionSchedule(id)
-          await gameSessionDataService.deleteGameSession(gameSession.id)
-          await BookingDataService.deleteRelatedBookingsForSession(gameSession.id, transactionID)
+          await gameSessionDataService.deleteAllGameSessionsByScheduleId(id)
+          await bookingDataService.deleteRelatedBookingsForSchedule(id, transactionID)
           await commitCascadeTransaction(transactionID)
         } catch {
           await rollbackCascadeTransaction(transactionID)

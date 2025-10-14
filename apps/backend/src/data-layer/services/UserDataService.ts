@@ -1,4 +1,4 @@
-import type { CreateUserData, EditUserData } from "@repo/shared"
+import { type CreateUserData, type EditUserData, MembershipType } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import type { PaginatedDocs, Where } from "payload"
 import { NotFound } from "payload"
@@ -23,32 +23,52 @@ export default class UserDataService {
    *
    * @param limit The maximum documents to be returned, defaults to 10
    * @param page The specific page number to offset to, defaults to 1
+   * @param query The search query to filter users by name or email
+   * @param filter JSON string containing field-based filters
    * @returns a {@link PaginatedDocs} object containing {@link User} documents
    */
   public async getPaginatedUsers(
-    options: { limit?: number; page?: number; query?: string } = {
+    options: { limit?: number; page?: number; query?: string; filter?: string } = {
       limit: 10,
       page: 1,
     },
   ): Promise<PaginatedDocs<User>> {
+    const whereConditions: Where[] = []
+
+    if (options.query) {
+      const queryConditions = options.query
+        .split(/ /g)
+        .filter((token) => token)
+        .map((token) => ({
+          or: [
+            { firstName: { like: token } },
+            { lastName: { like: token } },
+            { email: { like: token } },
+          ] as Where[],
+        }))
+      whereConditions.push(...queryConditions)
+    }
+
+    if (options.filter) {
+      try {
+        const filters = JSON.parse(options.filter)
+        Object.entries(filters).forEach(([field, value]) => {
+          if (value && Array.isArray(value) && value.length > 0) {
+            whereConditions.push({
+              [field === "level" ? "playLevel" : field]: { in: value },
+            } as Where)
+          }
+        })
+      } catch (_error) {
+        return Promise.reject(new Error("Invalid filter JSON"))
+      }
+    }
+
     return await payload.find({
       collection: "user",
       limit: options.limit,
       page: options.page,
-      where: {
-        and: options.query
-          ? options.query
-              .split(/ /g)
-              .filter((token) => token)
-              .map((token) => ({
-                or: [
-                  { firstName: { like: token } },
-                  { lastName: { like: token } },
-                  { email: { like: token } },
-                ] as Where[],
-              }))
-          : [],
-      },
+      where: { and: whereConditions },
     })
   }
 
@@ -105,15 +125,43 @@ export default class UserDataService {
   }
 
   /**
+   * Resets all memberships and/or sessions for {@link User} documents
+   */
+  public async resetAllMemberships(): Promise<void> {
+    await payload.update({
+      collection: "user",
+      where: {
+        and: [
+          { role: { not_equals: MembershipType.admin } },
+          {
+            or: [
+              { remainingSessions: { not_equals: 0 } },
+              { role: { equals: MembershipType.member } },
+            ],
+          },
+        ],
+      },
+      data: {
+        role: MembershipType.casual,
+        remainingSessions: 0,
+      },
+    })
+  }
+
+  /**
    * Deletes a {@link User} document
    *
    * @param id The ID of the {@link User} to delete
+   * @param transactionID An optional transaction ID for the request, useful for tracking purposes
    * @returns The deleted {@link User} document if successful, otherwise throws a {@link NotFound} error
    */
-  public async deleteUser(id: string): Promise<User> {
+  public async deleteUser(id: string, transactionID?: string | number): Promise<User> {
     return await payload.delete({
       collection: "user",
       id,
+      req: {
+        transactionID,
+      },
     })
   }
 }

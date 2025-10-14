@@ -1,9 +1,7 @@
-import { dayjs } from "@repo/shared"
-import { AdminTable, type UserData } from "@repo/ui/components/Composite"
+import { AdminTableWithPaginatedQuery } from "@repo/ui/components/Composite"
 import { Button } from "@repo/ui/components/Primitive"
 import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
-import { useMemo } from "react"
-import { useDeleteUser } from "@/services/admin/user/AdminUserMutations"
+import { useDeleteUser, useUpdateUser } from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembers = () => {
@@ -16,10 +14,7 @@ export const AdminMembers = () => {
   const notice = useNotice()
 
   const deleteUserMutation = useDeleteUser()
-  const { data } = useGetPaginatedUsers({
-    limit: 20,
-    page: 1,
-  })
+  const updateUserMutation = useUpdateUser()
 
   const handleResetConfirm = () => {
     onCloseConfirm()
@@ -33,27 +28,9 @@ export const AdminMembers = () => {
     })
   }
 
-  const userData = useMemo(
-    () =>
-      data?.pages
-        .flatMap((page) => page.data.docs)
-        .map((page) => ({
-          id: page.id,
-          name: `${page.firstName} ${page.lastName || ""}`,
-          email: page.email,
-          remaining: String(page.remainingSessions),
-          joined: dayjs(page.createdAt).format("DD MMM YYYY hh:mm A"),
-          role: page.role,
-          university: page.university,
-          level: page.playLevel,
-        })) ?? [],
-    [data?.pages],
-  )
-
   return (
     <>
-      <AdminTable
-        data={userData as UserData[]}
+      <AdminTableWithPaginatedQuery
         onDelete={(id) => {
           deleteUserMutation.mutate(id, {
             onSuccess: () => {
@@ -72,6 +49,29 @@ export const AdminMembers = () => {
             },
           })
         }}
+        onEdit={(id, data) => {
+          updateUserMutation.mutate(
+            { id, data },
+            {
+              onSuccess: () => {
+                notice({
+                  title: "Update successful",
+                  description: "User has been updated",
+                  status: "success",
+                })
+              },
+              onError: () => {
+                notice({
+                  title: "Update failed",
+                  description: "Failed to update user",
+                  status: "error",
+                })
+              },
+            },
+          )
+        }}
+        paginationWithEdges={false}
+        useGetPaginatedData={useGetPaginatedUsers}
       />
       <Button colorScheme="danger" onClick={onOpenConfirm} placeSelf="start">
         Reset Memberships

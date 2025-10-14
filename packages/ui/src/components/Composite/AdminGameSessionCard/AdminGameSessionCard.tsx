@@ -1,9 +1,9 @@
 "use client"
 
 import type { AdminGameSession } from "@repo/shared"
-import { capitalize } from "@repo/shared"
+import { capitalize, formatTime } from "@repo/shared"
 import { Button, Heading, IconWithText } from "@repo/ui/components/Primitive"
-import { formatTime, getStatusColor } from "@repo/ui/utils"
+import { getStatusColor } from "@repo/ui/utils"
 import { ClockIcon, MapPinIcon, UsersRoundIcon } from "@yamada-ui/lucide"
 import {
   Card,

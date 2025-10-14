@@ -21,7 +21,7 @@ export const casualUserMock: User = {
   emailVerification: validEmailVerification,
   gender: Gender.nonBinary,
   role: MembershipType.casual,
-  remainingSessions: 4,
+  remainingSessions: 0,
   playLevel: PlayLevel.beginner,
   dietaryRequirements: "Peanut",
   updatedAt: new Date(2025, 0, 1).toISOString(),
@@ -57,6 +57,16 @@ export const userCreateMock: CreateUserData = {
   lastName: "zhao",
   email: "straight.zhao@example.com",
   role: MembershipType.casual,
+  remainingSessions: 7,
+  image: null,
+  emailVerification: validEmailVerification,
+}
+
+export const memberUserCreateMock: CreateUserData = {
+  firstName: "straight",
+  lastName: "zhao",
+  email: "unstraight.zhao@example.com",
+  role: MembershipType.member,
   remainingSessions: 7,
   image: null,
   emailVerification: validEmailVerification,

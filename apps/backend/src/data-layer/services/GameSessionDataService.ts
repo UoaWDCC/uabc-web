@@ -8,7 +8,7 @@ import {
   type Weekday,
 } from "@repo/shared"
 import type { GameSession, GameSessionSchedule, Semester } from "@repo/shared/payload-types"
-import type { PaginatedDocs, Sort, Where } from "payload"
+import { NotFound, type PaginatedDocs, type Sort, type Where } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
 import { createGameSessionTimes, getWeeklySessionDates } from "../utils/DateUtils"
 
@@ -113,6 +113,7 @@ export default class GameSessionDataService {
    * Gets all {@link GameSession} documents for a given semester ID
    *
    * @param semesterId the ID of the {@link Semester} to get game sessions for
+   * @param timeframe optional filter to get upcoming, past, or current game sessions only
    * @returns an array of {@link GameSession} documents
    */
   public async getGameSessionsBySemesterId(
@@ -313,6 +314,25 @@ export default class GameSessionDataService {
           },
         },
         req: { transactionID: transactionId },
+      })
+    ).docs
+  }
+
+  /**
+   * Deletes all {@link GameSession} documents for a {@link GameSessionSchedule}
+   *
+   * @param scheduleId the ID of the {@link GameSessionSchedule} with game sessions to be deleted
+   * @returns the deleted {@link GameSession} documents if it exists, otherwise returns an empty array
+   */
+  public async deleteAllGameSessionsByScheduleId(scheduleId: string): Promise<GameSession[]> {
+    return (
+      await payload.delete({
+        collection: "gameSession",
+        where: {
+          gameSessionSchedule: {
+            equals: scheduleId,
+          },
+        },
       })
     ).docs
   }

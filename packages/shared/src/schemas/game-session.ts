@@ -41,13 +41,13 @@ export const GetPaginatedGameSessionsResponseSchema = z.object({
   }),
 })
 
-export const GetAllGameSessionsBySemesterResponseSchema = z.object({
-  data: z.array(GameSessionSchema),
-})
-
 export const GameSessionWithCountsSchema = GameSessionSchema.extend({
   attendees: z.number(),
   casualAttendees: z.number(),
+})
+
+export const GetAllGameSessionsBySemesterResponseSchema = z.object({
+  data: z.array(GameSessionWithCountsSchema),
 })
 
 export const GetCurrentGameSessionsResponseSchema = CommonResponseSchema.extend({

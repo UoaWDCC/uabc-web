@@ -1,4 +1,6 @@
 import { format } from "date-fns"
+import dayjs from "dayjs"
+import { getWeekdayFromDayIndex } from "../constants"
 import type { Semester } from "../payload-types"
 import { Weekday } from "../types"
 
@@ -40,7 +42,7 @@ export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date
   const openTime = new Date(bookingOpenTime)
 
   const dayIndex = startTime.getUTCDay()
-  const day = Object.values(Weekday)[dayIndex] as Weekday
+  const day = getWeekdayFromDayIndex(dayIndex)
   let daysDifference = getDaysBetweenWeekdays(bookingOpenDay as Weekday, day)
 
   // If the session is on the same day as bookingOpenDay, check the time
@@ -70,4 +72,112 @@ export function getGameSessionOpenDay(semester: Semester, startTime: Date): Date
  */
 export function getISODateKey(dateLike: string | number | Date): string {
   return format(new Date(dateLike), "yyyy-MM-dd")
+}
+
+/**
+ * Checks if two dates represent the same day (ignoring time).
+ * Uses UTC-safe comparison to avoid timezone issues.
+ *
+ * @param date1 First date to compare
+ * @param date2 Second date to compare
+ * @returns True if both dates represent the same day, false otherwise
+ */
+export function isSameDate(date1: string | number | Date, date2: string | number | Date): boolean {
+  return getISODateKey(date1) === getISODateKey(date2)
+}
+
+/**
+ * Formats a time string to a localized time format
+ *
+ * Converts ISO time strings to a user-friendly 12-hour format
+ * with hour and minute display.
+ *
+ * @param timeString The ISO time string to format
+ * @returns Formatted time string in 12-hour format
+ *
+ * @example
+ * ```ts
+ * formatTime("2025-01-21T19:30:00Z") // Returns: "7:30 PM"
+ * formatTime("2025-01-21T22:00:00Z") // Returns: "10:00 PM"
+ * ```
+ */
+export function formatTime(timeString: string): string {
+  return dayjs(timeString).format("h:mm A")
+}
+
+/**
+ * Formats a date to a localized date format
+ *
+ * Converts a Date object to a user-friendly format with weekday,
+ * day, month, and year display.
+ *
+ * @param date The Date object to format
+ * @returns Formatted date string
+ *
+ * @example
+ * ```ts
+ * formatDate(new Date("2025-01-21T19:30:00Z")) // Returns: "Tuesday, 21/01/25"
+ * ```
+ */
+export function formatDate(date: Date): string {
+  return date.toLocaleDateString("en-NZ", {
+    weekday: "long",
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+  })
+}
+
+/**
+ * Formats a Date object to YYYY-MM-DD string with timezone support
+ *
+ * Converts a Date object to ISO date format string using New Zealand timezone
+ *
+ * @param date The Date object to format
+ * @returns Formatted date string in YYYY-MM-DD format
+ *
+ * @example
+ * ```ts
+ * formatDateToISOString(new Date("2025-01-21T19:30:00Z")) // Returns: "2025-01-22"
+ * ```
+ */
+export function formatDateToISOString(date: Date): string {
+  return dayjs.tz(date, "Pacific/Auckland").format("YYYY-MM-DD")
+}
+
+/**
+ * Parses a date string in YYYY-MM-DD format to Date object with timezone support
+ *
+ * Converts a date string to Date object using New Zealand timezone
+ *
+ * @param dateString The date string in YYYY-MM-DD format
+ * @returns Date object or undefined if parsing fails
+ *
+ * @example
+ * ```ts
+ * parseISOStringToDate("2025-01-21") // Returns: Date object
+ * ```
+ */
+export function parseISOStringToDate(dateString: string): Date | undefined {
+  if (!dateString) {
+    return undefined
+  }
+  return dayjs.tz(dateString, "YYYY-MM-DD", "Pacific/Auckland").toDate()
+}
+
+/**
+ * Formats a date to YYYY-MM-DD string without timezone conversion
+ *
+ * Converts a Date object to ISO date format string without timezone handling
+ *
+ * @param date The Date object to format
+ * @returns Formatted date string in YYYY-MM-DD format
+ *
+ * @example
+ * ```ts
+ * formatDateToString(new Date("2025-01-21T19:30:00Z")) // Returns: "2025-01-21"
+ * ```
+ */
+export function formatDateToString(date: Date): string {
+  return dayjs(date).format("YYYY-MM-DD")
 }

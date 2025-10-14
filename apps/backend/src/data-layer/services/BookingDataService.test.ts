@@ -1,5 +1,11 @@
-import type { EditBookingData } from "@repo/shared"
-import { casualUserMock } from "@repo/shared/mocks"
+import {
+  BookingQueryType,
+  type CreateSemesterData,
+  type EditBookingData,
+  type GameSession,
+  Weekday,
+} from "@repo/shared"
+import { casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import { bookingCreateMock, bookingCreateMock2 } from "@/test-config/mocks/Booking.mock"
 import { gameSessionCreateMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
@@ -101,7 +107,7 @@ describe("bookingDataService", () => {
   })
 
   describe("getAllBookingsByUserId", () => {
-    it("should find all bookings by userId", async () => {
+    it("should find all bookings by userId if no type query is specified", async () => {
       const createdBooking1 = await bookingDataService.createBooking({
         ...bookingCreateMock,
         user: casualUserMock,
@@ -122,6 +128,169 @@ describe("bookingDataService", () => {
     it("should return empty array if there are no bookings by userId", async () => {
       const fetchedBooking = await bookingDataService.getAllBookingsByUserId("No bookings userId")
       expect(fetchedBooking).toStrictEqual([])
+    })
+
+    it("should return all future bookings for the current user if query type is set to future", async () => {
+      const pastGameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: new Date(2020, 0, 1).toISOString(),
+        endTime: new Date(2020, 0, 1).toISOString(),
+      })
+      const futureGameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
+        endTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      })
+
+      const pastBookingsToCreate = Array.from({ length: 2 }, (_, _i) => ({
+        ...bookingCreateMock,
+        gameSession: pastGameSession,
+      }))
+      await Promise.all(pastBookingsToCreate.map((u) => bookingDataService.createBooking(u)))
+
+      const futureBookingToCreate = {
+        ...bookingCreateMock,
+        gameSession: futureGameSession,
+      }
+      const futureBooking = await bookingDataService.createBooking(futureBookingToCreate)
+
+      const fetchedBookings = await bookingDataService.getAllBookingsByUserId(
+        casualUserMock.id,
+        BookingQueryType.FUTURE,
+      )
+
+      expect(fetchedBookings.length).toStrictEqual(1)
+      expect(fetchedBookings).toStrictEqual([futureBooking])
+      expect(Date.parse((fetchedBookings[0].gameSession as GameSession).startTime)).toBeGreaterThan(
+        Date.now(),
+      )
+    })
+  })
+
+  describe("getAllCurrentWeekBookingsByUserId", () => {
+    const now = new Date()
+
+    // Booking start weekday is Monday
+    const currentSemesterCreateMock: CreateSemesterData = {
+      ...semesterCreateMock,
+      startDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1)).toISOString(),
+      endDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 4, 0)).toISOString(),
+    }
+
+    it("should fetch all bookings within a booking week period", async () => {
+      const semester = await semesterDataService.createSemester(currentSemesterCreateMock)
+
+      const startTime = new Date(now)
+      const endTime = new Date(startTime)
+      endTime.setUTCMinutes(now.getUTCMinutes() + 59)
+
+      const gameSession1 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        semester: semester.id,
+      })
+      const gameSession2 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        semester: semester.id,
+      })
+
+      const booking1 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: memberUserMock,
+        gameSession: gameSession1.id,
+      })
+      const booking2 = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: memberUserMock,
+        gameSession: gameSession2.id,
+      })
+
+      const fetchedBookings = await bookingDataService.getAllCurrentWeekBookingsByUserId(
+        memberUserMock.id,
+        semester,
+      )
+
+      expect(fetchedBookings.length).toStrictEqual(2)
+      expect(fetchedBookings).toEqual(expect.arrayContaining([booking1, booking2]))
+    })
+
+    it("should not fetch bookings outside of the current booking week period", async () => {
+      const semester = await semesterDataService.createSemester(currentSemesterCreateMock)
+
+      // Set start and open time to a week ago
+      const startTime = new Date(now)
+      startTime.setUTCDate(now.getUTCDate() - 9)
+      const endTime = new Date(startTime)
+      endTime.setUTCDate(now.getUTCDate() - 8)
+
+      const gameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        semester: semester.id,
+      })
+
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: casualUserMock,
+        gameSession: gameSession.id,
+      })
+
+      const fetchedBookings = await bookingDataService.getAllCurrentWeekBookingsByUserId(
+        casualUserMock.id,
+        semester,
+      )
+      expect(fetchedBookings.length).toStrictEqual(0)
+    })
+
+    it("should go back to previous week when on booking open day but before booking open time", async () => {
+      const now = new Date()
+
+      // Create semester with booking opening much later in the day to ensure
+      // we're always "before" the booking open time during test execution
+      const currentSemesterCreateMock: CreateSemesterData = {
+        ...semesterCreateMock,
+        startDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1)).toISOString(),
+        endDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 4, 0)).toISOString(),
+        bookingOpenDay: Object.values(Weekday)[now.getUTCDay()],
+        bookingOpenTime: new Date(1970, 0, 1, 23, 59).toISOString(), // 11:59 PM
+      }
+
+      const semester = await semesterDataService.createSemester(currentSemesterCreateMock)
+
+      // Create a game session that would be in the "previous week's" booking period
+      // Since booking opens at 11:59 PM on Monday, and our test runs earlier,
+      // the method should look at the previous Monday 11:59 PM to this Monday 11:59 PM
+      const sessionStartTime = new Date(now)
+      const sessionEndTime = new Date(sessionStartTime)
+      sessionEndTime.setUTCMinutes(sessionStartTime.getUTCMinutes() + 60)
+
+      const gameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        startTime: sessionStartTime.toISOString(),
+        endTime: sessionEndTime.toISOString(),
+        semester: semester.id,
+      })
+
+      const booking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: memberUserMock,
+        gameSession: gameSession.id,
+      })
+
+      // When this method runs on Monday before 11:59 PM, it should:
+      // 1. Detect we're on Monday (booking open day) but before 11:59 PM (booking open time)
+      // 2. Add 7 days to daysDifference to look at previous week's booking period
+      // 3. Find the booking we just created since it's within that expanded range
+      const fetchedBookings = await bookingDataService.getAllCurrentWeekBookingsByUserId(
+        memberUserMock.id,
+        semester,
+      )
+
+      expect(fetchedBookings).toEqual([booking])
     })
   })
 
@@ -282,6 +451,35 @@ describe("bookingDataService", () => {
       expect(
         await bookingDataService.deleteBookingsBySemesterId("Not a valid semester ID"),
       ).toStrictEqual([])
+    })
+  })
+
+  describe("deleteBookingsByUserId", () => {
+    it("should delete user bookings by id", async () => {
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: casualUserMock,
+      })
+
+      await bookingDataService.createBooking({
+        ...bookingCreateMock2,
+        user: casualUserMock,
+      })
+
+      await bookingDataService.deleteBookingsByUserId(casualUserMock.id)
+      expect(await bookingDataService.getAllBookingsByUserId(casualUserMock.id)).toStrictEqual([])
+    })
+
+    it("should not delete bookings not related to the user", async () => {
+      const createdBooking = await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        user: memberUserMock,
+      })
+
+      await bookingDataService.deleteBookingsByUserId(casualUserMock.id)
+      expect(await bookingDataService.getAllBookingsByUserId(memberUserMock.id)).toStrictEqual([
+        createdBooking,
+      ])
     })
   })
 })
