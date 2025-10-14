@@ -168,7 +168,11 @@ export class ApiClient {
     }
 
     try {
-      if (response.status === 204 || response.headers.get("content-length") === "0") {
+      if (
+        response.status === 204 ||
+        schema === null ||
+        response.headers.get("content-length") === "0"
+      ) {
         return {
           success: true,
           data: null as T,
