@@ -186,7 +186,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
     const bookingDataService = new BookingDataService()
     const gameSessionDataService = new GameSessionDataService()
 
-    it("should delete game session schedule and its game session and bookings when cascade is true", async () => {
+    it("should delete game session schedule and its game session and bookings when delateRelatedDocs is true", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
@@ -206,7 +206,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       })
 
       const res = await DELETE(
-        createMockNextRequest("/api/admin/game-session-schedules?cascade=true", "DELETE"),
+        createMockNextRequest("/api/admin/game-session-schedules?delateRelatedDocs=true", "DELETE"),
         {
           params: Promise.resolve({
             id: newGameSessionSchedule.id,
@@ -228,9 +228,9 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
 
     it.for([
       // Test case 1: Explicit false boolean parameter
-      "/api/admin/game-session-schedules?cascade=false",
+      "/api/admin/game-session-schedules?delateRelatedDocs=false",
       // Test case 2: Flag parameter without value (equivalent to true in query params)
-      "/api/admin/game-session-schedules?cascade",
+      "/api/admin/game-session-schedules?delateRelatedDocs",
       // Test case 3: Unrelated query parameter (testing irrelevant params)
       "/api/admin/game-session-schedules?straightZhao",
       // Test case 4: Base URL with no query parameters
@@ -273,7 +273,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       },
     )
 
-    it("should rollback transaction if error occurs during cascade delete and return 500", async () => {
+    it("should rollback transaction if error occurs during deleteRelatedDocs and return 500", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
@@ -364,7 +364,7 @@ describe("/api/admin/game-session-schedules/[id]", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
 
       const res = await DELETE(
-        createMockNextRequest("/api/admin/game-session-schedules?cascade=true", "DELETE"),
+        createMockNextRequest("/api/admin/game-session-schedules?deleteRelatedDocs=true", "DELETE"),
         {
           params: Promise.resolve({ id: "invalid-id" }),
         },

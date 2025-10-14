@@ -4,13 +4,12 @@ import { type NextRequest, NextResponse } from "next/server"
 import { NotFound } from "payload"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
-import { payload } from "@/data-layer/adapters/Payload"
 import {
   commitCascadeTransaction,
   createTransactionId,
   rollbackCascadeTransaction,
 } from "@/data-layer/adapters/Transaction"
-import BookingDataService from "@/data-layer/services/BookingDataService"
+// import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 
 class RouteWrapper {
@@ -92,36 +91,17 @@ class RouteWrapper {
   static async DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
       const { id } = await params
-      const cascade = req.nextUrl.searchParams.get("cascade") === "true"
+      const cascade = req.nextUrl.searchParams.get("delateRelatedDocs") === "true"
       const gameSessionDataService = new GameSessionDataService()
+      // const bookingDatService = new BookingDataService()
       const transactionID = cascade && (await createTransactionId())
-      console.log(transactionID)
 
       if (transactionID) {
         try {
-          const gameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(id)
-
-          const { docs } = await payload.find({
-            collection: "gameSession",
-            where: {
-              or: [
-                {
-                  gameSessionSchedule: {
-                    equals: id,
-                  },
-                },
-                {
-                  gameSessionSchedule: {
-                    equals: gameSessionSchedule,
-                  },
-                },
-              ],
-            },
-          })
-          const gameSession = docs[0]
+          // const gameSessionSchedule = await gameSessionDataService.getGameSessionScheduleById(id)
           await gameSessionDataService.deleteGameSessionSchedule(id)
-          await gameSessionDataService.deleteGameSession(gameSession.id)
-          await BookingDataService.deleteRelatedBookingsForSession(gameSession.id, transactionID)
+          // await gameSessionDataService.deleteGameSession(gameSession.id)
+          // await bookingDatService.deleteRelatedBookingsForSession(gameSession.id, transactionID)
           await commitCascadeTransaction(transactionID)
         } catch {
           await rollbackCascadeTransaction(transactionID)

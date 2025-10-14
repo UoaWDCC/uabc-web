@@ -230,42 +230,6 @@ export default class BookingDataService {
   }
 
   /**
-   * Deletes all bookings related to a game session.
-   * @param sessionId the ID of the game session whose bookings are to be deleted
-   * @param transactionID an optional transaction ID for the request, useful for tracing
-   * @private
-   */
-  public static async deleteRelatedBookingsForSession(
-    sessionId: string,
-    transactionID?: string | number,
-  ): Promise<Booking[]> {
-    const relatedBookings = (
-      await payload.find({
-        collection: "booking",
-        where: {
-          gameSession: {
-            equals: sessionId,
-          },
-        },
-        pagination: false,
-      })
-    ).docs
-    const relatedBookingIds = relatedBookings.map((booking) => booking.id)
-
-    const bulkDeletionResult = await payload.delete({
-      collection: "booking",
-      where: {
-        id: { in: relatedBookingIds },
-      },
-      req: {
-        transactionID,
-      },
-    })
-
-    return bulkDeletionResult.docs
-  }
-
-  /**
    * Updates a {@link Booking} by ID.
    *
    * @param id The ID of the {@link Booking} to update
@@ -322,7 +286,7 @@ export default class BookingDataService {
    *
    * @param userId The ID of the user to bulk delete bookings for
    * @param transactionId an optional transaction ID for the request, useful for tracing
-   * @returns the deleted {@link Booking} documents if it exists, otherwise returns an empty array
+
    */
   public async deleteBookingsByUserId(
     userId: string,
@@ -339,5 +303,27 @@ export default class BookingDataService {
         req: { transactionID: transactionId },
       })
     ).docs
+  }
+
+  /**
+   * Deletes all bookings related to a game session.
+   * @param sessionId the ID of the game session whose bookings are to be deleted
+   * @param transactionID an optional transaction ID for the request, useful for tracing
+   */
+  public async deleteRelatedBookingsForSession(
+    sessionId: string,
+    transactionID?: string | number,
+  ): Promise<void> {
+    await payload.delete({
+      collection: "booking",
+      where: {
+        gameSession: {
+          equals: sessionId,
+        },
+      },
+      req: {
+        transactionID,
+      },
+    })
   }
 }

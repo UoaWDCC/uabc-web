@@ -8,7 +8,7 @@ import {
   type Weekday,
 } from "@repo/shared"
 import type { GameSession, GameSessionSchedule, Semester } from "@repo/shared/payload-types"
-import type { PaginatedDocs, Sort, Where } from "payload"
+import { NotFound, type PaginatedDocs, type Sort, type Where } from "payload"
 import { payload } from "@/data-layer/adapters/Payload"
 import { createGameSessionTimes, getWeeklySessionDates } from "../utils/DateUtils"
 
