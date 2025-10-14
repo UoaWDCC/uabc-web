@@ -14,6 +14,7 @@ import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
 import { useQueryState } from "nuqs"
 import {
   useCreateUser,
+  useDeleteUser,
   useResetAllMemberships,
   useUpdateUser,
 } from "@/services/admin/user/AdminUserMutations"
