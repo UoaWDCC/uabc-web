@@ -1,4 +1,5 @@
 import { CommonResponseSchema } from "@repo/shared"
+import { StatusCodes } from "http-status-codes"
 import type { z } from "zod"
 import { ApiClientError } from "./ApiClientError"
 
@@ -169,8 +170,7 @@ export class ApiClient {
 
     try {
       if (
-        response.status === 204 ||
-        schema === null ||
+        response.status === StatusCodes.NO_CONTENT ||
         response.headers.get("content-length") === "0"
       ) {
         return {
