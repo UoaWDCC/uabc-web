@@ -1,14 +1,9 @@
 import { render, screen } from "@repo/ui/test-utils"
-import type { ReactNode } from "react"
+import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { vi } from "vitest"
 import type { ColumnConfig } from "../types"
 import { Filter } from "./Filter"
-import { FilterActionsProvider } from "./FilterActionsContext"
 import type { FilterBarConfig } from "./types"
-
-export const createWrapper = ({ children }: { children: ReactNode }) => (
-  <FilterActionsProvider>{children}</FilterActionsProvider>
-)
 
 const mockUseManagementTable = vi.fn()
 vi.mock("../MemberManagementContext", () => ({
@@ -54,7 +49,7 @@ describe("<Filter />", () => {
     ] as ColumnConfig<{ name: string; status: string; role: string }>[]
 
     render(<Filter columnsConfig={columnsConfig} filterConfigs={filterConfigs} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     // Test that text filter is rendered
@@ -79,7 +74,9 @@ describe("<Filter />", () => {
       name: string
     }>[]
 
-    render(<Filter columnsConfig={columnsConfig} filterConfigs={[]} />, { wrapper: createWrapper })
+    render(<Filter columnsConfig={columnsConfig} filterConfigs={[]} />, {
+      wrapper: withNuqsTestingAdapter(),
+    })
 
     // Test that actions are still rendered even with no filters
     expect(screen.getByRole("button", { name: /add/i })).toBeInTheDocument()

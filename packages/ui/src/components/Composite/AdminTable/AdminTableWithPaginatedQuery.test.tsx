@@ -2,18 +2,11 @@ import { casualUserMock } from "@repo/shared/mocks"
 import type { User } from "@repo/shared/payload-types"
 import type { UpdateUserRequest } from "@repo/shared/types"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
-import { NuqsTestingAdapter, withNuqsTestingAdapter } from "nuqs/adapters/testing"
-import { isValidElement, type ReactNode } from "react"
-import { FilterActionsProvider } from "../../Generic/ManagementTable/Filter/FilterActionsContext"
+import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
+import { isValidElement } from "react"
 import { AdminTableWithPaginatedQuery } from "./AdminTableWithPaginatedQuery"
 
 const onUrlUpdate = vi.fn()
-
-export const createWrapper = ({ children }: { children: ReactNode }) => (
-  <NuqsTestingAdapter>
-    <FilterActionsProvider>{children}</FilterActionsProvider>
-  </NuqsTestingAdapter>
-)
 
 const createMockUser = (index: number): User => ({
   ...casualUserMock,
@@ -101,7 +94,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     })
 
     render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockMultiPageQuery} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     const comboboxes = screen.getAllByRole("combobox")
@@ -117,7 +110,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     })
 
     render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQueryWithPagination} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
@@ -127,7 +120,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
 
   it("should pass correct props to ManagementTable", () => {
     render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockUseGetPaginatedData} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     expect(screen.getByRole("table")).toBeInTheDocument()
@@ -143,7 +136,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
         useGetPaginatedData={mockUseGetPaginatedData}
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -157,7 +150,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
         useGetPaginatedData={mockUseGetPaginatedData}
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -166,7 +159,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
 
   it("should show correct pagination metadata", () => {
     render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockUseGetPaginatedData} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     expect(screen.getByRole("table")).toBeInTheDocument()
@@ -179,7 +172,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     })
 
     render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockBothPagesQuery} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
@@ -195,7 +188,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     })
 
     render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockBothPagesQuery} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     const actionButtons = screen.getAllByRole("button", { name: "Actions" })
@@ -214,7 +207,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     })
 
     render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockBothPagesQuery} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     const actionButtons = screen.getAllByRole("button", { name: "Actions" })
@@ -236,16 +229,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     })
 
     render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockBothPagesQuery} />, {
-      wrapper: ({ children }) => {
-        const NuqsTestingAdapterWithSearchParams = withNuqsTestingAdapter({
-          searchParams: "?page=2",
-        })
-        return (
-          <NuqsTestingAdapterWithSearchParams>
-            <FilterActionsProvider>{children}</FilterActionsProvider>
-          </NuqsTestingAdapterWithSearchParams>
-        )
-      },
+      wrapper: withNuqsTestingAdapter({ searchParams: "?page=2" }),
     })
 
     const actionButtons = screen.getAllByRole("button", { name: "Actions" })
@@ -272,14 +256,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const { user } = render(
       <AdminTableWithPaginatedQuery useGetPaginatedData={mockQueryWithPagination} />,
       {
-        wrapper: ({ children }) => {
-          const NuqsTestingAdapterWithSearchParams = withNuqsTestingAdapter({ onUrlUpdate })
-          return (
-            <NuqsTestingAdapterWithSearchParams>
-              <FilterActionsProvider>{children}</FilterActionsProvider>
-            </NuqsTestingAdapterWithSearchParams>
-          )
-        },
+        wrapper: withNuqsTestingAdapter({ onUrlUpdate }),
       },
     )
 
@@ -304,7 +281,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
         useGetPaginatedData={mockQueryWithDelete}
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -337,7 +314,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const { user } = render(
       <AdminTableWithPaginatedQuery onEdit={onEdit} useGetPaginatedData={mockQueryWithEdit} />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -364,7 +341,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
         useGetPaginatedData={mockQueryWithDelete}
       />,
       {
-        wrapper: createWrapper,
+        wrapper: withNuqsTestingAdapter(),
       },
     )
 
@@ -388,7 +365,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
@@ -410,7 +387,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
@@ -447,14 +424,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: ({ children }) => {
-        const NuqsTestingAdapterWithSearchParams = withNuqsTestingAdapter({ onUrlUpdate })
-        return (
-          <NuqsTestingAdapterWithSearchParams>
-            <FilterActionsProvider>{children}</FilterActionsProvider>
-          </NuqsTestingAdapterWithSearchParams>
-        )
-      },
+      wrapper: withNuqsTestingAdapter({ onUrlUpdate }),
     })
 
     expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
@@ -481,14 +451,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: ({ children }) => {
-        const NuqsTestingAdapterWithSearchParams = withNuqsTestingAdapter({ onUrlUpdate })
-        return (
-          <NuqsTestingAdapterWithSearchParams>
-            <FilterActionsProvider>{children}</FilterActionsProvider>
-          </NuqsTestingAdapterWithSearchParams>
-        )
-      },
+      wrapper: withNuqsTestingAdapter({ onUrlUpdate }),
     })
 
     const toggleColumnsButton = screen.getByRole("button", { name: "Toggle column visibility" })

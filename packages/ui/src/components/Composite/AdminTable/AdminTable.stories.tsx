@@ -2,7 +2,6 @@ import { Gender, MembershipType, PlayLevel, University } from "@repo/shared"
 import type { User } from "@repo/shared/payload-types"
 import type { Meta, StoryObj } from "@storybook/react"
 import { NuqsAdapter } from "nuqs/adapters/react"
-import { FilterActionsProvider } from "../../Generic/ManagementTable/Filter/FilterActionsContext"
 import { AdminTable } from "./AdminTable"
 
 const meta: Meta<typeof AdminTable> = {
@@ -11,9 +10,7 @@ const meta: Meta<typeof AdminTable> = {
   decorators: [
     (Story) => (
       <NuqsAdapter>
-        <FilterActionsProvider>
-          <Story />
-        </FilterActionsProvider>
+        <Story />
       </NuqsAdapter>
     ),
   ],

@@ -1,11 +1,7 @@
 import { render, screen } from "@repo/ui/test-utils"
-import { isValidElement, type ReactNode } from "react"
+import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
+import { isValidElement } from "react"
 import { FilterActions } from "./FilterActions"
-import { FilterActionsProvider } from "./FilterActionsContext"
-
-export const createWrapper = ({ children }: { children: ReactNode }) => (
-  <FilterActionsProvider>{children}</FilterActionsProvider>
-)
 
 const mockUseManagementTable = vi.fn()
 vi.mock("../MemberManagementContext", () => ({
@@ -50,7 +46,7 @@ describe("<FilterActions />", () => {
 
   it("should handle adding a member", async () => {
     const { user } = render(<FilterActions columns={[]} />, {
-      wrapper: createWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     await user.click(screen.getByText("Add"))

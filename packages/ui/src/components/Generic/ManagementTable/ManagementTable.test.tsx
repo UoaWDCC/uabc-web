@@ -1,16 +1,8 @@
 import { render, screen } from "@repo/ui/test-utils"
 import type { Column } from "@yamada-ui/table"
-import { NuqsTestingAdapter } from "nuqs/adapters/testing"
-import type { ReactNode } from "react"
-import { FilterActionsProvider } from "./Filter/FilterActionsContext"
+import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { ManagementTable } from "./ManagementTable"
 import type { ColumnConfig } from "./types"
-
-export const createWrapper = ({ children }: { children: ReactNode }) => (
-  <NuqsTestingAdapter>
-    <FilterActionsProvider>{children}</FilterActionsProvider>
-  </NuqsTestingAdapter>
-)
 
 describe("ManagementTable", () => {
   const columns: Column<{ id: string; name: string }>[] = [
@@ -36,7 +28,7 @@ describe("ManagementTable", () => {
         emptyStateText="No data"
         rowId="id"
       />,
-      { wrapper: createWrapper },
+      { wrapper: withNuqsTestingAdapter() },
     )
     expect(screen.getByText("ID")).toBeInTheDocument()
     expect(screen.getByText("Name")).toBeInTheDocument()
@@ -55,7 +47,7 @@ describe("ManagementTable", () => {
         emptyStateText="No data"
         rowId="id"
       />,
-      { wrapper: createWrapper },
+      { wrapper: withNuqsTestingAdapter() },
     )
     const menuButtons = screen.getAllByRole("button", { name: /actions/i })
     await user.click(menuButtons[0])
@@ -74,7 +66,7 @@ describe("ManagementTable", () => {
         emptyStateText="No data found"
         rowId="id"
       />,
-      { wrapper: createWrapper },
+      { wrapper: withNuqsTestingAdapter() },
     )
     expect(screen.getByText("No data found")).toBeInTheDocument()
   })
@@ -89,7 +81,7 @@ describe("ManagementTable", () => {
         emptyStateText="No data"
         rowId="id"
       />,
-      { wrapper: createWrapper },
+      { wrapper: withNuqsTestingAdapter() },
     )
     expect(screen.getByRole("table")).toBeInTheDocument()
   })
@@ -104,7 +96,7 @@ describe("ManagementTable", () => {
         emptyStateText="No data"
         rowId="id"
       />,
-      { wrapper: createWrapper },
+      { wrapper: withNuqsTestingAdapter() },
     )
     expect(screen.getByRole("table")).toBeInTheDocument()
   })
@@ -119,7 +111,7 @@ describe("ManagementTable", () => {
         emptyStateText="No data"
         rowId="id"
       />,
-      { wrapper: createWrapper },
+      { wrapper: withNuqsTestingAdapter() },
     )
     expect(screen.getByRole("table")).toBeInTheDocument()
   })
@@ -135,7 +127,7 @@ describe("ManagementTable", () => {
         emptyStateText="No data"
         rowId="id"
       />,
-      { wrapper: createWrapper },
+      { wrapper: withNuqsTestingAdapter() },
     )
     expect(screen.getAllByRole("button", { name: /actions/i })).toHaveLength(2)
   })
@@ -151,7 +143,7 @@ describe("ManagementTable", () => {
         providerProps={{ isLoading: true }}
         rowId="id"
       />,
-      { wrapper: createWrapper },
+      { wrapper: withNuqsTestingAdapter() },
     )
     expect(screen.getByRole("table")).toBeInTheDocument()
   })
@@ -167,7 +159,7 @@ describe("ManagementTable", () => {
         filterConfigs={[]}
         rowId="id"
       />,
-      { wrapper: createWrapper },
+      { wrapper: withNuqsTestingAdapter() },
     )
     expect(screen.getByRole("table")).toBeInTheDocument()
   })

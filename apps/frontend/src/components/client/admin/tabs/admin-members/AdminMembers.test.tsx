@@ -1,4 +1,3 @@
-import { FilterActionsProvider } from "@repo/ui/components/Generic/ManagementTable/Filter/FilterActionsContext"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { render, screen } from "@testing-library/react"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
@@ -21,9 +20,7 @@ describe("<AdminMembers />", () => {
     wrapper = ({ children }: { children: React.ReactNode }) => (
       <WithNuqsTestingAdapter>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <FilterActionsProvider>{children}</FilterActionsProvider>
-          </AuthProvider>
+          <AuthProvider>{children}</AuthProvider>
         </QueryClientProvider>
       </WithNuqsTestingAdapter>
     )
