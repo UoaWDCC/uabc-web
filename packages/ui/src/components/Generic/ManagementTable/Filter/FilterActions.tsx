@@ -39,7 +39,6 @@ export const FilterActions = <TData,>({ columns }: FilterActionsProps<TData>) =>
         colorScheme="primary"
         minW="0"
         onClick={() => {
-          console.log("clicked")
           setOpenCreate("true")
         }}
         px="md"

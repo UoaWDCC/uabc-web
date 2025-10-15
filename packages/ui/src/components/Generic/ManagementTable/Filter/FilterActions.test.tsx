@@ -3,6 +3,8 @@ import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { isValidElement } from "react"
 import { FilterActions } from "./FilterActions"
 
+const onUrlUpdate = vi.fn()
+
 const mockUseManagementTable = vi.fn()
 vi.mock("../MemberManagementContext", () => ({
   useManagementTable: () => mockUseManagementTable(),
@@ -44,18 +46,17 @@ describe("<FilterActions />", () => {
     expect(isValidElement(<FilterActions columns={[]} />)).toBeTruthy()
   })
 
-  it("should handle adding a member", async () => {
+  it("should handle adding query param when clicking Add", async () => {
     const { user } = render(<FilterActions columns={[]} />, {
-      wrapper: withNuqsTestingAdapter(),
+      wrapper: withNuqsTestingAdapter({
+        onUrlUpdate,
+      }),
     })
 
     await user.click(screen.getByText("Add"))
 
-    await user.type(screen.getByTestId("first-name"), "First-name")
-    await user.type(screen.getByTestId("email"), "test@example.com")
-    await user.click(screen.getByTestId("role"))
-    await user.click(screen.getByText("casual"))
-
-    await user.click(screen.getByTestId("submit"))
+    expect(onUrlUpdate).toHaveBeenCalledOnce()
+    const event = onUrlUpdate.mock.calls[0][0]
+    expect(event.queryString).toBe("?create-member=true")
   })
 })
