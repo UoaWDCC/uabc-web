@@ -1,5 +1,5 @@
+import { render, screen } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { render, screen } from "@testing-library/react"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { AuthProvider } from "@/context/AuthContext"
 import { AdminMembers } from "./AdminMembers"
