@@ -23,7 +23,7 @@ import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 export const AdminMembers = () => {
   const notice = useNotice()
 
-  const [openCreate, setOpenCreate] = useQueryState(Popup.CREATE_MEMBER)
+  const [openCreate] = useQueryState(Popup.CREATE_MEMBER)
   const { onClose: onCloseCreate } = useDisclosure()
 
   // TODO: make these refer to resetting members
@@ -65,7 +65,6 @@ export const AdminMembers = () => {
         })
       },
     })
-    setOpenCreate(null)
     onCloseCreate()
   }
 

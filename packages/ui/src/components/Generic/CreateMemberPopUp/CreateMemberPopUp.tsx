@@ -4,6 +4,7 @@ import {
   type CreateMemberPopUpFormValues,
   GenderOptions,
   PlayLevelOptions,
+  Popup,
   RoleOptions,
   University,
   UniversityOptions,
@@ -37,6 +38,7 @@ import {
   GridItem,
   VStack,
 } from "@yamada-ui/react"
+import { useQueryState } from "nuqs"
 import type { FC } from "react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 
@@ -80,6 +82,8 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
   onConfirm,
   ...props
 }) => {
+  const [_openCreate, setOpenCreate] = useQueryState(Popup.CREATE_MEMBER)
+
   const {
     register,
     control,
@@ -93,6 +97,7 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
 
   const handleClose = () => {
     reset()
+    setOpenCreate(null)
     props.onClose?.()
   }
 
