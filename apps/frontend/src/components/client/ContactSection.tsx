@@ -5,22 +5,22 @@ import { ContactOurTeam } from "@repo/ui/components/Composite"
 import { LinkTreeIcon } from "@repo/ui/components/Icon"
 import { FacebookIcon, InstagramIcon } from "@yamada-ui/lucide"
 import { useCallback } from "react"
-import { useContactMutation } from "@/services/contact/ContactMutation"
+import { useContactMutation } from "@/services/contact/ContactMutations"
 
 const socialLinks = [
   {
     label: "LinkTree",
-    url: "https://linktr.ee/uabc",
+    url: "https://linktr.ee/uoa.badminton",
     icon: LinkTreeIcon,
   },
   {
     label: "Facebook",
-    url: "https://www.facebook.com/uabc",
+    url: "https://www.facebook.com/groups/uoabadminton",
     icon: FacebookIcon,
   },
   {
     label: "Instagram",
-    url: "https://www.instagram.com/uabc",
+    url: "https://www.instagram.com/uoa.badminton",
     icon: InstagramIcon,
   },
 ]

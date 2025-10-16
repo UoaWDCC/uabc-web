@@ -16,13 +16,15 @@ import {
   HStack,
   Icon,
   Link,
-  memo,
   Stack,
   Text,
   Textarea,
+  Tooltip,
+  useNotice,
   VStack,
 } from "@yamada-ui/react"
 import NextLink from "next/link"
+import { memo } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import type { SocialLink } from "../Footer/constants"
 import { FooterSocialLinks } from "../Footer/FooterSocialLinks"
@@ -62,6 +64,7 @@ export const ContactOurTeam = memo(
     isLoading,
     socialLinks,
     contactInfo = {
+      // TODO: Change before deploying to production
       generalEmail: "badminton.au@gmail.com",
       bookingsEmail: "bookings@badminton.au",
       phoneNumber: "000-000-000",
@@ -69,6 +72,7 @@ export const ContactOurTeam = memo(
         "Guest bookings, date changes, any clarification about your stay at the lodge",
     },
   }: ContactOurTeamProps) => {
+    const notice = useNotice()
     const {
       register,
       handleSubmit,
@@ -87,8 +91,13 @@ export const ContactOurTeam = memo(
       },
     })
 
-    const handleFormSubmit: SubmitHandler<ContactFormData> = async (data) => {
-      await mutation.mutateAsync(data)
+    const handleFormSubmit: SubmitHandler<ContactFormData> = async (_data) => {
+      notice({
+        status: "info",
+        title: "Work in Progress",
+        description: "Form submission is not yet implemented.",
+      })
+      // await mutation.mutateAsync(data)
     }
 
     const isFormLoading = isLoading ?? isSubmitting ?? mutation.isPending
@@ -244,15 +253,18 @@ export const ContactOurTeam = memo(
             />
           </FormControl>
 
-          <Button
-            colorScheme="secondary"
-            loading={isFormLoading}
-            loadingText="Submitting..."
-            type="submit"
-            w="full"
-          >
-            Submit
-          </Button>
+          <Tooltip label="Form submission is not yet implemented." placement="top">
+            <Button
+              colorScheme="secondary"
+              disabled
+              loading={isFormLoading}
+              loadingText="Submitting..."
+              type="submit"
+              w="full"
+            >
+              Submit
+            </Button>
+          </Tooltip>
         </VStack>
       </Stack>
     )
