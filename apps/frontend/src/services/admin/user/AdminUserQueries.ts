@@ -29,5 +29,6 @@ export const useGetPaginatedUsers = ({ limit, query, filter }: Omit<PaginationQu
     },
     getNextPageParam: (lastPage) => lastPage.data?.nextPage,
     getPreviousPageParam: (firstPage) => firstPage.data?.prevPage,
+    enabled: !!token,
   })
 }
