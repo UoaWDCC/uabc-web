@@ -4,11 +4,16 @@ import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { vi } from "vitest"
 import * as useUpdateSelfMutationModule from "@/services/auth/AuthMutations"
+import * as bookingQueries from "@/services/bookings/BookingQueries"
 import { ProfileSection } from "./ProfileSection"
 
 vi.mock("@/context/AuthContext", () => ({
   useAuth: () => mockAuth,
   AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}))
+
+vi.mock("@/services/bookings/BookingQueries", () => ({
+  useMyBookings: vi.fn(),
 }))
 
 const mockAuth: AuthContextValue = {
@@ -33,6 +38,11 @@ const queryClientProvider = ({ children }: { children: React.ReactNode }) => {
 describe("<ProfileSection />", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.mocked(bookingQueries.useMyBookings).mockReturnValue({
+      data: { data: [] },
+      isLoading: false,
+      isError: false,
+    } as never)
   })
 
   it("renders profile details and additional info panels", () => {
