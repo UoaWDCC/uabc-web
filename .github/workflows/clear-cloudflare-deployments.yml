@@ -12,7 +12,7 @@ on:
           - 'uabc'
           - 'uabc-staging'
         default: 'all'
-        required: false
+        required: true
 
 jobs:
   clear-cloudflare-deployments:
