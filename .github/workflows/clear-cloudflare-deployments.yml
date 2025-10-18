@@ -1,6 +1,8 @@
 name: Clear Cloudflare Deployments
 
 on:
+  push:
+    branches: [master]
   workflow_dispatch:
     inputs:
       project-name:
