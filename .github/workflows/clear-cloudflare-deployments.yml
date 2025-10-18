@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        project-name: ${{ fromJSON(inputs.project-name || '["uabc-storybook", "uabc", "uabc-staging"]') }}
+        project-name: ${{ fromJSON(inputs.project-name && format('["{0}"]', inputs.project-name) || '["uabc-storybook","uabc","uabc-staging"]') }}
     steps:
       - uses: actions/checkout@v5
 
