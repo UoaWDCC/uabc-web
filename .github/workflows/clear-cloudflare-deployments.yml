@@ -1,0 +1,29 @@
+name: Clear Cloudflare Deployments
+
+on:
+  workflow_dispatch:
+    inputs:
+      project-name:
+        description: 'Project name'
+        type: choice
+        options:
+          - 'uabc-storybook'
+          - 'uabc'
+          - 'uabc-staging'
+        required: false
+
+jobs:
+  clear-cloudflare-deployments:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project-name: ${{ fromJSON(inputs.project-name || '["uabc-storybook", "uabc", "uabc-staging"]') }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Clear Cloudflare Deployments
+        uses: jeffplays2005/clear-cloudflare-deployments@v1
+        with:
+          CF_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CF_PROJECT_NAME: ${{ matrix.project-name }}
+          CF_AUTH_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
