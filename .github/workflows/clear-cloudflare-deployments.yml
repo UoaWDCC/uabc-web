@@ -7,9 +7,11 @@ on:
         description: 'Project name'
         type: choice
         options:
+          - 'all'
           - 'uabc-storybook'
           - 'uabc'
           - 'uabc-staging'
+        default: 'all'
         required: false
 
 jobs:
@@ -17,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        project-name: ${{ fromJSON(inputs.project-name && format('["{0}"]', inputs.project-name) || '["uabc-storybook","uabc","uabc-staging"]') }}
+        project-name: ${{ fromJSON(inputs.project-name !== 'all' && format('["{0}"]', inputs.project-name) || '["uabc-storybook","uabc","uabc-staging"]') }}
     steps:
       - uses: actions/checkout@v5
 
