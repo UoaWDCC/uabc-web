@@ -1,7 +1,11 @@
 import { AdminTableWithPaginatedQuery } from "@repo/ui/components/Composite"
 import { Button } from "@repo/ui/components/Primitive"
 import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
-import { useDeleteUser, useUpdateUser } from "@/services/admin/user/AdminUserMutations"
+import {
+  useDeleteUser,
+  useResetAllMemberships,
+  useUpdateUser,
+} from "@/services/admin/user/AdminUserMutations"
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembers = () => {
@@ -15,6 +19,7 @@ export const AdminMembers = () => {
 
   const deleteUserMutation = useDeleteUser()
   const updateUserMutation = useUpdateUser()
+  const resetAllMembershipsMutation = useResetAllMemberships()
 
   const handleResetConfirm = () => {
     onCloseConfirm()
@@ -23,8 +28,21 @@ export const AdminMembers = () => {
 
   const handleResetFinalConfirm = () => {
     onCloseFinalConfirm()
-    notice({
-      title: "TODO: Reset Memberships",
+    resetAllMembershipsMutation.mutate(undefined, {
+      onSuccess: () => {
+        notice({
+          title: "Membership reset successful",
+          description: "All user memberships have been reset",
+          status: "success",
+        })
+      },
+      onError: () => {
+        notice({
+          title: "Membership reset failed",
+          description: "Failed to reset user memberships",
+          status: "error",
+        })
+      },
     })
   }
 

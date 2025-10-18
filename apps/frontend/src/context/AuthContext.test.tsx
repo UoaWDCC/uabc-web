@@ -63,6 +63,7 @@ describe("AuthContext", () => {
     localStorage.clear()
     vi.restoreAllMocks()
     mockNotice.mockReset()
+    vi.spyOn(AuthService, "getUserInfo").mockResolvedValue({ data: null } as never)
   })
 
   it("throws when useAuth is used outside provider", () => {
