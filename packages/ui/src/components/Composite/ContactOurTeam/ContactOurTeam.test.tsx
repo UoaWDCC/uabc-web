@@ -23,13 +23,28 @@ const mockSocialLinks = [
   },
 ]
 
+const defaultContactInfo = {
+  // TODO: Change before deploying to production
+  generalEmail: "badminton.au@gmail.com",
+  bookingsEmail: "bookings@badminton.au",
+  phoneNumber: "000-000-000",
+  bookingsDescription:
+    "Guest bookings, date changes, any clarification about your stay at the lodge",
+}
+
 describe("<ContactOurTeam />", () => {
   beforeEach(() => {
     mockOnSubmit.mockClear()
   })
 
   it("should render the contact form with all required fields", () => {
-    render(<ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />)
+    render(
+      <ContactOurTeam
+        contactInfo={defaultContactInfo}
+        onSubmit={mockOnSubmit}
+        socialLinks={mockSocialLinks}
+      />,
+    )
 
     expect(screen.getByText("Contact our team")).toBeInTheDocument()
     expect(screen.getByText("Let's help you with your problem")).toBeInTheDocument()
@@ -41,7 +56,13 @@ describe("<ContactOurTeam />", () => {
   })
 
   it("should display contact information sections", () => {
-    render(<ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />)
+    render(
+      <ContactOurTeam
+        contactInfo={defaultContactInfo}
+        onSubmit={mockOnSubmit}
+        socialLinks={mockSocialLinks}
+      />,
+    )
 
     expect(screen.getByText("General Inquiries")).toBeInTheDocument()
     expect(screen.getByText("Bookings")).toBeInTheDocument()
@@ -52,7 +73,11 @@ describe("<ContactOurTeam />", () => {
 
   it.skip("should submit form with valid data", async () => {
     const { user } = render(
-      <ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />,
+      <ContactOurTeam
+        contactInfo={defaultContactInfo}
+        onSubmit={mockOnSubmit}
+        socialLinks={mockSocialLinks}
+      />,
     )
 
     await user.type(screen.getByTestId("firstName"), "John")
@@ -79,7 +104,11 @@ describe("<ContactOurTeam />", () => {
       .mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)))
 
     const { user } = render(
-      <ContactOurTeam onSubmit={slowOnSubmit} socialLinks={mockSocialLinks} />,
+      <ContactOurTeam
+        contactInfo={defaultContactInfo}
+        onSubmit={slowOnSubmit}
+        socialLinks={mockSocialLinks}
+      />,
     )
 
     await user.type(screen.getByTestId("firstName"), "John")
@@ -95,7 +124,11 @@ describe("<ContactOurTeam />", () => {
 
   it.skip("should reset form after successful submission", async () => {
     const { user } = render(
-      <ContactOurTeam onSubmit={mockOnSubmit} socialLinks={mockSocialLinks} />,
+      <ContactOurTeam
+        contactInfo={defaultContactInfo}
+        onSubmit={mockOnSubmit}
+        socialLinks={mockSocialLinks}
+      />,
     )
 
     await user.type(screen.getByTestId("firstName"), "John")
