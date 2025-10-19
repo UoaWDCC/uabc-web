@@ -28,6 +28,7 @@ describe("globals/about-us-info", () => {
               id: expect.any(String),
             },
           ],
+          carouselItems: [],
         },
       })
     })
