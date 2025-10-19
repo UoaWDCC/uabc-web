@@ -50,7 +50,7 @@ export const ContactInfoSchema = z.object({
 
   /**
    * Bookings email
-   * @example bookings@badminton.au
+   * @example badminton.au@gmail.com
    */
   bookingsEmail: z.string().email("Please enter a valid email address"),
 

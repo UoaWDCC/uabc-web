@@ -24,7 +24,6 @@ const mockSocialLinks = [
 ]
 
 const defaultContactInfo = {
-  // TODO: Change before deploying to production
   generalEmail: "badminton.au@gmail.com",
   bookingsEmail: "bookings@badminton.au",
   phoneNumber: "000-000-000",
