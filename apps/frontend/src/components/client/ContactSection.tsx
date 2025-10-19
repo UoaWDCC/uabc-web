@@ -25,6 +25,15 @@ const socialLinks = [
   },
 ]
 
+const defaultContactInfo = {
+  // TODO: Change before deploying to production
+  generalEmail: "badminton.au@gmail.com",
+  bookingsEmail: "badminton.au@gmail.com",
+  phoneNumber: "000-000-000 (Will be updated soon)",
+  bookingsDescription:
+    "Guest bookings, date changes, any clarification about your stay at the lodge",
+}
+
 /**
  * Client-side contact section that handles form submission
  */
@@ -40,6 +49,7 @@ export const ContactSection = () => {
 
   return (
     <ContactOurTeam
+      contactInfo={defaultContactInfo}
       isLoading={mutation.isPending}
       onSubmit={handleSubmit}
       socialLinks={socialLinks}

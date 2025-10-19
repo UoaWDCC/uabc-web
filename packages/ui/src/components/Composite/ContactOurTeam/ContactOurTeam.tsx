@@ -48,7 +48,7 @@ export interface ContactOurTeamProps {
   /**
    * Contact information for different categories
    */
-  contactInfo?: ContactInfo
+  contactInfo: ContactInfo
 }
 
 /**
@@ -59,19 +59,7 @@ export interface ContactOurTeamProps {
  * @returns A contact our team component
  */
 export const ContactOurTeam = memo(
-  ({
-    onSubmit,
-    isLoading,
-    socialLinks,
-    contactInfo = {
-      // TODO: Change before deploying to production
-      generalEmail: "badminton.au@gmail.com",
-      bookingsEmail: "bookings@badminton.au",
-      phoneNumber: "000-000-000",
-      bookingsDescription:
-        "Guest bookings, date changes, any clarification about your stay at the lodge",
-    },
-  }: ContactOurTeamProps) => {
+  ({ onSubmit, isLoading, socialLinks, contactInfo }: ContactOurTeamProps) => {
     const notice = useNotice()
     const {
       register,
