@@ -1083,6 +1083,14 @@ export interface Disclaimer {
 export interface AboutUsInfo {
   id: string;
   items: AboutUsInfoItems;
+  carouselItems: {
+    /**
+     * The emoji on the bottom right hand of the carousel
+     */
+    emoji: string;
+    image: string | Media;
+    id?: string | null;
+  }[];
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1244,6 +1252,13 @@ export interface DisclaimerSelect<T extends boolean = true> {
  */
 export interface AboutUsInfoSelect<T extends boolean = true> {
   items?: T | AboutUsInfoItemsSelect<T>;
+  carouselItems?:
+    | T
+    | {
+        emoji?: T;
+        image?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
