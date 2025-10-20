@@ -13,12 +13,6 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "public/dist/**"]
     },
-    "pages:build": {
-      "cache": true,
-      "dependsOn": ["^pages:build", "@repo/test-config#build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".vercel/**"]
-    },
     "check-types": {
       "dependsOn": ["^check-types", "@repo/test-config#build", "@repo/shared#build"],
       "cache": true
