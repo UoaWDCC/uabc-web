@@ -311,7 +311,7 @@ export default class BookingDataService {
    * @param scheduleId the ID of the game session schedule whose bookings are to be deleted
    * @param transactionID an optional transaction ID for the request, useful for tracing
    */
-  public async deleteRelatedBookingsForSchedule(
+  public async deleteRelatedBookingsByScheduleId(
     scheduleId: string,
     transactionID?: string | number,
   ): Promise<void> {

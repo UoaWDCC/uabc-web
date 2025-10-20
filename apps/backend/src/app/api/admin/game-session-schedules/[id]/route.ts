@@ -98,9 +98,9 @@ class RouteWrapper {
 
       if (transactionID) {
         try {
-          await gameSessionDataService.deleteGameSessionSchedule(id)
-          await gameSessionDataService.deleteAllGameSessionsByScheduleId(id)
-          await bookingDataService.deleteRelatedBookingsForSchedule(id, transactionID)
+          await gameSessionDataService.deleteGameSessionSchedule(id, transactionID)
+          await gameSessionDataService.deleteAllGameSessionsByScheduleId(id, transactionID)
+          await bookingDataService.deleteRelatedBookingsByScheduleId(id, transactionID)
           await commitCascadeTransaction(transactionID)
         } catch {
           await rollbackCascadeTransaction(transactionID)
