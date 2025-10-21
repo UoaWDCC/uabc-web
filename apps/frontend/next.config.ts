@@ -1,13 +1,7 @@
-import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev"
 import type { NextConfig } from "next"
 import type { RemotePattern } from "next/dist/shared/lib/image-config"
 
-const env = process.env.NEXT_CONFIG_ENV || "development"
-
 const config = (async () => {
-  if (env === "development") {
-    await setupDevPlatform()
-  }
   const remotePatterns: RemotePattern[] = [
     // TODO: remove once actual images implemented
     {
