@@ -420,7 +420,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: withNuqsTestingAdapter({ onUrlUpdate: onUrlUpdate }),
+      wrapper: withNuqsTestingAdapter({ onUrlUpdate }),
     })
 
     expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
@@ -447,7 +447,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: withNuqsTestingAdapter({ onUrlUpdate: onUrlUpdate }),
+      wrapper: withNuqsTestingAdapter({ onUrlUpdate }),
     })
 
     const toggleColumnsButton = screen.getByRole("button", { name: "Toggle column visibility" })
