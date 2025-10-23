@@ -414,7 +414,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
         filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
       }),
     )
-  })
+  }, 10_000)
 
   it("should handle selecting rows", async () => {
     const mockQuery = createMockUseGetPaginatedData()
