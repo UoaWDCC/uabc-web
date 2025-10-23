@@ -19,7 +19,7 @@ import { memo } from "react"
 import { Button } from "../../Primitive"
 import { AdminSemestersTable } from "../AdminSemestersTable/AdminSemestersTable"
 import type { SemesterSessionRow } from "../AdminSemestersTable/Columns"
-import { GameSessionCard } from "../GameSessionCard/GameSessionCard"
+import { GameSessionScheduleCard } from "../GameSessionScheduleCard/GameSessionScheduleCard"
 
 export type AdminSemestersResponsiveProps = {
   id?: string
@@ -120,14 +120,21 @@ export const AdminSemestersResponsive = memo(
                 {rows.map((r) => {
                   const [start, end] = r.time.split(" - ")
                   return (
-                    <GameSessionCard
-                      key={r.id}
-                      session={{
+                    <GameSessionScheduleCard
+                      gameSessionSchedule={{
+                        id: r.id,
                         name: r.sessionName,
+                        location: "",
+                        semester: "",
+                        day: "monday" as any,
                         startTime: start ?? "",
                         endTime: end ?? "",
-                        type: r.sessionType,
+                        capacity: 0,
+                        casualCapacity: 0,
+                        updatedAt: "",
+                        createdAt: "",
                       }}
+                      key={r.id}
                     />
                   )
                 })}
