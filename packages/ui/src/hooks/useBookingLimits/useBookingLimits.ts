@@ -79,10 +79,7 @@ export const useBookingLimits = ({
     [alreadyBookedCount, selectedCount],
   )
 
-  const weeklyLimit = useMemo(
-    () => (isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS),
-    [isMember],
-  )
+  const weeklyLimit = isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS
 
   const sessionsLeft = useMemo(
     () => Math.max(0, weeklyLimit - weeklyUsed),
