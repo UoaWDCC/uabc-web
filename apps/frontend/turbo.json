@@ -3,6 +3,7 @@
   "extends": ["//"],
   "tasks": {
     "build": {
+      "outputs": ["out"],
       "dependsOn": ["@repo/test-config#build", "^build"]
     }
   }
