@@ -414,6 +414,32 @@ describe("<AdminTableWithPaginatedQuery />", () => {
         filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
       }),
     )
+  }, 10_000)
+
+  it("should handle filtering by multiple fields", async () => {
+    const mockQuery = createMockUseGetPaginatedData()
+
+    const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
+      wrapper: withNuqsTestingAdapter(),
+    })
+
+    expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
+    expect(screen.getByText("User19 Lastname19")).toBeInTheDocument()
+
+    const roleDropdown = screen.getAllByRole("combobox")[0]
+    await user.click(roleDropdown)
+    const memberOption = screen.getAllByText("member")[0]
+    await user.click(memberOption)
+    const levelDropdown = screen.getByRole("combobox", { name: "Play Level" })
+    await user.click(levelDropdown)
+    const beginnerOption = screen.getAllByText("beginner")[0]
+    await user.click(beginnerOption)
+
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
+      }),
+    )
   })
 
   it("should handle selecting rows", async () => {
