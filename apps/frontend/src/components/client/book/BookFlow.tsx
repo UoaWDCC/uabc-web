@@ -34,12 +34,16 @@ type BookFlowProps = {
    * Sessions to drive the booking flow. Defaults to shared mockSessions.
    */
   sessions: SessionItem[]
+  /**
+   * The number of already booked sessions by the user.
+   */
+  numberBookedSessions?: number
 }
 
 /**
  * The main component for the booking flow.
  */
-export const BookFlow: FC<BookFlowProps> = ({ auth, sessions }) => {
+export const BookFlow: FC<BookFlowProps> = ({ auth, sessions, numberBookedSessions }) => {
   const bookingFlowReducer = createBookingFlowReducer(sessions)
   const [state, dispatch] = useReducer(bookingFlowReducer, initialState)
   const notice = useNotice()
@@ -156,6 +160,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth, sessions }) => {
       ) : state.step === "select-court" ? (
         <SelectACourt
           initialBookingTimes={state.bookingTimes}
+          numberBookedSessions={numberBookedSessions}
           onBack={handleBack}
           onNext={handleSelectCourt}
           sessions={sessions}
@@ -165,6 +170,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth, sessions }) => {
         <BookingConfirmation
           bookingData={state.selectedSessions ?? []}
           loading={createBooking.isPending}
+          numberBookedSessions={numberBookedSessions}
           onBack={handleBack}
           onConfirm={handleConfirmBooking}
           user={auth.user}

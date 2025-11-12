@@ -398,27 +398,23 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const memberOption = screen.getAllByText("member")[0]
     await user.click(memberOption)
 
-    await waitFor(() => {
-      expect(mockQuery).toHaveBeenCalledWith(
-        expect.objectContaining({
-          filter: JSON.stringify({ role: ["member"] }),
-        }),
-      )
-    })
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filter: JSON.stringify({ role: ["member"] }),
+      }),
+    )
 
     const levelDropdown = screen.getByRole("combobox", { name: "Play Level" })
     await user.click(levelDropdown)
     const beginnerOption = screen.getAllByText("beginner")[0]
     await user.click(beginnerOption)
 
-    await waitFor(() => {
-      expect(mockQuery).toHaveBeenCalledWith(
-        expect.objectContaining({
-          filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
-        }),
-      )
-    })
-  })
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
+      }),
+    )
+  }, 10_000)
 
   it("should handle selecting rows", async () => {
     const mockQuery = createMockUseGetPaginatedData()

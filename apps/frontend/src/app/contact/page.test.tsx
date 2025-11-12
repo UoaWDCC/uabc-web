@@ -6,11 +6,11 @@ describe("<Contact />", () => {
     expect(Contact).toBeDefined()
   })
 
-  it("should render the contact page with under construction message", () => {
+  it("should render the contact page with ContactOurTeam component", () => {
     render(<Contact />)
-    expect(screen.getByText("Feature is Under Construction 🔧")).toBeInTheDocument()
-    expect(
-      screen.getByText("Our team is busy working on this page. Check back later!"),
-    ).toBeInTheDocument()
+    expect(screen.getByText("Contact our team")).toBeInTheDocument()
+    expect(screen.getByText("Let's help you with your problem")).toBeInTheDocument()
+    expect(screen.getByText("General Inquiries")).toBeInTheDocument()
+    expect(screen.getByText("Bookings")).toBeInTheDocument()
   })
 })

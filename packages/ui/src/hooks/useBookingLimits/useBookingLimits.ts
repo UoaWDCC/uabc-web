@@ -11,9 +11,13 @@ interface UseBookingLimitsOptions {
    */
   user: Pick<User, "remainingSessions" | "role">
   /**
-   * The number of selected/booked sessions.
+   * The number of sessions currently selected in the form.
    */
   selectedCount: number
+  /**
+   * The number of sessions already booked this week.
+   */
+  alreadyBookedCount?: number
 }
 
 /**
@@ -25,7 +29,7 @@ interface UseBookingLimitsReturn {
    */
   isMember: boolean
   /**
-   * Maximum bookings allowed for the user type.
+   * Maximum bookings allowed for the user type (how many MORE can be selected).
    */
   maxBookings: number
   /**
@@ -55,35 +59,41 @@ interface UseBookingLimitsReturn {
  * @example
  * const limits = useBookingLimits({
  *   user: { role: MembershipType.member, remainingSessions: 5 },
- *   selectedCount: 2,
+ *   selectedCount: 1, // currently selecting 1
+ *   alreadyBookedCount: 1, // already booked 1 this week
  * })
- * // limits.sessionsLabel = "1 / 2 this week • 3 total remaining"
+ * // limits.sessionsLabel = "0 / 2 this week • 4 total remaining"
  */
 export const useBookingLimits = ({
   user,
   selectedCount,
+  alreadyBookedCount = 0,
 }: UseBookingLimitsOptions): UseBookingLimitsReturn => {
   const isMember = useMemo(
     () => user.role === MembershipType.member || user.role === MembershipType.admin,
     [user.role],
   )
 
-  const maxBookings = useMemo(
-    () =>
-      Math.min(user.remainingSessions ?? 0, isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS),
-    [isMember, user.remainingSessions],
+  const weeklyUsed = useMemo(
+    () => alreadyBookedCount + selectedCount,
+    [alreadyBookedCount, selectedCount],
   )
 
-  const sessionsLeft = useMemo(() => maxBookings - selectedCount, [maxBookings, selectedCount])
+  const weeklyLimit = isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS
+
+  const sessionsLeft = useMemo(
+    () => Math.max(0, weeklyLimit - weeklyUsed),
+    [weeklyLimit, weeklyUsed],
+  )
 
   const totalSessionsLeft = useMemo(
-    () => (user.remainingSessions ?? 0) - selectedCount,
+    () => Math.max(0, (user.remainingSessions ?? 0) - selectedCount),
     [user.remainingSessions, selectedCount],
   )
 
-  const weeklyLimit = useMemo(
-    () => (isMember ? MAX_MEMBER_BOOKINGS : MAX_CASUAL_BOOKINGS),
-    [isMember],
+  const maxBookings = useMemo(
+    () => Math.min(sessionsLeft, totalSessionsLeft),
+    [sessionsLeft, totalSessionsLeft],
   )
 
   const sessionsLabel = useMemo(() => {

@@ -46,5 +46,27 @@ export const AboutUsInfo: GlobalConfig = {
         },
       ],
     },
+    {
+      name: "carouselItems",
+      type: "array",
+      minRows: 1,
+      required: true,
+      fields: [
+        {
+          name: "emoji",
+          type: "text",
+          required: true,
+          admin: {
+            description: "The emoji on the bottom right hand of the carousel",
+          },
+        },
+        {
+          name: "image",
+          type: "relationship",
+          relationTo: "media",
+          required: true,
+        },
+      ],
+    },
   ],
 }
