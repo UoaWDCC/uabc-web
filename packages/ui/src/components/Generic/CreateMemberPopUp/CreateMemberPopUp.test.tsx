@@ -1,6 +1,6 @@
 import type { User } from "@repo/shared/payload-types"
 import { type CreateMemberPopUpFormValues, MembershipType } from "@repo/shared/types"
-import { render, screen, waitFor } from "@repo/ui/test-utils"
+import { render, screen } from "@repo/ui/test-utils"
 import { isValidElement, useState } from "react"
 import { Button } from "../../Primitive"
 import { CreateMemberPopUp, type CreateMemberPopUpProps } from "./CreateMemberPopUp"
@@ -64,9 +64,8 @@ describe("<CreateMemberPopUp />", () => {
     await user.click(screen.getByText("Open pop up"))
 
     await user.click(screen.getByTestId("back"))
-    await waitFor(() => {
-      expect(screen.getByRole("dialog")).not.toBeVisible()
-    })
+
+    expect(screen.getByRole("dialog")).not.toBeVisible()
   })
 
   it("should not submit when a user attempts to do so with errors in the input fields", async () => {

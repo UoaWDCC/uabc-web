@@ -11,7 +11,7 @@ import { AdminTableWithPaginatedQuery } from "@repo/ui/components/Composite"
 import { CreateMemberPopUp } from "@repo/ui/components/Generic/CreateMemberPopUp"
 import { Button } from "@repo/ui/components/Primitive"
 import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
-import { useQueryState } from "nuqs"
+import { parseAsBoolean, useQueryState } from "nuqs"
 import {
   useCreateUser,
   useDeleteUser,
@@ -23,8 +23,8 @@ import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 export const AdminMembers = () => {
   const notice = useNotice()
 
-  const [openCreate] = useQueryState(Popup.CREATE_MEMBER)
-  const { onClose: onCloseCreate } = useDisclosure()
+  const [openCreate, setOpenCreate] = useQueryState(Popup.CREATE_MEMBER, parseAsBoolean)
+  // const { onClose: onCloseCreate } = useDisclosure()
 
   // TODO: make these refer to resetting members
   const { open: openConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
@@ -65,7 +65,7 @@ export const AdminMembers = () => {
         })
       },
     })
-    onCloseCreate()
+    setOpenCreate(false)
   }
 
   const handleResetConfirm = () => {
@@ -142,9 +142,9 @@ export const AdminMembers = () => {
         Reset Memberships
       </Button>
       <CreateMemberPopUp
-        onClose={onCloseCreate}
+        onClose={() => setOpenCreate(false)}
         onConfirm={(data) => handleAddConfirm(data)}
-        open={openCreate === "true"}
+        open={openCreate ?? undefined}
       />
       <Dialog
         cancel="Cancel"
