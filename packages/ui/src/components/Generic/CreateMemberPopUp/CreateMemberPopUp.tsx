@@ -80,8 +80,6 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
   onConfirm,
   ...props
 }) => {
-  // const [_openCreate, setOpenCreate] = useQueryState(Popup.CREATE_MEMBER) // TODO: remove
-
   const {
     register,
     control,
@@ -95,7 +93,6 @@ export const CreateMemberPopUp: FC<CreateMemberPopUpProps> = ({
 
   const handleClose = () => {
     reset()
-    // setOpenCreate(null) // TODO: remove
     props.onClose?.()
   }
 

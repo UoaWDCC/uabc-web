@@ -1,6 +1,7 @@
 import type { User } from "@repo/shared/payload-types"
 import { type CreateMemberPopUpFormValues, MembershipType } from "@repo/shared/types"
 import { render, screen } from "@repo/ui/test-utils"
+import { noop } from "@yamada-ui/react"
 import { isValidElement, useState } from "react"
 import { Button } from "../../Primitive"
 import { CreateMemberPopUp, type CreateMemberPopUpProps } from "./CreateMemberPopUp"
@@ -60,12 +61,14 @@ describe("<CreateMemberPopUp />", () => {
   })
 
   it("should close when the user clicks the close button", async () => {
-    const { user } = render(<CreateMemberPopUpExample />)
+    const handleClose = vi.fn(noop)
+
+    const { user } = render(<CreateMemberPopUpExample onClose={handleClose} />)
     await user.click(screen.getByText("Open pop up"))
 
     await user.click(screen.getByTestId("back"))
 
-    expect(screen.getByRole("dialog")).not.toBeVisible()
+    expect(handleClose).toBeCalled()
   })
 
   it("should not submit when a user attempts to do so with errors in the input fields", async () => {
