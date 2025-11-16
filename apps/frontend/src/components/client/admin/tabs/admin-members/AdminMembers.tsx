@@ -24,7 +24,6 @@ export const AdminMembers = () => {
   const notice = useNotice()
 
   const [openCreate, setOpenCreate] = useQueryState(Popup.CREATE_MEMBER, parseAsBoolean)
-  // const { onClose: onCloseCreate } = useDisclosure()
 
   // TODO: make these refer to resetting members
   const { open: openConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
@@ -144,7 +143,7 @@ export const AdminMembers = () => {
       <CreateMemberPopUp
         onClose={() => setOpenCreate(false)}
         onConfirm={(data) => handleAddConfirm(data)}
-        open={openCreate ?? undefined}
+        open={openCreate ?? false}
       />
       <Dialog
         cancel="Cancel"
