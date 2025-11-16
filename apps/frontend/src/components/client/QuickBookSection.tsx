@@ -16,7 +16,9 @@ export const QuickBookSection = () => {
   const { buildLoginUrl } = useAuthNavigation()
   const { data, isLoading } = useGetCurrentAvailableGameSessions()
 
-  const sessions = data ? mapGameSessionsToSessionItems(data) : []
+  const sessions = data.availableSessions
+    ? mapGameSessionsToSessionItems(data.availableSessions)
+    : []
 
   const handleQuickBookSubmit = (formData: QuickBookFormData) => {
     // Save quick book data to localStorage
