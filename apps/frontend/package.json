@@ -29,7 +29,7 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-hook-form": "7.64.0",
-    "zod": "3.25.76"
+    "zod": "4.1.12"
   },
   "devDependencies": {
     "@repo/test-config": "workspace:*",
