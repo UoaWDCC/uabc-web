@@ -111,8 +111,8 @@ importers:
         specifier: 0.5.5
         version: 0.5.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@types/nodemailer':
-        specifier: 7.0.2
-        version: 7.0.2
+        specifier: 7.0.3
+        version: 7.0.3
       bcryptjs:
         specifier: 3.0.3
         version: 3.0.3
@@ -129,8 +129,8 @@ importers:
         specifier: 15.3.5
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.77.4)
       nodemailer:
-        specifier: 7.0.9
-        version: 7.0.9
+        specifier: 7.0.10
+        version: 7.0.10
       payload:
         specifier: 3.57.0
         version: 3.57.0(graphql@16.11.0)(typescript@5.9.3)
@@ -202,8 +202,8 @@ importers:
         specifier: 1.7.8
         version: 1.7.8(@emotion/is-prop-valid@1.3.1)(@emotion/react@11.14.0(@types/react@19.2.0)(react@19.2.0))(@emotion/styled@11.11.0(@emotion/react@11.14.0(@types/react@19.2.0)(react@19.2.0))(@types/react@19.2.0)(react@19.2.0))(@types/react@19.2.0)(motion@12.5.0(@emotion/is-prop-valid@1.3.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       dayjs:
-        specifier: 1.11.18
-        version: 1.11.18
+        specifier: 1.11.19
+        version: 1.11.19
       http-status-codes:
         specifier: 2.3.0
         version: 2.3.0
@@ -254,8 +254,8 @@ importers:
         specifier: 4.1.0
         version: 4.1.0
       dayjs:
-        specifier: 1.11.18
-        version: 1.11.18
+        specifier: 1.11.19
+        version: 1.11.19
       next:
         specifier: 15.3.5
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.77.4)
@@ -345,8 +345,8 @@ importers:
         specifier: 1.3.15
         version: 1.3.15(@emotion/is-prop-valid@1.3.1)(@types/react@19.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       dayjs:
-        specifier: 1.11.18
-        version: 1.11.18
+        specifier: 1.11.19
+        version: 1.11.19
       next:
         specifier: 15.3.5
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.77.4)
@@ -2589,8 +2589,8 @@ packages:
   '@types/node@22.18.8':
     resolution: {integrity: sha512-pAZSHMiagDR7cARo/cch1f3rXy0AEXwsVsVH09FcyeJVAzCnGgmYis7P3JidtTUjyadhTeSo8TgRPswstghDaw==}
 
-  '@types/nodemailer@7.0.2':
-    resolution: {integrity: sha512-Zo6uOA9157WRgBk/ZhMpTQ/iCWLMk7OIs/Q9jvHarMvrzUUP/MDdPHL2U1zpf57HrrWGv4nYQn5uIxna0xY3xw==}
+  '@types/nodemailer@7.0.3':
+    resolution: {integrity: sha512-fC8w49YQ868IuPWRXqPfLf+MuTRex5Z1qxMoG8rr70riqqbOp2F5xgOKE9fODEBPzpnvjkJXFgK6IL2xgMSTnA==}
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
@@ -3888,8 +3888,8 @@ packages:
   dateformat@4.6.3:
     resolution: {integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==}
 
-  dayjs@1.11.18:
-    resolution: {integrity: sha512-zFBQ7WFRvVRhKcWoUh+ZA1g2HVgUbsZm9sbddh8EC5iv93sui8DVVz1Npvz+r6meo9VKfa8NyLWBsQK1VvIKPA==}
+  dayjs@1.11.19:
+    resolution: {integrity: sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==}
 
   debounce@2.2.0:
     resolution: {integrity: sha512-Xks6RUDLZFdz8LIdR6q0MTH44k7FikOmnh5xkSjMig6ch45afc8sjTjRQf3P6ax8dMgcQrYO/AR2RGWURrruqw==}
@@ -5408,8 +5408,8 @@ packages:
     resolution: {integrity: sha512-psAuZdTIRN08HKVd/E8ObdV6NO7NTBY3KsC30F7M4H1OnmLCUNaS56FpYxyb26zWLSyYF9Ozch9KYHhHegsiOQ==}
     engines: {node: '>=6.0.0'}
 
-  nodemailer@7.0.9:
-    resolution: {integrity: sha512-9/Qm0qXIByEP8lEV2qOqcAW7bRpL8CR9jcTwk3NBnHJNmP9fIJ86g2fgmIXqHY+nj55ZEMwWqYAT2QTDpRUYiQ==}
+  nodemailer@7.0.10:
+    resolution: {integrity: sha512-Us/Se1WtT0ylXgNFfyFSx4LElllVLJXQjWi2Xz17xWw7amDKO2MLtFnVp1WACy7GkVGs+oBlRopVNUzlrGSw1w==}
     engines: {node: '>=6.0.0'}
 
   normalize-path@3.0.0:
@@ -9377,7 +9377,7 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/nodemailer@7.0.2':
+  '@types/nodemailer@7.0.3':
     dependencies:
       '@aws-sdk/client-sesv2': 3.899.0
       '@types/node': 22.18.8
@@ -9625,7 +9625,7 @@ snapshots:
       '@yamada-ui/use-disclosure': 1.1.6(react@19.2.0)
       '@yamada-ui/use-outside-click': 1.0.29(react@19.2.0)
       '@yamada-ui/utils': 1.7.2(react@19.2.0)
-      dayjs: 1.11.18
+      dayjs: 1.11.19
       react: 19.2.0
     transitivePeerDependencies:
       - '@emotion/is-prop-valid'
@@ -11431,7 +11431,7 @@ snapshots:
 
   dateformat@4.6.3: {}
 
-  dayjs@1.11.18: {}
+  dayjs@1.11.19: {}
 
   debounce@2.2.0: {}
 
@@ -13046,7 +13046,7 @@ snapshots:
 
   nodemailer@6.9.16: {}
 
-  nodemailer@7.0.9: {}
+  nodemailer@7.0.10: {}
 
   normalize-path@3.0.0: {}
 
