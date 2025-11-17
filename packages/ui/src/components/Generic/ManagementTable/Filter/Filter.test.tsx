@@ -1,4 +1,5 @@
 import { render, screen } from "@repo/ui/test-utils"
+import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
 import { vi } from "vitest"
 import type { ColumnConfig } from "../types"
 import { Filter } from "./Filter"
@@ -47,7 +48,9 @@ describe("<Filter />", () => {
       { key: "status", label: "Status" },
     ] as ColumnConfig<{ name: string; status: string; role: string }>[]
 
-    render(<Filter columnsConfig={columnsConfig} filterConfigs={filterConfigs} />)
+    render(<Filter columnsConfig={columnsConfig} filterConfigs={filterConfigs} />, {
+      wrapper: withNuqsTestingAdapter(),
+    })
 
     // Test that text filter is rendered
     expect(screen.getByPlaceholderText(/name/i)).toBeInTheDocument()
@@ -71,7 +74,9 @@ describe("<Filter />", () => {
       name: string
     }>[]
 
-    render(<Filter columnsConfig={columnsConfig} filterConfigs={[]} />)
+    render(<Filter columnsConfig={columnsConfig} filterConfigs={[]} />, {
+      wrapper: withNuqsTestingAdapter(),
+    })
 
     // Test that actions are still rendered even with no filters
     expect(screen.getByRole("button", { name: /add/i })).toBeInTheDocument()
