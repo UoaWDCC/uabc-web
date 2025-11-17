@@ -1,6 +1,8 @@
+import { Popup } from "@repo/shared/enums"
 import { Button } from "@repo/ui/components/Primitive"
 import { DownloadIcon, PlusIcon } from "@yamada-ui/lucide"
 import { ButtonGroup } from "@yamada-ui/react"
+import { useQueryState } from "nuqs"
 import { useManagementTable } from "../MemberManagementContext"
 import type { ColumnConfig } from "../types"
 import { FilterColumnVisibility } from "./FilterColumnVisibility"
@@ -15,10 +17,7 @@ interface FilterActionsProps<TData> {
 export const FilterActions = <TData,>({ columns }: FilterActionsProps<TData>) => {
   const { selectedRows, filteredData, totalItems } = useManagementTable()
 
-  const handleAddMember = () => {
-    // TODO: Implement add member functionality
-    console.log("Add new member clicked")
-  }
+  const [_openCreate, setOpenCreate] = useQueryState(Popup.CREATE_MEMBER)
 
   const handleExportData = () => {
     // TODO: Implement export data functionality
@@ -39,7 +38,9 @@ export const FilterActions = <TData,>({ columns }: FilterActionsProps<TData>) =>
       <Button
         colorScheme="primary"
         minW="0"
-        onClick={handleAddMember}
+        onClick={() => {
+          setOpenCreate("true")
+        }}
         px="md"
         size="sm"
         startIcon={<PlusIcon />}
