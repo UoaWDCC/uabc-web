@@ -114,8 +114,8 @@ importers:
         specifier: 7.0.3
         version: 7.0.3
       bcryptjs:
-        specifier: 3.0.2
-        version: 3.0.2
+        specifier: 3.0.3
+        version: 3.0.3
       googleapis:
         specifier: 150.0.1
         version: 150.0.1
@@ -3494,8 +3494,8 @@ packages:
     resolution: {integrity: sha512-lGe34o6EHj9y3Kts9R4ZYs/Gr+6N7MCaMlIFA3F1R2O5/m7K06AxfSeO5530PEERE6/WyEg3lsuyw4GHlPZHog==}
     engines: {node: ^4.5.0 || >= 5.9}
 
-  bcryptjs@3.0.2:
-    resolution: {integrity: sha512-k38b3XOZKv60C4E2hVsXTolJWfkGRMbILBIe2IBITXciy5bOsTKot5kDrf3ZfufQtQOUN5mXceUEpU1rTl9Uog==}
+  bcryptjs@3.0.3:
+    resolution: {integrity: sha512-GlF5wPWnSa/X5LKM1o0wz0suXIINz1iHRLvTS+sLyi7XPbe5ycmYI3DlZqVGZZtDgl4DmasFg7gOB3JYbphV5g==}
     hasBin: true
 
   better-opn@3.0.2:
@@ -10998,7 +10998,7 @@ snapshots:
 
   base64id@2.0.0: {}
 
-  bcryptjs@3.0.2: {}
+  bcryptjs@3.0.3: {}
 
   better-opn@3.0.2:
     dependencies:
