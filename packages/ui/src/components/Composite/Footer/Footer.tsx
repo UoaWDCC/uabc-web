@@ -22,7 +22,7 @@ export const Footer = memo<FooterProps>(
       description: "The largest university badminton club in New Zealand!",
     },
     bottomProps = {
-      copyrightName: "© 2025 University of Auckland Badminton Club.",
+      copyrightName: `© ${new Date().getFullYear()} University of Auckland Badminton Club.`,
       credits: "Developed by the 2025 WDCC UABC Team",
     },
     links,
