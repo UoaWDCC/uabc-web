@@ -177,6 +177,7 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
+  fallbackLocale: null;
   globals: {
     faq: Faq;
     footer: Footer;
