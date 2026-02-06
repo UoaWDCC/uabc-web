@@ -18,11 +18,11 @@
     "test:ui": "cross-env NODE_ENV=test vitest --ui --coverage"
   },
   "dependencies": {
-    "@payloadcms/db-mongodb": "3.65.0",
-    "@payloadcms/email-nodemailer": "3.65.0",
-    "@payloadcms/next": "3.65.0",
-    "@payloadcms/richtext-lexical": "3.65.0",
-    "@payloadcms/storage-uploadthing": "3.65.0",
+    "@payloadcms/db-mongodb": "3.66.0",
+    "@payloadcms/email-nodemailer": "3.66.0",
+    "@payloadcms/next": "3.66.0",
+    "@payloadcms/richtext-lexical": "3.66.0",
+    "@payloadcms/storage-uploadthing": "3.66.0",
     "@react-email/components": "0.5.5",
     "@types/nodemailer": "7.0.3",
     "bcryptjs": "3.0.3",
@@ -31,9 +31,9 @@
     "jsonwebtoken": "9.0.2",
     "next": "15.4.8",
     "nodemailer": "7.0.10",
-    "payload": "3.65.0",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
+    "payload": "3.66.0",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
     "sharp": "0.34.5",
     "zod": "3.25.76"
   },
@@ -44,8 +44,8 @@
     "@repo/typescript-config": "workspace:*",
     "@types/jsonwebtoken": "9.0.10",
     "@types/node": "22.18.8",
-    "@types/react": "19.2.0",
-    "@types/react-dom": "19.2.0",
+    "@types/react": "19.2.1",
+    "@types/react-dom": "19.2.1",
     "react-email": "4.2.12",
     "typescript": "5.9.3"
   }
