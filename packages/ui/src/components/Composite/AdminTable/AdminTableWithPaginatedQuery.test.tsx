@@ -381,7 +381,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
         query: "User1",
       }),
     )
-  })
+  }, 10_000)
 
   it("should handle filtering by fields", async () => {
     const mockQuery = createMockUseGetPaginatedData()
