@@ -28,13 +28,13 @@
     "bcryptjs": "3.0.3",
     "googleapis": "150.0.1",
     "http-status-codes": "2.3.0",
-    "jsonwebtoken": "9.0.2",
+    "jsonwebtoken": "9.0.3",
     "next": "15.3.5",
     "nodemailer": "7.0.10",
     "payload": "3.57.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "sharp": "0.34.4",
+    "sharp": "0.34.5",
     "zod": "3.25.76"
   },
   "devDependencies": {
