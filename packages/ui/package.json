@@ -43,7 +43,7 @@
     "react-dom": "19.2.1",
     "react-hook-form": "7.64.0",
     "storybook": "9.1.10",
-    "zod": "3.25.76"
+    "zod": "4.3.6"
   },
   "devDependencies": {
     "@repo/test-config": "workspace:*",
