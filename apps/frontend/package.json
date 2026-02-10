@@ -24,10 +24,10 @@
     "@yamada-ui/react": "1.7.8",
     "dayjs": "1.11.19",
     "http-status-codes": "2.3.0",
-    "next": "15.3.5",
+    "next": "15.4.11",
     "nuqs": "2.7.3",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
     "react-hook-form": "7.64.0",
     "zod": "3.25.76"
   },
@@ -35,8 +35,8 @@
     "@repo/test-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "22.18.8",
-    "@types/react": "19.2.0",
-    "@types/react-dom": "19.2.0",
+    "@types/react": "19.2.1",
+    "@types/react-dom": "19.2.1",
     "typescript": "5.9.3"
   }
 }
