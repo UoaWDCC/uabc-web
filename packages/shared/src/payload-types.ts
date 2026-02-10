@@ -197,9 +197,7 @@ export interface Config {
     onboarding: OnboardingSelect<false> | OnboardingSelect<true>;
   };
   locale: null;
-  user: Admin & {
-    collection: 'admin';
-  };
+  user: Admin;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -246,6 +244,7 @@ export interface Admin {
       }[]
     | null;
   password?: string | null;
+  collection: 'admin';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
