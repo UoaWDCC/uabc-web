@@ -39,8 +39,8 @@
     "dayjs": "1.11.19",
     "next": "15.4.11",
     "nuqs": "2.7.3",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "react-hook-form": "7.64.0",
     "storybook": "9.1.10",
     "zod": "3.25.76"
