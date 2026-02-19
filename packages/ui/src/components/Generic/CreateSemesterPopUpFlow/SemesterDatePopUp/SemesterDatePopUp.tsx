@@ -47,6 +47,13 @@ export interface SemesterDatePopUpProps {
   defaultValues?: { startDate: string; endDate: string }
 
   /**
+   * Optional date range to restrict the calendar selection.
+   * When provided, dates outside this range will be disabled.
+   * Useful for constraining break date selection within semester dates.
+   */
+  dateRange?: { startDate: string; endDate: string }
+
+  /**
    * Handler called when the user clicks the next button.
    */
   onNext?: (data: { startDate: string; endDate: string }) => void
@@ -77,6 +84,7 @@ export interface SemesterDatePopUpProps {
  * @param [props.subtitle] - Optional subtitle or additional information.
  * @param [props.semesterName] - The name of the semester to display.
  * @param [props.defaultValues] - Optional default date range to pre-fill the calendar.
+ * @param [props.dateRange] - Optional date range to restrict selectable dates on the calendar.
  * @param [props.onNext] - Handler called when the user clicks the next button, receiving the selected date range.
  * @param [props.onBack] - Handler called when the user clicks the back button.
  * @param [props.onClose] - Handler called when the user cancels or closes the dialog.
@@ -84,7 +92,18 @@ export interface SemesterDatePopUpProps {
  * @returns The rendered SemesterDatePopUp dialog.
  */
 export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
-  ({ onBack, onNext, open, onClose, title, semesterName, subtitle, defaultValues, ...props }) => {
+  ({
+    onBack,
+    onNext,
+    open,
+    onClose,
+    title,
+    semesterName,
+    subtitle,
+    defaultValues,
+    dateRange,
+    ...props
+  }) => {
     const [selectedDate, setSelectedDate] = useState<Date | [Date?, Date?] | null>(null)
 
     // Reset selected date when component opens, but restore from defaultValues if available
@@ -154,6 +173,8 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
                 background="blackAlpha.500"
                 enableRange
                 layerStyle="gradientBorder"
+                maxDate={dateRange ? new Date(dateRange.endDate) : undefined}
+                minDate={dateRange ? new Date(dateRange.startDate) : undefined}
                 onChange={handleCalendarChange}
                 size="lg"
                 value={selectedDate ?? undefined}

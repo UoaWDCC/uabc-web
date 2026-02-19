@@ -41,9 +41,8 @@ describe("<SemesterNamePopUp />", () => {
     await user.click(screen.getByText("Open Semester Name PopUp"))
 
     expect(screen.getByText("Create New Semester")).toBeInTheDocument()
-    expect(screen.getByText("Semester")).toBeInTheDocument()
     expect(screen.getByPlaceholderText("Enter Semester Name")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
     expect(screen.getByLabelText("Close dialog")).toBeInTheDocument()
   })
@@ -64,8 +63,8 @@ describe("<SemesterNamePopUp />", () => {
     const input = screen.getByPlaceholderText("Enter Semester Name")
     await user.type(input, "Spring 2025")
 
-    const confirmButton = screen.getByRole("button", { name: "Confirm" })
-    await user.click(confirmButton)
+    const nextButton = screen.getByRole("button", { name: "Next" })
+    await user.click(nextButton)
 
     expect(onConfirm).toHaveBeenCalledWith({ name: "Spring 2025" }, expect.any(Object))
   })
@@ -96,8 +95,8 @@ describe("<SemesterNamePopUp />", () => {
     const { user } = render(<SemesterNamePopUpExample {...requiredProps} />)
     await user.click(screen.getByText("Open Semester Name PopUp"))
 
-    const confirmButton = screen.getByRole("button", { name: "Confirm" })
-    await user.click(confirmButton)
+    const nextButton = screen.getByRole("button", { name: "Next" })
+    await user.click(nextButton)
 
     // The form should prevent submission with empty name due to validation
     // This test verifies the form behavior

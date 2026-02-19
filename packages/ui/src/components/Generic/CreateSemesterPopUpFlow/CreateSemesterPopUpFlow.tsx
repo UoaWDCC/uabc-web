@@ -164,6 +164,7 @@ export const CreateSemesterPopUpFlow = memo(
         title: "Break Dates",
         element: (
           <SemesterDatePopUp
+            dateRange={state.semesterDates}
             defaultValues={state.breakDates}
             key="break-dates-popup"
             onBack={handleBack}

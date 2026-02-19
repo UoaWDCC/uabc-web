@@ -68,8 +68,8 @@ describe("<CreateSemesterPopUpFlow />", () => {
     expect(screen.getByRole("heading", { name: "Create New Semester" })).toBeInTheDocument()
     const nameInput = screen.getByPlaceholderText("Enter Semester Name")
     await user.type(nameInput, "Spring 2025")
-    const confirmButton = screen.getByRole("button", { name: "Confirm" })
-    await user.click(confirmButton)
+    const nextButton = screen.getByRole("button", { name: "Next" })
+    await user.click(nextButton)
 
     // Step 2: Semester Dates
     await waitFor(() => {
@@ -156,8 +156,8 @@ describe("<CreateSemesterPopUpFlow />", () => {
     // After entering semester name, subtitles should include it
     const nameInput = screen.getByPlaceholderText("Enter Semester Name")
     await user.type(nameInput, "Test Semester")
-    const confirmButton = screen.getByRole("button", { name: "Confirm" })
-    await user.click(confirmButton)
+    const nextButton = screen.getByRole("button", { name: "Next" })
+    await user.click(nextButton)
 
     // Check that semester name appears in next step
     await waitFor(() => {
