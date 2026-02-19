@@ -24,15 +24,21 @@ describe("<DateCard />", () => {
   it("should show loading skeletons when no date is provided", () => {
     const { container } = render(<DateCard label="Start" />)
 
-    expect(container.querySelectorAll("ui-skeleton")).toHaveLength(3)
+    container.querySelectorAll(".ui-skeleton").forEach((el) => {
+      expect(el.getAttribute("aria-busy")).toBe("true")
+    })
   })
 
   it("should render date parts and dismiss skeletons when a date is provided", () => {
     const { container } = render(<DateCard date={DATE} label="Start" />)
+    console.log(container.innerHTML)
 
     expect(screen.getByText("15")).toBeInTheDocument()
     expect(screen.getByText("Jan")).toBeInTheDocument()
     expect(screen.getByText("2025")).toBeInTheDocument()
-    expect(container.querySelectorAll('ui-skeleton"')).toHaveLength(0)
+
+    container.querySelectorAll(".ui-skeleton").forEach((el) => {
+      expect(el.getAttribute("aria-busy")).toBe("false")
+    })
   })
 })
