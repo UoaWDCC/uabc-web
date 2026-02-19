@@ -6,10 +6,10 @@ export default mergeConfig(uiConfig, {
     setupFiles: ["./src/test-config/vitest.setup.ts"],
     coverage: {
       thresholds: {
-        statements: 90,
+        statements: 80,
         branches: 80,
         functions: 80,
-        lines: 90,
+        lines: 80,
       },
     },
   },

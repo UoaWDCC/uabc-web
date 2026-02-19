@@ -185,7 +185,7 @@ export const CreateSemesterPopUpFlow = memo(
             key="semester-created-popup"
             onClose={handleComplete}
             open={open && state.step === 3}
-            subtitle={`${state.semesterName || "Semester"} created.\nNote: Semester name can be edited later.`}
+            subtitle={`${state.semesterName || "Semester"} has been created.`}
             title="Semester Created"
           />
         ),
