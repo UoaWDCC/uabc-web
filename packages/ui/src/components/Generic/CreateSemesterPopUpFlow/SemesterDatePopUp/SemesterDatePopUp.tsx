@@ -2,16 +2,16 @@
 
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import { Calendar } from "@yamada-ui/calendar"
-import { ArrowLeft, ArrowRight, SquareDashedMousePointer } from "@yamada-ui/lucide"
+import { ArrowLeftIcon, ArrowRightIcon, SquareDashedMousePointerIcon } from "@yamada-ui/lucide"
 import {
   ButtonGroup,
   Dialog,
   DialogBody,
   DialogCloseButton,
   DialogFooter,
-  Divider,
   type FC,
   memo,
+  Separator,
   SimpleGrid,
   Text,
   VStack,
@@ -197,7 +197,7 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
             h="full"
             justifyContent="center"
           >
-            <Divider bg="grey" h="xl" orientation="vertical" w="2px" />
+            <Separator bg="grey" h="xl" orientation="vertical" w="2px" />
           </VStack>
           <VStack
             alignItems="center"
@@ -223,7 +223,7 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
               >
                 {formatSelectedDate()}
               </Heading.h3>
-              <SquareDashedMousePointer fontSize="120px" strokeWidth={0.5} />
+              <SquareDashedMousePointerIcon fontSize="120px" strokeWidth={0.5} />
             </DialogBody>
             <DialogFooter>
               <ButtonGroup flexDirection="column" gap="md">
@@ -233,11 +233,11 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
                   selectedDate[1] && (
                     <Button colorScheme="primary" gap="0" onClick={handleNext}>
                       Next
-                      <ArrowRight />
+                      <ArrowRightIcon />
                     </Button>
                   )}
                 <Button colorScheme="secondary" gap="0" onClick={onBack}>
-                  <ArrowLeft />
+                  <ArrowLeftIcon />
                   Back
                 </Button>
               </ButtonGroup>
