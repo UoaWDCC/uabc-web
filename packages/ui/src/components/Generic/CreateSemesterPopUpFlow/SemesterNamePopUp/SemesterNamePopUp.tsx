@@ -14,7 +14,6 @@ import {
   FormControl,
   memo,
   noop,
-  Text,
   VStack,
 } from "@yamada-ui/react"
 import { type SubmitHandler, useForm } from "react-hook-form"
@@ -72,12 +71,11 @@ export const SemesterNamePopUp: FC<SemesterNamePopUpProps> = memo(
         boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.1)"
         gap={{ base: "md", md: "lg" }}
         h={{ base: "auto", md: "458px" }}
-        isOpen={open}
         layerStyle="gradientBorder"
         maxW={{ base: "90%", md: "675px" }}
         onClose={onCancel}
-        px="lg"
-        py="lg"
+        open={open}
+        p="lg"
         {...props}
       >
         <DialogCloseButton
@@ -102,13 +100,9 @@ export const SemesterNamePopUp: FC<SemesterNamePopUpProps> = memo(
           <DialogBody justifyContent="center" px={{ base: "10%", md: "15%" }}>
             <VStack align="center" gap="lg">
               <Heading.h2 fontSize="3xl" fontWeight="medium" textAlign="center">
-                Enter{" "}
-                <Text as="span" fontWeight="bold">
-                  Semester
-                </Text>{" "}
-                Name
+                Enter Semester Name
               </Heading.h2>
-              <FormControl errorMessage={errors.name?.message} isInvalid={!!errors.name}>
+              <FormControl errorMessage={errors.name?.message} invalid={!!errors.name}>
                 <TextInput placeholder="Enter Semester Name" {...register("name")} size="lg" />
               </FormControl>
             </VStack>
@@ -119,7 +113,7 @@ export const SemesterNamePopUp: FC<SemesterNamePopUpProps> = memo(
                 Cancel
               </Button>
               <Button colorScheme="primary" loading={isSubmitting} size="lg" type="submit">
-                Confirm
+                Next
               </Button>
             </ButtonGroup>
           </DialogFooter>

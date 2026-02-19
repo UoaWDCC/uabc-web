@@ -2,7 +2,7 @@
 
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import { Calendar } from "@yamada-ui/calendar"
-import { ArrowLeftIcon, ArrowRightIcon, SquareDashedMousePointerIcon } from "@yamada-ui/lucide"
+import { ArrowLeftIcon, ArrowRightIcon } from "@yamada-ui/lucide"
 import {
   ButtonGroup,
   Dialog,
@@ -17,6 +17,7 @@ import {
   VStack,
 } from "@yamada-ui/react"
 import { useEffect, useState } from "react"
+import { DateRangeDisplay } from "../../DateRangeDisplay"
 
 export interface SemesterDatePopUpProps {
   /**
@@ -70,17 +71,17 @@ export interface SemesterDatePopUpProps {
  * The component supports navigation (back/next), cancellation, and pre-filling of date values.
  *
  * @component
- * @param {SemesterDatePopUpProps} props - The properties for the SemesterDatePopUp component.
- * @param {boolean} props.open - Whether the pop-up dialog is open.
- * @param {string} props.title - The main title displayed in the pop-up.
- * @param {string} [props.subtitle] - Optional subtitle or additional information.
- * @param {string} props.semesterName - The name of the semester to display.
- * @param {{ startDate: string; endDate: string }} [props.defaultValues] - Optional default date range to pre-fill the calendar.
- * @param {(data: { startDate: string; endDate: string }) => void} [props.onNext] - Handler called when the user clicks the next button, receiving the selected date range.
- * @param {() => void} [props.onBack] - Handler called when the user clicks the back button.
- * @param {() => void} [props.onClose] - Handler called when the user cancels or closes the dialog.
+ * @param props - The {@link SemesterDatePopUpProps} properties for the SemesterDatePopUp component.
+ * @param [props.open] - Whether the pop-up dialog is open.
+ * @param [props.title] - The main title displayed in the pop-up.
+ * @param [props.subtitle] - Optional subtitle or additional information.
+ * @param [props.semesterName] - The name of the semester to display.
+ * @param [props.defaultValues] - Optional default date range to pre-fill the calendar.
+ * @param [props.onNext] - Handler called when the user clicks the next button, receiving the selected date range.
+ * @param [props.onBack] - Handler called when the user clicks the back button.
+ * @param [props.onClose] - Handler called when the user cancels or closes the dialog.
  *
- * @returns {JSX.Element} The rendered SemesterDatePopUp dialog.
+ * @returns The rendered SemesterDatePopUp dialog.
  */
 export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
   ({ onBack, onNext, open, onClose, title, semesterName, subtitle, defaultValues, ...props }) => {
@@ -112,52 +113,20 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
       }
     }
 
-    // Helper function to format the selected date(s) as a string
-    const getDateText = (date: Date | [Date?, Date?] | null): string => {
-      if (!date) return ""
-      if (Array.isArray(date)) {
-        const [start, end] = date
-        if (start && end) {
-          return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`
-        }
-        if (start) {
-          return start.toLocaleDateString()
-        }
-        if (end) {
-          return end.toLocaleDateString()
-        }
-        return ""
-      }
-      return date.toLocaleDateString()
-    }
-
-    const formatSelectedDate = () => {
-      if (!selectedDate) return subtitle || "Select a date range"
-      const dateText = getDateText(selectedDate)
-
-      return (
-        <>
-          You have selected:
-          <br />
-          <br />
-          <Text as="span" fontWeight="bold">
-            {dateText}
-          </Text>
-        </>
-      )
-    }
+    const [startDate, endDate] = Array.isArray(selectedDate)
+      ? [selectedDate[0], selectedDate[1]]
+      : [undefined, undefined]
 
     return (
       <Dialog
         borderRadius="3xl"
         boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.1)"
         gap={{ base: "md", md: "lg" }}
-        isOpen={open}
         layerStyle="gradientBorder"
         minH="3xl"
         onClose={onClose}
-        px="xl"
-        py="xl"
+        open={open}
+        p="xl"
         size="6xl"
         {...props}
       >
@@ -215,27 +184,19 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
               >
                 <Text>{title}</Text>
               </Heading.h2>
-              <Heading.h3
-                fontSize="sm"
-                fontWeight="hairline"
-                textAlign="center"
-                whiteSpace="pre-line"
-              >
-                {formatSelectedDate()}
-              </Heading.h3>
-              <SquareDashedMousePointerIcon fontSize="120px" strokeWidth={0.5} />
+              <Text color="whiteAlpha.600" fontSize="sm" fontWeight="light" textAlign="center">
+                {subtitle}
+              </Text>
+              <DateRangeDisplay endDate={endDate} startDate={startDate} />
             </DialogBody>
             <DialogFooter>
               <ButtonGroup flexDirection="column" gap="md">
-                {selectedDate &&
-                  Array.isArray(selectedDate) &&
-                  selectedDate[0] &&
-                  selectedDate[1] && (
-                    <Button colorScheme="primary" gap="0" onClick={handleNext}>
-                      Next
-                      <ArrowRightIcon />
-                    </Button>
-                  )}
+                {Array.isArray(selectedDate) && selectedDate[0] && selectedDate[1] && (
+                  <Button colorScheme="primary" gap="0" onClick={handleNext}>
+                    Next
+                    <ArrowRightIcon />
+                  </Button>
+                )}
                 <Button colorScheme="secondary" gap="0" onClick={onBack}>
                   <ArrowLeftIcon />
                   Back
