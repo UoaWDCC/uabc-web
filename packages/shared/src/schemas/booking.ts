@@ -48,3 +48,7 @@ export const QuickBookLocalStorageSchema = z.object({
 
 export const UpdateBookingRequestSchema =
   CreateBookingRequestSchema.partial() satisfies z.ZodType<EditBookingData>
+
+export const UpdateBookingResponseSchema = z.object({
+  data: BookingSchema,
+})

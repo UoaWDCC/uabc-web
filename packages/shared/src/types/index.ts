@@ -1,6 +1,7 @@
 export * from "./auth"
 export * from "./booking"
 export * from "./collections"
+export * from "./contact"
 export * from "./enums"
 export * from "./game-session"
 export * from "./game-session-schedule"

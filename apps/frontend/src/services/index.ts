@@ -17,4 +17,5 @@ export enum QueryKeys {
   ONBOARDING = "onboarding",
   AUTH = "auth",
   ME = "me",
+  CONTACT = "contact",
 }

@@ -22,7 +22,7 @@ export type FaqQuestion = {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -153,6 +153,7 @@ export interface Config {
     gameSession: GameSession;
     booking: Booking;
     authentication: Authentication;
+    'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -168,6 +169,7 @@ export interface Config {
     gameSession: GameSessionSelect<false> | GameSessionSelect<true>;
     booking: BookingSelect<false> | BookingSelect<true>;
     authentication: AuthenticationSelect<false> | AuthenticationSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -175,6 +177,7 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
+  fallbackLocale: null;
   globals: {
     faq: Faq;
     footer: Footer;
@@ -194,9 +197,7 @@ export interface Config {
     onboarding: OnboardingSelect<false> | OnboardingSelect<true>;
   };
   locale: null;
-  user: Admin & {
-    collection: 'admin';
-  };
+  user: Admin;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -243,6 +244,7 @@ export interface Admin {
       }[]
     | null;
   password?: string | null;
+  collection: 'admin';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -261,7 +263,7 @@ export interface Event {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -595,6 +597,23 @@ export interface Authentication {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+  id: string;
+  key: string;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -851,6 +870,14 @@ export interface AuthenticationSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -1008,7 +1035,7 @@ export interface CheckInRules {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -1036,7 +1063,7 @@ export interface SessionRules {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -1064,7 +1091,7 @@ export interface Disclaimer {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -1083,6 +1110,14 @@ export interface Disclaimer {
 export interface AboutUsInfo {
   id: string;
   items: AboutUsInfoItems;
+  carouselItems: {
+    /**
+     * The emoji on the bottom right hand of the carousel
+     */
+    emoji: string;
+    image: string | Media;
+    id?: string | null;
+  }[];
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1099,7 +1134,7 @@ export interface Onboarding {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -1244,6 +1279,13 @@ export interface DisclaimerSelect<T extends boolean = true> {
  */
 export interface AboutUsInfoSelect<T extends boolean = true> {
   items?: T | AboutUsInfoItemsSelect<T>;
+  carouselItems?:
+    | T
+    | {
+        emoji?: T;
+        image?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
