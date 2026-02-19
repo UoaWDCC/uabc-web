@@ -21,19 +21,18 @@ describe("<DateCard />", () => {
     expect(screen.getByText("Start")).toBeInTheDocument()
   })
 
-  it("should not render real date parts when no date is provided", () => {
-    render(<DateCard label="Start" />)
+  it("should show loading skeletons when no date is provided", () => {
+    const { container } = render(<DateCard label="Start" />)
 
-    expect(screen.queryByText("15")).not.toBeInTheDocument()
-    expect(screen.queryByText("Jan")).not.toBeInTheDocument()
-    expect(screen.queryByText("2025")).not.toBeInTheDocument()
+    expect(container.querySelectorAll("ui-skeleton")).toHaveLength(3)
   })
 
-  it("should render date parts when a date is provided", () => {
-    render(<DateCard date={DATE} label="Start" />)
+  it("should render date parts and dismiss skeletons when a date is provided", () => {
+    const { container } = render(<DateCard date={DATE} label="Start" />)
 
     expect(screen.getByText("15")).toBeInTheDocument()
     expect(screen.getByText("Jan")).toBeInTheDocument()
     expect(screen.getByText("2025")).toBeInTheDocument()
+    expect(container.querySelectorAll('ui-skeleton"')).toHaveLength(0)
   })
 })

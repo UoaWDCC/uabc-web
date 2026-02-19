@@ -1,2 +1,2 @@
-export * from "./DateCard"
+export * from "../DateCard"
 export * from "./DateRangeDisplay"

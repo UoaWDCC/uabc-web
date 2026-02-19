@@ -23,14 +23,6 @@ describe("<DateRangeDisplay />", () => {
     expect(screen.getByText("End")).toBeInTheDocument()
   })
 
-  it("should render placeholder dashes when no dates are provided", () => {
-    render(<DateRangeDisplay />)
-
-    expect(screen.getAllByText("—")).toHaveLength(2)
-    expect(screen.getAllByText("———")).toHaveLength(2)
-    expect(screen.getAllByText("————")).toHaveLength(2)
-  })
-
   it("should render start date parts when only startDate is provided", () => {
     render(<DateRangeDisplay startDate={START_DATE} />)
 
