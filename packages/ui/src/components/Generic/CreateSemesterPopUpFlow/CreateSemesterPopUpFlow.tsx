@@ -172,7 +172,8 @@ export const CreateSemesterPopUpFlow = memo(
             open={open && state.step === 2}
             semesterName={state.semesterName || "Semester"}
             subtitle={`Select the start and end dates for ${state.semesterName || "the semester"} break period`}
-            title="Semester Break\nStart & End"
+            // biome-ignore lint/style/useConsistentCurlyBraces: Need to use this else the \n gets parsed as normal text
+            title={"Semester Break\nStart & End"}
           />
         ),
       },
