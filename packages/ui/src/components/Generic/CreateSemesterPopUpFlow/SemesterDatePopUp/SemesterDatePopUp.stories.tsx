@@ -1,4 +1,3 @@
-import { Button } from "@repo/ui/components/Primitive"
 import type { Meta, StoryObj } from "@storybook/react"
 import { useState } from "react"
 import { SemesterDatePopUp } from "./SemesterDatePopUp"
@@ -21,24 +20,21 @@ export default meta
 
 export const Default: Story = {
   render: (args) => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(true)
 
     return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Set Semester Dates</Button>
-        <SemesterDatePopUp
-          {...args}
-          onClose={() => {
-            console.log("Closed")
-            setIsOpen(false)
-          }}
-          onNext={(data) => {
-            console.log("Next clicked with semester data:", data)
-            setIsOpen(false)
-          }}
-          open={isOpen}
-        />
-      </>
+      <SemesterDatePopUp
+        {...args}
+        onClose={() => {
+          console.log("Closed")
+          setIsOpen(false)
+        }}
+        onNext={(data) => {
+          console.log("Next clicked with semester data:", data)
+          setIsOpen(false)
+        }}
+        open={isOpen}
+      />
     )
   },
   args: {
@@ -50,24 +46,21 @@ export const Default: Story = {
 
 export const BreakDates: Story = {
   render: (args) => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(true)
 
     return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Set Break Dates</Button>
-        <SemesterDatePopUp
-          {...args}
-          onClose={() => {
-            console.log("Closed")
-            setIsOpen(false)
-          }}
-          onNext={(data) => {
-            console.log("Next clicked with break data:", data)
-            setIsOpen(false)
-          }}
-          open={isOpen}
-        />
-      </>
+      <SemesterDatePopUp
+        {...args}
+        onClose={() => {
+          console.log("Closed")
+          setIsOpen(false)
+        }}
+        onNext={(data) => {
+          console.log("Next clicked with break data:", data)
+          setIsOpen(false)
+        }}
+        open={isOpen}
+      />
     )
   },
   args: {

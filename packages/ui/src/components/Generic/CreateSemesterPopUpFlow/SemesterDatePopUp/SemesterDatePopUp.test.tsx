@@ -119,7 +119,7 @@ describe("<SemesterDatePopUp />", () => {
     await user.click(screen.getByText("Open Semester Date PopUp"))
 
     // With default values, Next button should be available
-    const nextButton = screen.getByRole("button", { name: "Next" })
+    const nextButton = await screen.findByRole("button", { name: "Next" })
     await user.click(nextButton)
 
     expect(onNext).toHaveBeenCalledWith({

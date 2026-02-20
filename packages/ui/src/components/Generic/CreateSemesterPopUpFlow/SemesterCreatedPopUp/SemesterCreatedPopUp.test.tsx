@@ -7,7 +7,7 @@ import { SemesterCreatedPopUp, type SemesterCreatedPopUpProps } from "./Semester
 const SemesterCreatedPopUpExample = ({
   onClose,
   ...props
-}: Omit<SemesterCreatedPopUpProps, "isOpen">) => {
+}: Omit<SemesterCreatedPopUpProps, "open">) => {
   const [open, setOpen] = useState(false)
 
   const handleClose = () => {
@@ -18,7 +18,7 @@ const SemesterCreatedPopUpExample = ({
   return (
     <>
       <Button onClick={() => setOpen(true)}>Open Semester Created PopUp</Button>
-      <SemesterCreatedPopUp isOpen={open} onClose={handleClose} {...props} />
+      <SemesterCreatedPopUp onClose={handleClose} open={open} {...props} />
     </>
   )
 }

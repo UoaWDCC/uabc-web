@@ -31,7 +31,6 @@ describe("<DateCard />", () => {
 
   it("should render date parts and dismiss skeletons when a date is provided", () => {
     const { container } = render(<DateCard date={DATE} label="Start" />)
-    console.log(container.innerHTML)
 
     expect(screen.getByText("15")).toBeInTheDocument()
     expect(screen.getByText("Jan")).toBeInTheDocument()

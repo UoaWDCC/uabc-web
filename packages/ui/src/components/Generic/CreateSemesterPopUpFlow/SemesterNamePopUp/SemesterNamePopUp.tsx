@@ -55,7 +55,7 @@ export interface SemesterNamePopUpProps {
  * @returns The SemesterNamePopUp dialog component.
  */
 export const SemesterNamePopUp: FC<SemesterNamePopUpProps> = memo(
-  ({ defaultValues, open, onConfirm, onCancel, ...props }) => {
+  ({ defaultValues, open, onConfirm, onCancel }) => {
     const {
       register,
       handleSubmit,
@@ -76,7 +76,6 @@ export const SemesterNamePopUp: FC<SemesterNamePopUpProps> = memo(
         onClose={onCancel}
         open={open}
         p="lg"
-        {...props}
       >
         <DialogCloseButton
           bg="black"

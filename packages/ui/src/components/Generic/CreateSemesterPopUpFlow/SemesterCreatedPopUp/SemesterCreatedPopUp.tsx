@@ -63,6 +63,7 @@ export const SemesterCreatedPopUp = ({
       boxShadow="0px 1.5px 0px 0px rgba(0, 0, 0, 0.05), 0px 6px 6px 0px rgba(0, 0, 0, 0.05), 0px 15px 15px 0px rgba(0, 0, 0, 0.1)"
       gap={{ base: "md", md: "lg" }}
       layerStyle="gradientBorder"
+      onClose={onClose}
       px="lg"
       py="xl"
       size="3xl"

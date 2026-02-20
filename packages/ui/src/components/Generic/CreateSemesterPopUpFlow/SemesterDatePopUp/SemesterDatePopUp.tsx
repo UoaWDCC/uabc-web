@@ -92,18 +92,7 @@ export interface SemesterDatePopUpProps {
  * @returns The rendered SemesterDatePopUp dialog.
  */
 export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
-  ({
-    onBack,
-    onNext,
-    open,
-    onClose,
-    title,
-    semesterName,
-    subtitle,
-    defaultValues,
-    dateRange,
-    ...props
-  }) => {
+  ({ onBack, onNext, open, onClose, title, semesterName, subtitle, defaultValues, dateRange }) => {
     const [selectedDate, setSelectedDate] = useState<Date | [Date?, Date?] | null>(null)
 
     // Reset selected date when component opens, but restore from defaultValues if available
@@ -147,7 +136,6 @@ export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
         open={open}
         p="xl"
         size="6xl"
-        {...props}
       >
         <DialogCloseButton
           bg="black"

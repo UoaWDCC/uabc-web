@@ -1,4 +1,3 @@
-import { Button } from "@repo/ui/components/Primitive"
 import type { Meta, StoryObj } from "@storybook/react"
 import { useState } from "react"
 import { SemesterCreatedPopUp } from "./SemesterCreatedPopUp"
@@ -21,47 +20,21 @@ export default meta
 
 export const Default: Story = {
   render: (args) => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(true)
 
     return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Show Success Message</Button>
-        <SemesterCreatedPopUp
-          {...args}
-          isOpen={isOpen}
-          onClose={() => {
-            console.log("Closed")
-            setIsOpen(false)
-          }}
-        />
-      </>
+      <SemesterCreatedPopUp
+        {...args}
+        onClose={() => {
+          console.log("Closed")
+          setIsOpen(false)
+        }}
+        open={isOpen}
+      />
     )
   },
   args: {
     title: "Semester Created",
-    subtitle: "Semester Name created. \n Note: Semester Name can be edited later.",
-  },
-}
-
-export const WithoutSubtitle: Story = {
-  render: (args) => {
-    const [isOpen, setIsOpen] = useState(false)
-
-    return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Show Success (No Subtitle)</Button>
-        <SemesterCreatedPopUp
-          {...args}
-          isOpen={isOpen}
-          onClose={() => {
-            console.log("Closed")
-            setIsOpen(false)
-          }}
-        />
-      </>
-    )
-  },
-  args: {
-    title: "Semester Created!",
+    subtitle: "Semester Name has been created.",
   },
 }
