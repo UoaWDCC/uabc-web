@@ -1,3 +1,5 @@
+"use client"
+
 import { memo, Skeleton, Text, VStack } from "@yamada-ui/react"
 
 export interface DateCardProps {

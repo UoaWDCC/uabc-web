@@ -1,3 +1,5 @@
+"use client"
+
 import { ArrowRightIcon } from "@yamada-ui/lucide"
 import { Box, HStack, memo } from "@yamada-ui/react"
 import { DateCard } from "../DateCard"
