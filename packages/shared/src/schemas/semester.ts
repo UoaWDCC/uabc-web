@@ -2,6 +2,11 @@ import { z } from "zod"
 import type { Semester } from "../payload-types"
 import { type CreateSemesterData, type EditSemesterData, Weekday } from "../types"
 
+export const SemesterInfoPopUpSchema = z.object({
+  bookingOpenDay: z.nativeEnum(Weekday, { message: "Please select a day" }),
+  bookingOpenTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Invalid time format (HH:mm)"),
+})
+
 export const SemesterSchema = z.object({
   id: z.string(),
   name: z.string(),

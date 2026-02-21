@@ -23,6 +23,7 @@ type SemesterFlowAction =
   | { type: "SET_SEMESTER_NAME"; payload: string }
   | { type: "SET_SEMESTER_DATES"; payload: { startDate: string; endDate: string } }
   | { type: "SET_BREAK_DATES"; payload: { startDate: string; endDate: string } }
+  | { type: "SET_INFO"; payload: { bookingOpenDay: string; bookingOpenTime: string } }
   | { type: "RESET" }
 
 const reducer = (state: SemesterFlowState, action: SemesterFlowAction): SemesterFlowState => {
@@ -40,17 +41,25 @@ const reducer = (state: SemesterFlowState, action: SemesterFlowAction): Semester
     case "SET_SEMESTER_NAME":
       return {
         ...state,
-        semesterName: action.payload,
+        name: action.payload,
       }
     case "SET_SEMESTER_DATES":
       return {
         ...state,
-        semesterDates: action.payload,
+        startDate: action.payload.startDate,
+        endDate: action.payload.endDate,
       }
     case "SET_BREAK_DATES":
       return {
         ...state,
-        breakDates: action.payload,
+        breakStart: action.payload.startDate,
+        breakEnd: action.payload.endDate,
+      }
+    case "SET_INFO":
+      return {
+        ...state,
+        bookingOpenDay: action.payload.bookingOpenDay,
+        bookingOpenTime: action.payload.bookingOpenTime,
       }
     case "RESET":
       return initialState
@@ -77,11 +86,7 @@ interface CreateSemesterPopUpFlowProps {
   /**
    * Callback function to handle the completion of the semester creation flow.
    */
-  onComplete?: (data: {
-    semesterName: string
-    semesterDates: { startDate: string; endDate: string }
-    breakDates: { startDate: string; endDate: string }
-  }) => void
+  onComplete?: (data: CreateSemesterData) => void
 }
 
 /**
@@ -108,6 +113,16 @@ export const CreateSemesterPopUpFlow = memo(
 
     const handleBreakDatesSubmit = (data: { startDate: string; endDate: string }) => {
       dispatch({ type: "SET_BREAK_DATES", payload: data })
+      dispatch({ type: "NEXT" })
+    }
+
+    const handleBookingOpenSubmit = (data: SemesterInfoPopUpValues) => {
+      const [hours, minutes] = data.bookingOpenTime.split(":").map(Number)
+      const bookingOpenTime = new Date(Date.UTC(1970, 0, 1, hours, minutes)).toISOString()
+      dispatch({
+        type: "SET_INFO",
+        payload: { bookingOpenDay: data.bookingOpenDay, bookingOpenTime },
+      })
       dispatch({ type: "NEXT" })
     }
 
@@ -164,17 +179,43 @@ export const CreateSemesterPopUpFlow = memo(
         title: "Break Dates",
         element: (
           <SemesterDatePopUp
-            dateRange={state.semesterDates}
-            defaultValues={state.breakDates}
+            dateRange={
+              state.startDate && state.endDate
+                ? { startDate: state.startDate, endDate: state.endDate }
+                : undefined
+            }
+            defaultValues={
+              state.breakStart && state.breakEnd
+                ? { startDate: state.breakStart, endDate: state.breakEnd }
+                : undefined
+            }
             key="break-dates-popup"
             onBack={handleBack}
             onClose={handleClose}
             onNext={handleBreakDatesSubmit}
             open={open && state.step === 2}
-            semesterName={state.semesterName || "Semester"}
+            semesterName={state.name || "Semester"}
             subtitle={`Select the semester break's start and end dates on the calendar`}
             // biome-ignore lint/style/useConsistentCurlyBraces: Need to use this else the \n gets parsed as normal text
             title={"Semester Break\nStart & End"}
+          />
+        ),
+      },
+      {
+        title: "Booking Settings",
+        element: (
+          <SemesterInfoPopUp
+            defaultValues={{
+              bookingOpenDay: state.bookingOpenDay as
+                | SemesterInfoPopUpValues["bookingOpenDay"]
+                | undefined,
+              bookingOpenTime: bookingOpenTimeDisplay,
+            }}
+            key="semester-booking-popup"
+            onBack={handleBack}
+            onClose={handleClose}
+            onNext={handleBookingOpenSubmit}
+            open={open && state.step === 3}
           />
         ),
       },
@@ -184,8 +225,8 @@ export const CreateSemesterPopUpFlow = memo(
           <SemesterCreatedPopUp
             key="semester-created-popup"
             onClose={handleComplete}
-            open={open && state.step === 3}
-            subtitle={`${state.semesterName || "Semester"} has been created.`}
+            open={open && state.step === 4}
+            subtitle={`${state.name || "Semester"} has been created.`}
             title="Semester Created"
           />
         ),
