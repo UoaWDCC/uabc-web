@@ -1,16 +1,26 @@
 "use client"
 
-import type { SemesterNamePopUpValues } from "@repo/shared"
+import type {
+  CreateSemesterData,
+  SemesterInfoPopUpValues,
+  SemesterNamePopUpValues,
+  Weekday,
+} from "@repo/shared"
 import { memo, useReducer } from "react"
 import { SemesterCreatedPopUp } from "./SemesterCreatedPopUp"
 import { SemesterDatePopUp } from "./SemesterDatePopUp"
+import { SemesterInfoPopUp } from "./SemesterInfoPopUp"
 import { SemesterNamePopUp } from "./SemesterNamePopUp"
 
 interface SemesterFlowState {
   step: number
-  semesterName?: string
-  semesterDates?: { startDate: string; endDate: string }
-  breakDates?: { startDate: string; endDate: string }
+  name?: string
+  startDate?: string
+  endDate?: string
+  breakStart?: string
+  breakEnd?: string
+  bookingOpenDay?: string
+  bookingOpenTime?: string
 }
 
 const initialState: SemesterFlowState = {
@@ -136,22 +146,38 @@ export const CreateSemesterPopUpFlow = memo(
     }
 
     const handleComplete = () => {
-      if (state.semesterName && state.semesterDates && state.breakDates) {
+      if (
+        state.name &&
+        state.startDate &&
+        state.endDate &&
+        state.breakStart &&
+        state.breakEnd &&
+        state.bookingOpenDay &&
+        state.bookingOpenTime
+      ) {
         onComplete?.({
-          semesterName: state.semesterName,
-          semesterDates: state.semesterDates,
-          breakDates: state.breakDates,
+          name: state.name,
+          startDate: state.startDate,
+          endDate: state.endDate,
+          breakStart: state.breakStart,
+          breakEnd: state.breakEnd,
+          bookingOpenDay: state.bookingOpenDay as Weekday,
+          bookingOpenTime: state.bookingOpenTime,
         })
       }
       handleClose()
     }
+
+    const bookingOpenTimeDisplay = state.bookingOpenTime
+      ? `${String(new Date(state.bookingOpenTime).getUTCHours()).padStart(2, "0")}:${String(new Date(state.bookingOpenTime).getUTCMinutes()).padStart(2, "0")}`
+      : undefined
 
     const steps = [
       {
         title: "Semester Name",
         element: (
           <SemesterNamePopUp
-            defaultValues={state.semesterName ? { name: state.semesterName } : { name: "" }}
+            defaultValues={state.name ? { name: state.name } : { name: "" }}
             key="semester-name-popup"
             onCancel={handleClose}
             onConfirm={handleSemesterNameSubmit}
@@ -163,13 +189,17 @@ export const CreateSemesterPopUpFlow = memo(
         title: "Semester Dates",
         element: (
           <SemesterDatePopUp
-            defaultValues={state.semesterDates}
+            defaultValues={
+              state.startDate && state.endDate
+                ? { startDate: state.startDate, endDate: state.endDate }
+                : undefined
+            }
             key="semester-dates-popup"
             onBack={handleBack}
             onClose={handleClose}
             onNext={handleSemesterDatesSubmit}
             open={open && state.step === 1}
-            semesterName={state.semesterName || "Semester"}
+            semesterName={state.name || "Semester"}
             subtitle="Select the semester start and end dates on the calendar"
             title="Semester Dates"
           />

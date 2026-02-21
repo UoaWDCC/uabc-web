@@ -1,32 +1,64 @@
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { Button } from "@yamada-ui/react"
+import type { ComponentProps } from "react"
 import { isValidElement, useState } from "react"
 import * as CreateSemesterPopUpFlowModule from "."
 import { CreateSemesterPopUpFlow } from "./CreateSemesterPopUpFlow"
 
-interface CreateSemesterPopUpFlowProps {
-  open: boolean
-  onClose?: () => void
-  onComplete?: (data: {
-    semesterName: string
-    semesterDates: { startDate: string; endDate: string }
-    breakDates: { startDate: string; endDate: string }
-  }) => void
-}
-
-const CreateSemesterPopUpFlowExample = (props: Omit<CreateSemesterPopUpFlowProps, "open">) => {
+const CreateSemesterPopUpFlowExample = (
+  props: Omit<ComponentProps<typeof CreateSemesterPopUpFlow>, "open">,
+) => {
   const [open, setOpen] = useState(false)
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Create New Semester</Button>
-      <CreateSemesterPopUpFlow open={open} {...props} />
+      <Button onClick={() => setOpen(true)}>Open Flow</Button>
+      <CreateSemesterPopUpFlow onClose={() => setOpen(false)} open={open} {...props} />
     </>
   )
 }
 
-const requiredProps = {
-  // open is handled by the example component
+const clickCalendarDay = async (user: ReturnType<typeof render>["user"], day: number) => {
+  const allButtons = screen.getAllByRole("button")
+  const target = allButtons.find(
+    (btn) =>
+      btn.textContent?.trim() === String(day) &&
+      !btn.hasAttribute("disabled") &&
+      btn.getAttribute("aria-disabled") !== "true",
+  )
+  if (!target) {
+    throw new Error(`Calendar day button "${day}" not found or is disabled`)
+  }
+  await user.click(target)
+}
+
+const completeNameStep = async (user: ReturnType<typeof render>["user"], name = "Spring 2025") => {
+  await user.type(screen.getByPlaceholderText("Enter Semester Name"), name)
+  await user.click(screen.getByRole("button", { name: "Next" }))
+}
+
+const completeDateStep = async (
+  user: ReturnType<typeof render>["user"],
+  startDay: number,
+  endDay: number,
+) => {
+  await clickCalendarDay(user, startDay)
+  await clickCalendarDay(user, endDay)
+  await user.click(await screen.findByRole("button", { name: "Next" }))
+}
+
+const completeBookingStep = async (
+  user: ReturnType<typeof render>["user"],
+  day = "Monday",
+  time = "09:00",
+) => {
+  await waitFor(() => {
+    expect(screen.getByText("Booking Settings")).toBeInTheDocument()
+  })
+  await user.click(screen.getByRole("combobox", { name: "Select a day" }))
+  await user.click(screen.getByRole("option", { name: day }))
+  await user.type(screen.getByLabelText("Booking Open Time"), time)
+  await user.click(screen.getByRole("button", { name: "Next" }))
 }
 
 describe("<CreateSemesterPopUpFlow />", () => {
@@ -43,125 +75,231 @@ describe("<CreateSemesterPopUpFlow />", () => {
 
   it("should not render when closed", () => {
     render(<CreateSemesterPopUpFlow open={false} />)
-    // Should render nothing when not open
-    expect(screen.queryByText("Create New Semester")).not.toBeInTheDocument()
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
   })
 
   it("should start with semester name step", async () => {
-    const { user } = render(<CreateSemesterPopUpFlowExample {...requiredProps} />)
-    await user.click(screen.getByRole("button", { name: "Create New Semester" }))
+    const { user } = render(<CreateSemesterPopUpFlowExample />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
 
-    await waitFor(() => {
-      expect(screen.getByRole("heading", { name: /Enter.*Semester.*Name/ })).toBeInTheDocument()
-    })
     expect(screen.getByRole("heading", { name: "Create New Semester" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Enter Semester Name" })).toBeInTheDocument()
+    expect(screen.getByPlaceholderText("Enter Semester Name")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
   })
 
-  it("should progress through all steps", async () => {
-    const onComplete = vi.fn()
-    const { user } = render(
-      <CreateSemesterPopUpFlowExample {...requiredProps} onComplete={onComplete} />,
-    )
-    await user.click(screen.getByRole("button", { name: "Create New Semester" }))
+  it("should navigate to semester dates step after entering a name", async () => {
+    const { user } = render(<CreateSemesterPopUpFlowExample />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
 
-    // Step 1: Semester Name
-    expect(screen.getByRole("heading", { name: "Create New Semester" })).toBeInTheDocument()
-    const nameInput = screen.getByPlaceholderText("Enter Semester Name")
-    await user.type(nameInput, "Spring 2025")
-    const nextButton = screen.getByRole("button", { name: "Next" })
-    await user.click(nextButton)
+    await completeNameStep(user, "Spring 2025")
 
-    // Step 2: Semester Dates
     await waitFor(() => {
       expect(screen.getByText("Semester Dates")).toBeInTheDocument()
     })
     expect(screen.getByText("Spring 2025")).toBeInTheDocument()
-
-    // Mock date selection - in a real test, we'd interact with the calendar
-    // For now, we'll assume the component handles date selection properly
+    expect(
+      screen.getByText("Select the semester start and end dates on the calendar"),
+    ).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Back" })).toBeInTheDocument()
   })
 
-  it("should handle cancellation from first step", async () => {
-    const onClose = vi.fn()
-    const { user } = render(<CreateSemesterPopUpFlowExample {...requiredProps} onClose={onClose} />)
-    await user.click(screen.getByRole("button", { name: "Create New Semester" }))
+  it("should navigate back from semester dates step and preserve the entered name", async () => {
+    const { user } = render(<CreateSemesterPopUpFlowExample />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
 
-    const cancelButton = screen.getByRole("button", { name: "Cancel" })
-    await user.click(cancelButton)
+    await completeNameStep(user, "Spring 2025")
 
-    expect(onClose).toHaveBeenCalled()
-  })
-
-  it("should handle close button clicks", async () => {
-    const onClose = vi.fn()
-    const { user } = render(<CreateSemesterPopUpFlowExample {...requiredProps} onClose={onClose} />)
-    await user.click(screen.getByRole("button", { name: "Create New Semester" }))
-
-    const closeButton = screen.getByLabelText("Close dialog")
-    await user.click(closeButton)
-
-    expect(onClose).toHaveBeenCalled()
-  })
-
-  it("should call onComplete with correct data when flow finishes", async () => {
-    const onComplete = vi.fn()
-    const { user } = render(
-      <CreateSemesterPopUpFlowExample {...requiredProps} onComplete={onComplete} />,
-    )
-    await user.click(screen.getByRole("button", { name: "Create New Semester" }))
-
-    // Complete the flow by simulating all steps
-    // This is a simplified test - in practice, you'd need to interact with each step
-    expect(onComplete).not.toHaveBeenCalled()
-
-    // The flow should collect data from each step and pass it to onComplete
-  })
-
-  it("should handle back navigation", async () => {
-    const { user } = render(<CreateSemesterPopUpFlowExample {...requiredProps} />)
-    await user.click(screen.getByRole("button", { name: "Create New Semester" }))
-
-    // Start with semester name step
-    expect(screen.getByRole("heading", { name: "Create New Semester" })).toBeInTheDocument()
-
-    // After progressing to next step, back button should work
-    // This would require simulating the full flow progression
-  })
-
-  it("should reset state when closed", async () => {
-    const { user } = render(<CreateSemesterPopUpFlowExample {...requiredProps} />)
-    await user.click(screen.getByRole("button", { name: "Create New Semester" }))
-
-    // Simulate some state changes, then close
-    const closeButton = screen.getByLabelText("Close dialog")
-    await user.click(closeButton)
-
-    // Reopen should start fresh
-    await user.click(screen.getByRole("button", { name: "Create New Semester" }))
-    expect(screen.getByRole("heading", { name: "Create New Semester" })).toBeInTheDocument()
-  })
-
-  it("should render correct step titles", async () => {
-    const { user } = render(<CreateSemesterPopUpFlowExample {...requiredProps} />)
-    await user.click(screen.getByRole("button", { name: "Create New Semester" }))
-
-    // Should start with semester name step
-    expect(screen.getByRole("heading", { name: "Create New Semester" })).toBeInTheDocument()
-  })
-
-  it("should handle dynamic subtitles with semester name", async () => {
-    const { user } = render(<CreateSemesterPopUpFlowExample {...requiredProps} />)
-    await user.click(screen.getByRole("button", { name: "Create New Semester" }))
-
-    // After entering semester name, subtitles should include it
-    const nameInput = screen.getByPlaceholderText("Enter Semester Name")
-    await user.type(nameInput, "Test Semester")
-    const nextButton = screen.getByRole("button", { name: "Next" })
-    await user.click(nextButton)
-
-    // Check that semester name appears in next step
     await waitFor(() => {
-      expect(screen.getByText("Test Semester")).toBeInTheDocument()
+      expect(screen.getByText("Semester Dates")).toBeInTheDocument()
     })
+
+    await user.click(screen.getByRole("button", { name: "Back" }))
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText("Enter Semester Name")).toBeInTheDocument()
+    })
+    expect((screen.getByPlaceholderText("Enter Semester Name") as HTMLInputElement).value).toBe(
+      "Spring 2025",
+    )
+  })
+
+  it("should navigate to break dates step after selecting semester dates", async () => {
+    const { user } = render(<CreateSemesterPopUpFlowExample />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+    await completeNameStep(user)
+
+    await waitFor(() => {
+      expect(screen.getByText("Semester Dates")).toBeInTheDocument()
+    })
+
+    await completeDateStep(user, 5, 25)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Semester Break/)).toBeInTheDocument()
+    })
+    expect(
+      screen.getByText("Select the semester break's start and end dates on the calendar"),
+    ).toBeInTheDocument()
+  })
+
+  it("should navigate to booking settings step after selecting break dates", async () => {
+    const { user } = render(<CreateSemesterPopUpFlowExample />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+    await completeNameStep(user)
+
+    await waitFor(() => {
+      expect(screen.getByText("Semester Dates")).toBeInTheDocument()
+    })
+    await completeDateStep(user, 5, 25)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Semester Break/)).toBeInTheDocument()
+    })
+    await completeDateStep(user, 10, 20)
+
+    await waitFor(() => {
+      expect(screen.getByText("Booking Settings")).toBeInTheDocument()
+    })
+    expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Booking Open Time")).toBeInTheDocument()
+  })
+
+  it("should navigate back from booking settings to break dates step", async () => {
+    const { user } = render(<CreateSemesterPopUpFlowExample />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+    await completeNameStep(user)
+
+    await waitFor(() => {
+      expect(screen.getByText("Semester Dates")).toBeInTheDocument()
+    })
+    await completeDateStep(user, 5, 25)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Semester Break/)).toBeInTheDocument()
+    })
+    await completeDateStep(user, 10, 20)
+
+    await waitFor(() => {
+      expect(screen.getByText("Booking Settings")).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole("button", { name: "Back" }))
+
+    await waitFor(() => {
+      expect(screen.getByText(/Semester Break/)).toBeInTheDocument()
+    })
+  })
+
+  it("should show semester created popup after completing booking settings", async () => {
+    const { user } = render(<CreateSemesterPopUpFlowExample />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+    await completeNameStep(user)
+
+    await waitFor(() => {
+      expect(screen.getByText("Semester Dates")).toBeInTheDocument()
+    })
+    await completeDateStep(user, 5, 25)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Semester Break/)).toBeInTheDocument()
+    })
+    await completeDateStep(user, 10, 20)
+
+    await completeBookingStep(user)
+
+    await waitFor(() => {
+      expect(screen.getByText("Semester Created")).toBeInTheDocument()
+    })
+    expect(screen.getByText("Spring 2025 has been created.")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument()
+  })
+
+  it("should call onComplete with correct data after completing all steps", async () => {
+    const onComplete = vi.fn()
+    const { user } = render(<CreateSemesterPopUpFlowExample onComplete={onComplete} />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+    await completeNameStep(user, "Spring 2025")
+
+    await waitFor(() => {
+      expect(screen.getByText("Semester Dates")).toBeInTheDocument()
+    })
+    await completeDateStep(user, 5, 25)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Semester Break/)).toBeInTheDocument()
+    })
+    await completeDateStep(user, 10, 20)
+
+    await completeBookingStep(user, "Monday", "09:00")
+
+    await waitFor(() => {
+      expect(screen.getByText("Semester Created")).toBeInTheDocument()
+    })
+    await user.click(screen.getByRole("button", { name: "Close" }))
+
+    expect(onComplete).toHaveBeenCalledOnce()
+    expect(onComplete).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "Spring 2025",
+        bookingOpenDay: "monday",
+      }),
+    )
+  })
+
+  it("should handle cancellation from the name step", async () => {
+    const onClose = vi.fn()
+    const { user } = render(<CreateSemesterPopUpFlowExample onClose={onClose} />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }))
+
+    expect(onClose).toHaveBeenCalledOnce()
+  })
+
+  it("should handle the close button on any step", async () => {
+    const onClose = vi.fn()
+    const { user } = render(<CreateSemesterPopUpFlowExample onClose={onClose} />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+    await user.click(screen.getByLabelText("Close dialog"))
+
+    expect(onClose).toHaveBeenCalledOnce()
+  })
+
+  it("should reset to the name step with empty fields when reopened after closing", async () => {
+    const { user } = render(<CreateSemesterPopUpFlowExample />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+    await completeNameStep(user, "Spring 2025")
+
+    await waitFor(() => {
+      expect(screen.getByText("Semester Dates")).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByLabelText("Close dialog"))
+
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText("Enter Semester Name")).toBeInTheDocument()
+    })
+    expect((screen.getByPlaceholderText("Enter Semester Name") as HTMLInputElement).value).toBe("")
+  })
+
+  it("should not call onComplete if the flow is closed from the created popup without completing", async () => {
+    const onComplete = vi.fn()
+    const { user } = render(<CreateSemesterPopUpFlowExample onComplete={onComplete} />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+    await user.click(screen.getByLabelText("Close dialog"))
+
+    expect(onComplete).not.toHaveBeenCalled()
   })
 })
