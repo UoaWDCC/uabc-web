@@ -3,7 +3,10 @@ import type { Semester } from "../payload-types"
 import { type CreateSemesterData, type EditSemesterData, WeekdayZodEnum } from "../types"
 
 export const SemesterInfoPopUpSchema = z.object({
-  bookingOpenDay: WeekdayZodEnum,
+  bookingOpenDay: z.enum(
+    ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"],
+    { errorMap: () => ({ message: "Please select a day" }) },
+  ),
   bookingOpenTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Invalid time format (HH:mm)"),
 })
 
