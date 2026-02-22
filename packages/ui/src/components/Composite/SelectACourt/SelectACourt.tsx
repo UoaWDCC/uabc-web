@@ -25,15 +25,8 @@ import {
   Text,
   VStack,
 } from "@yamada-ui/react"
-import dayjs from "dayjs"
-import timezone from "dayjs/plugin/timezone"
-import utc from "dayjs/plugin/utc"
 import { memo, useCallback, useMemo } from "react"
 import { useForm } from "react-hook-form"
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.tz.setDefault("Pacific/Auckland")
 
 export type SelectACourtNextData = {
   bookingTimes: string[]

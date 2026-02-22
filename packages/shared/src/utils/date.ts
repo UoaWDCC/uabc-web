@@ -1,8 +1,8 @@
 import { format } from "date-fns"
-import dayjs from "dayjs"
 import { getWeekdayFromDayIndex } from "../constants"
 import type { Semester } from "../payload-types"
 import { Weekday } from "../types"
+import { dayjs } from "./dayjs"
 
 /**
  * Returns the number of days from fromDay to the next occurrence of toDay.

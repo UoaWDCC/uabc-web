@@ -183,7 +183,10 @@ export const SemesterCreatedPopUp: FC<SemesterCreatedPopUpProps> = ({
                 label="Opens On"
                 value={data.bookingOpenDay ? capitalize(data.bookingOpenDay) : undefined}
               />
-              <InfoRow label="Opens At" value={formatTime(data.bookingOpenTime ?? "")} />
+              <InfoRow
+                label="Opens At"
+                value={data.bookingOpenTime ? formatTime(data.bookingOpenTime) : undefined}
+              />
             </SimpleGrid>
           </VStack>
         </VStack>
