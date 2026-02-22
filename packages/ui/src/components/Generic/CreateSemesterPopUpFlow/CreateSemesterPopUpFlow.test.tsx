@@ -53,7 +53,7 @@ const completeBookingStep = async (
   time = "09:00",
 ) => {
   await waitFor(() => {
-    expect(screen.getByText("Booking Settings")).toBeInTheDocument()
+    expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument()
   })
   await user.click(screen.getByRole("combobox", { name: "Select a day" }))
   await user.click(screen.getByRole("option", { name: day }))
@@ -162,9 +162,8 @@ describe("<CreateSemesterPopUpFlow />", () => {
     await completeDateStep(user, 10, 20)
 
     await waitFor(() => {
-      expect(screen.getByText("Booking Settings")).toBeInTheDocument()
+      expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument()
     })
-    expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument()
     expect(screen.getByLabelText("Booking Open Time")).toBeInTheDocument()
   })
 
@@ -185,7 +184,7 @@ describe("<CreateSemesterPopUpFlow />", () => {
     await completeDateStep(user, 10, 20)
 
     await waitFor(() => {
-      expect(screen.getByText("Booking Settings")).toBeInTheDocument()
+      expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument()
     })
 
     await user.click(screen.getByRole("button", { name: "Back" }))
@@ -195,11 +194,11 @@ describe("<CreateSemesterPopUpFlow />", () => {
     })
   })
 
-  it("should show semester created popup after completing booking settings", async () => {
+  it("should show semester creation confirmation popup after completing booking settings", async () => {
     const { user } = render(<CreateSemesterPopUpFlowExample />)
     await user.click(screen.getByRole("button", { name: "Open Flow" }))
 
-    await completeNameStep(user)
+    await completeNameStep(user, "Spring 2025")
 
     await waitFor(() => {
       expect(screen.getByText("Semester Dates")).toBeInTheDocument()
@@ -214,13 +213,14 @@ describe("<CreateSemesterPopUpFlow />", () => {
     await completeBookingStep(user)
 
     await waitFor(() => {
-      expect(screen.getByText("Semester Created")).toBeInTheDocument()
+      expect(screen.getByText("Semester Creation Confirmation")).toBeInTheDocument()
     })
-    expect(screen.getByText("Spring 2025 has been created.")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument()
+    expect(screen.getByText("Spring 2025")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
   })
 
-  it("should call onComplete with correct data after completing all steps", async () => {
+  it("should call onComplete with correct data after confirming", async () => {
     const onComplete = vi.fn()
     const { user } = render(<CreateSemesterPopUpFlowExample onComplete={onComplete} />)
     await user.click(screen.getByRole("button", { name: "Open Flow" }))
@@ -240,9 +240,9 @@ describe("<CreateSemesterPopUpFlow />", () => {
     await completeBookingStep(user, "Monday", "09:00")
 
     await waitFor(() => {
-      expect(screen.getByText("Semester Created")).toBeInTheDocument()
+      expect(screen.getByText("Semester Creation Confirmation")).toBeInTheDocument()
     })
-    await user.click(screen.getByRole("button", { name: "Close" }))
+    await user.click(screen.getByRole("button", { name: "Confirm" }))
 
     expect(onComplete).toHaveBeenCalledOnce()
     expect(onComplete).toHaveBeenCalledWith(
@@ -251,6 +251,33 @@ describe("<CreateSemesterPopUpFlow />", () => {
         bookingOpenDay: "monday",
       }),
     )
+  })
+
+  it("should not call onComplete when cancel is clicked on confirmation step", async () => {
+    const onComplete = vi.fn()
+    const { user } = render(<CreateSemesterPopUpFlowExample onComplete={onComplete} />)
+    await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+    await completeNameStep(user, "Spring 2025")
+
+    await waitFor(() => {
+      expect(screen.getByText("Semester Dates")).toBeInTheDocument()
+    })
+    await completeDateStep(user, 5, 25)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Semester Break/)).toBeInTheDocument()
+    })
+    await completeDateStep(user, 10, 20)
+
+    await completeBookingStep(user, "Monday", "09:00")
+
+    await waitFor(() => {
+      expect(screen.getByText("Semester Creation Confirmation")).toBeInTheDocument()
+    })
+    await user.click(screen.getByRole("button", { name: "Cancel" }))
+
+    expect(onComplete).not.toHaveBeenCalled()
   })
 
   it("should handle cancellation from the name step", async () => {
@@ -293,7 +320,7 @@ describe("<CreateSemesterPopUpFlow />", () => {
     expect((screen.getByPlaceholderText("Enter Semester Name") as HTMLInputElement).value).toBe("")
   })
 
-  it("should not call onComplete if the flow is closed from the created popup without completing", async () => {
+  it("should not call onComplete if the flow is closed before confirming", async () => {
     const onComplete = vi.fn()
     const { user } = render(<CreateSemesterPopUpFlowExample onComplete={onComplete} />)
     await user.click(screen.getByRole("button", { name: "Open Flow" }))

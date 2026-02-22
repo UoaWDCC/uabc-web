@@ -26,7 +26,11 @@ export const Default: Story = {
       <SemesterCreatedPopUp
         {...args}
         onClose={() => {
-          console.log("Closed")
+          console.log("Cancelled")
+          setIsOpen(false)
+        }}
+        onConfirm={() => {
+          console.log("Confirmed")
           setIsOpen(false)
         }}
         open={isOpen}
@@ -34,7 +38,15 @@ export const Default: Story = {
     )
   },
   args: {
-    title: "Semester Created",
-    subtitle: "Semester Name has been created.",
+    title: "Semester Creation Confirmation",
+    data: {
+      name: "Semester 1 2025",
+      startDate: "2025-02-24T00:00:00.000Z",
+      endDate: "2025-06-20T00:00:00.000Z",
+      breakStart: "2025-04-14T00:00:00.000Z",
+      breakEnd: "2025-04-25T00:00:00.000Z",
+      bookingOpenDay: "monday",
+      bookingOpenTime: "1970-01-01T08:00:00.000Z",
+    },
   },
 }

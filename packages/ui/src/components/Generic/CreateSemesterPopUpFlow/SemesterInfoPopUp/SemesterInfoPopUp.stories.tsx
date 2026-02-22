@@ -1,5 +1,4 @@
 import { Weekday } from "@repo/shared/types"
-import { Button } from "@repo/ui/components/Primitive"
 import type { Meta, StoryObj } from "@storybook/react"
 import { useState } from "react"
 import { SemesterInfoPopUp } from "./SemesterInfoPopUp"
@@ -22,28 +21,25 @@ export default meta
 
 export const Default: Story = {
   render: (args) => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(true)
 
     return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Open Booking Settings</Button>
-        <SemesterInfoPopUp
-          {...args}
-          onBack={() => {
-            console.log("Back clicked")
-            setIsOpen(false)
-          }}
-          onClose={() => {
-            console.log("Closed")
-            setIsOpen(false)
-          }}
-          onNext={(data) => {
-            console.log("Next clicked with data:", data)
-            setIsOpen(false)
-          }}
-          open={isOpen}
-        />
-      </>
+      <SemesterInfoPopUp
+        {...args}
+        onBack={() => {
+          console.log("Back clicked")
+          setIsOpen(false)
+        }}
+        onClose={() => {
+          console.log("Closed")
+          setIsOpen(false)
+        }}
+        onNext={(data) => {
+          console.log("Next clicked with data:", data)
+          setIsOpen(false)
+        }}
+        open={isOpen}
+      />
     )
   },
   args: {},
@@ -51,28 +47,25 @@ export const Default: Story = {
 
 export const WithDefaultValues: Story = {
   render: (args) => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(true)
 
     return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Open Booking Settings</Button>
-        <SemesterInfoPopUp
-          {...args}
-          onBack={() => {
-            console.log("Back clicked")
-            setIsOpen(false)
-          }}
-          onClose={() => {
-            console.log("Closed")
-            setIsOpen(false)
-          }}
-          onNext={(data) => {
-            console.log("Next clicked with data:", data)
-            setIsOpen(false)
-          }}
-          open={isOpen}
-        />
-      </>
+      <SemesterInfoPopUp
+        {...args}
+        onBack={() => {
+          console.log("Back clicked")
+          setIsOpen(false)
+        }}
+        onClose={() => {
+          console.log("Closed")
+          setIsOpen(false)
+        }}
+        onNext={(data) => {
+          console.log("Next clicked with data:", data)
+          setIsOpen(false)
+        }}
+        open={isOpen}
+      />
     )
   },
   args: {

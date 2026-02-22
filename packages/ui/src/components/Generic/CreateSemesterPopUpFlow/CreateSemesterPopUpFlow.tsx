@@ -12,7 +12,7 @@ import { SemesterDatePopUp } from "./SemesterDatePopUp"
 import { SemesterInfoPopUp } from "./SemesterInfoPopUp"
 import { SemesterNamePopUp } from "./SemesterNamePopUp"
 
-interface SemesterFlowState {
+export interface SemesterFlowState {
   step: number
   name?: string
   startDate?: string
@@ -146,25 +146,16 @@ export const CreateSemesterPopUpFlow = memo(
     }
 
     const handleComplete = () => {
-      if (
-        state.name &&
-        state.startDate &&
-        state.endDate &&
-        state.breakStart &&
-        state.breakEnd &&
-        state.bookingOpenDay &&
-        state.bookingOpenTime
-      ) {
-        onComplete?.({
-          name: state.name,
-          startDate: state.startDate,
-          endDate: state.endDate,
-          breakStart: state.breakStart,
-          breakEnd: state.breakEnd,
-          bookingOpenDay: state.bookingOpenDay as Weekday,
-          bookingOpenTime: state.bookingOpenTime,
-        })
-      }
+      // Can assume that the data fields are filled, otherwise leave to error handling
+      onComplete?.({
+        name: state.name ?? "",
+        startDate: state.startDate ?? "",
+        endDate: state.endDate ?? "",
+        breakStart: state.breakStart ?? "",
+        breakEnd: state.breakEnd ?? "",
+        bookingOpenDay: (state.bookingOpenDay ?? "") as Weekday,
+        bookingOpenTime: state.bookingOpenTime ?? "",
+      })
       handleClose()
     }
 
@@ -250,14 +241,24 @@ export const CreateSemesterPopUpFlow = memo(
         ),
       },
       {
-        title: "Semester Created",
+        title: "Semester Create Confirmation",
         element: (
           <SemesterCreatedPopUp
+            data={{
+              name: state.name,
+              startDate: state.startDate,
+              endDate: state.endDate,
+              breakStart: state.breakStart,
+              breakEnd: state.breakEnd,
+              bookingOpenDay: state.bookingOpenDay,
+              bookingOpenTime: state.bookingOpenTime,
+            }}
             key="semester-created-popup"
-            onClose={handleComplete}
+            onBack={handleBack}
+            onClose={handleClose}
+            onConfirm={handleComplete}
             open={open && state.step === 4}
-            subtitle={`${state.name || "Semester"} has been created.`}
-            title="Semester Created"
+            title="Semester Creation Confirmation"
           />
         ),
       },
