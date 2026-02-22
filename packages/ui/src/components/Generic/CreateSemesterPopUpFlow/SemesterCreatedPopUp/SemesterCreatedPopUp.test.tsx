@@ -71,12 +71,11 @@ describe("<SemesterCreatedPopUp />", () => {
     expect(SemesterCreatedPopUp.displayName).toBe("SemesterCreatedPopUp")
   })
 
-  it("should render title, cancel and confirm buttons", async () => {
+  it("should render title and confirm button", async () => {
     const { user } = render(<SemesterCreatedPopUpExample {...requiredProps} />)
     await user.click(screen.getByText("Open Semester Created PopUp"))
 
     expect(screen.getByText("Semester Creation Confirmation")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument()
   })
 
@@ -98,15 +97,6 @@ describe("<SemesterCreatedPopUp />", () => {
     expect(screen.getByText("Booking Settings")).toBeInTheDocument()
   })
 
-  it("should call onClose when cancel button is clicked", async () => {
-    const onClose = vi.fn()
-    const { user } = render(<SemesterCreatedPopUpExample {...requiredProps} onClose={onClose} />)
-    await user.click(screen.getByText("Open Semester Created PopUp"))
-    await user.click(screen.getByRole("button", { name: "Cancel" }))
-
-    expect(onClose).toHaveBeenCalled()
-  })
-
   it("should call onConfirm when confirm button is clicked", async () => {
     const onConfirm = vi.fn()
     const { user } = render(
@@ -116,17 +106,6 @@ describe("<SemesterCreatedPopUp />", () => {
     await user.click(screen.getByRole("button", { name: "Confirm" }))
 
     expect(onConfirm).toHaveBeenCalled()
-  })
-
-  it("should not call onConfirm when cancel button is clicked", async () => {
-    const onConfirm = vi.fn()
-    const { user } = render(
-      <SemesterCreatedPopUpExample {...requiredProps} onConfirm={onConfirm} />,
-    )
-    await user.click(screen.getByText("Open Semester Created PopUp"))
-    await user.click(screen.getByRole("button", { name: "Cancel" }))
-
-    expect(onConfirm).not.toHaveBeenCalled()
   })
 
   it("should not call onClose when confirm button is clicked", async () => {
