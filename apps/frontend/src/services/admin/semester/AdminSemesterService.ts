@@ -16,7 +16,7 @@ const AdminSemesterService = {
     data: CreateSemesterRequest
     token: string | null
   }) => {
-    const response = await apiClient.post("/admin/semesters", data, GetSemesterResponseSchema, {
+    const response = await apiClient.post("/api/admin/semesters", data, GetSemesterResponseSchema, {
       requiresAuth: true,
       token,
     })
@@ -39,7 +39,7 @@ const AdminSemesterService = {
     token: string | null
   }) => {
     const response = await apiClient.put(
-      `/admin/semesters/${id}`,
+      `/api/admin/semesters/${id}`,
       data,
       GetSemesterResponseSchema,
       { requiresAuth: true, token },
@@ -53,7 +53,7 @@ const AdminSemesterService = {
    * @returns The deleted semester.
    */
   deleteSemester: async ({ id, token }: { id: string; token: string | null }) => {
-    const response = await apiClient.delete(`/admin/semesters/${id}`, undefined, {
+    const response = await apiClient.delete(`/api/admin/semesters/${id}`, undefined, {
       requiresAuth: true,
       token,
     })
