@@ -56,7 +56,7 @@ const completeBookingStep = async (
     expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument()
   })
   await user.click(screen.getByRole("combobox", { name: "Select a day" }))
-  await user.click(screen.getByRole("option", { name: day }))
+  await user.click(await screen.findByRole("option", { name: day }))
   await user.type(screen.getByLabelText("Booking Open Time"), time)
   await user.click(screen.getByRole("button", { name: "Next" }))
 }
