@@ -25,6 +25,10 @@ export const Default: Story = {
     return (
       <SemesterCreatedPopUp
         {...args}
+        onBack={() => {
+          console.log("Back")
+          setIsOpen(false)
+        }}
         onClose={() => {
           console.log("Cancelled")
           setIsOpen(false)

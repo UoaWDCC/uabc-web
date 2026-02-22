@@ -18,15 +18,12 @@ export enum Weekday {
   saturday = "saturday",
 }
 
-export const WeekdayZodEnum = z.enum([
-  "sunday",
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
-])
+export const WeekdayZodEnum = z.enum(
+  ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"],
+  {
+    errorMap: () => ({ message: "Please select a day" }),
+  },
+)
 
 // TODO: Decide if we should change PlayLevel enum values to title case
 export enum PlayLevel {
