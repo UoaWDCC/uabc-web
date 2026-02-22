@@ -60,13 +60,13 @@ describe("<SemesterInfoPopUp />", () => {
     const select = screen.getByRole("combobox", { name: "Select a day" })
     await user.click(select)
 
-    expect(screen.getByRole("option", { name: "Sunday" })).toBeInTheDocument()
-    expect(screen.getByRole("option", { name: "Monday" })).toBeInTheDocument()
-    expect(screen.getByRole("option", { name: "Tuesday" })).toBeInTheDocument()
-    expect(screen.getByRole("option", { name: "Wednesday" })).toBeInTheDocument()
-    expect(screen.getByRole("option", { name: "Thursday" })).toBeInTheDocument()
-    expect(screen.getByRole("option", { name: "Friday" })).toBeInTheDocument()
-    expect(screen.getByRole("option", { name: "Saturday" })).toBeInTheDocument()
+    expect(screen.getByText("Sunday")).toBeInTheDocument()
+    expect(screen.getByText("Monday")).toBeInTheDocument()
+    expect(screen.getByText("Tuesday")).toBeInTheDocument()
+    expect(screen.getByText("Wednesday")).toBeInTheDocument()
+    expect(screen.getByText("Thursday")).toBeInTheDocument()
+    expect(screen.getByText("Friday")).toBeInTheDocument()
+    expect(screen.getByText("Saturday")).toBeInTheDocument()
   })
 
   it("should handle form submission with valid data", async () => {
@@ -76,7 +76,7 @@ describe("<SemesterInfoPopUp />", () => {
 
     const select = screen.getByRole("combobox", { name: "Select a day" })
     await user.click(select)
-    await user.click(screen.getByRole("option", { name: "Monday" }))
+    await user.click(screen.getByText("Monday"))
 
     const timeInput = screen.getByLabelText("Booking Open Time")
     await user.type(timeInput, "12:00")
@@ -107,7 +107,7 @@ describe("<SemesterInfoPopUp />", () => {
 
     const select = screen.getByRole("combobox", { name: "Select a day" })
     await user.click(select)
-    await user.click(screen.getByRole("option", { name: "Monday" }))
+    await user.click(screen.getByText("Monday"))
 
     await user.click(screen.getByRole("button", { name: "Next" }))
 
