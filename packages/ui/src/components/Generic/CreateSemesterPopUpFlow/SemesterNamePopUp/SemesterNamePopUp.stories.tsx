@@ -1,4 +1,3 @@
-import { Button } from "@repo/ui/components/Primitive"
 import type { Meta, StoryObj } from "@storybook/react"
 import { useState } from "react"
 import { SemesterNamePopUp } from "./SemesterNamePopUp"
@@ -21,24 +20,21 @@ export default meta
 
 export const Default: Story = {
   render: (args) => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(true)
 
     return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Create Semester</Button>
-        <SemesterNamePopUp
-          {...args}
-          onCancel={() => {
-            console.log("Cancelled")
-            setIsOpen(false)
-          }}
-          onConfirm={(data) => {
-            console.log("Confirmed:", data)
-            setIsOpen(false)
-          }}
-          open={isOpen}
-        />
-      </>
+      <SemesterNamePopUp
+        {...args}
+        onCancel={() => {
+          console.log("Cancelled")
+          setIsOpen(false)
+        }}
+        onConfirm={(data) => {
+          console.log("Confirmed:", data)
+          setIsOpen(false)
+        }}
+        open={isOpen}
+      />
     )
   },
   args: {

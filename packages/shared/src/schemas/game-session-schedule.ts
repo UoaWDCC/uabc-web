@@ -1,6 +1,7 @@
 import z from "zod"
 import type { GameSessionSchedule as GameSessionScheduleType } from "../payload-types"
 import type { CreateGameSessionScheduleData, UpdateGameSessionScheduleData } from "../types"
+import { WeekdayZodEnum } from "../types"
 import { PaginationDataSchema } from "./query"
 import { SemesterSchema } from "./semester"
 
@@ -8,7 +9,7 @@ export const GameSessionScheduleSchema = z.object({
   id: z.string(),
   semester: z.union([z.string(), SemesterSchema]),
   // Payload generates a hard coded weekdays, the `satisfies` operator is used to ensure the type matches
-  day: z.enum(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]),
+  day: WeekdayZodEnum,
   name: z.string(),
   location: z.string(),
   startTime: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),

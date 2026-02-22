@@ -25,44 +25,36 @@ export interface SemesterDatePopUpProps {
    * @default false
    */
   open: boolean
-
   /**
    * Title to display in the pop-up header.
    */
   title: string
-
   /**
    * Optional subtitle or additional information in the pop-up.
    */
   subtitle?: string
-
   /**
    * Name of the semester to display in the pop-up.
    */
   semesterName: string
-
   /**
    * Default values to pre-fill the date selection.
    */
   defaultValues?: { startDate: string; endDate: string }
-
   /**
    * Optional date range to restrict the calendar selection.
    * When provided, dates outside this range will be disabled.
    * Useful for constraining break date selection within semester dates.
    */
   dateRange?: { startDate: string; endDate: string }
-
   /**
    * Handler called when the user clicks the next button.
    */
   onNext?: (data: { startDate: string; endDate: string }) => void
-
   /**
    * Handler called when the user clicks the back button.
    */
   onBack?: () => void
-
   /**
    * Handler called when the user clicks the cancel button or closes the dialog.
    */
@@ -77,17 +69,7 @@ export interface SemesterDatePopUpProps {
  *
  * The component supports navigation (back/next), cancellation, and pre-filling of date values.
  *
- * @component
- * @param props - The {@link SemesterDatePopUpProps} properties for the SemesterDatePopUp component.
- * @param [props.open] - Whether the pop-up dialog is open.
- * @param [props.title] - The main title displayed in the pop-up.
- * @param [props.subtitle] - Optional subtitle or additional information.
- * @param [props.semesterName] - The name of the semester to display.
- * @param [props.defaultValues] - Optional default date range to pre-fill the calendar.
- * @param [props.dateRange] - Optional date range to restrict selectable dates on the calendar.
- * @param [props.onNext] - Handler called when the user clicks the next button, receiving the selected date range.
- * @param [props.onBack] - Handler called when the user clicks the back button.
- * @param [props.onClose] - Handler called when the user cancels or closes the dialog.
+ * @param props The {@link SemesterDatePopUpProps} props for the SemesterDatePopUp component.
  *
  * @returns The rendered SemesterDatePopUp dialog.
  */

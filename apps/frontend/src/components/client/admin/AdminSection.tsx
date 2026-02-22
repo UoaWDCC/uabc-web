@@ -2,10 +2,11 @@
 
 import type { AdminTabBarSlug } from "@repo/shared"
 import { Routes } from "@repo/shared"
-import { AdminTabBar, UnderConstructionCard } from "@repo/ui/components/Generic"
-import { Center, Container, VStack } from "@yamada-ui/react"
+import { AdminTabBar } from "@repo/ui/components/Generic"
+import { Container, VStack } from "@yamada-ui/react"
 import { memo } from "react"
 import { AdminMembers, AdminSessions } from "./tabs"
+import { AdminSemesters } from "./tabs/admin-semesters/AdminSemesters"
 
 interface AdminSectionProps {
   slug?: AdminTabBarSlug
@@ -38,11 +39,7 @@ export const AdminSection = memo(({ slug, activeIndex }: AdminSectionProps) => {
       >
         {slug === "members" && <AdminMembers />}
         {slug === "sessions" && <AdminSessions />}
-        {slug === "semesters" && (
-          <Center>
-            <UnderConstructionCard title="View Semesters is Under Construction 🔧" />
-          </Center>
-        )}
+        {slug === "semesters" && <AdminSemesters />}
       </VStack>
     </Container>
   )
