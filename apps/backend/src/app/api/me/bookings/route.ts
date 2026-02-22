@@ -1,13 +1,12 @@
-import { BookingQuerySchema, BookingQueryType } from "@repo/shared"
-import type { User } from "@repo/shared/payload-types"
+import { BookingQuerySchema, BookingQueryType, type RequestWithUser } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
-import { type NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { Security } from "@/business-layer/middleware/Security"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 
 class RouteWrapper {
   @Security("jwt")
-  static async GET(req: NextRequest & { user: User }) {
+  static async GET(req: RequestWithUser) {
     try {
       const bookingDataService = new BookingDataService()
       const type = req.nextUrl.searchParams.get("type") || BookingQueryType.ALL
