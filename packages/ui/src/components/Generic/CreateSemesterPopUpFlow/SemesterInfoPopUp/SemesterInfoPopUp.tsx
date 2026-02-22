@@ -26,23 +26,19 @@ export interface SemesterInfoPopUpProps {
    * Default values to pre-fill the form.
    */
   defaultValues?: Partial<SemesterInfoPopUpValues>
-
   /**
    * Whether the popup is open or not.
    * @default false
    */
   open: boolean
-
   /**
    * Submit handler called when user submits the form.
    */
   onNext?: SubmitHandler<SemesterInfoPopUpValues>
-
   /**
    * Handler called when the user clicks the back button.
    */
   onBack?: () => void
-
   /**
    * Handler called when the user clicks the cancel button or closes the dialog.
    */
@@ -59,6 +55,13 @@ const WEEKDAY_LABELS: Record<Weekday, string> = {
   [Weekday.saturday]: "Saturday",
 }
 
+/**
+ * A popup dialog component for entering semester information, including the booking open day and time.
+ * It uses a form with validation to collect user input and provides navigation buttons for back, next, and close actions.
+ *
+ * @param props The props for the SemesterInfoPopUp component.
+ * @returns The rendered SemesterInfoPopUp component.
+ */
 export const SemesterInfoPopUp: FC<SemesterInfoPopUpProps> = memo(
   ({ defaultValues, open, onNext, onBack, onClose }) => {
     const {

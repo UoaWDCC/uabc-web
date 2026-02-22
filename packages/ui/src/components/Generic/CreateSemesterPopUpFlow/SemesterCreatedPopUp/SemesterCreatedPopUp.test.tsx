@@ -86,7 +86,7 @@ describe("<SemesterCreatedPopUp />", () => {
 
     expect(screen.getByText("Semester 1 2025")).toBeInTheDocument()
     expect(screen.getByText("Monday")).toBeInTheDocument()
-    expect(screen.getByText("08:00")).toBeInTheDocument()
+    expect(screen.getByText("8:00 PM")).toBeInTheDocument()
   })
 
   it("should render section headings", async () => {

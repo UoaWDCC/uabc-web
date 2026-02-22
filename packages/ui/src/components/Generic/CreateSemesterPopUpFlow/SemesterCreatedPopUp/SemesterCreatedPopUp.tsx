@@ -1,4 +1,4 @@
-import { capitalize } from "@repo/shared/utils"
+import { capitalize, formatDate, formatTime } from "@repo/shared/utils"
 import { Button, Heading } from "@repo/ui/components/Primitive"
 import {
   ButtonGroup,
@@ -13,36 +13,81 @@ import {
   VStack,
 } from "@yamada-ui/react"
 
+/**
+ * Represents the data required for confirming the creation of a semester.
+ * This includes details about the semester's name, dates, break period, and booking settings.
+ */
 export interface SemesterConfirmationData {
+  /**
+   * The name of the semester.
+   */
   name?: string
+  /**
+   * The start date of the semester, in string format.
+   */
   startDate?: string
+  /**
+   * The end date of the semester, in string format.
+   */
   endDate?: string
+  /**
+   * The start date of the break period, in string format.
+   */
   breakStart?: string
+  /**
+   * The end date of the break period, in string format.
+   */
   breakEnd?: string
+  /**
+   * The day of the week when booking opens.
+   */
   bookingOpenDay?: string
+  /**
+   * The time when booking opens, in string format.
+   */
   bookingOpenTime?: string
 }
-
+/**
+ * Represents the props for the SemesterCreatedPopUp component.
+ * This includes flags for dialog state, title, data to display, and callback functions.
+ */
 export interface SemesterCreatedPopUpProps {
+  /**
+   * Whether the dialog is open.
+   */
   open: boolean
+  /**
+   * The title of the dialog.
+   */
   title: string
+  /**
+   * The data to display in the dialog.
+   */
   data: SemesterConfirmationData
+  /**
+   * Callback to close the dialog.
+   */
   onClose: () => void
+  /**
+   * Callback to confirm the creation.
+   */
   onConfirm: () => void
+  /**
+   * Optional callback to go back.
+   */
   onBack?: () => void
 }
 
-const formatDate = (iso?: string) => {
-  if (!iso) return "—"
-  return new Date(iso).toLocaleDateString("en-NZ", { dateStyle: "long", timeZone: "UTC" })
-}
-
-const formatTime = (iso?: string) => {
-  if (!iso) return "—"
-  const d = new Date(iso)
-  return `${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}`
-}
-
+/**
+ * Renders a single information row consisting of a label and its value.
+ *
+ * The component displays the label in a muted style and the value in a more
+ * prominent style. If the value is undefined, a dash ("—") is rendered to
+ * indicate the absence of a value.
+ *
+ * @param props.label - The label text to display
+ * @param props.value - The value associated with the label; may be undefined
+ */
 const InfoRow: FC<{ label: string; value: string | undefined }> = ({ label, value }) => (
   <>
     <Text color="whiteAlpha.600" fontWeight="medium">
@@ -52,6 +97,15 @@ const InfoRow: FC<{ label: string; value: string | undefined }> = ({ label, valu
   </>
 )
 
+/**
+ * A dialog component for confirming the creation of a semester.
+ *
+ * This component displays the details of the semester to be created, including
+ * name, dates, break period, and booking settings. It provides buttons to
+ * confirm, cancel, or go back.
+ *
+ * @param props The props for SemesterCreatedPopUp
+ */
 export const SemesterCreatedPopUp: FC<SemesterCreatedPopUpProps> = ({
   open,
   title,
@@ -95,8 +149,14 @@ export const SemesterCreatedPopUp: FC<SemesterCreatedPopUpProps> = ({
             </Heading.h3>
             <SimpleGrid columns={2} gap="sm" w="full">
               <InfoRow label="Name" value={data.name} />
-              <InfoRow label="Start Date" value={formatDate(data.startDate)} />
-              <InfoRow label="End Date" value={formatDate(data.endDate)} />
+              <InfoRow
+                label="Start Date"
+                value={data.startDate ? formatDate(new Date(data.startDate)) : undefined}
+              />
+              <InfoRow
+                label="End Date"
+                value={data.endDate ? formatDate(new Date(data.endDate)) : undefined}
+              />
             </SimpleGrid>
           </VStack>
           <VStack gap="md" w="full">
@@ -104,8 +164,14 @@ export const SemesterCreatedPopUp: FC<SemesterCreatedPopUpProps> = ({
               Break Period
             </Heading.h3>
             <SimpleGrid columns={2} gap="sm" w="full">
-              <InfoRow label="Break Start" value={formatDate(data.breakStart)} />
-              <InfoRow label="Break End" value={formatDate(data.breakEnd)} />
+              <InfoRow
+                label="Break Start"
+                value={data.breakStart ? formatDate(new Date(data.breakStart)) : undefined}
+              />
+              <InfoRow
+                label="Break End"
+                value={data.breakEnd ? formatDate(new Date(data.breakEnd)) : undefined}
+              />
             </SimpleGrid>
           </VStack>
           <VStack gap="md" w="full">
@@ -113,8 +179,11 @@ export const SemesterCreatedPopUp: FC<SemesterCreatedPopUpProps> = ({
               Booking Settings
             </Heading.h3>
             <SimpleGrid columns={2} gap="sm" w="full">
-              <InfoRow label="Opens On" value={capitalize(data.bookingOpenDay || "")} />
-              <InfoRow label="Opens At" value={formatTime(data.bookingOpenTime)} />
+              <InfoRow
+                label="Opens On"
+                value={data.bookingOpenDay ? capitalize(data.bookingOpenDay) : undefined}
+              />
+              <InfoRow label="Opens At" value={formatTime(data.bookingOpenTime ?? "")} />
             </SimpleGrid>
           </VStack>
         </VStack>

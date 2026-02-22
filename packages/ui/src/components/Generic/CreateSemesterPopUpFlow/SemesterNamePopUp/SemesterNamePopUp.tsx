@@ -23,18 +23,15 @@ export interface SemesterNamePopUpProps {
    * Default values to pre-fill the form.
    */
   defaultValues?: SemesterNamePopUpValues
-
   /**
    * Whether the popup is open or not.
    * @default false
    */
   open: boolean
-
   /**
    * Submit handler called when user submits the form.
    */
   onConfirm?: SubmitHandler<SemesterNamePopUpValues>
-
   /**
    * Handler called when the user clicks the cancel button or closes the dialog.
    */
@@ -48,10 +45,10 @@ export interface SemesterNamePopUpProps {
  * the name of a new semester. It uses react-hook-form for form state management and
  * validation with Zod schema. The dialog provides Cancel and Confirm actions.
  *
- * @param defaultValues - Optional default values to pre-fill the form.
- * @param open - Controls whether the popup is open.
- * @param onConfirm - Callback invoked when the form is submitted successfully.
- * @param onCancel - Callback invoked when the dialog is closed or the Cancel button is clicked.
+ * @param defaultValues Optional default values to pre-fill the form.
+ * @param open Controls whether the popup is open.
+ * @param onConfirm Callback invoked when the form is submitted successfully.
+ * @param onCancel Callback invoked when the dialog is closed or the Cancel button is clicked.
  * @returns The SemesterNamePopUp dialog component.
  */
 export const SemesterNamePopUp: FC<SemesterNamePopUpProps> = memo(
