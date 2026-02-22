@@ -102,7 +102,7 @@ export function isSameDate(date1: string | number | Date, date2: string | number
  * ```
  */
 export function formatTime(timeString: string): string {
-  return dayjs(timeString).format("h:mm A")
+  return dayjs.utc(timeString).format("h:mm A")
 }
 
 /**

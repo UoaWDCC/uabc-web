@@ -11,7 +11,7 @@ const mockData = {
   breakStart: "2025-04-14T00:00:00.000Z",
   breakEnd: "2025-04-25T00:00:00.000Z",
   bookingOpenDay: "monday",
-  bookingOpenTime: "1970-01-01T08:00:00.000Z",
+  bookingOpenTime: "1970-01-01T20:00:00.000Z",
 }
 
 const SemesterCreatedPopUpExample = ({
