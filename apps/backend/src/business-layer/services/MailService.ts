@@ -14,6 +14,7 @@ export default class MailService {
   public static async sendEmailVerificationCode(email: string, verificationCode: string) {
     return await payload.sendEmail({
       to: email,
+      replyTo: "badminton.au@gmail.com",
       subject: "Email verification code",
       text: `Here is your email verification code: ${verificationCode}. This code will expire in 10 minutes.`,
     })
@@ -48,6 +49,7 @@ export default class MailService {
     )
     return await payload.sendEmail({
       to: email,
+      replyTo: "badminton.au@gmail.com",
       subject: `UABC - ${weekday} Booking Confirmation`,
       html,
     })
