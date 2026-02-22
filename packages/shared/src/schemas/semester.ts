@@ -1,9 +1,9 @@
 import { z } from "zod"
 import type { Semester } from "../payload-types"
-import { type CreateSemesterData, type EditSemesterData, Weekday } from "../types"
+import { type CreateSemesterData, type EditSemesterData, WeekdayZodEnum } from "../types"
 
 export const SemesterInfoPopUpSchema = z.object({
-  bookingOpenDay: z.nativeEnum(Weekday, { message: "Please select a day" }),
+  bookingOpenDay: WeekdayZodEnum,
   bookingOpenTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Invalid time format (HH:mm)"),
 })
 
@@ -15,15 +15,7 @@ export const SemesterSchema = z.object({
   breakStart: z.string(),
   breakEnd: z.string(),
   // Payload generates a hard coded weekdays, the `satisfies` operator is used to ensure the type matches
-  bookingOpenDay: z.enum([
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ]),
+  bookingOpenDay: WeekdayZodEnum,
   bookingOpenTime: z.string(),
   updatedAt: z.string(),
   createdAt: z.string(),
@@ -35,7 +27,7 @@ export const CreateSemesterRequestSchema = z.object({
   endDate: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   breakStart: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
   breakEnd: z.string().datetime({ message: "Invalid date format, should be in ISO 8601 format" }),
-  bookingOpenDay: z.nativeEnum(Weekday),
+  bookingOpenDay: WeekdayZodEnum,
   bookingOpenTime: z
     .string()
     .datetime({ message: "Invalid date format, should be in ISO 8601 format" }),

@@ -1,5 +1,5 @@
 import { Popup } from "@repo/shared/enums"
-import type { CreateSemesterData, CreateSemesterRequest } from "@repo/shared/types"
+import type { CreateSemesterData } from "@repo/shared/types"
 import { CreateSemesterPopUpFlow } from "@repo/ui/components/Generic"
 import { Button, useNotice } from "@yamada-ui/react"
 import { parseAsBoolean, useQueryState } from "nuqs"
@@ -17,7 +17,7 @@ export const AdminSemesters = () => {
 
   const handleCreateSemester = useCallback(
     (newSemester: CreateSemesterData) => {
-      createSemesterMutation.mutate(newSemester as CreateSemesterRequest, {
+      createSemesterMutation.mutate(newSemester, {
         onSuccess: () => {
           notice({
             title: "Creation successful",
