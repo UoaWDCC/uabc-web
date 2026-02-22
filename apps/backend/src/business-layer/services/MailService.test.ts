@@ -3,8 +3,6 @@ import { payload } from "@/data-layer/adapters/Payload"
 import { bookingMock, bookingWithGameSessionScheduleMock } from "@/test-config/mocks/Booking.mock"
 import MailService from "./MailService"
 
-const NOW = dayjs(new Date())
-
 describe("MailService", () => {
   afterEach(() => {
     vi.restoreAllMocks()
@@ -54,6 +52,7 @@ describe("MailService", () => {
     })
 
     it("should handle bookings with a game session schedule", async () => {
+      const NOW = dayjs(new Date())
       const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 
       await MailService.sendBookingConfirmation(bookingWithGameSessionScheduleMock)
@@ -79,6 +78,7 @@ describe("MailService", () => {
     })
 
     it("should handle bookings without a game session schedule", async () => {
+      const NOW = dayjs(new Date())
       const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 
       await MailService.sendBookingConfirmation(bookingMock)

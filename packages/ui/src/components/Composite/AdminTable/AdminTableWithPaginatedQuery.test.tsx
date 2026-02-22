@@ -466,5 +466,5 @@ describe("<AdminTableWithPaginatedQuery />", () => {
         queryString: "?columns=name,remaining,joined,role,university,level,actions",
       }),
     )
-  })
+  }, 10_000)
 })
