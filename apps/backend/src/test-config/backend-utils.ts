@@ -51,7 +51,7 @@ export function createMockNextRequest(
   url = "",
   method: "GET" | "POST" | "PATCH" | "DELETE" = "GET",
   body?: Record<string, unknown>,
-) {
+): RequestWithUser {
   return new NextRequest(new URL(url, "http://localhost:3000"), {
     method: method,
     ...(body && {

@@ -25,15 +25,8 @@ import {
   Text,
   VStack,
 } from "@yamada-ui/react"
-import dayjs from "dayjs"
-import timezone from "dayjs/plugin/timezone"
-import utc from "dayjs/plugin/utc"
 import { memo, useCallback, useMemo } from "react"
 import { useForm } from "react-hook-form"
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.tz.setDefault("Pacific/Auckland")
 
 export type SelectACourtNextData = {
   bookingTimes: string[]
@@ -76,6 +69,10 @@ export interface SelectACourtProps {
    * The initially selected booking times.
    */
   initialBookingTimes?: string[]
+  /**
+   * The number of already booked sessions by the user.
+   */
+  numberBookedSessions?: number
 }
 
 export const SelectACourt = memo<SelectACourtProps>(
@@ -87,6 +84,7 @@ export const SelectACourt = memo<SelectACourtProps>(
     onBack,
     onNext,
     initialBookingTimes = [],
+    numberBookedSessions = 0,
   }) => {
     const { control, handleSubmit, watch } = useForm<SelectACourtFormData>({
       defaultValues: { bookingTimes: initialBookingTimes },
@@ -98,6 +96,7 @@ export const SelectACourt = memo<SelectACourtProps>(
     const { isMember, maxBookings, sessionsLabel } = useBookingLimits({
       user,
       selectedCount: selectedSessions.length,
+      alreadyBookedCount: numberBookedSessions,
     })
 
     const [weeklyText, totalText] = useMemo(() => {
@@ -121,7 +120,8 @@ export const SelectACourt = memo<SelectACourtProps>(
           user.role === MembershipType.casual
             ? session.casualAttendees >= session.casualCapacity
             : session.attendees >= session.capacity
-        const capReached = selectedSessions.length >= maxBookings || isCapacityReached
+        const wouldExceedLimit = !isSelected && maxBookings === 0
+        const capReached = wouldExceedLimit || isCapacityReached
 
         return {
           value: session.id,

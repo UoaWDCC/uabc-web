@@ -1,7 +1,5 @@
-import { UpdateSelfRequestSchema } from "@repo/shared"
-import type { User } from "@repo/shared/payload-types"
+import { type RequestWithUser, UpdateSelfRequestSchema } from "@repo/shared"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
-import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { ZodError } from "zod"
 import { Security } from "@/business-layer/middleware/Security"
@@ -9,7 +7,7 @@ import UserDataService from "@/data-layer/services/UserDataService"
 
 class RouteWrapper {
   @Security("jwt")
-  static async GET(req: NextRequest & { user: User }) {
+  static async GET(req: RequestWithUser) {
     try {
       const userDataService = new UserDataService()
 
@@ -26,7 +24,7 @@ class RouteWrapper {
   }
 
   @Security("jwt")
-  static async PATCH(req: NextRequest & { user: User }) {
+  static async PATCH(req: RequestWithUser) {
     try {
       const parsedBody = UpdateSelfRequestSchema.parse(await req.json())
 

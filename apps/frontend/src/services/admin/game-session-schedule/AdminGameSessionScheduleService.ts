@@ -23,7 +23,7 @@ const AdminGameSessionScheduleService = {
     token: string | null
   }) => {
     const response = await apiClient.post(
-      "/admin/game-session-schedules",
+      "/api/admin/game-session-schedules",
       data,
       GetGameSessionScheduleResponseSchema,
       { requiresAuth: true, token },
@@ -44,7 +44,7 @@ const AdminGameSessionScheduleService = {
   }: PaginationQuery & { token: string | null }) => {
     const query = new URLSearchParams({ limit: String(limit), page: String(page) }).toString()
     const response = await apiClient.get(
-      `/admin/game-session-schedules?${query}`,
+      `/api/admin/game-session-schedules?${query}`,
       GetAllGameSessionSchedulesResponseSchema,
       { requiresAuth: true, token },
     )
@@ -59,7 +59,7 @@ const AdminGameSessionScheduleService = {
    */
   getGameSessionSchedule: async ({ id, token }: { id: string; token: string | null }) => {
     const response = await apiClient.get(
-      `/admin/game-session-schedules/${id}`,
+      `/api/admin/game-session-schedules/${id}`,
       GetGameSessionScheduleResponseSchema,
       { requiresAuth: true, token },
     )
@@ -83,7 +83,7 @@ const AdminGameSessionScheduleService = {
     token: string | null
   }) => {
     const response = await apiClient.patch(
-      `/admin/game-session-schedules/${id}`,
+      `/api/admin/game-session-schedules/${id}`,
       data,
       GetGameSessionScheduleResponseSchema,
       { requiresAuth: true, token },
@@ -98,7 +98,7 @@ const AdminGameSessionScheduleService = {
    * @returns A promise that resolves to a boolean indicating success.
    */
   deleteGameSessionSchedule: async ({ id, token }: { id: string; token: string | null }) => {
-    const response = await apiClient.delete(`/admin/game-session-schedules/${id}`, undefined, {
+    const response = await apiClient.delete(`/api/admin/game-session-schedules/${id}`, undefined, {
       requiresAuth: true,
       token,
     })

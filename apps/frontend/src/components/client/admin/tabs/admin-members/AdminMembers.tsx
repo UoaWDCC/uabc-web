@@ -1,7 +1,19 @@
+import { Popup } from "@repo/shared/enums"
+import type {
+  CreateMemberPopUpFormValues,
+  CreateUserRequest,
+  Gender,
+  MembershipType,
+  PlayLevel,
+  University,
+} from "@repo/shared/types"
 import { AdminTableWithPaginatedQuery } from "@repo/ui/components/Composite"
+import { CreateMemberPopUp } from "@repo/ui/components/Generic/CreateMemberPopUp"
 import { Button } from "@repo/ui/components/Primitive"
 import { Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
+import { parseAsBoolean, useQueryState } from "nuqs"
 import {
+  useCreateUser,
   useDeleteUser,
   useResetAllMemberships,
   useUpdateUser,
@@ -9,17 +21,51 @@ import {
 import { useGetPaginatedUsers } from "@/services/admin/user/AdminUserQueries"
 
 export const AdminMembers = () => {
+  const notice = useNotice()
+
+  const [openCreate, setOpenCreate] = useQueryState(Popup.CREATE_MEMBER, parseAsBoolean)
+
+  // TODO: make these refer to resetting members
   const { open: openConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const {
     open: openFinalConfirm,
     onOpen: onOpenFinalConfirm,
     onClose: onCloseFinalConfirm,
   } = useDisclosure()
-  const notice = useNotice()
 
-  const deleteUserMutation = useDeleteUser()
+  const createUserMutation = useCreateUser()
   const updateUserMutation = useUpdateUser()
+  const deleteUserMutation = useDeleteUser()
   const resetAllMembershipsMutation = useResetAllMemberships()
+
+  function handleAddConfirm(data: CreateMemberPopUpFormValues) {
+    const createUserRequest: CreateUserRequest = {
+      ...data,
+      role: data.role as MembershipType,
+      playLevel: data.playLevel as PlayLevel,
+      gender: data.gender as Gender,
+      university: data.university as University,
+      image: null,
+      emailVerification: {},
+    }
+    createUserMutation.mutate(createUserRequest, {
+      onSuccess: () => {
+        notice({
+          title: "Creation successful",
+          description: "User has been created",
+          status: "success",
+        })
+      },
+      onError: () => {
+        notice({
+          title: "Creation failed",
+          description: "Failed to create user",
+          status: "error",
+        })
+      },
+    })
+    setOpenCreate(false)
+  }
 
   const handleResetConfirm = () => {
     onCloseConfirm()
@@ -94,6 +140,11 @@ export const AdminMembers = () => {
       <Button colorScheme="danger" onClick={onOpenConfirm} placeSelf="start">
         Reset Memberships
       </Button>
+      <CreateMemberPopUp
+        onClose={() => setOpenCreate(false)}
+        onConfirm={(data) => handleAddConfirm(data)}
+        open={openCreate ?? false}
+      />
       <Dialog
         cancel="Cancel"
         header="Are you sure?"

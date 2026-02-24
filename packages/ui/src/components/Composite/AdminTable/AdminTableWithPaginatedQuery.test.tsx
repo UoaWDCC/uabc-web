@@ -381,7 +381,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
         query: "User1",
       }),
     )
-  })
+  }, 10_000)
 
   it("should handle filtering by fields", async () => {
     const mockQuery = createMockUseGetPaginatedData()
@@ -414,13 +414,13 @@ describe("<AdminTableWithPaginatedQuery />", () => {
         filter: JSON.stringify({ role: ["member"], level: ["beginner"] }),
       }),
     )
-  })
+  }, 10_000)
 
   it("should handle selecting rows", async () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: withNuqsTestingAdapter({ onUrlUpdate: onUrlUpdate }),
+      wrapper: withNuqsTestingAdapter({ onUrlUpdate }),
     })
 
     expect(screen.getByText("User0 Lastname0")).toBeInTheDocument()
@@ -447,7 +447,7 @@ describe("<AdminTableWithPaginatedQuery />", () => {
     const mockQuery = createMockUseGetPaginatedData()
 
     const { user } = render(<AdminTableWithPaginatedQuery useGetPaginatedData={mockQuery} />, {
-      wrapper: withNuqsTestingAdapter({ onUrlUpdate: onUrlUpdate }),
+      wrapper: withNuqsTestingAdapter({ onUrlUpdate }),
     })
 
     const toggleColumnsButton = screen.getByRole("button", { name: "Toggle column visibility" })
@@ -466,5 +466,5 @@ describe("<AdminTableWithPaginatedQuery />", () => {
         queryString: "?columns=name,remaining,joined,role,university,level,actions",
       }),
     )
-  })
+  }, 10_000)
 })

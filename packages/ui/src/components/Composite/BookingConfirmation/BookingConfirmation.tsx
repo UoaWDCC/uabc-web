@@ -67,6 +67,10 @@ export interface BookingConfirmationProps {
    * Whether the confirm button is loading.
    */
   loading?: boolean
+  /**
+   * The number of sessions the user has already booked this week.
+   */
+  numberBookedSessions?: number
 }
 
 /**
@@ -94,10 +98,19 @@ export interface BookingConfirmationProps {
  * />
  */
 export const BookingConfirmation = memo<BookingConfirmationProps>(
-  ({ bookingData, user, onBack, onConfirm, title = "Booking Confirmation", loading }) => {
+  ({
+    bookingData,
+    user,
+    onBack,
+    onConfirm,
+    title = "Booking Confirmation",
+    loading,
+    numberBookedSessions = 0,
+  }) => {
     const { sessionsLabel } = useBookingLimits({
       user,
       selectedCount: bookingData.length,
+      alreadyBookedCount: numberBookedSessions,
     })
 
     const [weeklyText, totalText] = useMemo(() => {

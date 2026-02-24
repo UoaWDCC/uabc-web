@@ -1,8 +1,8 @@
 import { format } from "date-fns"
-import dayjs from "dayjs"
 import { getWeekdayFromDayIndex } from "../constants"
 import type { Semester } from "../payload-types"
 import { GameSessionStatus, Weekday } from "../types"
+import { dayjs } from "./dayjs"
 
 /**
  * Returns the number of days from fromDay to the next occurrence of toDay.
@@ -102,7 +102,7 @@ export function isSameDate(date1: string | number | Date, date2: string | number
  * ```
  */
 export function formatTime(timeString: string): string {
-  return dayjs(timeString).format("h:mm A")
+  return dayjs.utc(timeString).format("h:mm A")
 }
 
 /**

@@ -11,7 +11,11 @@ import { BookFlow } from "./BookFlow"
 export const BookClient = () => {
   const { data, isError, error, isLoading } = useGetCurrentAvailableGameSessions()
 
-  const sessions = data ? mapGameSessionsToSessionItems(data) : []
+  const sessions = data.availableSessions
+    ? mapGameSessionsToSessionItems(data.availableSessions)
+    : []
+
+  const numberBookedSessions = data?.bookedSessions?.length ?? 0
 
   return (
     <RoleGuard
@@ -48,7 +52,7 @@ export const BookClient = () => {
               title="Could not load sessions"
             />
           ) : (
-            <BookFlow auth={auth} sessions={sessions} />
+            <BookFlow auth={auth} numberBookedSessions={numberBookedSessions} sessions={sessions} />
           )}
         </Container>
       )}
