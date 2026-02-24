@@ -3,6 +3,7 @@
   "files": {
     "includes": [
       "**",
+      "**/*.config.ts",
       "!**/src/payload-types.ts",
       "!pnpm-lock.yaml",
       "!**/*.md",
