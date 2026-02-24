@@ -1,5 +1,6 @@
 import { capitalize, formatDate, formatTime } from "@repo/shared/utils"
 import { Button, Heading } from "@repo/ui/components/Primitive"
+import { ArrowLeftIcon, ArrowRightIcon } from "@yamada-ui/lucide"
 import {
   ButtonGroup,
   Dialog,
@@ -195,14 +196,13 @@ export const SemesterCreatedPopUp: FC<SemesterCreatedPopUpProps> = ({
         <ButtonGroup flexDirection={{ base: "column-reverse", md: "row" }} gap="md">
           {onBack && (
             <Button colorScheme="secondary" onClick={onBack} size="lg">
+              <ArrowLeftIcon />
               Back
             </Button>
           )}
-          <Button colorScheme="secondary" onClick={onClose} size="lg">
-            Cancel
-          </Button>
           <Button colorScheme="primary" onClick={onConfirm} size="lg">
             Confirm
+            <ArrowRightIcon />
           </Button>
         </ButtonGroup>
       </DialogFooter>
