@@ -1,6 +1,7 @@
 export * from "./AboutUsSection"
 export * from "./AdditionalInfo"
 export * from "./AdminGameSessionCard"
+export * from "./AdminSemestersTable"
 export * from "./AdminSessionsCalendar"
 export * from "./AdminSessionsTable"
 export * from "./AdminTable"
