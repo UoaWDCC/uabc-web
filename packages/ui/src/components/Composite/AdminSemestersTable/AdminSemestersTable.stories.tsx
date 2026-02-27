@@ -26,15 +26,15 @@ export const Default: Story = {
           ...gameSessionScheduleMock,
           name: "ABA",
           day: "wednesday",
-          startTime: new Date(Date.now() - 2 * 60 * 60 * 1000).toUTCString(),
-          endTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toUTCString(),
+          startTime: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+          endTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
         },
         {
           ...gameSessionScheduleMock,
           name: "Auckland Badminton",
           day: "tuesday",
-          startTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toUTCString(),
-          endTime: new Date(Date.now() + 4 * 60 * 60 * 1000).toUTCString(),
+          startTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+          endTime: new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString(),
         },
       ]}
       onDeleteRow={args.onDeleteRow}

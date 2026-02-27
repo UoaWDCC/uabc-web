@@ -24,12 +24,12 @@ export const columns: Column<GameSessionSchedule>[] = [
   {
     accessorKey: "capacity",
     header: "Capacity",
-    cell: ({ getValue }) => <Text color="muted">{getValue<string>()}</Text>,
+    cell: ({ getValue }) => <Text color="muted">{getValue<number>()}</Text>,
   },
   {
     accessorKey: "casualCapacity",
     header: "Casual",
-    cell: ({ getValue }) => <Text color="muted">{getValue<string>()}</Text>,
+    cell: ({ getValue }) => <Text color="muted">{getValue<number>()}</Text>,
   },
   {
     accessorKey: "location",
