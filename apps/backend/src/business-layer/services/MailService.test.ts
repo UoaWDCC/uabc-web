@@ -19,6 +19,7 @@ describe("MailService", () => {
 
       expect(sendEmailMock).toHaveBeenCalledWith({
         to: email,
+        replyTo: ["badminton.au@gmail.com", "uabcbookings@gmail.com"],
         subject: "Email verification code",
         text: `Here is your email verification code: ${code}. This code will expire in 10 minutes.`,
       })
@@ -43,6 +44,7 @@ describe("MailService", () => {
 
       expect(sendEmailMock).toHaveBeenCalledWith({
         to: "straight.zhao@casual.com",
+        replyTo: ["badminton.au@gmail.com", "uabcbookings@gmail.com"],
         subject: "UABC - Monday Booking Confirmation",
         html: expect.stringContaining(
           "Your booking for our Monday session at UoA Rec Center has been confirmed!",
@@ -72,6 +74,7 @@ describe("MailService", () => {
 
       expect(sendEmailMock).toHaveBeenCalledWith({
         to: "straight.zhao@casual.com",
+        replyTo: ["badminton.au@gmail.com", "uabcbookings@gmail.com"],
         subject: "UABC - Monday Booking Confirmation",
         html: expect.any(String),
       })
@@ -98,6 +101,7 @@ describe("MailService", () => {
 
       expect(sendEmailMock).toHaveBeenCalledWith({
         to: "straight.zhao@casual.com",
+        replyTo: ["badminton.au@gmail.com", "uabcbookings@gmail.com"],
         subject: `UABC - ${NOW.format("dddd")} Booking Confirmation`,
         html: expect.any(String),
       })
