@@ -18,9 +18,9 @@ export type AdminSemestersTableProps = {
    */
   onEditRow?: (row: GameSessionSchedule) => void
   /**
-   * Callback function to delete a row
+   * Callback function to delete a row based on the id
    */
-  onDeleteRow?: (row: GameSessionSchedule) => void
+  onDeleteRow?: (row: string) => void
 }
 
 export const AdminSemestersTable = memo(
@@ -34,7 +34,7 @@ export const AdminSemestersTable = memo(
           },
           {
             text: "Delete",
-            onClick: (row: GameSessionSchedule) => onDeleteRow?.(row),
+            onClick: (row: GameSessionSchedule) => onDeleteRow?.(row.id),
           },
         ]}
         columns={columns}

@@ -53,7 +53,7 @@ describe("<AdminSemestersTable />", () => {
     await user.click(actionsButton)
     await user.click(screen.getByText(/delete/i))
     expect(onDeleteRow).toHaveBeenCalledTimes(1)
-    expect(onDeleteRow.mock.calls[0][0]).toMatchObject(gameSessionScheduleMock)
+    expect(onDeleteRow.mock.calls[0][0]).toStrictEqual(gameSessionScheduleMock.id)
   })
 
   it("should render if no data is provided", () => {

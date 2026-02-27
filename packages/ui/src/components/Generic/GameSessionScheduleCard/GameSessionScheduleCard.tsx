@@ -44,21 +44,25 @@ export const GameSessionScheduleCard = memo(
             >
               <HStack justifyContent="space-between">
                 <Text color="muted">Session Name</Text>
-                <Text fontWeight="bold">{name}</Text>
+                <Text fontWeight="bold" textAlign="right">
+                  {name}
+                </Text>
               </HStack>
               <HStack justifyContent="space-between">
                 <Text color="muted">Time</Text>
-                <Text fontWeight="semibold">
+                <Text fontWeight="semibold" textAlign="right">
                   {capitalize(day)} {formatTime(startTime)} - {formatTime(endTime)}
                 </Text>
               </HStack>
               <HStack justifyContent="space-between">
                 <Text color="muted">Location</Text>
-                <Text fontWeight="semibold">{location}</Text>
+                <Text fontWeight="semibold" textAlign="right">
+                  {location}
+                </Text>
               </HStack>
               <HStack justifyContent="space-between">
                 <Text color="muted">Capacities</Text>
-                <Text fontWeight="semibold">
+                <Text fontWeight="semibold" textAlign="right">
                   {capacity} / {casualCapacity}
                 </Text>
               </HStack>
