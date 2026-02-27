@@ -1,3 +1,5 @@
+"use client"
+
 import type { GameSessionSchedule } from "@repo/shared/types"
 import { capitalize, formatTime } from "@repo/shared/utils"
 import { Card, CardBody, type CardProps, HStack, memo, Text, VStack } from "@yamada-ui/react"
