@@ -1,5 +1,4 @@
 import type { MembershipType } from "@repo/shared"
-import type { User } from "@repo/shared/payload-types"
 import { StatusCodes } from "http-status-codes"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
@@ -30,9 +29,7 @@ export function Security(securityName: "jwt", scopes?: (keyof typeof MembershipT
       try {
         const user = await authenticate(securityName, scopes)
 
-        const reqWithUser = Object.assign(Object.create(Object.getPrototypeOf(req)), req, {
-          user,
-        }) as NextRequest & { user: User }
+        const reqWithUser = Object.assign(req, { user })
 
         return await originalMethod.call(this, reqWithUser, context)
       } catch (err) {

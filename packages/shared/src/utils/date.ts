@@ -1,8 +1,8 @@
 import { format } from "date-fns"
-import dayjs from "dayjs"
 import { getWeekdayFromDayIndex } from "../constants"
 import type { Semester } from "../payload-types"
-import { Weekday } from "../types"
+import { GameSessionStatus, Weekday } from "../types"
+import { dayjs } from "./dayjs"
 
 /**
  * Returns the number of days from fromDay to the next occurrence of toDay.
@@ -102,7 +102,7 @@ export function isSameDate(date1: string | number | Date, date2: string | number
  * ```
  */
 export function formatTime(timeString: string): string {
-  return dayjs(timeString).format("h:mm A")
+  return dayjs.utc(timeString).format("h:mm A")
 }
 
 /**
@@ -180,4 +180,27 @@ export function parseISOStringToDate(dateString: string): Date | undefined {
  */
 export function formatDateToString(date: Date): string {
   return dayjs(date).format("YYYY-MM-DD")
+}
+
+/**
+ * Method used to get the status of a date
+ *
+ * @param startTime The start time to check the status for
+ * @param endTime The end time to check the status for
+ * @returns The date {@link GameSessionStatus}
+ */
+export function getDateTimeStatus(startTime: string, endTime: string): GameSessionStatus {
+  const now = new Date()
+
+  let status: GameSessionStatus
+
+  if (now < new Date(startTime)) {
+    status = GameSessionStatus.UPCOMING
+  } else if (now > new Date(endTime)) {
+    status = GameSessionStatus.PAST
+  } else {
+    status = GameSessionStatus.ONGOING
+  }
+
+  return status
 }

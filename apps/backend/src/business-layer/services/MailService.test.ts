@@ -3,8 +3,6 @@ import { payload } from "@/data-layer/adapters/Payload"
 import { bookingMock, bookingWithGameSessionScheduleMock } from "@/test-config/mocks/Booking.mock"
 import MailService from "./MailService"
 
-const NOW = dayjs(new Date())
-
 describe("MailService", () => {
   afterEach(() => {
     vi.restoreAllMocks()
@@ -21,6 +19,7 @@ describe("MailService", () => {
 
       expect(sendEmailMock).toHaveBeenCalledWith({
         to: email,
+        replyTo: ["badminton.au@gmail.com", "uabcbookings@gmail.com"],
         subject: "Email verification code",
         text: `Here is your email verification code: ${code}. This code will expire in 10 minutes.`,
       })
@@ -45,6 +44,7 @@ describe("MailService", () => {
 
       expect(sendEmailMock).toHaveBeenCalledWith({
         to: "straight.zhao@casual.com",
+        replyTo: ["badminton.au@gmail.com", "uabcbookings@gmail.com"],
         subject: "UABC - Monday Booking Confirmation",
         html: expect.stringContaining(
           "Your booking for our Monday session at UoA Rec Center has been confirmed!",
@@ -54,6 +54,7 @@ describe("MailService", () => {
     })
 
     it("should handle bookings with a game session schedule", async () => {
+      const NOW = dayjs(new Date())
       const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 
       await MailService.sendBookingConfirmation(bookingWithGameSessionScheduleMock)
@@ -73,12 +74,14 @@ describe("MailService", () => {
 
       expect(sendEmailMock).toHaveBeenCalledWith({
         to: "straight.zhao@casual.com",
+        replyTo: ["badminton.au@gmail.com", "uabcbookings@gmail.com"],
         subject: "UABC - Monday Booking Confirmation",
         html: expect.any(String),
       })
     })
 
     it("should handle bookings without a game session schedule", async () => {
+      const NOW = dayjs(new Date())
       const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
 
       await MailService.sendBookingConfirmation(bookingMock)
@@ -98,6 +101,7 @@ describe("MailService", () => {
 
       expect(sendEmailMock).toHaveBeenCalledWith({
         to: "straight.zhao@casual.com",
+        replyTo: ["badminton.au@gmail.com", "uabcbookings@gmail.com"],
         subject: `UABC - ${NOW.format("dddd")} Booking Confirmation`,
         html: expect.any(String),
       })

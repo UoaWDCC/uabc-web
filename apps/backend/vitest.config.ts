@@ -3,6 +3,9 @@ import { mergeConfig } from "vitest/config"
 
 export default mergeConfig(backendConfig, {
   test: {
+    env: {
+      TZ: "UTC",
+    },
     // You can add backend-specific overrides here
     setupFiles: ["./src/test-config/vitest.setup.ts"],
     coverage: {
