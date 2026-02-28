@@ -1,6 +1,8 @@
 import {
   formatDate,
   formatTime,
+  GameSessionStatus,
+  getDateTimeStatus,
   getDaysBetweenWeekdays,
   getGameSessionOpenDay,
   isSameDate,
@@ -8,6 +10,7 @@ import {
 } from "@repo/shared"
 import { semesterMock } from "@repo/shared/mocks"
 import type { Semester } from "@repo/shared/payload-types"
+import { vi } from "vitest"
 
 describe("getDaysBetweenWeekdays", () => {
   it("should return 0 when fromDay and toDay are the same", () => {
@@ -216,5 +219,57 @@ describe("formatDate", () => {
   it("should format different dates correctly", () => {
     expect(formatDate(new Date("2025-12-25T12:00:00Z"))).toBe("Thursday, 25/12/25")
     expect(formatDate(new Date("2025-06-15T09:30:00Z"))).toBe("Sunday, 15/06/25")
+  })
+})
+
+describe("getDateTimeStatus", () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it("should return UPCOMING when now is before startTime", () => {
+    const startTime = "2025-01-21T10:00:00Z" // Session starts at 10:00 AM UTC on Jan 21, 2025
+    const endTime = "2025-01-21T12:00:00Z" // Session ends at 12:00 PM UTC on Jan 21, 2025
+    vi.setSystemTime(new Date("2025-01-20T10:00:00Z")) // Set current time to 10:00 AM UTC on Jan 20, 2025 (before start time)
+    expect(getDateTimeStatus(startTime, endTime)).toBe(GameSessionStatus.UPCOMING)
+  })
+
+  it("should return ONGOING when now is between startTime and endTime", () => {
+    const startTime = "2025-01-21T10:00:00Z" // Session starts at 10:00 AM UTC on Jan 21, 2025
+    const endTime = "2025-01-21T12:00:00Z" // Session ends at 12:00 PM UTC on Jan 21, 2025
+    vi.setSystemTime(new Date("2025-01-21T11:00:00Z")) // Set current time to 11:00 AM UTC on Jan 21, 2025 (during session)
+    expect(getDateTimeStatus(startTime, endTime)).toBe(GameSessionStatus.ONGOING)
+  })
+
+  it("should return PAST when now is after endTime", () => {
+    const startTime = "2025-01-21T10:00:00Z" // Session starts at 10:00 AM UTC on Jan 21, 2025
+    const endTime = "2025-01-21T12:00:00Z" // Session ends at 12:00 PM UTC on Jan 21, 2025
+    vi.setSystemTime(new Date("2025-01-21T13:00:00Z")) // Set current time to 1:00 PM UTC on Jan 21, 2025 (after end time)
+    expect(getDateTimeStatus(startTime, endTime)).toBe(GameSessionStatus.PAST)
+  })
+
+  it("should return ONGOING when now is exactly at startTime", () => {
+    const startTime = "2025-01-21T10:00:00Z" // Session starts at 10:00 AM UTC on Jan 21, 2025
+    const endTime = "2025-01-21T12:00:00Z" // Session ends at 12:00 PM UTC on Jan 21, 2025
+    vi.setSystemTime(new Date("2025-01-21T10:00:00Z")) // Set current time to exactly 10:00 AM UTC on Jan 21, 2025 (start of session)
+    expect(getDateTimeStatus(startTime, endTime)).toBe(GameSessionStatus.ONGOING)
+  })
+
+  it("should return ONGOING when now is exactly at endTime", () => {
+    const startTime = "2025-01-21T10:00:00Z" // Session starts at 10:00 AM UTC on Jan 21, 2025
+    const endTime = "2025-01-21T12:00:00Z" // Session ends at 12:00 PM UTC on Jan 21, 2025
+    vi.setSystemTime(new Date("2025-01-21T12:00:00Z")) // Set current time to exactly 12:00 PM UTC on Jan 21, 2025 (end of session)
+    expect(getDateTimeStatus(startTime, endTime)).toBe(GameSessionStatus.ONGOING)
+  })
+
+  it("should handle startTime and endTime on different days", () => {
+    const startTime = "2025-01-20T22:00:00Z" // Session starts at 10:00 PM UTC on Jan 20, 2025
+    const endTime = "2025-01-21T02:00:00Z" // Session ends at 2:00 AM UTC on Jan 21, 2025
+    vi.setSystemTime(new Date("2025-01-21T01:00:00Z")) // Set current time to 1:00 AM UTC on Jan 21, 2025 (during multi-day session)
+    expect(getDateTimeStatus(startTime, endTime)).toBe(GameSessionStatus.ONGOING)
   })
 })

@@ -1,9 +1,14 @@
 "use client"
 
 import type { AdminGameSession, GameSessionWithCounts } from "@repo/shared"
-import { dayjs, GameSessionStatus, type PlayLevel, Popup, Weekday } from "@repo/shared"
+import { dayjs, type GameSessionStatus, type PlayLevel, Popup, Weekday } from "@repo/shared"
 import type { Booking, User } from "@repo/shared/payload-types"
-import { formatDateToISOString, isSameDate, parseISOStringToDate } from "@repo/shared/utils/date"
+import {
+  formatDateToISOString,
+  getDateTimeStatus,
+  isSameDate,
+  parseISOStringToDate,
+} from "@repo/shared/utils/date"
 import {
   AdminGameSessionCard,
   AdminSessionsCalendar,
@@ -56,15 +61,7 @@ const transformToAdminGameSession = (session: GameSessionWithCounts): AdminGameS
   ]
 
   // Determine session status based on current time
-  const now = new Date()
-  let status: GameSessionStatus
-  if (now < new Date(session.openTime)) {
-    status = GameSessionStatus.UPCOMING
-  } else if (now > new Date(session.endTime)) {
-    status = GameSessionStatus.PAST
-  } else {
-    status = GameSessionStatus.ONGOING
-  }
+  const status: GameSessionStatus = getDateTimeStatus(session.openTime, session.endTime)
 
   return {
     ...session,
