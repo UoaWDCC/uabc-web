@@ -52,7 +52,7 @@
     "@storybook/addon-docs": "9.1.10",
     "@storybook/addon-queryparams": "7.0.1",
     "@storybook/react": "9.1.10",
-    "@types/node": "22.18.8",
+    "@types/node": "24.11.0",
     "@types/react": "19.2.1",
     "@types/react-dom": "19.2.1",
     "storybook-dark-mode": "4.0.2",
