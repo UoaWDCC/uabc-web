@@ -16,8 +16,8 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@testing-library/jest-dom": "6.9.1",
-    "@yamada-ui/react": "1.7.8",
-    "mongodb-memory-server": "10.2.2",
+    "@yamada-ui/react": "2.0.9",
+    "mongodb-memory-server": "11.0.1",
     "typescript": "5.9.3"
   }
 }
