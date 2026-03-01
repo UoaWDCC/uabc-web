@@ -153,6 +153,15 @@ describe("<AdminSemestersAccordion />", () => {
 
       expect(onDeleteSchedule).toHaveBeenCalledWith(gameSessionScheduleMock.id)
     })
+
+    it("renders SkeletonTable when isLoading is true", () => {
+      render(
+        <AdminSemestersAccordion defaultExpanded isLoading rows={[]} semester={semesterMock} />,
+        { wrapper: withNuqsTestingAdapter() },
+      )
+
+      expect(screen.queryByText("No sessions found.")).not.toBeInTheDocument()
+    })
   })
 
   describe("on mobile", () => {
@@ -188,6 +197,17 @@ describe("<AdminSemestersAccordion />", () => {
 
       expect(screen.getByText(gameSessionScheduleMock.name)).toBeInTheDocument()
       expect(screen.getByText(secondSchedule.name)).toBeInTheDocument()
+    })
+
+    it("renders a loading spinner when isLoading is true", () => {
+      render(
+        <AdminSemestersAccordion defaultExpanded isLoading rows={[]} semester={semesterMock} />,
+        { wrapper: withNuqsTestingAdapter() },
+      )
+
+      expect(screen.queryByRole("table")).not.toBeInTheDocument()
+      expect(screen.queryByText(gameSessionScheduleMock.name)).not.toBeInTheDocument()
+      expect(document.querySelector(".ui-loading")).toBeInTheDocument()
     })
   })
 })

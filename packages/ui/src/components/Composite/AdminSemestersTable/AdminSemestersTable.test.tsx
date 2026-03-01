@@ -61,4 +61,20 @@ describe("<AdminSemestersTable />", () => {
 
     expect(screen.getByText("No sessions found.")).toBeInTheDocument()
   })
+
+  it("renders SkeletonTable when isLoading is true", () => {
+    render(<AdminSemestersTable data={[]} isLoading />, { wrapper: withNuqsTestingAdapter() })
+
+    expect(screen.getByRole("table")).toBeInTheDocument()
+    expect(screen.queryByText("No sessions found.")).not.toBeInTheDocument()
+  })
+
+  it("does not render SkeletonTable when isLoading is false", () => {
+    render(<AdminSemestersTable data={[gameSessionScheduleMock]} isLoading={false} />, {
+      wrapper: withNuqsTestingAdapter(),
+    })
+
+    expect(screen.getByRole("table")).toBeInTheDocument()
+    expect(screen.getByText(gameSessionScheduleMock.name)).toBeInTheDocument()
+  })
 })

@@ -4,7 +4,9 @@ import {
   Accordion,
   AccordionItem,
   AccordionLabel,
+  Center,
   HStack,
+  Loading,
   Menu,
   MenuButton,
   MenuItem,
@@ -53,6 +55,10 @@ export interface AdminSemestersAccordionProps {
    * Callback function to delete the semester by its ID.
    */
   onDeleteSemester?: (semesterId: string) => void
+  /**
+   * Whether the schedules are currently loading.
+   */
+  isLoading?: boolean
 }
 
 export const AdminSemestersAccordion = ({
@@ -64,6 +70,7 @@ export const AdminSemestersAccordion = ({
   onDeleteSchedule,
   onEditSemester,
   onDeleteSemester,
+  isLoading = false,
 }: AdminSemestersAccordionProps) => {
   const isDesktop = useBreakpointValue({ base: false, md: true })
 
@@ -96,14 +103,25 @@ export const AdminSemestersAccordion = ({
         {isDesktop ? (
           <AdminSemestersTable
             data={rows}
+            isLoading={isLoading}
             onDeleteRow={onDeleteSchedule}
             onEditRow={onEditSchedule}
           />
+        ) : isLoading ? (
+          <Center h="3xs">
+            <Loading fontSize="5xl" />
+          </Center>
         ) : (
           <VStack gap="md" p="0">
-            {rows.map((row) => {
-              return <GameSessionScheduleCard gameSessionSchedule={row} key={row.id} />
-            })}
+            {rows.length ? (
+              rows.map((row) => {
+                return <GameSessionScheduleCard gameSessionSchedule={row} key={row.id} />
+              })
+            ) : (
+              <Center pt="lg">
+                <Text>No schedules found</Text>
+              </Center>
+            )}
           </VStack>
         )}
         <VStack mt="lg">
