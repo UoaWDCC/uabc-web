@@ -2,6 +2,7 @@ import {
   type CreateGameSessionScheduleRequest,
   GetAllGameSessionSchedulesResponseSchema,
   GetGameSessionScheduleResponseSchema,
+  GetGameSessionSchedulesBySemesterResponseSchema,
   type PaginationQuery,
   type UpdateGameSessionScheduleRequest,
 } from "@repo/shared"
@@ -46,6 +47,27 @@ const AdminGameSessionScheduleService = {
     const response = await apiClient.get(
       `/api/admin/game-session-schedules?${query}`,
       GetAllGameSessionSchedulesResponseSchema,
+      { requiresAuth: true, token },
+    )
+    return ApiClient.throwIfError(response)
+  },
+  /**
+   * Fetches all game session schedules for a semester.
+   *
+   * @param semesterId The semester ID.
+   * @param token The auth token to use for the request (may be null).
+   * @returns A promise that resolves to an array of game session schedules.
+   */
+  getGameSessionSchedulesBySemester: async ({
+    semesterId,
+    token,
+  }: {
+    semesterId: string
+    token: string | null
+  }) => {
+    const response = await apiClient.get(
+      `/api/admin/semesters/${semesterId}/game-session-schedules`,
+      GetGameSessionSchedulesBySemesterResponseSchema,
       { requiresAuth: true, token },
     )
     return ApiClient.throwIfError(response)

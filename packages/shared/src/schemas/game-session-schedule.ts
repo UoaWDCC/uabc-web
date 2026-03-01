@@ -36,5 +36,9 @@ export const GetGameSessionScheduleResponseSchema = z.object({
   data: GameSessionScheduleSchema,
 })
 
+export const GetGameSessionSchedulesBySemesterResponseSchema = z.object({
+  data: z.array(GameSessionScheduleSchema),
+})
+
 export const UpdateGameSessionScheduleRequestSchema =
   CreateGameSessionScheduleRequestSchema.partial() satisfies z.ZodType<UpdateGameSessionScheduleData>

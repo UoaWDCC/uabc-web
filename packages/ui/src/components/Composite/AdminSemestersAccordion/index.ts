@@ -1,1 +1,0 @@
-export { AdminSemestersAccordion } from "./AdminSemestersAccordion"

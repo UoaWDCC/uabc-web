@@ -6,7 +6,7 @@ import { AdminTabBar } from "@repo/ui/components/Generic"
 import { Container, VStack } from "@yamada-ui/react"
 import { memo } from "react"
 import { AdminMembers, AdminSessions } from "./tabs"
-import { AdminSemesters } from "./tabs/admin-semesters/AdminSemesters"
+import { AdminSemesters } from "./tabs/admin-semesters"
 
 interface AdminSectionProps {
   slug?: AdminTabBarSlug
