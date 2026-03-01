@@ -1,8 +1,8 @@
 import { gameSessionScheduleMock, semesterMock } from "@repo/shared/mocks"
 import { render, screen } from "@repo/ui/test-utils"
-import { useBreakpointValue } from "@yamada-ui/react"
+import { Accordion, useBreakpointValue } from "@yamada-ui/react"
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing"
-import { AdminSemestersAccordion } from "./AdminSemestersAccordion"
+import { AdminSemestersAccordionItem } from "./AdminSemestersAccordionItem"
 
 vi.mock("@yamada-ui/react", async (importActual) => {
   const actual = await importActual<typeof import("@yamada-ui/react")>()
@@ -14,23 +14,27 @@ vi.mock("@yamada-ui/react", async (importActual) => {
 
 const mockUseBreakpointValue = vi.mocked(useBreakpointValue)
 
-describe("<AdminSemestersAccordion />", () => {
+const renderInAccordion = (ui: React.ReactElement, expanded = false) =>
+  render(
+    <Accordion defaultIndex={expanded ? [0] : []} multiple>
+      {ui}
+    </Accordion>,
+    { wrapper: withNuqsTestingAdapter() },
+  )
+
+describe("<AdminSemestersAccordionItem />", () => {
   beforeEach(() => {
     mockUseBreakpointValue.mockReturnValue(true)
   })
 
   it("renders the semester name", () => {
-    render(<AdminSemestersAccordion semester={semesterMock} />, {
-      wrapper: withNuqsTestingAdapter(),
-    })
+    renderInAccordion(<AdminSemestersAccordionItem semester={semesterMock} />)
 
     expect(screen.getAllByText(semesterMock.name).length).toBeGreaterThan(0)
   })
 
-  it("renders the Add New Session button", () => {
-    render(<AdminSemestersAccordion defaultExpanded semester={semesterMock} />, {
-      wrapper: withNuqsTestingAdapter(),
-    })
+  it("renders the Add New Session button when expanded", () => {
+    renderInAccordion(<AdminSemestersAccordionItem semester={semesterMock} />, true)
 
     expect(screen.getByRole("button", { name: /add new session/i })).toBeInTheDocument()
   })
@@ -38,13 +42,9 @@ describe("<AdminSemestersAccordion />", () => {
   it("calls onAddSchedule when Add New Session is clicked", async () => {
     const onAddSchedule = vi.fn()
 
-    const { user } = render(
-      <AdminSemestersAccordion
-        defaultExpanded
-        onAddSchedule={onAddSchedule}
-        semester={semesterMock}
-      />,
-      { wrapper: withNuqsTestingAdapter() },
+    const { user } = renderInAccordion(
+      <AdminSemestersAccordionItem onAddSchedule={onAddSchedule} semester={semesterMock} />,
+      true,
     )
 
     await user.click(screen.getByRole("button", { name: /add new session/i }))
@@ -55,13 +55,9 @@ describe("<AdminSemestersAccordion />", () => {
   it("calls onEditSemester with semester id when Edit is clicked", async () => {
     const onEditSemester = vi.fn()
 
-    const { user } = render(
-      <AdminSemestersAccordion
-        defaultExpanded
-        onEditSemester={onEditSemester}
-        semester={semesterMock}
-      />,
-      { wrapper: withNuqsTestingAdapter() },
+    const { user } = renderInAccordion(
+      <AdminSemestersAccordionItem onEditSemester={onEditSemester} semester={semesterMock} />,
+      true,
     )
 
     await user.click(screen.getByRole("button", { name: /semester actions/i }))
@@ -73,13 +69,9 @@ describe("<AdminSemestersAccordion />", () => {
   it("calls onDeleteSemester with semester id when Delete is clicked", async () => {
     const onDeleteSemester = vi.fn()
 
-    const { user } = render(
-      <AdminSemestersAccordion
-        defaultExpanded
-        onDeleteSemester={onDeleteSemester}
-        semester={semesterMock}
-      />,
-      { wrapper: withNuqsTestingAdapter() },
+    const { user } = renderInAccordion(
+      <AdminSemestersAccordionItem onDeleteSemester={onDeleteSemester} semester={semesterMock} />,
+      true,
     )
 
     await user.click(screen.getByRole("button", { name: /semester actions/i }))
@@ -89,11 +81,24 @@ describe("<AdminSemestersAccordion />", () => {
   })
 
   it("renders empty rows without crashing", () => {
-    render(<AdminSemestersAccordion defaultExpanded rows={[]} semester={semesterMock} />, {
-      wrapper: withNuqsTestingAdapter(),
-    })
+    renderInAccordion(<AdminSemestersAccordionItem rows={[]} semester={semesterMock} />, true)
 
     expect(screen.getByRole("button", { name: /add new session/i })).toBeInTheDocument()
+  })
+
+  it("fires Accordion onChange when the item is toggled", async () => {
+    const onChange = vi.fn()
+
+    const { user } = render(
+      <Accordion multiple onChange={onChange}>
+        <AdminSemestersAccordionItem semester={semesterMock} />
+      </Accordion>,
+      { wrapper: withNuqsTestingAdapter() },
+    )
+
+    await user.click(screen.getByRole("button", { name: semesterMock.name }))
+
+    expect(onChange).toHaveBeenCalled()
   })
 
   describe("on desktop", () => {
@@ -102,13 +107,9 @@ describe("<AdminSemestersAccordion />", () => {
     })
 
     it("renders AdminSemestersTable with rows", () => {
-      render(
-        <AdminSemestersAccordion
-          defaultExpanded
-          rows={[gameSessionScheduleMock]}
-          semester={semesterMock}
-        />,
-        { wrapper: withNuqsTestingAdapter() },
+      renderInAccordion(
+        <AdminSemestersAccordionItem rows={[gameSessionScheduleMock]} semester={semesterMock} />,
+        true,
       )
 
       expect(screen.getByRole("table")).toBeInTheDocument()
@@ -118,14 +119,13 @@ describe("<AdminSemestersAccordion />", () => {
     it("calls onEditSchedule when table edit action is clicked", async () => {
       const onEditSchedule = vi.fn()
 
-      const { user } = render(
-        <AdminSemestersAccordion
-          defaultExpanded
+      const { user } = renderInAccordion(
+        <AdminSemestersAccordionItem
           onEditSchedule={onEditSchedule}
           rows={[gameSessionScheduleMock]}
           semester={semesterMock}
         />,
-        { wrapper: withNuqsTestingAdapter() },
+        true,
       )
 
       await user.click(screen.getByRole("button", { name: /^actions$/i }))
@@ -138,14 +138,13 @@ describe("<AdminSemestersAccordion />", () => {
     it("calls onDeleteSchedule when table delete action is clicked", async () => {
       const onDeleteSchedule = vi.fn()
 
-      const { user } = render(
-        <AdminSemestersAccordion
-          defaultExpanded
+      const { user } = renderInAccordion(
+        <AdminSemestersAccordionItem
           onDeleteSchedule={onDeleteSchedule}
           rows={[gameSessionScheduleMock]}
           semester={semesterMock}
         />,
-        { wrapper: withNuqsTestingAdapter() },
+        true,
       )
 
       await user.click(screen.getByRole("button", { name: /^actions$/i }))
@@ -155,12 +154,27 @@ describe("<AdminSemestersAccordion />", () => {
     })
 
     it("renders SkeletonTable when isLoading is true", () => {
-      render(
-        <AdminSemestersAccordion defaultExpanded isLoading rows={[]} semester={semesterMock} />,
-        { wrapper: withNuqsTestingAdapter() },
+      renderInAccordion(
+        <AdminSemestersAccordionItem isLoading rows={[]} semester={semesterMock} />,
+        true,
       )
 
+      expect(screen.getByRole("table")).toBeInTheDocument()
       expect(screen.queryByText("No sessions found.")).not.toBeInTheDocument()
+    })
+
+    it("renders the table with data when isLoading is false", () => {
+      renderInAccordion(
+        <AdminSemestersAccordionItem
+          isLoading={false}
+          rows={[gameSessionScheduleMock]}
+          semester={semesterMock}
+        />,
+        true,
+      )
+
+      expect(screen.getByRole("table")).toBeInTheDocument()
+      expect(screen.getByText(gameSessionScheduleMock.name)).toBeInTheDocument()
     })
   })
 
@@ -170,13 +184,9 @@ describe("<AdminSemestersAccordion />", () => {
     })
 
     it("renders GameSessionScheduleCards instead of a table", () => {
-      render(
-        <AdminSemestersAccordion
-          defaultExpanded
-          rows={[gameSessionScheduleMock]}
-          semester={semesterMock}
-        />,
-        { wrapper: withNuqsTestingAdapter() },
+      renderInAccordion(
+        <AdminSemestersAccordionItem rows={[gameSessionScheduleMock]} semester={semesterMock} />,
+        true,
       )
 
       expect(screen.queryByRole("table")).not.toBeInTheDocument()
@@ -186,13 +196,12 @@ describe("<AdminSemestersAccordion />", () => {
     it("renders a card per row", () => {
       const secondSchedule = { ...gameSessionScheduleMock, id: "another-id", name: "Court B" }
 
-      render(
-        <AdminSemestersAccordion
-          defaultExpanded
+      renderInAccordion(
+        <AdminSemestersAccordionItem
           rows={[gameSessionScheduleMock, secondSchedule]}
           semester={semesterMock}
         />,
-        { wrapper: withNuqsTestingAdapter() },
+        true,
       )
 
       expect(screen.getByText(gameSessionScheduleMock.name)).toBeInTheDocument()
@@ -200,14 +209,29 @@ describe("<AdminSemestersAccordion />", () => {
     })
 
     it("renders a loading spinner when isLoading is true", () => {
-      render(
-        <AdminSemestersAccordion defaultExpanded isLoading rows={[]} semester={semesterMock} />,
-        { wrapper: withNuqsTestingAdapter() },
+      renderInAccordion(
+        <AdminSemestersAccordionItem isLoading rows={[]} semester={semesterMock} />,
+        true,
       )
 
       expect(screen.queryByRole("table")).not.toBeInTheDocument()
       expect(screen.queryByText(gameSessionScheduleMock.name)).not.toBeInTheDocument()
       expect(document.querySelector(".ui-loading")).toBeInTheDocument()
+    })
+
+    it("renders cards when isLoading is false", () => {
+      renderInAccordion(
+        <AdminSemestersAccordionItem
+          isLoading={false}
+          rows={[gameSessionScheduleMock]}
+          semester={semesterMock}
+        />,
+        true,
+      )
+
+      expect(screen.queryByRole("table")).not.toBeInTheDocument()
+      expect(screen.getByText(gameSessionScheduleMock.name)).toBeInTheDocument()
+      expect(document.querySelector(".ui-loading")).not.toBeInTheDocument()
     })
   })
 })
