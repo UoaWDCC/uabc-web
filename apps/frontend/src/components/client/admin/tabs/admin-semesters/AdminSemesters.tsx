@@ -4,6 +4,7 @@ import { CreateSemesterPopUpFlow } from "@repo/ui/components/Generic"
 import { Accordion, Button, Center, Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
 import { parseAsBoolean, useQueryState } from "nuqs"
 import { useCallback, useState } from "react"
+import { useDeleteGameSessionSchedule } from "@/services/admin/game-session-schedule/AdminGameSessionScheduleMutations"
 import {
   useCreateSemester,
   useDeleteSemester,
@@ -78,6 +79,30 @@ export const AdminSemesters = () => {
     [createSemesterMutation, notice],
   )
 
+  // Delete game session logic
+  const deleteScheduleMutation = useDeleteGameSessionSchedule()
+  const handleDeleteSchedule = useCallback(
+    (sessionId: string) => {
+      deleteScheduleMutation.mutate(sessionId, {
+        onSuccess: () => {
+          notice({
+            title: "Deletion successful",
+            description: "Session schedule has been deleted",
+            status: "success",
+          })
+        },
+        onError: () => {
+          notice({
+            title: "Deletion failed",
+            description: "Failed to delete session schedule",
+            status: "error",
+          })
+        },
+      })
+    },
+    [deleteScheduleMutation, notice],
+  )
+
   return (
     <>
       <Button
@@ -102,6 +127,7 @@ export const AdminSemesters = () => {
             <SemesterScheduleAccordionItem
               enabled={expandedIndexes.has(index)}
               key={sem.id}
+              onDeleteSchedule={handleDeleteSchedule}
               onDeleteSemester={(semId) => {
                 setSemesterToDelete(semId)
                 onOpenDeleteSemester()
