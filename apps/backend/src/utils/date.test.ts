@@ -5,12 +5,77 @@ import {
   getDateTimeStatus,
   getDaysBetweenWeekdays,
   getGameSessionOpenDay,
+  isoToTimeInput,
   isSameDate,
+  timeInputToIso,
   Weekday,
 } from "@repo/shared"
 import { semesterMock } from "@repo/shared/mocks"
 import type { Semester } from "@repo/shared/payload-types"
 import { vi } from "vitest"
+
+describe("isoToTimeInput", () => {
+  it("should return empty string for undefined", () => {
+    expect(isoToTimeInput(undefined)).toBe("")
+  })
+
+  it("should return empty string for empty string", () => {
+    expect(isoToTimeInput("")).toBe("")
+  })
+
+  it("should return empty string for an invalid date string", () => {
+    expect(isoToTimeInput("not-a-date")).toBe("")
+  })
+
+  it("should format a UTC morning time correctly", () => {
+    expect(isoToTimeInput("2024-01-01T09:30:00.000Z")).toBe("09:30")
+  })
+
+  it("should format a UTC afternoon time correctly", () => {
+    expect(isoToTimeInput("2024-01-01T14:05:00.000Z")).toBe("14:05")
+  })
+
+  it("should format midnight correctly", () => {
+    expect(isoToTimeInput("2024-01-01T00:00:00.000Z")).toBe("00:00")
+  })
+
+  it("should format the end of day correctly", () => {
+    expect(isoToTimeInput("2024-01-01T23:59:00.000Z")).toBe("23:59")
+  })
+
+  it("should pad single-digit hours and minutes with a leading zero", () => {
+    expect(isoToTimeInput("2024-06-15T08:05:00.000Z")).toBe("08:05")
+  })
+
+  it("should use UTC time regardless of the date's timezone offset", () => {
+    expect(isoToTimeInput("2024-01-01T09:00:00+05:00")).toBe("04:00")
+  })
+})
+
+describe("timeInputToIso", () => {
+  it("should convert a morning time to ISO string", () => {
+    expect(timeInputToIso("09:30")).toBe("1970-01-01T09:30:00.000Z")
+  })
+
+  it("should convert an afternoon time to ISO string", () => {
+    expect(timeInputToIso("14:05")).toBe("1970-01-01T14:05:00.000Z")
+  })
+
+  it("should convert midnight to ISO string", () => {
+    expect(timeInputToIso("00:00")).toBe("1970-01-01T00:00:00.000Z")
+  })
+
+  it("should convert end of day to ISO string", () => {
+    expect(timeInputToIso("23:59")).toBe("1970-01-01T23:59:00.000Z")
+  })
+
+  it("should be the inverse of isoToTimeInput", () => {
+    const times = ["00:00", "09:30", "12:00", "14:05", "23:59"]
+    for (const time of times) {
+      expect(isoToTimeInput(timeInputToIso(time))).toBe(time)
+    }
+  })
+})
 
 describe("getDaysBetweenWeekdays", () => {
   it("should return 0 when fromDay and toDay are the same", () => {

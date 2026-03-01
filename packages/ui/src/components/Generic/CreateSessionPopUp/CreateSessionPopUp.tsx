@@ -323,9 +323,9 @@ export const CreateSessionPopUp: React.FC<CreateSessionPopUpProps> = ({
           <Button
             colorScheme="secondary"
             data-testid="back"
-            leftIcon={<ArrowLeftIcon />}
             onClick={handleClose}
             size="lg"
+            startIcon={<ArrowLeftIcon />}
             w="full"
           >
             Back
