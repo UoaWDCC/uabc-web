@@ -1,10 +1,10 @@
 import { AUTH_COOKIE_NAME } from "@repo/shared"
-import { gameSessionScheduleMock } from "@repo/shared/mocks"
 import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import { cookies } from "next/headers"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { createMockNextRequest } from "@/test-config/backend-utils"
+import { gameSessionScheduleCreateMock } from "@/test-config/mocks/GameSessionSchedule.mock"
 import { semesterCreateMock } from "@/test-config/mocks/Semester.mock"
 import { adminToken, casualToken, memberToken } from "@/test-config/vitest.setup"
 import { GET } from "./route"
@@ -43,11 +43,11 @@ describe("/api/admin/semesters/[id]/game-session-schedules", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, adminToken)
       const newSemester = await semesterDataService.createSemester(semesterCreateMock)
       await gameSessionDataService.createGameSessionSchedule({
-        ...gameSessionScheduleMock,
+        ...gameSessionScheduleCreateMock,
         semester: newSemester,
       })
       await gameSessionDataService.createGameSessionSchedule({
-        ...gameSessionScheduleMock,
+        ...gameSessionScheduleCreateMock,
         semester: newSemester,
       })
 
@@ -59,7 +59,7 @@ describe("/api/admin/semesters/[id]/game-session-schedules", async () => {
       const json = await res.json()
       expect(Array.isArray(json.data)).toBe(true)
       expect(json.data).toHaveLength(2)
-      expect(json.data[0].semester).toBe(newSemester.id)
+      expect(json.data[0].semester.id).toBe(newSemester.id)
     })
 
     it("should return an empty array if the semester has no schedules", async () => {
