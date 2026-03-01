@@ -1,20 +1,25 @@
 import { Popup } from "@repo/shared/enums"
 import type { CreateSemesterData } from "@repo/shared/types"
 import { CreateSemesterPopUpFlow } from "@repo/ui/components/Generic"
-import { Button, useNotice } from "@yamada-ui/react"
+import { Accordion, Button, Center, useNotice } from "@yamada-ui/react"
 import { parseAsBoolean, useQueryState } from "nuqs"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import { useCreateSemester } from "@/services/admin/semester/AdminSemesterMutations"
+import { useGetAllSemesters } from "@/services/semester/SemesterQueries"
+import { SemesterScheduleAccordionItem } from "./SemesterScheduleAccordionItem"
 
 export const AdminSemesters = () => {
   const notice = useNotice()
+
+  const { data: allSemesters } = useGetAllSemesters()
+
+  const [expandedIndexes, setExpandedIndexes] = useState<Set<number>>(new Set([0]))
+
   const [openCreateSemester, setOpenCreateSemester] = useQueryState(
     Popup.CREATE_SEMESTER,
     parseAsBoolean,
   )
-
   const createSemesterMutation = useCreateSemester()
-
   const handleCreateSemester = useCallback(
     (newSemester: CreateSemesterData) => {
       createSemesterMutation.mutate(newSemester, {
@@ -48,6 +53,25 @@ export const AdminSemesters = () => {
       >
         Create Semester
       </Button>
+      <Accordion
+        defaultIndex={[0]}
+        multiple
+        onChange={(openIndexes) => {
+          setExpandedIndexes(new Set(openIndexes as number[]))
+        }}
+      >
+        {allSemesters?.data.length ? (
+          allSemesters.data.map((sem, index) => (
+            <SemesterScheduleAccordionItem
+              enabled={expandedIndexes.has(index)}
+              key={sem.id}
+              semester={sem}
+            />
+          ))
+        ) : (
+          <Center>No semesters found</Center>
+        )}
+      </Accordion>
       <CreateSemesterPopUpFlow
         onClose={() => {
           setOpenCreateSemester(false)
