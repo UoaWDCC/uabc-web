@@ -395,6 +395,58 @@ describe("GameSessionDataService", () => {
     })
   })
 
+  describe("getGameSessionSchedulesBySemesterId", () => {
+    it("should return all game session schedules for a given semester ID", async () => {
+      const createdSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const createdSchedule1 = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleCreateMock,
+        semester: createdSemester.id,
+      })
+      const createdSchedule2 = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleCreateMock,
+        semester: createdSemester.id,
+      })
+
+      const schedules = await gameSessionDataService.getGameSessionSchedulesBySemesterId(
+        createdSemester.id,
+      )
+
+      expect(schedules).toHaveLength(2)
+      expect(schedules).toEqual(expect.arrayContaining([createdSchedule1, createdSchedule2]))
+    })
+
+    it("should not return schedules belonging to a different semester", async () => {
+      const targetSemester = await semesterDataService.createSemester(semesterCreateMock)
+      const otherSemester = await semesterDataService.createSemester(semesterCreateMock)
+
+      await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleCreateMock,
+        semester: otherSemester.id,
+      })
+      const targetSchedule = await gameSessionDataService.createGameSessionSchedule({
+        ...gameSessionScheduleCreateMock,
+        semester: targetSemester.id,
+      })
+
+      const schedules = await gameSessionDataService.getGameSessionSchedulesBySemesterId(
+        targetSemester.id,
+      )
+
+      expect(schedules).toHaveLength(1)
+      expect(schedules[0]).toEqual(targetSchedule)
+    })
+
+    it("should return an empty array if no schedules exist for the semester", async () => {
+      const createdSemester = await semesterDataService.createSemester(semesterCreateMock)
+
+      const schedules = await gameSessionDataService.getGameSessionSchedulesBySemesterId(
+        createdSemester.id,
+      )
+
+      expect(schedules).toStrictEqual([])
+    })
+  })
+
   describe("getGameSessionScheduleById", () => {
     it("should get a game session schedule by ID", async () => {
       const newGameSessionSchedule = await gameSessionDataService.createGameSessionSchedule(
