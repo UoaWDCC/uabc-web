@@ -24,7 +24,8 @@ const clickCalendarDay = async (user: ReturnType<typeof render>["user"], day: nu
     (btn) =>
       btn.textContent?.trim() === String(day) &&
       !btn.hasAttribute("disabled") &&
-      btn.getAttribute("aria-disabled") !== "true",
+      btn.getAttribute("aria-disabled") !== "true" &&
+      !btn.hasAttribute("data-outside"),
   )
   if (!target) {
     throw new Error(`Calendar day button "${day}" not found or is disabled`)
