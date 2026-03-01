@@ -2,6 +2,7 @@ import type z from "zod"
 import type {
   CreateGameSessionScheduleRequestSchema,
   GetAllGameSessionSchedulesResponseSchema,
+  GetGameSessionSchedulesBySemesterResponseSchema,
   UpdateGameSessionScheduleRequestSchema,
 } from "../schemas"
 
@@ -13,4 +14,7 @@ export type UpdateGameSessionScheduleRequest = z.infer<
 >
 export type GetAllGameSessionSchedulesResponse = z.infer<
   typeof GetAllGameSessionSchedulesResponseSchema
+>
+export type GetGameSessionSchedulesBySemesterResponse = z.infer<
+  typeof GetGameSessionSchedulesBySemesterResponseSchema
 >

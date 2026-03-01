@@ -1,5 +1,5 @@
 import type { PaginationQuery } from "@repo/shared"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { useAuth } from "@/context/AuthContext"
 import { QueryKeys } from "@/services"
 import AdminGameSessionScheduleService from "./AdminGameSessionScheduleService"
@@ -26,5 +26,28 @@ export const useGetPaginatedGameSessionSchedules = (query: PaginationQuery) => {
     getNextPageParam: (lastPage) => lastPage.data?.nextPage,
     getPreviousPageParam: (firstPage) => firstPage.data?.prevPage,
     enabled: !!token,
+  })
+}
+
+/**
+ * Retrieves and caches game session schedules for a specific semester.
+ * Only fetches when enabled is true, enabling lazy/on-demand loading.
+ *
+ * @param semesterId The semester ID to fetch schedules for.
+ * @param enabled Whether the query should run.
+ * @returns A query hook that fetches game session schedules for the semester.
+ */
+export const useGetGameSessionSchedulesBySemester = (semesterId: string, enabled: boolean) => {
+  const { token } = useAuth()
+  return useQuery({
+    queryKey: [QueryKeys.GAME_SESSION_SCHEDULE_QUERY_KEY, semesterId],
+    queryFn: async () => {
+      const response = await AdminGameSessionScheduleService.getGameSessionSchedulesBySemester({
+        semesterId,
+        token,
+      })
+      return response
+    },
+    enabled: !!token && enabled,
   })
 }
