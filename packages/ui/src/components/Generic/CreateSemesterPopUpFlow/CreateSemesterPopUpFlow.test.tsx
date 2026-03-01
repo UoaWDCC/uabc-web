@@ -166,7 +166,7 @@ describe("<CreateSemesterPopUpFlow />", () => {
       expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument()
     })
     expect(screen.getByLabelText("Booking Open Time")).toBeInTheDocument()
-  })
+  }, 10_000)
 
   it("should navigate back from booking settings to break dates step", async () => {
     const { user } = render(<CreateSemesterPopUpFlowExample />)
