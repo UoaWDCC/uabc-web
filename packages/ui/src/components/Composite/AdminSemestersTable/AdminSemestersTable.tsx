@@ -2,7 +2,7 @@
 
 import type { GameSessionSchedule } from "@repo/shared/types"
 import { memo } from "react"
-import { ManagementTable } from "../../Generic"
+import { ManagementTable, SkeletonTable } from "../../Generic"
 import { columns } from "./Columns"
 
 /**
@@ -14,6 +14,10 @@ export type AdminSemestersTableProps = {
    */
   data: GameSessionSchedule[]
   /**
+   * Whether the table is in a loading state
+   */
+  isLoading?: boolean
+  /**
    * Callback function to edit a row
    */
   onEditRow?: (row: GameSessionSchedule) => void
@@ -24,7 +28,11 @@ export type AdminSemestersTableProps = {
 }
 
 export const AdminSemestersTable = memo(
-  ({ data, onEditRow, onDeleteRow }: AdminSemestersTableProps) => {
+  ({ data, isLoading = false, onEditRow, onDeleteRow }: AdminSemestersTableProps) => {
+    if (isLoading) {
+      return <SkeletonTable />
+    }
+
     return (
       <ManagementTable
         actions={[
