@@ -30,7 +30,7 @@ runs:
 
     - name: Pre-comment
       if: ${{ inputs.method == 'pre' }}
-      uses: peter-evans/create-or-update-comment@v3
+      uses: peter-evans/create-or-update-comment@v5
       with:
         issue-number: ${{ github.event.pull_request.number }}
         comment-id: ${{ steps.find-comment.outputs.comment-id }}
@@ -70,7 +70,7 @@ runs:
 
     - name: Post-comment
       if: ${{ inputs.method == 'post' }}
-      uses: peter-evans/create-or-update-comment@v3
+      uses: peter-evans/create-or-update-comment@v5
       with:
         issue-number: ${{ github.event.pull_request.number }}
         comment-id: ${{ steps.find-comment.outputs.comment-id }}
