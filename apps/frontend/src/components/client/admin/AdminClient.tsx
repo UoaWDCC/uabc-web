@@ -16,6 +16,7 @@ export const AdminClient = ({ slug, activeIndex }: AdminClientProps) => {
     <RoleGuard
       fallback={
         <NotAuthorised
+          additionalDescription="You may also be logged out."
           description="You must be an admin to view this page."
           title="Access Denied"
         />

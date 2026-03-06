@@ -26,6 +26,11 @@ export interface NotAuthorisedProps
    */
   description?: string
   /**
+   * An optional additional description text to display below the main description
+   * @defaultValue undefined
+   */
+  additionalDescription?: string
+  /**
    * Label for the return button
    * @defaultValue "Return Home"
    */
@@ -54,6 +59,7 @@ export interface NotAuthorisedProps
 export const NotAuthorised: FC<NotAuthorisedProps> = ({
   title = "Not Authorised",
   description = "You do not have permission to view this page.",
+  additionalDescription,
   returnLabel = "Return Home",
   buttonProps,
   href = "/",
@@ -66,6 +72,9 @@ export const NotAuthorised: FC<NotAuthorisedProps> = ({
       </EmptyStateIndicator>
       <EmptyStateTitle as={Heading.h2}>{title}</EmptyStateTitle>
       <EmptyStateDescription textAlign="center">{description}</EmptyStateDescription>
+      {additionalDescription && (
+        <EmptyStateDescription textAlign="center">{additionalDescription}</EmptyStateDescription>
+      )}
       <Button as={NextLink} colorScheme="primary" href={href} placeSelf="center" {...buttonProps}>
         {returnLabel}
       </Button>

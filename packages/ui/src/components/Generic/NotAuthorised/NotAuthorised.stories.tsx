@@ -9,6 +9,7 @@ export const Default = () => <NotAuthorised />
 
 export const Custom = () => (
   <NotAuthorised
+    additionalDescription="You may also be logged out."
     description="You must be an admin to view this page."
     href="/dashboard"
     returnLabel="Go Back"
