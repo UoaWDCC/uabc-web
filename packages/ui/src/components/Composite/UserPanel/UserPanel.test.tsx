@@ -6,7 +6,7 @@ import { UserPanel } from "./UserPanel"
 describe("UserPanel", () => {
   it("should re-export the Select component and check if Select exists", () => {
     expect(UserPanel).toBeDefined()
-    expect(isValidElement(<UserPanel user={memberUserMock} />)).toBeTruthy()
+    expect(isValidElement(<UserPanel remainingSessions={1} user={memberUserMock} />)).toBeTruthy()
   })
 
   it("should have correct displayName", () => {
@@ -14,7 +14,7 @@ describe("UserPanel", () => {
   })
 
   it("renders user information correctly", () => {
-    render(<UserPanel user={memberUserMock} />)
+    render(<UserPanel remainingSessions={1} user={memberUserMock} />)
 
     expect(
       screen.getByText(`${memberUserMock.firstName} ${memberUserMock.lastName}`),

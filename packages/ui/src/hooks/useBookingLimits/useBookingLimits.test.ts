@@ -23,6 +23,7 @@ describe("useBookingLimits", () => {
       useBookingLimits({
         user: memberUser,
         selectedCount: 1,
+        remainingSessions: memberUser.remainingSessions,
       }),
     )
 
@@ -39,6 +40,7 @@ describe("useBookingLimits", () => {
       useBookingLimits({
         user: casualUser,
         selectedCount: 0,
+        remainingSessions: casualUser.remainingSessions,
       }),
     )
 
@@ -55,6 +57,7 @@ describe("useBookingLimits", () => {
       useBookingLimits({
         user: adminUser,
         selectedCount: 2,
+        remainingSessions: adminUser.remainingSessions,
       }),
     )
 
@@ -71,6 +74,7 @@ describe("useBookingLimits", () => {
       useBookingLimits({
         user: { ...memberUser, remainingSessions: 0 },
         selectedCount: 0,
+        remainingSessions: memberUser.remainingSessions,
       }),
     )
 
@@ -85,6 +89,7 @@ describe("useBookingLimits", () => {
       useBookingLimits({
         user: { ...memberUser, remainingSessions: null },
         selectedCount: 0,
+        remainingSessions: memberUser.remainingSessions,
       }),
     )
 
@@ -100,6 +105,7 @@ describe("useBookingLimits", () => {
         user: memberUser,
         selectedCount: 1,
         alreadyBookedCount: 1,
+        remainingSessions: memberUser.remainingSessions,
       }),
     )
 
@@ -115,6 +121,7 @@ describe("useBookingLimits", () => {
         user: casualUser,
         selectedCount: 2,
         alreadyBookedCount: 0,
+        remainingSessions: casualUser.remainingSessions,
       }),
     )
 
