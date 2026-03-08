@@ -64,7 +64,7 @@ describe("<BookFlow />", () => {
   })
 
   it("should show empty state when no bookings are available", () => {
-    render(<BookFlow auth={mockAuth} sessions={[]} />, {
+    render(<BookFlow auth={mockAuth} remainingSessions={0} sessions={[]} />, {
       wrapper: withNuqsTestingAdapter(),
     })
     expect(screen.getByText("No bookings found")).toBeInTheDocument()
@@ -80,7 +80,7 @@ describe("<BookFlow />", () => {
         remainingSessions: 0,
       },
     }
-    render(<BookFlow auth={authWithNoSessions} sessions={mockSessions} />, {
+    render(<BookFlow auth={authWithNoSessions} remainingSessions={0} sessions={mockSessions} />, {
       wrapper: withNuqsTestingAdapter(),
     })
     expect(screen.getByText("No remaining sessions")).toBeInTheDocument()
@@ -89,18 +89,24 @@ describe("<BookFlow />", () => {
   })
 
   it("should handle play level selection and move to next step", async () => {
-    const { user } = render(<BookFlow auth={mockAuth} sessions={mockSessions} />, {
-      wrapper: withNuqsTestingAdapter(),
-    })
+    const { user } = render(
+      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
+    )
     const beginnerButton = screen.getByRole("button", { name: /beginner/i })
     await user.click(beginnerButton)
     expect(screen.getByText(/select a court/i)).toBeInTheDocument()
   })
 
   it("should handle court selection and move to confirmation step", async () => {
-    const { user } = render(<BookFlow auth={mockAuth} sessions={mockSessions} />, {
-      wrapper: withNuqsTestingAdapter(),
-    })
+    const { user } = render(
+      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
+    )
     const beginnerButton = screen.getByRole("button", { name: /beginner/i })
     await user.click(beginnerButton)
     const firstDateLabel = formatDateWithOrdinal(mockSessions[0].date)
@@ -112,9 +118,12 @@ describe("<BookFlow />", () => {
   })
 
   it("should handle back navigation from select court to play level", async () => {
-    const { user } = render(<BookFlow auth={mockAuth} sessions={mockSessions} />, {
-      wrapper: withNuqsTestingAdapter(),
-    })
+    const { user } = render(
+      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
+    )
     const beginnerButton = screen.getByRole("button", { name: /beginner/i })
     await user.click(beginnerButton)
     const backButton = screen.getByRole("button", { name: "Back" })
@@ -125,9 +134,12 @@ describe("<BookFlow />", () => {
   })
 
   it("should handle back navigation from confirmation to select court", async () => {
-    const { user } = render(<BookFlow auth={mockAuth} sessions={mockSessions} />, {
-      wrapper: withNuqsTestingAdapter(),
-    })
+    const { user } = render(
+      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
+    )
     const beginnerButton = screen.getByRole("button", { name: /beginner/i })
     await user.click(beginnerButton)
     const firstDateLabel = formatDateWithOrdinal(mockSessions[0].date)
@@ -156,9 +168,12 @@ describe("<BookFlow />", () => {
         switchPopup: vi.fn(),
       },
     })
-    const { user } = render(<BookFlow auth={mockAuth} sessions={mockSessions} />, {
-      wrapper: withNuqsTestingAdapter(),
-    })
+    const { user } = render(
+      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
+    )
     const beginnerButton = screen.getByRole("button", { name: /beginner/i })
     await user.click(beginnerButton)
     const firstDateLabel = formatDateWithOrdinal(mockSessions[0].date)
@@ -172,9 +187,12 @@ describe("<BookFlow />", () => {
   })
 
   it("should render booking confirmation with correct data", async () => {
-    const { user } = render(<BookFlow auth={mockAuth} sessions={mockSessions} />, {
-      wrapper: withNuqsTestingAdapter(),
-    })
+    const { user } = render(
+      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      {
+        wrapper: withNuqsTestingAdapter(),
+      },
+    )
     const beginnerButton = screen.getByRole("button", { name: /beginner/i })
     await user.click(beginnerButton)
     const firstDateLabel = formatDateWithOrdinal(mockSessions[0].date)
@@ -192,7 +210,7 @@ describe("<BookFlow />", () => {
         role: MembershipType.casual,
       },
     }
-    render(<BookFlow auth={casualAuth} sessions={mockSessions} />, {
+    render(<BookFlow auth={casualAuth} remainingSessions={0} sessions={mockSessions} />, {
       wrapper: withNuqsTestingAdapter(),
     })
     expect(screen.getByText(/beginner/i)).toBeInTheDocument()
@@ -206,7 +224,7 @@ describe("<BookFlow />", () => {
         role: MembershipType.admin,
       },
     }
-    render(<BookFlow auth={adminAuth} sessions={mockSessions} />, {
+    render(<BookFlow auth={adminAuth} remainingSessions={0} sessions={mockSessions} />, {
       wrapper: withNuqsTestingAdapter(),
     })
     expect(screen.getByText(/beginner/i)).toBeInTheDocument()
