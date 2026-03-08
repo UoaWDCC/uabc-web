@@ -7,6 +7,7 @@ import {
 import type { Booking, GameSession } from "@repo/shared/payload-types"
 import type BookingDataService from "@/data-layer/services/BookingDataService"
 import type SemesterDataService from "@/data-layer/services/SemesterDataService"
+import type UserDataService from "@/data-layer/services/UserDataService"
 
 /**
  * Extract session properties with fallback logic from GameSession
@@ -78,6 +79,7 @@ export const getRemainingSessions = async (
   >,
   semesterDataService: SemesterDataService,
   bookingDataService: BookingDataService,
+  userDataService: UserDataService,
 ): Promise<number> => {
   const strategy: GameBookingStrategy =
     user.role === "casual" ? GameBookingStrategy.CASUAL : GameBookingStrategy.MEMBER
@@ -95,7 +97,8 @@ export const getRemainingSessions = async (
       return 1
     }
     case GameBookingStrategy.MEMBER: {
-      return user.remainingSessions ?? 0
+      const userData = await userDataService.getUserById(user.id)
+      return userData.remainingSessions ?? 0
     }
   }
 }

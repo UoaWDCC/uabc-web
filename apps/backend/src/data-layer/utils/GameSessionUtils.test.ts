@@ -4,6 +4,7 @@ import type { User } from "@repo/shared/payload-types"
 import type { Mock } from "vitest"
 import type BookingDataService from "@/data-layer/services/BookingDataService"
 import type SemesterDataService from "@/data-layer/services/SemesterDataService"
+import type UserDataService from "@/data-layer/services/UserDataService"
 import { bookingMock } from "@/test-config/mocks/Booking.mock"
 import { gameSessionMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleMock } from "@/test-config/mocks/GameSessionSchedule.mock"
@@ -286,6 +287,9 @@ describe("GameSessionUtils", () => {
     let mockBookingDataService: {
       getAllCurrentWeekBookingsByUserId: Mock
     }
+    let mockUserDataService: {
+      getUserById: Mock
+    }
 
     beforeEach(() => {
       mockSemesterDataService = {
@@ -293,6 +297,9 @@ describe("GameSessionUtils", () => {
       }
       mockBookingDataService = {
         getAllCurrentWeekBookingsByUserId: vi.fn(),
+      }
+      mockUserDataService = {
+        getUserById: vi.fn(),
       }
     })
 
@@ -305,6 +312,7 @@ describe("GameSessionUtils", () => {
         user,
         mockSemesterDataService as unknown as SemesterDataService,
         mockBookingDataService as unknown as BookingDataService,
+        mockUserDataService as unknown as UserDataService,
       )
 
       expect(result).toBe(1)
@@ -324,6 +332,7 @@ describe("GameSessionUtils", () => {
         user,
         mockSemesterDataService as unknown as SemesterDataService,
         mockBookingDataService as unknown as BookingDataService,
+        mockUserDataService as unknown as UserDataService,
       )
 
       expect(result).toBe(0)
@@ -331,24 +340,29 @@ describe("GameSessionUtils", () => {
 
     it("should return remainingSessions for member user", async () => {
       const user = { id: memberUserMock.id, role: MembershipType.member, remainingSessions: 5 }
+      mockUserDataService.getUserById.mockResolvedValue({ remainingSessions: 5 })
 
       const result = await getRemainingSessions(
         user,
         mockSemesterDataService as unknown as SemesterDataService,
         mockBookingDataService as unknown as BookingDataService,
+        mockUserDataService as unknown as UserDataService,
       )
 
       expect(result).toBe(5)
       expect(mockSemesterDataService.getCurrentSemester).not.toHaveBeenCalled()
+      expect(mockUserDataService.getUserById).toHaveBeenCalledWith(user.id)
     })
 
     it("should return 0 for member user with null remainingSessions", async () => {
       const user = { id: memberUserMock.id, role: MembershipType.member, remainingSessions: null }
+      mockUserDataService.getUserById.mockResolvedValue({ remainingSessions: null })
 
       const result = await getRemainingSessions(
         user,
         mockSemesterDataService as unknown as SemesterDataService,
         mockBookingDataService as unknown as BookingDataService,
+        mockUserDataService as unknown as UserDataService,
       )
 
       expect(result).toBe(0)
@@ -360,11 +374,13 @@ describe("GameSessionUtils", () => {
         role: MembershipType.member,
         remainingSessions: undefined,
       }
+      mockUserDataService.getUserById.mockResolvedValue({ remainingSessions: undefined })
 
       const result = await getRemainingSessions(
         user,
         mockSemesterDataService as unknown as SemesterDataService,
         mockBookingDataService as unknown as BookingDataService,
+        mockUserDataService as unknown as UserDataService,
       )
 
       expect(result).toBe(0)
@@ -372,14 +388,17 @@ describe("GameSessionUtils", () => {
 
     it("should return remainingSessions for admin user", async () => {
       const user = { id: memberUserMock.id, role: MembershipType.admin, remainingSessions: 3 }
+      mockUserDataService.getUserById.mockResolvedValue({ remainingSessions: 3 })
 
       const result = await getRemainingSessions(
         user,
         mockSemesterDataService as unknown as SemesterDataService,
         mockBookingDataService as unknown as BookingDataService,
+        mockUserDataService as unknown as UserDataService,
       )
 
       expect(result).toBe(3)
+      expect(mockUserDataService.getUserById).toHaveBeenCalledWith(user.id)
     })
   })
 })

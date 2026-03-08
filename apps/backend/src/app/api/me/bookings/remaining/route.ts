@@ -4,6 +4,7 @@ import { NextResponse } from "next/server"
 import { Security } from "@/business-layer/middleware/Security"
 import BookingDataService from "@/data-layer/services/BookingDataService"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
+import UserDataService from "@/data-layer/services/UserDataService"
 import { getRemainingSessions } from "@/data-layer/utils/GameSessionUtils"
 
 class RouteWrapper {
@@ -16,6 +17,7 @@ class RouteWrapper {
             req.user,
             new SemesterDataService(),
             new BookingDataService(),
+            new UserDataService(),
           ),
         },
       })

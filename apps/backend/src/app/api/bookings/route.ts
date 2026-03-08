@@ -50,6 +50,7 @@ class RouteWrapper {
         userData,
         semesterDataService,
         bookingDataService,
+        userDataService,
       )
 
       if ((remainingSessionsBasedOnRole ?? 0) <= 0)
