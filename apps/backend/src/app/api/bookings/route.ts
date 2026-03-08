@@ -53,7 +53,7 @@ class RouteWrapper {
         userDataService,
       )
 
-      if ((remainingSessionsBasedOnRole ?? 0) <= 0)
+      if (remainingSessionsBasedOnRole <= 0)
         return NextResponse.json(
           { error: "No remaining sessions" },
           { status: StatusCodes.FORBIDDEN },
