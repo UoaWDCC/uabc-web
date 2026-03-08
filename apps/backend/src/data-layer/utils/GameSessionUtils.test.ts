@@ -1,10 +1,13 @@
 import { MembershipType } from "@repo/shared"
 import { casualUserMock, memberUserMock } from "@repo/shared/mocks"
 import type { User } from "@repo/shared/payload-types"
+import type { Mock } from "vitest"
+import type BookingDataService from "@/data-layer/services/BookingDataService"
+import type SemesterDataService from "@/data-layer/services/SemesterDataService"
 import { bookingMock } from "@/test-config/mocks/Booking.mock"
 import { gameSessionMock } from "@/test-config/mocks/GameSession.mock"
 import { gameSessionScheduleMock } from "@/test-config/mocks/GameSessionSchedule.mock"
-import { countAttendees, getSessionProperties } from "./GameSessionUtils"
+import { countAttendees, getRemainingSessions, getSessionProperties } from "./GameSessionUtils"
 
 describe("GameSessionUtils", () => {
   describe("getSessionProperties", () => {
@@ -273,6 +276,110 @@ describe("GameSessionUtils", () => {
         attendees: 1, // admin counts as regular attendee
         casualAttendees: 0,
       })
+    })
+  })
+
+  describe("getRemainingSessions", () => {
+    let mockSemesterDataService: {
+      getCurrentSemester: Mock
+    }
+    let mockBookingDataService: {
+      getAllCurrentWeekBookingsByUserId: Mock
+    }
+
+    beforeEach(() => {
+      mockSemesterDataService = {
+        getCurrentSemester: vi.fn(),
+      }
+      mockBookingDataService = {
+        getAllCurrentWeekBookingsByUserId: vi.fn(),
+      }
+    })
+
+    it("should return 1 for casual user with no existing bookings", async () => {
+      const user = { id: casualUserMock.id, role: MembershipType.casual, remainingSessions: null }
+      mockSemesterDataService.getCurrentSemester.mockResolvedValue({ id: "semester-1" })
+      mockBookingDataService.getAllCurrentWeekBookingsByUserId.mockResolvedValue([])
+
+      const result = await getRemainingSessions(
+        user,
+        mockSemesterDataService as unknown as SemesterDataService,
+        mockBookingDataService as unknown as BookingDataService,
+      )
+
+      expect(result).toBe(1)
+      expect(mockSemesterDataService.getCurrentSemester).toHaveBeenCalled()
+      expect(mockBookingDataService.getAllCurrentWeekBookingsByUserId).toHaveBeenCalledWith(
+        user.id,
+        { id: "semester-1" },
+      )
+    })
+
+    it("should return 0 for casual user with existing bookings", async () => {
+      const user = { id: casualUserMock.id, role: MembershipType.casual, remainingSessions: null }
+      mockSemesterDataService.getCurrentSemester.mockResolvedValue({ id: "semester-1" })
+      mockBookingDataService.getAllCurrentWeekBookingsByUserId.mockResolvedValue([bookingMock])
+
+      const result = await getRemainingSessions(
+        user,
+        mockSemesterDataService as unknown as SemesterDataService,
+        mockBookingDataService as unknown as BookingDataService,
+      )
+
+      expect(result).toBe(0)
+    })
+
+    it("should return remainingSessions for member user", async () => {
+      const user = { id: memberUserMock.id, role: MembershipType.member, remainingSessions: 5 }
+
+      const result = await getRemainingSessions(
+        user,
+        mockSemesterDataService as unknown as SemesterDataService,
+        mockBookingDataService as unknown as BookingDataService,
+      )
+
+      expect(result).toBe(5)
+      expect(mockSemesterDataService.getCurrentSemester).not.toHaveBeenCalled()
+    })
+
+    it("should return 0 for member user with null remainingSessions", async () => {
+      const user = { id: memberUserMock.id, role: MembershipType.member, remainingSessions: null }
+
+      const result = await getRemainingSessions(
+        user,
+        mockSemesterDataService as unknown as SemesterDataService,
+        mockBookingDataService as unknown as BookingDataService,
+      )
+
+      expect(result).toBe(0)
+    })
+
+    it("should return 0 for member user with undefined remainingSessions", async () => {
+      const user = {
+        id: memberUserMock.id,
+        role: MembershipType.member,
+        remainingSessions: undefined,
+      }
+
+      const result = await getRemainingSessions(
+        user,
+        mockSemesterDataService as unknown as SemesterDataService,
+        mockBookingDataService as unknown as BookingDataService,
+      )
+
+      expect(result).toBe(0)
+    })
+
+    it("should return remainingSessions for admin user", async () => {
+      const user = { id: memberUserMock.id, role: MembershipType.admin, remainingSessions: 3 }
+
+      const result = await getRemainingSessions(
+        user,
+        mockSemesterDataService as unknown as SemesterDataService,
+        mockBookingDataService as unknown as BookingDataService,
+      )
+
+      expect(result).toBe(3)
     })
   })
 })

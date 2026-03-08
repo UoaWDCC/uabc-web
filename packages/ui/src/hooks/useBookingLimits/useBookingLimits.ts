@@ -18,6 +18,10 @@ interface UseBookingLimitsOptions {
    * The number of sessions already booked this week.
    */
   alreadyBookedCount?: number
+  /**
+   * The number of remaining sessions for the user.
+   */
+  remainingSessions: number
 }
 
 /**
@@ -58,14 +62,16 @@ interface UseBookingLimitsReturn {
  *
  * @example
  * const limits = useBookingLimits({
- *   user: { role: MembershipType.member, remainingSessions: 5 },
+ *   user: { role: MembershipType.member },
  *   selectedCount: 1, // currently selecting 1
+ *   remainingSessions: 5, // has 5 remaining sessions
  *   alreadyBookedCount: 1, // already booked 1 this week
  * })
  * // limits.sessionsLabel = "0 / 2 this week • 4 total remaining"
  */
 export const useBookingLimits = ({
   user,
+  remainingSessions,
   selectedCount,
   alreadyBookedCount = 0,
 }: UseBookingLimitsOptions): UseBookingLimitsReturn => {
@@ -87,8 +93,8 @@ export const useBookingLimits = ({
   )
 
   const totalSessionsLeft = useMemo(
-    () => Math.max(0, (user.remainingSessions ?? 0) - selectedCount),
-    [user.remainingSessions, selectedCount],
+    () => Math.max(0, remainingSessions - selectedCount),
+    [remainingSessions, selectedCount],
   )
 
   const maxBookings = useMemo(

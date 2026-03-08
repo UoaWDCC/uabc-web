@@ -34,15 +34,15 @@ describe("/api/bookings", async () => {
   const gameSessionDataService = new GameSessionDataService()
   const userDataService = new UserDataService()
 
+  const now = new Date()
+
+  const currentSemesterCreateMock: CreateSemesterData = {
+    ...semesterCreateMock,
+    startDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1)).toISOString(),
+    endDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 4, 0)).toISOString(),
+  }
+
   describe("POST", () => {
-    const now = new Date()
-
-    const currentSemesterCreateMock: CreateSemesterData = {
-      ...semesterCreateMock,
-      startDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1)).toISOString(),
-      endDate: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 4, 0)).toISOString(),
-    }
-
     it("should return a 401 if token is missing", async () => {
       const res = await POST(createMockNextRequest())
       expect(res.status).toBe(StatusCodes.UNAUTHORIZED)
@@ -105,6 +105,11 @@ describe("/api/bookings", async () => {
         futureGameSessionCreateMock,
       )
 
+      // Ensure member has enough remaining sessions so we hit the weekly limit, not "No remaining sessions"
+      await userDataService.updateUser(memberUserMock.id, {
+        remainingSessions: 10,
+      })
+
       await bookingDataService.createBooking({
         ...bookingCreateMock,
         gameSession: gameSession.id,
@@ -126,7 +131,7 @@ describe("/api/bookings", async () => {
       expect(await res.json()).toStrictEqual({ error: "Weekly booking limit reached" })
     })
 
-    it("should return a 403 if a member has reached their max number of bookings per week", async () => {
+    it("should return a 403 if a casual has reached their max number of bookings per week", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
 
       const currentSemester = await semesterDataService.createSemester(currentSemesterCreateMock)
@@ -162,7 +167,7 @@ describe("/api/bookings", async () => {
 
       const res = await POST(req)
       expect(res.status).toBe(StatusCodes.FORBIDDEN)
-      expect(await res.json()).toStrictEqual({ error: "Weekly booking limit reached" })
+      expect(await res.json()).toStrictEqual({ error: "No remaining sessions" })
     })
 
     it("should call the booking confirmation email service", async () => {
@@ -198,13 +203,18 @@ describe("/api/bookings", async () => {
       )
     })
 
-    it("should return a 409 if the user has already made a booking for the session", async () => {
-      cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const gameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+    it("should return a 409 if a member user has already made a booking for the session", async () => {
+      cookieStore.set(AUTH_COOKIE_NAME, memberToken)
+      const currentSemester = await semesterDataService.createSemester(currentSemesterCreateMock)
+      const gameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: currentSemester,
+      })
+
       await bookingDataService.createBooking({
         ...bookingCreateMock,
         gameSession: gameSession.id,
-        user: casualUserMock,
+        user: memberUserMock,
       })
 
       const req = createMockNextRequest("/api/bookings", "POST", {
@@ -219,13 +229,25 @@ describe("/api/bookings", async () => {
 
     it("should return a 403 if the user has no remaining sessions", async () => {
       cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-      const gameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
-      await userDataService.updateUser(casualUserMock.id, {
-        remainingSessions: -1,
+      const currentSemester = await semesterDataService.createSemester(currentSemesterCreateMock)
+      const gameSession = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: currentSemester,
+      })
+      const gameSession2 = await gameSessionDataService.createGameSession({
+        ...gameSessionCreateMock,
+        semester: currentSemester,
+      })
+
+      // Create a booking on a different session so getRemainingSessions returns 0 for casual
+      await bookingDataService.createBooking({
+        ...bookingCreateMock,
+        gameSession: gameSession.id,
+        user: casualUserMock,
       })
 
       const req = createMockNextRequest("", "POST", {
-        gameSession,
+        gameSession: gameSession2,
         playerLevel: PlayLevel.beginner,
       } satisfies CreateBookingRequest)
       const res = await POST(req)
@@ -268,7 +290,11 @@ describe("/api/bookings", async () => {
 
   it("should return a 403 if the user is a casual and has exceeded booking capacity", async () => {
     cookieStore.set(AUTH_COOKIE_NAME, casualToken)
-    const gameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+    const currentSemester = await semesterDataService.createSemester(currentSemesterCreateMock)
+    const gameSession = await gameSessionDataService.createGameSession({
+      ...gameSessionCreateMock,
+      semester: currentSemester,
+    })
     await bookingDataService.createBooking({
       ...bookingCreateMock,
       gameSession: gameSession.id,
@@ -284,12 +310,16 @@ describe("/api/bookings", async () => {
     const res = await POST(req)
 
     expect(res.status).toBe(StatusCodes.FORBIDDEN)
-    expect(await res.json()).toStrictEqual({ error: "Session is full for the selected user role" })
+    expect(await res.json()).toStrictEqual({ error: "No remaining sessions" })
   })
 
   it("should a 403 if the user is a member and has exceeded booking capacity", async () => {
     cookieStore.set(AUTH_COOKIE_NAME, memberToken)
-    const gameSession = await gameSessionDataService.createGameSession(gameSessionCreateMock)
+    const currentSemester = await semesterDataService.createSemester(currentSemesterCreateMock)
+    const gameSession = await gameSessionDataService.createGameSession({
+      ...gameSessionCreateMock,
+      semester: currentSemester,
+    })
     await bookingDataService.createBooking({
       ...bookingCreateMock,
       gameSession: gameSession.id,

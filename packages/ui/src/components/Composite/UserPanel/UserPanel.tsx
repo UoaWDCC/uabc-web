@@ -30,6 +30,10 @@ export interface UserPanelProps extends CardProps {
    */
   user: User
   /**
+   * The number of remaining sessions for the user
+   */
+  remainingSessions: number
+  /**
    * Props for the edit icon button
    *
    * @remarks
@@ -70,8 +74,13 @@ export interface UserPanelProps extends CardProps {
  *   }}
  * />
  */
-export const UserPanel: FC<UserPanelProps> = ({ user, iconButtonProps, ...props }) => {
-  const { firstName, lastName, role, email, phoneNumber, remainingSessions, image } = user
+export const UserPanel: FC<UserPanelProps> = ({
+  user,
+  iconButtonProps,
+  remainingSessions,
+  ...props
+}) => {
+  const { firstName, lastName, role, email, phoneNumber, image } = user
   return (
     <Card
       bg={["secondary.50", "secondary.900"]}

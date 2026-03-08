@@ -27,6 +27,12 @@ export const GetBookingsResponseSchema = z.object({
   data: z.array(BookingSchema),
 })
 
+export const GetRemainingSessionsResponseSchema = z.object({
+  data: z.object({
+    remainingSessions: z.number(),
+  }),
+})
+
 export const SelectACourtFormDataSchema = z.object({
   bookingTimes: z.array(z.string()).min(1, "Please select at least one session"),
 })

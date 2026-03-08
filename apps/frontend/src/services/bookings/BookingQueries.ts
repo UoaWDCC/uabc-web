@@ -19,3 +19,14 @@ export function useMyBookings() {
     enabled: !!token,
   })
 }
+
+export function useMyRemainingSessions() {
+  const { token } = useAuth()
+  return useQuery({
+    queryKey: [QueryKeys.BOOKINGS_QUERY_KEY, QueryKeys.MY_FUTURE_BOOKINGS_QUERY_KEY],
+    queryFn: async () => {
+      return await BookingService.getRemainingSessions(token)
+    },
+    enabled: !!token,
+  })
+}

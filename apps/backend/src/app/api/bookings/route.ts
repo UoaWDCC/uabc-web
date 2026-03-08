@@ -1,5 +1,6 @@
 import {
   CreateBookingRequestSchema,
+  GameBookingStrategy,
   getMaxBookingSize,
   MembershipType,
   type RequestWithUser,
@@ -14,6 +15,7 @@ import BookingDataService from "@/data-layer/services/BookingDataService"
 import GameSessionDataService from "@/data-layer/services/GameSessionDataService"
 import SemesterDataService from "@/data-layer/services/SemesterDataService"
 import UserDataService from "@/data-layer/services/UserDataService"
+import { getRemainingSessions } from "@/data-layer/utils/GameSessionUtils"
 
 class RouteWrapper {
   @Security("jwt")
@@ -44,16 +46,26 @@ class RouteWrapper {
       // Refetch user data as JWT stored data could be outdated
       const userData = await userDataService.getUserById(req.user.id)
 
-      if ((userData.remainingSessions ?? 0) <= -1)
+      const remainingSessionsBasedOnRole = await getRemainingSessions(
+        userData,
+        semesterDataService,
+        bookingDataService,
+      )
+
+      if ((remainingSessionsBasedOnRole ?? 0) <= 0)
         return NextResponse.json(
           { error: "No remaining sessions" },
           { status: StatusCodes.FORBIDDEN },
         )
 
+      const bookingStrategy =
+        userData.role === MembershipType.member
+          ? GameBookingStrategy.MEMBER
+          : GameBookingStrategy.CASUAL
       if (
-        (userData.role === MembershipType.casual &&
+        (bookingStrategy === GameBookingStrategy.CASUAL &&
           bookings.length >= gameSession.casualCapacity) ||
-        (userData.role === MembershipType.member && bookings.length >= gameSession.capacity)
+        (bookingStrategy === GameBookingStrategy.MEMBER && bookings.length >= gameSession.capacity)
       )
         return NextResponse.json(
           { error: "Session is full for the selected user role" },
@@ -72,6 +84,7 @@ class RouteWrapper {
       // Check if the user's booking limit has been reached
       const currentSemester = await semesterDataService.getCurrentSemester()
 
+      // Important: this controls the weekly booking limit for both casual and member users, as it counts all bookings regardless of user role.
       const allUpcomingBookings = await bookingDataService.getAllCurrentWeekBookingsByUserId(
         req.user.id,
         currentSemester,
@@ -91,14 +104,21 @@ class RouteWrapper {
 
       await MailService.sendBookingConfirmation(newBooking)
 
-      const newRemainingSessions = (userData.remainingSessions ?? 0) - 1
-      // Demote user to casual if session count is lower than or equal to 0
-      await userDataService.updateUser(req.user.id, {
-        remainingSessions: newRemainingSessions,
-        role: newRemainingSessions <= 0 ? MembershipType.casual : req.user.role,
-      })
+      switch (bookingStrategy) {
+        case GameBookingStrategy.CASUAL:
+          // Casual bookings do not affect remaining sessions or membership status
+          return NextResponse.json({ data: newBooking }, { status: StatusCodes.CREATED })
+        case GameBookingStrategy.MEMBER: {
+          const newRemainingSessions = (userData.remainingSessions ?? 0) - 1
+          // Demote user to casual if session count is lower than or equal to 0
+          await userDataService.updateUser(req.user.id, {
+            remainingSessions: newRemainingSessions,
+            role: newRemainingSessions <= 0 ? MembershipType.casual : req.user.role,
+          })
 
-      return NextResponse.json({ data: newBooking }, { status: StatusCodes.CREATED })
+          return NextResponse.json({ data: newBooking }, { status: StatusCodes.CREATED })
+        }
+      }
     } catch (error) {
       if (error instanceof NotFound) {
         return NextResponse.json(

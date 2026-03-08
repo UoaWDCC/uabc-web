@@ -1,5 +1,12 @@
-import { isGameSessionScheduleObject, isUserObject, MembershipType } from "@repo/shared"
+import {
+  GameBookingStrategy,
+  isGameSessionScheduleObject,
+  isUserObject,
+  MembershipType,
+} from "@repo/shared"
 import type { Booking, GameSession } from "@repo/shared/payload-types"
+import type BookingDataService from "@/data-layer/services/BookingDataService"
+import type SemesterDataService from "@/data-layer/services/SemesterDataService"
 
 /**
  * Extract session properties with fallback logic from GameSession
@@ -62,4 +69,33 @@ export const countAttendees = (bookings: Booking[]) => {
   }
 
   return counts
+}
+
+export const getRemainingSessions = async (
+  user: Pick<
+    { id: string; role: string; remainingSessions?: number | null },
+    "id" | "role" | "remainingSessions"
+  >,
+  semesterDataService: SemesterDataService,
+  bookingDataService: BookingDataService,
+): Promise<number> => {
+  const strategy: GameBookingStrategy =
+    user.role === "casual" ? GameBookingStrategy.CASUAL : GameBookingStrategy.MEMBER
+
+  switch (strategy) {
+    case GameBookingStrategy.CASUAL: {
+      const currentSemester = await semesterDataService.getCurrentSemester()
+      const upcomingBookings = await bookingDataService.getAllCurrentWeekBookingsByUserId(
+        user.id,
+        currentSemester,
+      )
+      if (upcomingBookings.length > 0) {
+        return 0
+      }
+      return 1
+    }
+    case GameBookingStrategy.MEMBER: {
+      return user.remainingSessions ?? 0
+    }
+  }
 }
