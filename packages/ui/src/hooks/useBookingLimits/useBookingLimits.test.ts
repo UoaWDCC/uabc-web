@@ -74,7 +74,7 @@ describe("useBookingLimits", () => {
       useBookingLimits({
         user: { ...memberUser, remainingSessions: 0 },
         selectedCount: 0,
-        remainingSessions: memberUser.remainingSessions,
+        remainingSessions: 0,
       }),
     )
 
@@ -89,7 +89,7 @@ describe("useBookingLimits", () => {
       useBookingLimits({
         user: { ...memberUser, remainingSessions: null },
         selectedCount: 0,
-        remainingSessions: memberUser.remainingSessions,
+        remainingSessions: 0,
       }),
     )
 

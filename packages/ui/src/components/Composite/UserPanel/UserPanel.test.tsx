@@ -14,7 +14,9 @@ describe("UserPanel", () => {
   })
 
   it("renders user information correctly", () => {
-    render(<UserPanel remainingSessions={1} user={memberUserMock} />)
+    render(
+      <UserPanel remainingSessions={memberUserMock.remainingSessions ?? 0} user={memberUserMock} />,
+    )
 
     expect(
       screen.getByText(`${memberUserMock.firstName} ${memberUserMock.lastName}`),
