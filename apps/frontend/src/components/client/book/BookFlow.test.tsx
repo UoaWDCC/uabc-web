@@ -90,7 +90,7 @@ describe("<BookFlow />", () => {
 
   it("should handle play level selection and move to next step", async () => {
     const { user } = render(
-      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      <BookFlow auth={mockAuth} remainingSessions={3} sessions={mockSessions} />,
       {
         wrapper: withNuqsTestingAdapter(),
       },
@@ -102,7 +102,7 @@ describe("<BookFlow />", () => {
 
   it("should handle court selection and move to confirmation step", async () => {
     const { user } = render(
-      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      <BookFlow auth={mockAuth} remainingSessions={3} sessions={mockSessions} />,
       {
         wrapper: withNuqsTestingAdapter(),
       },
@@ -119,7 +119,7 @@ describe("<BookFlow />", () => {
 
   it("should handle back navigation from select court to play level", async () => {
     const { user } = render(
-      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      <BookFlow auth={mockAuth} remainingSessions={3} sessions={mockSessions} />,
       {
         wrapper: withNuqsTestingAdapter(),
       },
@@ -135,7 +135,7 @@ describe("<BookFlow />", () => {
 
   it("should handle back navigation from confirmation to select court", async () => {
     const { user } = render(
-      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      <BookFlow auth={mockAuth} remainingSessions={3} sessions={mockSessions} />,
       {
         wrapper: withNuqsTestingAdapter(),
       },
@@ -169,7 +169,7 @@ describe("<BookFlow />", () => {
       },
     })
     const { user } = render(
-      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      <BookFlow auth={mockAuth} remainingSessions={3} sessions={mockSessions} />,
       {
         wrapper: withNuqsTestingAdapter(),
       },
@@ -188,7 +188,7 @@ describe("<BookFlow />", () => {
 
   it("should render booking confirmation with correct data", async () => {
     const { user } = render(
-      <BookFlow auth={mockAuth} remainingSessions={0} sessions={mockSessions} />,
+      <BookFlow auth={mockAuth} remainingSessions={3} sessions={mockSessions} />,
       {
         wrapper: withNuqsTestingAdapter(),
       },
@@ -210,7 +210,7 @@ describe("<BookFlow />", () => {
         role: MembershipType.casual,
       },
     }
-    render(<BookFlow auth={casualAuth} remainingSessions={0} sessions={mockSessions} />, {
+    render(<BookFlow auth={casualAuth} remainingSessions={3} sessions={mockSessions} />, {
       wrapper: withNuqsTestingAdapter(),
     })
     expect(screen.getByText(/beginner/i)).toBeInTheDocument()
@@ -224,7 +224,7 @@ describe("<BookFlow />", () => {
         role: MembershipType.admin,
       },
     }
-    render(<BookFlow auth={adminAuth} remainingSessions={0} sessions={mockSessions} />, {
+    render(<BookFlow auth={adminAuth} remainingSessions={3} sessions={mockSessions} />, {
       wrapper: withNuqsTestingAdapter(),
     })
     expect(screen.getByText(/beginner/i)).toBeInTheDocument()
