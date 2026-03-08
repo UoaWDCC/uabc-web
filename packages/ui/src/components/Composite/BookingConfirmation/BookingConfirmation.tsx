@@ -141,7 +141,7 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
             descriptionProps: { fontSize: "md", fontWeight: "medium" },
           },
           {
-            term: "Attendees",
+            term: user.role === "casual" ? "Casual Attendees" : "Attendees",
             description:
               user.role === MembershipType.casual
                 ? `${booking.casualAttendees} / ${booking.casualCapacity}`
