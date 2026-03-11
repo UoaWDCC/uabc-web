@@ -101,4 +101,11 @@ describe("<SemesterNamePopUp />", () => {
     // The form should prevent submission with empty name due to validation
     // This test verifies the form behavior
   })
+
+  it("should render custom title when provided", async () => {
+    const { user } = render(<SemesterNamePopUpExample {...requiredProps} title="Edit Semester" />)
+    await user.click(screen.getByText("Open Semester Name PopUp"))
+
+    expect(screen.getByText("Edit Semester")).toBeInTheDocument()
+  })
 })

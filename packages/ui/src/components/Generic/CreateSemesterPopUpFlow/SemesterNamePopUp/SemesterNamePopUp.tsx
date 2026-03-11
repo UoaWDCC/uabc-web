@@ -36,6 +36,11 @@ export interface SemesterNamePopUpProps {
    * Handler called when the user clicks the cancel button or closes the dialog.
    */
   onCancel?: () => void
+  /**
+   * The title to display in the dialog header.
+   * @default "Create New Semester"
+   */
+  title?: string
 }
 
 /**
@@ -52,7 +57,7 @@ export interface SemesterNamePopUpProps {
  * @returns The SemesterNamePopUp dialog component.
  */
 export const SemesterNamePopUp: FC<SemesterNamePopUpProps> = memo(
-  ({ defaultValues, open, onConfirm, onCancel }) => {
+  ({ defaultValues, open, onConfirm, onCancel, title = "Create New Semester" }) => {
     const {
       register,
       handleSubmit,
@@ -90,7 +95,7 @@ export const SemesterNamePopUp: FC<SemesterNamePopUpProps> = memo(
         >
           <DialogHeader justifyContent="center" w="full">
             <Heading.h2 fontSize="5xl" fontWeight="semibold" textAlign="center">
-              Create New Semester
+              {title}
             </Heading.h2>
           </DialogHeader>
           <DialogBody justifyContent="center" px={{ base: "10%", md: "15%" }}>
