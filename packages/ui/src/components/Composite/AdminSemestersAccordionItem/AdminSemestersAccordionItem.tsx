@@ -45,7 +45,7 @@ export interface AdminSemestersAccordionItemProps {
   /**
    * Callback function to edit the semester.
    */
-  onEditSemester?: (semesterId: string) => void
+  onEditSemester?: (semester: Semester) => void
   /**
    * Callback function to delete the semester by its ID.
    */
@@ -86,7 +86,7 @@ export const AdminSemestersAccordionItem = ({
                 variant="ghost"
               />
               <MenuList onClick={(e) => e.stopPropagation()}>
-                <MenuItem onClick={() => onEditSemester?.(semester.id)}>Edit</MenuItem>
+                <MenuItem onClick={() => onEditSemester?.(semester)}>Edit</MenuItem>
                 <MenuItem onClick={() => onDeleteSemester?.(semester.id)}>Delete</MenuItem>
               </MenuList>
             </Menu>

@@ -1,5 +1,5 @@
 import { Popup } from "@repo/shared/enums"
-import type { GameSessionSchedule } from "@repo/shared/payload-types"
+import type { GameSessionSchedule, Semester } from "@repo/shared/payload-types"
 import type { CreateGameSchedulePopUpFormValues } from "@repo/shared/schemas"
 import type { CreateSemesterData } from "@repo/shared/types"
 import { timeInputToIso } from "@repo/shared/utils"
@@ -15,6 +15,7 @@ import {
 import {
   useCreateSemester,
   useDeleteSemester,
+  useUpdateSemester,
 } from "@/services/admin/semester/AdminSemesterMutations"
 import { useGetAllSemesters } from "@/services/semester/SemesterQueries"
 import { SemesterScheduleAccordionItem } from "./SemesterScheduleAccordionItem"
@@ -84,6 +85,54 @@ export const AdminSemesters = () => {
       })
     },
     [createSemesterMutation, notice],
+  )
+
+  // Edit semester logic
+  const [semesterToEdit, setSemesterToEdit] = useState<Semester | null>(null)
+  const {
+    open: openUpdateSemester,
+    onOpen: onOpenUpdateSemester,
+    onClose: onCloseUpdateSemester,
+  } = useDisclosure()
+  const updateSemesterMutation = useUpdateSemester()
+  const handleEditSemester = useCallback(
+    (semester: Semester) => {
+      setSemesterToEdit(semester)
+      onOpenUpdateSemester()
+    },
+    [onOpenUpdateSemester],
+  )
+  const handleEditSemesterConfirm = useCallback(
+    (data: CreateSemesterData) => {
+      if (!semesterToEdit) {
+        return
+      }
+      updateSemesterMutation.mutate(
+        {
+          id: semesterToEdit.id,
+          data,
+        },
+        {
+          onSuccess: () => {
+            notice({
+              title: "Update successful",
+              description: "Semester has been updated",
+              status: "success",
+            })
+            onCloseUpdateSemester()
+            setSemesterToEdit(null)
+          },
+          onError: () => {
+            notice({
+              title: "Update failed",
+              description: "Failed to update semester",
+              status: "error",
+            })
+          },
+        },
+      )
+    },
+    [updateSemesterMutation, semesterToEdit, notice, onCloseUpdateSemester],
   )
 
   // Create game session schedule logic
@@ -243,6 +292,7 @@ export const AdminSemesters = () => {
                 onOpenDeleteSemester()
               }}
               onEditSchedule={handleEditSchedule}
+              onEditSemester={handleEditSemester}
               semester={sem}
             />
           ))
@@ -274,6 +324,23 @@ export const AdminSemesters = () => {
         }}
         onComplete={handleCreateSemester}
         open={!!openCreateSemester}
+      />
+      <CreateSemesterPopUpFlow
+        confirmationTitle="Semester Edit Confirmation"
+        initialValues={
+          semesterToEdit
+            ? {
+                ...semesterToEdit,
+              }
+            : undefined
+        }
+        key={semesterToEdit?.id}
+        onClose={() => {
+          onCloseUpdateSemester()
+          setSemesterToEdit(null)
+        }}
+        onComplete={handleEditSemesterConfirm}
+        open={openUpdateSemester}
       />
       <Dialog
         cancel="Cancel"
