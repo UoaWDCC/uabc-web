@@ -38,7 +38,7 @@ const AdminSemesterService = {
     data: UpdateSemesterRequest
     token: string | null
   }) => {
-    const response = await apiClient.put(
+    const response = await apiClient.patch(
       `/api/admin/semesters/${id}`,
       data,
       GetSemesterResponseSchema,
