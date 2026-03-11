@@ -1,9 +1,20 @@
+import { semesterMock } from "@repo/shared/mocks"
 import { render, screen, waitFor } from "@repo/ui/test-utils"
 import { Button } from "@yamada-ui/react"
 import type { ComponentProps } from "react"
 import { isValidElement, useState } from "react"
 import * as CreateSemesterPopUpFlowModule from "."
 import { CreateSemesterPopUpFlow } from "./CreateSemesterPopUpFlow"
+
+const initialValuesMock = {
+  name: semesterMock.name,
+  startDate: semesterMock.startDate,
+  endDate: semesterMock.endDate,
+  breakStart: semesterMock.breakStart,
+  breakEnd: semesterMock.breakEnd,
+  bookingOpenDay: semesterMock.bookingOpenDay,
+  bookingOpenTime: semesterMock.bookingOpenTime,
+}
 
 const CreateSemesterPopUpFlowExample = (
   props: Omit<ComponentProps<typeof CreateSemesterPopUpFlow>, "open">,
@@ -302,5 +313,184 @@ describe("<CreateSemesterPopUpFlow />", () => {
     await user.click(screen.getByLabelText("Close dialog"))
 
     expect(onComplete).not.toHaveBeenCalled()
+  })
+
+  describe("initialValues", () => {
+    it("should pre-fill the semester name step with initialValues", async () => {
+      const { user } = render(<CreateSemesterPopUpFlowExample initialValues={initialValuesMock} />)
+      await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+      expect((screen.getByPlaceholderText("Enter Semester Name") as HTMLInputElement).value).toBe(
+        semesterMock.name,
+      )
+    })
+
+    it("should skip to step 0 and preserve name when navigating forward with initialValues", async () => {
+      const { user } = render(<CreateSemesterPopUpFlowExample initialValues={initialValuesMock} />)
+      await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByText("Semester Dates")).toBeInTheDocument()
+      })
+      expect(screen.getByText(semesterMock.name)).toBeInTheDocument()
+    })
+
+    it("should pre-fill the booking settings step with initialValues", async () => {
+      const { user } = render(<CreateSemesterPopUpFlowExample initialValues={initialValuesMock} />)
+      await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByText("Semester Dates")).toBeInTheDocument()
+      })
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByText(/Semester Break/)).toBeInTheDocument()
+      })
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument()
+      })
+
+      expect(screen.getByRole("combobox", { name: "Select a day" })).toHaveTextContent("Monday")
+      expect((screen.getByLabelText("Booking Open Time") as HTMLInputElement).value).toBe("12:00")
+    }, 10_000)
+
+    it("should show the confirmation step with pre-filled data from initialValues", async () => {
+      const { user } = render(<CreateSemesterPopUpFlowExample initialValues={initialValuesMock} />)
+      await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByText("Semester Dates")).toBeInTheDocument()
+      })
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByText(/Semester Break/)).toBeInTheDocument()
+      })
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument()
+      })
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByText("Semester Creation Confirmation")).toBeInTheDocument()
+      })
+      expect(screen.getByText(semesterMock.name)).toBeInTheDocument()
+      expect(screen.getByText("Monday")).toBeInTheDocument()
+    }, 10_000)
+
+    it("should call onComplete with pre-filled data when confirming with initialValues", async () => {
+      const onComplete = vi.fn()
+      const { user } = render(
+        <CreateSemesterPopUpFlowExample
+          initialValues={initialValuesMock}
+          onComplete={onComplete}
+        />,
+      )
+      await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByText("Semester Dates")).toBeInTheDocument()
+      })
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByText(/Semester Break/)).toBeInTheDocument()
+      })
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument()
+      })
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByText("Semester Creation Confirmation")).toBeInTheDocument()
+      })
+      await user.click(screen.getByRole("button", { name: "Confirm" }))
+
+      expect(onComplete).toHaveBeenCalledOnce()
+      expect(onComplete).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: semesterMock.name,
+          bookingOpenDay: semesterMock.bookingOpenDay,
+          bookingOpenTime: semesterMock.bookingOpenTime,
+        }),
+      )
+    }, 10_000)
+
+    it("should reset state to empty when closed even when initialValues were provided", async () => {
+      const { user } = render(<CreateSemesterPopUpFlowExample initialValues={initialValuesMock} />)
+      await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+      await user.click(screen.getByLabelText("Close dialog"))
+
+      await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+      await waitFor(() => {
+        expect(screen.getByPlaceholderText("Enter Semester Name")).toBeInTheDocument()
+      })
+      expect((screen.getByPlaceholderText("Enter Semester Name") as HTMLInputElement).value).toBe(
+        "",
+      )
+    })
+  })
+
+  describe("confirmationTitle", () => {
+    it("should display the default confirmation title when not provided", async () => {
+      const { user } = render(<CreateSemesterPopUpFlowExample initialValues={initialValuesMock} />)
+      await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+      await user.click(screen.getByRole("button", { name: "Next" }))
+      await waitFor(() => expect(screen.getByText("Semester Dates")).toBeInTheDocument())
+      await user.click(screen.getByRole("button", { name: "Next" }))
+      await waitFor(() => expect(screen.getByText(/Semester Break/)).toBeInTheDocument())
+      await user.click(screen.getByRole("button", { name: "Next" }))
+      await waitFor(() =>
+        expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument(),
+      )
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByText("Semester Creation Confirmation")).toBeInTheDocument()
+      })
+    }, 10_000)
+
+    it("should display a custom confirmationTitle on the confirmation step", async () => {
+      const { user } = render(
+        <CreateSemesterPopUpFlowExample
+          confirmationTitle="Semester Edit Confirmation"
+          initialValues={initialValuesMock}
+        />,
+      )
+      await user.click(screen.getByRole("button", { name: "Open Flow" }))
+
+      await user.click(screen.getByRole("button", { name: "Next" }))
+      await waitFor(() => expect(screen.getByText("Semester Dates")).toBeInTheDocument())
+      await user.click(screen.getByRole("button", { name: "Next" }))
+      await waitFor(() => expect(screen.getByText(/Semester Break/)).toBeInTheDocument())
+      await user.click(screen.getByRole("button", { name: "Next" }))
+      await waitFor(() =>
+        expect(screen.getByRole("combobox", { name: "Select a day" })).toBeInTheDocument(),
+      )
+      await user.click(screen.getByRole("button", { name: "Next" }))
+
+      await waitFor(() => {
+        expect(screen.getByText("Semester Edit Confirmation")).toBeInTheDocument()
+      })
+      expect(screen.queryByText("Semester Creation Confirmation")).not.toBeInTheDocument()
+    }, 10_000)
   })
 })
