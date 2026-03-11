@@ -35,17 +35,38 @@ import {
 import type { FC } from "react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 
+/**
+ * Props for the CreateGameSchedulePopUp component.
+ * @extends DialogProps
+ */
 export interface CreateGameSchedulePopUpProps extends DialogProps {
+  /**
+   * Optional title for the popup.
+   */
   title?: string
+  /**
+   * Optional schedule to edit.
+   */
   scheduleToEdit?: GameSessionSchedule | null
+  /**
+   * Callback when confirming the form.
+   */
   onConfirm?: (data: CreateGameSchedulePopUpFormValues) => void
 }
 
+/**
+ * Options for weekdays, formatted for Select component.
+ */
 const WeekdayOptions = Object.values(Weekday).map((day) => ({
   value: day,
   label: day.charAt(0).toUpperCase() + day.slice(1),
 }))
 
+/**
+ * A popup dialog for creating or editing a game schedule.
+ * @param props - The props for the component.
+ * @returns The rendered component.
+ */
 export const CreateGameSchedulePopUp: FC<CreateGameSchedulePopUpProps> = ({
   title = "Create Game Schedule",
   scheduleToEdit,
