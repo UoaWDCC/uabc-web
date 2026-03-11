@@ -18,13 +18,13 @@ export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] 
 
   const sessionDate = new Date(semesterStart)
   const dayOffSet = getDaysBetweenWeekdays(Object.values(Weekday)[sessionDate.getUTCDay()], day)
-  sessionDate.setDate(sessionDate.getUTCDate() + dayOffSet)
+  sessionDate.setUTCDate(sessionDate.getUTCDate() + dayOffSet)
 
   while (sessionDate <= semesterEnd) {
     if (sessionDate < breakStart || sessionDate > breakEnd) {
       dates.push(new Date(sessionDate))
     }
-    sessionDate.setDate(sessionDate.getUTCDate() + 7)
+    sessionDate.setUTCDate(sessionDate.getUTCDate() + 7)
   }
 
   return dates
@@ -40,7 +40,7 @@ export function getWeeklySessionDates(day: Weekday, semester: Semester): Date[] 
 export function createGameSessionTimes(schedule: GameSessionSchedule, date: Date) {
   const day = date.getUTCDate()
   const month = date.getUTCMonth()
-  const year = date.getFullYear()
+  const year = date.getUTCFullYear()
 
   const start = new Date(schedule.startTime)
   const end = new Date(schedule.endTime)
