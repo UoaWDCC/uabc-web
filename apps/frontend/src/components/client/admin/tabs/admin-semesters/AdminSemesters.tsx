@@ -335,6 +335,7 @@ export const AdminSemesters = () => {
             : undefined
         }
         key={semesterToEdit?.id}
+        nameStepTitle="Edit Semester"
         onClose={() => {
           onCloseUpdateSemester()
           setSemesterToEdit(null)
