@@ -67,7 +67,7 @@ export const useDeleteGameSessionSchedule = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         // TODO: when get by id is implemented, only invalidate the updated id for get by id
-        queryKey: [QueryKeys.GAME_SESSION_SCHEDULE_QUERY_KEY],
+        queryKey: [QueryKeys.GAME_SESSION_SCHEDULE_QUERY_KEY, QueryKeys.GAME_SESSION_QUERY_KEY],
       })
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.GAME_SESSION_QUERY_KEY],
