@@ -1,10 +1,17 @@
 import { Popup } from "@repo/shared/enums"
+import type { GameSessionSchedule } from "@repo/shared/payload-types"
+import type { CreateGameSchedulePopUpFormValues } from "@repo/shared/schemas"
 import type { CreateSemesterData } from "@repo/shared/types"
-import { CreateSemesterPopUpFlow } from "@repo/ui/components/Generic"
+import { timeInputToIso } from "@repo/shared/utils"
+import { CreateGameSchedulePopUp, CreateSemesterPopUpFlow } from "@repo/ui/components/Generic"
 import { Accordion, Button, Center, Dialog, useDisclosure, useNotice } from "@yamada-ui/react"
 import { parseAsBoolean, useQueryState } from "nuqs"
 import { useCallback, useState } from "react"
-import { useDeleteGameSessionSchedule } from "@/services/admin/game-session-schedule/AdminGameSessionScheduleMutations"
+import {
+  useCreateGameSessionSchedule,
+  useDeleteGameSessionSchedule,
+  useUpdateGameSessionSchedule,
+} from "@/services/admin/game-session-schedule/AdminGameSessionScheduleMutations"
 import {
   useCreateSemester,
   useDeleteSemester,
@@ -79,6 +86,108 @@ export const AdminSemesters = () => {
     [createSemesterMutation, notice],
   )
 
+  // Create game session schedule logic
+  const [scheduleTargetSemesterId, setScheduleTargetSemesterId] = useState<string | null>(null)
+  const {
+    open: openCreateSchedule,
+    onOpen: onOpenCreateSchedule,
+    onClose: onCloseCreateSchedule,
+  } = useDisclosure()
+  const createScheduleMutation = useCreateGameSessionSchedule()
+  const handleAddSchedule = useCallback(
+    (semesterId: string) => {
+      setScheduleTargetSemesterId(semesterId)
+      onOpenCreateSchedule()
+    },
+    [onOpenCreateSchedule],
+  )
+  const handleCreateScheduleConfirm = useCallback(
+    (data: CreateGameSchedulePopUpFormValues) => {
+      if (!scheduleTargetSemesterId) {
+        return
+      }
+      createScheduleMutation.mutate(
+        {
+          ...data,
+          semester: scheduleTargetSemesterId,
+          startTime: timeInputToIso(data.startTime),
+          endTime: timeInputToIso(data.endTime),
+        },
+        {
+          onSuccess: () => {
+            notice({
+              title: "Creation successful",
+              description: "Session schedule has been created",
+              status: "success",
+            })
+            onCloseCreateSchedule()
+            setScheduleTargetSemesterId(null)
+          },
+          onError: () => {
+            notice({
+              title: "Creation failed",
+              description: "Failed to create session schedule",
+              status: "error",
+            })
+          },
+        },
+      )
+    },
+    [createScheduleMutation, scheduleTargetSemesterId, notice, onCloseCreateSchedule],
+  )
+
+  // Edit game session schedule logic
+  const [scheduleToEdit, setScheduleToEdit] = useState<GameSessionSchedule | null>(null)
+  const {
+    open: openEditSchedule,
+    onOpen: onOpenEditSchedule,
+    onClose: onCloseEditSchedule,
+  } = useDisclosure()
+  const updateScheduleMutation = useUpdateGameSessionSchedule()
+  const handleEditSchedule = useCallback(
+    (schedule: GameSessionSchedule) => {
+      setScheduleToEdit(schedule)
+      onOpenEditSchedule()
+    },
+    [onOpenEditSchedule],
+  )
+  const handleEditScheduleConfirm = useCallback(
+    (data: CreateGameSchedulePopUpFormValues) => {
+      if (!scheduleToEdit) {
+        return
+      }
+      updateScheduleMutation.mutate(
+        {
+          id: scheduleToEdit.id,
+          data: {
+            ...data,
+            startTime: timeInputToIso(data.startTime),
+            endTime: timeInputToIso(data.endTime),
+          },
+        },
+        {
+          onSuccess: () => {
+            notice({
+              title: "Update successful",
+              description: "Session schedule has been updated",
+              status: "success",
+            })
+            onCloseEditSchedule()
+            setScheduleToEdit(null)
+          },
+          onError: () => {
+            notice({
+              title: "Update failed",
+              description: "Failed to update session schedule",
+              status: "error",
+            })
+          },
+        },
+      )
+    },
+    [updateScheduleMutation, scheduleToEdit, notice, onCloseEditSchedule],
+  )
+
   // Delete game session logic
   const deleteScheduleMutation = useDeleteGameSessionSchedule()
   const handleDeleteSchedule = useCallback(
@@ -127,11 +236,13 @@ export const AdminSemesters = () => {
             <SemesterScheduleAccordionItem
               enabled={expandedIndexes.has(index)}
               key={sem.id}
+              onAddSchedule={() => handleAddSchedule(sem.id)}
               onDeleteSchedule={handleDeleteSchedule}
               onDeleteSemester={(semId) => {
                 setSemesterToDelete(semId)
                 onOpenDeleteSemester()
               }}
+              onEditSchedule={handleEditSchedule}
               semester={sem}
             />
           ))
@@ -140,6 +251,23 @@ export const AdminSemesters = () => {
         )}
       </Accordion>
       {/* Action flows and confirmations */}
+      <CreateGameSchedulePopUp
+        key={scheduleTargetSemesterId}
+        onClose={onCloseCreateSchedule}
+        onConfirm={handleCreateScheduleConfirm}
+        open={openCreateSchedule}
+      />
+      <CreateGameSchedulePopUp
+        key={scheduleToEdit?.id}
+        onClose={() => {
+          onCloseEditSchedule()
+          setScheduleToEdit(null)
+        }}
+        onConfirm={handleEditScheduleConfirm}
+        open={openEditSchedule}
+        scheduleToEdit={scheduleToEdit} // Editing schedule
+        title="Edit Game Schedule"
+      />
       <CreateSemesterPopUpFlow
         onClose={() => {
           setOpenCreateSemester(false)
