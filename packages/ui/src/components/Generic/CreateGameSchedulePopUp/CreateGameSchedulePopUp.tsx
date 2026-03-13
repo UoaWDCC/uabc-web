@@ -14,12 +14,13 @@ import {
   ArrowLeftIcon,
   CalendarDaysIcon,
   Clock3Icon,
+  Clock9Icon,
+  IdCardIcon,
   MapPinIcon,
   UserRoundIcon,
 } from "@yamada-ui/lucide"
 import {
   ButtonGroup,
-  Center,
   Dialog,
   DialogBody,
   DialogCloseButton,
@@ -135,92 +136,117 @@ export const CreateGameSchedulePopUp: FC<CreateGameSchedulePopUpProps> = ({
         </VStack>
       </DialogHeader>
       <DialogBody overflow="visible" w="full">
-        <Center w="full">
-          <VStack gap="6" w="full">
-            <Grid gap="lg" templateColumns={{ base: "1fr", lg: "1fr 1fr" }} w="full">
-              <GridItem as={VStack} gap="md">
-                <FormControl errorMessage={errors.name?.message} invalid={!!errors.name}>
-                  <TextInput
-                    data-testid="name"
-                    placeholder="Name"
-                    size="lg"
-                    type={InputType.Text}
-                    {...register("name")}
+        <Grid
+          gap="md"
+          templateAreas={`
+              "one two"
+              "three four"
+              "five five"
+              "six seven"
+              `}
+          w="full"
+        >
+          <GridItem area="one">
+            <FormControl errorMessage={errors.name?.message} invalid={!!errors.name}>
+              <TextInput
+                data-testid="name"
+                placeholder="Name"
+                size="lg"
+                startElement={<IdCardIcon />}
+                type={InputType.Text}
+                {...register("name")}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem area="two">
+            <FormControl errorMessage={errors.day?.message} invalid={!!errors.day}>
+              <Controller
+                control={control}
+                name="day"
+                render={({ field }) => (
+                  <Select
+                    data-testid="day"
+                    icon={<CalendarDaysIcon />}
+                    items={WeekdayOptions}
+                    placeholder="Weekday"
+                    {...field}
                   />
-                </FormControl>
-                <FormControl errorMessage={errors.location?.message} invalid={!!errors.location}>
-                  <TextInput
-                    data-testid="location"
-                    placeholder="Location"
-                    size="lg"
-                    startElement={<MapPinIcon />}
-                    type={InputType.Text}
-                    {...register("location")}
-                  />
-                </FormControl>
-                <FormControl errorMessage={errors.day?.message} invalid={!!errors.day}>
-                  <Controller
-                    control={control}
-                    name="day"
-                    render={({ field }) => (
-                      <Select
-                        data-testid="day"
-                        icon={<CalendarDaysIcon />}
-                        items={WeekdayOptions}
-                        {...field}
-                      />
-                    )}
-                  />
-                </FormControl>
-                <FormControl errorMessage={errors.capacity?.message} invalid={!!errors.capacity}>
-                  <TextInput
-                    data-testid="capacity"
-                    placeholder="Capacity"
-                    size="lg"
-                    startElement={<UserRoundIcon />}
-                    type={InputType.Number}
-                    {...register("capacity")}
-                  />
-                </FormControl>
-              </GridItem>
-              <GridItem as={VStack} gap="md">
-                <FormControl
-                  errorMessage={errors.casualCapacity?.message}
-                  invalid={!!errors.casualCapacity}
-                >
-                  <TextInput
-                    data-testid="casual-capacity"
-                    placeholder="Casual Capacity"
-                    size="lg"
-                    startElement={<UserRoundIcon />}
-                    type={InputType.Number}
-                    {...register("casualCapacity")}
-                  />
-                </FormControl>
-                <FormControl errorMessage={errors.startTime?.message} invalid={!!errors.startTime}>
-                  <TextInput
-                    data-testid="start-time"
-                    placeholder="Start Time"
-                    size="lg"
-                    startElement={<Clock3Icon />}
-                    type={InputType.Time}
-                    {...register("startTime")}
-                  />
-                </FormControl>
-                <FormControl errorMessage={errors.endTime?.message} invalid={!!errors.endTime}>
-                  <TextInput
-                    data-testid="end-time"
-                    placeholder="End Time"
-                    size="lg"
-                    startElement={<Clock3Icon />}
-                    type={InputType.Time}
-                    {...register("endTime")}
-                  />
-                </FormControl>
-              </GridItem>
-            </Grid>
-          </VStack>
-        </Center>
+                )}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem area="three">
+            <FormControl errorMessage={errors.capacity?.message} invalid={!!errors.capacity}>
+              <TextInput
+                data-testid="capacity"
+                placeholder="Capacity"
+                size="lg"
+                startElement={<UserRoundIcon />}
+                type={InputType.Number}
+                {...register("capacity")}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem area="four">
+            <FormControl
+              errorMessage={errors.casualCapacity?.message}
+              invalid={!!errors.casualCapacity}
+            >
+              <TextInput
+                data-testid="casual-capacity"
+                placeholder="Casual Capacity"
+                size="lg"
+                startElement={<UserRoundIcon />}
+                type={InputType.Number}
+                {...register("casualCapacity")}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem area="five">
+            <FormControl errorMessage={errors.location?.message} invalid={!!errors.location}>
+              <TextInput
+                data-testid="location"
+                placeholder="Location"
+                size="lg"
+                startElement={<MapPinIcon />}
+                type={InputType.Text}
+                {...register("location")}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem area="six">
+            <FormControl
+              errorMessage={errors.startTime?.message}
+              invalid={!!errors.startTime}
+              label="Start time"
+            >
+              <TextInput
+                data-testid="start-time"
+                placeholder="Start Time"
+                size="lg"
+                startElement={<Clock3Icon />}
+                type={InputType.Time}
+                {...register("startTime")}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem area="seven">
+            <FormControl
+              errorMessage={errors.endTime?.message}
+              invalid={!!errors.endTime}
+              label="End time"
+            >
+              <TextInput
+                data-testid="end-time"
+                placeholder="End Time"
+                size="lg"
+                startElement={<Clock9Icon />}
+                type={InputType.Time}
+                {...register("endTime")}
+              />
+            </FormControl>
+          </GridItem>
+        </Grid>
       </DialogBody>
       <DialogFooter gap="6.5" w="full">
         <ButtonGroup
