@@ -16,7 +16,7 @@ import {
   Text,
   VStack,
 } from "@yamada-ui/react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { DateRangeDisplay } from "../../DateRangeDisplay"
 
 export interface SemesterDatePopUpProps {
@@ -75,20 +75,11 @@ export interface SemesterDatePopUpProps {
  */
 export const SemesterDatePopUp: FC<SemesterDatePopUpProps> = memo(
   ({ onBack, onNext, open, onClose, title, semesterName, subtitle, defaultValues, dateRange }) => {
-    const [selectedDate, setSelectedDate] = useState<Date | [Date?, Date?] | null>(null)
-
-    // Reset selected date when component opens, but restore from defaultValues if available
-    useEffect(() => {
-      if (open) {
-        if (defaultValues) {
-          const startDate = new Date(defaultValues.startDate)
-          const endDate = new Date(defaultValues.endDate)
-          setSelectedDate([startDate, endDate])
-        } else {
-          setSelectedDate(null)
-        }
-      }
-    }, [open, defaultValues])
+    const [selectedDate, setSelectedDate] = useState<Date | [Date?, Date?] | null>(
+      defaultValues?.startDate && defaultValues?.endDate
+        ? [new Date(defaultValues.startDate), new Date(defaultValues.endDate)]
+        : null,
+    )
 
     const handleCalendarChange = (date: Date | [Date?, Date?]) => {
       setSelectedDate(date)
