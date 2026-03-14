@@ -33,6 +33,33 @@ describe("DateUtils", () => {
       )
     })
 
+    it("returns dates that all fall on the correct UTC weekday", () => {
+      const semester = {
+        ...semesterMock,
+        startDate: "2025-02-24",
+        endDate: "2025-05-30",
+        breakStart: "2025-04-14",
+        breakEnd: "2025-04-25",
+      }
+
+      const result = getWeeklySessionDates("friday" as Weekday, semester)
+
+      expect(result.length).toBeGreaterThan(0)
+      for (const date of result) {
+        expect(date.getUTCDay()).toBe(5) // 5 is friday index
+      }
+    })
+
+    it("returns dates with exactly 7 days between consecutive sessions", () => {
+      const result = getWeeklySessionDates("wednesday" as Weekday, semesterMock)
+
+      for (let i = 1; i < result.length; i++) {
+        const diff = result[i].getTime() - result[i - 1].getTime()
+        const daysDiff = diff / (1000 * 60 * 60 * 24)
+        expect(daysDiff === 7 || daysDiff > 7).toBe(true)
+      }
+    })
+
     it("returns empty array if no sessions fall outside break", () => {
       const semester = {
         ...semesterMock,

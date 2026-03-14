@@ -5,4 +5,6 @@ export enum Popup {
   CHANGE_SESSION_FLOW = "change-session-flow",
   CREATE_MEMBER = "create-member",
   CREATE_SEMESTER = "create-semester",
+  CREATE_GAME_SCHEDULE = "create-game-schedule",
+  EDIT_GAME_SCHEDULE = "edit-game-schedule",
 }

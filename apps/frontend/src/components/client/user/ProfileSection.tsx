@@ -29,7 +29,7 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
   const deleteBookingMutation = useDeleteBooking()
   const notice = useNotice()
   const [bookingId, setBookingId] = useState<string | null>(null)
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
 
   const handleDeleteBooking = async (bookingId: string) => {
     setBookingId(bookingId)
@@ -139,7 +139,7 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
           loading: deleteBookingMutation.isPending,
         }}
         onClose={cancelDelete}
-        open={isOpen}
+        open={open}
         subtitle="Are you sure you want to delete this booking? This action cannot be undone."
         title="Delete Booking"
       />

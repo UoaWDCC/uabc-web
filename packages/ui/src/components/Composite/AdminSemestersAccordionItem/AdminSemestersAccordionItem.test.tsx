@@ -63,7 +63,7 @@ describe("<AdminSemestersAccordionItem />", () => {
     await user.click(screen.getByRole("button", { name: /semester actions/i }))
     await user.click(screen.getByText("Edit"))
 
-    expect(onEditSemester).toHaveBeenCalledWith(semesterMock.id)
+    expect(onEditSemester).toHaveBeenCalledWith(semesterMock)
   })
 
   it("calls onDeleteSemester with semester id when Delete is clicked", async () => {

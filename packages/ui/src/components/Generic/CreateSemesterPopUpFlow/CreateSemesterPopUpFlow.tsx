@@ -6,6 +6,7 @@ import type {
   SemesterNamePopUpValues,
   Weekday,
 } from "@repo/shared"
+import { isoToTimeInput } from "@repo/shared/utils"
 import { memo, useReducer } from "react"
 import { SemesterCreatedPopUp } from "./SemesterCreatedPopUp"
 import { SemesterDatePopUp } from "./SemesterDatePopUp"
@@ -25,6 +26,22 @@ export interface SemesterFlowState {
 
 const initialState: SemesterFlowState = {
   step: 0,
+}
+
+function buildInitialState(initialValues?: CreateSemesterData): SemesterFlowState {
+  if (!initialValues) {
+    return initialState
+  }
+  return {
+    step: 0,
+    name: initialValues.name,
+    startDate: initialValues.startDate,
+    endDate: initialValues.endDate,
+    breakStart: initialValues.breakStart,
+    breakEnd: initialValues.breakEnd,
+    bookingOpenDay: initialValues.bookingOpenDay,
+    bookingOpenTime: initialValues.bookingOpenTime,
+  }
 }
 
 type SemesterFlowAction =
@@ -87,16 +104,28 @@ interface CreateSemesterPopUpFlowProps {
    * @default false
    */
   open: boolean
-
   /**
    * Handler called when the flow is completed or cancelled.
    */
   onClose?: () => void
-
   /**
    * Callback function to handle the completion of the semester creation flow.
    */
   onComplete?: (data: CreateSemesterData) => void
+  /**
+   * Optional pre-filled values to seed the flow (e.g. when editing an existing semester).
+   */
+  initialValues?: CreateSemesterData
+  /**
+   * Optional title override for the confirmation step.
+   * @default "Semester Creation Confirmation"
+   */
+  confirmationTitle?: string
+  /**
+   * Optional title for the semester name step.
+   * @default "Create New Semester"
+   */
+  nameStepTitle?: string
 }
 
 /**
@@ -108,8 +137,15 @@ interface CreateSemesterPopUpFlowProps {
  * @returns The CreateSemesterPopUpFlow component with all steps
  */
 export const CreateSemesterPopUpFlow = memo(
-  ({ open, onClose, onComplete }: CreateSemesterPopUpFlowProps) => {
-    const [state, dispatch] = useReducer(reducer, initialState)
+  ({
+    open,
+    onClose,
+    onComplete,
+    initialValues,
+    confirmationTitle = "Semester Creation Confirmation",
+    nameStepTitle = "Create New Semester",
+  }: CreateSemesterPopUpFlowProps) => {
+    const [state, dispatch] = useReducer(reducer, initialValues, buildInitialState)
 
     const handleSemesterNameSubmit = (data: SemesterNamePopUpValues) => {
       dispatch({ type: "SET_SEMESTER_NAME", payload: data.name })
@@ -145,6 +181,8 @@ export const CreateSemesterPopUpFlow = memo(
       onClose?.()
     }
 
+    const bookingOpenTimeIso = state.bookingOpenTime
+
     const handleComplete = () => {
       // Can assume that the data fields are filled, otherwise leave to error handling
       onComplete?.({
@@ -159,8 +197,8 @@ export const CreateSemesterPopUpFlow = memo(
       handleClose()
     }
 
-    const bookingOpenTimeDisplay = state.bookingOpenTime
-      ? `${String(new Date(state.bookingOpenTime).getUTCHours()).padStart(2, "0")}:${String(new Date(state.bookingOpenTime).getUTCMinutes()).padStart(2, "0")}`
+    const bookingOpenTimeDisplay = bookingOpenTimeIso
+      ? isoToTimeInput(bookingOpenTimeIso)
       : undefined
 
     const steps = [
@@ -168,11 +206,12 @@ export const CreateSemesterPopUpFlow = memo(
         title: "Semester Name",
         element: (
           <SemesterNamePopUp
-            defaultValues={state.name ? { name: state.name } : { name: "" }}
+            defaultValues={{ name: state.name ?? "" }}
             key="semester-name-popup"
             onCancel={handleClose}
             onConfirm={handleSemesterNameSubmit}
             open={open && state.step === 0}
+            title={nameStepTitle}
           />
         ),
       },
@@ -258,7 +297,7 @@ export const CreateSemesterPopUpFlow = memo(
             onClose={handleClose}
             onConfirm={handleComplete}
             open={open && state.step === 4}
-            title="Semester Creation Confirmation"
+            title={confirmationTitle}
           />
         ),
       },

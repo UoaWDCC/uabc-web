@@ -183,6 +183,53 @@ export function formatDateToString(date: Date): string {
 }
 
 /**
+ * Converts an ISO 8601 datetime string to a time input value in HH:MM format (UTC).
+ *
+ * Intended for populating HTML `<input type="time">` elements from stored ISO timestamps.
+ *
+ * @param iso The ISO 8601 datetime string to convert
+ * @returns Time string in HH:MM format, or empty string if input is falsy or invalid
+ *
+ * @example
+ * ```ts
+ * isoToTimeInput("2024-01-01T09:30:00.000Z") // Returns: "09:30"
+ * isoToTimeInput("2024-01-01T14:05:00.000Z") // Returns: "14:05"
+ * isoToTimeInput("")                          // Returns: ""
+ * isoToTimeInput(undefined)                   // Returns: ""
+ * ```
+ */
+export function isoToTimeInput(iso?: string): string {
+  if (!iso) return ""
+  const date = new Date(iso)
+  if (Number.isNaN(date.getTime())) {
+    return ""
+  }
+  const hours = String(date.getUTCHours()).padStart(2, "0")
+  const minutes = String(date.getUTCMinutes()).padStart(2, "0")
+  return `${hours}:${minutes}`
+}
+
+/**
+ * Converts an HTML `<input type="time">` value (HH:MM) to an ISO 8601 datetime string.
+ *
+ * The date portion is fixed to 1970-01-01 UTC to match the backend's time field normalization.
+ *
+ * @param time The time string in HH:MM format
+ * @returns ISO 8601 datetime string
+ *
+ * @example
+ * ```ts
+ * timeInputToIso("09:30") // Returns: "1970-01-01T09:30:00.000Z"
+ * timeInputToIso("14:05") // Returns: "1970-01-01T14:05:00.000Z"
+ * timeInputToIso("00:00") // Returns: "1970-01-01T00:00:00.000Z"
+ * ```
+ */
+export function timeInputToIso(time: string): string {
+  const [hours, minutes] = time.split(":")
+  return new Date(Date.UTC(1970, 0, 1, Number(hours), Number(minutes))).toISOString()
+}
+
+/**
  * Method used to get the status of a date
  *
  * @param startTime The start time to check the status for

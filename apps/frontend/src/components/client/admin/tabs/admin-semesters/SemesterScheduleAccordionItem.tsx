@@ -30,7 +30,7 @@ interface SemesterScheduleAccordionItemProps {
   /**
    * Callback function to edit the semester.
    */
-  onEditSemester?: (semesterId: string) => void
+  onEditSemester?: (semester: Semester) => void
   /**
    * Callback function to delete the semester by its ID.
    */
