@@ -30,7 +30,7 @@
     "http-status-codes": "2.3.0",
     "jsonwebtoken": "9.0.3",
     "next": "15.4.11",
-    "nodemailer": "7.0.13",
+    "nodemailer": "8.0.1",
     "payload": "3.76.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
