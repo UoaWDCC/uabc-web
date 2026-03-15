@@ -71,6 +71,7 @@ export interface BookingConfirmationProps {
    * The number of sessions the user has already booked this week.
    */
   numberBookedSessions?: number
+  remainingSessions: number
 }
 
 /**
@@ -106,9 +107,11 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
     title = "Booking Confirmation",
     loading,
     numberBookedSessions = 0,
+    remainingSessions,
   }) => {
     const { sessionsLabel } = useBookingLimits({
       user,
+      remainingSessions,
       selectedCount: bookingData.length,
       alreadyBookedCount: numberBookedSessions,
     })
@@ -138,7 +141,7 @@ export const BookingConfirmation = memo<BookingConfirmationProps>(
             descriptionProps: { fontSize: "md", fontWeight: "medium" },
           },
           {
-            term: "Attendees",
+            term: user.role === "casual" ? "Casual Attendees" : "Attendees",
             description:
               user.role === MembershipType.casual
                 ? `${booking.casualAttendees} / ${booking.casualCapacity}`

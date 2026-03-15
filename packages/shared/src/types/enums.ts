@@ -81,3 +81,8 @@ export enum GameSessionStatus {
   UPCOMING = "Upcoming",
   PAST = "Past",
 }
+
+export enum GameBookingStrategy {
+  MEMBER = "member",
+  CASUAL = "casual",
+}

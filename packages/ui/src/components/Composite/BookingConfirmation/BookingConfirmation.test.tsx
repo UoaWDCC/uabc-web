@@ -22,6 +22,7 @@ const defaultProps = {
   },
   onBack: vi.fn(),
   onConfirm: vi.fn(),
+  remainingSessions: 6,
 }
 
 describe("<BookingConfirmation />", () => {

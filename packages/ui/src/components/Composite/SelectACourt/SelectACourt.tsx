@@ -73,6 +73,10 @@ export interface SelectACourtProps {
    * The number of already booked sessions by the user.
    */
   numberBookedSessions?: number
+  /**
+   * Remaining sessions for the user.
+   */
+  remainingSessions: number
 }
 
 export const SelectACourt = memo<SelectACourtProps>(
@@ -85,6 +89,7 @@ export const SelectACourt = memo<SelectACourtProps>(
     onNext,
     initialBookingTimes = [],
     numberBookedSessions = 0,
+    remainingSessions,
   }) => {
     const { control, handleSubmit, watch } = useForm<SelectACourtFormData>({
       defaultValues: { bookingTimes: initialBookingTimes },
@@ -95,6 +100,7 @@ export const SelectACourt = memo<SelectACourtProps>(
 
     const { isMember, maxBookings, sessionsLabel } = useBookingLimits({
       user,
+      remainingSessions,
       selectedCount: selectedSessions.length,
       alreadyBookedCount: numberBookedSessions,
     })

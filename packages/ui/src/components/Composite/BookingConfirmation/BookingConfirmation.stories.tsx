@@ -20,6 +20,7 @@ type Story = StoryObj<typeof BookingConfirmation>
 
 export const Default: Story = {
   args: {
+    remainingSessions: 2,
     bookingData: [
       {
         date: "Tuesday 24/06/25",
@@ -35,7 +36,6 @@ export const Default: Story = {
     ],
     user: {
       role: MembershipType.member,
-      remainingSessions: 2,
     },
   },
 }
@@ -64,6 +64,7 @@ export const CasualMember: Story = {
 
 export const CustomTitle: Story = {
   args: {
+    remainingSessions: 2,
     bookingData: [
       {
         date: "Thursday 26/06/25",
@@ -79,7 +80,6 @@ export const CustomTitle: Story = {
     ],
     user: {
       role: MembershipType.member,
-      remainingSessions: 2,
     },
     title: "Confirm Your Booking",
   },

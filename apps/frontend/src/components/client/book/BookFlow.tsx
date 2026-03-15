@@ -38,12 +38,22 @@ type BookFlowProps = {
    * The number of already booked sessions by the user.
    */
   numberBookedSessions?: number
+
+  /**
+   * The number of remaining sessions for the user.
+   */
+  remainingSessions: number
 }
 
 /**
  * The main component for the booking flow.
  */
-export const BookFlow: FC<BookFlowProps> = ({ auth, sessions, numberBookedSessions }) => {
+export const BookFlow: FC<BookFlowProps> = ({
+  auth,
+  sessions,
+  numberBookedSessions,
+  remainingSessions,
+}) => {
   const bookingFlowReducer = createBookingFlowReducer(sessions)
   const [state, dispatch] = useReducer(bookingFlowReducer, initialState)
   const notice = useNotice()
@@ -135,7 +145,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth, sessions, numberBookedSessio
     )
   }
 
-  if (auth.user.remainingSessions === 0) {
+  if (remainingSessions <= 0) {
     return (
       <EmptyState
         description="You have no remaining sessions."
@@ -163,6 +173,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth, sessions, numberBookedSessio
           numberBookedSessions={numberBookedSessions}
           onBack={handleBack}
           onNext={handleSelectCourt}
+          remainingSessions={remainingSessions}
           sessions={sessions}
           user={auth.user}
         />
@@ -173,6 +184,7 @@ export const BookFlow: FC<BookFlowProps> = ({ auth, sessions, numberBookedSessio
           numberBookedSessions={numberBookedSessions}
           onBack={handleBack}
           onConfirm={handleConfirmBooking}
+          remainingSessions={remainingSessions}
           user={auth.user}
         />
       ) : null}
