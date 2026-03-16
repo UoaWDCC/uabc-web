@@ -286,7 +286,7 @@ export default class BookingDataService {
    *
    * @param userId The ID of the user to bulk delete bookings for
    * @param transactionId an optional transaction ID for the request, useful for tracing
-   * @returns the deleted {@link Booking} documents if it exists, otherwise returns an empty array
+
    */
   public async deleteBookingsByUserId(
     userId: string,
@@ -303,5 +303,28 @@ export default class BookingDataService {
         req: { transactionID: transactionId },
       })
     ).docs
+  }
+
+  /**
+   * Deletes all bookings related to a game session schedule.
+   *
+   * @param scheduleId the ID of the game session schedule whose bookings are to be deleted
+   * @param transactionID an optional transaction ID for the request, useful for tracing
+   */
+  public async deleteRelatedBookingsByScheduleId(
+    scheduleId: string,
+    transactionID?: string | number,
+  ): Promise<void> {
+    await payload.delete({
+      collection: "booking",
+      where: {
+        "gameSession.gameSessionSchedule": {
+          equals: scheduleId,
+        },
+      },
+      req: {
+        transactionID,
+      },
+    })
   }
 }
