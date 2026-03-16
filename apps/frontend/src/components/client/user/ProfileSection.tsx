@@ -20,12 +20,14 @@ import { Container, Grid, GridItem, useDisclosure, useNotice } from "@yamada-ui/
 import { memo, useState } from "react"
 import { useDeleteBooking } from "@/services/admin/bookings/AdminBookingMutations"
 import { useUpdateSelfMutation } from "@/services/auth/AuthMutations"
-import { useMyBookings } from "@/services/bookings/BookingQueries"
+import { useMyBookings, useMyRemainingSessions } from "@/services/bookings/BookingQueries"
 
 export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
   const { user } = auth
   const { data: bookings, isLoading: isBookingsLoading, isError: isBookingsError } = useMyBookings()
   const updateSelfMutation = useUpdateSelfMutation()
+  const { data: remainingSessionsResponse, isLoading: isRemainingSessionsLoading } =
+    useMyRemainingSessions()
   const deleteBookingMutation = useDeleteBooking()
   const notice = useNotice()
   const [bookingId, setBookingId] = useState<string | null>(null)
@@ -63,7 +65,16 @@ export const ProfileSection = memo(({ auth }: { auth: AuthContextValue }) => {
   return (
     <Container centerContent gap="xl" layerStyle="container">
       <Grid gap="xl" templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }} w="full">
-        <GridItem>{!user ? <UserPanelSkeleton /> : <UserPanel user={user} />}</GridItem>
+        <GridItem>
+          {isRemainingSessionsLoading || !user ? (
+            <UserPanelSkeleton />
+          ) : (
+            <UserPanel
+              remainingSessions={remainingSessionsResponse?.data.remainingSessions ?? 0}
+              user={user}
+            />
+          )}
+        </GridItem>
         <GridItem>
           {isBookingsLoading || !user ? (
             <ProfileBookingPanelSkeleton />

@@ -2,6 +2,7 @@ import {
   type CreateBookingRequest,
   CreateBookingResponseSchema,
   GetBookingsResponseSchema,
+  GetRemainingSessionsResponseSchema,
   type UpdateBookingRequest,
   UpdateBookingResponseSchema,
 } from "@repo/shared"
@@ -22,6 +23,18 @@ const BookingService = {
       requiresAuth: true,
       token,
     })
+    return ApiClient.throwIfError(response)
+  },
+
+  getRemainingSessions: async (token: string | null) => {
+    const response = await apiClient.get(
+      "/api/me/bookings/remaining",
+      GetRemainingSessionsResponseSchema,
+      {
+        requiresAuth: true,
+        token,
+      },
+    )
     return ApiClient.throwIfError(response)
   },
 

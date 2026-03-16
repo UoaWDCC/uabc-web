@@ -4,12 +4,20 @@ import { Heading } from "@repo/ui/components/Primitive"
 import { CircleAlertIcon } from "@yamada-ui/lucide"
 import { Container, EmptyState, VStack } from "@yamada-ui/react"
 import { RoleGuard } from "@/context/RoleWrappers"
+import { useMyRemainingSessions } from "@/services/bookings/BookingQueries"
 import { mapGameSessionsToSessionItems } from "@/services/game-session/GameSessionAdapter"
 import { useGetCurrentAvailableGameSessions } from "@/services/game-session/GameSessionQueries"
 import { BookFlow } from "./BookFlow"
 
 export const BookClient = () => {
-  const { data, isError, error, isLoading } = useGetCurrentAvailableGameSessions()
+  const {
+    data,
+    isError,
+    error,
+    isLoading: isLoadingCurrentAvailableGameSessions,
+  } = useGetCurrentAvailableGameSessions()
+  const { isLoading: isLoadingRemainingSessions, data: remainingSessions } =
+    useMyRemainingSessions()
 
   const sessions = data.availableSessions
     ? mapGameSessionsToSessionItems(data.availableSessions)
@@ -39,7 +47,7 @@ export const BookClient = () => {
     >
       {(auth) => (
         <Container centerContent layerStyle="container">
-          {isLoading ? (
+          {isLoadingCurrentAvailableGameSessions || isLoadingRemainingSessions ? (
             <VStack flex={1} gap="lg" textAlign="center">
               <Heading.h2 fontSize="3xl">Book a court</Heading.h2>
               <BookACourtSkeleton />
@@ -52,7 +60,12 @@ export const BookClient = () => {
               title="Could not load sessions"
             />
           ) : (
-            <BookFlow auth={auth} numberBookedSessions={numberBookedSessions} sessions={sessions} />
+            <BookFlow
+              auth={auth}
+              numberBookedSessions={numberBookedSessions}
+              remainingSessions={remainingSessions?.data.remainingSessions ?? 0}
+              sessions={sessions}
+            />
           )}
         </Container>
       )}

@@ -14,6 +14,35 @@ vi.mock("@/context/AuthContext", () => ({
 
 vi.mock("@/services/bookings/BookingQueries", () => ({
   useMyBookings: vi.fn(),
+  useMyRemainingSessions: vi.fn(),
+}))
+
+vi.mock("@/services/admin/bookings/AdminBookingMutations", () => ({
+  useDeleteBooking: vi.fn().mockReturnValue({
+    mutateAsync: vi.fn(),
+    isPending: false,
+  }),
+}))
+
+vi.mock("@/services/auth/AuthMutations", () => ({
+  useUpdateSelfMutation: vi.fn().mockReturnValue({
+    mutateAsync: vi.fn(),
+    mutate: vi.fn(),
+    error: null,
+    data: undefined,
+    reset: vi.fn(),
+    variables: undefined,
+    status: "idle",
+    isError: false,
+    isIdle: true,
+    isPending: false,
+    isSuccess: false,
+    context: undefined,
+    failureCount: 0,
+    failureReason: null,
+    isPaused: false,
+    submittedAt: 0,
+  }),
 }))
 
 const mockAuth: AuthContextValue = {
@@ -42,6 +71,10 @@ describe("<ProfileSection />", () => {
       data: { data: [] },
       isLoading: false,
       isError: false,
+    } as never)
+    vi.mocked(bookingQueries.useMyRemainingSessions).mockReturnValue({
+      data: { data: { remainingSessions: 0 } },
+      isLoading: false,
     } as never)
   })
 
@@ -168,5 +201,88 @@ describe("<ProfileSection />", () => {
     await waitFor(() => {
       expect(mutateAsync).toHaveBeenCalled()
     })
+  })
+  it("shows remaining sessions from API response", () => {
+    vi.mocked(bookingQueries.useMyRemainingSessions).mockReturnValue({
+      data: { data: { remainingSessions: 1 } },
+      isLoading: false,
+    } as never)
+
+    render(<ProfileSection auth={mockAuth} />, {
+      wrapper: queryClientProvider,
+    })
+
+    expect(screen.getByText(/1/)).toBeInTheDocument()
+  })
+
+  it("shows 0 remaining sessions when API returns 0", () => {
+    vi.mocked(bookingQueries.useMyRemainingSessions).mockReturnValue({
+      data: { data: { remainingSessions: 0 } },
+      isLoading: false,
+    } as never)
+
+    render(<ProfileSection auth={mockAuth} />, {
+      wrapper: queryClientProvider,
+    })
+
+    expect(screen.getByText(/0/)).toBeInTheDocument()
+  })
+
+  it("shows remainingSessions from API for non-casual role", () => {
+    const memberAuth: AuthContextValue = {
+      ...mockAuth,
+      user: {
+        ...casualUserMock,
+        role: "member" as never,
+        remainingSessions: 5,
+      },
+    }
+
+    vi.mocked(bookingQueries.useMyRemainingSessions).mockReturnValue({
+      data: { data: { remainingSessions: 5 } },
+      isLoading: false,
+    } as never)
+
+    render(<ProfileSection auth={memberAuth} />, {
+      wrapper: queryClientProvider,
+    })
+
+    expect(screen.getByText(/5/)).toBeInTheDocument()
+  })
+
+  it("shows 0 remaining sessions when API response is missing", () => {
+    const memberAuth: AuthContextValue = {
+      ...mockAuth,
+      user: {
+        ...casualUserMock,
+        role: "member" as never,
+        remainingSessions: undefined as never,
+      },
+    }
+
+    vi.mocked(bookingQueries.useMyRemainingSessions).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+    } as never)
+
+    render(<ProfileSection auth={memberAuth} />, {
+      wrapper: queryClientProvider,
+    })
+
+    expect(screen.getByText(/0/)).toBeInTheDocument()
+  })
+
+  it("renders skeleton when remaining sessions are loading", () => {
+    vi.mocked(bookingQueries.useMyRemainingSessions).mockReturnValue({
+      data: undefined,
+      isLoading: true,
+    } as never)
+
+    render(<ProfileSection auth={mockAuth} />, {
+      wrapper: queryClientProvider,
+    })
+
+    // UserPanelSkeleton is rendered when isRemainingSessionsLoading is true
+    expect(screen.queryByText(/remaining/i)).not.toBeInTheDocument()
   })
 })
