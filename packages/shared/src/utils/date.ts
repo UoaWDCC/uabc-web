@@ -29,6 +29,36 @@ export function formatDateWithOrdinal(date: string | Date): string {
 }
 
 /**
+ * Formats a date-like value as a full weekday name.
+ *
+ * @param date The date-like value to format
+ * @returns Weekday name such as "Monday"
+ */
+export function formatWeekday(date: string | Date): string {
+  return dayjs(date).format("dddd")
+}
+
+/**
+ * Formats a date-like value as day and month.
+ *
+ * @param date The date-like value to format
+ * @returns Formatted value such as "1 January"
+ */
+export function formatDayMonth(date: string | Date): string {
+  return dayjs(date).format("D MMMM")
+}
+
+/**
+ * Formats a date-like value as a 24-hour time.
+ *
+ * @param date The date-like value to format
+ * @returns Formatted time such as "09:30"
+ */
+export function formatTime24Hour(date: string | Date): string {
+  return dayjs(date).format("HH:mm")
+}
+
+/**
  * Calculates the open date for a session based on the start time, open day, and open time.
  *
  * @param semester The {@link Semester} object containing booking open day and time

@@ -1,4 +1,5 @@
-import { dayjs } from "@repo/shared"
+import { formatDayMonth, formatTime24Hour, formatWeekday } from "@repo/shared"
+import type { GameSession } from "@repo/shared/payload-types"
 import { payload } from "@/data-layer/adapters/Payload"
 import { bookingMock, bookingWithGameSessionScheduleMock } from "@/test-config/mocks/Booking.mock"
 import MailService from "./MailService"
@@ -54,8 +55,8 @@ describe("MailService", () => {
     })
 
     it("should handle bookings with a game session schedule", async () => {
-      const NOW = dayjs(new Date())
       const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
+      const gameSession = bookingWithGameSessionScheduleMock.gameSession as GameSession
 
       await MailService.sendBookingConfirmation(bookingWithGameSessionScheduleMock)
 
@@ -63,8 +64,8 @@ describe("MailService", () => {
 
       const expectedStrings = [
         "Your booking for our Monday session at UoA Rec Center has been confirmed!",
-        `Date: <!-- -->Monday<!-- --> <!-- -->${NOW.format("D MMMM")}`,
-        `Time: <!-- -->${NOW.format("HH:mm")}<!-- --> - <!-- -->${NOW.format("HH:mm")}`,
+        `Date: <!-- -->Monday<!-- --> <!-- -->${formatDayMonth(gameSession.startTime)}`,
+        `Time: <!-- -->${formatTime24Hour(gameSession.startTime)}<!-- --> - <!-- -->${formatTime24Hour(gameSession.endTime)}`,
         "Location: <!-- -->UoA Rec Center<!-- -->, <!-- -->17 Symonds Street",
       ]
 
@@ -81,18 +82,19 @@ describe("MailService", () => {
     })
 
     it("should handle bookings without a game session schedule", async () => {
-      const NOW = dayjs(new Date())
       const sendEmailMock = vi.spyOn(payload, "sendEmail").mockResolvedValueOnce({ success: true })
+      const gameSession = bookingMock.gameSession as GameSession
+      const weekday = formatWeekday(gameSession.startTime)
 
       await MailService.sendBookingConfirmation(bookingMock)
 
       const htmlContent = sendEmailMock.mock.calls[0][0].html
 
       const expectedStrings = [
-        `Your booking for our ${NOW.format("dddd")} session at UoA Rec Center has been confirmed!`,
-        `Date: <!-- -->${NOW.format("dddd").charAt(0) + NOW.format("dddd").slice(1)}<!-- --> <!-- -->${NOW.format("D MMMM")}`,
+        `Your booking for our ${weekday} session at UoA Rec Center has been confirmed!`,
+        `Date: <!-- -->${weekday}<!-- --> <!-- -->${formatDayMonth(gameSession.startTime)}`,
         "Location: <!-- -->UoA Rec Center<!-- -->, <!-- -->17 Symonds Street",
-        `Time: <!-- -->${NOW.format("HH:mm")}<!-- --> - <!-- -->${NOW.format("HH:mm")}`,
+        `Time: <!-- -->${formatTime24Hour(gameSession.startTime)}<!-- --> - <!-- -->${formatTime24Hour(gameSession.endTime)}`,
       ]
 
       expectedStrings.forEach((expectedString) => {
@@ -102,7 +104,7 @@ describe("MailService", () => {
       expect(sendEmailMock).toHaveBeenCalledWith({
         to: "straight.zhao@casual.com",
         replyTo: ["badminton.au@gmail.com", "uabcbookings@gmail.com"],
-        subject: `UABC - ${NOW.format("dddd")} Booking Confirmation`,
+        subject: `UABC - ${weekday} Booking Confirmation`,
         html: expect.any(String),
       })
     })

@@ -1,6 +1,9 @@
 import {
   formatDate,
+  formatDayMonth,
   formatTime,
+  formatTime24Hour,
+  formatWeekday,
   GameSessionStatus,
   getDateTimeStatus,
   getDaysBetweenWeekdays,
@@ -284,6 +287,27 @@ describe("formatDate", () => {
   it("should format different dates correctly", () => {
     expect(formatDate(new Date("2025-12-25T12:00:00Z"))).toBe("Thursday, 25/12/25")
     expect(formatDate(new Date("2025-06-15T09:30:00Z"))).toBe("Sunday, 15/06/25")
+  })
+})
+
+describe("formatWeekday", () => {
+  it("should format weekday names correctly", () => {
+    expect(formatWeekday("2025-01-06T09:30:00Z")).toBe("Monday")
+    expect(formatWeekday("2025-01-07T09:30:00Z")).toBe("Tuesday")
+  })
+})
+
+describe("formatDayMonth", () => {
+  it("should format day and month correctly", () => {
+    expect(formatDayMonth("2025-01-06T09:30:00Z")).toBe("6 January")
+    expect(formatDayMonth("2025-12-25T12:00:00Z")).toBe("25 December")
+  })
+})
+
+describe("formatTime24Hour", () => {
+  it("should format time in 24-hour format correctly", () => {
+    expect(formatTime24Hour("2025-01-06T09:30:00Z")).toBe("09:30")
+    expect(formatTime24Hour("2025-01-06T14:05:00Z")).toBe("14:05")
   })
 })
 
