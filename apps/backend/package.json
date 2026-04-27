@@ -20,7 +20,7 @@
   "dependencies": {
     "@payloadcms/db-mongodb": "3.76.1",
     "@payloadcms/email-nodemailer": "3.76.1",
-    "@payloadcms/next": "3.76.1",
+    "@payloadcms/next": "3.78.0",
     "@payloadcms/richtext-lexical": "3.76.1",
     "@payloadcms/storage-uploadthing": "3.76.1",
     "@react-email/components": "0.5.7",
